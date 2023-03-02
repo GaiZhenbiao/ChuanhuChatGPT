@@ -35,7 +35,7 @@ class ChatGPT:
 
     def retry(self, context):
         response = self.get_response(context[:-1])
-        context.append({"role": "assistant", "content": response})
+        context[-1] = {"role": "assistant", "content": response}
         response = []
         for i in range(0, len(context), 2):
             response.append((context[i]["content"], context[i+1]["content"]))
