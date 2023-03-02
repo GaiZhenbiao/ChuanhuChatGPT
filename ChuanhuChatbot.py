@@ -1,11 +1,10 @@
 import gradio as gr
 import openai
 
-my_api_key = ""
+my_api_key = ""    # input your api_key
 initial_prompt = "You are a helpful assistant."
 
 class ChatGPT:
-
     def __init__(self, apikey) -> None:
         openai.api_key = apikey
         self.system = {"role": "system", "content": initial_prompt}
@@ -19,27 +18,27 @@ class ChatGPT:
         response = response["choices"][0]["message"]["content"]
         return response
 
-    def predict(self, input_sentence, context):
+    def predict(self, chatbot, input_sentence, context):
+        if len(input_sentence) == 0:
+            return [], context
         context.append({"role": "user", "content": f"{input_sentence}"})
 
         response = self.get_response(context)
 
         context.append({"role": "assistant", "content": response})
+        
+        chatbot.append((input_sentence, response))
 
-        response = []
+        return chatbot, context
 
-        for i in range(0, len(context), 2):
-            response.append((context[i]["content"], context[i+1]["content"]))
-
-        return response, context
-
-    def retry(self, context):
+    def retry(self, chatbot, context):
+        if len(context) == 0:
+            return [], []
         response = self.get_response(context[:-1])
         context[-1] = {"role": "assistant", "content": response}
-        response = []
-        for i in range(0, len(context), 2):
-            response.append((context[i]["content"], context[i+1]["content"]))
-        return response, context
+        
+        chatbot[-1] = (context[-2]["content"], response)
+        return chatbot, context
 
     def update_system(self, new_system_prompt):
         self.system = {"role": "system", "content": new_system_prompt}
@@ -61,14 +60,14 @@ with gr.Blocks() as demo:
         emptyBth = gr.Button("重置")
         retryBth = gr.Button("再试一次")
 
-    system = gr.Textbox(show_label=True, placeholder="New system prompts here...", label="System Prompt").style(container=False)
-    syspromptTxt = gr.Textbox(show_label=False, placeholder=initial_prompt, interactive=False).style(container=False)
+    system = gr.Textbox(show_label=True, placeholder=f"Current System prompt: {initial_prompt}", label="更改 System prompt").style(container=False)
+    syspromptTxt = gr.Textbox(show_label=True, placeholder=initial_prompt, interactive=False, label="目前的 System prompt").style(container=False)
 
-    txt.submit(mychatGPT.predict, [txt, state], [chatbot, state], show_progress=True)
+    txt.submit(mychatGPT.predict, [chatbot, txt, state], [chatbot, state], show_progress=True)
     txt.submit(lambda :"", None, txt)
     emptyBth.click(reset_state, outputs=[chatbot, state])
     system.submit(mychatGPT.update_system, system, syspromptTxt)
     system.submit(lambda :"", None, system)
-    retryBth.click(mychatGPT.retry, [state], [chatbot, state], show_progress=True)
+    retryBth.click(mychatGPT.retry, [chatbot, state], [chatbot, state], show_progress=True)
 
 demo.launch()
