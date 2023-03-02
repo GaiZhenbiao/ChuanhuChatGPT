@@ -1,7 +1,8 @@
 import gradio as gr
 import openai
+import markdown
 
-my_api_key = ""    # input your api_key
+my_api_key = "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"    # input your api_key
 initial_prompt = "You are a helpful assistant."
 
 class ChatGPT:
@@ -16,6 +17,7 @@ class ChatGPT:
             messages=[self.system, *messages],
         )
         response = response["choices"][0]["message"]["content"]
+        response = markdown.markdown(response)
         return response
 
     def predict(self, chatbot, input_sentence, context):
@@ -26,7 +28,7 @@ class ChatGPT:
         response = self.get_response(context)
 
         context.append({"role": "assistant", "content": response})
-        
+
         chatbot.append((input_sentence, response))
 
         return chatbot, context
@@ -36,7 +38,7 @@ class ChatGPT:
             return [], []
         response = self.get_response(context[:-1])
         context[-1] = {"role": "assistant", "content": response}
-        
+
         chatbot[-1] = (context[-2]["content"], response)
         return chatbot, context
 
@@ -51,7 +53,7 @@ mychatGPT = ChatGPT(my_api_key)
 
 
 with gr.Blocks() as demo:
-    chatbot = gr.Chatbot()
+    chatbot = gr.Chatbot().style(color_map=("#1D51EE", "#585A5B"))
     state = gr.State([])
 
     with gr.Column():
@@ -60,7 +62,7 @@ with gr.Blocks() as demo:
         emptyBth = gr.Button("重置")
         retryBth = gr.Button("再试一次")
 
-    system = gr.Textbox(show_label=True, placeholder=f"Current System prompt: {initial_prompt}", label="更改 System prompt").style(container=False)
+    system = gr.Textbox(show_label=True, placeholder=f"在这里输入新的System Prompt...", label="更改 System prompt").style(container=False)
     syspromptTxt = gr.Textbox(show_label=True, placeholder=initial_prompt, interactive=False, label="目前的 System prompt").style(container=False)
 
     txt.submit(mychatGPT.predict, [chatbot, txt, state], [chatbot, state], show_progress=True)
