@@ -42,7 +42,7 @@ python3 ChuanhuChatbot.py
 
 如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
 
-## 使用Docker 安装与运行
+## 或者，使用Docker 安装与运行
 
 构建镜像
 ```
