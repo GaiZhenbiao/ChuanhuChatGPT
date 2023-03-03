@@ -2,10 +2,10 @@ import gradio as gr
 import openai
 import markdown
 
-my_api_key = "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"    # input your api_key
+我的API密钥 = "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 
-openai.api_key = my_api_key
+openai.api_key = 我的API密钥
 
 def get_response(system, context, raw = False):
     response = openai.ChatCompletion.create(
