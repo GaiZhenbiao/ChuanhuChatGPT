@@ -8,7 +8,7 @@ GUI for ChatGPT API
 - 安装依赖
 
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 - 填入你的OpenAI API
 <img width="552" alt="SCR-20230302-sula" src="https://user-images.githubusercontent.com/51039745/222445258-248f2789-81d2-4f0a-8697-c720f588d8de.png">
