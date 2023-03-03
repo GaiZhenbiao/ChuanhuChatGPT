@@ -38,7 +38,7 @@ def get_response(system, context, raw = False):
         message_with_stats = f'{message}\n\n================\n\n{statistics}'
 #         message_with_stats = markdown.markdown(message_with_stats)
 
-        return message, message_with_stats
+        return message, parse_text(message_with_stats)
 
 def predict(chatbot, input_sentence, system, context):
     if len(input_sentence) == 0:
