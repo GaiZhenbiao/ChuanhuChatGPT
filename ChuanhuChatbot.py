@@ -25,50 +25,50 @@ class ChatGPT:
         
         return message, message_with_stats
 
-    def predict(self, chatbot, input_sentence, context):
+    def predict(self, chatbot, input_sentence, ):
         if len(input_sentence) == 0:
-            return [], context
-        context.append({"role": "user", "content": f"{input_sentence}"})
+            return []
+        self.context.append({"role": "user", "content": f"{input_sentence}"})
 
-        message, message_with_stats = self.get_response(context)
+        message, message_with_stats = self.get_response(self.context)
 
-        context.append({"role": "assistant", "content": message})
+        self.context.append({"role": "assistant", "content": message})
 
         chatbot.append((input_sentence, message_with_stats))
 
-        return chatbot, context
+        return chatbot
 
-    def retry(self, chatbot, context):
-        if len(context) == 0:
+    def retry(self, chatbot):
+        if len(self.context) == 0:
             return [], []
-        message, message_with_stats = self.get_response(context[:-1])
-        context[-1] = {"role": "assistant", "content": message}
+        message, message_with_stats = self.get_response(self.context[:-1])
+        self.context[-1] = {"role": "assistant", "content": message}
 
-        chatbot[-1] = (context[-2]["content"], message_with_stats)
-        return chatbot, context
+        chatbot[-1] = (self.context[-2]["content"], message_with_stats)
+        return chatbot
 
     def update_system(self, new_system_prompt):
         self.system = {"role": "system", "content": new_system_prompt}
         return new_system_prompt
 
-    def delete_last_conversation(self, chatbot, context):
-        if len(context) == 0:
+    def delete_last_conversation(self, chatbot):
+        if len(self.context) == 0:
             return [], []
         chatbot = chatbot[:-1]
-        context = context[:-2]
-        return chatbot, context
+        self.context = self.context[:-2]
+        return chatbot
     
-    def reduce_token(self, chatbot, context):
-        context.append({"role": "user", "content": "请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。在总结中不要加入这一句话。"})
-        message, message_with_stats = self.get_response(context)
-        self.system = {"role": "system", "content": f"You are a helpful assistant. The content that the Assistant and the User discussed in the previous context is: {message}."}
+    def reduce_token(self, chatbot):
+        self.context.append({"role": "user", "content": "请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。在总结中不要加入这一句话。"})
+        message, message_with_stats = self.get_response(self.context)
+        self.system = {"role": "system", "content": f"You are a helpful assistant. The content that the Assistant and the User discussed in the previous self.context is: {message}."}
         
         statistics = f'本次对话Tokens用量【{self.response["usage"]["completion_tokens"]+23} / 4096】'
         optmz_str = markdown.markdown( f"System prompt已经更新, 请继续对话\n\n================\n\n{statistics}" )
         chatbot.append(("请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。", optmz_str))
         
-        context = []
-        return chatbot, context, self.system["content"]
+        self.context = []
+        return chatbot, self.system["content"]
 
 
 def reset_state():
@@ -79,7 +79,7 @@ mychatGPT = ChatGPT(my_api_key)
 
 with gr.Blocks() as demo:
     chatbot = gr.Chatbot().style(color_map=("#1D51EE", "#585A5B"))
-    state = gr.State([])
+    # state = gr.State([])
 
     with gr.Column():
             txt = gr.Textbox(show_label=False, placeholder="💬 在这里输入").style(container=False)
@@ -92,13 +92,13 @@ with gr.Blocks() as demo:
     system = gr.Textbox(show_label=True, placeholder=f"在这里输入新的System Prompt...", label="更改 System prompt").style(container=True)
     syspromptTxt = gr.Textbox(show_label=True, placeholder=initial_prompt, interactive=False, label="目前的 System prompt").style(container=True)
 
-    txt.submit(mychatGPT.predict, [chatbot, txt, state], [chatbot, state], show_progress=True)
+    txt.submit(mychatGPT.predict, [chatbot, txt], [chatbot], show_progress=True)
     txt.submit(lambda :"", None, txt)
-    emptyBth.click(reset_state, outputs=[chatbot, state])
+    emptyBth.click(reset_state, outputs=[chatbot])
     system.submit(mychatGPT.update_system, system, syspromptTxt)
     system.submit(lambda :"", None, system)
-    retryBth.click(mychatGPT.retry, [chatbot, state], [chatbot, state], show_progress=True)
-    delLastBth.click(mychatGPT.delete_last_conversation, [chatbot, state], [chatbot, state], show_progress=True)
-    reduceTokenBth.click(mychatGPT.reduce_token, [chatbot, state], [chatbot, state, syspromptTxt], show_progress=True)
+    retryBth.click(mychatGPT.retry, [chatbot], [chatbot], show_progress=True)
+    delLastBth.click(mychatGPT.delete_last_conversation, [chatbot], [chatbot], show_progress=True)
+    reduceTokenBth.click(mychatGPT.reduce_token, [chatbot], [chatbot, syspromptTxt], show_progress=True)
 
 demo.launch()
