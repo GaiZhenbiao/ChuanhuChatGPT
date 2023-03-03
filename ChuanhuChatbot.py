@@ -63,7 +63,7 @@ def reduce_token(chatbot, system, context):
     chatbot.append(("请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。", optmz_str))
 
     context = []
-    return chatbot, system, context
+    return chatbot, system, context, system['content']
 
 def reset_state():
     return [], []
@@ -101,7 +101,6 @@ with gr.Blocks() as demo:
     newSystemPrompt.submit(lambda :"", None, newSystemPrompt)
     retryBtn.click(retry, [chatbot, systemPrompt, context], [chatbot, context], show_progress=True)
     delLastBtn.click(delete_last_conversation, [chatbot, context], [chatbot, context], show_progress=True)
-    reduceTokenBtn.click(reduce_token, [chatbot, systemPrompt, context], [chatbot, systemPrompt, context], show_progress=True)
-    reduceTokenBtn.click(lambda x: x['content'], systemPrompt, systemPromptDisplay)
+    reduceTokenBtn.click(reduce_token, [chatbot, systemPrompt, context], [chatbot, systemPrompt, context, systemPromptDisplay], show_progress=True)
 
 demo.launch()
