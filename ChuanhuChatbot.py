@@ -2,7 +2,7 @@ import gradio as gr
 import openai
 import markdown
 
-my_api_key = "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"    # input your api_key
+my_api_key = "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"    # input your api_key
 initial_prompt = "You are a helpful assistant."
 
 class ChatGPT:
