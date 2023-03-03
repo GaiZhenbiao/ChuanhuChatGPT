@@ -1,12 +1,28 @@
 import gradio as gr
 import openai
-import markdown
+# import markdown
 
 
 我的API密钥 = "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 
 openai.api_key = 我的API密钥
+
+def parse_text(text):
+    lines = text.split("\n")
+    for i,line in enumerate(lines):
+        if "```" in line:
+            items = line.split('`')
+            if items[-1]:
+                lines[i] = f'<pre><code class="{items[-1]}">'
+            else:
+                lines[i] = f'</code></pre>'
+        else:
+            if i>0:
+                line = line.replace("<", "&lt;")
+                line = line.replace(">", "&gt;")
+                lines[i] = '<br/>'+line.replace(" ", "&nbsp;")
+    return "".join(lines)
 
 def get_response(system, context, raw = False):
     response = openai.ChatCompletion.create(
@@ -20,7 +36,7 @@ def get_response(system, context, raw = False):
         message = response["choices"][0]["message"]["content"]
 
         message_with_stats = f'{message}\n\n================\n\n{statistics}'
-        message_with_stats = markdown.markdown(message_with_stats)
+#         message_with_stats = markdown.markdown(message_with_stats)
 
         return message, message_with_stats
 
