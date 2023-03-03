@@ -1,12 +1,20 @@
 import gradio as gr
 import openai
+import os
+import sys
 # import markdown
 
-
-我的API密钥 = "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"    # 在这里输入你的 API 密钥
+my_api_key = ""    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 
-openai.api_key = 我的API密钥
+if my_api_key == "":
+    my_api_key = os.environ.get('my_api_key')
+
+if my_api_key == "empty":
+    print("Please give a api key!")
+    sys.exit(1)
+
+openai.api_key = my_api_key
 
 def parse_text(text):
     lines = text.split("\n")
