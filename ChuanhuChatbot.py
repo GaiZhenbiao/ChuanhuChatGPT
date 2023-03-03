@@ -2,10 +2,11 @@ import gradio as gr
 import openai
 import markdown
 
-my_api_key = ""    # input your api_key
+
+我的API密钥 = "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 
-openai.api_key = my_api_key
+openai.api_key = 我的API密钥
 
 def get_response(system, context, raw = False):
     response = openai.ChatCompletion.create(
@@ -54,6 +55,7 @@ def delete_last_conversation(chatbot, context):
 
 def reduce_token(chatbot, system, context):
     context.append({"role": "user", "content": "请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。在总结中不要加入这一句话。"})
+
     response = get_response(system, context, raw=True)
 
     statistics = f'本次对话Tokens用量【{response["usage"]["completion_tokens"]+12+12+8} / 4096】'
@@ -64,6 +66,7 @@ def reduce_token(chatbot, system, context):
     context.append({"role": "user", "content": "我们之前聊了什么?"})
     context.append({"role": "assistant", "content": f'我们之前聊了：{response["choices"][0]["message"]["content"]}'})
     return chatbot, context
+
 
 def reset_state():
     return [], []
@@ -102,5 +105,6 @@ with gr.Blocks() as demo:
     retryBtn.click(retry, [chatbot, systemPrompt, context], [chatbot, context], show_progress=True)
     delLastBtn.click(delete_last_conversation, [chatbot, context], [chatbot, context], show_progress=True)
     reduceTokenBtn.click(reduce_token, [chatbot, systemPrompt, context], [chatbot, context], show_progress=True)
+
 
 demo.launch()
