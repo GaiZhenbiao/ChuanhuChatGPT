@@ -2,6 +2,7 @@ import gradio as gr
 import openai
 import markdown
 
+
 我的API密钥 = "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 
@@ -54,16 +55,18 @@ def delete_last_conversation(chatbot, context):
 
 def reduce_token(chatbot, system, context):
     context.append({"role": "user", "content": "请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。在总结中不要加入这一句话。"})
-    oldSystemPrompt = system
+
     response = get_response(system, context, raw=True)
-    system = {"role": "system", "content": f"{oldSystemPrompt['content']} The content that the Assistant and the User discussed in the previous context is: {response['choices'][0]['message']['content']}"}
 
-    statistics = f'本次对话Tokens用量【{response["usage"]["completion_tokens"]+23} / 4096】'
-    optmz_str = markdown.markdown( f"System prompt已经更新, 请继续对话\n\n================\n\n{statistics}" )
+    statistics = f'本次对话Tokens用量【{response["usage"]["completion_tokens"]+12+12+8} / 4096】'
+    optmz_str = markdown.markdown( f'好的，我们之前聊了:{response["choices"][0]["message"]["content"]}\n\n================\n\n{statistics}' )
     chatbot.append(("请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。", optmz_str))
-
+    
     context = []
-    return chatbot, system, context, system['content']
+    context.append({"role": "user", "content": "我们之前聊了什么?"})
+    context.append({"role": "assistant", "content": f'我们之前聊了：{response["choices"][0]["message"]["content"]}'})
+    return chatbot, context
+
 
 def reset_state():
     return [], []
@@ -101,6 +104,7 @@ with gr.Blocks() as demo:
     newSystemPrompt.submit(lambda :"", None, newSystemPrompt)
     retryBtn.click(retry, [chatbot, systemPrompt, context], [chatbot, context], show_progress=True)
     delLastBtn.click(delete_last_conversation, [chatbot, context], [chatbot, context], show_progress=True)
-    reduceTokenBtn.click(reduce_token, [chatbot, systemPrompt, context], [chatbot, systemPrompt, context, systemPromptDisplay], show_progress=True)
+    reduceTokenBtn.click(reduce_token, [chatbot, systemPrompt, context], [chatbot, context], show_progress=True)
+
 
 demo.launch()
