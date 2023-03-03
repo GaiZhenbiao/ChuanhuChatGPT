@@ -1,7 +1,7 @@
 # 川虎 ChatGPT
 为ChatGPT API提供了一个Web图形界面。
 GUI for ChatGPT API
-<img width="1238" alt="截屏2023-03-02 21 41 16" src="https://user-images.githubusercontent.com/51039745/222444934-f60b6e1f-edff-4c30-832b-6df47161c52a.png">
+<img width="1238" alt="截屏2023-03-03 11 33 20" src="https://user-images.githubusercontent.com/51039745/222624919-6be7a294-da56-451c-af47-7da45c7c83b7.png">
 
 ## 使用方式
 - 安装依赖
@@ -16,4 +16,5 @@ pip install requirements.txt
 
 ```
 python ChuanhuChatbot.py
+
 ```
