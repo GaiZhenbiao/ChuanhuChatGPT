@@ -42,6 +42,26 @@ python3 ChuanhuChatbot.py
 
 如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
 
+## 使用Docker 安装与运行
+
+构建镜像
+```
+docker build -t chuanhuchatgpt:latest .
+```
+
+一键运行
+```
+docker run -d --name chatgpt -e my_api_key="替换成API"  --network host chuanhuchatgpt:latest
+```
+
+查看本地访问地址
+```
+docker logs chatgpt
+```
+
+
+
+
 ## 使用技巧
 
 - 使用System Prompt可以很有效地设定前提条件
