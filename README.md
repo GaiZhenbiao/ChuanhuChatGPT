@@ -6,7 +6,7 @@
 GUI for ChatGPT API
 <img width="1204" alt="截屏2023-03-03 13 59 46" src="https://user-images.githubusercontent.com/51039745/222643242-c0b90a54-8f07-4fb6-b88e-ef338fd80f49.png">
 
-## 使用方式
+## 安装方式
 
 - 填入你的 OpenAI API 密钥
 
@@ -41,3 +41,8 @@ python3 ChuanhuChatbot.py
 ```
 
 如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
+
+## 使用技巧
+
+- 使用System Prompt可以很有效地设定前提条件
+- 对于长对话，可以使用“优化Tokens”按钮减少Tokens占用。
