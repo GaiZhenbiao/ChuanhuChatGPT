@@ -25,6 +25,7 @@ pip3 install -r requirements.txt
 ```
 
 如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
+如果下载慢，建议[配置清华源](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)，或者科学上网。
 
 - 启动
 
