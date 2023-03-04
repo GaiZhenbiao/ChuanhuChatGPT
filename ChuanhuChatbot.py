@@ -142,7 +142,7 @@ def set_apikey(new_api_key, myKey):
 
 
 with gr.Blocks() as demo:
-    keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的API-key...", value=my_api_key, label="API Key").style(container=True)
+    keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的API-key...", value=str(my_api_key[:4] + "..." + my_api_key[-4:]), label="API Key").style(container=True)
     chatbot = gr.Chatbot().style(color_map=("#1D51EE", "#585A5B"))
     context = gr.State([])
     systemPrompt = gr.State(update_system(initial_prompt))
