@@ -57,8 +57,20 @@ def predict(chatbot, input_sentence, system, context, myKey):
 
     try:
         message, message_with_stats = get_response(system, context, myKey)
-    except:
+    except openai.error.AuthenticationError:
         chatbot.append((input_sentence, "请求失败，请检查API-key是否正确。"))
+        return chatbot, context
+    except openai.error.Timeout:
+        chatbot.append((input_sentence, "请求超时，请检查网络连接。"))
+        return chatbot, context
+    except openai.error.APIConnectionError:
+        chatbot.append((input_sentence, "连接失败，请检查网络连接。"))
+        return chatbot, context
+    except openai.error.RateLimitError:
+        chatbot.append((input_sentence, "请求过于频繁，请5s后再试。"))
+        return chatbot, context
+    except:
+        chatbot.append((input_sentence, "发生了未知错误Orz"))
         return chatbot, context
 
     context.append({"role": "assistant", "content": message})
@@ -70,11 +82,25 @@ def predict(chatbot, input_sentence, system, context, myKey):
 def retry(chatbot, system, context, myKey):
     if len(context) == 0:
         return [], []
+    
     try:
         message, message_with_stats = get_response(system, context[:-1], myKey)
-    except:
+    except openai.error.AuthenticationError:
         chatbot.append(("重试请求", "请求失败，请检查API-key是否正确。"))
         return chatbot, context
+    except openai.error.Timeout:
+        chatbot.append(("重试请求", "请求超时，请检查网络连接。"))
+        return chatbot, context
+    except openai.error.APIConnectionError:
+        chatbot.append(("重试请求", "连接失败，请检查网络连接。"))
+        return chatbot, context
+    except openai.error.RateLimitError:
+        chatbot.append(("重试请求", "请求过于频繁，请5s后再试。"))
+        return chatbot, context
+    except:
+        chatbot.append(("重试请求", "发生了未知错误Orz"))
+        return chatbot, context
+    
     context[-1] = {"role": "assistant", "content": message}
 
     chatbot[-1] = (context[-2]["content"], message_with_stats)
@@ -131,12 +157,18 @@ def update_system(new_system_prompt):
 
 def set_apikey(new_api_key, myKey):
     old_api_key = myKey
+    
     try:
         get_response(update_system(initial_prompt), [{"role": "user", "content": "test"}], new_api_key)
-    except:
-        traceback.print_exc()
-        print("API key校验失败，请检查API key是否正确，或者检查网络是否畅通。")
+    except openai.error.AuthenticationError:
         return "无效的api-key", myKey
+    except openai.error.Timeout:
+        return "请求超时，请检查网络设置", myKey
+    except openai.error.APIConnectionError:
+        return "网络错误", myKey
+    except:
+        return "发生了未知错误Orz", myKey
+    
     encryption_str = "验证成功，api-key已做遮挡处理：" + new_api_key[:4] + "..." + new_api_key[-4:]
     return encryption_str, new_api_key
 
