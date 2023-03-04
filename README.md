@@ -22,7 +22,18 @@
 
 ## 安装方式
 
-### 填入你的 OpenAI API 密钥
+### 填写API密钥
+
+#### 在图形界面中填写你的API密钥
+
+这样设置的密钥会在页面刷新后被清除
+
+<img width="760" alt="image" src="https://user-images.githubusercontent.com/51039745/222873756-3858bb82-30b9-49bc-9019-36e378ee624d.png">
+
+
+#### ……或者在代码中填入你的 OpenAI API 密钥
+
+这样设置的密钥会成为默认密钥
 
 <img width="552" alt="SCR-20230302-sula" src="https://user-images.githubusercontent.com/51039745/222445258-248f2789-81d2-4f0a-8697-c720f588d8de.png">
 
