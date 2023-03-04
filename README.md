@@ -91,3 +91,37 @@ docker run -d --name chatgpt -e my_api_key="替换成API"  --network host chuanh
 docker logs chatgpt
 ```
 
+## 疑难杂症解决
+
+## No module named '_bz2'
+
+太空急先锋：部署在CentOS7.6,Python3.11.0上,最后报错ModuleNotFoundError: No module named '_bz2'
+
+解决方案：安装python前得下个bzip编译环境
+
+```
+sudo yum install bzip2-devel
+```
+
+## openai.error.APIConnectionError
+
+我是一只孤猫：
+
+如果有人也出现了`openai.error.APIConnectionError`提示的报错，那可能是`urllib3`的版本导致的。`urllib3`版本大于`1.25.11`，就会出现这个问题。
+
+解决方案是卸载`urllib3`然后重装至`1.25.11`版本再重新运行一遍就可以
+
+在终端或命令提示符中卸载`urllib3`
+
+```
+pip uninstall urllib3
+```
+
+然后，您可以通过使用指定版本号的`pip install`命令来安装所需的版本：
+
+```
+pip install urllib3==1.25.11
+```
+
+参考自：
+[解决OpenAI API 挂了代理还是连接不上的问题](https://zhuanlan.zhihu.com/p/611080662)
