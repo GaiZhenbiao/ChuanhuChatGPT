@@ -1,7 +1,7 @@
 <img width="200" alt="截屏2023-03-03 13 59 46" src="https://user-images.githubusercontent.com/51039745/222689546-7612df0e-e28b-4693-9f5f-4ef2be3daf48.png">
 
 # 川虎 ChatGPT
-为ChatGPT API提供了一个Web图形界面。
+为ChatGPT API提供了一个Web图形界面。[在Bilibili上观看视频教程](https://www.bilibili.com/video/BV1mo4y1r7eE/)。
 
 <img width="800" alt="截屏2023-03-04 11 18 12" src="https://user-images.githubusercontent.com/51039745/222873223-90817abb-7626-450c-8cfc-732e92267e91.png">
 
