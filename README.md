@@ -15,11 +15,11 @@ GUI for ChatGPT API
 
 ## 安装方式
 
-- 填入你的 OpenAI API 密钥
+### 填入你的 OpenAI API 密钥
 
 <img width="552" alt="SCR-20230302-sula" src="https://user-images.githubusercontent.com/51039745/222445258-248f2789-81d2-4f0a-8697-c720f588d8de.png">
 
-- 安装依赖
+### 安装依赖
 
 ```
 pip install -r requirements.txt
@@ -35,7 +35,7 @@ pip3 install -r requirements.txt
 
 如果下载慢，建议[配置清华源](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)，或者科学上网。
 
-- 启动
+### 启动
 
 ```
 python ChuanhuChatbot.py
@@ -51,17 +51,17 @@ python3 ChuanhuChatbot.py
 
 ## 或者，使用Docker 安装与运行
 
-构建镜像
+### 构建镜像
 ```
 docker build -t chuanhuchatgpt:latest .
 ```
 
-一键运行
+### 一键运行
 ```
 docker run -d --name chatgpt -e my_api_key="替换成API"  --network host chuanhuchatgpt:latest
 ```
 
-查看本地访问地址
+### 查看本地访问地址
 ```
 docker logs chatgpt
 ```
