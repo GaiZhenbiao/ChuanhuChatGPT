@@ -3,13 +3,15 @@
 # 川虎 ChatGPT
 为ChatGPT API提供了一个Web图形界面。[在Bilibili上观看视频教程](https://www.bilibili.com/video/BV1mo4y1r7eE/)。
 
-<img width="800" alt="截屏2023-03-04 11 18 12" src="https://user-images.githubusercontent.com/51039745/222873223-90817abb-7626-450c-8cfc-732e92267e91.png">
+<img width="1420" alt="截屏2023-03-04 11 29 50 1" src="https://user-images.githubusercontent.com/51039745/222873690-d046dfa1-8941-49ff-92a2-fef34421c503.png">
+
 
 ## 功能
 - 重试对话，让ChatGPT再回答一次。
 - 优化Tokens，减少Tokens占用，以支持更长的对话。
 - 设置System Prompt，有效地设定前置条件
 - 保存/加载对话历史记录
+- 在图形界面中添加API key
 
 ## 使用技巧
 
