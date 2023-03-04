@@ -6,6 +6,13 @@
 GUI for ChatGPT API
 <img width="1204" alt="截屏2023-03-03 13 59 46" src="https://user-images.githubusercontent.com/51039745/222643242-c0b90a54-8f07-4fb6-b88e-ef338fd80f49.png">
 
+## 使用技巧
+
+- 使用System Prompt可以很有效地设定前提条件
+- 对于长对话，可以使用“优化Tokens”按钮减少Tokens占用。
+- 如果部署到服务器，将程序最后一句改成`demo.launch(server_name="0.0.0.0", server_port=99999)`。其中`99999`是端口号，应该是1000-65535任意可用端口，请自行更改为实际端口号。
+- 如果需要获取公共链接，将程序最后一句改成`demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问
+
 ## 安装方式
 
 - 填入你的 OpenAI API 密钥
@@ -59,10 +66,3 @@ docker run -d --name chatgpt -e my_api_key="替换成API"  --network host chuanh
 docker logs chatgpt
 ```
 
-
-
-
-## 使用技巧
-
-- 使用System Prompt可以很有效地设定前提条件
-- 对于长对话，可以使用“优化Tokens”按钮减少Tokens占用。

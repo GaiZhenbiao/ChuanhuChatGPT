@@ -1,3 +1,4 @@
+import json
 import gradio as gr
 import openai
 import os
@@ -93,11 +94,32 @@ def reduce_token(chatbot, system, context, myKey):
     statistics = f'本次对话Tokens用量【{response["usage"]["completion_tokens"]+12+12+8} / 4096】'
     optmz_str = parse_text( f'好的，我们之前聊了:{response["choices"][0]["message"]["content"]}\n\n================\n\n{statistics}' )
     chatbot.append(("请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。", optmz_str))
-    
+
     context = []
     context.append({"role": "user", "content": "我们之前聊了什么?"})
     context.append({"role": "assistant", "content": f'我们之前聊了：{response["choices"][0]["message"]["content"]}'})
     return chatbot, context
+
+def save_chat_history(filepath, system, context):
+    if filepath == "":
+        return
+    history = {"system": system, "context": context}
+    with open(f"{filepath}.json", "w") as f:
+        json.dump(history, f)
+
+def load_chat_history(fileobj):
+    with open(fileobj.name, "r") as f:
+        history = json.load(f)
+    context = history["context"]
+    chathistory = []
+    for i in range(0, len(context), 2):
+        chathistory.append((parse_text(context[i]["content"]), parse_text(context[i+1]["content"])))
+    return chathistory , history["system"], context, history["system"]["content"]
+
+def get_history_names():
+    with open("history.json", "r") as f:
+        history = json.load(f)
+    return list(history.keys())
 
 
 def reset_state():
@@ -122,6 +144,7 @@ with gr.Blocks() as demo:
     context = gr.State([])
     systemPrompt = gr.State(update_system(initial_prompt))
     myKey = gr.State("sk-xxxxxxxxxxxxxxxxxxxxx")
+    topic = gr.State("未命名对话历史记录")
 
     with gr.Row():
         with gr.Column(scale=12):
@@ -133,9 +156,16 @@ with gr.Blocks() as demo:
         retryBtn = gr.Button("🔄 重新生成")
         delLastBtn = gr.Button("🗑️ 删除上条对话")
         reduceTokenBtn = gr.Button("♻️ 优化Tokens")
-
     newSystemPrompt = gr.Textbox(show_label=True, placeholder=f"在这里输入新的System Prompt...", label="更改 System prompt").style(container=True)
     systemPromptDisplay = gr.Textbox(show_label=True, value=initial_prompt, interactive=False, label="目前的 System prompt").style(container=True)
+    with gr.Accordion(label="保存/加载对话历史记录(在文本框中输入文件名，点击“保存对话”按钮，历史记录文件会被存储到本地)", open=False):
+        with gr.Column():
+            with gr.Row():
+                with gr.Column(scale=6):
+                    saveFileName = gr.Textbox(show_label=True, placeholder=f"在这里输入保存的文件名...", label="保存对话", value="对话历史记录").style(container=True)
+                with gr.Column(scale=1):
+                    saveBtn = gr.Button("💾 保存对话")
+                    uploadBtn = gr.UploadButton("📂 读取对话", file_count="single", file_types=["json"])
 
     txt.submit(predict, [chatbot, txt, systemPrompt, context, myKey], [chatbot, context], show_progress=True)
     txt.submit(lambda :"", None, txt)
@@ -149,6 +179,10 @@ with gr.Blocks() as demo:
     delLastBtn.click(delete_last_conversation, [chatbot, context], [chatbot, context], show_progress=True)
     reduceTokenBtn.click(reduce_token, [chatbot, systemPrompt, context, myKey], [chatbot, context], show_progress=True)
     keyTxt.submit(set_apikey, [keyTxt, myKey], [keyTxt, myKey], show_progress=True)
+    reduceTokenBtn.click(reduce_token, [chatbot, systemPrompt, context, myKey], [chatbot, context], show_progress=True)
+    keyTxt.submit(set_apikey, [keyTxt, myKey], [keyTxt, myKey], show_progress=True)
+    uploadBtn.upload(load_chat_history, uploadBtn, [chatbot, systemPrompt, context, systemPromptDisplay], show_progress=True)
+    saveBtn.click(save_chat_history, [saveFileName, systemPrompt, context], None, show_progress=True)
 
 
 demo.launch()
