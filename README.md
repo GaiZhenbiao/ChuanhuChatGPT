@@ -3,8 +3,13 @@
 # 川虎 ChatGPT
 为ChatGPT API提供了一个Web图形界面。
 
-GUI for ChatGPT API
-<img width="1204" alt="截屏2023-03-03 13 59 46" src="https://user-images.githubusercontent.com/51039745/222643242-c0b90a54-8f07-4fb6-b88e-ef338fd80f49.png">
+<img width="800" alt="截屏2023-03-04 11 18 12" src="https://user-images.githubusercontent.com/51039745/222873223-90817abb-7626-450c-8cfc-732e92267e91.png">
+
+## 功能
+- 重试对话，让ChatGPT再回答一次。
+- 优化Tokens，减少Tokens占用，以支持更长的对话。
+- 设置System Prompt，有效地设定前置条件
+- 保存/加载对话历史记录
 
 ## 使用技巧
 
