@@ -3,6 +3,7 @@ import gradio as gr
 import openai
 import os
 import sys
+import traceback
 # import markdown
 
 my_api_key = ""    # 在这里输入你的 API 密钥
@@ -133,6 +134,8 @@ def set_apikey(new_api_key, myKey):
     try:
         get_response(update_system(initial_prompt), [{"role": "user", "content": "test"}], new_api_key)
     except:
+        traceback.print_exc()
+        print("API key校验失败，请检查API key是否正确，或者检查网络是否畅通。")
         return "无效的api-key", myKey
     encryption_str = "验证成功，api-key已做遮挡处理：" + new_api_key[:4] + "..." + new_api_key[-4:]
     return encryption_str, new_api_key
