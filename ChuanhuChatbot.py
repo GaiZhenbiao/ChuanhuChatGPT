@@ -3,6 +3,7 @@ import gradio as gr
 import openai
 import os
 import sys
+import traceback
 # import markdown
 
 my_api_key = ""    # 在这里输入你的 API 密钥
@@ -14,8 +15,6 @@ if my_api_key == "":
 if my_api_key == "empty":
     print("Please give a api key!")
     sys.exit(1)
-
-openai.api_key = my_api_key
 
 def parse_text(text):
     lines = text.split("\n")
@@ -33,11 +32,13 @@ def parse_text(text):
                 lines[i] = '<br/>'+line.replace(" ", "&nbsp;")
     return "".join(lines)
 
-def get_response(system, context, raw = False):
+def get_response(system, context, myKey, raw = False):
+    openai.api_key = myKey
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[system, *context],
     )
+    openai.api_key = ""
     if raw:
         return response
     else:
@@ -45,16 +46,20 @@ def get_response(system, context, raw = False):
         message = response["choices"][0]["message"]["content"]
 
         message_with_stats = f'{message}\n\n================\n\n{statistics}'
-#         message_with_stats = .markdown(message_with_stats)
+        # message_with_stats = markdown.markdown(message_with_stats)
 
         return message, parse_text(message_with_stats)
 
-def predict(chatbot, input_sentence, system, context):
+def predict(chatbot, input_sentence, system, context, myKey):
     if len(input_sentence) == 0:
         return []
     context.append({"role": "user", "content": f"{input_sentence}"})
 
-    message, message_with_stats = get_response(system, context)
+    try:
+        message, message_with_stats = get_response(system, context, myKey)
+    except:
+        chatbot.append((input_sentence, "请求失败，请检查API-key是否正确。"))
+        return chatbot, context
 
     context.append({"role": "assistant", "content": message})
 
@@ -62,10 +67,14 @@ def predict(chatbot, input_sentence, system, context):
 
     return chatbot, context
 
-def retry(chatbot, system, context):
+def retry(chatbot, system, context, myKey):
     if len(context) == 0:
         return [], []
-    message, message_with_stats = get_response(system, context[:-1])
+    try:
+        message, message_with_stats = get_response(system, context[:-1], myKey)
+    except:
+        chatbot.append(("重试请求", "请求失败，请检查API-key是否正确。"))
+        return chatbot, context
     context[-1] = {"role": "assistant", "content": message}
 
     chatbot[-1] = (context[-2]["content"], message_with_stats)
@@ -78,13 +87,13 @@ def delete_last_conversation(chatbot, context):
     context = context[:-2]
     return chatbot, context
 
-def reduce_token(chatbot, system, context):
+def reduce_token(chatbot, system, context, myKey):
     context.append({"role": "user", "content": "请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。在总结中不要加入这一句话。"})
 
-    response = get_response(system, context, raw=True)
+    response = get_response(system, context, myKey, raw=True)
 
     statistics = f'本次对话Tokens用量【{response["usage"]["completion_tokens"]+12+12+8} / 4096】'
-    optmz_str = markdown.markdown( f'好的，我们之前聊了:{response["choices"][0]["message"]["content"]}\n\n================\n\n{statistics}' )
+    optmz_str = parse_text( f'好的，我们之前聊了:{response["choices"][0]["message"]["content"]}\n\n================\n\n{statistics}' )
     chatbot.append(("请帮我总结一下上述对话的内容，实现减少tokens的同时，保证对话的质量。", optmz_str))
 
     context = []
@@ -120,11 +129,24 @@ def reset_state():
 def update_system(new_system_prompt):
     return {"role": "system", "content": new_system_prompt}
 
+def set_apikey(new_api_key, myKey):
+    old_api_key = myKey
+    try:
+        get_response(update_system(initial_prompt), [{"role": "user", "content": "test"}], new_api_key)
+    except:
+        traceback.print_exc()
+        print("API key校验失败，请检查API key是否正确，或者检查网络是否畅通。")
+        return "无效的api-key", myKey
+    encryption_str = "验证成功，api-key已做遮挡处理：" + new_api_key[:4] + "..." + new_api_key[-4:]
+    return encryption_str, new_api_key
+
 
 with gr.Blocks() as demo:
+    keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的API-key...", value=my_api_key, label="API Key").style(container=True)
     chatbot = gr.Chatbot().style(color_map=("#1D51EE", "#585A5B"))
     context = gr.State([])
     systemPrompt = gr.State(update_system(initial_prompt))
+    myKey = gr.State(my_api_key)
     topic = gr.State("未命名对话历史记录")
 
     with gr.Row():
@@ -148,17 +170,18 @@ with gr.Blocks() as demo:
                     saveBtn = gr.Button("💾 保存对话")
                     uploadBtn = gr.UploadButton("📂 读取对话", file_count="single", file_types=["json"])
 
-    txt.submit(predict, [chatbot, txt, systemPrompt, context], [chatbot, context], show_progress=True)
+    txt.submit(predict, [chatbot, txt, systemPrompt, context, myKey], [chatbot, context], show_progress=True)
     txt.submit(lambda :"", None, txt)
-    submitBtn.click(predict, [chatbot, txt, systemPrompt, context], [chatbot, context], show_progress=True)
+    submitBtn.click(predict, [chatbot, txt, systemPrompt, context, myKey], [chatbot, context], show_progress=True)
     submitBtn.click(lambda :"", None, txt)
     emptyBtn.click(reset_state, outputs=[chatbot, context])
     newSystemPrompt.submit(update_system, newSystemPrompt, systemPrompt)
     newSystemPrompt.submit(lambda x: x, newSystemPrompt, systemPromptDisplay)
     newSystemPrompt.submit(lambda :"", None, newSystemPrompt)
-    retryBtn.click(retry, [chatbot, systemPrompt, context], [chatbot, context], show_progress=True)
+    retryBtn.click(retry, [chatbot, systemPrompt, context, myKey], [chatbot, context], show_progress=True)
     delLastBtn.click(delete_last_conversation, [chatbot, context], [chatbot, context], show_progress=True)
-    reduceTokenBtn.click(reduce_token, [chatbot, systemPrompt, context], [chatbot, context], show_progress=True)
+    reduceTokenBtn.click(reduce_token, [chatbot, systemPrompt, context, myKey], [chatbot, context], show_progress=True)
+    keyTxt.submit(set_apikey, [keyTxt, myKey], [keyTxt, myKey], show_progress=True)
     uploadBtn.upload(load_chat_history, uploadBtn, [chatbot, systemPrompt, context, systemPromptDisplay], show_progress=True)
     saveBtn.click(save_chat_history, [saveFileName, systemPrompt, context], None, show_progress=True)
 
