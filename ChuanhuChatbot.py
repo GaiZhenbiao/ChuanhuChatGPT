@@ -143,7 +143,7 @@ with gr.Blocks() as demo:
     chatbot = gr.Chatbot().style(color_map=("#1D51EE", "#585A5B"))
     context = gr.State([])
     systemPrompt = gr.State(update_system(initial_prompt))
-    myKey = gr.State("sk-xxxxxxxxxxxxxxxxxxxxx")
+    myKey = gr.State(my_api_key)
     topic = gr.State("未命名对话历史记录")
 
     with gr.Row():
