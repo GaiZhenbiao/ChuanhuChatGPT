@@ -25,18 +25,25 @@ else:
 
 def parse_text(text):
     lines = text.split("\n")
+    count = 0
     for i,line in enumerate(lines):
         if "```" in line:
+            count += 1
             items = line.split('`')
-            if items[-1]:
+            if count % 2 == 1:
                 lines[i] = f'<pre><code class="{items[-1]}">'
             else:
                 lines[i] = f'</code></pre>'
         else:
-            if i>0:
-                line = line.replace("<", "&lt;")
-                line = line.replace(">", "&gt;")
-                lines[i] = '<br/>'+line.replace(" ", "&nbsp;")
+            if i > 0:
+                if count % 2 == 1:
+                    line = line.replace("&", "&amp;")
+                    line = line.replace("\"", "&quot;")
+                    line = line.replace("\'", "&apos;")
+                    line = line.replace("<", "&lt;")
+                    line = line.replace(">", "&gt;")
+                    line = line.replace(" ", "&nbsp;")
+                lines[i] = '<br/>'+line
     return "".join(lines)
 
 def get_response(system, context, myKey, raw = False):
