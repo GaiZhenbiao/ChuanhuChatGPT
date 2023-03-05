@@ -93,7 +93,7 @@ docker logs chatgpt
 
 ## 疑难杂症解决
 
-## No module named '_bz2'
+### No module named '_bz2'
 
 太空急先锋：部署在CentOS7.6,Python3.11.0上,最后报错ModuleNotFoundError: No module named '_bz2'
 
@@ -103,9 +103,9 @@ docker logs chatgpt
 sudo yum install bzip2-devel
 ```
 
-## openai.error.APIConnectionError
+### openai.error.APIConnectionError
 
-我是一只孤猫：
+我是一只孤猫 [#5](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/5)：
 
 如果有人也出现了`openai.error.APIConnectionError`提示的报错，那可能是`urllib3`的版本导致的。`urllib3`版本大于`1.25.11`，就会出现这个问题。
 
@@ -125,3 +125,10 @@ pip install urllib3==1.25.11
 
 参考自：
 [解决OpenAI API 挂了代理还是连接不上的问题](https://zhuanlan.zhihu.com/p/611080662)
+
+### API 被墙了怎么办
+跑起来之后，输入问题好像就没反应了，也没报错 [#25](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/25)
+
+### 在 Python 文件里 设定 API Key 之后验证失败
+
+在ChuanhuChatbot.py中设置APIkey后验证出错，提示“发生了未知错误Orz” [#26](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/26)
