@@ -1,9 +1,9 @@
-FROM python:3.9-slim-buster as builder
-RUN apt-get update && apt-get install -y build-essential
+FROM python:3.9-alpine as builder
+RUN apk add --no-cache build-base
 COPY requirements.txt .
 RUN pip install --user -r requirements.txt
 
-FROM python:3.9-slim-buster
+FROM python:3.9-alpine
 MAINTAINER iskoldt
 COPY --from=builder /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
