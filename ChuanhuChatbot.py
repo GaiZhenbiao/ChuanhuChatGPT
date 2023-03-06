@@ -180,6 +180,15 @@ def reset_textbox():
     return gr.update(value='')
 
 title = """<h1 align="center">川虎ChatGPT 🚀</h1>"""
+description = """<div align=center>
+
+由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 开发
+
+访问川虎ChatGPT的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本
+
+此App使用 `gpt-3.5-turbo` 大语言模型
+</div>
+"""
 with gr.Blocks() as demo:
     gr.HTML(title)
     keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的OpenAI API-key...",
@@ -225,6 +234,8 @@ with gr.Blocks() as demo:
                                 step=0.1, interactive=True, label="Temperature",)
         #top_k = gr.Slider( minimum=1, maximum=50, value=4, step=1, interactive=True, label="Top-k",)
         #repetition_penalty = gr.Slider( minimum=0.1, maximum=3.0, value=1.03, step=0.01, interactive=True, label="Repetition Penalty", )
+    gr.Markdown(description)
+
 
     txt.submit(predict, [txt, top_p, temperature, keyTxt,
                chatbot, history, systemPromptTxt], [chatbot, history])
@@ -246,6 +257,6 @@ with gr.Blocks() as demo:
     uploadBtn.click(load_chat_history, [uploadDropdown],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
 
 print("川虎的温馨提示：访问 http://localhost:7860 查看界面")
-
-# 默认开启本地服务器，默认可以直接从IP访问，默认创建公开分享链接
-demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=True)
+# 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
+demo.title = "川虎ChatGPT 🚀"
+demo.queue().launch(server_name="127.0.0.1", server_port=7860, share=False) # 改为 share=True 可以创建公开分享链接
