@@ -87,7 +87,7 @@ python3 ChuanhuChatbot.py
 
 ### 从本项目的Packages页面拉取
 
-从本项目的[Packages](https://github.com/GaiZhenbiao/ChuanhuChatGPT/pkgs/container/chuanhuchatgpt)页面拉取Docker镜像，使用Github Actions自动创建。
+从本项目的[Packages](https://github.com/GaiZhenbiao/ChuanhuChatGPT/pkgs/container/chuanhuchatgpt)页面拉取Docker镜像，使用Github Actions自动创建。也可以去本项目的[Dockerhub页面](https://hub.docker.com/r/tuchuanhuhuhu/chuanhuchatgpt)拉取。
 
 ### 手动构建镜像
 
