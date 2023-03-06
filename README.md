@@ -100,7 +100,25 @@ docker run -d --name chatgpt -e my_api_key="替换成API"  --network host chuanh
 docker logs chatgpt
 ```
 
+## 部署相关
+
+### 部署到公网服务器
+
+将最后一句修改为
+
+```
+demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
+```
+### 用账号密码保护页面
+
+将最后一句修改为
+
+```
+demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
+```
+
 ## 疑难杂症解决
+
 
 ### No module named '_bz2'
 
@@ -160,3 +178,7 @@ Expecting value: 1ine 1 column 1 (char o)
 ```
 
 出现这个错误的原因是`127.0.0.1`被代理了，导致网页无法和后端通信。请设置代理软件，将`127.0.0.1`加入直连。
+
+### No matching distribution found for openai>=0.27.0
+
+`openai`这个依赖已经被移除了。请尝试下载最新版脚本。
