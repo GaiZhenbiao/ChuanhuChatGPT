@@ -113,7 +113,14 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
         # check whether each line is non-empty
         if chunk:
             # decode each line as response data is in bytes
-            if len(json.loads(chunk.decode()[6:])['choices'][0]["delta"]) == 0:
+            try:
+                if len(json.loads(chunk.decode()[6:])['choices'][0]["delta"]) == 0:
+                    break
+            except Exception as e:
+                chatbot.pop()
+                chatbot.append((history[-1], f"☹️发生了错误\n返回值：{response.text}\n异常：{e}"))
+                history.pop()
+                yield chatbot, history
                 break
             #print(json.loads(chunk.decode()[6:])['choices'][0]["delta"]    ["content"])
             partial_words = partial_words + \
@@ -259,4 +266,5 @@ with gr.Blocks() as demo:
 print("川虎的温馨提示：访问 http://localhost:7860 查看界面")
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
 demo.title = "川虎ChatGPT 🚀"
-demo.queue().launch(server_name="127.0.0.1", server_port=7860, share=False) # 改为 share=True 可以创建公开分享链接
+demo.queue().launch(server_name = "0.0.0.0", share=False) # 改为 share=True 可以创建公开分享链接
+# demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
