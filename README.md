@@ -136,8 +136,19 @@ pip install urllib3==1.25.11
 [解决OpenAI API 挂了代理还是连接不上的问题](https://zhuanlan.zhihu.com/p/611080662)
 
 ### API 被墙了怎么办
+
+建议把`openai.com`加入Clash等软件的分流规则中。
+
 跑起来之后，输入问题好像就没反应了，也没报错 [#25](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/25)
 
 ### 在 Python 文件里 设定 API Key 之后验证失败
 
 在ChuanhuChatbot.py中设置APIkey后验证出错，提示“发生了未知错误Orz” [#26](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/26)
+
+### 重装 gradio
+
+很多时候，这样就可以解决问题。
+
+```
+pip install gradio --upgrade --force_reinstall
+```
