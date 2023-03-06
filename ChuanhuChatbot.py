@@ -1,11 +1,13 @@
 import json
 import gradio as gr
+# import openai
 import os
 import sys
 import traceback
 import requests
+# import markdown
 
-my_api_key = "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"    # 在这里输入你的 API 密钥
+my_api_key = ""    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 
 API_URL = "https://api.openai.com/v1/chat/completions"
@@ -120,7 +122,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
             if token_counter == 0:
                 history.append(" " + partial_words)
             else:
-                history[-1] = partial_words
+                history[-1] = parse_text(partial_words)
             chatbot[-1] = (history[-2], history[-1])
         #   chat = [(history[i], history[i + 1]) for i in range(0, len(history)     - 1, 2) ]  # convert to tuples of list
             token_counter += 1
@@ -240,8 +242,6 @@ with gr.Blocks() as demo:
                   saveFileName, systemPromptTxt, history, chatbot], None, show_progress=True)
     saveBtn.click(get_history_names, None, [uploadDropdown])
     refreshBtn.click(get_history_names, None, [uploadDropdown])
-    # uploadBtn.upload(load_chat_history, uploadBtn, [
-    #                  saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
     uploadBtn.click(load_chat_history, [uploadDropdown],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
 
 

@@ -14,11 +14,14 @@
 
 
 ## 功能
-- 重试对话，让ChatGPT再回答一次。
-- 优化Tokens，减少Tokens占用，以支持更长的对话。
-- 设置System Prompt，有效地设定前置条件
-- 保存/加载对话历史记录
-- 在图形界面中添加API key
+- [x] 像官方客户端那样支持实时显示回答！
+- [x] 重试对话，让ChatGPT再回答一次。
+- [x] 优化Tokens，减少Tokens占用，以支持更长的对话。
+- [x] 设置System Prompt，有效地设定前置条件
+- [x] 保存/加载对话历史记录
+- [x] 在图形界面中添加API key
+- [ ] System Prompt模板功能，从预置的Prompt库中选择
+- [ ] 实时显示Tokens用量
 
 ## 使用技巧
 
