@@ -10,8 +10,13 @@
 
 为ChatGPT API提供了一个Web图形界面。在Bilibili上[观看视频教程](https://www.bilibili.com/video/BV1mo4y1r7eE/)。也在Hugging Face上[在线体验](https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT)。
 
-<img width="1420" alt="截屏2023-03-04 11 29 50 1" src="https://user-images.githubusercontent.com/51039745/222873690-d046dfa1-8941-49ff-92a2-fef34421c503.png">
+![Animation Demo](https://user-images.githubusercontent.com/51039745/223147807-9f5928ad-a4d0-47d7-b4f5-97b164a914ff.gif)
 
+## 🎉🎉🎉 重大更新
+
+- 精简了UI
+- 像官方ChatGPT那样实时回复
+- 改进的保存/加载功能
 
 ## 功能
 - [x] 像官方客户端那样支持实时显示回答！
