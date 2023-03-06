@@ -179,8 +179,9 @@ def compose_user(user_input):
 def reset_textbox():
     return gr.update(value='')
 
-
+title = """<h1 align="center">川虎ChatGPT 🚀</h1>"""
 with gr.Blocks() as demo:
+    gr.HTML(title)
     keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的OpenAI API-key...",
                         value=my_api_key, label="API Key", type="password").style(container=True)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
@@ -244,5 +245,7 @@ with gr.Blocks() as demo:
     refreshBtn.click(get_history_names, None, [uploadDropdown])
     uploadBtn.click(load_chat_history, [uploadDropdown],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
 
+print("川虎的温馨提示：访问 http://localhost:7860 查看界面")
 
-demo.queue().launch(debug=True)
+# 默认开启本地服务器，默认可以直接从IP访问，默认创建公开分享链接
+demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=True)
