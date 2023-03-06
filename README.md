@@ -152,3 +152,11 @@ pip install urllib3==1.25.11
 ```
 pip install gradio --upgrade --force_reinstall
 ```
+### 网页提示错误
+
+```
+Something went wrong
+Expecting value: 1ine 1 column 1 (char o)
+```
+
+出现这个错误的原因是`127.0.0.1`被代理了，导致网页无法和后端通信。请设置代理软件，将`127.0.0.1`加入直连。
