@@ -85,12 +85,18 @@ python3 ChuanhuChatbot.py
 
 ## 或者，使用Docker 安装与运行
 
-### 构建镜像
+### 从本项目的Packages页面拉取
+
+从本项目的[Packages](https://github.com/GaiZhenbiao/ChuanhuChatGPT/pkgs/container/chuanhuchatgpt)页面拉取Docker镜像，使用Github Actions自动创建。
+
+### 手动构建镜像
+
 ```
 docker build -t chuanhuchatgpt:latest .
 ```
 
-### 一键运行
+运行
+
 ```
 docker run -d --name chatgpt -e my_api_key="替换成API"  --network host chuanhuchatgpt:latest
 ```
