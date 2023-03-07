@@ -198,6 +198,7 @@ def load_template(filename):
     with open(os.path.join(TEMPLATES_DIR, filename), "r") as csvfile:
         reader = csv.reader(csvfile)
         lines = list(reader)
+    lines = lines[1:]
     return {row[0]:row[1] for row in lines}, gr.Dropdown.update(choices=[row[0] for row in lines])
 
 def get_template_names(plain=False):
