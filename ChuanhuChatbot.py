@@ -238,7 +238,7 @@ description = """<div align=center>
 with gr.Blocks() as demo:
     gr.HTML(title)
     keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的OpenAI API-key...",
-                        value=my_api_key, label="API Key", type="password", visible=HIDE_MY_KEY).style(container=True)
+                        value=my_api_key, label="API Key", type="password", visible=not HIDE_MY_KEY).style(container=True)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
     promptTemplates = gr.State({})
