@@ -8,7 +8,7 @@ import requests
 # import markdown
 import csv
 
-my_api_key = "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"    # 在这里输入你的 API 密钥
+my_api_key = ""    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 API_URL = "https://api.openai.com/v1/chat/completions"
 HISTORY_DIR = "history"
