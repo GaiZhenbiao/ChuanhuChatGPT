@@ -19,6 +19,7 @@
 - 像官方ChatGPT那样实时回复
 - 改进的保存/加载功能
 - 从Prompt模板中选择预设
+- 正常显示代码和代码块
 
 
 ## 功能
@@ -38,6 +39,7 @@
 - 如果部署到服务器，将程序最后一句改成`demo.launch(server_name="0.0.0.0", server_port=99999)`。其中`99999`是端口号，应该是1000-65535任意可用端口，请自行更改为实际端口号。
 - 如果需要获取公共链接，将程序最后一句改成`demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问
 - 使用Prompt模板功能时，请先选择模板文件（`.csv`），然后点击载入按钮，然后就可以从下拉菜单中选择想要的prompt了，点击应用填入System Prmpt
+- 输入框支持换行，按`shift enter`即可
 
 ## 安装方式
 
@@ -52,9 +54,9 @@
 
 #### ……或者在代码中填入你的 OpenAI API 密钥
 
-这样设置的密钥会成为默认密钥
+这样设置的密钥会成为默认密钥。在这里还可以选择是否在UI中隐藏密钥输入框。
 
-<img width="552" alt="SCR-20230302-sula" src="https://user-images.githubusercontent.com/51039745/222445258-248f2789-81d2-4f0a-8697-c720f588d8de.png">
+<img width="525" alt="image" src="https://user-images.githubusercontent.com/51039745/223440375-d472de4b-aa7f-4eae-9170-6dc2ed9f5480.png">
 
 ### 安装依赖
 
