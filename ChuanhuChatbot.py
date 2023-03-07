@@ -48,7 +48,7 @@ def parse_text(text):
             count += 1
             items = line.split('`')
             if count % 2 == 1:
-                lines[i] = f'<pre><code class="{items[-1]}" style="display: block; white-space: pre; background-color: hsl(0, 0%, 32%); border-radius: 8px; padding: 0px 1em 1em; margin-top: 1em; font-size: initial;">'
+                lines[i] = f'<pre><code class="{items[-1]}" style="display: block; white-space: pre; background-color: hsl(0, 0%, 32%); border-radius: 8px; padding: 0px 1em 1em; margin-top: 1em; font-size: initial;color: #FFF;">'
                 firstline = True
             else:
                 lines[i] = f'</code></pre>'
