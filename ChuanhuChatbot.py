@@ -7,6 +7,12 @@ import traceback
 import requests
 # import markdown
 
+my_api_key = ""    # 在这里输入你的 API 密钥
+initial_prompt = "You are a helpful assistant."
+API_URL = "https://api.openai.com/v1/chat/completions"
+
+
+
 #if we are running in Docker
 if os.environ.get('dockerrun') == 'yes':
     dockerflag = True
@@ -25,12 +31,6 @@ if dockerflag:
         authflag = False
     else:
         authflag = True
-
-
-my_api_key = ""    # 在这里输入你的 API 密钥
-initial_prompt = "You are a helpful assistant."
-
-API_URL = "https://api.openai.com/v1/chat/completions"
 
 
 def parse_text(text):
