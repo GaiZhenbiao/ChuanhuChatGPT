@@ -195,7 +195,7 @@ def get_history_names(plain=False):
 
 def load_template(filename):
     lines = []
-    with open(os.path.join(TEMPLATES_DIR, filename), "r") as csvfile:
+    with open(os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8") as csvfile:
         reader = csv.reader(csvfile)
         lines = list(reader)
     lines = lines[1:]
