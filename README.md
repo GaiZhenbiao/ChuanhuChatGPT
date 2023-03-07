@@ -224,7 +224,7 @@ pip install urllib3==1.25.11
 很多时候，这样就可以解决问题。
 
 ```
-pip install gradio --upgrade --force_reinstall
+pip install gradio --upgrade --force-reinstall
 ```
 
 ### SSL Error [#49](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/49)
