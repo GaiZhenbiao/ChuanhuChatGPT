@@ -111,7 +111,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
 
     if not summary:
         history.append(inputs)
-    # print(f"payload is - {payload}")
+    print(f"payload is - {payload}")
     # make a POST request to the API endpoint using the requests.post method, passing in stream=True
     response = requests.post(API_URL, headers=headers,
                              json=payload, stream=True)
@@ -156,11 +156,9 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
 
 
 def delete_last_conversation(chatbot, history):
-    if chat_counter > 0:
-        chat_counter -= 1
-        chatbot.pop()
-        history.pop()
-        history.pop()
+    chatbot.pop()
+    history.pop()
+    history.pop()
     return chatbot, history
 
 def save_chat_history(filename, system, history, chatbot):
