@@ -63,8 +63,6 @@ def parse_text(text):
                     line = line.replace(" ", "&nbsp;")
                     line = line.replace("*", "&ast;")
                     line = line.replace("_", "&lowbar;")
-                    line = line.replace("{", "&#123;")
-                    line = line.replace("}", "&#125;")
                     line = line.replace("[", "&#91;")
                     line = line.replace("]", "&#93;")
                     line = line.replace("-", "&#45;")
