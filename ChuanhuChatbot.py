@@ -38,6 +38,7 @@ if dockerflag:
 
 def parse_text(text):
     lines = text.split("\n")
+    lines = [line for line in lines if line != ""]
     count = 0
     for i, line in enumerate(lines):
         if "```" in line:
@@ -52,18 +53,19 @@ def parse_text(text):
                 if count % 2 == 1:
                     line = line.replace("&", "&amp;")
                     line = line.replace("\"", "&quot;")
+                    # line = line.replace("\"", "&#34;")
                     line = line.replace("\'", "&apos;")
+                    # line = line.replace("\'", "&#39;")
                     line = line.replace("<", "&lt;")
                     line = line.replace(">", "&gt;")
                     line = line.replace(" ", "&nbsp;")
-                # lines[i] = '<br/>'+line
-                if i > 0 and count % 2 == 0:
-                    lines[i] = "<br/>"+line
-                else:
-                    lines[i] = line
-    return "".join(lines)
+                lines[i] = '<br>'+line
+    return "".join(lines).replace("<br>\n", "<br>")
+    # text = "</br>".join([ i for i in "".join(lines).split("<br/>") if i != ""])
 
 def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], system_prompt=initial_prompt, retry=False, summary=False):  # repetition_penalty, top_k
+
+    print(f"chatbot 1: {chatbot}")
 
     headers = {
         "Content-Type": "application/json",
@@ -138,7 +140,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
                     break
             except Exception as e:
                 chatbot.pop()
-                chatbot.append((history[-1], f"☹️发生了错误\n返回值：{response.text}\n异常：{e}"))
+                chatbot.append((history[-1], f"☹️发生了错误<br>返回值：{response.text}<br>异常：{e}"))
                 history.pop()
                 yield chatbot, history
                 break
