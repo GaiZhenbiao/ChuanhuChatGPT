@@ -176,6 +176,29 @@ pip install urllib3==1.25.11
 ```
 pip install gradio --upgrade --force_reinstall
 ```
+
+### SSL Error
+
+```
+requests.exceptions.SSLError: HTTPSConnectionPool(host='api.openai.com', port=443): Max retries exceeded with url: /v1/chat/completions (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
+```
+
+请将`openai.com`加入你使用的代理App的代理规则。注意不要将`127.0.0.1`加入代理，否则会有下一个错误。例如，在Clash配置文件中，加入：
+
+```
+rules:
+- DOMAIN-SUFFIX,openai.com,你的代理规则
+- DOMAIN,127.0.0.1,DIRECT
+```
+
+Surge：
+
+```
+[Rule]
+DOMAIN,127.0.0.1,DIRECT
+DOMAIN-SUFFIX,openai.com,你的代理规则
+```
+
 ### 网页提示错误
 
 ```
