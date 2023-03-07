@@ -40,12 +40,14 @@ def parse_text(text):
     lines = text.split("\n")
     lines = [line for line in lines if line != ""]
     count = 0
+    firstline = False
     for i, line in enumerate(lines):
         if "```" in line:
             count += 1
             items = line.split('`')
             if count % 2 == 1:
-                lines[i] = f'<pre><code class="{items[-1]}">'
+                lines[i] = f'<pre><code class="{items[-1]}" style="display: block; white-space: pre; padding: 0 1em 1em 1em; color: #fff; background: #000;">'
+                firstline = True
             else:
                 lines[i] = f'</code></pre>'
         else:
@@ -59,8 +61,12 @@ def parse_text(text):
                     line = line.replace("<", "&lt;")
                     line = line.replace(">", "&gt;")
                     line = line.replace(" ", "&nbsp;")
-                lines[i] = '<br>'+line
-    return "".join(lines).replace("<br>\n", "<br>")
+                if firstline:
+                    lines[i] = line
+                    firstline = False
+                else:
+                    lines[i] = '<br>'+line
+    return "".join(lines)
     # text = "</br>".join([ i for i in "".join(lines).split("<br/>") if i != ""])
 
 def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], system_prompt=initial_prompt, retry=False, summary=False):  # repetition_penalty, top_k
