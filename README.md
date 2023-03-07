@@ -225,6 +225,8 @@ pip install gradio --upgrade --force_reinstall
 
 ### SSL Error
 
+请参考此 Issue: [#49](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/49)
+
 ```
 requests.exceptions.SSLError: HTTPSConnectionPool(host='api.openai.com', port=443): Max retries exceeded with url: /v1/chat/completions (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
 ```
