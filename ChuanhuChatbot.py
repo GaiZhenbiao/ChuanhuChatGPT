@@ -8,7 +8,7 @@ import requests
 # import markdown
 import csv
 
-my_api_key = ""    # 在这里输入你的 API 密钥
+my_api_key = "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"    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 API_URL = "https://api.openai.com/v1/chat/completions"
 HISTORY_DIR = "history"
@@ -54,20 +54,14 @@ def parse_text(text):
             if i > 0:
                 if count % 2 == 1:
                     line = line.replace("&", "&amp;")
-                    line = line.replace("\"", "&quot;")
-                    # line = line.replace("\"", "&#34;")
-                    line = line.replace("\'", "&apos;")
-                    # line = line.replace("\'", "&#39;")
+                    line = line.replace("\"", "`\"`")
+                    line = line.replace("\'", "`\'`")
                     line = line.replace("<", "&lt;")
                     line = line.replace(">", "&gt;")
                     line = line.replace(" ", "&nbsp;")
-                if firstline:
-                    lines[i] = line
-                    firstline = False
-                else:
-                    lines[i] = '<br>'+line
-    return "".join(lines)
-    # text = "</br>".join([ i for i in "".join(lines).split("<br/>") if i != ""])
+                lines[i] = "<br>"+line
+    text = "".join(lines)
+    return text
 
 def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], system_prompt=initial_prompt, retry=False, summary=False):  # repetition_penalty, top_k
 
