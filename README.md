@@ -18,6 +18,8 @@
 - 精简了UI
 - 像官方ChatGPT那样实时回复
 - 改进的保存/加载功能
+- 从Prompt模板中选择预设
+
 
 ## 功能
 - [x] 像官方客户端那样支持实时显示回答！
@@ -26,7 +28,7 @@
 - [x] 设置System Prompt，有效地设定前置条件
 - [x] 保存/加载对话历史记录
 - [x] 在图形界面中添加API key
-- [ ] System Prompt模板功能，从预置的Prompt库中选择
+- [x] System Prompt模板功能，从预置的Prompt库中选择System Prompt
 - [ ] 实时显示Tokens用量
 
 ## 使用技巧
@@ -35,6 +37,7 @@
 - 对于长对话，可以使用“优化Tokens”按钮减少Tokens占用。
 - 如果部署到服务器，将程序最后一句改成`demo.launch(server_name="0.0.0.0", server_port=99999)`。其中`99999`是端口号，应该是1000-65535任意可用端口，请自行更改为实际端口号。
 - 如果需要获取公共链接，将程序最后一句改成`demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问
+- 使用Prompt模板功能时，请先选择模板文件（`.csv`），然后点击载入按钮，然后就可以从下拉菜单中选择想要的prompt了，点击应用填入System Prmpt
 
 ## 安装方式
 
@@ -220,7 +223,7 @@ pip install urllib3==1.25.11
 pip install gradio --upgrade --force_reinstall
 ```
 
-### SSL Error
+### SSL Error [#49](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/49)
 
 ```
 requests.exceptions.SSLError: HTTPSConnectionPool(host='api.openai.com', port=443): Max retries exceeded with url: /v1/chat/completions (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
