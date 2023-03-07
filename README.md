@@ -159,7 +159,6 @@ map $http_upgrade $connection_upgrade {
   default upgrade;
   ''      close;
   }
-}
 ```
 
 ## 疑难杂症解决
