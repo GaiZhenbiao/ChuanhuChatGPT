@@ -6,11 +6,13 @@ import sys
 import traceback
 import requests
 # import markdown
+import csv
 
 my_api_key = ""    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 API_URL = "https://api.openai.com/v1/chat/completions"
 HISTORY_DIR = "history"
+TEMPLATES_DIR = "templates"
 
 
 
@@ -177,10 +179,10 @@ def load_chat_history(filename):
     return filename, json_s["system"], json_s["history"], json_s["chatbot"]
 
 
-def get_history_names(plain=False):
+def get_file_names(dir, plain=False, filetype=".json"):
     # find all json files in the current directory and return their names
     try:
-        files = [f for f in os.listdir(HISTORY_DIR) if f.endswith(".json")]
+        files = [f for f in os.listdir(dir) if f.endswith(filetype)]
     except FileNotFoundError:
         files = []
     if plain:
@@ -188,6 +190,18 @@ def get_history_names(plain=False):
     else:
         return gr.Dropdown.update(choices=files)
 
+def get_history_names(plain=False):
+    return get_file_names(HISTORY_DIR, plain)
+
+def load_template(filename):
+    lines = []
+    with open(os.path.join(TEMPLATES_DIR, filename), "r") as csvfile:
+        reader = csv.reader(csvfile)
+        lines = list(reader)
+    return {row[0]:row[1] for row in lines}, gr.Dropdown.update(choices=[row[0] for row in lines])
+
+def get_template_names(plain=False):
+    return get_file_names(TEMPLATES_DIR, plain, filetype=".csv")
 
 def reset_state():
     return [], []
@@ -220,6 +234,7 @@ with gr.Blocks() as demo:
                         value=my_api_key, label="API Key", type="password").style(container=True)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
+    promptTemplates = gr.State({})
     TRUECOMSTANT = gr.State(True)
     FALSECONSTANT = gr.State(False)
     topic = gr.State("未命名对话历史记录")
@@ -237,6 +252,19 @@ with gr.Blocks() as demo:
         reduceTokenBtn = gr.Button("♻️ 总结对话")
     systemPromptTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入System Prompt...",
                                  label="System prompt", value=initial_prompt).style(container=True)
+    with gr.Accordion(label="加载Prompt模板", open=False):
+        with gr.Column():
+            with gr.Row():
+                with gr.Column(scale=6):
+                    templateFileSelectDropdown = gr.Dropdown(label="选择Prompt模板集合文件（.csv）", choices=get_template_names(plain=True), multiselect=False)
+                with gr.Column(scale=1):
+                    templateRefreshBtn = gr.Button("🔄 刷新")
+                    templaeFileReadBtn = gr.Button("📂 读入模板")
+            with gr.Row():
+                with gr.Column(scale=6):
+                    templateSelectDropdown = gr.Dropdown(label="从Prompt模板中加载", choices=[], multiselect=False)
+                with gr.Column(scale=1):
+                    templateApplyBtn = gr.Button("⬇️ 应用")
     with gr.Accordion(label="保存/加载对话历史记录(在文本框中输入文件名，点击“保存对话”按钮，历史记录文件会被存储到Python文件旁边)", open=False):
         with gr.Column():
             with gr.Row():
@@ -247,10 +275,10 @@ with gr.Blocks() as demo:
                     saveBtn = gr.Button("💾 保存对话")
             with gr.Row():
                 with gr.Column(scale=6):
-                    uploadDropdown = gr.Dropdown(label="从列表中加载对话", choices=get_history_names(plain=True), multiselect=False)
+                    historyFileSelectDropdown = gr.Dropdown(label="从列表中加载对话", choices=get_history_names(plain=True), multiselect=False)
                 with gr.Column(scale=1):
-                    refreshBtn = gr.Button("🔄 刷新")
-                    uploadBtn = gr.Button("📂 读取对话")
+                    historyRefreshBtn = gr.Button("🔄 刷新")
+                    historyReadBtn = gr.Button("📂 读入对话")
     #inputs, top_p, temperature, top_k, repetition_penalty
     with gr.Accordion("参数", open=False):
         top_p = gr.Slider(minimum=-0, maximum=1.0, value=1.0, step=0.05,
@@ -277,9 +305,12 @@ with gr.Blocks() as demo:
                          systemPromptTxt, FALSECONSTANT, TRUECOMSTANT], [chatbot, history], show_progress=True)
     saveBtn.click(save_chat_history, [
                   saveFileName, systemPromptTxt, history, chatbot], None, show_progress=True)
-    saveBtn.click(get_history_names, None, [uploadDropdown])
-    refreshBtn.click(get_history_names, None, [uploadDropdown])
-    uploadBtn.click(load_chat_history, [uploadDropdown],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
+    saveBtn.click(get_history_names, None, [historyFileSelectDropdown])
+    historyRefreshBtn.click(get_history_names, None, [historyFileSelectDropdown])
+    historyReadBtn.click(load_chat_history, [historyFileSelectDropdown],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
+    templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
+    templaeFileReadBtn.click(load_template, [templateFileSelectDropdown],  [promptTemplates, templateSelectDropdown], show_progress=True)
+    templateApplyBtn.click(lambda x, y: x[y], [promptTemplates, templateSelectDropdown],  [systemPromptTxt], show_progress=True)
 
 print("川虎的温馨提示：访问 http://localhost:7860 查看界面")
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
