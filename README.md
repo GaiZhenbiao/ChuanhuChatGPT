@@ -138,6 +138,8 @@ server {
 		proxy_set_header Host $host;
 		proxy_set_header X-Real-IP $remote_addr;
 		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header Upgrade $http_upgrade;		# Websocket配置
+		proxy_set_header Connection $connection_upgrade;		#Websocket配置
 		proxy_max_temp_file_size 0;
 		client_max_body_size 10m;
 		client_body_buffer_size 128k;
