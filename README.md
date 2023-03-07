@@ -83,28 +83,38 @@ python3 ChuanhuChatbot.py
 
 如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
 
-## 或者，使用Docker 安装与运行
+## 或者，使用Docker 运行
 
-### 从本项目的Packages页面拉取
-
-从本项目的[Packages](https://github.com/GaiZhenbiao/ChuanhuChatGPT/pkgs/container/chuanhuchatgpt)页面拉取Docker镜像，使用Github Actions自动创建。也可以去本项目的[Dockerhub页面](https://hub.docker.com/r/tuchuanhuhuhu/chuanhuchatgpt)拉取。
-
-### 手动构建镜像
+### 拉取镜像
 
 ```
-docker build -t chuanhuchatgpt:latest .
+docker pull tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
 
-运行
+### 运行
 
 ```
-docker run -d --name chatgpt -e my_api_key="替换成API"  --network host chuanhuchatgpt:latest
+docker run -d --name chatgpt -e my_api_key="替换成API"  --network host tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
 
 ### 查看本地访问地址
 ```
 docker logs chatgpt
 ```
+### 不支持Docker host 网络的系统
+
+可以直接尝试
+
+```
+docker run -d --name chatgpt -e my_api_key="替换成API"  -p 7860:7860 tuchuanhuhuhu/chuanhuchatgpt:latest
+```
+
+### 也可修改脚本后手动构建镜像
+
+```
+docker build -t chuanhuchatgpt:latest .
+```
+
 
 ## 部署相关
 
