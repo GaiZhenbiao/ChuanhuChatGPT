@@ -9,6 +9,8 @@ import requests
 import csv
 
 my_api_key = ""    # 在这里输入你的 API 密钥
+HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
+
 initial_prompt = "You are a helpful assistant."
 API_URL = "https://api.openai.com/v1/chat/completions"
 HISTORY_DIR = "history"
@@ -236,7 +238,7 @@ description = """<div align=center>
 with gr.Blocks() as demo:
     gr.HTML(title)
     keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的OpenAI API-key...",
-                        value=my_api_key, label="API Key", type="password").style(container=True)
+                        value=my_api_key, label="API Key", type="password", visible=HIDE_MY_KEY).style(container=True)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
     promptTemplates = gr.State({})
