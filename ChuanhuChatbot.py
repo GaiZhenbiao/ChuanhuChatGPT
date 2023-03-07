@@ -56,8 +56,11 @@ def parse_text(text):
                     line = line.replace("<", "&lt;")
                     line = line.replace(">", "&gt;")
                     line = line.replace(" ", "&nbsp;")
-                if not line.startswith("<br/>"):
-                    lines[i] = '<br/>'+line
+                # lines[i] = '<br/>'+line
+                if i > 0 and count % 2 == 0:
+                    lines[i] = "<br/>"+line
+                else:
+                    lines[i] = line
     return "".join(lines)
 
 def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], system_prompt=initial_prompt, retry=False, summary=False):  # repetition_penalty, top_k
