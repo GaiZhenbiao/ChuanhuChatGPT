@@ -97,7 +97,11 @@ docker pull tuchuanhuhuhu/chuanhuchatgpt:latest
 ### 运行
 
 ```
-docker run -d --name chatgpt -e my_api_key="替换成API"  -p 7860:7860 tuchuanhuhuhu/chuanhuchatgpt:latest
+docker run -d --name chatgpt \
+	-e my_api_key="替换成API" \
+	-v ~/chatGPThistory:app/history \
+	-p 7860:7860 \
+	tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
 
 ### 查看运行状态
@@ -257,3 +261,13 @@ Expecting value: 1ine 1 column 1 (char o)
 ### No matching distribution found for openai>=0.27.0
 
 `openai`这个依赖已经被移除了。请尝试下载最新版脚本。
+
+## Starchart
+
+[![Star History Chart](https://api.star-history.com/svg?repos=GaiZhenbiao/ChuanhuChatGPT&type=Date)](https://star-history.com/#GaiZhenbiao/ChuanhuChatGPT&Date)
+
+## Contributors
+
+<a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=GaiZhenbiao/ChuanhuChatGPT" />
+</a>
