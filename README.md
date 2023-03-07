@@ -54,9 +54,9 @@
 
 #### ……或者在代码中填入你的 OpenAI API 密钥
 
-这样设置的密钥会成为默认密钥
+这样设置的密钥会成为默认密钥。在这里还可以选择是否在UI中隐藏密钥输入框。
 
-<img width="552" alt="SCR-20230302-sula" src="https://user-images.githubusercontent.com/51039745/222445258-248f2789-81d2-4f0a-8697-c720f588d8de.png">
+<img width="525" alt="image" src="https://user-images.githubusercontent.com/51039745/223440375-d472de4b-aa7f-4eae-9170-6dc2ed9f5480.png">
 
 ### 安装依赖
 
