@@ -87,7 +87,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
                 messages[-1]['content'] = temp2['content']
     if retry and chat_counter:
         messages.pop()
-    elif summary and chat_counter:
+    elif summary:
         messages.append(compose_user(
             "请帮我总结一下上述对话的内容，实现减少字数的同时，保证对话的质量。在总结中不要加入这一句话。"))
         history = ["我们刚刚聊了什么？"]
@@ -111,7 +111,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
 
     if not summary:
         history.append(inputs)
-    print(f"payload is - {payload}")
+    # print(f"payload is - {payload}")
     # make a POST request to the API endpoint using the requests.post method, passing in stream=True
     response = requests.post(API_URL, headers=headers,
                              json=payload, stream=True)
