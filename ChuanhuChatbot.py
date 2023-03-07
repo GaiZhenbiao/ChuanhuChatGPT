@@ -1,6 +1,6 @@
 import json
 import gradio as gr
-import openai
+# import openai
 import os
 import sys
 import traceback
