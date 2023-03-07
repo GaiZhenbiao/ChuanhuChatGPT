@@ -94,19 +94,12 @@ docker pull tuchuanhuhuhu/chuanhuchatgpt:latest
 ### 运行
 
 ```
-docker run -d --name chatgpt -e my_api_key="替换成API"  --network host tuchuanhuhuhu/chuanhuchatgpt:latest
+docker run -d --name chatgpt -e my_api_key="替换成API"  -p 7860:7860 tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
 
-### 查看本地访问地址
+### 查看运行状态
 ```
 docker logs chatgpt
-```
-### 不支持Docker host 网络的系统
-
-可以直接尝试
-
-```
-docker run -d --name chatgpt -e my_api_key="替换成API"  -p 7860:7860 tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
 
 ### 也可修改脚本后手动构建镜像
