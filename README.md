@@ -123,6 +123,45 @@ demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可�
 demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
 ```
 
+### 如果你想用域名访问，可以配置Nginx反向代理
+
+添加独立配置文件：
+```nginx
+server {
+	listen 80;
+	server_name /域名/;   # 请填入你设定的域名
+	access_log off;
+	error_log off;
+	location / {
+		proxy_pass http://127.0.0.1:7860;   # 注意端口号
+		proxy_redirect off;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_max_temp_file_size 0;
+		client_max_body_size 10m;
+		client_body_buffer_size 128k;
+		proxy_connect_timeout 90;
+		proxy_send_timeout 90;
+		proxy_read_timeout 90;
+		proxy_buffer_size 4k;
+		proxy_buffers 4 32k;
+		proxy_busy_buffers_size 64k;
+		proxy_temp_file_write_size 64k;
+	}
+}
+```
+
+修改`nginx.conf`配置文件（通常在`/etc/nginx/nginx.conf`），向http部分添加如下配置：
+（这一步是为了配置websocket连接，如之前配置过可忽略）
+```nginx
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  ''      close;
+  }
+}
+```
+
 ## 疑难杂症解决
 
 
