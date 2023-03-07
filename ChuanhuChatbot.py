@@ -10,6 +10,7 @@ import requests
 my_api_key = ""    # 在这里输入你的 API 密钥
 initial_prompt = "You are a helpful assistant."
 API_URL = "https://api.openai.com/v1/chat/completions"
+HISTORY_DIR = "history"
 
 
 
@@ -18,7 +19,7 @@ if os.environ.get('dockerrun') == 'yes':
     dockerflag = True
 else:
     dockerflag = False
-    
+
 if dockerflag:
     my_api_key = os.environ.get('my_api_key')
     if my_api_key == "empty":
@@ -159,25 +160,29 @@ def delete_last_conversation(chatbot, history):
         history.pop()
     return chatbot, history
 
-def save_chat_history(filepath, system, history, chatbot):
-    if filepath == "":
+def save_chat_history(filename, system, history, chatbot):
+    if filename == "":
         return
-    if not filepath.endswith(".json"):
-        filepath += ".json"
+    if not filename.endswith(".json"):
+        filename += ".json"
+    os.makedirs(HISTORY_DIR, exist_ok=True)
     json_s = {"system": system, "history": history, "chatbot": chatbot}
-    with open(filepath, "w") as f:
+    with open(os.path.join(HISTORY_DIR, filename), "w") as f:
         json.dump(json_s, f)
 
 
 def load_chat_history(filename):
-    with open(filename, "r") as f:
+    with open(os.path.join(HISTORY_DIR, filename), "r") as f:
         json_s = json.load(f)
     return filename, json_s["system"], json_s["history"], json_s["chatbot"]
 
 
 def get_history_names(plain=False):
     # find all json files in the current directory and return their names
-    files = [f for f in os.listdir() if f.endswith(".json")]
+    try:
+        files = [f for f in os.listdir(HISTORY_DIR) if f.endswith(".json")]
+    except FileNotFoundError:
+        files = []
     if plain:
         return files
     else:
