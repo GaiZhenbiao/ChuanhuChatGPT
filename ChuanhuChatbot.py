@@ -48,7 +48,7 @@ def parse_text(text):
             count += 1
             items = line.split('`')
             if count % 2 == 1:
-                lines[i] = f'<pre><code class="{items[-1]}" style="display: block; white-space: pre; background-color: hsl(0, 0%, 32%); border-radius: 8px; padding: 0px 1em 1em; margin-top: 1em; font-size: initial;color: #FFF;">'
+                lines[i] = f'<pre><code class="{items[-1]}">'
                 firstline = True
             else:
                 lines[i] = f'</code></pre>'
@@ -243,7 +243,34 @@ description = """<div align=center>
 此App使用 `gpt-3.5-turbo` 大语言模型
 </div>
 """
-with gr.Blocks() as demo:
+customCSS = """
+code {
+    display: inline;
+    white-space: break-spaces;
+    border-radius: 6px;
+    margin: 0 2px 0 2px;
+    padding: .2em .4em .1em .4em;
+    background-color: rgba(175,184,193,0.2);
+}
+pre {
+    display: block; 
+    white-space: pre; 
+    background-color: hsla(0, 0%, 0%, 72%);
+    border: solid 1.2px var(--color-border-primary) !important;
+    border-radius: 8px; 
+    padding: 0 1.2rem 1.2rem;
+    margin-top: 1em !important; 
+    color: #FFF;
+    box-shadow: inset 0px 8px 16px hsla(0, 0%, 0%, .2)
+}
+pre code, pre code code {
+    background-color: transparent !important;
+    margin: 0;
+    padding: 0;
+}
+"""
+
+with gr.Blocks(css=customCSS) as demo:
     gr.HTML(title)
     keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的OpenAI API-key...",
                         value=my_api_key, label="API Key", type="password", visible=not HIDE_MY_KEY).style(container=True)
