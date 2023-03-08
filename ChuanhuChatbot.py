@@ -253,13 +253,13 @@ code {
     background-color: rgba(175,184,193,0.2);
 }
 pre {
-    display: block; 
-    white-space: pre; 
+    display: block;
+    white-space: pre;
     background-color: hsla(0, 0%, 0%, 72%);
-    border: solid 1.2px var(--color-border-primary) !important;
-    border-radius: 8px; 
+    border: solid 5px var(--color-border-primary) !important;
+    border-radius: 8px;
     padding: 0 1.2rem 1.2rem;
-    margin-top: 1em !important; 
+    margin-top: 1em !important;
     color: #FFF;
     box-shadow: inset 0px 8px 16px hsla(0, 0%, 0%, .2)
 }
