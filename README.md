@@ -1,6 +1,6 @@
 <img height="128" align="left" src="https://user-images.githubusercontent.com/51039745/222689546-7612df0e-e28b-4693-9f5f-4ef2be3daf48.png" alt="Logo">
 
-# 川虎 ChatGPT / Chuanhu ChatGPT
+# 川虎 ChatGPT 🐯 Chuanhu ChatGPT
 
 [![LICENSE](https://img.shields.io/github/license/GaiZhenbiao/ChuanhuChatGPT)](https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE)
 [![Base](https://img.shields.io/badge/Base-Gradio-fb7d1a?style=flat)](https://gradio.app/)
@@ -13,13 +13,17 @@
 ![Animation Demo](https://user-images.githubusercontent.com/51039745/223148794-f4fd2fcb-3e48-4cdf-a759-7aa463d3f14c.gif)
 
 
-## 🎉🎉🎉 重大更新
+## 重大更新 🎉🎉🎉
 
 - 精简了UI
 - 像官方ChatGPT那样实时回复
 - 改进的保存/加载功能
 - 从Prompt模板中选择预设
 - 将大段代码显示在代码块中
+
+## 目录
+|[功能](#功能)|[使用技巧](#使用技巧)|[安装方式](#安装方式)|[疑难杂症解决](#疑难杂症解决)|
+|  ----  | ----  | ----  | ----  |
 
 
 ## 功能
@@ -50,18 +54,34 @@
 
 ### 填写API密钥
 
+<details><summary>在图形界面中填写你的API密钥</summary>
+<p>
+
 #### 在图形界面中填写你的API密钥
 
 这样设置的密钥会在页面刷新后被清除
 
 <img width="760" alt="image" src="https://user-images.githubusercontent.com/51039745/222873756-3858bb82-30b9-49bc-9019-36e378ee624d.png">
 
+</p>
+</details>
+
+<details><summary>在代码中填入你的 OpenAI API 密钥</summary>
+<p>
 
 #### ……或者在代码中填入你的 OpenAI API 密钥
 
 这样设置的密钥会成为默认密钥。在这里还可以选择是否在UI中隐藏密钥输入框。
 
 <img width="525" alt="image" src="https://user-images.githubusercontent.com/51039745/223440375-d472de4b-aa7f-4eae-9170-6dc2ed9f5480.png">
+
+</p>
+</details>
+
+### 直接安装
+
+<details>
+<p>
 
 ### 安装依赖
 
@@ -93,15 +113,21 @@ python3 ChuanhuChatbot.py
 
 如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
 
-## 或者，使用Docker 运行
+</p>
+</details>
 
-### 拉取镜像
+### 或者，使用Docker 运行
+
+<details>
+<p>
+
+#### 拉取镜像
 
 ```
 docker pull tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
 
-### 运行
+#### 运行
 
 ```
 docker run -d --name chatgpt \
@@ -111,19 +137,25 @@ docker run -d --name chatgpt \
 	tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
 
-### 查看运行状态
+#### 查看运行状态
 ```
 docker logs chatgpt
 ```
 
-### 也可修改脚本后手动构建镜像
+#### 也可修改脚本后手动构建镜像
 
 ```
 docker build -t chuanhuchatgpt:latest .
 ```
 
+</p>
+</details>
+
 
 ## 部署相关
+
+<details>
+<p>
 
 ### 部署到公网服务器
 
@@ -180,10 +212,16 @@ map $http_upgrade $connection_upgrade {
   }
 ```
 
+</p>
+</details>
+
 ## 疑难杂症解决
 
 
 ### No module named '_bz2'
+
+<details>
+<p>
 
 太空急先锋：部署在CentOS7.6,Python3.11.0上,最后报错ModuleNotFoundError: No module named '_bz2'
 
@@ -216,11 +254,8 @@ pip install urllib3==1.25.11
 参考自：
 [解决OpenAI API 挂了代理还是连接不上的问题](https://zhuanlan.zhihu.com/p/611080662)
 
-### API 被墙了怎么办
-
-建议把`openai.com`加入Clash等软件的分流规则中。
-
-跑起来之后，输入问题好像就没反应了，也没报错 [#25](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/25)
+</p>
+</details>
 
 ### 在 Python 文件里 设定 API Key 之后验证失败
 
@@ -228,13 +263,24 @@ pip install urllib3==1.25.11
 
 ### 重装 gradio
 
+<details>
+<p>
+
 很多时候，这样就可以解决问题。
 
 ```
 pip install gradio --upgrade --force-reinstall
 ```
 
+</p>
+</details>
+
 ### 一直等待/SSL Error [#49](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/49)
+
+<details>
+<p>
+
+跑起来之后，输入问题好像就没反应了，也没报错 [#25](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/25)
 
 ```
 requests.exceptions.SSLError: HTTPSConnectionPool(host='api.openai.com', port=443): Max retries exceeded with url: /v1/chat/completions (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
@@ -258,7 +304,13 @@ DOMAIN,127.0.0.1,DIRECT
 DOMAIN-SUFFIX,openai.com,你的代理规则
 ```
 
-### 网页提示错误
+</p>
+</details>
+
+### 网页提示错误 Something went wrong
+
+<details>
+<p>
 
 ```
 Something went wrong
@@ -266,6 +318,9 @@ Expecting value: 1ine 1 column 1 (char o)
 ```
 
 出现这个错误的原因是`127.0.0.1`被代理了，导致网页无法和后端通信。请设置代理软件，将`127.0.0.1`加入直连。
+
+</p>
+</details>
 
 ### No matching distribution found for openai>=0.27.0
 
@@ -280,3 +335,10 @@ Expecting value: 1ine 1 column 1 (char o)
 <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=GaiZhenbiao/ChuanhuChatGPT" />
 </a>
+
+## 捐款
+
+请作者喝可乐～
+
+<img width="350" alt="image" src="https://user-images.githubusercontent.com/51039745/223626874-f471e5f5-8a06-43d5-aa31-9d2575b6f631.JPG">
+
