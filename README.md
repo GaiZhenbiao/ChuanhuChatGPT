@@ -338,7 +338,7 @@ Expecting value: 1ine 1 column 1 (char o)
 
 ## 捐款
 
-请作者喝可乐～
+🐯请作者喝可乐～
 
 <img width="350" alt="image" src="https://user-images.githubusercontent.com/51039745/223626874-f471e5f5-8a06-43d5-aa31-9d2575b6f631.JPG">
 
