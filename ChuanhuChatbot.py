@@ -9,7 +9,6 @@ import requests
 import csv
 
 my_api_key = ""    # 在这里输入你的 API 密钥
-HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
 
 initial_prompt = "You are a helpful assistant."
 API_URL = "https://api.openai.com/v1/chat/completions"
@@ -76,6 +75,8 @@ def parse_text(text):
 def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], system_prompt=initial_prompt, retry=False, summary=False):  # repetition_penalty, top_k
 
     print(f"chatbot 1: {chatbot}")
+    
+    openai_api_key = openai_api_key if openai_api_key.strip() != "" else my_api_key
 
     headers = {
         "Content-Type": "application/json",
@@ -167,8 +168,6 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
             token_counter += 1
             # resembles {chatbot: chat,     state: history}
             yield chatbot, history
-
-
 
 def delete_last_conversation(chatbot, history):
     chatbot.pop()
@@ -272,8 +271,8 @@ pre code, pre code code {
 
 with gr.Blocks(css=customCSS) as demo:
     gr.HTML(title)
-    keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的OpenAI API-key...",
-                        value=my_api_key, label="API Key", type="password", visible=not HIDE_MY_KEY).style(container=True)
+    keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的OpenAI API-key, 或留空使用默认配置",
+                        value="", label="API Key", type="password").style(container=True)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
     promptTemplates = gr.State({})
@@ -283,7 +282,7 @@ with gr.Blocks(css=customCSS) as demo:
 
     with gr.Row():
         with gr.Column(scale=12):
-            txt = gr.Textbox(show_label=False, placeholder="在这里输入").style(
+            txt = gr.Textbox(show_label=False, placeholder="在这里输入, shift+enter 换行").style(
                 container=False)
         with gr.Column(min_width=50, scale=1):
             submitBtn = gr.Button("🚀", variant="primary")
