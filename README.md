@@ -245,7 +245,7 @@ requests.exceptions.SSLError: HTTPSConnectionPool(host='api.openai.com', port=44
 ```
 rules:
 - DOMAIN-SUFFIX,openai.com,你的代理规则
-- DOMAIN,127.0.0.1,DIRECT
+- IP-CIDR,127.0.0.1,DIRECT
 ```
 
 Surge：
