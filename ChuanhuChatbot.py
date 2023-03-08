@@ -69,6 +69,8 @@ def parse_text(text):
                     line = line.replace("!", "&#33;")
                     line = line.replace("(", "&#40;")
                     line = line.replace(")", "&#41;")
+                    line = line.replace("$", "&#36;")
+                    line = line.replace("`", "&#96;")
                 lines[i] = "<br>"+line
     text = "".join(lines)
     return text
