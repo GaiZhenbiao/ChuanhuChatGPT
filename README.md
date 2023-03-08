@@ -125,7 +125,7 @@ docker pull tuchuanhuhuhu/chuanhuchatgpt:latest
 ```shell
 docker run -d --name chatgpt \
 	-e my_api_key="替换成API" \
-	-v ~/chatGPThistory:app/history \
+	-v ~/chatGPThistory:/app/history \
 	-p 7860:7860 \
 	tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
