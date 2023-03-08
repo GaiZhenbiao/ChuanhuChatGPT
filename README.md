@@ -50,86 +50,79 @@
 
 ## 安装方式
 
-如果你在安装过程中碰到了问题，请先看看本页面最后的“疑难杂症解决”部分。
+### 本地部署
 
-### 填写API密钥
+1. **下载本项目**
 
-<details><summary>在图形界面中填写你的API密钥</summary>
-<p>
+	```shell
+	git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git
+	cd ChuanhuChatGPT
+	```
+	或者，点击网页右上角的 `Download ZIP`，下载并解压完成后进入文件夹，进入`终端`或`命令提示符`。
 
-#### 在图形界面中填写你的API密钥
+	<img width="200" alt="downloadZIP" src="https://user-images.githubusercontent.com/23137268/223696317-b89d2c71-c74d-4c6d-8060-a21406cfb8c8.png">
 
-这样设置的密钥会在页面刷新后被清除
+2. **填写API密钥**
 
-<img width="760" alt="image" src="https://user-images.githubusercontent.com/51039745/222873756-3858bb82-30b9-49bc-9019-36e378ee624d.png">
+	以下两种方法任选其一：
 
-</p>
-</details>
+	<details><summary>1. 在图形界面中填写你的API密钥</summary>
+	
+	这样设置的密钥会在页面刷新后被清除。
 
-<details><summary>在代码中填入你的 OpenAI API 密钥</summary>
-<p>
+	<img width="760" alt="image" src="https://user-images.githubusercontent.com/51039745/222873756-3858bb82-30b9-49bc-9019-36e378ee624d.png"></details>
+	<details><summary>2. 在直接代码中填入你的 OpenAI API 密钥</summary>
+	
+	这样设置的密钥会成为默认密钥。在这里还可以选择是否在UI中隐藏密钥输入框。
 
-#### ……或者在代码中填入你的 OpenAI API 密钥
+	<img width="525" alt="image" src="https://user-images.githubusercontent.com/51039745/223440375-d472de4b-aa7f-4eae-9170-6dc2ed9f5480.png"></details>
+	
+3. **安装依赖**
 
-这样设置的密钥会成为默认密钥。在这里还可以选择是否在UI中隐藏密钥输入框。
+	```shell
+	pip install -r requirements.txt
+	```
 
-<img width="525" alt="image" src="https://user-images.githubusercontent.com/51039745/223440375-d472de4b-aa7f-4eae-9170-6dc2ed9f5480.png">
+	如果报错，试试
 
-</p>
-</details>
+	```shell
+	pip3 install -r requirements.txt
+	```
 
-### 直接安装
+	如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
 
-<details>
-<p>
+	如果下载慢，建议[配置清华源](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)，或者科学上网。
 
-### 安装依赖
+4. **启动**
 
-```
-pip install -r requirements.txt
-```
+	```shell
+	python ChuanhuChatbot.py
+	```
 
-如果报错，试试
+	如果报错，试试
 
-```
-pip3 install -r requirements.txt
-```
+	```shell
+	python3 ChuanhuChatbot.py
+	```
 
-如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
+	如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
+<br />
 
-如果下载慢，建议[配置清华源](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)，或者科学上网。
+如果一切顺利，现在，你应该已经可以在浏览器地址栏中输入 [`http://localhost:7860`](http://localhost:7860) 查看并使用 ChuanhuChatGPT 了。
 
-### 启动
+**如果你在安装过程中碰到了问题，请先查看[疑难杂症解决](#疑难杂症解决)部分。**
 
-```
-python ChuanhuChatbot.py
-```
-
-如果报错，试试
-
-```
-python3 ChuanhuChatbot.py
-```
-
-如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
-
-</p>
-</details>
-
-### 或者，使用Docker 运行
-
-<details>
-<p>
+<details><summary><h3>或者，使用Docker 运行</h3></summary>
 
 #### 拉取镜像
 
-```
+```shell
 docker pull tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
 
 #### 运行
 
-```
+```shell
 docker run -d --name chatgpt \
 	-e my_api_key="替换成API" \
 	-v ~/chatGPThistory:/app/history \
@@ -138,24 +131,21 @@ docker run -d --name chatgpt \
 ```
 
 #### 查看运行状态
-```
+```shell
 docker logs chatgpt
 ```
 
 #### 也可修改脚本后手动构建镜像
 
-```
+```shell
 docker build -t chuanhuchatgpt:latest .
 ```
-
-</p>
 </details>
 
 
 ## 部署相关
 
-<details>
-<p>
+<details><summary>如果需要在公网服务器部署本项目，可以查看。</summary>
 
 ### 部署到公网服务器
 
@@ -212,32 +202,36 @@ map $http_upgrade $connection_upgrade {
   }
 ```
 
-</p>
 </details>
 
 ## 疑难杂症解决
 
+首先，请尝试重装 gradio:
 
-### No module named '_bz2'
+```
+pip install gradio --upgrade --force-reinstall
+```
 
-<details>
-<p>
+很多时候，这样就可以解决问题。
 
-太空急先锋：部署在CentOS7.6,Python3.11.0上,最后报错ModuleNotFoundError: No module named '_bz2'
+<details><summary><h3><code>No module named '_bz2'</code></h3></summary>
 
-解决方案：安装python前得下个bzip编译环境
+> 部署在CentOS7.6,Python3.11.0上,最后报错ModuleNotFoundError: No module named '_bz2'
+
+安装python前先下载 `bzip` 编译环境
 
 ```
 sudo yum install bzip2-devel
 ```
+</details>
 
-### openai.error.APIConnectionError
+<details><summary><h3><code>openai.error.APIConnectionError</code></h3></summary>
 
-我是一只孤猫 [#5](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/5)：
+> 如果有人也出现了`openai.error.APIConnectionError`提示的报错，那可能是`urllib3`的版本导致的。`urllib3`版本大于`1.25.11`，就会出现这个问题。
+>
+> 解决方案是卸载`urllib3`然后重装至`1.25.11`版本再重新运行一遍就可以
 
-如果有人也出现了`openai.error.APIConnectionError`提示的报错，那可能是`urllib3`的版本导致的。`urllib3`版本大于`1.25.11`，就会出现这个问题。
-
-解决方案是卸载`urllib3`然后重装至`1.25.11`版本再重新运行一遍就可以
+参见：[#5](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/5)
 
 在终端或命令提示符中卸载`urllib3`
 
@@ -245,7 +239,7 @@ sudo yum install bzip2-devel
 pip uninstall urllib3
 ```
 
-然后，您可以通过使用指定版本号的`pip install`命令来安装所需的版本：
+然后，通过使用指定版本号的`pip install`命令来安装所需的版本：
 
 ```
 pip install urllib3==1.25.11
@@ -253,38 +247,24 @@ pip install urllib3==1.25.11
 
 参考自：
 [解决OpenAI API 挂了代理还是连接不上的问题](https://zhuanlan.zhihu.com/p/611080662)
-
-</p>
 </details>
 
-### 在 Python 文件里 设定 API Key 之后验证失败
+<details><summary><h3>在 Python 文件里 设定 API Key 之后验证失败</h3></summary>
 
-在ChuanhuChatbot.py中设置APIkey后验证出错，提示“发生了未知错误Orz” [#26](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/26)
+> 在ChuanhuChatbot.py中设置APIkey后验证出错，提示“发生了未知错误Orz” 
 
-### 重装 gradio
-
-<details>
-<p>
-
-很多时候，这样就可以解决问题。
-
-```
-pip install gradio --upgrade --force-reinstall
-```
-
-</p>
+参见：[#26](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/26)
 </details>
 
-### 一直等待/SSL Error [#49](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/49)
+<details><summary><h3>一直等待/SSL Error</h3></summary>
 
-<details>
-<p>
-
-跑起来之后，输入问题好像就没反应了，也没报错 [#25](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/25)
-
-```
-requests.exceptions.SSLError: HTTPSConnectionPool(host='api.openai.com', port=443): Max retries exceeded with url: /v1/chat/completions (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
-```
+> 更新脚本文件后，SSLError [#49](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/49)
+> 
+> 跑起来之后，输入问题好像就没反应了，也没报错 [#25](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/25)
+>
+> ```
+> requests.exceptions.SSLError: HTTPSConnectionPool(host='api.openai.com', port=443): Max retries exceeded with url: /v1/chat/completions (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
+> ```
 
 请将`openai.com`加入你使用的代理App的代理规则。注意不要将`127.0.0.1`加入代理，否则会有下一个错误。
 
@@ -303,28 +283,22 @@ Surge：
 DOMAIN,127.0.0.1,DIRECT
 DOMAIN-SUFFIX,openai.com,你的代理规则
 ```
-
-</p>
 </details>
 
-### 网页提示错误 Something went wrong
+<details><summary><h3>网页提示错误 Something went wrong</h3></summary>
 
-<details>
-<p>
-
-```
-Something went wrong
-Expecting value: 1ine 1 column 1 (char o)
-```
+> ```
+> Something went wrong
+> Expecting value: 1ine 1 column 1 (char o)
+> ```
 
 出现这个错误的原因是`127.0.0.1`被代理了，导致网页无法和后端通信。请设置代理软件，将`127.0.0.1`加入直连。
-
-</p>
 </details>
 
-### No matching distribution found for openai>=0.27.0
+<details><summary><h3><code>No matching distribution found for openai>=0.27.0</code></h3></summary>
 
 `openai`这个依赖已经被移除了。请尝试下载最新版脚本。
+</details>
 
 ## Starchart
 
