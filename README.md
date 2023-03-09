@@ -47,6 +47,11 @@
 - 输入框支持换行，按`shift enter`即可
 - 在Hugging Face上使用时，建议在右上角**复制Space**再使用，这样能大大减少排队时间，App反应也会更加迅速。
   <img width="300" alt="image" src="https://user-images.githubusercontent.com/51039745/223447310-e098a1f2-0dcf-48d6-bcc5-49472dd7ca0d.png">
+  
+
+## 已知问题
+
+在代码块中输出Shell脚本存在问题，主要是撇号（`）被Markdown转义导致的。如果你知道怎么修复这个bug，欢迎提交PR ^_^
 
 
 ## 安装方式
