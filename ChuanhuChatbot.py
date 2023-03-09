@@ -140,7 +140,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
 
     counter = 0
     if stream:
-        chatbot.append((history[-1], ""))
+        chatbot.append((parse_text(history[-1]), ""))
         for chunk in response.iter_lines():
             if counter == 0:
                 counter += 1
@@ -173,7 +173,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
                     history.append(" " + partial_words)
                 else:
                     history[-1] = partial_words
-                chatbot[-1] = (history[-2], parse_text(history[-1]))
+                chatbot[-1] = (parse_text(history[-2]), parse_text(history[-1]))
                 token_counter += 1
                 yield chatbot, history, status_text
     else:
@@ -181,10 +181,10 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
             responsejson = json.loads(response.text)
             content = responsejson["choices"][0]["message"]["content"]
             history.append(content)
-            chatbot.append((history[-2], parse_text(content)))
+            chatbot.append((parse_text(history[-2]), parse_text(content)))
             status_text = "精简完成"
         except:
-            chatbot.append((history[-1], "☹️发生了错误，请检查网络连接或者稍后再试。"))
+            chatbot.append((parse_text(history[-1]), "☹️发生了错误，请检查网络连接或者稍后再试。"))
             status_text = "status: ERROR"
         yield chatbot, history, status_text
 
