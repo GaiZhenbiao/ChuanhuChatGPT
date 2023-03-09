@@ -151,6 +151,9 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
                 # decode each line as response data is in bytes
                 try:
                     if len(json.loads(chunk.decode()[6:])['choices'][0]["delta"]) == 0:
+                        chunkjson = json.loads(chunk.decode()[6:])
+                        status_text = f"id: {chunked['id']}, finish_reason: {chunkjson['choices'][0]['finish_reason']}"
+                        yield chatbot, history, status_text
                         break
                 except Exception as e:
                     traceback.print_exc()
