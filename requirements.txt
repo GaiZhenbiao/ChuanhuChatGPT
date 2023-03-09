@@ -1,2 +1,1 @@
 gradio
-llama_index
