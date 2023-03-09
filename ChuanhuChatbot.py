@@ -233,14 +233,16 @@ def get_file_names(dir, plain=False, filetype=".json"):
 def get_history_names(plain=False):
     return get_file_names(HISTORY_DIR, plain)
 
-def load_template(filename, plain=False):
+def load_template(filename, mode=0):
     lines = []
     with open(os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8") as csvfile:
         reader = csv.reader(csvfile)
         lines = list(reader)
     lines = lines[1:]
-    if plain:
+    if mode == 1:
         return sorted([row[0] for row in lines])
+    elif mode == 2:
+        return {row[0]:row[1] for row in lines}
     else:
         return {row[0]:row[1] for row in lines}, gr.Dropdown.update(choices=sorted([row[0] for row in lines]))
 
@@ -305,7 +307,7 @@ with gr.Blocks(css=customCSS) as demo:
                         value=my_api_key, label="API Key", type="password", visible=not HIDE_MY_KEY).style(container=True)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
-    promptTemplates = gr.State({})
+    promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     TRUECOMSTANT = gr.State(True)
     FALSECONSTANT = gr.State(False)
     topic = gr.State("未命名对话历史记录")
@@ -334,7 +336,7 @@ with gr.Blocks(css=customCSS) as demo:
                     templaeFileReadBtn = gr.Button("📂 读入模板")
             with gr.Row():
                 with gr.Column(scale=6):
-                    templateSelectDropdown = gr.Dropdown(label="从Prompt模板中加载", choices=load_template(get_template_names(plain=True)[0], plain=True), multiselect=False)
+                    templateSelectDropdown = gr.Dropdown(label="从Prompt模板中加载", choices=load_template(get_template_names(plain=True)[0], mode=1), multiselect=False)
                 with gr.Column(scale=1):
                     templateApplyBtn = gr.Button("⬇️ 应用")
     with gr.Accordion(label="保存/加载对话历史记录(在文本框中输入文件名，点击“保存对话”按钮，历史记录文件会被存储到Python文件旁边)", open=False):
