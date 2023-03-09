@@ -17,6 +17,7 @@
 
 - 精简了UI
 - 像官方ChatGPT那样实时回复
+- 无限长度对话
 - 改进的保存/加载功能
 - 从Prompt模板中选择预设
 - 将大段代码显示在代码块中
@@ -67,16 +68,16 @@
 	以下两种方法任选其一：
 
 	<details><summary>1. 在图形界面中填写你的API密钥</summary>
-	
+
 	这样设置的密钥会在页面刷新后被清除。
 
 	<img width="760" alt="image" src="https://user-images.githubusercontent.com/51039745/222873756-3858bb82-30b9-49bc-9019-36e378ee624d.png"></details>
 	<details><summary>2. 在直接代码中填入你的 OpenAI API 密钥</summary>
-	
+
 	这样设置的密钥会成为默认密钥。在这里还可以选择是否在UI中隐藏密钥输入框。
 
 	<img width="525" alt="image" src="https://user-images.githubusercontent.com/51039745/223440375-d472de4b-aa7f-4eae-9170-6dc2ed9f5480.png"></details>
-	
+
 3. **安装依赖**
 
 	```shell
@@ -251,7 +252,7 @@ pip install urllib3==1.25.11
 
 <details><summary><h3>在 Python 文件里 设定 API Key 之后验证失败</h3></summary>
 
-> 在ChuanhuChatbot.py中设置APIkey后验证出错，提示“发生了未知错误Orz” 
+> 在ChuanhuChatbot.py中设置APIkey后验证出错，提示“发生了未知错误Orz”
 
 参见：[#26](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/26)
 </details>
@@ -259,7 +260,7 @@ pip install urllib3==1.25.11
 <details><summary><h3>一直等待/SSL Error</h3></summary>
 
 > 更新脚本文件后，SSLError [#49](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/49)
-> 
+>
 > 跑起来之后，输入问题好像就没反应了，也没报错 [#25](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/25)
 >
 > ```
@@ -315,4 +316,3 @@ DOMAIN-SUFFIX,openai.com,你的代理规则
 🐯请作者喝可乐～
 
 <img width="350" alt="image" src="https://user-images.githubusercontent.com/51039745/223626874-f471e5f5-8a06-43d5-aa31-9d2575b6f631.JPG">
-
