@@ -56,6 +56,7 @@ def parse_text(text):
             if i > 0:
                 if count % 2 == 1:
                     line = line.replace("&", "&amp;")
+                    line = line.replace("`", "&#96;")
                     line = line.replace("\"", "`\"`")
                     line = line.replace("\'", "`\'`")
                     line = line.replace("<", "&lt;")
@@ -63,14 +64,12 @@ def parse_text(text):
                     line = line.replace(" ", "&nbsp;")
                     line = line.replace("*", "&ast;")
                     line = line.replace("_", "&lowbar;")
-                    line = line.replace("#", "&#35;")
                     line = line.replace("-", "&#45;")
                     line = line.replace(".", "&#46;")
                     line = line.replace("!", "&#33;")
                     line = line.replace("(", "&#40;")
                     line = line.replace(")", "&#41;")
                     line = line.replace("$", "&#36;")
-                    line = line.replace("`", "&#96;")
                 lines[i] = "<br>"+line
     text = "".join(lines)
     return text
