@@ -1,14 +1,14 @@
 ---
-name: Report localhost
-about: 报告本地部署时的错误
-title: "[本地部署] 简短的错误描述"
-labels: local deployment
+name: Report others
+about: 报告其他错误（如 Hugging Face 中的 Space 等）
+title: "[其他] 简短的错误描述"
+labels: question
 assignees: ''
 
 ---
 
 感谢提交 issue! 请尽可能完整填写以下信息，帮助我们更好地定位问题~ 
-如果你不知道怎么填写，请先点击编辑框上方的“Preview”在预览中查看我们的说明，然后在空白行处填写信息~
+如果你不知道怎么填写，请先点击编辑框上方的“Preview”在预览中查看我们的说明，然后点击“Write”在空白行处填写信息~
 
 ### 错误描述
 > 请简明描述该错误。
@@ -30,23 +30,12 @@ assignees: ''
 ```
 
 ### 运行环境
-#### 桌面系统
 > **请填写以下列表：**
 
  - OS: [e.g. Windows11 22H2]
  - Browser: [e.g. Chrome, safari]
-
-#### 运行依赖
-> **请填写以下列表：**
-> 你可以在终端中依次输入以下指令以查看软件版本：
-> ```shell
-> pip show gradio
-> python --version
-> ```
-> （如果你使用Python3，请将`pip`替换为`pip3`，`python`替换为`python3`）
-
-- Gradio version:
-- Python (或Python3) version:
+ - Gradio version:
+ - Python (或Python3) version:
 
 ### 其他
 > 补充说明
