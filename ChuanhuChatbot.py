@@ -152,7 +152,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
                 try:
                     if len(json.loads(chunk.decode()[6:])['choices'][0]["delta"]) == 0:
                         chunkjson = json.loads(chunk.decode()[6:])
-                        status_text = f"id: {chunked['id']}, finish_reason: {chunkjson['choices'][0]['finish_reason']}"
+                        status_text = f"id: {chunkjson['id']}, finish_reason: {chunkjson['choices'][0]['finish_reason']}"
                         yield chatbot, history, status_text
                         break
                 except Exception as e:
