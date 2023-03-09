@@ -55,7 +55,7 @@ def parse_text(text):
         else:
             if i > 0:
                 if count % 2 == 1:
-                    line = line.replace("`", "&grave;")
+                    line = line.replace("`", "\`")
                     line = line.replace("\"", "`\"`")
                     line = line.replace("\'", "`\'`")
                     # line = line.replace("&", "&amp;")
