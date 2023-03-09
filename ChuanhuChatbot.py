@@ -8,7 +8,7 @@ import requests
 # import markdown
 import csv
 
-my_api_key = "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"    # 在这里输入你的 API 密钥
+my_api_key = ""    # 在这里输入你的 API 密钥
 HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
 
 initial_prompt = "You are a helpful assistant."
