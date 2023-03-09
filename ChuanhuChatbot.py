@@ -8,7 +8,7 @@ import requests
 # import markdown
 import csv
 
-my_api_key = ""    # 在这里输入你的 API 密钥
+my_api_key = "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"    # 在这里输入你的 API 密钥
 HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
 
 initial_prompt = "You are a helpful assistant."
@@ -75,9 +75,10 @@ def parse_text(text):
     text = "".join(lines)
     return text
 
-def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], system_prompt=initial_prompt, retry=False, summary=False):  # repetition_penalty, top_k
+def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], system_prompt=initial_prompt, retry=False, summary=False, summary_on_crash = False, stream = True):  # repetition_penalty, top_k
 
-    print(f"chatbot 1: {chatbot}")
+    if summary:
+        stream = False
 
     headers = {
         "Content-Type": "application/json",
@@ -90,24 +91,25 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
 
     messages = [compose_system(system_prompt)]
     if chat_counter:
-        for data in chatbot:
+        for index in range(0, 2*chat_counter, 2):
             temp1 = {}
             temp1["role"] = "user"
-            temp1["content"] = data[0]
+            temp1["content"] = history[index]
             temp2 = {}
             temp2["role"] = "assistant"
-            temp2["content"] = data[1]
+            temp2["content"] = history[index+1]
             if temp1["content"] != "":
-                messages.append(temp1)
-                messages.append(temp2)
+                if temp2["content"] != "" or retry:
+                    messages.append(temp1)
+                    messages.append(temp2)
             else:
                 messages[-1]['content'] = temp2['content']
     if retry and chat_counter:
         messages.pop()
     elif summary:
+        history = [*[i["content"] for i in messages[-2:]], "我们刚刚聊了什么？"]
         messages.append(compose_user(
             "请帮我总结一下上述对话的内容，实现减少字数的同时，保证对话的质量。在总结中不要加入这一句话。"))
-        history = ["我们刚刚聊了什么？"]
     else:
         temp3 = {}
         temp3["role"] = "user"
@@ -121,61 +123,82 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
         "temperature": temperature,  # 1.0,
         "top_p": top_p,  # 1.0,
         "n": 1,
-        "stream": True,
+        "stream": stream,
         "presence_penalty": 0,
         "frequency_penalty": 0,
     }
 
     if not summary:
         history.append(inputs)
-    print(f"payload is - {payload}")
+    else:
+        print("精简中...")
     # make a POST request to the API endpoint using the requests.post method, passing in stream=True
     response = requests.post(API_URL, headers=headers,
                              json=payload, stream=True)
-    #response = requests.post(API_URL, headers=headers, json=payload, stream=True)
 
     token_counter = 0
     partial_words = ""
 
     counter = 0
-    chatbot.append((history[-1], ""))
-    for chunk in response.iter_lines():
-        if counter == 0:
+    if stream:
+        chatbot.append((history[-1], ""))
+        for chunk in response.iter_lines():
+            if counter == 0:
+                counter += 1
+                continue
             counter += 1
-            continue
-        counter += 1
-        # check whether each line is non-empty
-        if chunk:
-            # decode each line as response data is in bytes
-            try:
-                if len(json.loads(chunk.decode()[6:])['choices'][0]["delta"]) == 0:
+            # check whether each line is non-empty
+            if chunk:
+                # decode each line as response data is in bytes
+                try:
+                    if len(json.loads(chunk.decode()[6:])['choices'][0]["delta"]) == 0:
+                        break
+                except Exception as e:
+                    traceback.print_exc()
+                    print("Context 过长，正在尝试精简……")
+                    chatbot.pop()
+                    chatbot, history, status_text = next(predict(inputs, top_p, temperature, openai_api_key, chatbot, history, system_prompt, retry, summary=True, summary_on_crash=True, stream=False))
+                    yield chatbot, history, status_text
+                    if not "ERROR" in status_text:
+                        print("精简完成，正在尝试重新生成……")
+                        yield next(predict(inputs, top_p, temperature, openai_api_key, chatbot, history, system_prompt, retry, summary=False, summary_on_crash=True, stream=False))
+                    else:
+                        print("精简出错了，可能是网络原因。")
                     break
-            except Exception as e:
-                chatbot.pop()
-                chatbot.append((history[-1], f"☹️发生了错误<br>返回值：{response.text}<br>异常：{e}"))
-                history.pop()
-                yield chatbot, history
-                break
-            #print(json.loads(chunk.decode()[6:])['choices'][0]["delta"]    ["content"])
-            partial_words = partial_words + \
-                json.loads(chunk.decode()[6:])[
-                    'choices'][0]["delta"]["content"]
-            if token_counter == 0:
-                history.append(" " + partial_words)
-            else:
-                history[-1] = parse_text(partial_words)
-            chatbot[-1] = (history[-2], history[-1])
-        #   chat = [(history[i], history[i + 1]) for i in range(0, len(history)     - 1, 2) ]  # convert to tuples of list
-            token_counter += 1
-            # resembles {chatbot: chat,     state: history}
-            yield chatbot, history
+                chunkjson = json.loads(chunk.decode()[6:])
+                status_text = f"id: {chunkjson['id']}, finish_reason: {chunkjson['choices'][0]['finish_reason']}"
+                partial_words = partial_words + \
+                    json.loads(chunk.decode()[6:])[
+                        'choices'][0]["delta"]["content"]
+                if token_counter == 0:
+                    history.append(" " + partial_words)
+                else:
+                    history[-1] = parse_text(partial_words)
+                chatbot[-1] = (history[-2], history[-1])
+                token_counter += 1
+                yield chatbot, history, status_text
+    else:
+        try:
+            responsejson = json.loads(response.text)
+            content = responsejson["choices"][0]["message"]["content"]
+            history.append(content)
+            chatbot.append((history[-2], history[-1]))
+            status_text = "精简完成"
+        except:
+            chatbot.append((history[-1], "☹️发生了错误，请检查网络连接或者稍后再试。"))
+            status_text = "status: ERROR"
+        yield chatbot, history, status_text
 
 
 
 def delete_last_conversation(chatbot, history):
-    chatbot.pop()
+    if "☹️发生了错误" in chatbot[-1][1]:
+        chatbot.pop()
+        print(history)
+        return chatbot, history
     history.pop()
     history.pop()
+    print(history)
     return chatbot, history
 
 def save_chat_history(filename, system, history, chatbot):
@@ -185,6 +208,7 @@ def save_chat_history(filename, system, history, chatbot):
         filename += ".json"
     os.makedirs(HISTORY_DIR, exist_ok=True)
     json_s = {"system": system, "history": history, "chatbot": chatbot}
+    print(json_s)
     with open(os.path.join(HISTORY_DIR, filename), "w") as f:
         json.dump(json_s, f)
 
@@ -192,6 +216,7 @@ def save_chat_history(filename, system, history, chatbot):
 def load_chat_history(filename):
     with open(os.path.join(HISTORY_DIR, filename), "r") as f:
         json_s = json.load(f)
+    print(json_s)
     return filename, json_s["system"], json_s["history"], json_s["chatbot"]
 
 
@@ -294,6 +319,7 @@ with gr.Blocks(css=customCSS) as demo:
         retryBtn = gr.Button("🔄 重新生成")
         delLastBtn = gr.Button("🗑️ 删除上条对话")
         reduceTokenBtn = gr.Button("♻️ 总结对话")
+    statusDisplay = gr.Markdown("status: ready")
     systemPromptTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入System Prompt...",
                                  label="System prompt", value=initial_prompt).style(container=True)
     with gr.Accordion(label="加载Prompt模板", open=False):
@@ -335,18 +361,18 @@ with gr.Blocks(css=customCSS) as demo:
 
 
     txt.submit(predict, [txt, top_p, temperature, keyTxt,
-               chatbot, history, systemPromptTxt], [chatbot, history])
+               chatbot, history, systemPromptTxt], [chatbot, history, statusDisplay])
     txt.submit(reset_textbox, [], [txt])
     submitBtn.click(predict, [txt, top_p, temperature, keyTxt, chatbot,
-                    history, systemPromptTxt], [chatbot, history], show_progress=True)
+                    history, systemPromptTxt], [chatbot, history, statusDisplay], show_progress=True)
     submitBtn.click(reset_textbox, [], [txt])
     emptyBtn.click(reset_state, outputs=[chatbot, history])
     retryBtn.click(predict, [txt, top_p, temperature, keyTxt, chatbot, history,
-                   systemPromptTxt, TRUECOMSTANT], [chatbot, history], show_progress=True)
+                   systemPromptTxt, TRUECOMSTANT], [chatbot, history, statusDisplay], show_progress=True)
     delLastBtn.click(delete_last_conversation, [chatbot, history], [
                      chatbot, history], show_progress=True)
     reduceTokenBtn.click(predict, [txt, top_p, temperature, keyTxt, chatbot, history,
-                         systemPromptTxt, FALSECONSTANT, TRUECOMSTANT], [chatbot, history], show_progress=True)
+                         systemPromptTxt, FALSECONSTANT, TRUECOMSTANT], [chatbot, history, statusDisplay], show_progress=True)
     saveBtn.click(save_chat_history, [
                   saveFileName, systemPromptTxt, history, chatbot], None, show_progress=True)
     saveBtn.click(get_history_names, None, [historyFileSelectDropdown])
