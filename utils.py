@@ -215,9 +215,10 @@ def delete_last_conversation(chatbot, history):
         chatbot.pop()
         print(history)
         return chatbot, history
-    history.pop()
-    history.pop()
-    print(history)
+    if len(history) > 0:
+        history.pop()
+        history.pop()
+        print(history)
     return chatbot, history
 
 def save_chat_history(filename, system, history, chatbot):
