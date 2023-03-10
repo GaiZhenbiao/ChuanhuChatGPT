@@ -42,12 +42,13 @@ def postprocess(
             y[i] = (
                 # None if message is None else markdown.markdown(message),
                 # None if response is None else markdown.markdown(response),
-                None if message is None else mdtex2html.convert((message)),
-                None if response is None else mdtex2html.convert(response),
+                None if message is None else mdtex2html.convert(message, extensions=['fenced_code','codehilite']),
+                None if response is None else mdtex2html.convert(response, extensions=['fenced_code','codehilite']),
             )
         return y
 
 def parse_text(text):
+    return text
     lines = text.split("\n")
     lines = [line for line in lines if line != ""]
     count = 0
