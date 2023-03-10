@@ -17,20 +17,15 @@ code {
     padding: .2em .4em .1em .4em;
     background-color: rgba(175,184,193,0.2);
 }
-pre {
+pre code {
     display: block;
     white-space: pre;
     background-color: hsla(0, 0%, 0%, 72%);
     border: solid 5px var(--color-border-primary) !important;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 0 1.2rem 1.2rem;
     margin-top: 1em !important;
     color: #FFF;
     box-shadow: inset 0px 8px 16px hsla(0, 0%, 0%, .2)
-}
-pre code, pre code code {
-    background-color: transparent !important;
-    margin: 0;
-    padding: 0;
 }
 """
