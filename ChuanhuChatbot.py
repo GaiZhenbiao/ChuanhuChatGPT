@@ -15,6 +15,8 @@ if os.environ.get('dockerrun') == 'yes':
 else:
     dockerflag = False
 
+authflag = False
+
 if dockerflag:
     my_api_key = os.environ.get('my_api_key')
     if my_api_key == "empty":
@@ -23,20 +25,19 @@ if dockerflag:
     #auth
     username = os.environ.get('USERNAME')
     password = os.environ.get('PASSWORD')
-    if isinstance(username, type(None)) or isinstance(password, type(None)):
-        authflag = False
-    else:
+    if not (isinstance(username, type(None)) or isinstance(password, type(None))):
         authflag = True
 else:
     if os.path.exists("api_key.txt"):
         with open("api_key.txt", "r") as f:
-            my_api_key = f.read()
+            my_api_key = f.read().strip()
     if os.path.exists("auth.json"):
         with open("auth.json", "r") as f:
             auth = json.load(f)
             username = auth["username"]
             password = auth["password"]
-            authflag = True
+            if username != "" and password != "":
+                authflag = True
 
 title = """<h1 align="center">川虎ChatGPT 🚀</h1>"""
 description = """<div align=center>
