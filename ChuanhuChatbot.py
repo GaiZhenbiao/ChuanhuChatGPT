@@ -27,6 +27,16 @@ if dockerflag:
         authflag = False
     else:
         authflag = True
+else:
+    if os.path.exists("api_key.txt"):
+        with open("api_key.txt", "r") as f:
+            my_api_key = f.read()
+    if os.path.exists("auth.json"):
+        with open("auth.json", "r") as f:
+            auth = json.load(f)
+            username = auth["username"]
+            password = auth["password"]
+            authflag = True
 
 title = """<h1 align="center">川虎ChatGPT 🚀</h1>"""
 description = """<div align=center>
@@ -162,7 +172,10 @@ if dockerflag:
         demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False)
 #if not running in Docker
 else:
-    demo.queue().launch(share=False) # 改为 share=True 可以创建公开分享链接
+    if authflag:
+        demo.queue().launch(share=False, auth=(username, password))
+    else:
+        demo.queue().launch(share=False) # 改为 share=True 可以创建公开分享链接
     #demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
     #demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
     #demo.queue().launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理
