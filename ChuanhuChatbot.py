@@ -69,26 +69,26 @@ with gr.Blocks(css=customCSS) as demo:
         with gr.Column():
             with gr.Row():
                 with gr.Column(scale=6):
-                    templateFileSelectDropdown = gr.Dropdown(label="选择Prompt模板集合文件（.csv）", choices=get_template_names(plain=True), multiselect=False)
+                    templateFileSelectDropdown = gr.Dropdown(label="选择Prompt模板集合文件（.csv）", choices=get_template_names(plain=True), multiselect=False, value=get_template_names(plain=True)[0])
                 with gr.Column(scale=1):
                     templateRefreshBtn = gr.Button("🔄 刷新")
                     templaeFileReadBtn = gr.Button("📂 读入模板")
             with gr.Row():
                 with gr.Column(scale=6):
-                    templateSelectDropdown = gr.Dropdown(label="从Prompt模板中加载", choices=load_template(get_template_names(plain=True)[0], mode=1), multiselect=False)
+                    templateSelectDropdown = gr.Dropdown(label="从Prompt模板中加载", choices=load_template(get_template_names(plain=True)[0], mode=1), multiselect=False, value=load_template(get_template_names(plain=True)[0], mode=1)[0])
                 with gr.Column(scale=1):
                     templateApplyBtn = gr.Button("⬇️ 应用")
-    with gr.Accordion(label="保存/加载对话历史记录(在文本框中输入文件名，点击“保存对话”按钮，历史记录文件会被存储到Python文件旁边)", open=False):
+    with gr.Accordion(label="保存/加载对话历史记录", open=False):
         with gr.Column():
             with gr.Row():
                 with gr.Column(scale=6):
                     saveFileName = gr.Textbox(
                         show_label=True, placeholder=f"在这里输入保存的文件名...", label="设置保存文件名", value="对话历史记录").style(container=True)
                 with gr.Column(scale=1):
-                    saveBtn = gr.Button("💾 保存对话")
+                    saveHistoryBtn = gr.Button("💾 保存对话")
             with gr.Row():
                 with gr.Column(scale=6):
-                    historyFileSelectDropdown = gr.Dropdown(label="从列表中加载对话", choices=get_history_names(plain=True), multiselect=False)
+                    historyFileSelectDropdown = gr.Dropdown(label="从列表中加载对话", choices=get_history_names(plain=True), multiselect=False, value=get_history_names(plain=True)[0])
                 with gr.Column(scale=1):
                     historyRefreshBtn = gr.Button("🔄 刷新")
                     historyReadBtn = gr.Button("📂 读入对话")
@@ -116,14 +116,14 @@ with gr.Blocks(css=customCSS) as demo:
                      chatbot, history], show_progress=True)
     reduceTokenBtn.click(predict, [txt, top_p, temperature, keyTxt, chatbot, history,
                          systemPromptTxt, FALSECONSTANT, TRUECOMSTANT], [chatbot, history, statusDisplay], show_progress=True)
-    saveBtn.click(save_chat_history, [
+    saveHistoryBtn.click(save_chat_history, [
                   saveFileName, systemPromptTxt, history, chatbot], None, show_progress=True)
-    saveBtn.click(get_history_names, None, [historyFileSelectDropdown])
+    saveHistoryBtn.click(get_history_names, None, [historyFileSelectDropdown])
     historyRefreshBtn.click(get_history_names, None, [historyFileSelectDropdown])
-    historyReadBtn.click(load_chat_history, [historyFileSelectDropdown],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
+    historyReadBtn.click(load_chat_history, [historyFileSelectDropdown, systemPromptTxt, history, chatbot],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
     templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
     templaeFileReadBtn.click(load_template, [templateFileSelectDropdown],  [promptTemplates, templateSelectDropdown], show_progress=True)
-    templateApplyBtn.click(lambda x, y: x[y], [promptTemplates, templateSelectDropdown],  [systemPromptTxt], show_progress=True)
+    templateApplyBtn.click(get_template_content, [promptTemplates, templateSelectDropdown, systemPromptTxt],  [systemPromptTxt], show_progress=True)
 
 print("川虎的温馨提示：访问 http://localhost:7860 查看界面")
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接

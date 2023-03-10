@@ -210,15 +210,18 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
 
 
 def delete_last_conversation(chatbot, history):
-    if "☹️发生了错误" in chatbot[-1][1]:
+    try:
+        if "☹️发生了错误" in chatbot[-1][1]:
+            chatbot.pop()
+            print(history)
+            return chatbot, history
+        history.pop()
+        history.pop()
         chatbot.pop()
         print(history)
         return chatbot, history
-    if len(history) > 0:
-        history.pop()
-        history.pop()
-        print(history)
-    return chatbot, history
+    except:
+        return chatbot, history
 
 def save_chat_history(filename, system, history, chatbot):
     if filename == "":
@@ -232,11 +235,16 @@ def save_chat_history(filename, system, history, chatbot):
         json.dump(json_s, f)
 
 
-def load_chat_history(filename):
-    with open(os.path.join(HISTORY_DIR, filename), "r") as f:
-        json_s = json.load(f)
-    print(json_s)
-    return filename, json_s["system"], json_s["history"], json_s["chatbot"]
+def load_chat_history(filename, system, history, chatbot):
+    try:
+        print("Loading from history...")
+        with open(os.path.join(HISTORY_DIR, filename), "r") as f:
+            json_s = json.load(f)
+        print(json_s)
+        return filename, json_s["system"], json_s["history"], json_s["chatbot"]
+    except FileNotFoundError:
+        print("File not found.")
+        return filename, system, history, chatbot
 
 def sorted_by_pinyin(list):
     return sorted(list, key=lambda char: lazy_pinyin(char)[0][0])
@@ -250,6 +258,8 @@ def get_file_names(dir, plain=False, filetypes=[".json"]):
     except FileNotFoundError:
         files = []
     files = sorted_by_pinyin(files)
+    if files == []:
+        files = [""]
     if plain:
         return files
     else:
@@ -260,6 +270,7 @@ def get_history_names(plain=False):
 
 def load_template(filename, mode=0):
     lines = []
+    print("Loading template...")
     if filename.endswith(".json"):
         with open(os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8") as f:
             lines = json.load(f)
@@ -270,18 +281,24 @@ def load_template(filename, mode=0):
             lines = list(reader)
         lines = lines[1:]
     if mode == 1:
-        return sorted([row[0] for row in lines])
+        return sorted_by_pinyin([row[0] for row in lines])
     elif mode == 2:
         return {row[0]:row[1] for row in lines}
     else:
-        return {row[0]:row[1] for row in lines}, gr.Dropdown.update(choices=sorted_by_pinyin([row[0] for row in lines]))
+        choices = sorted_by_pinyin([row[0] for row in lines])
+        return {row[0]:row[1] for row in lines}, gr.Dropdown.update(choices=choices, value=choices[0])
 
 def get_template_names(plain=False):
     return get_file_names(TEMPLATES_DIR, plain, filetypes=[".csv", "json"])
 
+def get_template_content(templates, selection, original_system_prompt):
+    try:
+        return templates[selection]
+    except:
+        return original_system_prompt
+
 def reset_state():
     return [], []
-
 
 def compose_system(system_prompt):
     return {"role": "system", "content": system_prompt}
