@@ -7,6 +7,7 @@ import traceback
 import requests
 # import markdown
 import csv
+from utils import ChuanhuChatbot
 
 my_api_key = ""    # 在这里输入你的 API 密钥
 HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
@@ -48,16 +49,18 @@ def parse_text(text):
             count += 1
             items = line.split('`')
             if count % 2 == 1:
-                lines[i] = f'<pre><code class="{items[-1]}">'
-                firstline = True
+                lines[i] = f'<pre><code class="language-{items[-1]}">'
             else:
-                lines[i] = f'</code></pre>'
+                lines[i] = f'<br></code></pre>'
         else:
             if i > 0:
                 if count % 2 == 1:
+                    # line = line.replace("‘", "'")
+                    # line = line.replace("“", '"')
                     line = line.replace("`", "\`")
-                    line = line.replace("\"", "`\"`")
-                    line = line.replace("\'", "`\'`")
+                    # line = line.replace("\"", "`\"`")
+                    # line = line.replace("\'", "`\'`")
+                    # line = line.replace("'``'", "''")
                     # line = line.replace("&", "&amp;")
                     line = line.replace("<", "&lt;")
                     line = line.replace(">", "&gt;")
@@ -74,10 +77,10 @@ def parse_text(text):
     text = "".join(lines)
     return text
 
-def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], system_prompt=initial_prompt, retry=False, summary=False, summary_on_crash = False, stream = True):  # repetition_penalty, top_k
+def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], system_prompt=initial_prompt, retry=False, summary=False, retry_on_crash = False, stream = True):  # repetition_penalty, top_k
 
-    if summary:
-        stream = False
+    if retry_on_crash:
+        retry = True
 
     headers = {
         "Content-Type": "application/json",
@@ -88,7 +91,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
 
     print(f"chat_counter - {chat_counter}")
 
-    messages = [compose_system(system_prompt)]
+    messages = []
     if chat_counter:
         for index in range(0, 2*chat_counter, 2):
             temp1 = {}
@@ -104,6 +107,8 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
             else:
                 messages[-1]['content'] = temp2['content']
     if retry and chat_counter:
+        if retry_on_crash:
+            messages = messages[-6:]
         messages.pop()
     elif summary:
         history = [*[i["content"] for i in messages[-2:]], "我们刚刚聊了什么？"]
@@ -115,6 +120,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
         temp3["content"] = inputs
         messages.append(temp3)
         chat_counter += 1
+    messages = [compose_system(system_prompt), *messages]
     # messages
     payload = {
         "model": "gpt-3.5-turbo",
@@ -131,9 +137,16 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
         history.append(inputs)
     else:
         print("精简中...")
+
+    print(f"payload: {payload}")
     # make a POST request to the API endpoint using the requests.post method, passing in stream=True
-    response = requests.post(API_URL, headers=headers,
-                             json=payload, stream=True)
+    try:
+        response = requests.post(API_URL, headers=headers, json=payload, stream=True)
+    except:
+        history.append("")
+        chatbot.append(inputs, "")
+        yield history, chatbot, f"出现了网络错误"
+        return
 
     token_counter = 0
     partial_words = ""
@@ -157,15 +170,17 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
                         break
                 except Exception as e:
                     traceback.print_exc()
-                    print("Context 过长，正在尝试精简……")
-                    chatbot.pop()
-                    chatbot, history, status_text = next(predict(inputs, top_p, temperature, openai_api_key, chatbot, history, system_prompt, retry, summary=True, summary_on_crash=True, stream=False))
-                    yield chatbot, history, status_text
-                    if not "ERROR" in status_text:
-                        print("精简完成，正在尝试重新生成……")
-                        yield next(predict(inputs, top_p, temperature, openai_api_key, chatbot, history, system_prompt, retry, summary=False, summary_on_crash=True, stream=False))
+                    if not retry_on_crash:
+                        print("正在尝试使用缩短的context重新生成……")
+                        chatbot.pop()
+                        history.append("")
+                        yield next(predict(inputs, top_p, temperature, openai_api_key, chatbot, history, system_prompt, retry, summary=False, retry_on_crash=True, stream=False))
                     else:
-                        print("精简出错了，可能是网络原因。")
+                        msg = "☹️发生了错误：生成失败，请检查网络"
+                        print(msg)
+                        history.append(inputs, "")
+                        chatbot.append(inputs, msg)
+                        yield chatbot, history, "status: ERROR"
                     break
                 chunkjson = json.loads(chunk.decode()[6:])
                 status_text = f"id: {chunkjson['id']}, finish_reason: {chunkjson['choices'][0]['finish_reason']}"
