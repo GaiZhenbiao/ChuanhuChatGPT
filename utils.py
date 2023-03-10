@@ -13,6 +13,7 @@ import requests
 # import markdown
 import csv
 import mdtex2html
+from pypinyin import lazy_pinyin
 
 if TYPE_CHECKING:
     from typing import TypedDict
@@ -237,13 +238,18 @@ def load_chat_history(filename):
     print(json_s)
     return filename, json_s["system"], json_s["history"], json_s["chatbot"]
 
+def sorted_by_pinyin(list):
+    return sorted(list, key=lambda char: lazy_pinyin(char)[0][0])
 
-def get_file_names(dir, plain=False, filetype=".json"):
+def get_file_names(dir, plain=False, filetypes=[".json"]):
     # find all json files in the current directory and return their names
+    files = []
     try:
-        files = sorted([f for f in os.listdir(dir) if f.endswith(filetype)])
+        for type in filetypes:
+            files += [f for f in os.listdir(dir) if f.endswith(type)]
     except FileNotFoundError:
         files = []
+    files = sorted_by_pinyin(files)
     if plain:
         return files
     else:
@@ -254,19 +260,24 @@ def get_history_names(plain=False):
 
 def load_template(filename, mode=0):
     lines = []
-    with open(os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8") as csvfile:
-        reader = csv.reader(csvfile)
-        lines = list(reader)
-    lines = lines[1:]
+    if filename.endswith(".json"):
+        with open(os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8") as f:
+            lines = json.load(f)
+        lines = [[i["act"], i["prompt"]] for i in lines]
+    else:
+        with open(os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8") as csvfile:
+            reader = csv.reader(csvfile)
+            lines = list(reader)
+        lines = lines[1:]
     if mode == 1:
         return sorted([row[0] for row in lines])
     elif mode == 2:
         return {row[0]:row[1] for row in lines}
     else:
-        return {row[0]:row[1] for row in lines}, gr.Dropdown.update(choices=sorted([row[0] for row in lines]))
+        return {row[0]:row[1] for row in lines}, gr.Dropdown.update(choices=sorted_by_pinyin([row[0] for row in lines]))
 
 def get_template_names(plain=False):
-    return get_file_names(TEMPLATES_DIR, plain, filetype=".csv")
+    return get_file_names(TEMPLATES_DIR, plain, filetypes=[".csv", "json"])
 
 def reset_state():
     return [], []
