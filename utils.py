@@ -171,7 +171,6 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
                         yield chatbot, history, status_text
                         break
                 except Exception as e:
-                    traceback.print_exc()
                     if not retry_on_crash:
                         print("正在尝试使用缩短的context重新生成……")
                         chatbot.pop()
