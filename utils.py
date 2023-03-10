@@ -41,7 +41,7 @@ def postprocess(
             y[i] = (
                 # None if message is None else markdown.markdown(message),
                 # None if response is None else markdown.markdown(response),
-                None if message is None else mdtex2html.convert(message),
+                None if message is None else mdtex2html.convert((message)),
                 None if response is None else mdtex2html.convert(response),
             )
         return y
@@ -145,8 +145,8 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
         response = requests.post(API_URL, headers=headers, json=payload, stream=True)
     except:
         history.append("")
-        chatbot.append(inputs, "")
-        yield history, chatbot, f"出现了网络错误"
+        chatbot.append((inputs, ""))
+        yield history, chatbot, f"获取请求失败，请检查网络连接。"
         return
 
     token_counter = 0
