@@ -55,9 +55,9 @@ def parse_text(text):
         else:
             if i > 0:
                 if count % 2 == 1:
-                    line = line.replace("`", "\`")
-                    line = line.replace("\"", "`\"`")
-                    line = line.replace("\'", "`\'`")
+                    line = line.replace("`", "&#96;")
+                    line = line.replace("\"", '`"`')
+                    line = line.replace("'", "`'`")
                     # line = line.replace("&", "&amp;")
                     line = line.replace("<", "&lt;")
                     line = line.replace(">", "&gt;")
@@ -87,6 +87,9 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
     chat_counter = len(history) // 2
 
     print(f"chat_counter - {chat_counter}")
+    
+    for i in range(chat_counter):
+        chatbot[i] = (parse_text(history[i*2]), parse_text(history[i*2+1]))
 
     messages = [compose_system(system_prompt)]
     if chat_counter:
@@ -152,6 +155,7 @@ def predict(inputs, top_p, temperature, openai_api_key, chatbot=[], history=[], 
                 try:
                     if len(json.loads(chunk.decode()[6:])['choices'][0]["delta"]) == 0:
                         chunkjson = json.loads(chunk.decode()[6:])
+                        chatbot[-1] = (parse_text(history[-2]), parse_text(history[-1]))
                         status_text = f"id: {chunkjson['id']}, finish_reason: {chunkjson['choices'][0]['finish_reason']}"
                         yield chatbot, history, status_text
                         break
