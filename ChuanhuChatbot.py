@@ -3,6 +3,7 @@ import gradio as gr
 import os
 import sys
 from utils import *
+from presets import *
 
 my_api_key = ""    # 在这里输入你的 API 密钥
 HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
@@ -38,43 +39,6 @@ else:
             password = auth["password"]
             if username != "" and password != "":
                 authflag = True
-
-title = """<h1 align="center">川虎ChatGPT 🚀</h1>"""
-description = """<div align=center>
-
-由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)开发
-
-访问川虎ChatGPT的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本
-
-此App使用 `gpt-3.5-turbo` 大语言模型
-</div>
-"""
-customCSS = """
-code {
-    display: inline;
-    white-space: break-spaces;
-    border-radius: 6px;
-    margin: 0 2px 0 2px;
-    padding: .2em .4em .1em .4em;
-    background-color: rgba(175,184,193,0.2);
-}
-pre {
-    display: block;
-    white-space: pre;
-    background-color: hsla(0, 0%, 0%, 72%);
-    border: solid 5px var(--color-border-primary) !important;
-    border-radius: 8px;
-    padding: 0 1.2rem 1.2rem;
-    margin-top: 1em !important;
-    color: #FFF;
-    box-shadow: inset 0px 8px 16px hsla(0, 0%, 0%, .2)
-}
-pre code, pre code code {
-    background-color: transparent !important;
-    margin: 0;
-    padding: 0;
-}
-"""
 
 with gr.Blocks(css=customCSS) as demo:
     gr.HTML(title)

@@ -62,13 +62,7 @@ def parse_text(text):
         else:
             if i > 0:
                 if count % 2 == 1:
-                    # line = line.replace("‘", "'")
-                    # line = line.replace("“", '"')
                     line = line.replace("`", "\`")
-                    # line = line.replace("\"", "`\"`")
-                    # line = line.replace("\'", "`\'`")
-                    # line = line.replace("'``'", "''")
-                    # line = line.replace("&", "&amp;")
                     line = line.replace("<", "&lt;")
                     line = line.replace(">", "&gt;")
                     line = line.replace(" ", "&nbsp;")
