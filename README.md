@@ -47,7 +47,7 @@
 - 输入框支持换行，按`shift enter`即可
 - 在Hugging Face上使用时，建议在右上角**复制Space**再使用，这样能大大减少排队时间，App反应也会更加迅速。
   <img width="300" alt="image" src="https://user-images.githubusercontent.com/51039745/223447310-e098a1f2-0dcf-48d6-bcc5-49472dd7ca0d.png">
-  
+
 
 ## 已知问题
 
@@ -70,7 +70,7 @@
 
 2. **填写API密钥**
 
-	以下两种方法任选其一：
+	以下3种方法任选其一：
 
 	<details><summary>1. 在图形界面中填写你的API密钥</summary>
 
@@ -82,6 +82,23 @@
 	这样设置的密钥会成为默认密钥。在这里还可以选择是否在UI中隐藏密钥输入框。
 
 	<img width="525" alt="image" src="https://user-images.githubusercontent.com/51039745/223440375-d472de4b-aa7f-4eae-9170-6dc2ed9f5480.png"></details>
+
+	<details><summary>3. 在文件中设定默认密钥、用户名密码</summary>
+
+	这样设置的密钥可以在项目更新之后保留。
+
+	在`api_key.txt`中填写你的API-Key，注意不要填写任何无关内容。
+
+	在`auth.json`中填写你的用户名和密码。
+
+	```
+	{
+    "username": "用户名",
+    "password": "密码"
+	}
+	```
+
+	</details>
 
 3. **安装依赖**
 
