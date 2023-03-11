@@ -37,7 +37,7 @@ if dockerflag:
     if not (isinstance(username, type(None)) or isinstance(password, type(None))):
         authflag = True
 else:
-    if os.path.exists("api_key.txt"):
+    if not my_api_key and os.path.exists("api_key.txt") and os.path.getsize("api_key.txt"):
         with open("api_key.txt", "r") as f:
             my_api_key = f.read().strip()
     if os.path.exists("auth.json"):
