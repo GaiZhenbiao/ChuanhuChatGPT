@@ -131,18 +131,19 @@ print("川虎的温馨提示：访问 http://localhost:7860 查看界面")
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
 demo.title = "川虎ChatGPT 🚀"
 
-#if running in Docker
-if dockerflag:
-    if authflag:
-        demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=(username, password))
+if __name__ == "__main__":
+    #if running in Docker
+    if dockerflag:
+        if authflag:
+            demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=(username, password))
+        else:
+            demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False)
+    #if not running in Docker
     else:
-        demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False)
-#if not running in Docker
-else:
-    if authflag:
-        demo.queue().launch(share=False, auth=(username, password))
-    else:
-        demo.queue().launch(share=False) # 改为 share=True 可以创建公开分享链接
-    #demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
-    #demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
-    #demo.queue().launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理
+        if authflag:
+            demo.queue().launch(share=False, auth=(username, password))
+        else:
+            demo.queue().launch(share=False) # 改为 share=True 可以创建公开分享链接
+        #demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
+        #demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
+        #demo.queue().launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理
