@@ -8,9 +8,6 @@ from presets import *
 
 
 my_api_key = ""    # 在这里输入你的 API 密钥
-HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
-
-gr.Chatbot.postprocess = postprocess
 
 #if we are running in Docker
 if os.environ.get('dockerrun') == 'yes':
@@ -42,12 +39,17 @@ else:
             if username != "" and password != "":
                 authflag = True
 
+gr.Chatbot.postprocess = postprocess
+
 with gr.Blocks(css=customCSS) as demo:
     gr.HTML(title)
-    keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的OpenAI API-key...",
-                        value=my_api_key, label="API Key", type="password", visible=not HIDE_MY_KEY).style(container=True)
+    with gr.Row():
+        keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",
+                            value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=True)
+        use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
+    token_count = gr.State([])
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     TRUECOMSTANT = gr.State(True)
     FALSECONSTANT = gr.State(False)
@@ -55,16 +57,16 @@ with gr.Blocks(css=customCSS) as demo:
 
     with gr.Row():
         with gr.Column(scale=12):
-            txt = gr.Textbox(show_label=False, placeholder="在这里输入").style(
+            user_input = gr.Textbox(show_label=False, placeholder="在这里输入").style(
                 container=False)
         with gr.Column(min_width=50, scale=1):
             submitBtn = gr.Button("🚀", variant="primary")
     with gr.Row():
         emptyBtn = gr.Button("🧹 新的对话")
         retryBtn = gr.Button("🔄 重新生成")
-        delLastBtn = gr.Button("🗑️ 删除上条对话")
+        delLastBtn = gr.Button("🗑️ 删除最近一条对话")
         reduceTokenBtn = gr.Button("♻️ 总结对话")
-    statusDisplay = gr.Markdown("status: ready")
+    status_display = gr.Markdown("status: ready")
     systemPromptTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入System Prompt...",
                                  label="System prompt", value=initial_prompt).style(container=True)
     with gr.Accordion(label="加载Prompt模板", open=False):
@@ -105,26 +107,34 @@ with gr.Blocks(css=customCSS) as demo:
     gr.Markdown(description)
 
 
-    txt.submit(predict, [txt, top_p, temperature, keyTxt,
-               chatbot, history, systemPromptTxt], [chatbot, history, statusDisplay])
-    txt.submit(reset_textbox, [], [txt])
-    submitBtn.click(predict, [txt, top_p, temperature, keyTxt, chatbot,
-                    history, systemPromptTxt], [chatbot, history, statusDisplay], show_progress=True)
-    submitBtn.click(reset_textbox, [], [txt])
-    emptyBtn.click(reset_state, outputs=[chatbot, history])
-    retryBtn.click(predict, [txt, top_p, temperature, keyTxt, chatbot, history,
-                   systemPromptTxt, TRUECOMSTANT], [chatbot, history, statusDisplay], show_progress=True)
-    delLastBtn.click(delete_last_conversation, [chatbot, history], [
-                     chatbot, history], show_progress=True)
-    reduceTokenBtn.click(predict, [txt, top_p, temperature, keyTxt, chatbot, history,
-                         systemPromptTxt, FALSECONSTANT, TRUECOMSTANT], [chatbot, history, statusDisplay], show_progress=True)
+    user_input.submit(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
+    user_input.submit(reset_textbox, [], [user_input])
+
+    submitBtn.click(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
+    submitBtn.click(reset_textbox, [], [user_input])
+
+    emptyBtn.click(reset_state, outputs=[chatbot, history, token_count, status_display], show_progress=True)
+
+    retryBtn.click(retry, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
+
+    delLastBtn.click(delete_last_conversation, [chatbot, history, token_count, use_streaming_checkbox], [
+                     chatbot, history, token_count, status_display], show_progress=True)
+
+    reduceTokenBtn.click(reduce_token_size, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
+
     saveHistoryBtn.click(save_chat_history, [
                   saveFileName, systemPromptTxt, history, chatbot], None, show_progress=True)
+
     saveHistoryBtn.click(get_history_names, None, [historyFileSelectDropdown])
+
     historyRefreshBtn.click(get_history_names, None, [historyFileSelectDropdown])
+
     historyReadBtn.click(load_chat_history, [historyFileSelectDropdown, systemPromptTxt, history, chatbot],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
+
     templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
+
     templaeFileReadBtn.click(load_template, [templateFileSelectDropdown],  [promptTemplates, templateSelectDropdown], show_progress=True)
+
     templateApplyBtn.click(get_template_content, [promptTemplates, templateSelectDropdown, systemPromptTxt],  [systemPromptTxt], show_progress=True)
 
 print("川虎的温馨提示：访问 http://localhost:7860 查看界面")
