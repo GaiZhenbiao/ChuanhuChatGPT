@@ -71,7 +71,7 @@ with gr.Blocks(css=customCSS) as demo:
         with gr.Column():
             with gr.Row():
                 with gr.Column(scale=6):
-                    templateFileSelectDropdown = gr.Dropdown(label="选择Prompt模板集合文件（.csv）", choices=get_template_names(plain=True), multiselect=False, value=get_template_names(plain=True)[0])
+                    templateFileSelectDropdown = gr.Dropdown(label="选择Prompt模板集合文件", choices=get_template_names(plain=True), multiselect=False, value=get_template_names(plain=True)[0])
                 with gr.Column(scale=1):
                     templateRefreshBtn = gr.Button("🔄 刷新")
                     templaeFileReadBtn = gr.Button("📂 读入模板")
