@@ -13,10 +13,13 @@ parse.add_argument('--api_key', type=str, help='OpenAI API Key', default="")
 parse.add_argument('--share', type=bool, help='Share to public', default=False)
 args = parse.parse_args()
 
-my_api_key = args.api_key    # 在这里输入你的 API 密钥
+my_api_key = ""    # 在这里输入你的 API 密钥
 HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
 
 gr.Chatbot.postprocess = postprocess
+
+if args.api_key:
+    my_api_key = args.api_key
 
 #if we are running in Docker
 if os.environ.get('dockerrun') == 'yes':
