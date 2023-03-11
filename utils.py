@@ -251,10 +251,16 @@ def save_chat_history(filename, system, history, chatbot):
 
 def load_chat_history(filename, system, history, chatbot):
     try:
-        print("Loading from history...")
         with open(os.path.join(HISTORY_DIR, filename), "r") as f:
             json_s = json.load(f)
-        print(json_s)
+        if type(json_s["history"]) == list:
+            new_history = []
+            for index, item in enumerate(json_s["history"]):
+                if index % 2 == 0:
+                    new_history.append(construct_user(item))
+                else:
+                    new_history.append(construct_assistant(item))
+            json_s["history"] = new_history
         return filename, json_s["system"], json_s["history"], json_s["chatbot"]
     except FileNotFoundError:
         print("File not found.")
