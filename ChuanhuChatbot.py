@@ -10,16 +10,6 @@ from presets import *
 my_api_key = ""    # 在这里输入你的 API 密钥
 HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
 
-parse = argparse.ArgumentParser()
-parse.add_argument('--host', type=str, help='Server Host', default="127.0.0.1")
-parse.add_argument('--port', type=int, help='Server Port', default=7860)
-parse.add_argument('--api_key', type=str, help='OpenAI API Key', default="")
-parse.add_argument('--share', type=bool, help='Share to public', default=False)
-args = parse.parse_args()
-
-if args.api_key:
-    my_api_key = args.api_key
-
 gr.Chatbot.postprocess = postprocess
 
 #if we are running in Docker
@@ -152,7 +142,7 @@ else:
     if authflag:
         demo.queue().launch(share=False, auth=(username, password))
     else:
-        demo.queue().launch(server_name=args.host, server_port=args.port, share=args.share) # 改为 share=True 可以创建公开分享链接
+        demo.queue().launch(share=False) # 改为 share=True 可以创建公开分享链接
     #demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
     #demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
     #demo.queue().launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理
