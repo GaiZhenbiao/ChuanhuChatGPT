@@ -35,7 +35,7 @@
 - [x] 保存/加载对话历史记录
 - [x] 在图形界面中添加API key
 - [x] System Prompt模板功能，从预置的Prompt库中选择System Prompt
-- [ ] 实时显示Tokens用量
+- [x] 实时显示Tokens用量
 
 ## 使用技巧
 
