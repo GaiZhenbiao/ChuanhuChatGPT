@@ -1,3 +1,4 @@
 gradio
 mdtex2html
 pypinyin
+jieba

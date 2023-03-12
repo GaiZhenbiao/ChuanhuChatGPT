@@ -12,6 +12,7 @@ import csv
 import mdtex2html
 from pypinyin import lazy_pinyin
 from presets import *
+import jieba
 
 if TYPE_CHECKING:
     from typing import TypedDict
@@ -44,6 +45,10 @@ def postprocess(
                 None if response is None else mdtex2html.convert(response),
             )
         return y
+
+def count_words(input_str):
+    words = jieba.lcut(input_str)
+    return len(words)
 
 def parse_text(text):
     lines = text.split("\n")
@@ -89,7 +94,7 @@ def construct_assistant(text):
     return construct_text("assistant", text)
 
 def construct_token_message(token, stream=False):
-    extra = "【仅包含回答的计数】 " if stream else ""
+    extra = "【粗略计数（因为实时传输回答）】 " if stream else ""
     return f"{extra}Token 计数: {token}"
 
 def get_response(openai_api_key, system_prompt, history, temperature, top_p, stream):
@@ -125,6 +130,10 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, prev
     counter = 0
     status_text = "OK"
     history.append(construct_user(inputs))
+    if len(previous_token_count) == 0:
+        rough_user_token_count = count_words(inputs) + count_words(system_prompt)
+    else:
+        rough_user_token_count = count_words(inputs)
     try:
         response = get_response(openai_api_key, system_prompt, history, temperature, top_p, True)
     except requests.exceptions.ConnectTimeout:
@@ -148,7 +157,7 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, prev
             # decode each line as response data is in bytes
             if chunklength > 6 and "delta" in chunk['choices'][0]:
                 finish_reason = chunk['choices'][0]['finish_reason']
-                status_text = construct_token_message(sum(previous_token_count)+token_counter, stream=True)
+                status_text = construct_token_message(sum(previous_token_count)+token_counter+rough_user_token_count, stream=True)
                 if finish_reason == "stop":
                     yield get_return_value()
                     break
