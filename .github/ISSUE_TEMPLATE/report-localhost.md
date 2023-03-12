@@ -2,7 +2,7 @@
 name: Report localhost
 about: 报告本地部署时的错误
 title: "[本地部署] 简短的错误描述"
-labels: local deployment
+labels: question, local deployment
 assignees: ''
 
 ---
@@ -11,7 +11,7 @@ assignees: ''
 如果你不知道怎么填写，请先点击编辑框上方的“Preview”在预览中查看我们的说明，然后在空白行处填写信息~
 
 ### 错误描述
-> 请简明描述该错误。
+> 请简明描述该错误。另外，请注意替换issue标题中的“简短的错误描述”。
 
 ### 复现操作
 > 你之前干了什么，然后出现了错误呢？例如：

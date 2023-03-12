@@ -48,12 +48,6 @@
 - 在Hugging Face上使用时，建议在右上角**复制Space**再使用，这样能大大减少排队时间，App反应也会更加迅速。
   <img width="300" alt="image" src="https://user-images.githubusercontent.com/51039745/223447310-e098a1f2-0dcf-48d6-bcc5-49472dd7ca0d.png">
 
-
-## 已知问题
-
-在代码块中输出Shell脚本存在问题，主要是撇号（`）被Markdown转义导致的。如果你知道怎么修复这个bug，欢迎提交PR ^_^
-
-
 ## 安装方式
 
 ### 本地部署
@@ -85,7 +79,9 @@
 
 	<details><summary>3. 在文件中设定默认密钥、用户名密码</summary>
 
-	这样设置的密钥可以在项目更新之后保留。
+	这样设置的密钥可以在拉取项目更新之后保留。
+	
+	在项目文件夹中新建这两个文件：`api_key.txt` 和 `auth.json`。
 
 	在`api_key.txt`中填写你的API-Key，注意不要填写任何无关内容。
 
@@ -168,7 +164,7 @@ docker build -t chuanhuchatgpt:latest .
 
 ## 部署相关
 
-<details><summary>如果需要在公网服务器部署本项目，可以查看。</summary>
+<details><summary>如果需要在公网服务器部署本项目，可以阅读本部分。</summary>
 
 ### 部署到公网服务器
 
@@ -229,7 +225,14 @@ map $http_upgrade $connection_upgrade {
 
 ## 疑难杂症解决
 
-首先，请尝试重装 gradio:
+首先，请尝试拉取本项目的最新更改，使用最新的代码重试。
+
+点击网页上的 `Download ZIP` 下载最新代码，或
+```shell
+git pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f
+```
+
+如果还有问题，可以再尝试重装 gradio:
 
 ```
 pip install gradio --upgrade --force-reinstall

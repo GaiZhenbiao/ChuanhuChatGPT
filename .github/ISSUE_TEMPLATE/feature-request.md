@@ -2,7 +2,7 @@
 name: Feature request
 about: 请求更多功能！
 title: "[功能请求] 简明描述你想要增加的功能"
-labels: enhancement
+labels: feature request
 assignees: ''
 
 ---
