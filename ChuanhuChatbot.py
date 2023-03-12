@@ -1,5 +1,5 @@
+# -*- coding:utf-8 -*-
 import gradio as gr
-# import openai
 import os
 import sys
 import argparse

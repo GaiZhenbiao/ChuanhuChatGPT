@@ -1,7 +1,4 @@
-"""Contains all of the components that can be used with Gradio Interface / Blocks.
-Along with the docs for each component, you can find the names of example demos that use
-each component. These demos are located in the `demo` directory."""
-
+# -*- coding:utf-8 -*-
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple, Type
 import json
