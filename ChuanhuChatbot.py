@@ -2,14 +2,14 @@
 import gradio as gr
 import os
 import sys
-import argparse
+# import argparse
 from utils import *
 from presets import *
 
 
 my_api_key = ""    # 在这里输入你的 API 密钥
 
-#if we are running in Docker
+# if we are running in Docker
 if os.environ.get('dockerrun') == 'yes':
     dockerflag = True
 else:
@@ -22,7 +22,7 @@ if dockerflag:
     if my_api_key == "empty":
         print("Please give a api key!")
         sys.exit(1)
-    #auth
+    # auth
     username = os.environ.get('USERNAME')
     password = os.environ.get('PASSWORD')
     if not (isinstance(username, type(None)) or isinstance(password, type(None))):
@@ -97,14 +97,14 @@ with gr.Blocks(css=customCSS) as demo:
                 with gr.Column(scale=1):
                     historyRefreshBtn = gr.Button("🔄 刷新")
                     historyReadBtn = gr.Button("📂 读入对话")
-    #inputs, top_p, temperature, top_k, repetition_penalty
+    # nputs, top_p, temperature, top_k, repetition_penalty
     with gr.Accordion("参数", open=False):
         top_p = gr.Slider(minimum=-0, maximum=1.0, value=1.0, step=0.05,
                           interactive=True, label="Top-p (nucleus sampling)",)
         temperature = gr.Slider(minimum=-0, maximum=5.0, value=1.0,
                                 step=0.1, interactive=True, label="Temperature",)
-        #top_k = gr.Slider( minimum=1, maximum=50, value=4, step=1, interactive=True, label="Top-k",)
-        #repetition_penalty = gr.Slider( minimum=0.1, maximum=3.0, value=1.03, step=0.01, interactive=True, label="Repetition Penalty", )
+        # top_k = gr.Slider( minimum=1, maximum=50, value=4, step=1, interactive=True, label="Top-k",)
+        # repetition_penalty = gr.Slider( minimum=0.1, maximum=3.0, value=1.03, step=0.01, interactive=True, label="Repetition Penalty", )
     gr.Markdown(description)
 
 
@@ -155,6 +155,6 @@ if __name__ == "__main__":
             demo.queue().launch(share=False, auth=(username, password))
         else:
             demo.queue().launch(share=False) # 改为 share=True 可以创建公开分享链接
-        #demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
-        #demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
-        #demo.queue().launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理
+        # demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
+        # demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
+        # demo.queue().launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理
