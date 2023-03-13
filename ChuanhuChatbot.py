@@ -72,7 +72,7 @@ with gr.Blocks(css=customCSS) as demo:
         retryBtn = gr.Button("🔄 重新生成")
         delLastBtn = gr.Button("🗑️ 删除最近一条对话")
         reduceTokenBtn = gr.Button("♻️ 总结对话")
-    status_display = gr.Markdown("status: ready")
+    status_display = gr.Markdown("status: ready", visible=args.display_status)
     systemPromptTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入System Prompt...",
                                  label="System prompt", value=initial_prompt).style(container=True)
     with gr.Accordion(label="加载Prompt模板", open=False):
