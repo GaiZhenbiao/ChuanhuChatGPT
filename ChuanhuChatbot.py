@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--authentication", action="store_true", default=False, help="是否开启登录")
 parser.add_argument("--input_key", action="store_true", default=False, help="是否由用户输入API-Key")
 parser.add_argument("--share", action="store_true", default=False, help="是否创建gradio公开链接")
+parser.add_argument("--use_stream", type=int, default=1, choices=[0, 1, 2], help="0实时传输回答，1一次性返回答案，2在ui中增加传输模式选项")
 
 args = parser.parse_args()
 
@@ -52,12 +53,15 @@ gr.Chatbot.postprocess = postprocess
 
 with gr.Blocks(css=customCSS) as demo:
     gr.HTML(title)
-    with gr.Row():
-        if args.input_key:
-            with gr.Column(scale=4):
-                keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=True)
-        with gr.Column(scale=1):
-            use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
+    # Input API-KEY
+    if args.use_stream == 2 or args.input_key:
+        with gr.Row():
+            if args.input_key:
+                with gr.Column(scale=4):
+                    keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=True)
+            if args.use_stream == 2:
+                with gr.Column(scale=1):
+                    use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
     token_count = gr.State([])
@@ -119,13 +123,17 @@ with gr.Blocks(css=customCSS) as demo:
 
     if not args.input_key:
         keyTxt = gr.State(my_api_key)
+    if not args.use_stream == 2:
+        use_streaming_checkbox = gr.State(args.use_stream)
 
+    # Input
     user_input.submit(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
     user_input.submit(reset_textbox, [], [user_input])
 
     submitBtn.click(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
     submitBtn.click(reset_textbox, [], [user_input])
 
+    # ChatBox
     emptyBtn.click(reset_state, outputs=[chatbot, history, token_count, status_display], show_progress=True)
 
     retryBtn.click(retry, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
@@ -135,6 +143,7 @@ with gr.Blocks(css=customCSS) as demo:
 
     reduceTokenBtn.click(reduce_token_size, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
 
+    # Load / Save History
     saveHistoryBtn.click(save_chat_history, [
                   saveFileName, systemPromptTxt, history, chatbot], None, show_progress=True)
 
@@ -144,6 +153,7 @@ with gr.Blocks(css=customCSS) as demo:
 
     historyReadBtn.click(load_chat_history, [historyFileSelectDropdown, systemPromptTxt, history, chatbot],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
 
+    # Prompt Template
     templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
 
     templaeFileReadBtn.click(load_template, [templateFileSelectDropdown],  [promptTemplates, templateSelectDropdown], show_progress=True)
