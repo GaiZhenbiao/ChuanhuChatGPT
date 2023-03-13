@@ -297,16 +297,24 @@ pip install urllib3==1.25.11
 例如，在Clash配置文件中，加入：
 
 ```
+rule-providers:
+  private:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt"
+    path: ./ruleset/ads.yaml
+    interval: 86400
+
 rules:
-- IP-CIDR,127.0.0.1,DIRECT
-- DOMAIN-SUFFIX,openai.com,你的代理规则
+ - RULE-SET,private,DIRECT
+ - DOMAIN-SUFFIX,openai.com,你的代理规则
 ```
 
 Surge：
 
 ```
 [Rule]
-DOMAIN,127.0.0.1,DIRECT
+DOMAIN-SET,https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/private.txt,DIRECT
 DOMAIN-SUFFIX,openai.com,你的代理规则
 ```
 </details>
