@@ -286,15 +286,20 @@ def load_chat_history(filename, system, history, chatbot):
     try:
         with open(os.path.join(HISTORY_DIR, filename), "r") as f:
             json_s = json.load(f)
-        if type(json_s["history"]) == list:
-            print("历史记录格式为旧版，正在转换……")
-            new_history = []
-            for index, item in enumerate(json_s["history"]):
-                if index % 2 == 0:
-                    new_history.append(construct_user(item))
-                else:
-                    new_history.append(construct_assistant(item))
-            json_s["history"] = new_history
+        try:
+            if type(json_s["history"][0]) == str:
+                print("历史记录格式为旧版，正在转换……")
+                new_history = []
+                for index, item in enumerate(json_s["history"]):
+                    if index % 2 == 0:
+                        new_history.append(construct_user(item))
+                    else:
+                        new_history.append(construct_assistant(item))
+                json_s["history"] = new_history
+                print(new_history)
+        except:
+            # 没有对话历史
+            pass
         print("加载对话历史完毕")
         return filename, json_s["system"], json_s["history"], json_s["chatbot"]
     except FileNotFoundError:
