@@ -49,10 +49,8 @@ def postprocess(
         return y
 
 def count_token(input_str):
-    print("计算输入Token计数中……")
     encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
     length = len(encoding.encode(input_str))
-    print("计算完成！")
     return length
 
 def parse_text(text):
