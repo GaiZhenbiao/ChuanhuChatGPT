@@ -1,3 +1,5 @@
+import argparse
+
 # -*- coding:utf-8 -*-
 title = """<h1 align="center">川虎ChatGPT 🚀</h1>"""
 description = """<div align=center>
@@ -34,9 +36,18 @@ pre code {
 standard_error_msg = "☹️发生了错误：" # 错误信息的标准前缀
 error_retrieve_prompt = "连接超时，无法获取对话。请检查网络连接，或者API-Key是否有效。" # 获取对话时发生错误
 summarize_prompt = "请总结以上对话，不超过100字。" # 总结对话时的 prompt
-max_token_streaming = 3500 # 流式对话时的最大 token 数
-timeout_streaming = 5 # 流式对话时的超时时间
-max_token_all = 3500 # 非流式对话时的最大 token 数
-timeout_all = 200 # 非流式对话时的超时时间
-# enable_streaming_option = True  # 是否启用选择选择是否实时显示回答的勾选框, 已弃用，请至argparser查看
-# HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True, 已弃用，请至argparser查看
+
+my_api_key = ""    # 在这里输入你的 API 密钥
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--authentication", action="store_true", default=False, help="是否开启登录")
+parser.add_argument("--input_key", action="store_true", default=False, help="是否由用户输入API-Key")
+parser.add_argument("--share", action="store_true", default=False, help="是否创建gradio公开链接")
+parser.add_argument("--use_stream", type=int, default=1, choices=[0, 1, 2], help="0实时传输回答，1一次性返回答案，2在ui中增加传输模式选项")
+parser.add_argument("--timeout_all", type=int, default=200, help="非流式对话时的超时时间")
+parser.add_argument("--max_token_all", type=int, default=3000, help="非流式对话时的最大 token 数")
+parser.add_argument("--timeout_streaming", type=int, default=5, help="流式对话时的超时时间")
+parser.add_argument("--max_token_streaming", type=int, default=3000, help="流式对话时的最大 token 数")
+
+args = parser.parse_args()
+

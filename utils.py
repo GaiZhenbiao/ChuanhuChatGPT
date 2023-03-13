@@ -118,9 +118,9 @@ def get_response(openai_api_key, system_prompt, history, temperature, top_p, str
         "frequency_penalty": 0,
     }
     if stream:
-        timeout = timeout_streaming
+        timeout = args.timeout_streaming
     else:
-        timeout = timeout_all
+        timeout = args.timeout_all
     response = requests.post(API_URL, headers=headers, json=payload, stream=True, timeout=timeout)
     return response
 
@@ -217,9 +217,9 @@ def predict(openai_api_key, system_prompt, history, inputs, chatbot, token_count
     print(f"传输完毕。当前token计数为{token_count}")
     print("回答为：" +colorama.Fore.BLUE + f"{history[-1]['content']}" + colorama.Style.RESET_ALL)
     if stream:
-        max_token = max_token_streaming
+        max_token = args.max_token_streaming
     else:
-        max_token = max_token_all
+        max_token = args.max_token_all
     if sum(token_count) > max_token and should_check_token_count:
         print(f"精简token中{token_count}/{max_token}")
         iter = reduce_token_size(openai_api_key, system_prompt, history, chatbot, token_count, top_p, temperature, stream=False, hidden=True)

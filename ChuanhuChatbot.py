@@ -2,19 +2,10 @@
 import gradio as gr
 import os
 import sys
-import argparse
 from utils import *
 from presets import *
 
 my_api_key = ""    # 在这里输入你的 API 密钥
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--authentication", action="store_true", default=False, help="是否开启登录")
-parser.add_argument("--input_key", action="store_true", default=False, help="是否由用户输入API-Key")
-parser.add_argument("--share", action="store_true", default=False, help="是否创建gradio公开链接")
-parser.add_argument("--use_stream", type=int, default=1, choices=[0, 1, 2], help="0实时传输回答，1一次性返回答案，2在ui中增加传输模式选项")
-
-args = parser.parse_args()
 
 # TODO refactor the code later
 #if we are running in Docker
