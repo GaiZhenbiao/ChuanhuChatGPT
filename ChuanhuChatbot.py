@@ -6,9 +6,16 @@ import argparse
 from utils import *
 from presets import *
 
-
 my_api_key = ""    # 在这里输入你的 API 密钥
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--authentication", action="store_true", default=False, help="是否开启登录")
+parser.add_argument("--input_key", action="store_true", default=False, help="是否由用户输入API-Key")
+parser.add_argument("--share", action="store_true", default=False, help="是否创建gradio公开链接")
+
+args = parser.parse_args()
+
+# TODO refactor the code later
 #if we are running in Docker
 if os.environ.get('dockerrun') == 'yes':
     dockerflag = True
@@ -38,14 +45,17 @@ else:
             password = auth["password"]
             if username != "" and password != "":
                 authflag = True
+# end TODO
+
 
 gr.Chatbot.postprocess = postprocess
 
 with gr.Blocks(css=customCSS) as demo:
     gr.HTML(title)
     with gr.Row():
-        with gr.Column(scale=4):
-            keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=True)
+        if args.input_key:
+            with gr.Column(scale=4):
+                keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=True)
         with gr.Column(scale=1):
             use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
@@ -107,6 +117,8 @@ with gr.Blocks(css=customCSS) as demo:
         #repetition_penalty = gr.Slider( minimum=0.1, maximum=3.0, value=1.03, step=0.01, interactive=True, label="Repetition Penalty", )
     gr.Markdown(description)
 
+    if not args.input_key:
+        keyTxt = gr.State(my_api_key)
 
     user_input.submit(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
     user_input.submit(reset_textbox, [], [user_input])
@@ -143,6 +155,11 @@ print(colorama.Back.GREEN + "\n川虎的温馨提示：访问 http://localhost:7
 demo.title = "川虎ChatGPT 🚀"
 
 if __name__ == "__main__":
+    # TODO refactor the code later
+    if not authflag:
+        authflag = args.authentication
+    # end TODO
+
     #if running in Docker
     if dockerflag:
         if authflag:
@@ -152,9 +169,8 @@ if __name__ == "__main__":
     #if not running in Docker
     else:
         if authflag:
-            demo.queue().launch(share=False, auth=(username, password))
+            demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=args.share, auth=(username, password))
         else:
-            demo.queue().launch(share=False) # 改为 share=True 可以创建公开分享链接
-        #demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
+            demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=args.share) # 改为 share=True 可以创建公开分享链接
         #demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
         #demo.queue().launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理
