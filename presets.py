@@ -10,6 +10,21 @@ description = """<div align=center>
 </div>
 """
 customCSS = """
+table {
+    margin: 1em 0;
+    border-collapse: collapse;
+    empty-cells: show;
+}
+td,th {
+    border: 1.2px solid var(--color-border-primary) !important;
+    padding: 0.2em;
+}
+thead {
+    background-color: rgba(175,184,193,0.2);
+}
+thead th {
+    padding: .5em .2em;
+}
 code {
     display: inline;
     white-space: break-spaces;
