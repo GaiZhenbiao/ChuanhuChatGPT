@@ -43,8 +43,8 @@ def postprocess(
             y[i] = (
                 # None if message is None else markdown.markdown(message),
                 # None if response is None else markdown.markdown(response),
-                None if message is None else mdtex2html.convert(message, extensions=['fenced_code','codehilite']),
-                None if response is None else mdtex2html.convert(response, extensions=['fenced_code','codehilite']),
+                None if message is None else mdtex2html.convert(message, extensions=['fenced_code','codehilite','tables']),
+                None if response is None else mdtex2html.convert(response, extensions=['fenced_code','codehilite','tables']),
             )
         return y
 
