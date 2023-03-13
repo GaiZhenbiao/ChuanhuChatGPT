@@ -49,7 +49,7 @@ def postprocess(
         return y
 
 def count_token(input_str):
-    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    encoding = tiktoken.get_encoding("cl100k_base")
     length = len(encoding.encode(input_str))
     return length
 
