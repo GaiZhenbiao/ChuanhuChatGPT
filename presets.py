@@ -48,6 +48,6 @@ parser.add_argument("--timeout_all", type=int, default=200, help="非流式对�
 parser.add_argument("--max_token_all", type=int, default=3000, help="非流式对话时的最大 token 数")
 parser.add_argument("--timeout_streaming", type=int, default=5, help="流式对话时的超时时间")
 parser.add_argument("--max_token_streaming", type=int, default=3000, help="流式对话时的最大 token 数")
-
+parser.add_argument("--show_hyper_parameter", action="store_true", default=False, help="是否显示参数选项卡")
 args = parser.parse_args()
 

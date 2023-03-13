@@ -103,19 +103,23 @@ with gr.Blocks(css=customCSS) as demo:
                     historyRefreshBtn = gr.Button("🔄 刷新")
                     historyReadBtn = gr.Button("📂 读入对话")
     #inputs, top_p, temperature, top_k, repetition_penalty
-    with gr.Accordion("参数", open=False):
-        top_p = gr.Slider(minimum=-0, maximum=1.0, value=1.0, step=0.05,
-                          interactive=True, label="Top-p (nucleus sampling)",)
-        temperature = gr.Slider(minimum=-0, maximum=5.0, value=1.0,
-                                step=0.1, interactive=True, label="Temperature",)
-        #top_k = gr.Slider( minimum=1, maximum=50, value=4, step=1, interactive=True, label="Top-k",)
-        #repetition_penalty = gr.Slider( minimum=0.1, maximum=3.0, value=1.03, step=0.01, interactive=True, label="Repetition Penalty", )
+    if args.show_hyper_parameter:
+        with gr.Accordion("参数", open=False):
+            top_p = gr.Slider(minimum=-0, maximum=1.0, value=1.0, step=0.05,
+                            interactive=True, label="Top-p (nucleus sampling)",)
+            temperature = gr.Slider(minimum=-0, maximum=5.0, value=1.0,
+                                    step=0.1, interactive=True, label="Temperature",)
+            #top_k = gr.Slider( minimum=1, maximum=50, value=4, step=1, interactive=True, label="Top-k",)
+            #repetition_penalty = gr.Slider( minimum=0.1, maximum=3.0, value=1.03, step=0.01, interactive=True, label="Repetition Penalty", )
     gr.Markdown(description)
 
     if not args.input_key:
         keyTxt = gr.State(my_api_key)
     if not args.use_stream == 2:
         use_streaming_checkbox = gr.State(args.use_stream)
+    if not args.show_hyper_parameter:
+        top_p = gr.State(1.0)
+        temperature = gr.State(1.0)
 
     # Input
     user_input.submit(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
