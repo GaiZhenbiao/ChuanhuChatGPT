@@ -169,7 +169,12 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, prev
                     print("生成完毕")
                     yield get_return_value()
                     break
-                partial_words = partial_words + chunk['choices'][0]["delta"]["content"]
+                try:
+                    partial_words = partial_words + chunk['choices'][0]["delta"]["content"]
+                except KeyError:
+                    status_text = standard_error_msg + "API回复中找不到内容。很可能是Token计数达到上限了。当前Token计数: " + str(sum(previous_token_count)+token_counter+user_token_count)
+                    yield get_return_value()
+                    break
                 if token_counter == 0:
                     history.append(construct_assistant(" " + partial_words))
                 else:
