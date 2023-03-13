@@ -352,7 +352,7 @@ def get_template_names(plain=False):
     return get_file_names(TEMPLATES_DIR, plain, filetypes=[".csv", "json"])
 
 def get_template_content(templates, selection, original_system_prompt):
-    print(f"获取模板内容，模板字典为{templates}，选择为{selection}，原始系统提示为{original_system_prompt}")
+    print(f"应用模板中，选择为{selection}，原始系统提示为{original_system_prompt}")
     try:
         return templates[selection]
     except:
