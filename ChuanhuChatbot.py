@@ -138,7 +138,7 @@ with gr.Blocks(css=customCSS) as demo:
 
     templateApplyBtn.click(get_template_content, [promptTemplates, templateSelectDropdown, systemPromptTxt],  [systemPromptTxt], show_progress=True)
 
-print("川虎的温馨提示：访问 http://localhost:7860 查看界面")
+print(colorama.Back.GREEN + "\n川虎的温馨提示：访问 http://localhost:7860 查看界面" + colorama.Style.RESET_ALL)
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
 demo.title = "川虎ChatGPT 🚀"
 
