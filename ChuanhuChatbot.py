@@ -44,9 +44,10 @@ gr.Chatbot.postprocess = postprocess
 with gr.Blocks(css=customCSS) as demo:
     gr.HTML(title)
     with gr.Row():
-        keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",
-                            value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=True)
-        use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
+        with gr.Column(scale=4):
+            keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=True)
+        with gr.Column(scale=1):
+            use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
     token_count = gr.State([])
