@@ -1,6 +1,7 @@
 gradio
 mdtex2html
 pypinyin
-jieba
+tiktoken
 socksio
 tqdm
+colorama
