@@ -51,7 +51,7 @@ def postprocess(
 def count_token(input_str):
     print("计算输入Token计数中……")
     encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
-    length = len(encoding.encode("tiktoken is great!"))
+    length = len(encoding.encode(input_str))
     print("计算完成！")
     return length
 
@@ -138,7 +138,8 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, prev
     history.append(construct_user(inputs))
     user_token_count = 0
     if len(previous_token_count) == 0:
-        user_token_count = count_token(inputs) + count_token(system_prompt)
+        system_prompt_token_count = count_token(system_prompt)
+        user_token_count = count_token(inputs) + system_prompt_token_count
     else:
         user_token_count = count_token(inputs)
     print(f"输入token计数: {user_token_count}")
@@ -200,7 +201,7 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, previou
 
 
 def predict(openai_api_key, system_prompt, history, inputs, chatbot, token_count, top_p, temperature, stream=False, should_check_token_count = True):  # repetition_penalty, top_k
-    print(colorama.Fore.BLUE + f"输入为：{inputs}" + colorama.Style.RESET_ALL)
+    print("输入为：" +colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
     if stream:
         print("使用流式传输")
         iter = stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, token_count, top_p, temperature)
@@ -211,7 +212,7 @@ def predict(openai_api_key, system_prompt, history, inputs, chatbot, token_count
         chatbot, history, status_text, token_count = predict_all(openai_api_key, system_prompt, history, inputs, chatbot, token_count, top_p, temperature)
         yield chatbot, history, status_text, token_count
     print(f"传输完毕。当前token计数为{token_count}")
-    print(colorama.Fore.BLUE + f"回答为：{history[-1]['content']}" + colorama.Style.RESET_ALL)
+    print("回答为：" +colorama.Fore.BLUE + f"{history[-1]['content']}" + colorama.Style.RESET_ALL)
     if stream:
         max_token = max_token_streaming
     else:
