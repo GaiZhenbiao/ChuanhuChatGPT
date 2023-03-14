@@ -160,7 +160,12 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, prev
         if chunk:
             chunk = chunk.decode()
             chunklength = len(chunk)
-            chunk = json.loads(chunk[6:])
+            try:
+                chunk = json.loads(chunk[6:])
+            except json.JSONDecodeError:
+                status_text = f"JSON解析错误。请重置对话。收到的内容: {chunk}"
+                yield get_return_value()
+                break
             # decode each line as response data is in bytes
             if chunklength > 6 and "delta" in chunk['choices'][0]:
                 finish_reason = chunk['choices'][0]['finish_reason']
