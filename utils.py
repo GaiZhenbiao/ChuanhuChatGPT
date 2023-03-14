@@ -178,7 +178,6 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_
                 finish_reason = chunk['choices'][0]['finish_reason']
                 status_text = construct_token_message(sum(all_token_counts), stream=True)
                 if finish_reason == "stop":
-                    print("生成完毕")
                     yield get_return_value()
                     break
                 try:
@@ -216,7 +215,6 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_tok
     total_token_count = response["usage"]["total_tokens"]
     all_token_counts[-1] = total_token_count - sum(all_token_counts)
     status_text = construct_token_message(total_token_count)
-    print("生成一次性回答完毕")
     return chatbot, history, status_text, all_token_counts
 
 
