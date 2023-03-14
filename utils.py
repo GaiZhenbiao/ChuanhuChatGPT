@@ -124,37 +124,37 @@ def get_response(openai_api_key, system_prompt, history, temperature, top_p, str
     response = requests.post(API_URL, headers=headers, json=payload, stream=True, timeout=timeout)
     return response
 
-def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, previous_token_count, top_p, temperature):
+def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature):
     def get_return_value():
-        return chatbot, history, status_text, [*previous_token_count, token_counter]
+        return chatbot, history, status_text, all_token_counts
 
     print("实时回答模式")
-    token_counter = 0
     partial_words = ""
     counter = 0
     status_text = "开始实时传输回答……"
     history.append(construct_user(inputs))
+    history.append(construct_assistant(""))
+    chatbot.append((parse_text(inputs), ""))
     user_token_count = 0
-    if len(previous_token_count) == 0:
+    if len(all_token_counts) == 0:
         system_prompt_token_count = count_token(system_prompt)
         user_token_count = count_token(inputs) + system_prompt_token_count
     else:
         user_token_count = count_token(inputs)
+    all_token_counts.append(user_token_count)
     print(f"输入token计数: {user_token_count}")
+    yield get_return_value()
     try:
         response = get_response(openai_api_key, system_prompt, history, temperature, top_p, True)
     except requests.exceptions.ConnectTimeout:
-        history.pop()
-        status_text = standard_error_msg + "连接超时，无法获取对话。" + error_retrieve_prompt
+        status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
         yield get_return_value()
         return
     except requests.exceptions.ReadTimeout:
-        history.pop()
-        status_text = standard_error_msg + "读取超时，无法获取对话。" + error_retrieve_prompt
+        status_text = standard_error_msg + read_timeout_prompt + error_retrieve_prompt
         yield get_return_value()
         return
 
-    chatbot.append((parse_text(inputs), ""))
     yield get_return_value()
 
     for chunk in tqdm(response.iter_lines()):
@@ -169,13 +169,14 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, prev
             try:
                 chunk = json.loads(chunk[6:])
             except json.JSONDecodeError:
+                print(chunk)
                 status_text = f"JSON解析错误。请重置对话。收到的内容: {chunk}"
                 yield get_return_value()
-                break
+                continue
             # decode each line as response data is in bytes
             if chunklength > 6 and "delta" in chunk['choices'][0]:
                 finish_reason = chunk['choices'][0]['finish_reason']
-                status_text = construct_token_message(sum(previous_token_count)+token_counter+user_token_count, stream=True)
+                status_text = construct_token_message(sum(all_token_counts), stream=True)
                 if finish_reason == "stop":
                     print("生成完毕")
                     yield get_return_value()
@@ -183,60 +184,76 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, prev
                 try:
                     partial_words = partial_words + chunk['choices'][0]["delta"]["content"]
                 except KeyError:
-                    status_text = standard_error_msg + "API回复中找不到内容。很可能是Token计数达到上限了。请重置对话。当前Token计数: " + str(sum(previous_token_count)+token_counter+user_token_count)
+                    status_text = standard_error_msg + "API回复中找不到内容。很可能是Token计数达到上限了。请重置对话。当前Token计数: " + str(sum(all_token_counts))
                     yield get_return_value()
                     break
-                if token_counter == 0:
-                    history.append(construct_assistant(" " + partial_words))
-                else:
-                    history[-1] = construct_assistant(partial_words)
+                history[-1] = construct_assistant(partial_words)
                 chatbot[-1] = (parse_text(inputs), parse_text(partial_words))
-                token_counter += 1
+                all_token_counts[-1] += 1
                 yield get_return_value()
 
 
-def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, previous_token_count, top_p, temperature):
+def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature):
     print("一次性回答模式")
     history.append(construct_user(inputs))
+    history.append(construct_assistant(""))
+    chatbot.append((parse_text(inputs), ""))
+    all_token_counts.append(count_token(inputs))
     try:
         response = get_response(openai_api_key, system_prompt, history, temperature, top_p, False)
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + error_retrieve_prompt
-        return chatbot, history, status_text, previous_token_count
+        return chatbot, history, status_text, all_token_counts
+    except requests.exceptions.ProxyError:
+        status_text = standard_error_msg + proxy_error_prompt + error_retrieve_prompt
+    except requests.exceptions.SSLError:
+        status_text = standard_error_msg + ssl_error_prompt + error_retrieve_prompt
+        return chatbot, history, status_text, all_token_counts
     response = json.loads(response.text)
     content = response["choices"][0]["message"]["content"]
-    history.append(construct_assistant(content))
+    history[-1] = construct_assistant(content)
     chatbot.append((parse_text(inputs), parse_text(content)))
     total_token_count = response["usage"]["total_tokens"]
-    previous_token_count.append(total_token_count - sum(previous_token_count))
+    all_token_counts[-1] = total_token_count - sum(all_token_counts)
     status_text = construct_token_message(total_token_count)
     print("生成一次性回答完毕")
-    return chatbot, history, status_text, previous_token_count
+    return chatbot, history, status_text, all_token_counts
 
 
-def predict(openai_api_key, system_prompt, history, inputs, chatbot, token_count, top_p, temperature, stream=False, should_check_token_count = True):  # repetition_penalty, top_k
+def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, stream=False, should_check_token_count = True):  # repetition_penalty, top_k
     print("输入为：" +colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
+    if len(openai_api_key) != 51:
+        status_text = standard_error_msg + no_apikey_msg
+        print(status_text)
+        history.append(construct_user(inputs))
+        history.append("")
+        chatbot.append((parse_text(inputs), ""))
+        all_token_counts.append(0)
+        yield chatbot, history, status_text, all_token_counts
+        return
+    yield chatbot, history, "开始生成回答……", all_token_counts
     if stream:
         print("使用流式传输")
-        iter = stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, token_count, top_p, temperature)
-        for chatbot, history, status_text, token_count in iter:
-            yield chatbot, history, status_text, token_count
+        iter = stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature)
+        for chatbot, history, status_text, all_token_counts in iter:
+            yield chatbot, history, status_text, all_token_counts
     else:
         print("不使用流式传输")
-        chatbot, history, status_text, token_count = predict_all(openai_api_key, system_prompt, history, inputs, chatbot, token_count, top_p, temperature)
-        yield chatbot, history, status_text, token_count
-    print(f"传输完毕。当前token计数为{token_count}")
-    print("回答为：" +colorama.Fore.BLUE + f"{history[-1]['content']}" + colorama.Style.RESET_ALL)
+        chatbot, history, status_text, all_token_counts = predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature)
+        yield chatbot, history, status_text, all_token_counts
+    print(f"传输完毕。当前token计数为{all_token_counts}")
+    if len(history) > 1 and history[-1]['content'] != inputs:
+        print("回答为：" +colorama.Fore.BLUE + f"{history[-1]['content']}" + colorama.Style.RESET_ALL)
     if stream:
         max_token = max_token_streaming
     else:
         max_token = max_token_all
-    if sum(token_count) > max_token and should_check_token_count:
-        print(f"精简token中{token_count}/{max_token}")
-        iter = reduce_token_size(openai_api_key, system_prompt, history, chatbot, token_count, top_p, temperature, stream=False, hidden=True)
-        for chatbot, history, status_text, token_count in iter:
+    if sum(all_token_counts) > max_token and should_check_token_count:
+        print(f"精简token中{all_token_counts}/{max_token}")
+        iter = reduce_token_size(openai_api_key, system_prompt, history, chatbot, all_token_counts, top_p, temperature, stream=False, hidden=True)
+        for chatbot, history, status_text, all_token_counts in iter:
             status_text = f"Token 达到上限，已自动降低Token计数至 {status_text}"
-            yield chatbot, history, status_text, token_count
+            yield chatbot, history, status_text, all_token_counts
 
 
 def retry(openai_api_key, system_prompt, history, chatbot, token_count, top_p, temperature, stream=False):

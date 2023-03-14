@@ -42,13 +42,6 @@ else:
 gr.Chatbot.postprocess = postprocess
 
 with gr.Blocks(css=customCSS) as demo:
-    gr.HTML(title)
-    with gr.Row():
-        with gr.Column(scale=4):
-            keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=True)
-        with gr.Column(scale=1):
-            use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
-    chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
     token_count = gr.State([])
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
@@ -56,6 +49,13 @@ with gr.Blocks(css=customCSS) as demo:
     FALSECONSTANT = gr.State(False)
     topic = gr.State("未命名对话历史记录")
 
+    gr.HTML(title)
+    with gr.Row():
+        with gr.Column(scale=4):
+            keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=False)
+        with gr.Column(scale=1):
+            use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
+    chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     with gr.Row():
         with gr.Column(scale=12):
             user_input = gr.Textbox(show_label=False, placeholder="在这里输入").style(
@@ -68,8 +68,9 @@ with gr.Blocks(css=customCSS) as demo:
         delLastBtn = gr.Button("🗑️ 删除最近一条对话")
         reduceTokenBtn = gr.Button("♻️ 总结对话")
     status_display = gr.Markdown("status: ready")
-    systemPromptTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入System Prompt...",
-                                 label="System prompt", value=initial_prompt).style(container=True)
+
+    systemPromptTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入System Prompt...", label="System prompt", value=initial_prompt).style(container=True)
+
     with gr.Accordion(label="加载Prompt模板", open=False):
         with gr.Column():
             with gr.Row():
@@ -100,11 +101,10 @@ with gr.Blocks(css=customCSS) as demo:
     #inputs, top_p, temperature, top_k, repetition_penalty
     with gr.Accordion("参数", open=False):
         top_p = gr.Slider(minimum=-0, maximum=1.0, value=1.0, step=0.05,
-                          interactive=True, label="Top-p (nucleus sampling)",)
+                        interactive=True, label="Top-p (nucleus sampling)",)
         temperature = gr.Slider(minimum=-0, maximum=5.0, value=1.0,
                                 step=0.1, interactive=True, label="Temperature",)
-        #top_k = gr.Slider( minimum=1, maximum=50, value=4, step=1, interactive=True, label="Top-k",)
-        #repetition_penalty = gr.Slider( minimum=0.1, maximum=3.0, value=1.03, step=0.01, interactive=True, label="Repetition Penalty", )
+
     gr.Markdown(description)
 
 

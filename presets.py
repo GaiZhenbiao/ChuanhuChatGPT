@@ -31,9 +31,17 @@ pre code {
 }
 """
 
+summarize_prompt = "请总结以上对话，不超过100字。" # 总结对话时的 prompt
+
+# 错误信息
 standard_error_msg = "☹️发生了错误：" # 错误信息的标准前缀
 error_retrieve_prompt = "请检查网络连接，或者API-Key是否有效。" # 获取对话时发生错误
-summarize_prompt = "请总结以上对话，不超过100字。" # 总结对话时的 prompt
+connection_timeout_prompt = "连接超时，无法获取对话。" # 连接超时
+read_timeout_prompt = "读取超时，无法获取对话。" # 读取超时
+proxy_error_prompt = "代理错误，无法获取对话。" # 代理错误
+ssl_error_prompt = "SSL错误，无法获取对话。" # SSL 错误
+no_apikey_msg = "API key长度不是51位，请检查是否输入正确。" # API key 长度不足 51 位
+
 max_token_streaming = 3500 # 流式对话时的最大 token 数
 timeout_streaming = 15 # 流式对话时的超时时间
 max_token_all = 3500 # 非流式对话时的最大 token 数
