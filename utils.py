@@ -144,7 +144,11 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, prev
     try:
         response = get_response(openai_api_key, system_prompt, history, temperature, top_p, True)
     except requests.exceptions.ConnectTimeout:
-        status_text = standard_error_msg + error_retrieve_prompt
+        status_text = standard_error_msg + "连接超时，无法获取对话。" + error_retrieve_prompt
+        yield get_return_value()
+        return
+    except requests.exceptions.ReadTimeout:
+        status_text = standard_error_msg + "读取超时，无法获取对话。" + error_retrieve_prompt
         yield get_return_value()
         return
 
