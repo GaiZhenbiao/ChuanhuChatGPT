@@ -144,10 +144,14 @@ docker pull tuchuanhuhuhu/chuanhuchatgpt:latest
 ```shell
 docker run -d --name chatgpt \
 	-e my_api_key="替换成API" \
+	-e USERNAME="替换成用户名" \
+	-e PASSWORD="替换成密码" \
 	-v ~/chatGPThistory:/app/history \
 	-p 7860:7860 \
 	tuchuanhuhuhu/chuanhuchatgpt:latest
 ```
+
+注：`USERNAME` 和 `PASSWORD` 两行可省略。若省略则不会启用认证。
 
 #### 查看运行状态
 ```shell
@@ -162,9 +166,9 @@ docker build -t chuanhuchatgpt:latest .
 </details>
 
 
-## 部署相关
+### 远程部署
 
-<details><summary>如果需要在公网服务器部署本项目，可以阅读本部分。</summary>
+<details><summary>如果需要在公网服务器部署本项目，请阅读本部分</summary>
 
 ### 部署到公网服务器
 
@@ -181,7 +185,11 @@ demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可�
 demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
 ```
 
-### 如果你想用域名访问，可以配置Nginx反向代理
+### 配置 Nginx 反向代理
+
+注意：配置反向代理不是必须的。如果需要使用域名，则需要配置 Nginx 反向代理。
+
+又及：目前配置认证后，Nginx 必须配置 SSL，否则会出现 [Cookie 不匹配问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/89)。
 
 添加独立配置文件：
 ```nginx
@@ -220,6 +228,43 @@ map $http_upgrade $connection_upgrade {
   ''      close;
   }
 ```
+
+<details><summary>如果需要同时配置域名访问和身份认证,请查看此部分</summary>
+
+将上述配置文件中的
+
+```nginx
+server {
+	listen 80;
+	server_name /域名/;   # 请填入你设定的域名
+	access_log off;
+	error_log off;
+	location / {
+		...
+	}
+}
+```
+
+改为
+
+```nginx
+server {
+	listen 443 ssl;
+	ssl_certificate     /etc/nginx/ssl/你的证书;
+    ssl_certificate_key /etc/nginx/ssl/你的证书私钥;
+	server_name /域名/;   # 请填入你设定的域名
+	access_log off;
+	error_log off;
+	location / {
+		...
+	}
+}
+```
+
+其中 `你的证书` 和 `你的证书私钥` 需要自行申领，具体方法请参考：
+[acme.sh - 说明](https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E)
+
+</details>
 
 </details>
 
