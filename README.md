@@ -229,42 +229,7 @@ map $http_upgrade $connection_upgrade {
   }
 ```
 
-<details><summary>如果需要同时配置域名访问和身份认证,请查看此部分</summary>
-
-将上述配置文件中的
-
-```nginx
-server {
-	listen 80;
-	server_name /域名/;   # 请填入你设定的域名
-	access_log off;
-	error_log off;
-	location / {
-		...
-	}
-}
-```
-
-改为
-
-```nginx
-server {
-	listen 443 ssl;
-	ssl_certificate     /etc/nginx/ssl/你的证书;
-    ssl_certificate_key /etc/nginx/ssl/你的证书私钥;
-	server_name /域名/;   # 请填入你设定的域名
-	access_log off;
-	error_log off;
-	location / {
-		...
-	}
-}
-```
-
-其中 `你的证书` 和 `你的证书私钥` 需要自行申领，具体方法请参考：
-[acme.sh - 说明](https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E)
-
-</details>
+为了同时配置域名访问和身份认证，需要配置SSL的证书，可以参考[这篇博客](https://www.gzblog.tech/2020/12/25/how-to-config-hexo/#%E9%85%8D%E7%BD%AEHTTPS)一键配置
 
 </details>
 
