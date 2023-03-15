@@ -224,10 +224,13 @@ def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_c
     if len(openai_api_key) != 51:
         status_text = standard_error_msg + no_apikey_msg
         print(status_text)
-        history.append(construct_user(inputs))
-        history.append("")
         chatbot.append((parse_text(inputs), ""))
-        all_token_counts.append(0)
+        if len(history) == 0:
+            history.append(construct_user(inputs))
+            history.append("")
+            all_token_counts.append(0)
+        else:
+            history[-2] = construct_user(inputs)
         yield chatbot, history, status_text, all_token_counts
         return
     yield chatbot, history, "开始生成回答……", all_token_counts
