@@ -1,11 +1,13 @@
 # -*- coding:utf-8 -*-
 import gradio as gr
 import os
+import logging
 import sys
 import argparse
 from utils import *
 from presets import *
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s")
 
 my_api_key = ""    # 在这里输入你的 API 密钥
 
@@ -20,7 +22,7 @@ authflag = False
 if dockerflag:
     my_api_key = os.environ.get('my_api_key')
     if my_api_key == "empty":
-        print("Please give a api key!")
+        logging.error("Please give a api key!")
         sys.exit(1)
     #auth
     username = os.environ.get('USERNAME')
@@ -140,7 +142,7 @@ with gr.Blocks(css=customCSS) as demo:
 
     templateApplyBtn.click(get_template_content, [promptTemplates, templateSelectDropdown, systemPromptTxt],  [systemPromptTxt], show_progress=True)
 
-print(colorama.Back.GREEN + "\n川虎的温馨提示：访问 http://localhost:7860 查看界面" + colorama.Style.RESET_ALL)
+logging.info(colorama.Back.GREEN + "\n川虎的温馨提示：访问 http://localhost:7860 查看界面" + colorama.Style.RESET_ALL)
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
 demo.title = "川虎ChatGPT 🚀"
 
