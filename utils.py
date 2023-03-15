@@ -99,7 +99,7 @@ def construct_assistant(text):
 def construct_token_message(token, stream=False):
     return f"Token 计数: {token}"
 
-def get_response(openai_api_key, system_prompt, history, temperature, top_p, stream):
+def get_response(openai_api_key, system_prompt, history, temperature, top_p, stream, selected_model):
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {openai_api_key}"
@@ -108,7 +108,7 @@ def get_response(openai_api_key, system_prompt, history, temperature, top_p, str
     history = [construct_system(system_prompt), *history]
 
     payload = {
-        "model": "gpt-3.5-turbo",
+        "model": selected_model,
         "messages": history,  # [{"role": "user", "content": f"{inputs}"}],
         "temperature": temperature,  # 1.0,
         "top_p": top_p,  # 1.0,
@@ -124,7 +124,7 @@ def get_response(openai_api_key, system_prompt, history, temperature, top_p, str
     response = requests.post(API_URL, headers=headers, json=payload, stream=True, timeout=timeout)
     return response
 
-def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature):
+def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, selected_model):
     def get_return_value():
         return chatbot, history, status_text, all_token_counts
 
@@ -145,7 +145,7 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_
     print(f"输入token计数: {user_token_count}")
     yield get_return_value()
     try:
-        response = get_response(openai_api_key, system_prompt, history, temperature, top_p, True)
+        response = get_response(openai_api_key, system_prompt, history, temperature, top_p, True, selected_model)
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
         yield get_return_value()
@@ -192,14 +192,14 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_
                 yield get_return_value()
 
 
-def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature):
+def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, selected_model):
     print("一次性回答模式")
     history.append(construct_user(inputs))
     history.append(construct_assistant(""))
     chatbot.append((parse_text(inputs), ""))
     all_token_counts.append(count_token(inputs))
     try:
-        response = get_response(openai_api_key, system_prompt, history, temperature, top_p, False)
+        response = get_response(openai_api_key, system_prompt, history, temperature, top_p, False, selected_model)
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + error_retrieve_prompt
         return chatbot, history, status_text, all_token_counts
@@ -218,7 +218,7 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_tok
     return chatbot, history, status_text, all_token_counts
 
 
-def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, stream=False, should_check_token_count = True):  # repetition_penalty, top_k
+def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, stream=False, selected_model = MODELS[0], should_check_token_count = True):  # repetition_penalty, top_k
     print("输入为：" +colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
     if len(openai_api_key) != 51:
         status_text = standard_error_msg + no_apikey_msg
@@ -232,12 +232,12 @@ def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_c
     yield chatbot, history, "开始生成回答……", all_token_counts
     if stream:
         print("使用流式传输")
-        iter = stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature)
+        iter = stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, selected_model)
         for chatbot, history, status_text, all_token_counts in iter:
             yield chatbot, history, status_text, all_token_counts
     else:
         print("不使用流式传输")
-        chatbot, history, status_text, all_token_counts = predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature)
+        chatbot, history, status_text, all_token_counts = predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, selected_model)
         yield chatbot, history, status_text, all_token_counts
     print(f"传输完毕。当前token计数为{all_token_counts}")
     if len(history) > 1 and history[-1]['content'] != inputs:
@@ -254,7 +254,7 @@ def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_c
             yield chatbot, history, status_text, all_token_counts
 
 
-def retry(openai_api_key, system_prompt, history, chatbot, token_count, top_p, temperature, stream=False):
+def retry(openai_api_key, system_prompt, history, chatbot, token_count, top_p, temperature, stream=False, selected_model = MODELS[0]):
     print("重试中……")
     if len(history) == 0:
         yield chatbot, history, f"{standard_error_msg}上下文是空的", token_count
@@ -262,15 +262,15 @@ def retry(openai_api_key, system_prompt, history, chatbot, token_count, top_p, t
     history.pop()
     inputs = history.pop()["content"]
     token_count.pop()
-    iter = predict(openai_api_key, system_prompt, history, inputs, chatbot, token_count, top_p, temperature, stream=stream)
+    iter = predict(openai_api_key, system_prompt, history, inputs, chatbot, token_count, top_p, temperature, stream=stream, selected_model=selected_model)
     print("重试完毕")
     for x in iter:
         yield x
 
 
-def reduce_token_size(openai_api_key, system_prompt, history, chatbot, token_count, top_p, temperature, stream=False, hidden=False):
+def reduce_token_size(openai_api_key, system_prompt, history, chatbot, token_count, top_p, temperature, stream=False, hidden=False, selected_model = MODELS[0]):
     print("开始减少token数量……")
-    iter = predict(openai_api_key, system_prompt, history, summarize_prompt, chatbot, token_count, top_p, temperature, stream=stream, should_check_token_count=False)
+    iter = predict(openai_api_key, system_prompt, history, summarize_prompt, chatbot, token_count, top_p, temperature, stream=stream, selected_model = selected_model, should_check_token_count=False)
     for chatbot, history, status_text, previous_token_count in iter:
         history = history[-2:]
         token_count = previous_token_count[-1:]

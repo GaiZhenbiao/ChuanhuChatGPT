@@ -51,10 +51,12 @@ with gr.Blocks(css=customCSS) as demo:
 
     gr.HTML(title)
     with gr.Row():
-        with gr.Column(scale=4):
-            keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=False)
-        with gr.Column(scale=1):
-            use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
+        with gr.Column():
+            keyTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY, label="API-Key")
+        with gr.Column():
+            with gr.Row():
+                model_select_dropdown = gr.Dropdown(label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0])
+                use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     with gr.Row():
         with gr.Column(scale=12):
@@ -108,20 +110,20 @@ with gr.Blocks(css=customCSS) as demo:
     gr.Markdown(description)
 
 
-    user_input.submit(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
+    user_input.submit(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox, model_select_dropdown], [chatbot, history, status_display, token_count], show_progress=True)
     user_input.submit(reset_textbox, [], [user_input])
 
-    submitBtn.click(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
+    submitBtn.click(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox, model_select_dropdown], [chatbot, history, status_display, token_count], show_progress=True)
     submitBtn.click(reset_textbox, [], [user_input])
 
     emptyBtn.click(reset_state, outputs=[chatbot, history, token_count, status_display], show_progress=True)
 
-    retryBtn.click(retry, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
+    retryBtn.click(retry, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox, model_select_dropdown], [chatbot, history, status_display, token_count], show_progress=True)
 
-    delLastBtn.click(delete_last_conversation, [chatbot, history, token_count, use_streaming_checkbox], [
+    delLastBtn.click(delete_last_conversation, [chatbot, history, token_count, use_streaming_checkbox, model_select_dropdown], [
                      chatbot, history, token_count, status_display], show_progress=True)
 
-    reduceTokenBtn.click(reduce_token_size, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
+    reduceTokenBtn.click(reduce_token_size, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox, model_select_dropdown], [chatbot, history, status_display, token_count], show_progress=True)
 
     saveHistoryBtn.click(save_chat_history, [
                   saveFileName, systemPromptTxt, history, chatbot], None, show_progress=True)
