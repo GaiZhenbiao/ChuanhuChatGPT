@@ -314,7 +314,7 @@ def save_chat_history(filename, system, history, chatbot):
     json_s = {"system": system, "history": history, "chatbot": chatbot}
     print(json_s)
     with open(os.path.join(HISTORY_DIR, filename), "w") as f:
-        json.dump(json_s, f)
+        json.dump(json_s, f, ensure_ascii=False, indent=4)
     print("保存对话历史完毕")
 
 
