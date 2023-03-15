@@ -87,20 +87,15 @@ with gr.Blocks(css=customCSS) as demo:
                 with gr.Column(scale=1):
                     templateApplyBtn = gr.Button("⬇️ 应用")
     with gr.Accordion(label="保存/加载对话历史记录", open=False):
-        with gr.Column():
             with gr.Row():
                 with gr.Column(scale=4):
                     saveFileName = gr.Textbox(
                         show_label=True, placeholder=f"在这里输入保存的文件名...", label="设置文件名: 默认为.json，可选为.md", value="对话历史记录").style(container=True)
+                    historyFileSelectDropdown = gr.Dropdown(label="从列表中加载对话", choices=get_history_names(plain=True), multiselect=False, value=get_history_names(plain=True)[0])
                 with gr.Column(scale=1):
                     downloadFile = gr.File(interactive=False)
                 with gr.Column(scale=1):
                     saveHistoryBtn = gr.Button("💾 保存对话")
-
-            with gr.Row():
-                with gr.Column(scale=5):
-                    historyFileSelectDropdown = gr.Dropdown(label="从列表中加载对话", choices=get_history_names(plain=True), multiselect=False, value=get_history_names(plain=True)[0])
-                with gr.Column(scale=1):
                     historyRefreshBtn = gr.Button("🔄 刷新列表")
                     historyReadBtn = gr.Button("📂 读入对话")
     #inputs, top_p, temperature, top_k, repetition_penalty
