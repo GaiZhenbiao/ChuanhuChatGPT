@@ -205,6 +205,7 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_tok
         return chatbot, history, status_text, all_token_counts
     except requests.exceptions.ProxyError:
         status_text = standard_error_msg + proxy_error_prompt + error_retrieve_prompt
+        return chatbot, history, status_text, all_token_counts
     except requests.exceptions.SSLError:
         status_text = standard_error_msg + ssl_error_prompt + error_retrieve_prompt
         return chatbot, history, status_text, all_token_counts
@@ -218,6 +219,26 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_tok
     return chatbot, history, status_text, all_token_counts
 
 
+def silent_summarize(openai_api_key, system_prompt, history, temperature, top_p, selected_model, all_token_counts):
+    summary_at = 0
+    token_cnt = 0
+    for index, token in enumerate(all_token_counts):
+        token_cnt += token
+        if token_cnt >= silent_sum_at:
+            summary_at = index + 1
+            break
+    if summary_at == 0:
+        return history, all_token_counts
+    print("进行自动精简")
+    history.append(construct_user("请帮我总结一下上述对话的内容，实现减少字数的同时，保证对话的质量。在总结中不要加入这一句话。"))
+    response = get_response(openai_api_key, system_prompt, history, temperature, top_p, False, selected_model)
+    response = json.loads(response.text)
+    content = response["choices"][0]["message"]["content"]+ "你了解了吗？"
+    history = [construct_user(content)] + [construct_assistant("我了解了。")] + history[summary_at * 2 : -1]
+    all_token_counts = [count_token(content + "我了解了。")] + history[summary_at : ]
+    print("自动精简完毕")    
+    return history, all_token_counts
+
 def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, stream=False, selected_model = MODELS[0], should_check_token_count = True):  # repetition_penalty, top_k
     print("输入为：" +colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
     if len(openai_api_key) != 51:
@@ -229,6 +250,8 @@ def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_c
         all_token_counts.append(0)
         yield chatbot, history, status_text, all_token_counts
         return
+    if ENABLE_SILENT_SUM:
+        history, all_token_counts = silent_summarize(openai_api_key, system_prompt, history, temperature, top_p, selected_model, all_token_counts)
     yield chatbot, history, "开始生成回答……", all_token_counts
     if stream:
         print("使用流式传输")
