@@ -120,7 +120,7 @@ with gr.Blocks(css=customCSS) as demo:
 
     retryBtn.click(retry, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox, model_select_dropdown], [chatbot, history, status_display, token_count], show_progress=True)
 
-    delLastBtn.click(delete_last_conversation, [chatbot, history, token_count, use_streaming_checkbox], [
+    delLastBtn.click(delete_last_conversation, [chatbot, history, token_count], [
                      chatbot, history, token_count, status_display], show_progress=True)
 
     reduceTokenBtn.click(reduce_token_size, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox, model_select_dropdown], [chatbot, history, status_display, token_count], show_progress=True)

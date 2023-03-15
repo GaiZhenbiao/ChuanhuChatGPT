@@ -280,7 +280,7 @@ def reduce_token_size(openai_api_key, system_prompt, history, chatbot, token_cou
     print("减少token数量完毕")
 
 
-def delete_last_conversation(chatbot, history, previous_token_count, streaming):
+def delete_last_conversation(chatbot, history, previous_token_count):
     if len(chatbot) > 0 and standard_error_msg in chatbot[-1][1]:
         print("由于包含报错信息，只删除chatbot记录")
         chatbot.pop()
@@ -295,7 +295,7 @@ def delete_last_conversation(chatbot, history, previous_token_count, streaming):
     if len(previous_token_count) > 0:
         print("删除了一组对话的token计数记录")
         previous_token_count.pop()
-    return chatbot, history, previous_token_count, construct_token_message(sum(previous_token_count), streaming)
+    return chatbot, history, previous_token_count, construct_token_message(sum(previous_token_count))
 
 
 def save_chat_history(filename, system, history, chatbot):
