@@ -156,6 +156,7 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_
         return
 
     yield get_return_value()
+    error_json_str = ""
 
     for chunk in tqdm(response.iter_lines()):
         if counter == 0:
@@ -170,7 +171,8 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_
                 chunk = json.loads(chunk[6:])
             except json.JSONDecodeError:
                 print(chunk)
-                status_text = f"JSON解析错误。请重置对话。收到的内容: {chunk}"
+                error_json_str += chunk
+                status_text = f"JSON解析错误。请重置对话。收到的内容: {error_json_str}"
                 yield get_return_value()
                 continue
             # decode each line as response data is in bytes
