@@ -32,7 +32,7 @@ pre code {
 """
 
 summarize_prompt = "请总结以上对话，不超过100字。" # 总结对话时的 prompt
-MODELS = ["gpt-3.5-turbo"] # 可选的模型
+MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-0301"] # 可选的模型
 
 # 错误信息
 standard_error_msg = "☹️发生了错误：" # 错误信息的标准前缀
