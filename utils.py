@@ -201,10 +201,11 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_tok
     try:
         response = get_response(openai_api_key, system_prompt, history, temperature, top_p, False, selected_model)
     except requests.exceptions.ConnectTimeout:
-        status_text = standard_error_msg + error_retrieve_prompt
+        status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
         return chatbot, history, status_text, all_token_counts
     except requests.exceptions.ProxyError:
         status_text = standard_error_msg + proxy_error_prompt + error_retrieve_prompt
+        return chatbot, history, status_text, all_token_counts
     except requests.exceptions.SSLError:
         status_text = standard_error_msg + ssl_error_prompt + error_retrieve_prompt
         return chatbot, history, status_text, all_token_counts
