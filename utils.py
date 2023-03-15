@@ -308,14 +308,23 @@ def save_chat_history(filename, system, history, chatbot):
     print("保存对话历史中……")
     if filename == "":
         return
-    if not filename.endswith(".json"):
+    if not (filename.endswith(".json") or filename.endswith(".md")):
         filename += ".json"
     os.makedirs(HISTORY_DIR, exist_ok=True)
-    json_s = {"system": system, "history": history, "chatbot": chatbot}
-    print(json_s)
-    with open(os.path.join(HISTORY_DIR, filename), "w") as f:
-        json.dump(json_s, f)
+    if filename.endswith(".json"):
+        json_s = {"system": system, "history": history, "chatbot": chatbot}
+        print(json_s)
+        with open(os.path.join(HISTORY_DIR, filename), "w") as f:
+            json.dump(json_s, f)
+    elif filename.endswith(".md"):
+        md_s = f"system: \n- {system} \n"
+        for data in history:
+            md_s += f"{data['role']}: \n- {data['content']} \n"
+        with open(os.path.join(HISTORY_DIR, filename), "w") as f:
+            f.write(md_s)
     print("保存对话历史完毕")
+    return os.path.join(HISTORY_DIR, filename)
+
 
 
 def load_chat_history(filename, system, history, chatbot):
