@@ -193,6 +193,7 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, previou
         status_text = standard_error_msg + error_retrieve_prompt
         return chatbot, history, status_text, previous_token_count
     response = json.loads(response.text)
+    print(response)
     content = response["choices"][0]["message"]["content"]
     history.append(construct_assistant(content))
     chatbot.append((parse_text(inputs), parse_text(content)))

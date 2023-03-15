@@ -3,9 +3,9 @@ import gradio as gr
 import os
 import sys
 from utils import *
-from presets import *
+# from presets import *
 
-my_api_key = ""    # 在这里输入你的 API 密钥
+# my_api_key = ""    # 在这里输入你的 API 密钥
 
 # TODO refactor the code later
 #if we are running in Docker
@@ -49,10 +49,10 @@ with gr.Blocks(css=customCSS) as demo:
         with gr.Row():
             if args.input_key:
                 with gr.Column(scale=4):
-                    keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY).style(container=True)
+                    keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not args.hide_my_key).style(container=True)
             if args.use_stream == 2:
                 with gr.Column(scale=1):
-                    use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
+                    use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=(args.use_stream == 2))
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
     token_count = gr.State([])
@@ -116,7 +116,7 @@ with gr.Blocks(css=customCSS) as demo:
     if not args.input_key:
         keyTxt = gr.State(my_api_key)
     if not args.use_stream == 2:
-        use_streaming_checkbox = gr.State(args.use_stream)
+        use_streaming_checkbox = gr.State(args.use_stream == 1)
     if not args.show_hyper_parameter:
         top_p = gr.State(1.0)
         temperature = gr.State(1.0)
