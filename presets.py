@@ -40,15 +40,15 @@ summarize_prompt = "请总结以上对话，不超过100字。" # 总结对话�
 my_api_key = ""    # 在这里输入你的 API 密钥
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--authentication", action="store_true", default=False, help="是否开启登录")
-parser.add_argument("--input_key", action="store_true", default=False, help="是否由用户输入API-Key")
-parser.add_argument("--share", action="store_true", default=False, help="是否创建gradio公开链接")
-parser.add_argument("--use_stream", type=int, default=0, choices=[0, 1, 2], help="0一次性返回答案，1实时传输回答，2在ui中增加传输模式选项")
+parser.add_argument("--authentication", type=bool, default=False, help="是否开启登录")
+parser.add_argument("--input_key", type=bool, default=True, help="是否由用户输入API-Key")
+parser.add_argument("--share", type=bool, default=False, help="是否创建gradio公开链接")
+parser.add_argument("--use_stream", type=int, default=2, choices=[0, 1, 2], help="0一次性返回答案，1实时传输回答，2在ui中增加传输模式选项")
 parser.add_argument("--timeout_all", type=int, default=200, help="非流式对话时的超时时间")
 parser.add_argument("--max_token_all", type=int, default=3000, help="非流式对话时的最大 token 数")
 parser.add_argument("--timeout_streaming", type=int, default=15, help="流式对话时的超时时间")
 parser.add_argument("--max_token_streaming", type=int, default=3000, help="流式对话时的最大 token 数")
-parser.add_argument("--show_hyper_parameter", action="store_true", default=False, help="是否显示参数选项卡")
-parser.add_argument("--display_status", action="store_true", default=True, help="是否显示 status")
+parser.add_argument("--show_hyper_parameter", type=bool, default=True, help="是否显示参数选项卡")
+parser.add_argument("--display_status", type=bool, default=True, help="是否显示 status")
 args = parser.parse_args()
 

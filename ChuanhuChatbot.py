@@ -49,10 +49,10 @@ with gr.Blocks(css=customCSS) as demo:
         with gr.Row():
             if args.input_key:
                 with gr.Column(scale=4):
-                    keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password", visible=not args.hide_my_key).style(container=True)
+                    keyTxt = gr.Textbox(show_label=False, placeholder=f"在这里输入你的OpenAI API-key...",value=my_api_key, type="password").style(container=True)
             if args.use_stream == 2:
                 with gr.Column(scale=1):
-                    use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=(args.use_stream == 2))
+                    use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True)
     chatbot = gr.Chatbot()  # .style(color_map=("#1D51EE", "#585A5B"))
     history = gr.State([])
     token_count = gr.State([])
