@@ -51,9 +51,10 @@ with gr.Blocks(css=customCSS,) as demo:
     FALSECONSTANT = gr.State(False)
     topic = gr.State("未命名对话历史记录")
 
-    gr.HTML("""
-    <div style="text-align: center; margin-top: 20px;">
-    """)
+    # gr.HTML("""
+    # <div style="text-align: center; margin-top: 20px;">
+    # """)
+    gr.HTML(title)
 
     with gr.Row(scale=1).style(equal_height=True):
 
@@ -76,46 +77,45 @@ with gr.Blocks(css=customCSS,) as demo:
 
         with gr.Column():
             with gr.Row(min_width=50,scale=1):
-                gr.HTML(title)
                 status_display = gr.Markdown("status: ready")
-                keyTxt = gr.Textbox(show_label=True, placeholder=f"OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY, label="API-Key")
-                model_select_dropdown = gr.Dropdown(label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0])
-                systemPromptTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入System Prompt...", label="System prompt", value=initial_prompt).style(container=True)
+                with gr.Tab(label="ChatGPT"):
+                    keyTxt = gr.Textbox(show_label=True, placeholder=f"OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY, label="API-Key")
+                    model_select_dropdown = gr.Dropdown(label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0])
+                    with gr.Accordion("参数", open=False):
+                        top_p = gr.Slider(minimum=-0, maximum=1.0, value=1.0, step=0.05,
+                                        interactive=True, label="Top-p (nucleus sampling)",)
+                        temperature = gr.Slider(minimum=-0, maximum=5.0, value=1.0,
+                                                step=0.1, interactive=True, label="Temperature",)
+                    use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
+                    use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
 
+                with gr.Tab(label="Prompt"):
+                    systemPromptTxt = gr.Textbox(show_label=True, placeholder=f"在这里输入System Prompt...", label="System prompt", value=initial_prompt).style(container=True)
+                    with gr.Accordion(label="加载Prompt模板", open=True):
+                        with gr.Column():
+                            with gr.Row():
+                                with gr.Column(scale=6):
+                                    templateFileSelectDropdown = gr.Dropdown(label="选择Prompt模板集合文件", choices=get_template_names(plain=True), multiselect=False, value=get_template_names(plain=True)[0])
+                                with gr.Column(scale=1):
+                                    templateRefreshBtn = gr.Button("🔄 刷新")
+                            with gr.Row():
+                                with gr.Column():
+                                    templateSelectDropdown = gr.Dropdown(label="从Prompt模板中加载", choices=load_template(get_template_names(plain=True)[0], mode=1), multiselect=False, value=load_template(get_template_names(plain=True)[0], mode=1)[0])
 
-                with gr.Accordion(label="加载Prompt模板", open=False):
-                    with gr.Column():
-                        with gr.Row():
-                            with gr.Column(scale=6):
-                                templateFileSelectDropdown = gr.Dropdown(label="选择Prompt模板集合文件", choices=get_template_names(plain=True), multiselect=False, value=get_template_names(plain=True)[0])
-                            with gr.Column(scale=1):
-                                templateRefreshBtn = gr.Button("🔄 刷新")
-                        with gr.Row():
-                            with gr.Column():
-                                templateSelectDropdown = gr.Dropdown(label="从Prompt模板中加载", choices=load_template(get_template_names(plain=True)[0], mode=1), multiselect=False, value=load_template(get_template_names(plain=True)[0], mode=1)[0])
-                with gr.Accordion(label="保存/加载对话历史记录", open=False):
-                    with gr.Column():
-                        with gr.Row():
-                            with gr.Column(scale=6):
-                                saveFileName = gr.Textbox(
-                                    show_label=True, placeholder=f"在这里输入保存的文件名...", label="设置保存文件名", value="对话历史记录").style(container=True)
-                            with gr.Column(scale=1):
-                                saveHistoryBtn = gr.Button("💾 保存对话")
-                        with gr.Row():
-                            with gr.Column(scale=6):
-                                historyFileSelectDropdown = gr.Dropdown(label="从列表中加载对话", choices=get_history_names(plain=True), multiselect=False, value=get_history_names(plain=True)[0])
-                            with gr.Column(scale=1):
-                                historyRefreshBtn = gr.Button("🔄 刷新")
-
-                use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
-                use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
-
-
-                with gr.Accordion("参数", open=False):
-                    top_p = gr.Slider(minimum=-0, maximum=1.0, value=1.0, step=0.05,
-                                    interactive=True, label="Top-p (nucleus sampling)",)
-                    temperature = gr.Slider(minimum=-0, maximum=5.0, value=1.0,
-                                            step=0.1, interactive=True, label="Temperature",)
+                with gr.Tab(label="保存/加载"):
+                    with gr.Accordion(label="保存/加载对话历史记录", open=True):
+                        with gr.Column():
+                            with gr.Row():
+                                with gr.Column(scale=6):
+                                    saveFileName = gr.Textbox(
+                                        show_label=True, placeholder=f"在这里输入保存的文件名...", label="设置保存文件名", value="对话历史记录").style(container=True)
+                                with gr.Column(scale=1):
+                                    saveHistoryBtn = gr.Button("💾 保存对话")
+                            with gr.Row():
+                                with gr.Column(scale=6):
+                                    historyFileSelectDropdown = gr.Dropdown(label="从列表中加载对话", choices=get_history_names(plain=True), multiselect=False, value=get_history_names(plain=True)[0])
+                                with gr.Column(scale=1):
+                                    historyRefreshBtn = gr.Button("🔄 刷新")
 
 
 
