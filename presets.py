@@ -30,11 +30,6 @@ pre code {
     box-shadow: inset 0px 8px 16px hsla(0, 0%, 0%, .2)
 }
 
-*{
-    border-radius: 3px !important;
-    transition: all 0.6s;
-}
-
 
 """
 
