@@ -217,7 +217,7 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_tok
     response = json.loads(response.text)
     content = response["choices"][0]["message"]["content"]
     history[-1] = construct_assistant(content)
-    chatbot.append((parse_text(inputs), parse_text(content)))
+    chatbot[-1] = (parse_text(inputs), parse_text(content))
     total_token_count = response["usage"]["total_tokens"]
     all_token_counts[-1] = total_token_count - sum(all_token_counts)
     status_text = construct_token_message(total_token_count)
@@ -238,7 +238,8 @@ def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_c
             history[-2] = construct_user(inputs)
         yield chatbot, history, status_text, all_token_counts
         return
-    yield chatbot, history, "开始生成回答……", all_token_counts
+    if stream:
+        yield chatbot, history, "开始生成回答……", all_token_counts
     if stream:
         logging.info("使用流式传输")
         iter = stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, selected_model)
@@ -256,8 +257,10 @@ def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_c
     else:
         max_token = max_token_all
     if sum(all_token_counts) > max_token and should_check_token_count:
-        logging.info(f"精简token中{all_token_counts}/{max_token}")
-        iter = reduce_token_size(openai_api_key, system_prompt, history, chatbot, all_token_counts, top_p, temperature, stream=False, hidden=True)
+        status_text = f"精简token中{all_token_counts}/{max_token}"
+        logging.info(status_text)
+        yield chatbot, history, status_text, all_token_counts
+        iter = reduce_token_size(openai_api_key, system_prompt, history, chatbot, all_token_counts, top_p, temperature, stream=False, selected_model=selected_model, hidden=True)
         for chatbot, history, status_text, all_token_counts in iter:
             status_text = f"Token 达到上限，已自动降低Token计数至 {status_text}"
             yield chatbot, history, status_text, all_token_counts
@@ -277,9 +280,10 @@ def retry(openai_api_key, system_prompt, history, chatbot, token_count, top_p, t
         yield x
 
 
-def reduce_token_size(openai_api_key, system_prompt, history, chatbot, token_count, top_p, temperature, stream=False, hidden=False, selected_model = MODELS[0]):
+def reduce_token_size(openai_api_key, system_prompt, history, chatbot, token_count, top_p, temperature, stream=False, selected_model = MODELS[0], hidden=False):
     logging.info("开始减少token数量……")
     iter = predict(openai_api_key, system_prompt, history, summarize_prompt, chatbot, token_count, top_p, temperature, stream=stream, selected_model = selected_model, should_check_token_count=False)
+    logging.info(f"chatbot: {chatbot}")
     for chatbot, history, status_text, previous_token_count in iter:
         history = history[-2:]
         token_count = previous_token_count[-1:]
