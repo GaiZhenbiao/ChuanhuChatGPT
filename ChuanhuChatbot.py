@@ -70,7 +70,7 @@ with gr.Blocks(css=customCSS,) as demo:
             with gr.Row(scale=1):
                 emptyBtn = gr.Button("🧹 新的对话",)
                 retryBtn = gr.Button("🔄 重新生成")
-                delLastBtn = gr.Button("🗑️ 删除最近一条对话")
+                delLastBtn = gr.Button("🗑️ 删除一条对话")
                 reduceTokenBtn = gr.Button("♻️ 总结对话")
 
 
