@@ -84,7 +84,7 @@ with gr.Blocks(css=customCSS,) as demo:
                     with gr.Accordion("参数", open=False):
                         top_p = gr.Slider(minimum=-0, maximum=1.0, value=1.0, step=0.05,
                                         interactive=True, label="Top-p (nucleus sampling)",)
-                        temperature = gr.Slider(minimum=-0, maximum=5.0, value=1.0,
+                        temperature = gr.Slider(minimum=-0, maximum=2.0, value=1.0,
                                                 step=0.1, interactive=True, label="Temperature",)
                     use_streaming_checkbox = gr.Checkbox(label="实时传输回答", value=True, visible=enable_streaming_option)
                     use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
