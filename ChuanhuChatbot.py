@@ -76,7 +76,7 @@ with gr.Blocks(css=customCSS,) as demo:
 
 
         with gr.Column():
-            with gr.Row(min_width=50,scale=1):
+            with gr.Column(min_width=50,scale=1):
                 status_display = gr.Markdown("status: ready")
                 with gr.Tab(label="ChatGPT"):
                     keyTxt = gr.Textbox(show_label=True, placeholder=f"OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY, label="API-Key")
