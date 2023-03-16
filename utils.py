@@ -16,6 +16,8 @@ from presets import *
 import tiktoken
 from tqdm import tqdm
 import colorama
+from duckduckgo_search import ddg
+import datetime
 
 # logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s")
 
@@ -224,8 +226,17 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_tok
     return chatbot, history, status_text, all_token_counts
 
 
-def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, stream=False, selected_model = MODELS[0], should_check_token_count = True):  # repetition_penalty, top_k
+def predict(openai_api_key, system_prompt, history, inputs, chatbot, all_token_counts, top_p, temperature, stream=False, selected_model = MODELS[0], use_websearch_checkbox = False, should_check_token_count = True):  # repetition_penalty, top_k
     logging.info("输入为：" +colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
+    if use_websearch_checkbox:
+        results = ddg(inputs, max_results=3)
+        web_results = []
+        for idx, result in enumerate(results):
+            logging.info(f"搜索结果{idx + 1}：{result}")
+            web_results.append(f'[{idx+1}]"{result["body"]}"\nURL: {result["href"]}')
+        web_results = "\n\n".join(web_results)
+        today = datetime.datetime.today().strftime("%Y-%m-%d")
+        inputs = websearch_prompt.replace("{current_date}", today).replace("{query}", inputs).replace("{web_results}", web_results)
     if len(openai_api_key) != 51:
         status_text = standard_error_msg + no_apikey_msg
         logging.info(status_text)
