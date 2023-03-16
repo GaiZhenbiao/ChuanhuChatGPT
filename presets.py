@@ -28,6 +28,10 @@ pre code {
     margin-top: 1em !important;
     color: #FFF;
     box-shadow: inset 0px 8px 16px hsla(0, 0%, 0%, .2)
+
+*{
+    transition: all 0.6s;
+}
 }
 
 
