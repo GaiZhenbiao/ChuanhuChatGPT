@@ -43,7 +43,7 @@ else:
 
 gr.Chatbot.postprocess = postprocess
 
-with gr.Blocks(css=customCSS,) as demo:
+with gr.Blocks(css=customCSS) as demo:
     history = gr.State([])
     token_count = gr.State([])
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
@@ -51,13 +51,11 @@ with gr.Blocks(css=customCSS,) as demo:
     FALSECONSTANT = gr.State(False)
     topic = gr.State("未命名对话历史记录")
 
-    # gr.HTML("""
-    # <div style="text-align: center; margin-top: 20px;">
-    # """)
-    gr.HTML(title)
+    with gr.Row():
+        gr.HTML(title)
+        status_display = gr.Markdown("status: ready", elem_id="status_display")
 
     with gr.Row(scale=1).style(equal_height=True):
-
         with gr.Column(scale=5):
             with gr.Row(scale=1):
                 chatbot = gr.Chatbot().style(height=600)  # .style(color_map=("#1D51EE", "#585A5B"))
@@ -73,11 +71,8 @@ with gr.Blocks(css=customCSS,) as demo:
                 delLastBtn = gr.Button("🗑️ 删除一条对话")
                 reduceTokenBtn = gr.Button("♻️ 总结对话")
 
-
-
         with gr.Column():
             with gr.Column(min_width=50,scale=1):
-                status_display = gr.Markdown("status: ready")
                 with gr.Tab(label="ChatGPT"):
                     keyTxt = gr.Textbox(show_label=True, placeholder=f"OpenAI API-key...",value=my_api_key, type="password", visible=not HIDE_MY_KEY, label="API-Key")
                     model_select_dropdown = gr.Dropdown(label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0])
@@ -117,13 +112,7 @@ with gr.Blocks(css=customCSS,) as demo:
                                 with gr.Column(scale=1):
                                     historyRefreshBtn = gr.Button("🔄 刷新")
 
-
-
-    gr.HTML("""
-    <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
-    """)
     gr.Markdown(description)
-
 
     user_input.submit(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox, model_select_dropdown, use_websearch_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
     user_input.submit(reset_textbox, [], [user_input])
