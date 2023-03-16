@@ -31,7 +31,7 @@ pre code {
 }
 """
 
-summarize_prompt = "请总结以上对话，不超过100字。" # 总结对话时的 prompt
+summarize_prompt = "你是谁？我们刚才聊了什么？" # 总结对话时的 prompt
 MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-0301", "gpt-4","gpt-4-0314", "gpt-4-32k", "gpt-4-32k-0314"] # 可选的模型
 
 # 错误信息
@@ -43,7 +43,7 @@ proxy_error_prompt = "代理错误，无法获取对话。" # 代理错误
 ssl_error_prompt = "SSL错误，无法获取对话。" # SSL 错误
 no_apikey_msg = "API key长度不是51位，请检查是否输入正确。" # API key 长度不足 51 位
 
-max_token_streaming = 50 # 流式对话时的最大 token 数
+max_token_streaming = 3500 # 流式对话时的最大 token 数
 timeout_streaming = 15 # 流式对话时的超时时间
 max_token_all = 3500 # 非流式对话时的最大 token 数
 timeout_all = 200 # 非流式对话时的超时时间
