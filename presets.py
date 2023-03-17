@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-title = """<h1 align="left">川虎ChatGPT 🚀</h1>"""
-description = """<div align=center>
+title = """<h1 align="left" style="min-width:200px; margin-top:0;">川虎ChatGPT 🚀</h1>"""
+description = """<div align="center" style="margin-top:20px">
 
 由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)开发
 
@@ -10,6 +10,17 @@ description = """<div align=center>
 </div>
 """
 customCSS = """
+#status_display {
+    display: flex;
+    min-height: 2.5em;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+#status_display p {
+    font-size: .85em;
+    font-family: monospace;
+    color: var(--text-color-subdued) !important;
+}
 code {
     display: inline;
     white-space: break-spaces;
@@ -30,11 +41,9 @@ pre code {
     box-shadow: inset 0px 8px 16px hsla(0, 0%, 0%, .2)
 }
 
-*{
+* {
     transition: all 0.6s;
 }
-
-
 """
 
 summarize_prompt = "你是谁？我们刚才聊了什么？" # 总结对话时的 prompt
