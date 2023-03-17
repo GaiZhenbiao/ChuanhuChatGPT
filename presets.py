@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 title = """<h1 align="left" style="min-width:200px; margin-top:0;">川虎ChatGPT 🚀</h1>"""
-description = """<div align="center" style="margin-top:20px">
+description = """<div align="center" style="margin:16px 0">
 
 由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)开发
 
@@ -20,6 +20,22 @@ customCSS = """
     font-size: .85em;
     font-family: monospace;
     color: var(--text-color-subdued) !important;
+}
+[class *= "message"] {
+    border-radius: var(--radius-xl) !important;
+    border: none;
+    padding: var(--spacing-xl) !important;
+    font-size: var(--text-md) !important;
+    line-height: var(--line-md) !important;
+}
+[data-testid = "bot"] {
+    max-width: 85%;
+    border-bottom-left-radius: 0 !important;
+}
+[data-testid = "user"] {
+    max-width: 85%;
+    width: auto !important;
+    border-bottom-right-radius: 0 !important;
 }
 code {
     display: inline;
