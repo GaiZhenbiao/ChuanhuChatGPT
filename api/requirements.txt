@@ -1,1 +1,8 @@
-
+gradio
+mdtex2html
+pypinyin
+tiktoken
+socksio
+tqdm
+colorama
+duckduckgo_search

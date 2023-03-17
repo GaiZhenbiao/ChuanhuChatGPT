@@ -1,9 +1,1 @@
 Flask==2.2.2
-gradio
-mdtex2html
-pypinyin
-tiktoken
-socksio
-tqdm
-colorama
-duckduckgo_search
