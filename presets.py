@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-title = """<h1 align="center">川虎ChatGPT 🚀</h1>"""
-description = """<div align=center>
+title = """<h1 align="left" style="min-width:200px; margin-top:0;">川虎ChatGPT 🚀</h1>"""
+description = """<div align="center" style="margin:16px 0">
 
 由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)开发
 
@@ -10,6 +10,33 @@ description = """<div align=center>
 </div>
 """
 customCSS = """
+#status_display {
+    display: flex;
+    min-height: 2.5em;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+#status_display p {
+    font-size: .85em;
+    font-family: monospace;
+    color: var(--text-color-subdued) !important;
+}
+[class *= "message"] {
+    border-radius: var(--radius-xl) !important;
+    border: none;
+    padding: var(--spacing-xl) !important;
+    font-size: var(--text-md) !important;
+    line-height: var(--line-md) !important;
+}
+[data-testid = "bot"] {
+    max-width: 85%;
+    border-bottom-left-radius: 0 !important;
+}
+[data-testid = "user"] {
+    max-width: 85%;
+    width: auto !important;
+    border-bottom-right-radius: 0 !important;
+}
 table {
     margin: 1em 0;
     border-collapse: collapse;
@@ -113,14 +140,42 @@ pre code {
 .codehilite .vi { color: #f8f8f2 } /* Name.Variable.Instance */
 .codehilite .vm { color: #f8f8f2 } /* Name.Variable.Magic */
 .codehilite .il { color: #ae81ff } /* Literal.Number.Integer.Long */
+
+* {
+    transition: all 0.6s;
+}
 """
 
-standard_error_msg = "☹️发生了错误：" # 错误信息的标准前缀
-error_retrieve_prompt = "连接超时，无法获取对话。请检查网络连接，或者API-Key是否有效。" # 获取对话时发生错误
-summarize_prompt = "请总结以上对话，不超过100字。" # 总结对话时的 prompt
-max_token_streaming = 3500 # 流式对话时的最大 token 数
-timeout_streaming = 5 # 流式对话时的超时时间
-max_token_all = 3500 # 非流式对话时的最大 token 数
-timeout_all = 200 # 非流式对话时的超时时间
+summarize_prompt = "你是谁？我们刚才聊了什么？"  # 总结对话时的 prompt
+MODELS = [
+    "gpt-3.5-turbo",
+    "gpt-3.5-turbo-0301",
+    "gpt-4",
+    "gpt-4-0314",
+    "gpt-4-32k",
+    "gpt-4-32k-0314",
+]  # 可选的模型
+websearch_prompt = """Web search results:
+
+{web_results}
+Current date: {current_date}
+
+Instructions: Using the provided web search results, write a comprehensive reply to the given query. Make sure to cite results using [[number](URL)] notation after the reference. If the provided search results refer to multiple subjects with the same name, write separate answers for each subject.
+Query: {query}
+Reply in 中文"""
+
+# 错误信息
+standard_error_msg = "☹️发生了错误："  # 错误信息的标准前缀
+error_retrieve_prompt = "请检查网络连接，或者API-Key是否有效。"  # 获取对话时发生错误
+connection_timeout_prompt = "连接超时，无法获取对话。"  # 连接超时
+read_timeout_prompt = "读取超时，无法获取对话。"  # 读取超时
+proxy_error_prompt = "代理错误，无法获取对话。"  # 代理错误
+ssl_error_prompt = "SSL错误，无法获取对话。"  # SSL 错误
+no_apikey_msg = "API key长度不是51位，请检查是否输入正确。"  # API key 长度不足 51 位
+
+max_token_streaming = 3500  # 流式对话时的最大 token 数
+timeout_streaming = 30  # 流式对话时的超时时间
+max_token_all = 3500  # 非流式对话时的最大 token 数
+timeout_all = 200  # 非流式对话时的超时时间
 enable_streaming_option = True  # 是否启用选择选择是否实时显示回答的勾选框
-HIDE_MY_KEY = False # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
+HIDE_MY_KEY = False  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
