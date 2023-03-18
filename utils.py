@@ -48,7 +48,7 @@ def postprocess(
             y[i] = (
                 # None if message is None else markdown.markdown(message),
                 # None if response is None else markdown.markdown(response),
-                None if message is None else mdtex2html.convert((message)),
+                None if message is None else message,
                 None if response is None else mdtex2html.convert(response),
             )
         return y
