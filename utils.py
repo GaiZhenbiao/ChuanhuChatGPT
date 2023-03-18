@@ -323,12 +323,8 @@ def delete_last_conversation(chatbot, history, previous_token_count):
     return chatbot, history, previous_token_count, construct_token_message(sum(previous_token_count))
 
 
-def save_chat_history(filename, system, history, chatbot):
+def save_file(filename, system, history, chatbot):
     logging.info("保存对话历史中……")
-    if filename == "":
-        return
-    if not (filename.endswith(".json") or filename.endswith(".md")):
-        filename += ".json"
     os.makedirs(HISTORY_DIR, exist_ok=True)
     if filename.endswith(".json"):
         json_s = {"system": system, "history": history, "chatbot": chatbot}
@@ -344,9 +340,25 @@ def save_chat_history(filename, system, history, chatbot):
     logging.info("保存对话历史完毕")
     return os.path.join(HISTORY_DIR, filename)
 
+def save_chat_history(filename, system, history, chatbot):
+    if filename == "":
+        return
+    if not filename.endswith(".json"):
+        filename += ".json"
+    return save_file(filename, system, history, chatbot)
+
+def export_markdown(filename, system, history, chatbot):
+    if filename == "":
+        return
+    if not filename.endswith(".md"):
+        filename += ".md"
+    return save_file(filename, system, history, chatbot)
+
 
 def load_chat_history(filename, system, history, chatbot):
     logging.info("加载对话历史中……")
+    if type(filename) != str:
+        filename = filename.name
     try:
         with open(os.path.join(HISTORY_DIR, filename), "r") as f:
             json_s = json.load(f)
