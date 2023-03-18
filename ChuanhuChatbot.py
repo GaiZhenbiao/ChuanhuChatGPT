@@ -125,6 +125,7 @@ with gr.Blocks(css=customCSS) as demo:
                         placeholder=f"在这里输入System Prompt...",
                         label="System prompt",
                         value=initial_prompt,
+                        lines=10,
                     ).style(container=True)
                     with gr.Accordion(label="加载Prompt模板", open=True):
                         with gr.Column():
@@ -153,8 +154,17 @@ with gr.Blocks(css=customCSS) as demo:
 
                 with gr.Tab(label="保存/加载"):
                     with gr.Accordion(label="保存/加载对话历史记录", open=True):
-                        gr.Markdown("对话历史默认保存在history文件夹中。")
                         with gr.Column():
+                            with gr.Row():
+                                with gr.Column(scale=6):
+                                    historyFileSelectDropdown = gr.Dropdown(
+                                        label="从列表中加载对话",
+                                        choices=get_history_names(plain=True),
+                                        multiselect=False,
+                                        value=get_history_names(plain=True)[0],
+                                    )
+                                with gr.Column(scale=1):
+                                    historyRefreshBtn = gr.Button("🔄 刷新")
                             with gr.Row():
                                 with gr.Column(scale=6):
                                     saveFileName = gr.Textbox(
@@ -166,16 +176,7 @@ with gr.Blocks(css=customCSS) as demo:
                                 with gr.Column(scale=1):
                                     saveHistoryBtn = gr.Button("💾 保存对话")
                                     exportMarkdownBtn = gr.Button("📝 导出为Markdown")
-                            with gr.Row():
-                                with gr.Column(scale=6):
-                                    historyFileSelectDropdown = gr.Dropdown(
-                                        label="从列表中加载对话",
-                                        choices=get_history_names(plain=True),
-                                        multiselect=False,
-                                        value=get_history_names(plain=True)[0],
-                                    )
-                                with gr.Column(scale=1):
-                                    historyRefreshBtn = gr.Button("🔄 刷新")
+                                    gr.Markdown("默认保存于history文件夹")
                             with gr.Row():
                                 with gr.Column():
                                     downloadFile = gr.File(interactive=True)
