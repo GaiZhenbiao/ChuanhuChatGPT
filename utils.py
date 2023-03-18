@@ -53,10 +53,9 @@ def postprocess(
             )
         return y
 
-def count_token(messages):
+def count_token(message):
     encoding = tiktoken.get_encoding("cl100k_base")
-    messages = [("role", "content")]
-    input_str = "\n".join([f"role: {msg[0]}, content: {msg[1]}" for msg in messages])
+    input_str = f"role: {message['role']}, content: {message['content']}"
     length = len(encoding.encode(input_str))
     return length
 
