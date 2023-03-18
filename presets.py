@@ -63,13 +63,12 @@ code {
 pre code {
     display: block;
     white-space: pre;
-    background-color: hsla(0, 0%, 0%, 72%);
-    border: solid 5px var(--color-border-primary) !important;
+    background-color: hsla(0, 0%, 0%, 80%)!important;
     border-radius: 10px;
     padding: 1rem 1.2rem 1rem;
-    margin: 1em 0 1em;
+    margin: 1.2em 2em 1.2em 0.5em;
     color: #FFF;
-    box-shadow: inset 0px 8px 16px hsla(0, 0%, 0%, .2)
+    box-shadow: 6px 6px 16px hsla(0, 0%, 0%, 0.2);
 }
 .codehilite .hll { background-color: #49483e }
 .codehilite .c { color: #75715e } /* Comment */
