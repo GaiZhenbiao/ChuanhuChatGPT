@@ -53,8 +53,9 @@ def postprocess(
             )
         return y
 
-def count_token(input_str):
+def count_token(message):
     encoding = tiktoken.get_encoding("cl100k_base")
+    input_str = f"role: {message['role']}, content: {message['content']}"
     length = len(encoding.encode(input_str))
     return length
 
@@ -142,10 +143,10 @@ def stream_predict(openai_api_key, system_prompt, history, inputs, chatbot, all_
     chatbot.append((parse_text(inputs), ""))
     user_token_count = 0
     if len(all_token_counts) == 0:
-        system_prompt_token_count = count_token(system_prompt)
-        user_token_count = count_token(inputs) + system_prompt_token_count
+        system_prompt_token_count = count_token(construct_system(system_prompt))
+        user_token_count = count_token(construct_user(inputs)) + system_prompt_token_count
     else:
-        user_token_count = count_token(inputs)
+        user_token_count = count_token(construct_user(inputs))
     all_token_counts.append(user_token_count)
     logging.info(f"输入token计数: {user_token_count}")
     yield get_return_value()
@@ -204,7 +205,7 @@ def predict_all(openai_api_key, system_prompt, history, inputs, chatbot, all_tok
     history.append(construct_user(inputs))
     history.append(construct_assistant(""))
     chatbot.append((parse_text(inputs), ""))
-    all_token_counts.append(count_token(inputs))
+    all_token_counts.append(count_token(construct_user(inputs)))
     try:
         response = get_response(openai_api_key, system_prompt, history, temperature, top_p, False, selected_model)
     except requests.exceptions.ConnectTimeout:
