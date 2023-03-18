@@ -99,6 +99,7 @@ with gr.Blocks(css=customCSS) as demo:
 
                 with gr.Tab(label="保存/加载"):
                     with gr.Accordion(label="保存/加载对话历史记录", open=True):
+                        gr.Markdown("对话历史默认保存在history文件夹中。")
                         with gr.Column():
                             with gr.Row():
                                 with gr.Column(scale=6):
@@ -106,6 +107,7 @@ with gr.Blocks(css=customCSS) as demo:
                                         show_label=True, placeholder=f"设置文件名: 默认为.json，可选为.md", label="设置保存文件名", value="对话历史记录").style(container=True)
                                 with gr.Column(scale=1):
                                     saveHistoryBtn = gr.Button("💾 保存对话")
+                                    exportMarkdownBtn = gr.Button("📝 导出为Markdown")
                             with gr.Row():
                                 with gr.Column(scale=6):
                                     historyFileSelectDropdown = gr.Dropdown(label="从列表中加载对话", choices=get_history_names(plain=True), multiselect=False, value=get_history_names(plain=True)[0])
@@ -113,10 +115,11 @@ with gr.Blocks(css=customCSS) as demo:
                                     historyRefreshBtn = gr.Button("🔄 刷新")
                             with gr.Row():
                                 with gr.Column():
-                                    downloadFile = gr.File(interactive=False)
+                                    downloadFile = gr.File(interactive=True)
 
     gr.Markdown(description)
 
+    # Chatbot
     user_input.submit(predict, [keyTxt, systemPromptTxt, history, user_input, chatbot, token_count, top_p, temperature, use_streaming_checkbox, model_select_dropdown, use_websearch_checkbox], [chatbot, history, status_display, token_count], show_progress=True)
     user_input.submit(reset_textbox, [], [user_input])
 
@@ -132,20 +135,19 @@ with gr.Blocks(css=customCSS) as demo:
 
     reduceTokenBtn.click(reduce_token_size, [keyTxt, systemPromptTxt, history, chatbot, token_count, top_p, temperature, use_streaming_checkbox, model_select_dropdown], [chatbot, history, status_display, token_count], show_progress=True)
 
-    saveHistoryBtn.click(save_chat_history, [
-                  saveFileName, systemPromptTxt, history, chatbot], downloadFile, show_progress=True)
-
-    saveHistoryBtn.click(get_history_names, None, [historyFileSelectDropdown])
-
-    historyRefreshBtn.click(get_history_names, None, [historyFileSelectDropdown])
-
-    historyFileSelectDropdown.change(load_chat_history, [historyFileSelectDropdown, systemPromptTxt, history, chatbot],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
-
+    # Template
     templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
-
     templateFileSelectDropdown.change(load_template, [templateFileSelectDropdown],  [promptTemplates, templateSelectDropdown], show_progress=True)
-
     templateSelectDropdown.change(get_template_content, [promptTemplates, templateSelectDropdown, systemPromptTxt],  [systemPromptTxt], show_progress=True)
+
+    # S&L
+    saveHistoryBtn.click(save_chat_history, [saveFileName, systemPromptTxt, history, chatbot], downloadFile, show_progress=True)
+    saveHistoryBtn.click(get_history_names, None, [historyFileSelectDropdown])
+    exportMarkdownBtn.click(export_markdown, [saveFileName, systemPromptTxt, history, chatbot], downloadFile, show_progress=True)
+    historyRefreshBtn.click(get_history_names, None, [historyFileSelectDropdown])
+    historyFileSelectDropdown.change(load_chat_history, [historyFileSelectDropdown, systemPromptTxt, history, chatbot],  [saveFileName, systemPromptTxt, history, chatbot], show_progress=True)
+    downloadFile.change(load_chat_history, [downloadFile, systemPromptTxt, history, chatbot],  [saveFileName, systemPromptTxt, history, chatbot])
+
 
 logging.info(colorama.Back.GREEN + "\n川虎的温馨提示：访问 http://localhost:7860 查看界面" + colorama.Style.RESET_ALL)
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
