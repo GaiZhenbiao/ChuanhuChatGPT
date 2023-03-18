@@ -180,6 +180,28 @@ with gr.Blocks(css=customCSS) as demo:
                             with gr.Row():
                                 with gr.Column():
                                     downloadFile = gr.File(interactive=True)
+                                    
+                with gr.Tab(label="高级"):
+                    default_btn = gr.Button("🔙 恢复默认设置")
+                    gr.Markdown("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置")
+                    
+                    apiurlTxt = gr.Textbox(
+                        show_label=True,
+                        placeholder=f"在这里输入API地址...",
+                        label="API地址",
+                        value="https://api.openai.com/v1/chat/completions",
+                        lines=2
+                    )
+                    changeAPIURLBtn = gr.Button("🔄 切换API地址")
+                    proxyTxt = gr.Textbox(
+                        show_label=True,
+                        placeholder=f"在这里输入代理地址...",
+                        label="代理地址（示例：http://127.0.0.1:10809）",
+                        value="",
+                        lines=2
+                    )
+                    changeProxyBtn = gr.Button("🔄 设置代理地址")
+
 
     gr.Markdown(description)
 
@@ -312,8 +334,27 @@ with gr.Blocks(css=customCSS) as demo:
         [downloadFile, systemPromptTxt, history, chatbot],
         [saveFileName, systemPromptTxt, history, chatbot],
     )
-
-
+    
+    # Advanced
+    default_btn.click(
+        reset_default,
+        [],
+        [apiurlTxt, proxyTxt],
+        show_progress=True
+    )
+    changeAPIURLBtn.click(
+        change_api_url,
+        [apiurlTxt],
+        [],
+        show_progress=True,
+    )
+    changeProxyBtn.click(
+        change_proxy,
+        [proxyTxt],
+        [],
+        show_progress=True,
+    )
+    
 logging.info(
     colorama.Back.GREEN
     + "\n川虎的温馨提示：访问 http://localhost:7860 查看界面"

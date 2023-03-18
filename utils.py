@@ -35,6 +35,7 @@ initial_prompt = "You are a helpful assistant."
 API_URL = "https://api.openai.com/v1/chat/completions"
 HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"
+PROXY = None
 
 
 def postprocess(
@@ -142,7 +143,7 @@ def get_response(
     else:
         timeout = timeout_all
     response = requests.post(
-        API_URL, headers=headers, json=payload, stream=True, timeout=timeout
+        API_URL, headers=headers, json=payload, stream=True, timeout=timeout, proxies=PROXY
     )
     return response
 
@@ -628,3 +629,22 @@ def reset_state():
 
 def reset_textbox():
     return gr.update(value="")
+
+def reset_default():
+    global API_URL
+    API_URL = "https://api.openai.com/v1/chat/completions"
+    global PROXY
+    PROXY = None
+    return gr.update(value=API_URL), gr.update(value="")
+
+def change_api_url(url):
+    global API_URL 
+    API_URL = url
+    logging.info(f"更改API地址为{url}")
+
+def change_proxy(proxy):
+    global PROXY
+    PROXY = {
+        'https': proxy
+    }
+    logging.info(f"更改代理为{proxy}")
