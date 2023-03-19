@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 title = """<h1 align="left" style="min-width:200px; margin-top:0;">川虎ChatGPT 🚀</h1>"""
-description = """<div align="center" style="margin:16px 0">
+description = """\
+<div align="center" style="margin:16px 0">
 
 由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)开发
 
@@ -8,58 +9,6 @@ description = """<div align="center" style="margin:16px 0">
 
 此App使用 `gpt-3.5-turbo` 大语言模型
 </div>
-"""
-customCSS = """
-#status_display {
-    display: flex;
-    min-height: 2.5em;
-    align-items: flex-end;
-    justify-content: flex-end;
-}
-#status_display p {
-    font-size: .85em;
-    font-family: monospace;
-    color: var(--text-color-subdued) !important;
-}
-[class *= "message"] {
-    border-radius: var(--radius-xl) !important;
-    border: none;
-    padding: var(--spacing-xl) !important;
-    font-size: var(--text-md) !important;
-    line-height: var(--line-md) !important;
-}
-[data-testid = "bot"] {
-    max-width: 85%;
-    border-bottom-left-radius: 0 !important;
-}
-[data-testid = "user"] {
-    max-width: 85%;
-    width: auto !important;
-    border-bottom-right-radius: 0 !important;
-}
-code {
-    display: inline;
-    white-space: break-spaces;
-    border-radius: 6px;
-    margin: 0 2px 0 2px;
-    padding: .2em .4em .1em .4em;
-    background-color: rgba(175,184,193,0.2);
-}
-pre code {
-    display: block;
-    white-space: pre;
-    background-color: hsla(0, 0%, 0%, 72%);
-    border: solid 5px var(--color-border-primary) !important;
-    border-radius: 10px;
-    padding: 0 1.2rem 1.2rem;
-    margin-top: 1em !important;
-    color: #FFF;
-    box-shadow: inset 0px 8px 16px hsla(0, 0%, 0%, .2)
-}
-
-* {
-    transition: all 0.6s;
-}
 """
 
 summarize_prompt = "你是谁？我们刚才聊了什么？"  # 总结对话时的 prompt
@@ -71,7 +20,9 @@ MODELS = [
     "gpt-4-32k",
     "gpt-4-32k-0314",
 ]  # 可选的模型
-websearch_prompt = """Web search results:
+
+websearch_prompt = """\
+Web search results:
 
 {web_results}
 Current date: {current_date}
