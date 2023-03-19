@@ -11,8 +11,18 @@
     color: var(--text-color-subdued) !important;
 }
 /* chatbot */
-#chuanhu_chatbot {
+/* 大于等于500px的设备 */
+@media (min-width: 500px) {
+    #chuanhu_chatbot {
+      height: calc(100vh - 200px);
+    }
+  }
+
+/* 小于500px的设备 */
+@media (max-width: 499px) {
+    #chuanhu_chatbot {
     height: calc(100vh - 140px);
+}
 }
 /* 对话气泡 */
 [class *= "message"] {
