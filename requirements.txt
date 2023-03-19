@@ -6,3 +6,4 @@ socksio
 tqdm
 colorama
 duckduckgo_search
+Pygments

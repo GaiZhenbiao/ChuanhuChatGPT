@@ -1,52 +1,54 @@
-<img height="128" align="left" src="https://user-images.githubusercontent.com/51039745/222689546-7612df0e-e28b-4693-9f5f-4ef2be3daf48.png" alt="Logo">
+<h1 align="center">川虎 ChatGPT 🐯 Chuanhu ChatGPT</h1>
+<div align="center">
+  <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT">
+    <img src="https://user-images.githubusercontent.com/51039745/222689546-7612df0e-e28b-4693-9f5f-4ef2be3daf48.png" alt="Logo" height="156">
+  </a>
 
-# 川虎 ChatGPT 🐯 Chuanhu ChatGPT
-
-[![LICENSE](https://img.shields.io/github/license/GaiZhenbiao/ChuanhuChatGPT)](https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE)
-[![Base](https://img.shields.io/badge/Base-Gradio-fb7d1a?style=flat)](https://gradio.app/)
-[![Bilibili](https://img.shields.io/badge/Bilibili-%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-ff69b4?style=flat&logo=bilibili)](https://www.bilibili.com/video/BV1mo4y1r7eE)
-
----
-
-为ChatGPT API提供了一个Web图形界面。在Bilibili上[观看视频教程](https://www.bilibili.com/video/BV1mo4y1r7eE/)。也可以在Hugging Face上[在线体验](https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT)。
-
-![Animation Demo](https://user-images.githubusercontent.com/51039745/223148794-f4fd2fcb-3e48-4cdf-a759-7aa463d3f14c.gif)
-
-
-## 重大更新 🎉🎉🎉
-
-- 像官方ChatGPT那样实时回复
-- 无限长度对话
-- 从互联网搜索结果
-- 改进的保存/加载功能
-- 从Prompt模板中选择预设
-- 将大段代码显示在代码块中
-- 渲染输出中的LaTex公式
+  <p align="center">
+    <h3>为ChatGPT API提供了一个轻快好用的Web图形界面</h3>
+    <p align="center">
+      <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
+        <img alt="Tests Passing" src="https://img.shields.io/github/license/GaiZhenbiao/ChuanhuChatGPT" />
+      </a>
+      <a href="https://gradio.app/">
+        <img alt="GitHub Contributors" src="https://img.shields.io/badge/Base-Gradio-fb7d1a?style=flat" />
+      </a>
+      <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT/graphs/contributors">
+        <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/GaiZhenBiao/ChuanhuChatGPT" />
+      </a>
+      <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT/issues">
+        <img alt="Issues" src="https://img.shields.io/github/issues/GaiZhenBiao/ChuanhuChatGPT?color=0088ff" />
+      </a>
+      <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT/pulls">
+        <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/GaiZhenBiao/ChuanhuChatGPT?color=0088ff" />
+      </a>
+      <br/>
+      <em>实时回复 / 无限对话 / 保存对话记录 / 渲染公式代码 / 联网搜索 / 预设Prompt集 / 实时Tokens显示</em>
+      <br/>
+      <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
+        ·
+      <a href="https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT"><strong>在线体验</strong></a>
+    </p>
+    <p align="center">
+      <img alt="Animation Demo" src="https://user-images.githubusercontent.com/51039745/223148794-f4fd2fcb-3e48-4cdf-a759-7aa463d3f14c.gif" />
+    </p>
+  </p>
+</div>
 
 ## 目录
-|[功能](#功能)|[使用技巧](#使用技巧)|[安装方式](#安装方式)|[疑难杂症解决](#疑难杂症解决)|
-|  ----  | ----  | ----  | ----  |
-
-
-## 功能
-- [x] 像官方客户端那样支持实时显示回答！
-- [x] 重试对话，让ChatGPT再回答一次。
-- [x] 优化Tokens，减少Tokens占用，以支持更长的对话。
-- [x] 设置System Prompt，有效地设定前置条件
-- [x] 保存/加载对话历史记录
-- [x] 在图形界面中添加API key
-- [x] System Prompt模板功能，从预置的Prompt库中选择System Prompt
-- [x] 实时显示Tokens用量
+|[使用技巧](#使用技巧)|[安装方式](#安装方式)|[疑难杂症解决](#疑难杂症解决)| [给作者买可乐🥤](#捐款) |
+|  ----  | ----  | ----  | --- |
 
 ## 使用技巧
 
-- 使用System Prompt可以很有效地设定前提条件
-- 对于长对话，可以使用“优化Tokens”按钮减少Tokens占用。
-- 如果部署到服务器，将程序最后一句改成`demo.launch(server_name="0.0.0.0", server_port=99999)`。其中`99999`是端口号，应该是1000-65535任意可用端口，请自行更改为实际端口号。
-- 如果需要获取公共链接，将程序最后一句改成`demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问
-- 使用Prompt模板功能时，请先选择模板文件（`.csv`），然后点击载入按钮，然后就可以从下拉菜单中选择想要的prompt了，点击应用填入System Prmpt
-- 输入框支持换行，按`shift enter`即可
-- 在Hugging Face上使用时，建议在右上角**复制Space**再使用，这样能大大减少排队时间，App反应也会更加迅速。
+- 使用System Prompt可以很有效地设定前提条件。
+- 使用Prompt模板功能时，选择Prompt模板集合文件，然后从下拉菜单中选择想要的prompt。
+- 如果回答不满意，可以使用`重新生成`按钮再试一次
+- 对于长对话，可以使用`优化Tokens`按钮减少Tokens占用。
+- 输入框支持换行，按`shift enter`即可。
+- 部署到服务器：将程序最后一句改成`demo.launch(server_name="0.0.0.0", server_port=<你的端口号>)`。
+- 获取公共链接：将程序最后一句改成`demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问。
+- 在Hugging Face上使用：建议在右上角 **复制Space** 再使用，这样能大大减少排队时间，App反应也会更加迅速。
   <img width="300" alt="image" src="https://user-images.githubusercontent.com/51039745/223447310-e098a1f2-0dcf-48d6-bcc5-49472dd7ca0d.png">
 
 ## 安装方式
@@ -132,7 +134,9 @@
 
 **如果你在安装过程中碰到了问题，请先查看[疑难杂症解决](#疑难杂症解决)部分。**
 
-<details><summary><h3>或者，使用Docker 运行</h3></summary>
+### 使用Docker运行
+
+<details><summary>如果觉得以上方法比较麻烦，我们提供了Docker镜像</summary>
 
 #### 拉取镜像
 
@@ -169,7 +173,7 @@ docker build -t chuanhuchatgpt:latest .
 
 ### 远程部署
 
-<details><summary>如果需要在公网服务器部署本项目，请阅读本部分</summary>
+<details><summary>如果需要在公网服务器部署本项目，请阅读该部分</summary>
 
 ### 部署到公网服务器
 
@@ -234,9 +238,11 @@ map $http_upgrade $connection_upgrade {
 
 </details>
 
+---
+
 ## 疑难杂症解决
 
-首先，请尝试拉取本项目的最新更改，使用最新的代码重试。
+首先，请先尝试拉取本项目的最新更改，使用最新的代码重试。
 
 点击网页上的 `Download ZIP` 下载最新代码，或
 ```shell
@@ -251,7 +257,9 @@ pip install gradio --upgrade --force-reinstall
 
 很多时候，这样就可以解决问题。
 
-<details><summary><h3><code>No module named '_bz2'</code></h3></summary>
+### 常见问题
+
+<details><summary><code>No module named '_bz2'</code></summary>
 
 > 部署在CentOS7.6,Python3.11.0上,最后报错ModuleNotFoundError: No module named '_bz2'
 
@@ -262,7 +270,7 @@ sudo yum install bzip2-devel
 ```
 </details>
 
-<details><summary><h3><code>openai.error.APIConnectionError</code></h3></summary>
+<details><summary><code>openai.error.APIConnectionError</code></summary>
 
 > 如果有人也出现了`openai.error.APIConnectionError`提示的报错，那可能是`urllib3`的版本导致的。`urllib3`版本大于`1.25.11`，就会出现这个问题。
 >
@@ -286,14 +294,14 @@ pip install urllib3==1.25.11
 [解决OpenAI API 挂了代理还是连接不上的问题](https://zhuanlan.zhihu.com/p/611080662)
 </details>
 
-<details><summary><h3>在 Python 文件里 设定 API Key 之后验证失败</h3></summary>
+<details><summary><code>在 Python 文件里 设定 API Key 之后验证失败</code></summary>
 
 > 在ChuanhuChatbot.py中设置APIkey后验证出错，提示“发生了未知错误Orz”
 
 参见：[#26](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/26)
 </details>
 
-<details><summary><h3>一直等待/SSL Error</h3></summary>
+<details><summary><code>一直等待/SSL Error</code></summary>
 
 > 更新脚本文件后，SSLError [#49](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/49)
 >
@@ -330,17 +338,17 @@ DOMAIN-SUFFIX,openai.com,你的代理规则
 ```
 </details>
 
-<details><summary><h3>网页提示错误 Something went wrong</h3></summary>
+<details><summary><code>网页提示错误 Something went wrong</code></summary>
 
 > ```
 > Something went wrong
 > Expecting value: 1ine 1 column 1 (char o)
 > ```
 
-出现这个错误的原因是`127.0.0.1`被代理了，导致网页无法和后端通信。请设置代理软件，将`127.0.0.1`加入直连。
+出现这个错误的原因是`127.0.0.1`被代理了，导致网页无法和后端通信。请设置代理软件，将`127.0.0.1`加入直连（具体方法见上面“一直等待/SSL Error”部分）。
 </details>
 
-<details><summary><h3><code>No matching distribution found for openai>=0.27.0</code></h3></summary>
+<details><summary><code>No matching distribution found for openai>=0.27.0</code></summary>
 
 `openai`这个依赖已经被移除了。请尝试下载最新版脚本。
 </details>

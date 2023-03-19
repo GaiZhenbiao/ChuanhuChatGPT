@@ -35,7 +35,6 @@ initial_prompt = "You are a helpful assistant."
 API_URL = "https://api.openai.com/v1/chat/completions"
 HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"
-PROXY = None
 
 
 def postprocess(
@@ -54,7 +53,7 @@ def postprocess(
             # None if message is None else markdown.markdown(message),
             # None if response is None else markdown.markdown(response),
             None if message is None else message,
-            None if response is None else mdtex2html.convert(response),
+            None if response is None else mdtex2html.convert(response, extensions=['fenced_code','codehilite','tables']),
         )
     return y
 
@@ -67,34 +66,19 @@ def count_token(message):
 
 
 def parse_text(text):
-    lines = text.split("\n")
-    lines = [line for line in lines if line != ""]
-    count = 0
-    for i, line in enumerate(lines):
-        if "```" in line:
-            count += 1
-            items = line.split("`")
-            if count % 2 == 1:
-                lines[i] = f'<pre><code class="language-{items[-1]}">'
-            else:
-                lines[i] = f"<br></code></pre>"
+    in_code_block = False
+    new_lines = []
+    for i,line in enumerate(text.split("\n")):
+        if line.strip().startswith("```"):
+            in_code_block = not in_code_block
+        if in_code_block:
+            if line.strip() != "":
+                new_lines.append(line)
         else:
-            if i > 0:
-                if count % 2 == 1:
-                    line = line.replace("`", "\`")
-                    line = line.replace("<", "&lt;")
-                    line = line.replace(">", "&gt;")
-                    line = line.replace(" ", "&nbsp;")
-                    line = line.replace("*", "&ast;")
-                    line = line.replace("_", "&lowbar;")
-                    line = line.replace("-", "&#45;")
-                    line = line.replace(".", "&#46;")
-                    line = line.replace("!", "&#33;")
-                    line = line.replace("(", "&#40;")
-                    line = line.replace(")", "&#41;")
-                    line = line.replace("$", "&#36;")
-                lines[i] = "<br>" + line
-    text = "".join(lines)
+            new_lines.append(line)
+    if in_code_block:
+        new_lines.append("```")
+    text = "\n".join(new_lines)
     return text
 
 
@@ -142,9 +126,38 @@ def get_response(
         timeout = timeout_streaming
     else:
         timeout = timeout_all
-    response = requests.post(
-        API_URL, headers=headers, json=payload, stream=True, timeout=timeout, proxies=PROXY
-    )
+
+    # 获取环境变量中的代理设置
+    http_proxy = os.environ.get("HTTP_PROXY") or os.environ.get("http_proxy")
+    https_proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
+
+    # 如果存在代理设置，使用它们
+    proxies = {}
+    if http_proxy:
+        logging.info(f"Using HTTP proxy: {http_proxy}")
+        proxies["http"] = http_proxy
+    if https_proxy:
+        logging.info(f"Using HTTPS proxy: {https_proxy}")
+        proxies["https"] = https_proxy
+
+    # 如果有代理，使用代理发送请求，否则使用默认设置发送请求
+    if proxies:
+        response = requests.post(
+            API_URL,
+            headers=headers,
+            json=payload,
+            stream=True,
+            timeout=timeout,
+            proxies=proxies,
+        )
+    else:
+        response = requests.post(
+            API_URL,
+            headers=headers,
+            json=payload,
+            stream=True,
+            timeout=timeout,
+        )
     return response
 
 
@@ -633,8 +646,8 @@ def reset_textbox():
 def reset_default():
     global API_URL
     API_URL = "https://api.openai.com/v1/chat/completions"
-    global PROXY
-    PROXY = None
+    os.environ.pop("HTTPS_PROXY", None)
+    os.environ.pop("HTTP_PROXY", None)
     return gr.update(value=API_URL), gr.update(value="")
 
 def change_api_url(url):
@@ -643,8 +656,8 @@ def change_api_url(url):
     logging.info(f"更改API地址为{url}")
 
 def change_proxy(proxy):
-    global PROXY
-    PROXY = {
-        'https': proxy
-    }
+    if "https" in proxy:
+        os.environ["HTTPS_PROXY"] = proxy
+    elif "http" in proxy:
+        os.environ["HTTP_PROXY"] = proxy
     logging.info(f"更改代理为{proxy}")
