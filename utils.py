@@ -72,9 +72,12 @@ def parse_text(text):
         if line.strip().startswith("```"):
             in_code_block = not in_code_block
         if in_code_block:
-            if line.strip() != "": new_lines.append(line)
+            if line.strip() != "":
+                new_lines.append(line)
         else:
             new_lines.append(line)
+    if in_code_block:
+        new_lines.append("```")
     text = "\n".join(new_lines)
     return text
 
