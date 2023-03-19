@@ -50,6 +50,9 @@ else:
 
 gr.Chatbot.postprocess = postprocess
 
+with open("custom.css", "r") as f:
+    customCSS = f.read()
+
 with gr.Blocks(css=customCSS) as demo:
     history = gr.State([])
     token_count = gr.State([])
