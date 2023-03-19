@@ -345,7 +345,7 @@ DOMAIN-SUFFIX,openai.com,你的代理规则
 > Expecting value: 1ine 1 column 1 (char o)
 > ```
 
-出现这个错误的原因是`127.0.0.1`被代理了，导致网页无法和后端通信。请设置代理软件，将`127.0.0.1`加入直连。
+出现这个错误的原因是`127.0.0.1`被代理了，导致网页无法和后端通信。请设置代理软件，将`127.0.0.1`加入直连（具体方法见上面“一直等待/SSL Error”部分）。
 </details>
 
 <details><summary><code>No matching distribution found for openai>=0.27.0</code></summary>
