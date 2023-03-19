@@ -131,3 +131,7 @@ pre code {
 * {
     transition: all 0.6s;
 }
+
+#chuanhu_chatbot {
+    height: 75vh;
+}

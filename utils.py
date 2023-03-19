@@ -648,13 +648,17 @@ def reset_default():
     API_URL = "https://api.openai.com/v1/chat/completions"
     os.environ.pop("HTTPS_PROXY", None)
     os.environ.pop("https_proxy", None)
-    return gr.update(value=API_URL), gr.update(value="")
+    return gr.update(value=API_URL), gr.update(value=""), "API URL 和代理已重置"
 
 def change_api_url(url):
-    global API_URL 
+    global API_URL
     API_URL = url
-    logging.info(f"更改API地址为{url}")
+    msg = f"API地址更改为了{url}"
+    logging.info(msg)
+    return msg
 
 def change_proxy(proxy):
     os.environ["HTTPS_PROXY"] = proxy
-    logging.info(f"更改代理为{proxy}")
+    msg = f"代理更改为了{proxy}"
+    logging.info(msg)
+    return msg
