@@ -642,3 +642,19 @@ def reset_state():
 
 def reset_textbox():
     return gr.update(value="")
+
+def reset_default():
+    global API_URL
+    API_URL = "https://api.openai.com/v1/chat/completions"
+    os.environ.pop("HTTPS_PROXY", None)
+    os.environ.pop("https_proxy", None)
+    return gr.update(value=API_URL), gr.update(value="")
+
+def change_api_url(url):
+    global API_URL 
+    API_URL = url
+    logging.info(f"更改API地址为{url}")
+
+def change_proxy(proxy):
+    os.environ["HTTPS_PROXY"] = proxy
+    logging.info(f"更改代理为{proxy}")
