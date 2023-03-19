@@ -66,17 +66,13 @@ def count_token(message):
 
 
 def parse_text(text):
-    in_code_block = False
     lines = text.split("\n")
-    lines = [line for line in lines if line != ""]
-    new_lines = []
-    for line in lines:
-        if line.strip().startswith("```"):
-            in_code_block = not in_code_block
-        if not in_code_block:
-            line = line.replace("\n", "<br />")
-        new_lines.append(line)
-    text = "<br />".join(new_lines)
+    compressed_lines = []
+    for i in range(len(lines)):
+        line = lines[i].strip("\n")
+        if line != "" or (i > 0 and lines[i-1].strip("\n") != ""):
+            compressed_lines.append(line)
+    text = "\n".join(compressed_lines)
     return text
 
 
