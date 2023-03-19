@@ -1,3 +1,4 @@
+/* status_display */
 #status_display {
     display: flex;
     min-height: 2.5em;
@@ -9,6 +10,11 @@
     font-family: monospace;
     color: var(--text-color-subdued) !important;
 }
+/* chatbot */
+#chuanhu_chatbot {
+    height: calc(100vh - 140px);
+}
+/* 对话气泡 */
 [class *= "message"] {
     border-radius: var(--radius-xl) !important;
     border: none;
@@ -25,6 +31,7 @@
     width: auto !important;
     border-bottom-right-radius: 0 !important;
 }
+/* 表格 */
 table {
     margin: 1em 0;
     border-collapse: collapse;
@@ -40,6 +47,7 @@ thead {
 thead th {
     padding: .5em .2em;
 }
+/* 行内代码 */
 code {
     display: inline;
     white-space: break-spaces;
@@ -48,6 +56,7 @@ code {
     padding: .2em .4em .1em .4em;
     background-color: rgba(175,184,193,0.2);
 }
+/* 代码块 */
 pre code {
     display: block;
     white-space: pre;
@@ -58,6 +67,7 @@ pre code {
     color: #FFF;
     box-shadow: 6px 6px 16px hsla(0, 0%, 0%, 0.2);
 }
+/* 代码高亮样式 */
 .codehilite .hll { background-color: #49483e }
 .codehilite .c { color: #75715e } /* Comment */
 .codehilite .err { color: #960050; background-color: #1e0010 } /* Error */
@@ -128,10 +138,7 @@ pre code {
 .codehilite .vm { color: #f8f8f2 } /* Name.Variable.Magic */
 .codehilite .il { color: #ae81ff } /* Literal.Number.Integer.Long */
 
+/* 全局元素 */
 * {
     transition: all 0.6s;
-}
-
-#chuanhu_chatbot {
-    height: 75vh;
 }
