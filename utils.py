@@ -141,9 +141,38 @@ def get_response(
         timeout = timeout_streaming
     else:
         timeout = timeout_all
-    response = requests.post(
-        API_URL, headers=headers, json=payload, stream=True, timeout=timeout
-    )
+
+    # 获取环境变量中的代理设置
+    http_proxy = os.environ.get("HTTP_PROXY") or os.environ.get("http_proxy")
+    https_proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
+
+    # 如果存在代理设置，使用它们
+    proxies = {}
+    if http_proxy:
+        logging.info(f"Using HTTP proxy: {http_proxy}")
+        proxies["http"] = http_proxy
+    if https_proxy:
+        logging.info(f"Using HTTPS proxy: {https_proxy}")
+        proxies["https"] = https_proxy
+
+    # 如果有代理，使用代理发送请求，否则使用默认设置发送请求
+    if proxies:
+        response = requests.post(
+            API_URL,
+            headers=headers,
+            json=payload,
+            stream=True,
+            timeout=timeout,
+            proxies=proxies,
+        )
+    else:
+        response = requests.post(
+            API_URL,
+            headers=headers,
+            json=payload,
+            stream=True,
+            timeout=timeout,
+        )
     return response
 
 
