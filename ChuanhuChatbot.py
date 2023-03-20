@@ -119,6 +119,7 @@ with gr.Blocks(
     history = gr.State([])
     token_count = gr.State([])
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
+    user_api_key = gr.State(my_api_key)
     TRUECOMSTANT = gr.State(True)
     FALSECONSTANT = gr.State(False)
     topic = gr.State("未命名对话历史记录")
@@ -152,7 +153,7 @@ with gr.Blocks(
                     keyTxt = gr.Textbox(
                         show_label=True,
                         placeholder=f"OpenAI API-key...",
-                        value=my_api_key,
+                        value=hide_middle_chars(my_api_key),
                         type="password",
                         visible=not HIDE_MY_KEY,
                         label="API-Key",
@@ -269,11 +270,12 @@ with gr.Blocks(
 
     gr.Markdown(description)
 
+    keyTxt.submit(submit_key, keyTxt, [user_api_key, status_display])
     # Chatbot
     user_input.submit(
         predict,
         [
-            keyTxt,
+            user_api_key,
             systemPromptTxt,
             history,
             user_input,
@@ -293,7 +295,7 @@ with gr.Blocks(
     submitBtn.click(
         predict,
         [
-            keyTxt,
+            user_api_key,
             systemPromptTxt,
             history,
             user_input,
@@ -319,7 +321,7 @@ with gr.Blocks(
     retryBtn.click(
         retry,
         [
-            keyTxt,
+            user_api_key,
             systemPromptTxt,
             history,
             chatbot,
@@ -343,7 +345,7 @@ with gr.Blocks(
     reduceTokenBtn.click(
         reduce_token_size,
         [
-            keyTxt,
+            user_api_key,
             systemPromptTxt,
             history,
             chatbot,

@@ -662,3 +662,17 @@ def change_proxy(proxy):
     msg = f"代理更改为了{proxy}"
     logging.info(msg)
     return msg
+
+def hide_middle_chars(s):
+    if len(s) <= 8:
+        return s
+    else:
+        head = s[:4]
+        tail = s[-4:]
+        hidden = '*' * (len(s) - 8)
+        return head + hidden + tail
+
+def submit_key(key):
+    msg = f"API密钥更改为了{hide_middle_chars(key)}"
+    logging.info(msg)
+    return key, msg
