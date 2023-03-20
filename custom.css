@@ -103,6 +103,7 @@ code {
 /* 代码块 */
 pre code {
     display: block;
+    overflow: auto;
     white-space: pre;
     background-color: hsla(0, 0%, 0%, 80%)!important;
     border-radius: 10px;
