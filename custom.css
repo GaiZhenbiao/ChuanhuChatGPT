@@ -13,7 +13,7 @@
 #status_display p {
     font-size: .85em;
     font-family: monospace;
-    color: var(--text-color-subdued) !important;
+    color: var(--body-text-color-subdued);
 }
 /* 亮色 */
 @media (prefers-color-scheme: light) {
@@ -81,7 +81,7 @@ table {
     empty-cells: show;
 }
 td,th {
-    border: 1.2px solid var(--color-border-primary) !important;
+    border: 1.2px solid var(--border-color-primary) !important;
     padding: 0.2em;
 }
 thead {
