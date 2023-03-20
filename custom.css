@@ -1,3 +1,8 @@
+:root {
+    --bg-color-light: #F3F3F3;
+    --bg-color-dark: #121111;
+}
+
 /* status_display */
 #status_display {
     display: flex;
@@ -10,12 +15,7 @@
     font-family: monospace;
     color: var(--text-color-subdued) !important;
 }
-/* chatbot */
-:root {
-    --bg-color-light: #F3F3F3;
-    --bg-color-dark: #121111;
-  }
-
+/* 亮色 */
 @media (prefers-color-scheme: light) {
     #chuanhu_chatbot {
         background-color: var(--bg-color-light) !important;
@@ -27,7 +27,7 @@
         background-color: #95EC69 !important;
     }
 }
-
+/* 暗色 */
 @media (prefers-color-scheme: dark) {
     #chuanhu_chatbot {
         background-color: var(--bg-color-dark) !important;
@@ -39,9 +39,8 @@
         background-color: #26B561 !important;
     }
 }
-
 /* 屏幕宽度大于等于500px的设备 */
-@media (min-width: 500px) {
+@media screen and (min-width: 500px) {
     #chuanhu_chatbot {
         height: calc(100vh - 200px);
     }
@@ -50,7 +49,7 @@
     }
 }
 /* 屏幕宽度小于500px的设备 */
-@media (max-width: 499px) {
+@media screen and (max-width: 499px) {
     #chuanhu_chatbot {
         height: calc(100vh - 140px);
     }
