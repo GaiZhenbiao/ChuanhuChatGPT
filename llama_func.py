@@ -123,8 +123,8 @@ def chat_ai(
     response = response
 
     context.append({"role": "user", "content": question})
-    context.append({"role": "assistant", "content": chatbot_display})
-    chatbot.append((question, response))
+    context.append({"role": "assistant", "content": response})
+    chatbot.append((question, chatbot_display))
 
     os.environ["OPENAI_API_KEY"] = ""
     return context, chatbot, status_text
@@ -167,14 +167,13 @@ def ask_ai(
     if response is not None:
         logging.info(f"Response: {response}")
         ret_text = response.response
-        ret_text += "\n----------\n"
         nodes = []
         for index, node in enumerate(response.source_nodes):
             brief = node.source_text[:25].replace("\n", "")
             nodes.append(
                 f"<details><summary>[{index+1}]\t{brief}...</summary><p>{node.source_text}</p></details>"
             )
-        new_response = ret_text + "\n\n".join(nodes)
+        new_response = ret_text + "\n----------\n" + "\n\n".join(nodes)
         logging.info(
             f"Response: {colorama.Fore.BLUE}{ret_text}{colorama.Style.RESET_ALL}"
         )
