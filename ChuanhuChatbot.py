@@ -275,6 +275,7 @@ with gr.Blocks(
     gr.Markdown(description)
 
     keyTxt.submit(submit_key, keyTxt, [user_api_key, status_display])
+    keyTxt.change(submit_key, keyTxt, [user_api_key, status_display])
     # Chatbot
     user_input.submit(
         predict,
