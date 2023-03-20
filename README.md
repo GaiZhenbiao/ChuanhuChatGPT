@@ -236,6 +236,49 @@ map $http_upgrade $connection_upgrade {
 
 为了同时配置域名访问和身份认证，需要配置SSL的证书，可以参考[这篇博客](https://www.gzblog.tech/2020/12/25/how-to-config-hexo/#%E9%85%8D%E7%BD%AEHTTPS)一键配置
 
+
+### 全程使用Docker 为ChuanhuChatGPT 开启HTTPS
+
+如果你的VPS 80端口与443端口没有被占用，则可以考虑如下的方法，只需要将你的域名提前绑定到你的VPS 的IP即可。此方法由[@iskoldt-X](https://github.com/iskoldt-X) 提供。
+
+首先，运行[nginx-proxy](https://github.com/nginx-proxy/nginx-proxy)
+
+```
+docker run --detach \
+    --name nginx-proxy \
+    --publish 80:80 \
+    --publish 443:443 \
+    --volume certs:/etc/nginx/certs \
+    --volume vhost:/etc/nginx/vhost.d \
+    --volume html:/usr/share/nginx/html \
+    --volume /var/run/docker.sock:/tmp/docker.sock:ro \
+    nginxproxy/nginx-proxy
+```
+接着，运行[acme-companion](https://github.com/nginx-proxy/acme-companion)，这是用来自动申请TLS 证书的容器
+
+```
+docker run --detach \
+    --name nginx-proxy-acme \
+    --volumes-from nginx-proxy \
+    --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+    --volume acme:/etc/acme.sh \
+    --env "DEFAULT_EMAIL=你的邮箱（用于申请TLS 证书）" \
+    nginxproxy/acme-companion
+```
+
+最后，可以运行ChuanhuChatGPT
+```
+docker run -d --name chatgpt \
+	-e my_api_key="你的API" \
+	-e USERNAME="替换成用户名" \
+	-e PASSWORD="替换成密码" \
+	-v ~/chatGPThistory:/app/history \
+	-e VIRTUAL_HOST=你的域名 \
+	-e VIRTUAL_PORT=7860 \
+	-e LETSENCRYPT_HOST=你的域名 \
+	tuchuanhuhuhu/chuanhuchatgpt:latest
+```
+如此即可为ChuanhuChatGPT实现自动申请TLS证书并且开启HTTPS
 </details>
 
 ---
