@@ -23,7 +23,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/GaiZhenBiao/ChuanhuChatGPT?color=0088ff" />
       </a>
       <br/>
-      <em>实时回复 / 无限对话 / 保存对话记录 / 渲染公式代码表格 / 语法高亮 / 联网搜索 / 预设Prompt集 / 实时Tokens显示</em>
+      <em>实时回复 / 无限对话 / 保存对话记录 / 渲染公式代码表格 / 语法高亮 / 联网搜索 / 预设Prompt集 / Chat 任何文件</em>
       <br/>
       <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
         ·
