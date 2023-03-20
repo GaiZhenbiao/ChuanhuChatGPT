@@ -50,7 +50,7 @@ else:
 
 gr.Chatbot.postprocess = postprocess
 
-with open("custom.css", "r") as f:
+with open("custom.css", "r", encoding="utf-8") as f:
     customCSS = f.read()
 
 with gr.Blocks(css=customCSS) as demo:
