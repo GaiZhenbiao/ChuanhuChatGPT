@@ -1,11 +1,8 @@
 import os
-from llama_index import (
-    GPTSimpleVectorIndex,
-    GPTTreeIndex,
-    GPTKeywordTableIndex,
-    GPTListIndex,
-)
-from llama_index import SimpleDirectoryReader, download_loader
+import logging
+
+from llama_index import GPTSimpleVectorIndex
+from llama_index import download_loader
 from llama_index import (
     Document,
     LLMPredictor,
@@ -13,14 +10,9 @@ from llama_index import (
     QuestionAnswerPrompt,
     RefinePrompt,
 )
-from langchain.llms import OpenAIChat, OpenAI
-from googlesearch import search as google_search
-from baidusearch.baidusearch import search as baidu_search
-from duckduckgo_search import ddg
+from langchain.llms import OpenAI
 import colorama
 
-import logging
-import sys
 
 from presets import *
 from utils import *

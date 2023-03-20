@@ -1,9 +1,10 @@
 # -*- coding:utf-8 -*-
-import gradio as gr
 import os
 import logging
 import sys
-import argparse
+
+import gradio as gr
+
 from utils import *
 from presets import *
 from overwrites import *

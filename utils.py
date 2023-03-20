@@ -3,40 +3,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple, Type
 import logging
 import json
-import gradio as gr
-
-# import openai
 import os
-import traceback
-import requests
-
-# import markdown
-import csv
-import mdtex2html
-from pypinyin import lazy_pinyin
-from presets import *
-import tiktoken
-from tqdm import tqdm
-import colorama
-import os
-from llama_index import (
-    GPTSimpleVectorIndex,
-    GPTTreeIndex,
-    GPTKeywordTableIndex,
-    GPTListIndex,
-)
-from llama_index import SimpleDirectoryReader, download_loader
-from llama_index import (
-    Document,
-    LLMPredictor,
-    PromptHelper,
-    QuestionAnswerPrompt,
-    RefinePrompt,
-)
-from langchain.llms import OpenAIChat, OpenAI
-from duckduckgo_search import ddg
 import datetime
 import hashlib
+import csv
+
+import gradio as gr
+from pypinyin import lazy_pinyin
+import tiktoken
+
+from presets import *
 
 # logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s")
 
