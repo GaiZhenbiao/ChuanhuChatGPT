@@ -267,6 +267,7 @@ def hide_middle_chars(s):
 
 
 def submit_key(key):
+    key = key.strip()
     msg = f"API密钥更改为了{hide_middle_chars(key)}"
     logging.info(msg)
     return key, msg
