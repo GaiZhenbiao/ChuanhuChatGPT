@@ -100,18 +100,20 @@ with gr.Blocks(
     ).set(
         button_primary_background_fill="#06AE56",
         button_primary_background_fill_dark="#06AE56",
+        button_primary_background_fill_hover="#07C863",
         button_primary_border_color="#06AE56",
         button_primary_border_color_dark="#06AE56",
         button_primary_text_color="#FFFFFF",
         button_primary_text_color_dark="#FFFFFF",
         button_secondary_background_fill="#F2F2F2",
         button_secondary_background_fill_dark="#2B2B2B",
-        button_secondary_text_color="#06AE56",
+        button_secondary_text_color="#393939",
         button_secondary_text_color_dark="#FFFFFF",
-        background_fill_primary="#F7F7F7",
-        background_fill_primary_dark="#1F1F1F",
-        block_title_text_color="#6E737B",
-        block_title_background_fill = "*background_fill_primary",
+        # background_fill_primary="#F7F7F7",
+        # background_fill_primary_dark="#1F1F1F",
+        block_title_text_color="*primary_500",
+        block_title_background_fill = "*primary_100",
+        input_background_fill="#F6F6F6",
     ),
 ) as demo:
     history = gr.State([])
@@ -128,7 +130,7 @@ with gr.Blocks(
     with gr.Row(scale=1).style(equal_height=True):
         with gr.Column(scale=5):
             with gr.Row(scale=1):
-                chatbot = gr.Chatbot(elem_id="chuanhu_chatbot")
+                chatbot = gr.Chatbot(elem_id="chuanhu_chatbot").style(height="100%")
             with gr.Row(scale=1):
                 with gr.Column(scale=12):
                     user_input = gr.Textbox(

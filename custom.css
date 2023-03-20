@@ -15,12 +15,20 @@
 @media (min-width: 500px) {
     #chuanhu_chatbot {
         height: calc(100vh - 200px);
+        background-color: #F3F3F3 !important;
+    }
+    #chuanhu_chatbot .wrap {
+        max-height: calc(100vh - 200px - var(--line-sm)*1rem );
     }
 }
 /* 屏幕宽度小于500px的设备 */
 @media (max-width: 499px) {
     #chuanhu_chatbot {
         height: calc(100vh - 140px);
+        background-color: #F3F3F3 !important;
+    }
+    #chuanhu_chatbot .wrap {
+        max-height: calc(100vh - 140 - var(--line-sm)*1rem );
     }
 }
 /* 对话气泡 */
@@ -34,12 +42,13 @@
 [data-testid = "bot"] {
     max-width: 85%;
     border-bottom-left-radius: 0 !important;
+    background-color: #FFFFFF !important;
 }
 [data-testid = "user"] {
     max-width: 85%;
     width: auto !important;
     border-bottom-right-radius: 0 !important;
-    color: #FFFFFF !important;
+    background-color: #95EC69 !important;
 }
 /* 表格 */
 table {
