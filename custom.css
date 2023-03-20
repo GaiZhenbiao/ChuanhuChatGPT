@@ -18,7 +18,7 @@
         background-color: #F3F3F3 !important;
     }
     #chuanhu_chatbot .wrap {
-        max-height: calc(100vh - 200px - var(--line-sm)*1rem );
+        max-height: calc(100vh - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     }
 }
 /* 屏幕宽度小于500px的设备 */
@@ -28,7 +28,7 @@
         background-color: #F3F3F3 !important;
     }
     #chuanhu_chatbot .wrap {
-        max-height: calc(100vh - 140 - var(--line-sm)*1rem );
+        max-height: calc(100vh - 140 - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     }
 }
 /* 对话气泡 */
