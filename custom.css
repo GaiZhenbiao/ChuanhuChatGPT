@@ -11,11 +11,39 @@
     color: var(--text-color-subdued) !important;
 }
 /* chatbot */
+:root {
+    --bg-color-light: #F3F3F3;
+    --bg-color-dark: #121111;
+  }
+
+@media (prefers-color-scheme: light) {
+    #chuanhu_chatbot {
+        background-color: var(--bg-color-light) !important;
+    }
+    [data-testid = "bot"] {
+        background-color: #FFFFFF !important;
+    }
+    [data-testid = "user"] {
+        background-color: #95EC69 !important;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    #chuanhu_chatbot {
+        background-color: var(--bg-color-dark) !important;
+    }
+    [data-testid = "bot"] {
+        background-color: #2C2C2C !important;
+    }
+    [data-testid = "user"] {
+        background-color: #26B561 !important;
+    }
+}
+
 /* 屏幕宽度大于等于500px的设备 */
 @media (min-width: 500px) {
     #chuanhu_chatbot {
         height: calc(100vh - 200px);
-        background-color: #F3F3F3 !important;
     }
     #chuanhu_chatbot .wrap {
         max-height: calc(100vh - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
@@ -25,7 +53,6 @@
 @media (max-width: 499px) {
     #chuanhu_chatbot {
         height: calc(100vh - 140px);
-        background-color: #F3F3F3 !important;
     }
     #chuanhu_chatbot .wrap {
         max-height: calc(100vh - 140 - var(--line-sm)*1rem - 2*var(--block-label-margin) );
@@ -42,13 +69,11 @@
 [data-testid = "bot"] {
     max-width: 85%;
     border-bottom-left-radius: 0 !important;
-    background-color: #FFFFFF !important;
 }
 [data-testid = "user"] {
     max-width: 85%;
     width: auto !important;
     border-bottom-right-radius: 0 !important;
-    background-color: #95EC69 !important;
 }
 /* 表格 */
 table {
