@@ -6,6 +6,7 @@ import logging
 import json
 import os
 import requests
+import urllib3
 
 from tqdm import tqdm
 import colorama
@@ -99,6 +100,7 @@ def stream_predict(
     top_p,
     temperature,
     selected_model,
+    fake_input=None
 ):
     def get_return_value():
         return chatbot, history, status_text, all_token_counts
@@ -109,7 +111,10 @@ def stream_predict(
     status_text = "开始实时传输回答……"
     history.append(construct_user(inputs))
     history.append(construct_assistant(""))
-    chatbot.append((parse_text(inputs), ""))
+    if fake_input:
+        chatbot.append((parse_text(fake_input), ""))
+    else:
+        chatbot.append((parse_text(inputs), ""))
     user_token_count = 0
     if len(all_token_counts) == 0:
         system_prompt_token_count = count_token(construct_system(system_prompt))
@@ -184,7 +189,7 @@ def stream_predict(
                     yield get_return_value()
                     break
                 history[-1] = construct_assistant(partial_words)
-                chatbot[-1] = (parse_text(inputs), parse_text(partial_words))
+                chatbot[-1] = (chatbot[-1][0], parse_text(partial_words))
                 all_token_counts[-1] += 1
                 yield get_return_value()
 
@@ -199,11 +204,15 @@ def predict_all(
     top_p,
     temperature,
     selected_model,
+    fake_input=None
 ):
     logging.info("一次性回答模式")
     history.append(construct_user(inputs))
     history.append(construct_assistant(""))
-    chatbot.append((parse_text(inputs), ""))
+    if fake_input:
+        chatbot.append((parse_text(fake_input), ""))
+    else:
+        chatbot.append((parse_text(inputs), ""))
     all_token_counts.append(count_token(construct_user(inputs)))
     try:
         response = get_response(
@@ -229,7 +238,7 @@ def predict_all(
     response = json.loads(response.text)
     content = response["choices"][0]["message"]["content"]
     history[-1] = construct_assistant(content)
-    chatbot[-1] = (parse_text(inputs), parse_text(content))
+    chatbot[-1] = (chatbot[-1][0], parse_text(content))
     total_token_count = response["usage"]["total_tokens"]
     all_token_counts[-1] = total_token_count - sum(all_token_counts)
     status_text = construct_token_message(total_token_count)
@@ -247,7 +256,7 @@ def predict(
     temperature,
     stream=False,
     selected_model=MODELS[0],
-    use_websearch_checkbox=False,
+    use_websearch=False,
     files = None,
     should_check_token_count=True,
 ):  # repetition_penalty, top_k
@@ -262,18 +271,24 @@ def predict(
         history, chatbot, status_text = chat_ai(openai_api_key, index, inputs, history, chatbot)
         yield chatbot, history, status_text, all_token_counts
         return
-    if use_websearch_checkbox:
-        results = ddg(inputs, max_results=3)
+
+    old_inputs = ""
+    link_references = []
+    if use_websearch:
+        search_results = ddg(inputs, max_results=5)
+        old_inputs = inputs
         web_results = []
-        for idx, result in enumerate(results):
+        for idx, result in enumerate(search_results):
             logging.info(f"搜索结果{idx + 1}：{result}")
+            domain_name = urllib3.util.parse_url(result["href"]).host
             web_results.append(f'[{idx+1}]"{result["body"]}"\nURL: {result["href"]}')
-        web_results = "\n\n".join(web_results)
+            link_references.append(f"[{idx+1}]: [{domain_name}]({result['href']})")
         inputs = (
             replace_today(WEBSEARCH_PTOMPT_TEMPLATE)
             .replace("{query}", inputs)
-            .replace("{web_results}", web_results)
+            .replace("{web_results}", "\n\n".join(web_results))
         )
+
     if len(openai_api_key) != 51:
         status_text = standard_error_msg + no_apikey_msg
         logging.info(status_text)
@@ -286,8 +301,9 @@ def predict(
             history[-2] = construct_user(inputs)
         yield chatbot, history, status_text, all_token_counts
         return
-    if stream:
-        yield chatbot, history, "开始生成回答……", all_token_counts
+
+    yield chatbot, history, "开始生成回答……", all_token_counts
+
     if stream:
         logging.info("使用流式传输")
         iter = stream_predict(
@@ -300,6 +316,7 @@ def predict(
             top_p,
             temperature,
             selected_model,
+            fake_input=old_inputs
         )
         for chatbot, history, status_text, all_token_counts in iter:
             yield chatbot, history, status_text, all_token_counts
@@ -315,8 +332,10 @@ def predict(
             top_p,
             temperature,
             selected_model,
+            fake_input=old_inputs
         )
         yield chatbot, history, status_text, all_token_counts
+
     logging.info(f"传输完毕。当前token计数为{all_token_counts}")
     if len(history) > 1 and history[-1]["content"] != inputs:
         logging.info(
@@ -325,10 +344,20 @@ def predict(
             + f"{history[-1]['content']}"
             + colorama.Style.RESET_ALL
         )
+
+    if use_websearch:
+        response = history[-1]['content']
+        response += "\n\n" + "\n".join(link_references)
+        logging.info(f"Added link references.")
+        logging.info(response)
+        chatbot[-1] = (parse_text(old_inputs), response)
+        yield chatbot, history, status_text, all_token_counts
+
     if stream:
         max_token = max_token_streaming
     else:
         max_token = max_token_all
+
     if sum(all_token_counts) > max_token and should_check_token_count:
         status_text = f"精简token中{all_token_counts}/{max_token}"
         logging.info(status_text)
