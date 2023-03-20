@@ -1,70 +1,13 @@
 from __future__ import annotations
-import os
+import logging
 
-import llama_index
-
-from llama_index import (
-    LLMPredictor,
-    GPTTreeIndex,
-    Document,
-    GPTSimpleVectorIndex,
-    SimpleDirectoryReader,
-    RefinePrompt,
-    QuestionAnswerPrompt,
-    GPTListIndex,
-    PromptHelper,
-)
-from pathlib import Path
-from docx import Document as DocxDocument
-from tqdm import tqdm
-import re
-from langchain.llms import OpenAIChat, OpenAI
-from llama_index.composability import ComposableGraph
-from IPython.display import Markdown, display
-import json
 from llama_index import Prompt
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple, Type
-
-import logging
-import sys
-
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple, Type
-import logging
-import json
-import gradio as gr
-
-# import openai
-import os
-import traceback
-import requests
-
-# import markdown
-import csv
+from typing import List, Tuple
 import mdtex2html
-from pypinyin import lazy_pinyin
+
 from presets import *
 from llama_func import *
-import tiktoken
-from tqdm import tqdm
-import colorama
-import os
-from llama_index import (
-    GPTSimpleVectorIndex,
-    GPTTreeIndex,
-    GPTKeywordTableIndex,
-    GPTListIndex,
-)
-from llama_index import SimpleDirectoryReader, download_loader
-from llama_index import (
-    Document,
-    LLMPredictor,
-    PromptHelper,
-    QuestionAnswerPrompt,
-    RefinePrompt,
-)
-from langchain.llms import OpenAIChat, OpenAI
-from duckduckgo_search import ddg
-import datetime
+
 
 def compact_text_chunks(self, prompt: Prompt, text_chunks: List[str]) -> List[str]:
     logging.debug("Compacting text chunks...🚀🚀🚀")
