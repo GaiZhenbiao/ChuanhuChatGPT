@@ -1,6 +1,6 @@
 :root {
-    --bg-color-light: #F3F3F3;
-    --bg-color-dark: #121111;
+    --chatbot-color-light: #F3F3F3;
+    --chatbot-color-dark: #121111;
 }
 
 /* status_display */
@@ -18,7 +18,7 @@
 /* 亮色 */
 @media (prefers-color-scheme: light) {
     #chuanhu_chatbot {
-        background-color: var(--bg-color-light) !important;
+        background-color: var(--chatbot-color-light) !important;
     }
     [data-testid = "bot"] {
         background-color: #FFFFFF !important;
@@ -30,13 +30,16 @@
 /* 暗色 */
 @media (prefers-color-scheme: dark) {
     #chuanhu_chatbot {
-        background-color: var(--bg-color-dark) !important;
+        background-color: var(--chatbot-color-dark) !important;
     }
     [data-testid = "bot"] {
         background-color: #2C2C2C !important;
     }
     [data-testid = "user"] {
         background-color: #26B561 !important;
+    }
+    body {
+        background-color: var(--neutral-950) !important;
     }
 }
 /* 屏幕宽度大于等于500px的设备 */
