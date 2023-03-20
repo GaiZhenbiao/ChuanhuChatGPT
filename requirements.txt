@@ -7,3 +7,5 @@ tqdm
 colorama
 duckduckgo_search
 Pygments
+llama_index
+langchain

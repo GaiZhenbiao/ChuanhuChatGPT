@@ -6,9 +6,11 @@ import sys
 import argparse
 from utils import *
 from presets import *
+from overwrites import *
+from chat_func import *
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
 )
 
@@ -49,6 +51,7 @@ else:
                 authflag = True
 
 gr.Chatbot.postprocess = postprocess
+PromptHelper.compact_text_chunks = compact_text_chunks
 
 with open("custom.css", "r", encoding="utf-8") as f:
     customCSS = f.read()
@@ -165,7 +168,7 @@ with gr.Blocks(
                         label="实时传输回答", value=True, visible=enable_streaming_option
                     )
                     use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
-                    index_files = gr.File(label="上传索引文件", type="file", multiple=True)
+                    index_files = gr.Files(label="上传索引文件", type="file", multiple=True)
 
                 with gr.Tab(label="Prompt"):
                     systemPromptTxt = gr.Textbox(
@@ -286,6 +289,7 @@ with gr.Blocks(
             use_streaming_checkbox,
             model_select_dropdown,
             use_websearch_checkbox,
+            index_files
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
@@ -306,6 +310,7 @@ with gr.Blocks(
             use_streaming_checkbox,
             model_select_dropdown,
             use_websearch_checkbox,
+            index_files
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
