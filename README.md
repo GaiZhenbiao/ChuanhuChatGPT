@@ -83,7 +83,7 @@
 	<details><summary>3. 在文件中设定默认密钥、用户名密码</summary>
 
 	这样设置的密钥可以在拉取项目更新之后保留。
-	
+
 	在项目文件夹中新建这两个文件：`api_key.txt` 和 `auth.json`。
 
 	在`api_key.txt`中填写你的API-Key，注意不要填写任何无关内容。
@@ -258,6 +258,15 @@ pip install gradio --upgrade --force-reinstall
 很多时候，这样就可以解决问题。
 
 ### 常见问题
+
+<details><summary><code>TypeError: Base.set () got an unexpected keyword argument</code></summary>
+
+这是因为川虎ChatGPT紧跟Gradio发展步伐，你的Gradio版本太旧了。请升级依赖：
+
+```
+pip install -r requirements.txt --upgrade
+```
+</details>
 
 <details><summary><code>No module named '_bz2'</code></summary>
 
