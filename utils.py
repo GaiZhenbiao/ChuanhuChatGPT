@@ -90,7 +90,7 @@ def convert_mdtext(md_text):
             non_code = normalize_markdown(non_code)
             result.append(mdtex2html.convert(non_code, extensions=['tables']))
         if code.strip():
-            code = f"```{code}```"
+            code = f"```{code}\n\n```"
             code = markdown_to_html_with_syntax_highlight(code)
             result.append(code)
     result = "".join(result)
