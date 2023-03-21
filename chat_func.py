@@ -115,9 +115,9 @@ def stream_predict(
     history.append(construct_user(inputs))
     history.append(construct_assistant(""))
     if fake_input:
-        chatbot.append((parse_text(fake_input), ""))
+        chatbot.append((fake_input, ""))
     else:
-        chatbot.append((parse_text(inputs), ""))
+        chatbot.append((inputs, ""))
     user_token_count = 0
     if len(all_token_counts) == 0:
         system_prompt_token_count = count_token(construct_system(system_prompt))
@@ -192,7 +192,7 @@ def stream_predict(
                     yield get_return_value()
                     break
                 history[-1] = construct_assistant(partial_words)
-                chatbot[-1] = (chatbot[-1][0], parse_text(partial_words+display_append))
+                chatbot[-1] = (chatbot[-1][0], partial_words+display_append)
                 all_token_counts[-1] += 1
                 yield get_return_value()
 
@@ -214,9 +214,9 @@ def predict_all(
     history.append(construct_user(inputs))
     history.append(construct_assistant(""))
     if fake_input:
-        chatbot.append((parse_text(fake_input), ""))
+        chatbot.append((fake_input, ""))
     else:
-        chatbot.append((parse_text(inputs), ""))
+        chatbot.append((inputs, ""))
     all_token_counts.append(count_token(construct_user(inputs)))
     try:
         response = get_response(
@@ -242,7 +242,7 @@ def predict_all(
     response = json.loads(response.text)
     content = response["choices"][0]["message"]["content"]
     history[-1] = construct_assistant(content)
-    chatbot[-1] = (chatbot[-1][0], parse_text(content+display_append))
+    chatbot[-1] = (chatbot[-1][0], content+display_append)
     total_token_count = response["usage"]["total_tokens"]
     all_token_counts[-1] = total_token_count - sum(all_token_counts)
     status_text = construct_token_message(total_token_count)
@@ -299,7 +299,7 @@ def predict(
     if len(openai_api_key) != 51:
         status_text = standard_error_msg + no_apikey_msg
         logging.info(status_text)
-        chatbot.append((parse_text(inputs), ""))
+        chatbot.append((inputs, ""))
         if len(history) == 0:
             history.append(construct_user(inputs))
             history.append("")

@@ -9,3 +9,4 @@ duckduckgo_search
 Pygments
 llama_index
 langchain
+markdown

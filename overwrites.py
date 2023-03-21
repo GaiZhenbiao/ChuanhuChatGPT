@@ -28,13 +28,7 @@ def postprocess(
     Returns:
         List of tuples representing the message and response. Each message and response will be a string of HTML.
     """
-    if y is None:
+    if y is None or y == []:
         return []
-    for i, (message, response) in enumerate(y):
-        y[i] = (
-            # None if message is None else markdown.markdown(message),
-            # None if response is None else markdown.markdown(response),
-            None if message is None else message,
-            None if response is None else mdtex2html.convert(response, extensions=['fenced_code','codehilite','tables']),
-        )
+    y[-1] = (y[-1][0].replace("\n", "<br>"), convert_mdtext(y[-1][1]))
     return y
