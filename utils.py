@@ -287,10 +287,17 @@ def replace_today(prompt):
 def get_geoip():
     response = requests.get('https://ipapi.co/json/', timeout=5)
     data = response.json()
-    country = data['country_name']
-    if country == "China":
-        text = "**您的IP区域：中国。请立即检查代理设置，在不受支持的地区使用API可能导致账号被封禁。**"
+    if "error" in data.keys():
+        logging.info("无法获取IP地址信息。")
+        if data['reason'] == "RateLimited":
+            return f"获取IP地理位置失败，因为达到了检测IP的速率限制。聊天功能可能仍然可用，但请注意，如果您的IP地址在不受支持的地区，您可能会遇到问题。"
+        else:
+            return f"获取IP地理位置失败。原因：{data['reason']}"
     else:
-        text = f"您的IP区域：{country}。"
-    logging.info(text)
-    return text
+        country = data['country_name']
+        if country == "China":
+            text = "**您的IP区域：中国。请立即检查代理设置，在不受支持的地区使用API可能导致账号被封禁。**"
+        else:
+            text = f"您的IP区域：{country}。"
+        logging.info(text)
+        return text
