@@ -90,6 +90,7 @@ def convert_mdtext(md_text):
             non_code = normalize_markdown(non_code)
             result.append(mdtex2html.convert(non_code, extensions=['tables']))
         if code.strip():
+            _, code = detect_language(code) # 暂时去除代码高亮功能，因为在大段代码的情况下会出现问题
             code = f"```{code}\n\n```"
             code = markdown_to_html_with_syntax_highlight(code)
             result.append(code)
