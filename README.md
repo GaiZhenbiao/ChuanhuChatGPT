@@ -302,6 +302,37 @@ pip install gradio --upgrade --force-reinstall
 
 ### 常见问题
 
+<details><summary>配置代理</summary>
+
+OpenAI不允许在不受支持的地区使用API，否则可能会导致账号被风控。下面给出代理配置示例：
+
+在Clash配置文件中，加入：
+
+```
+rule-providers:
+  private:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt"
+    path: ./ruleset/ads.yaml
+    interval: 86400
+
+rules:
+ - RULE-SET,private,DIRECT
+ - DOMAIN-SUFFIX,openai.com,你的代理规则
+```
+
+如果你使用 Surge，请在配置文件中加入：
+
+```
+[Rule]
+DOMAIN-SET,https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/private.txt,DIRECT
+DOMAIN-SUFFIX,openai.com,你的代理规则
+```
+注意，如果你本来已经有对应的字段，请将这些规则合并到已有字段中，否则代理软件会报错。
+
+</details>
+
 <details><summary><code>TypeError: Base.set () got an unexpected keyword argument</code></summary>
 
 这是因为川虎ChatGPT紧跟Gradio发展步伐，你的Gradio版本太旧了。请升级依赖：
@@ -363,31 +394,8 @@ pip install urllib3==1.25.11
 > requests.exceptions.SSLError: HTTPSConnectionPool(host='api.openai.com', port=443): Max retries exceeded with url: /v1/chat/completions (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
 > ```
 
-请将`openai.com`加入你使用的代理App的代理规则。注意不要将`127.0.0.1`加入代理，否则会有下一个错误。
+请参考配置代理部分，将`openai.com`加入你使用的代理App的代理规则。注意不要将`127.0.0.1`加入代理，否则会有下一个错误。
 
-例如，在Clash配置文件中，加入：
-
-```
-rule-providers:
-  private:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt"
-    path: ./ruleset/ads.yaml
-    interval: 86400
-
-rules:
- - RULE-SET,private,DIRECT
- - DOMAIN-SUFFIX,openai.com,你的代理规则
-```
-
-Surge：
-
-```
-[Rule]
-DOMAIN-SET,https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/private.txt,DIRECT
-DOMAIN-SUFFIX,openai.com,你的代理规则
-```
 </details>
 
 <details><summary><code>网页提示错误 Something went wrong</code></summary>
