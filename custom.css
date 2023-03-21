@@ -25,7 +25,7 @@ ol, ul {
     padding-left: 0;
 }
 
-li, ul li {
+ol li, ul:not(.options) li {
     padding-left: 1.5em;
     text-indent: -1.5em;
 }
