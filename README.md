@@ -63,6 +63,8 @@
 	```
 	或者，点击网页右上角的 `Download ZIP`，下载并解压完成后进入文件夹，进入`终端`或`命令提示符`。
 
+	如果你使用Windows，应该在文件夹里按住`shift`右键，选择“在终端中打开”。如果没有这个选项，选择“在此处打开Powershell窗口”。如果你使用macOS，可以在Finder底部的路径栏中右键当前文件夹，选择`服务-新建位于文件夹位置的终端标签页`。
+
 	<img width="200" alt="downloadZIP" src="https://user-images.githubusercontent.com/23137268/223696317-b89d2c71-c74d-4c6d-8060-a21406cfb8c8.png">
 
 2. **填写API密钥**
@@ -101,6 +103,8 @@
 
 3. **安装依赖**
 
+	在终端中输入下面的命令，然后回车。
+
 	```shell
 	pip install -r requirements.txt
 	```
@@ -116,6 +120,8 @@
 	如果下载慢，建议[配置清华源](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)，或者科学上网。
 
 4. **启动**
+
+	请使用下面的命令。
 
 	```shell
 	python ChuanhuChatbot.py
