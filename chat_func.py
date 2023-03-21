@@ -293,6 +293,8 @@ def predict(
             .replace("{query}", inputs)
             .replace("{web_results}", "\n\n".join(web_results))
         )
+    else:
+        link_references = ""
 
     if len(openai_api_key) != 51:
         status_text = standard_error_msg + no_apikey_msg
@@ -338,7 +340,8 @@ def predict(
             top_p,
             temperature,
             selected_model,
-            fake_input=old_inputs
+            fake_input=old_inputs,
+            display_append=link_references
         )
         yield chatbot, history, status_text, all_token_counts
 
