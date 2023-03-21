@@ -15,6 +15,11 @@
     font-family: monospace;
     color: var(--body-text-color-subdued);
 }
+
+#chuanhu_chatbot, #status_display {
+    transition: all 0.6s;
+}
+
 /* 亮色 */
 @media (prefers-color-scheme: light) {
     #chuanhu_chatbot {
@@ -184,8 +189,3 @@ pre code {
 .codehilite .vi { color: #f8f8f2 } /* Name.Variable.Instance */
 .codehilite .vm { color: #f8f8f2 } /* Name.Variable.Magic */
 .codehilite .il { color: #ae81ff } /* Literal.Number.Integer.Long */
-
-/* 全局元素 */
-* {
-    transition: all 0.6s;
-}
