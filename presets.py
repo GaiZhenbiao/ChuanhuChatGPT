@@ -1,4 +1,11 @@
 # -*- coding:utf-8 -*-
+
+# ChatGPT 设置
+initial_prompt = "You are a helpful assistant."
+API_URL = "https://api.openai.com/v1/chat/completions"
+HISTORY_DIR = "history"
+TEMPLATES_DIR = "templates"
+
 # 错误信息
 standard_error_msg = "☹️发生了错误："  # 错误信息的标准前缀
 error_retrieve_prompt = "请检查网络连接，或者API-Key是否有效。"  # 获取对话时发生错误

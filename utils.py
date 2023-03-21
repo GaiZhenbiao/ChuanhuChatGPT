@@ -26,12 +26,6 @@ if TYPE_CHECKING:
         data: List[List[str | int | bool]]
 
 
-initial_prompt = "You are a helpful assistant."
-API_URL = "https://api.openai.com/v1/chat/completions"
-HISTORY_DIR = "history"
-TEMPLATES_DIR = "templates"
-
-
 def count_token(message):
     encoding = tiktoken.get_encoding("cl100k_base")
     input_str = f"role: {message['role']}, content: {message['content']}"
@@ -46,7 +40,7 @@ def parse_text(text):
     for line in text.split("\n"):
         if line.strip().startswith("```"):
             in_code_block = not in_code_block
-        else: 
+        else:
             if re.match(r'(\*|-|\d+\.)\s', line):
                 if not in_list:
                     in_list = True
