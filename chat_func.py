@@ -102,7 +102,8 @@ def stream_predict(
     top_p,
     temperature,
     selected_model,
-    fake_input=None
+    fake_input=None,
+    display_append=""
 ):
     def get_return_value():
         return chatbot, history, status_text, all_token_counts
@@ -191,7 +192,7 @@ def stream_predict(
                     yield get_return_value()
                     break
                 history[-1] = construct_assistant(partial_words)
-                chatbot[-1] = (chatbot[-1][0], parse_text(partial_words))
+                chatbot[-1] = (chatbot[-1][0], parse_text(partial_words+display_append))
                 all_token_counts[-1] += 1
                 yield get_return_value()
 
@@ -206,7 +207,8 @@ def predict_all(
     top_p,
     temperature,
     selected_model,
-    fake_input=None
+    fake_input=None,
+    display_append=""
 ):
     logging.info("一次性回答模式")
     history.append(construct_user(inputs))
@@ -240,7 +242,7 @@ def predict_all(
     response = json.loads(response.text)
     content = response["choices"][0]["message"]["content"]
     history[-1] = construct_assistant(content)
-    chatbot[-1] = (chatbot[-1][0], parse_text(content))
+    chatbot[-1] = (chatbot[-1][0], parse_text(content+display_append))
     total_token_count = response["usage"]["total_tokens"]
     all_token_counts[-1] = total_token_count - sum(all_token_counts)
     status_text = construct_token_message(total_token_count)
@@ -284,7 +286,8 @@ def predict(
             logging.info(f"搜索结果{idx + 1}：{result}")
             domain_name = urllib3.util.parse_url(result["href"]).host
             web_results.append(f'[{idx+1}]"{result["body"]}"\nURL: {result["href"]}')
-            link_references.append(f"[{idx+1}]: [{domain_name}]({result['href']})")
+            link_references.append(f"{idx+1}. [{domain_name}]({result['href']})\n")
+        link_references = "\n\n" + "".join(link_references)
         inputs = (
             replace_today(WEBSEARCH_PTOMPT_TEMPLATE)
             .replace("{query}", inputs)
@@ -318,7 +321,8 @@ def predict(
             top_p,
             temperature,
             selected_model,
-            fake_input=old_inputs
+            fake_input=old_inputs,
+            display_append=link_references
         )
         for chatbot, history, status_text, all_token_counts in iter:
             yield chatbot, history, status_text, all_token_counts
@@ -346,14 +350,6 @@ def predict(
             + f"{history[-1]['content']}"
             + colorama.Style.RESET_ALL
         )
-
-    if use_websearch:
-        response = history[-1]['content']
-        response += "\n\n" + "\n".join(link_references)
-        logging.info(f"Added link references.")
-        logging.info(response)
-        chatbot[-1] = (parse_text(old_inputs), response)
-        yield chatbot, history, status_text, all_token_counts
 
     if stream:
         max_token = max_token_streaming
