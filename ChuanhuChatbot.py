@@ -116,7 +116,7 @@ with gr.Blocks(
         # background_fill_primary="#F7F7F7",
         # background_fill_primary_dark="#1F1F1F",
         block_title_text_color="*primary_500",
-        block_title_background_fill = "*primary_100",
+        block_title_background_fill="*primary_100",
         input_background_fill="#F6F6F6",
     ),
 ) as demo:
@@ -178,7 +178,7 @@ with gr.Blocks(
                         label="System prompt",
                         value=initial_prompt,
                         lines=10,
-                    ).style(container=True)
+                    ).style(container=False)
                     with gr.Accordion(label="加载Prompt模板", open=True):
                         with gr.Column():
                             with gr.Row():
@@ -188,7 +188,7 @@ with gr.Blocks(
                                         choices=get_template_names(plain=True),
                                         multiselect=False,
                                         value=get_template_names(plain=True)[0],
-                                    )
+                                    ).style(container=False)
                                 with gr.Column(scale=1):
                                     templateRefreshBtn = gr.Button("🔄 刷新")
                             with gr.Row():
@@ -202,7 +202,7 @@ with gr.Blocks(
                                         value=load_template(
                                             get_template_names(plain=True)[0], mode=1
                                         )[0],
-                                    )
+                                    ).style(container=False)
 
                 with gr.Tab(label="保存/加载"):
                     with gr.Accordion(label="保存/加载对话历史记录", open=True):
@@ -291,7 +291,7 @@ with gr.Blocks(
             use_streaming_checkbox,
             model_select_dropdown,
             use_websearch_checkbox,
-            index_files
+            index_files,
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
@@ -312,7 +312,7 @@ with gr.Blocks(
             use_streaming_checkbox,
             model_select_dropdown,
             use_websearch_checkbox,
-            index_files
+            index_files,
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,

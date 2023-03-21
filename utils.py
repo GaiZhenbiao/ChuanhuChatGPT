@@ -288,7 +288,7 @@ def get_geoip():
     response = requests.get('https://ipapi.co/json/', timeout=5)
     data = response.json()
     if "error" in data.keys():
-        logging.info("无法获取IP地址信息。")
+        logging.warning(f"无法获取IP地址信息。\n{data}")
         if data['reason'] == "RateLimited":
             return f"获取IP地理位置失败，因为达到了检测IP的速率限制。聊天功能可能仍然可用，但请注意，如果您的IP地址在不受支持的地区，您可能会遇到问题。"
         else:
