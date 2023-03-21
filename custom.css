@@ -20,6 +20,16 @@
     transition: all 0.6s;
 }
 
+ol, ul {
+    list-style-position: inside;
+    padding-left: 0;
+}
+
+li, ul li {
+    padding-left: 1.5em;
+    text-indent: -1.5em;
+}
+
 /* 亮色 */
 @media (prefers-color-scheme: light) {
     #chuanhu_chatbot {

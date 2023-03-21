@@ -8,6 +8,7 @@ import datetime
 import hashlib
 import csv
 import requests
+import re
 
 import gradio as gr
 from pypinyin import lazy_pinyin
@@ -40,11 +41,23 @@ def count_token(message):
 
 def parse_text(text):
     in_code_block = False
+    in_list = False
     new_lines = []
     for line in text.split("\n"):
         if line.strip().startswith("```"):
             in_code_block = not in_code_block
+        else: 
+            if re.match(r'(\*|-|\d+\.)\s', line):
+                if not in_list:
+                    in_list = True
+            elif in_list and line.strip() != "":
+                in_list = False
+                new_lines.append("")
+
         if in_code_block:
+            if line.strip() != "":
+                new_lines.append(line)
+        elif in_list:
             if line.strip() != "":
                 new_lines.append(line)
         else:
