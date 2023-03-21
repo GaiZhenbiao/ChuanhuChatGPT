@@ -29,7 +29,7 @@
       </p>
       <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
         ·
-      <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>2.0介绍视频</strong></a>
+      <a href="https://www.bilibili.com/video/BV1184y1w7aP"><strong>2.0介绍视频</strong></a>
 	·
       <a href="https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT"><strong>在线体验</strong></a>
     </p>
