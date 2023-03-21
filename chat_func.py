@@ -11,6 +11,8 @@ import urllib3
 from tqdm import tqdm
 import colorama
 from duckduckgo_search import ddg
+import asyncio
+import aiohttp
 
 from presets import *
 from llama_func import *

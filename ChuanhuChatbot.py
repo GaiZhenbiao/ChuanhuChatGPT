@@ -130,7 +130,7 @@ with gr.Blocks(
 
     with gr.Row():
         gr.HTML(title)
-        status_display = gr.Markdown("status: ready", elem_id="status_display")
+        status_display = gr.Markdown(get_geoip(), elem_id="status_display")
 
     with gr.Row(scale=1).style(equal_height=True):
         with gr.Column(scale=5):
@@ -244,7 +244,7 @@ with gr.Blocks(
                             value=1.0,
                             step=0.05,
                             interactive=True,
-                            label="Top-p (nucleus sampling)",
+                            label="Top-p",
                         )
                         temperature = gr.Slider(
                             minimum=-0,

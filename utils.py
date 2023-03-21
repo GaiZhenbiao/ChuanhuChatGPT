@@ -7,6 +7,7 @@ import os
 import datetime
 import hashlib
 import csv
+import requests
 
 import gradio as gr
 from pypinyin import lazy_pinyin
@@ -282,3 +283,14 @@ def sha1sum(filename):
 def replace_today(prompt):
     today = datetime.datetime.today().strftime("%Y-%m-%d")
     return prompt.replace("{current_date}", today)
+
+def get_geoip():
+    response = requests.get('https://ipapi.co/json/', timeout=5)
+    data = response.json()
+    country = data['country_name']
+    if country == "China":
+        text = "**您的IP区域：中国。请立即检查代理设置，在不受支持的地区使用API可能导致账号被封禁。**"
+    else:
+        text = f"您的IP区域：{country}。"
+    logging.info(text)
+    return text
