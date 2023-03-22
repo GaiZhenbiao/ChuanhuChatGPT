@@ -351,6 +351,9 @@ rules:
 DOMAIN-SET,https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/private.txt,DIRECT
 DOMAIN-SUFFIX,openai.com,你的代理规则
 ```
+
+另外，强烈建议打开Clash的TUN模式（Surge的增强模式），否则终端流量可能不会走代理。或者，你也可以配置HTTPS_PROXY这个环境变量，川虎ChatGPT会自动从环境变量中获取代理配置。
+
 注意，如果你本来已经有对应的字段，请将这些规则合并到已有字段中，否则代理软件会报错。
 
 </details>
