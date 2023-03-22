@@ -371,9 +371,8 @@ def predict(
             all_token_counts,
             top_p,
             temperature,
-            stream=False,
+            max_token//2,
             selected_model=selected_model,
-            hidden=True,
         )
         for chatbot, history, status_text, all_token_counts in iter:
             status_text = f"Token 达到上限，已自动降低Token计数至 {status_text}"
@@ -410,9 +409,10 @@ def retry(
         stream=stream,
         selected_model=selected_model,
     )
-    logging.info("重试完毕")
+    logging.info("重试中……")
     for x in iter:
         yield x
+    logging.info("重试完毕")
 
 
 def reduce_token_size(
@@ -423,9 +423,8 @@ def reduce_token_size(
     token_count,
     top_p,
     temperature,
-    stream=False,
+    max_token_count,
     selected_model=MODELS[0],
-    hidden=False,
 ):
     logging.info("开始减少token数量……")
     iter = predict(
@@ -437,17 +436,21 @@ def reduce_token_size(
         token_count,
         top_p,
         temperature,
-        stream=stream,
         selected_model=selected_model,
         should_check_token_count=False,
     )
     logging.info(f"chatbot: {chatbot}")
+    flag = False
     for chatbot, history, status_text, previous_token_count in iter:
-        history = history[-2:]
-        token_count = previous_token_count[-1:]
-        if hidden:
-            chatbot.pop()
-        yield chatbot, history, construct_token_message(
-            sum(token_count), stream=stream
+        num_chat = find_n(previous_token_count, max_token_count)
+        if flag:
+            chatbot = chatbot[:-1]
+        flag = True
+        history = history[-2*num_chat:] if num_chat > 0 else []
+        token_count = previous_token_count[-num_chat:] if num_chat > 0 else []
+        msg = f"保留了最近{num_chat}轮对话"
+        yield chatbot, history, msg + "，" + construct_token_message(
+            sum(token_count) if len(token_count) > 0 else 0,
         ), token_count
+    logging.info(msg)
     logging.info("减少token数量完毕")

@@ -359,7 +359,7 @@ with gr.Blocks(
             token_count,
             top_p,
             temperature,
-            use_streaming_checkbox,
+            gr.State(0),
             model_select_dropdown,
         ],
         [chatbot, history, status_display, token_count],
