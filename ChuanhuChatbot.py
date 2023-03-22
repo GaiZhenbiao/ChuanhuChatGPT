@@ -425,10 +425,6 @@ with gr.Blocks(
         show_progress=True,
     )
 
-    lock_sidebar.change(
-
-    )
-
 logging.info(
     colorama.Back.GREEN
     + "\n川虎的温馨提示：访问 http://localhost:7860 查看界面"
