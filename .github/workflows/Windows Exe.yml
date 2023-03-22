@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ChuanhuChatbot.exe
-        path: dist
+        path: ./dist
 
     # # update exe to release
     # - name: Create Release
