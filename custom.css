@@ -76,6 +76,8 @@ ol:not(.options), ul:not(.options) {
     padding: var(--spacing-xl) !important;
     font-size: var(--text-md) !important;
     line-height: var(--line-md) !important;
+    min-height: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl));
+    min-width: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl));
 }
 [data-testid = "bot"] {
     max-width: 85%;
