@@ -52,10 +52,22 @@
 - 输入框支持换行，按`shift enter`即可。
 - 部署到服务器：将程序最后一句改成`demo.launch(server_name="0.0.0.0", server_port=<你的端口号>)`。
 - 获取公共链接：将程序最后一句改成`demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问。
-- 在Hugging Face上使用：建议在右上角 **复制Space** 再使用，这样能大大减少排队时间，App反应也会更加迅速。
-  <img width="300" alt="image" src="https://user-images.githubusercontent.com/51039745/223447310-e098a1f2-0dcf-48d6-bcc5-49472dd7ca0d.png">
+- 在Hugging Face上使用：建议在右上角 **复制Space** 再使用，这样
+ 
 
 ## 安装方式
+
+### 直接在Hugging Face上部署
+
+访问[本项目的Hugging Face页面](https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT)，点击右上角的 **复制Space** ，新建一个私人空间。然后就直接可以开始使用啦！放心，这是免费的。
+
+注意不要直接使用我的Space，否则排队速度会很漫长。在你的私人空间里使用能大大减少排队时间，App反应也会更加迅速。
+
+ <img width="300" alt="image" src="https://user-images.githubusercontent.com/51039745/223447310-e098a1f2-0dcf-48d6-bcc5-49472dd7ca0d.png">
+ 
+ Hugging Face的优点：部署容易，甚至不需要电脑。免费。无需配置代理。
+ 
+ Hugging Face的缺点：支持的gradio版本比较老旧，不支持最新的界面。
 
 ### 本地部署
 
