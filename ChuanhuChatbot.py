@@ -151,7 +151,7 @@ with gr.Blocks(
                 delLastBtn = gr.Button("🗑️ 删除一条对话")
                 reduceTokenBtn = gr.Button("♻️ 总结对话")
 
-        with gr.Column():
+        with gr.Column(elem_id="right_column"):
             with gr.Column(min_width=50, scale=1):
                 with gr.Tab(label="ChatGPT"):
                     keyTxt = gr.Textbox(
@@ -423,6 +423,10 @@ with gr.Blocks(
         [proxyTxt],
         [status_display],
         show_progress=True,
+    )
+
+    lock_sidebar.change(
+
     )
 
 logging.info(

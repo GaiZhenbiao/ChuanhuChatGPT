@@ -199,3 +199,39 @@ pre code {
 .highlight .vi { color: #f8f8f2 } /* Name.Variable.Instance */
 .highlight .vm { color: #f8f8f2 } /* Name.Variable.Magic */
 .highlight .il { color: #ae81ff } /* Literal.Number.Integer.Long */
+
+
+
+
+/* 横屏自动隐藏设置 */
+
+@media screen and (orientation: landscape) {
+    #right_column{
+        /* 鼠标不移上去时缩小到最右侧宽度20px不显示内容 全部css加上!important */
+        min-width: 20px!important;
+        max-width: 20px!important;
+    
+    
+        background-color: var(--primary-800);
+        /* 鼠标移上去时宽度变为300px */
+        transition: all 0.5s ease;
+
+        border-radius: var(--radius-md);
+    }
+    
+    
+    #right_column>*{
+        display:none!important;
+    }
+    
+    #right_column:hover{
+        min-width: 300px!important;
+        max-width: 300px!important;
+        /* width: 300px!important; */
+        background-color: var(--neutral-950);
+    }
+    
+    #right_column:hover>*{
+        display: flex!important;
+    }
+}
