@@ -153,124 +153,130 @@ with gr.Blocks(
 
         with gr.Column():
             with gr.Column(min_width=50, scale=1):
-                with gr.Tab(label="ChatGPT"):
-                    keyTxt = gr.Textbox(
-                        show_label=True,
-                        placeholder=f"OpenAI API-key...",
-                        value=hide_middle_chars(my_api_key),
-                        type="password",
-                        visible=not HIDE_MY_KEY,
-                        label="API-Key",
-                    )
-                    model_select_dropdown = gr.Dropdown(
-                        label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0]
-                    )
-                    use_streaming_checkbox = gr.Checkbox(
-                        label="实时传输回答", value=True, visible=enable_streaming_option
-                    )
-                    use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
-                    index_files = gr.Files(label="上传索引文件", type="file", multiple=True)
-
-                with gr.Tab(label="Prompt"):
-                    systemPromptTxt = gr.Textbox(
-                        show_label=True,
-                        placeholder=f"在这里输入System Prompt...",
-                        label="System prompt",
-                        value=initial_prompt,
-                        lines=10,
-                    ).style(container=False)
-                    with gr.Accordion(label="加载Prompt模板", open=True):
-                        with gr.Column():
-                            with gr.Row():
-                                with gr.Column(scale=6):
-                                    templateFileSelectDropdown = gr.Dropdown(
-                                        label="选择Prompt模板集合文件",
-                                        choices=get_template_names(plain=True),
-                                        multiselect=False,
-                                        value=get_template_names(plain=True)[0],
-                                    ).style(container=False)
-                                with gr.Column(scale=1):
-                                    templateRefreshBtn = gr.Button("🔄 刷新")
-                            with gr.Row():
-                                with gr.Column():
-                                    templateSelectDropdown = gr.Dropdown(
-                                        label="从Prompt模板中加载",
-                                        choices=load_template(
-                                            get_template_names(plain=True)[0], mode=1
-                                        ),
-                                        multiselect=False,
-                                        value=load_template(
-                                            get_template_names(plain=True)[0], mode=1
-                                        )[0],
-                                    ).style(container=False)
-
-                with gr.Tab(label="保存/加载"):
-                    with gr.Accordion(label="保存/加载对话历史记录", open=True):
-                        with gr.Column():
-                            with gr.Row():
-                                with gr.Column(scale=6):
-                                    historyFileSelectDropdown = gr.Dropdown(
-                                        label="从列表中加载对话",
-                                        choices=get_history_names(plain=True),
-                                        multiselect=False,
-                                        value=get_history_names(plain=True)[0],
-                                    )
-                                with gr.Column(scale=1):
-                                    historyRefreshBtn = gr.Button("🔄 刷新")
-                            with gr.Row():
-                                with gr.Column(scale=6):
-                                    saveFileName = gr.Textbox(
-                                        show_label=True,
-                                        placeholder=f"设置文件名: 默认为.json，可选为.md",
-                                        label="设置保存文件名",
-                                        value="对话历史记录",
-                                    ).style(container=True)
-                                with gr.Column(scale=1):
-                                    saveHistoryBtn = gr.Button("💾 保存对话")
-                                    exportMarkdownBtn = gr.Button("📝 导出为Markdown")
-                                    gr.Markdown("默认保存于history文件夹")
-                            with gr.Row():
-                                with gr.Column():
-                                    downloadFile = gr.File(interactive=True)
-
-                with gr.Tab(label="高级"):
-                    default_btn = gr.Button("🔙 恢复默认设置")
-                    gr.Markdown("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置")
-
-                    with gr.Accordion("参数", open=False):
-                        top_p = gr.Slider(
-                            minimum=-0,
-                            maximum=1.0,
-                            value=1.0,
-                            step=0.05,
-                            interactive=True,
-                            label="Top-p",
+                with gr.Tabs() as tabs:
+                    with gr.TabItem(label="ChatGPT"):
+                        keyTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"OpenAI API-key...",
+                            value=hide_middle_chars(my_api_key),
+                            type="password",
+                            visible=False,
+                            label="API-Key",
                         )
-                        temperature = gr.Slider(
-                            minimum=-0,
-                            maximum=2.0,
-                            value=1.0,
-                            step=0.1,
-                            interactive=True,
-                            label="Temperature",
+                        model_select_dropdown = gr.Dropdown(
+                            label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0],visible=False
                         )
+                        use_streaming_checkbox = gr.Checkbox(
+                            label="实时传输回答", value=True, visible=False
+                        )
+                        use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False,visible=False)
+                        use_gptIndex_checkbox = gr.Checkbox(label="使用GPTIndex", value=True)
+                        update_gptIndex_checkbox = gr.Checkbox(label="是否更新Index（耗时较长）", value=False)
+                        index_files = gr.Files(label="上传索引文件", type="file", multiple=True,visible=False)
 
-                    apiurlTxt = gr.Textbox(
-                        show_label=True,
-                        placeholder=f"在这里输入API地址...",
-                        label="API地址",
-                        value="https://api.openai.com/v1/chat/completions",
-                        lines=2,
-                    )
-                    changeAPIURLBtn = gr.Button("🔄 切换API地址")
-                    proxyTxt = gr.Textbox(
-                        show_label=True,
-                        placeholder=f"在这里输入代理地址...",
-                        label="代理地址（示例：http://127.0.0.1:10809）",
-                        value="",
-                        lines=2,
-                    )
-                    changeProxyBtn = gr.Button("🔄 设置代理地址")
+                    #with gr.TabItem(label="Prompt", visible=False):
+                        systemPromptTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"在这里输入System Prompt...",
+                            label="System prompt",
+                            value=initial_prompt,
+                            lines=10,
+                            visible=False
+                        ).style(container=False)
+                        with gr.Accordion(label="加载Prompt模板", open=True, visible=False):
+                            with gr.Column():
+                                with gr.Row():
+                                    with gr.Column(scale=6):
+                                        templateFileSelectDropdown = gr.Dropdown(
+                                            label="选择Prompt模板集合文件",
+                                            choices=get_template_names(plain=True),
+                                            multiselect=False,
+                                            value=get_template_names(plain=True)[0],
+                                        ).style(container=False)
+                                    with gr.Column(scale=1):
+                                        templateRefreshBtn = gr.Button("🔄 刷新")
+                                with gr.Row():
+                                    with gr.Column():
+                                        templateSelectDropdown = gr.Dropdown(
+                                            label="从Prompt模板中加载",
+                                            choices=load_template(
+                                                get_template_names(plain=True)[0], mode=1
+                                            ),
+                                            multiselect=False,
+                                            value=load_template(
+                                                get_template_names(plain=True)[0], mode=1
+                                            )[0],
+                                        ).style(container=False)
+
+                    #with gr.TabItem(label="保存/加载", visible=False):
+                        with gr.Accordion(label="保存/加载对话历史记录", open=True, visible=False):
+                            with gr.Column():
+                                with gr.Row():
+                                    with gr.Column(scale=6):
+                                        historyFileSelectDropdown = gr.Dropdown(
+                                            label="从列表中加载对话",
+                                            choices=get_history_names(plain=True),
+                                            multiselect=False,
+                                            value=get_history_names(plain=True)[0],
+                                        )
+                                    with gr.Column(scale=1):
+                                        historyRefreshBtn = gr.Button("🔄 刷新")
+                                with gr.Row():
+                                    with gr.Column(scale=6):
+                                        saveFileName = gr.Textbox(
+                                            show_label=True,
+                                            placeholder=f"设置文件名: 默认为.json，可选为.md",
+                                            label="设置保存文件名",
+                                            value="对话历史记录",
+                                        ).style(container=True)
+                                    with gr.Column(scale=1):
+                                        saveHistoryBtn = gr.Button("💾 保存对话")
+                                        exportMarkdownBtn = gr.Button("📝 导出为Markdown")
+                                        gr.Markdown("默认保存于history文件夹")
+                                with gr.Row():
+                                    with gr.Column():
+                                        downloadFile = gr.File(interactive=True)
+
+                    #with gr.TabItem(label="高级"):
+                        default_btn = gr.Button("🔙 恢复默认设置", visible=False)
+                        #gr.Markdown("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置")
+
+                        with gr.Accordion("参数", open=False, visible=False):
+                            top_p = gr.Slider(
+                                minimum=-0,
+                                maximum=1.0,
+                                value=1.0,
+                                step=0.05,
+                                interactive=True,
+                                label="Top-p",
+                            )
+                            temperature = gr.Slider(
+                                minimum=-0,
+                                maximum=2.0,
+                                value=1.0,
+                                step=0.1,
+                                interactive=True,
+                                label="Temperature",
+                            )
+
+                        apiurlTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"在这里输入API地址...",
+                            label="API地址",
+                            value="https://api.openai.com/v1/chat/completions",
+                            lines=2,
+                            visible=False
+                        )
+                        changeAPIURLBtn = gr.Button("🔄 切换API地址", visible=False)
+                        proxyTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"在这里输入代理地址...",
+                            label="代理地址（示例：http://127.0.0.1:10809）",
+                            value="",
+                            lines=2,
+                            visible=False
+                        )
+                        changeProxyBtn = gr.Button("🔄 设置代理地址", visible=False)
 
     gr.Markdown(description)
 
@@ -291,7 +297,8 @@ with gr.Blocks(
             use_streaming_checkbox,
             model_select_dropdown,
             use_websearch_checkbox,
-            index_files,
+            use_gptIndex_checkbox,
+            update_gptIndex_checkbox
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
@@ -312,7 +319,8 @@ with gr.Blocks(
             use_streaming_checkbox,
             model_select_dropdown,
             use_websearch_checkbox,
-            index_files,
+            use_gptIndex_checkbox,
+            update_gptIndex_checkbox
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
@@ -427,11 +435,11 @@ with gr.Blocks(
 
 logging.info(
     colorama.Back.GREEN
-    + "\n川虎的温馨提示：访问 http://localhost:7860 查看界面"
+    + "\n温馨提示：访问 http://localhost:7860 查看界面"
     + colorama.Style.RESET_ALL
 )
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
-demo.title = "川虎ChatGPT 🚀"
+demo.title = "ChatGPT 🚀"
 
 if __name__ == "__main__":
     # if running in Docker

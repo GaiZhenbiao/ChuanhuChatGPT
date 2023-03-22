@@ -1,7 +1,7 @@
 import os
 import logging
 
-from llama_index import GPTSimpleVectorIndex
+from llama_index import GPTSimpleVectorIndex,SimpleDirectoryReader,GPTTreeIndex
 from llama_index import download_loader
 from llama_index import (
     Document,
@@ -11,12 +11,19 @@ from llama_index import (
     RefinePrompt,
 )
 from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
 import colorama
 
 
 from presets import *
 from utils import *
 
+def construct_index_by_dir(api_key, file_src):
+    logging.info("开始查询结果。" )
+    os.environ["OPENAI_API_KEY"] = api_key
+    documents = SimpleDirectoryReader(file_src).load_data()
+    index = GPTTreeIndex(documents)
+    index.save_to_disk('index.json')
 
 def get_documents(file_src):
     documents = []
@@ -158,7 +165,7 @@ def ask_ai(
     response = index.query(
         question,
         llm_predictor=llm_predictor,
-        similarity_top_k=sim_k,
+        #similarity_top_k=sim_k,
         text_qa_template=qa_prompt,
         refine_template=rf_prompt,
         response_mode="compact",

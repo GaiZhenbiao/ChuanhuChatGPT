@@ -261,16 +261,22 @@ def predict(
     stream=False,
     selected_model=MODELS[0],
     use_websearch=False,
-    files = None,
+    use_gptIndex_checkbox=True,
+    update_gptIndex_checkbox=False,
     should_check_token_count=True,
 ):  # repetition_penalty, top_k
     logging.info("输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
-    if files:
-        msg = "构建索引中……（这可能需要比较久的时间）"
-        logging.info(msg)
-        yield chatbot, history, msg, all_token_counts
-        index = construct_index(openai_api_key, file_src=files)
-        msg = "索引构建完成，获取回答中……"
+    if use_gptIndex_checkbox:
+        msg = None
+        if update_gptIndex_checkbox:
+            msg = "构建索引中……（这可能需要比较久的时间）"
+            logging.info(msg)
+            yield chatbot, history, msg, all_token_counts
+            file_src = "data"
+            construct_index_by_dir(openai_api_key, file_src)
+            msg = "索引构建完成，获取回答中……"
+        os.environ["OPENAI_API_KEY"] = openai_api_key
+        index = GPTTreeIndex.load_from_disk('index.json')
         yield chatbot, history, msg, all_token_counts
         history, chatbot, status_text = chat_ai(openai_api_key, index, inputs, history, chatbot)
         yield chatbot, history, status_text, all_token_counts
