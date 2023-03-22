@@ -59,7 +59,7 @@
 
 ### 直接在Hugging Face上部署
 
-访问[本项目的Hugging Face页面](https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT)，点击右上角的 **复制Space** ，新建一个私人空间。然后就直接可以开始使用啦！放心，这是免费的。
+访问[本项目的Hugging Face页面](https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT)，点击右上角的 **Duplicate Space** （复制空间），新建一个私人空间。然后就直接可以开始使用啦！放心，这是免费的。
 
 注意不要直接使用我的Space，否则排队速度会很漫长。在你的私人空间里使用能大大减少排队时间，App反应也会更加迅速。
 
