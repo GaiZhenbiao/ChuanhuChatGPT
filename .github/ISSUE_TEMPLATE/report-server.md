@@ -1,8 +1,8 @@
 ---
-name: Report Docker
-about: 报告使用 Docker 部署时的问题或错误
-title: "[Docker] 简短的错误描述"
-labels: question, docker deployment
+name: Report Server
+about: 报告在远程服务器上部署时的问题或错误
+title: "[远程部署] 简短的错误描述"
+labels: question, server deployment
 assignees: ''
 
 ---
