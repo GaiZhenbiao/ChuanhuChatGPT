@@ -30,7 +30,7 @@ def postprocess(
     """
     if y is None or y == []:
         return []
-    tag_regex = re.compile(r"<\w+>[^<]+</\w+>")
+    tag_regex = re.compile(r"^<\w+>[^<]+</\w+>")
     if tag_regex.search(y[-1][1]):
         y[-1] = (y[-1][0].replace("\n", "<br>"), y[-1][1])
     else:
