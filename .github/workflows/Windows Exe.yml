@@ -13,7 +13,7 @@ jobs:
 
     permissions: write-all
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
 
