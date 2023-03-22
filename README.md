@@ -23,7 +23,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/GaiZhenBiao/ChuanhuChatGPT?color=0088ff" />
       </a>
 	  <a href="https://github.com/JANERUBBISHTOEAT/ChuanhuChatGPT/actions/workflows/Windows%20Exe.yml">
-	  	<img alt="Package exe with PyInstaller - Windows" src="https://github.com/JANERUBBISHTOEAT/ChuanhuChatGPT/actions/workflows/Windows%20Exe.yml/badge.svg">
+	  	<img alt="Package exe with PyInstaller - Windows" src="https://github.com/JANERUBBISHTOEAT/ChuanhuChatGPT/actions/workflows/Windows%20Exe.yml/badge.svg?branch=main">
 	  </a>
       <p>
       	实时回复 / 无限对话 / 保存对话记录 / 预设Prompt集 / 联网搜索 / 根据文件回答
