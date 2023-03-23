@@ -5,10 +5,10 @@ import sys
 
 import gradio as gr
 
-from utils import *
-from presets import *
-from overwrites import *
-from chat_func import *
+from modules.utils import *
+from modules.presets import *
+from modules.overwrites import *
+from modules.chat_func import *
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -54,7 +54,7 @@ else:
 gr.Chatbot.postprocess = postprocess
 PromptHelper.compact_text_chunks = compact_text_chunks
 
-with open("custom.css", "r", encoding="utf-8") as f:
+with open("assets/custom.css", "r", encoding="utf-8") as f:
     customCSS = f.read()
 
 with gr.Blocks(
@@ -124,8 +124,7 @@ with gr.Blocks(
     token_count = gr.State([])
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     user_api_key = gr.State(my_api_key)
-    TRUECOMSTANT = gr.State(True)
-    FALSECONSTANT = gr.State(False)
+    outputing = gr.State(False)
     topic = gr.State("未命名对话历史记录")
 
     with gr.Row():
@@ -275,59 +274,61 @@ with gr.Blocks(
 
     gr.Markdown(description)
 
+    chatgpt_predict_args = dict(
+        fn=predict,
+        inputs=[
+            user_api_key,
+            systemPromptTxt,
+            history,
+            user_input,
+            chatbot,
+            token_count,
+            top_p,
+            temperature,
+            use_streaming_checkbox,
+            model_select_dropdown,
+            use_websearch_checkbox,
+            index_files,
+        ],
+        outputs=[chatbot, history, status_display, token_count],
+        show_progress=True,
+    )
+
+    start_outputing_args = dict(
+        fn=start_outputing, inputs=[], outputs=[submitBtn, cancelBtn], show_progress=True
+    )
+
+    end_outputing_args = dict(
+        fn=end_outputing, inputs=[], outputs=[submitBtn, cancelBtn]
+    )
+
+    reset_textbox_args = dict(
+        fn=reset_textbox, inputs=[], outputs=[user_input], show_progress=True
+    )
+
     keyTxt.submit(submit_key, keyTxt, [user_api_key, status_display])
     keyTxt.change(submit_key, keyTxt, [user_api_key, status_display])
     # Chatbot
-    user_input.submit(
-        predict,
-        [
-            user_api_key,
-            systemPromptTxt,
-            history,
-            user_input,
-            chatbot,
-            token_count,
-            top_p,
-            temperature,
-            use_streaming_checkbox,
-            model_select_dropdown,
-            use_websearch_checkbox,
-            index_files,
-        ],
-        [chatbot, history, status_display, token_count],
-        show_progress=True,
-    )
-    user_input.submit(reset_textbox, [], [user_input])
+    cancelBtn.click(cancel_outputing, [], [])
 
-    # submitBtn.click(return_cancel_btn, [], [submitBtn, cancelBtn])
-    submitBtn.click(
-        predict,
-        [
-            user_api_key,
-            systemPromptTxt,
-            history,
-            user_input,
-            chatbot,
-            token_count,
-            top_p,
-            temperature,
-            use_streaming_checkbox,
-            model_select_dropdown,
-            use_websearch_checkbox,
-            index_files,
-        ],
-        [chatbot, history, status_display, token_count],
-        show_progress=True,
+    user_input.submit(**start_outputing_args).then(
+        **chatgpt_predict_args
+    ).then(**reset_textbox_args).then(
+        **end_outputing_args
     )
-    submitBtn.click(reset_textbox, [], [user_input])
+    submitBtn.click(**start_outputing_args).then(
+        **chatgpt_predict_args
+    ).then(**reset_textbox_args).then(
+        **end_outputing_args
+    )
 
     emptyBtn.click(
         reset_state,
         outputs=[chatbot, history, token_count, status_display],
         show_progress=True,
-    )
+    ).then(**reset_textbox_args)
 
-    retryBtn.click(
+    retryBtn.click(**start_outputing_args).then(
         retry,
         [
             user_api_key,
@@ -342,7 +343,7 @@ with gr.Blocks(
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
-    )
+    ).then(**end_outputing_args)
 
     delLastBtn.click(
         delete_last_conversation,
@@ -441,17 +442,31 @@ if __name__ == "__main__":
     if dockerflag:
         if authflag:
             demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
-                server_name="0.0.0.0", server_port=7860, auth=(username, password),
-                favicon_path="./assets/favicon.png"
+                server_name="0.0.0.0",
+                server_port=7860,
+                auth=(username, password),
+                favicon_path="./assets/favicon.png",
             )
         else:
-            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860, share=False, favicon_path="./assets/favicon.png")
+            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
+                server_name="0.0.0.0",
+                server_port=7860,
+                share=False,
+                favicon_path="./assets/favicon.png",
+            )
     # if not running in Docker
     else:
         if authflag:
-            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(share=False, auth=(username, password), favicon_path="./assets/favicon.png", inbrowser=True)
+            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
+                share=False,
+                auth=(username, password),
+                favicon_path="./assets/favicon.png",
+                inbrowser=True,
+            )
         else:
-            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(share=False, favicon_path="./assets/favicon.ico", inbrowser=True)  # 改为 share=True 可以创建公开分享链接
+            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
+                share=False, favicon_path="./assets/favicon.ico", inbrowser=True
+            )  # 改为 share=True 可以创建公开分享链接
         # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
         # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
         # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理

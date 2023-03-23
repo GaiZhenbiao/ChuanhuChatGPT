@@ -14,8 +14,8 @@ from langchain.llms import OpenAI
 import colorama
 
 
-from presets import *
-from utils import *
+from modules.presets import *
+from modules.utils import *
 
 
 def get_documents(file_src):

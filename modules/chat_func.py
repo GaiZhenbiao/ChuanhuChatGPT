@@ -14,9 +14,10 @@ from duckduckgo_search import ddg
 import asyncio
 import aiohttp
 
-from presets import *
-from llama_func import *
-from utils import *
+from modules.presets import *
+from modules.llama_func import *
+from modules.utils import *
+import modules.shared as shared
 
 # logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s")
 
@@ -29,7 +30,6 @@ if TYPE_CHECKING:
 
 
 initial_prompt = "You are a helpful assistant."
-API_URL = "https://api.openai.com/v1/chat/completions"
 HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"
 
@@ -65,16 +65,18 @@ def get_response(
     # 如果存在代理设置，使用它们
     proxies = {}
     if http_proxy:
-        logging.info(f"Using HTTP proxy: {http_proxy}")
+        logging.info(f"使用 HTTP 代理: {http_proxy}")
         proxies["http"] = http_proxy
     if https_proxy:
-        logging.info(f"Using HTTPS proxy: {https_proxy}")
+        logging.info(f"使用 HTTPS 代理: {https_proxy}")
         proxies["https"] = https_proxy
 
     # 如果有代理，使用代理发送请求，否则使用默认设置发送请求
+    if shared.state.api_url != API_URL:
+        logging.info(f"使用自定义API URL: {shared.state.api_url}")
     if proxies:
         response = requests.post(
-            API_URL,
+            shared.state.api_url,
             headers=headers,
             json=payload,
             stream=True,
@@ -83,7 +85,7 @@ def get_response(
         )
     else:
         response = requests.post(
-            API_URL,
+            shared.state.api_url,
             headers=headers,
             json=payload,
             stream=True,
@@ -268,10 +270,10 @@ def predict(
     if files:
         msg = "构建索引中……（这可能需要比较久的时间）"
         logging.info(msg)
-        yield chatbot, history, msg, all_token_counts
+        yield chatbot+[(inputs, "")], history, msg, all_token_counts
         index = construct_index(openai_api_key, file_src=files)
         msg = "索引构建完成，获取回答中……"
-        yield chatbot, history, msg, all_token_counts
+        yield chatbot+[(inputs, "")], history, msg, all_token_counts
         history, chatbot, status_text = chat_ai(openai_api_key, index, inputs, history, chatbot)
         yield chatbot, history, status_text, all_token_counts
         return
@@ -306,10 +308,15 @@ def predict(
             all_token_counts.append(0)
         else:
             history[-2] = construct_user(inputs)
-        yield chatbot, history, status_text, all_token_counts
+        yield chatbot+[(inputs, "")], history, status_text, all_token_counts
+        return
+    elif len(inputs.strip()) == 0:
+        status_text = standard_error_msg + no_input_msg
+        logging.info(status_text)
+        yield chatbot+[(inputs, "")], history, status_text, all_token_counts
         return
 
-    yield chatbot, history, "开始生成回答……", all_token_counts
+    yield chatbot+[(inputs, "")], history, "开始生成回答……", all_token_counts
 
     if stream:
         logging.info("使用流式传输")
@@ -327,6 +334,9 @@ def predict(
             display_append=link_references
         )
         for chatbot, history, status_text, all_token_counts in iter:
+            if shared.state.interrupted:
+                shared.state.recover()
+                return
             yield chatbot, history, status_text, all_token_counts
     else:
         logging.info("不使用流式传输")

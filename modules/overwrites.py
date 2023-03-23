@@ -5,8 +5,8 @@ from llama_index import Prompt
 from typing import List, Tuple
 import mdtex2html
 
-from presets import *
-from llama_func import *
+from modules.presets import *
+from modules.llama_func import *
 
 
 def compact_text_chunks(self, prompt: Prompt, text_chunks: List[str]) -> List[str]:
@@ -51,5 +51,5 @@ def reload_javascript():
         return res
 
     gr.routes.templates.TemplateResponse = template_response
-     
+
 GradioTemplateResponseOriginal = gr.routes.templates.TemplateResponse

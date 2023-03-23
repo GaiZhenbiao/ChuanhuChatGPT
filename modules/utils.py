@@ -19,9 +19,13 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-from presets import *
+from modules.presets import *
+import modules.shared as shared
 
-# logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
+)
 
 if TYPE_CHECKING:
     from typing import TypedDict
@@ -107,9 +111,11 @@ def convert_mdtext(md_text):
     result = "".join(result)
     return result
 
+
 def convert_user(userinput):
     userinput = userinput.replace("\n", "<br>")
     return f"<pre>{userinput}</pre>"
+
 
 def detect_language(code):
     if code.startswith("\n"):
@@ -297,20 +303,19 @@ def reset_state():
 
 
 def reset_textbox():
+    logging.debug("重置文本框")
     return gr.update(value="")
 
 
 def reset_default():
-    global API_URL
-    API_URL = "https://api.openai.com/v1/chat/completions"
+    newurl = shared.state.reset_all()
     os.environ.pop("HTTPS_PROXY", None)
     os.environ.pop("https_proxy", None)
-    return gr.update(value=API_URL), gr.update(value=""), "API URL 和代理已重置"
+    return gr.update(value=newurl), gr.update(value=""), "API URL 和代理已重置"
 
 
 def change_api_url(url):
-    global API_URL
-    API_URL = url
+    shared.state.set_api_url(url)
     msg = f"API地址更改为了{url}"
     logging.info(msg)
     return msg
@@ -384,13 +389,22 @@ def find_n(lst, max_num):
 
     for i in range(len(lst)):
         if total - lst[i] < max_num:
-            return n - i -1
+            return n - i - 1
         total = total - lst[i]
     return 1
 
-def return_cancel_btn():
-    return gr.Button.update(
-        visible=False
-    ), gr.Button.update(
-        visible=True
+
+def start_outputing():
+    logging.debug("显示取消按钮，隐藏发送按钮")
+    return gr.Button.update(visible=False), gr.Button.update(visible=True)
+
+def end_outputing():
+    return (
+        gr.Button.update(visible=True),
+        gr.Button.update(visible=False),
     )
+
+
+def cancel_outputing():
+    logging.info("中止输出……")
+    shared.state.interrupt()
