@@ -434,6 +434,7 @@ logging.info(
 demo.title = "川虎ChatGPT 🚀"
 
 if __name__ == "__main__":
+    reload_javascript()
     # if running in Docker
     if dockerflag:
         if authflag:
