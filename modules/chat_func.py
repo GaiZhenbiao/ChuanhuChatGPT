@@ -268,6 +268,7 @@ def predict(
     should_check_token_count=True,
 ):  # repetition_penalty, top_k
     logging.info("输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
+    yield chatbot+[(inputs, "")], history, "开始生成回答……", all_token_counts
     if reply_language == "跟随问题语言（不稳定）":
         reply_language = "the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch."
     if files:
@@ -319,8 +320,6 @@ def predict(
         logging.info(status_text)
         yield chatbot+[(inputs, "")], history, status_text, all_token_counts
         return
-
-    yield chatbot+[(inputs, "")], history, "开始生成回答……", all_token_counts
 
     if stream:
         logging.info("使用流式传输")
