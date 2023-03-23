@@ -19,15 +19,9 @@
 #chuanhu_chatbot, #status_display {
     transition: all 0.6s;
 }
-
-ol, ul {
-    list-style-position: inside;
-    padding-left: 0;
-}
-
-ol li, ul:not(.options) li {
-    padding-left: 1.5em;
-    text-indent: -1.5em;
+/* list */
+ol:not(.options), ul:not(.options) {
+    padding-inline-start: 2em !important;
 }
 
 /* 亮色 */
@@ -82,6 +76,8 @@ ol li, ul:not(.options) li {
     padding: var(--spacing-xl) !important;
     font-size: var(--text-md) !important;
     line-height: var(--line-md) !important;
+    min-height: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl));
+    min-width: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl));
 }
 [data-testid = "bot"] {
     max-width: 85%;
