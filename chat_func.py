@@ -262,9 +262,12 @@ def predict(
     selected_model=MODELS[0],
     use_websearch=False,
     files = None,
+    reply_language="中文",
     should_check_token_count=True,
 ):  # repetition_penalty, top_k
     logging.info("输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
+    if reply_language == "跟随问题语言（不稳定）":
+        reply_language = "the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch."
     if files:
         msg = "构建索引中……（这可能需要比较久的时间）"
         logging.info(msg)
@@ -272,7 +275,7 @@ def predict(
         index = construct_index(openai_api_key, file_src=files)
         msg = "索引构建完成，获取回答中……"
         yield chatbot, history, msg, all_token_counts
-        history, chatbot, status_text = chat_ai(openai_api_key, index, inputs, history, chatbot)
+        history, chatbot, status_text = chat_ai(openai_api_key, index, inputs, history, chatbot, reply_language)
         yield chatbot, history, status_text, all_token_counts
         return
 
@@ -292,6 +295,7 @@ def predict(
             replace_today(WEBSEARCH_PTOMPT_TEMPLATE)
             .replace("{query}", inputs)
             .replace("{web_results}", "\n\n".join(web_results))
+            .replace("{reply_language}", reply_language )
         )
     else:
         link_references = ""
@@ -389,6 +393,7 @@ def retry(
     temperature,
     stream=False,
     selected_model=MODELS[0],
+    reply_language="中文",
 ):
     logging.info("重试中……")
     if len(history) == 0:
@@ -408,6 +413,7 @@ def retry(
         temperature,
         stream=stream,
         selected_model=selected_model,
+        reply_language=reply_language,
     )
     logging.info("重试中……")
     for x in iter:
@@ -425,6 +431,7 @@ def reduce_token_size(
     temperature,
     max_token_count,
     selected_model=MODELS[0],
+    reply_language="中文",
 ):
     logging.info("开始减少token数量……")
     iter = predict(
@@ -438,6 +445,7 @@ def reduce_token_size(
         temperature,
         selected_model=selected_model,
         should_check_token_count=False,
+        reply_language=reply_language,
     )
     logging.info(f"chatbot: {chatbot}")
     flag = False

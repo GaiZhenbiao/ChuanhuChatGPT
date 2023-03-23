@@ -170,6 +170,12 @@ with gr.Blocks(
                         label="实时传输回答", value=True, visible=enable_streaming_option
                     )
                     use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
+                    language_select_dropdown = gr.Dropdown(
+                        label="选择回复语言（针对搜索&索引功能）", 
+                        choices=REPLY_LANGUAGES, 
+                        multiselect=False, 
+                        value=REPLY_LANGUAGES[0]
+                        )
                     index_files = gr.Files(label="上传索引文件", type="file", multiple=True)
 
                 with gr.Tab(label="Prompt"):
@@ -293,6 +299,7 @@ with gr.Blocks(
             model_select_dropdown,
             use_websearch_checkbox,
             index_files,
+            language_select_dropdown,
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
@@ -315,6 +322,7 @@ with gr.Blocks(
             model_select_dropdown,
             use_websearch_checkbox,
             index_files,
+            language_select_dropdown,
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
@@ -339,6 +347,7 @@ with gr.Blocks(
             temperature,
             use_streaming_checkbox,
             model_select_dropdown,
+            language_select_dropdown,
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
@@ -363,6 +372,7 @@ with gr.Blocks(
             temperature,
             gr.State(0),
             model_select_dropdown,
+            language_select_dropdown,
         ],
         [chatbot, history, status_display, token_count],
         show_progress=True,
