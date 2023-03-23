@@ -387,3 +387,10 @@ def find_n(lst, max_num):
             return n - i -1
         total = total - lst[i]
     return 1
+
+def return_cancel_btn():
+    return gr.Button.update(
+        visible=False
+    ), gr.Button.update(
+        visible=True
+    )
