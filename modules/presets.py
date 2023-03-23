@@ -17,7 +17,7 @@ no_apikey_msg = "API key长度不是51位，请检查是否输入正确。"  # A
 no_input_msg = "请输入对话内容。"  # 未输入对话内容
 
 max_token_streaming = 3500  # 流式对话时的最大 token 数
-timeout_streaming = 5  # 流式对话时的超时时间
+timeout_streaming = 10  # 流式对话时的超时时间
 max_token_all = 3500  # 非流式对话时的最大 token 数
 timeout_all = 200  # 非流式对话时的超时时间
 enable_streaming_option = True  # 是否启用选择选择是否实时显示回答的勾选框
@@ -50,6 +50,16 @@ MODELS = [
     "gpt-4-32k-0314",
 ]  # 可选的模型
 
+REPLY_LANGUAGES = [
+    "中文",
+    "English",
+    "日本語",
+    "Español",
+    "Français",
+    "Deutsch",
+    "跟随问题语言（不稳定）"
+]
+
 
 WEBSEARCH_PTOMPT_TEMPLATE = """\
 Web search results:
@@ -59,7 +69,8 @@ Current date: {current_date}
 
 Instructions: Using the provided web search results, write a comprehensive reply to the given query. Make sure to cite results using [[number](URL)] notation after the reference. If the provided search results refer to multiple subjects with the same name, write separate answers for each subject.
 Query: {query}
-Reply in 中文"""
+Reply in {reply_language}
+"""
 
 PROMPT_TEMPLATE = """\
 Context information is below.
@@ -72,7 +83,7 @@ Make sure to cite results using [number] notation after the reference.
 If the provided context information refer to multiple subjects with the same name, write separate answers for each subject.
 Use prior knowledge only if the given context didn't provide enough information.
 Answer the question: {query_str}
-Reply in 中文
+Reply in {reply_language}
 """
 
 REFINE_TEMPLATE = """\
@@ -84,6 +95,6 @@ We have the opportunity to refine the existing answer
 {context_msg}
 ------------
 Given the new context, refine the original answer to better
-Answer in the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch.
+Reply in {reply_language}
 If the context isn't useful, return the original answer.
 """
