@@ -63,7 +63,7 @@
 
 访问[本项目的Hugging Face页面](https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT)，点击右上角的 **Duplicate Space** （复制空间），新建一个私人空间。然后就直接可以开始使用啦！放心，这是免费的。
 
-注意不要直接使用我的Space，否则排队速度会很漫长。在你的私人空间里使用能大大减少排队时间，App反应也会更加迅速。
+您可以直接使用我的空间，这样能实时享受到最新功能。您也可以将项目复制为私人空间里使用，这样App反应可能会快一点。
 
  <img width="300" alt="image" src="https://user-images.githubusercontent.com/51039745/223447310-e098a1f2-0dcf-48d6-bcc5-49472dd7ca0d.png">
 
