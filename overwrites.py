@@ -30,5 +30,26 @@ def postprocess(
     """
     if y is None or y == []:
         return []
-    y[-1] = (y[-1][0].replace("\n", "<br>"), convert_mdtext(y[-1][1]))
+    tag_regex = re.compile(r"^<\w+>[^<]+</\w+>")
+    if tag_regex.search(y[-1][1]):
+        y[-1] = (convert_user(y[-1][0]), y[-1][1])
+    else:
+        y[-1] = (convert_user(y[-1][0]), convert_mdtext(y[-1][1]))
     return y
+
+with open("./assets/custom.js", "r", encoding="utf-8") as f, open("./assets/Kelpy-Codos.js", "r", encoding="utf-8") as f2:
+    customJS = f.read()
+    kelpyCodos = f2.read()
+
+def reload_javascript():
+    print("Reloading javascript...")
+    js = f'<script>{customJS}</script><script>{kelpyCodos}</script>'
+    def template_response(*args, **kwargs):
+        res = GradioTemplateResponseOriginal(*args, **kwargs)
+        res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))
+        res.init_headers()
+        return res
+
+    gr.routes.templates.TemplateResponse = template_response
+     
+GradioTemplateResponseOriginal = gr.routes.templates.TemplateResponse

@@ -442,6 +442,7 @@ logging.info(
 demo.title = "ChatGPT 🚀"
 
 if __name__ == "__main__":
+    reload_javascript()
     # if running in Docker
     if dockerflag:
         if authflag:
@@ -454,9 +455,9 @@ if __name__ == "__main__":
     # if not running in Docker
     else:
         if authflag:
-            demo.queue().launch(share=False, auth=(username, password), favicon_path="./assets/favicon.png")
+            demo.queue().launch(share=False, auth=(username, password), favicon_path="./assets/favicon.png", inbrowser=True)
         else:
-            demo.queue().launch(share=False, favicon_path="./assets/favicon.png")  # 改为 share=True 可以创建公开分享链接
+            demo.queue().launch(share=False, favicon_path="./assets/favicon.ico", inbrowser=True)  # 改为 share=True 可以创建公开分享链接
         # demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
         # demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
         # demo.queue().launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理

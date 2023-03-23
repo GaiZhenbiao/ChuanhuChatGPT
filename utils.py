@@ -86,6 +86,7 @@ def normalize_markdown(md_text: str) -> str:
 
 def convert_mdtext(md_text):
     code_block_pattern = re.compile(r"```(.*?)(?:```|$)", re.DOTALL)
+    inline_code_pattern = re.compile(r"`(.*?)`", re.DOTALL)
     code_blocks = code_block_pattern.findall(md_text)
     non_code_parts = code_block_pattern.split(md_text)[::2]
 
@@ -93,16 +94,22 @@ def convert_mdtext(md_text):
     for non_code, code in zip(non_code_parts, code_blocks + [""]):
         if non_code.strip():
             non_code = normalize_markdown(non_code)
-            result.append(mdtex2html.convert(non_code, extensions=["tables"]))
+            if inline_code_pattern.search(non_code):
+                result.append(markdown(non_code, extensions=["tables"]))
+            else:
+                result.append(mdtex2html.convert(non_code, extensions=["tables"]))
         if code.strip():
             # _, code = detect_language(code)  # 暂时去除代码高亮功能，因为在大段代码的情况下会出现问题
-            code = code.replace("\n\n", "\n") # 暂时去除代码中的空行，因为在大段代码的情况下会出现问题
+            # code = code.replace("\n\n", "\n") # 暂时去除代码中的空行，因为在大段代码的情况下会出现问题
             code = f"```{code}\n\n```"
             code = markdown_to_html_with_syntax_highlight(code)
             result.append(code)
     result = "".join(result)
     return result
 
+def convert_user(userinput):
+    userinput = userinput.replace("\n", "<br>")
+    return f"<pre>{userinput}</pre>"
 
 def detect_language(code):
     if code.startswith("\n"):
