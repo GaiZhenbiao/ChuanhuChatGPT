@@ -409,3 +409,9 @@ def end_outputing():
 def cancel_outputing():
     logging.info("中止输出……")
     shared.state.interrupt()
+
+def transfer_input(inputs):
+    # 一次性返回，降低延迟
+    textbox = reset_textbox()
+    outputing = start_outputing()
+    return inputs, gr.update(value=""), gr.Button.update(visible=False), gr.Button.update(visible=True)

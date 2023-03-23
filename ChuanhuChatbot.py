@@ -318,7 +318,7 @@ with gr.Blocks(
     )
 
     transfer_input_args = dict(
-        fn=lambda x: x, inputs=[user_input], outputs=[user_question], show_progress=True
+        fn=transfer_input, inputs=[user_input], outputs=[user_question, user_input, submitBtn, cancelBtn], show_progress=True
     )
 
     keyTxt.submit(submit_key, keyTxt, [user_api_key, status_display])
@@ -326,13 +326,9 @@ with gr.Blocks(
     # Chatbot
     cancelBtn.click(cancel_outputing, [], [])
 
-    user_input.submit(**transfer_input_args).then(**reset_textbox_args).then(
-        **start_outputing_args
-    ).then(**chatgpt_predict_args).then(**end_outputing_args)
+    user_input.submit(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
 
-    submitBtn.click(**transfer_input_args).then(**reset_textbox_args).then(
-        **start_outputing_args
-    ).then(**chatgpt_predict_args).then(**end_outputing_args)
+    submitBtn.click(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
 
     emptyBtn.click(
         reset_state,
