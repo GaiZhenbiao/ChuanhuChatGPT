@@ -124,6 +124,7 @@ with gr.Blocks(
     token_count = gr.State([])
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     user_api_key = gr.State(my_api_key)
+    user_question = gr.State("")
     outputing = gr.State(False)
     topic = gr.State("未命名对话历史记录")
 
@@ -173,8 +174,8 @@ with gr.Blocks(
                         label="选择回复语言（针对搜索&索引功能）",
                         choices=REPLY_LANGUAGES,
                         multiselect=False,
-                        value=REPLY_LANGUAGES[0]
-                        )
+                        value=REPLY_LANGUAGES[0],
+                    )
                     index_files = gr.Files(label="上传索引文件", type="file", multiple=True)
 
                 with gr.Tab(label="Prompt"):
@@ -286,7 +287,7 @@ with gr.Blocks(
             user_api_key,
             systemPromptTxt,
             history,
-            user_input,
+            user_question,
             chatbot,
             token_count,
             top_p,
@@ -302,7 +303,10 @@ with gr.Blocks(
     )
 
     start_outputing_args = dict(
-        fn=start_outputing, inputs=[], outputs=[submitBtn, cancelBtn], show_progress=True
+        fn=start_outputing,
+        inputs=[],
+        outputs=[submitBtn, cancelBtn],
+        show_progress=True,
     )
 
     end_outputing_args = dict(
@@ -310,7 +314,11 @@ with gr.Blocks(
     )
 
     reset_textbox_args = dict(
-        fn=reset_textbox, inputs=[], outputs=[user_input], show_progress=True
+        fn=reset_textbox, inputs=[], outputs=[user_input]
+    )
+
+    transfer_input_args = dict(
+        fn=lambda x: x, inputs=[user_input], outputs=[user_question], show_progress=True
     )
 
     keyTxt.submit(submit_key, keyTxt, [user_api_key, status_display])
@@ -318,16 +326,13 @@ with gr.Blocks(
     # Chatbot
     cancelBtn.click(cancel_outputing, [], [])
 
-    user_input.submit(**start_outputing_args).then(
-        **chatgpt_predict_args
-    ).then(**reset_textbox_args).then(
-        **end_outputing_args
-    )
-    submitBtn.click(**start_outputing_args).then(
-        **chatgpt_predict_args
-    ).then(**reset_textbox_args).then(
-        **end_outputing_args
-    )
+    user_input.submit(**transfer_input_args).then(**reset_textbox_args).then(
+        **start_outputing_args
+    ).then(**chatgpt_predict_args).then(**end_outputing_args)
+
+    submitBtn.click(**transfer_input_args).then(**reset_textbox_args).then(
+        **start_outputing_args
+    ).then(**chatgpt_predict_args).then(**end_outputing_args)
 
     emptyBtn.click(
         reset_state,

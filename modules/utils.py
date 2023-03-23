@@ -398,6 +398,7 @@ def start_outputing():
     logging.debug("显示取消按钮，隐藏发送按钮")
     return gr.Button.update(visible=False), gr.Button.update(visible=True)
 
+
 def end_outputing():
     return (
         gr.Button.update(visible=True),
