@@ -10,6 +10,8 @@ from presets import *
 from overwrites import *
 from chat_func import *
 
+# import pdb
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
@@ -132,7 +134,7 @@ with gr.Blocks(
         gr.HTML(title)
         status_display = gr.Markdown(get_geoip(), elem_id="status_display")
 
-    with gr.Row(scale=1).style(equal_height=True):
+    with gr.Row(scale=1,elem_id="app_box").style(equal_height=True):
         with gr.Column(scale=5):
             with gr.Row(scale=1):
                 chatbot = gr.Chatbot(elem_id="chuanhu_chatbot").style(height="100%")
@@ -170,6 +172,7 @@ with gr.Blocks(
                     )
                     use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
                     index_files = gr.Files(label="上传索引文件", type="file", multiple=True)
+                    pinned = gr.Checkbox(label="固定侧边栏", value=False,elem_id="is_pinned")
 
                 with gr.Tab(label="Prompt"):
                     systemPromptTxt = gr.Textbox(
@@ -424,6 +427,8 @@ with gr.Blocks(
         [status_display],
         show_progress=True,
     )
+    # sidebar
+
 
 logging.info(
     colorama.Back.GREEN
@@ -433,8 +438,50 @@ logging.info(
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
 demo.title = "川虎ChatGPT 🚀"
 
+def reload_javascript():
+    print("Reloading javascript...")
+    js = """
+    <script>
+    window.onload = function() {
+        console.log("loaded");
+        console.log(document.querySelector("#is_pinned > label > input"));
+
+        const is_pinned = document.querySelector("#is_pinned > label > input");
+
+        is_pinned.addEventListener("change", function(ev) {
+            const elem = document.querySelector(':root');
+            if (ev.target.checked) {
+                console.log("pinned");
+                elem.style.setProperty('--side-bar-width', '300px');
+                elem.style.setProperty('--side-bar-display', 'flex');
+
+                elem.style.setProperty('--side-bar-bg', 'var(--neutral-950)');
+            } else {
+                console.log("unpinned");
+                elem.style.setProperty('--side-bar-width', '20px');
+                elem.style.setProperty('--side-bar-display', 'none');
+
+                elem.style.setProperty('--side-bar-bg', 'var(--primary-800)');
+            }
+            console.log(elem)
+        });
+    }
+    </script>
+    """
+    def template_response(*args, **kwargs):
+        res = GradioTemplateResponseOriginal(*args, **kwargs)
+        res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))
+        res.init_headers()
+        # print("reloaded", res.body)
+        return res
+
+    gr.routes.templates.TemplateResponse = template_response
+
+GradioTemplateResponseOriginal = gr.routes.templates.TemplateResponse
+
 if __name__ == "__main__":
     # if running in Docker
+    reload_javascript()
     if dockerflag:
         if authflag:
             demo.queue().launch(
@@ -446,9 +493,9 @@ if __name__ == "__main__":
     # if not running in Docker
     else:
         if authflag:
-            demo.queue().launch(share=False, auth=(username, password), favicon_path="./asserts/favicon.png")
+            demo.queue().launch(share=True, auth=(username, password), favicon_path="./asserts/favicon.png")
         else:
-            demo.queue().launch(share=False, favicon_path="./asserts/favicon.png")  # 改为 share=True 可以创建公开分享链接
+            demo.queue().launch(share=True, favicon_path="./asserts/favicon.png")  # 改为 share=True 可以创建公开分享链接
         # demo.queue().launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
         # demo.queue().launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
         # demo.queue().launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理

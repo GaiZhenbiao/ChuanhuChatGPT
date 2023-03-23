@@ -206,13 +206,22 @@ pre code {
 /* 横屏自动隐藏设置 */
 
 @media screen and (orientation: landscape) {
+    :root{
+        --side-bar-width: 20px;
+        --side-bar-display: none;
+        --side-bar-bg: var(--primary-800);
+    }
+    #app_box{
+        max-width: 1280px!important;
+    }
+    
     #right_column{
         /* 鼠标不移上去时缩小到最右侧宽度20px不显示内容 全部css加上!important */
-        min-width: 20px!important;
-        max-width: 20px!important;
+        min-width: var(--side-bar-width)!important;
+        max-width: var(--side-bar-width)!important;
     
     
-        background-color: var(--primary-800);
+        background-color: var(--side-bar-bg);
         /* 鼠标移上去时宽度变为300px */
         transition: all 0.5s ease;
 
@@ -221,7 +230,7 @@ pre code {
     
     
     #right_column>*{
-        display:none!important;
+        display:var(--side-bar-display)!important;
     }
     
     #right_column:hover{
