@@ -32,7 +32,7 @@ def postprocess(
         return []
     tag_regex = re.compile(r"^<\w+>[^<]+</\w+>")
     if tag_regex.search(y[-1][1]):
-        y[-1] = (y[-1][0].replace("\n", "<br>"), y[-1][1])
+        y[-1] = (convert_user(y[-1][0]), y[-1][1])
     else:
-        y[-1] = (y[-1][0].replace("\n", "<br>"), convert_mdtext(y[-1][1]))
+        y[-1] = (convert_user(y[-1][0]), convert_mdtext(y[-1][1]))
     return y

@@ -107,6 +107,9 @@ def convert_mdtext(md_text):
     result = "".join(result)
     return result
 
+def convert_user(userinput):
+    userinput = userinput.replace("\n", "<br>")
+    return f"<pre>{userinput}</pre>"
 
 def detect_language(code):
     if code.startswith("\n"):
