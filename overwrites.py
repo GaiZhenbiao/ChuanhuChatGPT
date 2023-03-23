@@ -36,3 +36,19 @@ def postprocess(
     else:
         y[-1] = (y[-1][0].replace("\n", "<br>"), convert_mdtext(y[-1][1]))
     return y
+
+with open("./assets/custom.js", "r", encoding="utf-8") as f:
+    customJS = f.read()
+
+def reload_javascript():
+    print("Reloading javascript...")
+    js = f'<script>{customJS}</script>'
+    def template_response(*args, **kwargs):
+        res = GradioTemplateResponseOriginal(*args, **kwargs)
+        res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))
+        res.init_headers()
+        return res
+
+    gr.routes.templates.TemplateResponse = template_response
+     
+GradioTemplateResponseOriginal = gr.routes.templates.TemplateResponse
