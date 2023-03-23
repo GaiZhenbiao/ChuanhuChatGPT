@@ -30,5 +30,9 @@ def postprocess(
     """
     if y is None or y == []:
         return []
-    y[-1] = (y[-1][0].replace("\n", "<br>"), convert_mdtext(y[-1][1]))
+    tag_regex = re.compile(r"^<\w+>[^<]+</\w+>")
+    if tag_regex.search(y[-1][1]):
+        y[-1] = (y[-1][0].replace("\n", "<br>"), y[-1][1])
+    else:
+        y[-1] = (y[-1][0].replace("\n", "<br>"), convert_mdtext(y[-1][1]))
     return y
