@@ -1,7 +1,7 @@
 <h1 align="center">川虎 ChatGPT 🐯 Chuanhu ChatGPT</h1>
 <div align="center">
   <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT">
-    <img src="https://user-images.githubusercontent.com/70903329/226267132-e5295925-f53a-4e9d-a221-6099583da98d.png" alt="Logo" height="156">
+    <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
   </a>
 
   <p align="center">
