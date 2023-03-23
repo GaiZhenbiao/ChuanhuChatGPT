@@ -37,12 +37,13 @@ def postprocess(
         y[-1] = (y[-1][0].replace("\n", "<br>"), convert_mdtext(y[-1][1]))
     return y
 
-with open("./assets/custom.js", "r", encoding="utf-8") as f:
+with open("./assets/custom.js", "r", encoding="utf-8") as f, open("./assets/Kelpy-Codos.js", "r", encoding="utf-8") as f2:
     customJS = f.read()
+    kelpyCodos = f2.read()
 
 def reload_javascript():
     print("Reloading javascript...")
-    js = f'<script>{customJS}</script>'
+    js = f'<script>{customJS}</script><script>{kelpyCodos}</script>'
     def template_response(*args, **kwargs):
         res = GradioTemplateResponseOriginal(*args, **kwargs)
         res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))
