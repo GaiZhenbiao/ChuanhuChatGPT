@@ -44,7 +44,7 @@ else:
         with open("api_key.txt", "r") as f:
             my_api_key = f.read().strip()
     if os.path.exists("auth.json"):
-        with open("auth.json", "r") as f:
+        with open("auth.json", "r", encoding='utf-8') as f:
             auth = json.load(f)
             username = auth["username"]
             password = auth["password"]
