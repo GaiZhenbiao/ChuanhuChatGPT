@@ -394,14 +394,14 @@ if __name__ == "__main__":
                 server_name="0.0.0.0",
                 server_port=7860,
                 auth=(username, password),
-                favicon_path="./assets/favicon.png",
+                favicon_path="./assets/favicon.ico",
             )
         else:
             demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
                 server_name="0.0.0.0",
                 server_port=7860,
                 share=False,
-                favicon_path="./assets/favicon.png",
+                favicon_path="./assets/favicon.ico",
             )
     # if not running in Docker
     else:
@@ -409,7 +409,7 @@ if __name__ == "__main__":
             demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
                 share=False,
                 auth=(username, password),
-                favicon_path="./assets/favicon.png",
+                favicon_path="./assets/favicon.ico",
                 inbrowser=True,
             )
         else:
