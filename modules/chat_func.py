@@ -276,8 +276,10 @@ def predict(
         logging.info(msg)
         yield chatbot+[(inputs, "")], history, msg, all_token_counts
         index = construct_index(openai_api_key, file_src=files)
-        cost = round(all_token_counts[-1] * 0.0000004, 7)
-        msg = f"索引构建完成，消耗 {all_token_counts[-1]} token, API费用 ${cost}. 获取回答中……"
+        embedding_token_used = find_embedding_token_usage()
+        cost = round(embedding_token_used * 0.0000004, 7)
+        logging.info(f"索引构建完成，消耗 {embedding_token_used} token, API费用 ${cost}. 获取回答中……")
+        msg = f"索引构建完成，消耗 {embedding_token_used} token, API费用 ${cost}. 获取回答中……"
         yield chatbot+[(inputs, "")], history, msg, all_token_counts
         history, chatbot, status_text = chat_ai(openai_api_key, index, inputs, history, chatbot, reply_language)
         yield chatbot, history, status_text, all_token_counts
@@ -472,3 +474,17 @@ def reduce_token_size(
         ), token_count
     logging.info(msg)
     logging.info("减少token数量完毕")
+
+def find_embedding_token_usage(file_name="/var/log/application.log"):
+    last_occurence = ""
+    try:
+        with open(file_name, 'r') as f:
+            lines = f.readlines()
+            for i in range(len(lines)-1, -1, -1):
+                if 'Total embedding token usage' in lines[i]:
+                    last_occurence = lines[i]
+                    break
+        token_used = last_occurence.split(":")[1].strip().split(" ")[0]
+        return int(token_used)
+    except:
+        return 0
