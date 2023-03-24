@@ -179,8 +179,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                     downloadFile = gr.File(interactive=True)
 
                 with gr.Tab(label="高级"):
-                    default_btn = gr.Button("🔙 恢复默认设置")
                     gr.Markdown("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置")
+                    default_btn = gr.Button("🔙 恢复默认设置")
 
                     with gr.Accordion("参数", open=False):
                         top_p = gr.Slider(
@@ -200,22 +200,23 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             label="Temperature",
                         )
 
-                    apiurlTxt = gr.Textbox(
-                        show_label=True,
-                        placeholder=f"在这里输入API地址...",
-                        label="API地址",
-                        value="https://api.openai.com/v1/chat/completions",
-                        lines=2,
-                    )
-                    changeAPIURLBtn = gr.Button("🔄 切换API地址")
-                    proxyTxt = gr.Textbox(
-                        show_label=True,
-                        placeholder=f"在这里输入代理地址...",
-                        label="代理地址（示例：http://127.0.0.1:10809）",
-                        value="",
-                        lines=2,
-                    )
-                    changeProxyBtn = gr.Button("🔄 设置代理地址")
+                    with gr.Accordion("网络设置", open=False):
+                        apiurlTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"在这里输入API地址...",
+                            label="API地址",
+                            value="https://api.openai.com/v1/chat/completions",
+                            lines=2,
+                        )
+                        changeAPIURLBtn = gr.Button("🔄 切换API地址")
+                        proxyTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"在这里输入代理地址...",
+                            label="代理地址（示例：http://127.0.0.1:10809）",
+                            value="",
+                            lines=2,
+                        )
+                        changeProxyBtn = gr.Button("🔄 设置代理地址")
 
     gr.Markdown(description)
 
