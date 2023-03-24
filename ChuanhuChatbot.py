@@ -383,7 +383,7 @@ logging.info(
     + colorama.Style.RESET_ALL
 )
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
-demo.title = "🧼GPT most credit to -> 川虎ChatGPT 🚀"
+demo.title = "胖猫🐱🐱GPT most credit to -> 川虎ChatGPT 🚀"
 
 if __name__ == "__main__":
     reload_javascript()
