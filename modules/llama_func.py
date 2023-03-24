@@ -181,7 +181,8 @@ def ask_ai(
             f"Response: {colorama.Fore.BLUE}{ret_text}{colorama.Style.RESET_ALL}"
         )
         os.environ["OPENAI_API_KEY"] = ""
-        return ret_text, new_response, f"查询消耗了{llm_predictor.last_token_usage} tokens"
+        cost = round(llm_predictor.last_token_usage * 0.000002, 6)
+        return ret_text, new_response, f"查询消耗了{llm_predictor.last_token_usage} tokens, API费用: ${cost}"
     else:
         logging.warning("No response found, returning None")
         os.environ["OPENAI_API_KEY"] = ""
