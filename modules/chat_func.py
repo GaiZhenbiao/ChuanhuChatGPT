@@ -477,7 +477,7 @@ def reduce_token_size(
     logging.info(msg)
     logging.info("减少token数量完毕")
 
-def find_embedding_token_usage(file_name="/var/log/application.log"):
+def find_embedding_token_usage(file_name="application.log"):
     last_occurence = ""
     try:
         with open(file_name, 'r') as f:
