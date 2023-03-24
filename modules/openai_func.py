@@ -47,7 +47,7 @@ def get_balance(openai_api_key):
             timeout=timeout,
         )
     try:
-        balance = response.get("total_available") if response.get(
+        balance = response.json().get("total_available") if response.json().get(
             "total_available") else 0
     except Exception as e:
         logging.error(f"balance解析失败:"+str(e))
