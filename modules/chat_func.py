@@ -71,7 +71,7 @@ def get_response(
         logging.info(f"使用 HTTPS 代理: {https_proxy}")
         proxies["https"] = https_proxy
 
-    # 如果有代理，使用代理发送请求，否则使用默认设置发送请求
+    # 如果有自定义的api-url，使用自定义url发送请求，否则使用默认设置发送请求
     if shared.state.api_url != API_URL:
         logging.info(f"使用自定义API URL: {shared.state.api_url}")
     if proxies:

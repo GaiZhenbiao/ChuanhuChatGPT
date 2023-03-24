@@ -316,7 +316,7 @@ def reset_textbox():
 
 
 def reset_default():
-    newurl = shared.state.reset_all()
+    newurl = shared.state.reset_api_url()
     os.environ.pop("HTTPS_PROXY", None)
     os.environ.pop("https_proxy", None)
     return gr.update(value=newurl), gr.update(value=""), "API URL 和代理已重置"
