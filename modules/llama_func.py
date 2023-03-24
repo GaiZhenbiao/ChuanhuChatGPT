@@ -88,6 +88,9 @@ def construct_index(
             index = GPTSimpleVectorIndex(
                 documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper
             )
+            index_token_usage = llm_predictor.last_token_usage
+            cost = round(index_token_usage * 0.0000004, 7)
+            logging.info(f"索引构建完成！消耗token {index_token_usage}, API费用 ${cost}")
             os.makedirs("./index", exist_ok=True)
             index.save_to_disk(f"./index/{index_name}.json")
             return index

@@ -272,11 +272,12 @@ def predict(
     if reply_language == "跟随问题语言（不稳定）":
         reply_language = "the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch."
     if files:
-        msg = "构建索引中……（这可能需要比较久的时间）"
+        msg = "构建索引中……（这可能需要比较久的时间）索引构建需要使用OpenAI Embeddings, 较为昂贵. 请谨慎使用"
         logging.info(msg)
         yield chatbot+[(inputs, "")], history, msg, all_token_counts
         index = construct_index(openai_api_key, file_src=files)
-        msg = "索引构建完成，获取回答中……"
+        cost = round(all_token_counts * 0.0000004, 7)
+        msg = f"索引构建完成，消耗 {all_token_counts} token, API费用 ${cost}. 获取回答中……"
         yield chatbot+[(inputs, "")], history, msg, all_token_counts
         history, chatbot, status_text = chat_ai(openai_api_key, index, inputs, history, chatbot, reply_language)
         yield chatbot, history, status_text, all_token_counts
