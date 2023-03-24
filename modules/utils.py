@@ -9,6 +9,7 @@ import hashlib
 import csv
 import requests
 import re
+import html
 
 import gradio as gr
 from pypinyin import lazy_pinyin
@@ -105,16 +106,22 @@ def convert_mdtext(md_text):
         if code.strip():
             # _, code = detect_language(code)  # 暂时去除代码高亮功能，因为在大段代码的情况下会出现问题
             # code = code.replace("\n\n", "\n") # 暂时去除代码中的空行，因为在大段代码的情况下会出现问题
-            code = f"```{code}\n\n```"
+            code = f"\n```{code}\n\n```"
             code = markdown_to_html_with_syntax_highlight(code)
             result.append(code)
     result = "".join(result)
+    result += ALREADY_CONVERTED_MARK
     return result
 
 
-def convert_user(userinput):
-    userinput = userinput.replace("\n", "<br>")
-    return f"<pre>{userinput}</pre>"
+def convert_asis(userinput):
+    return f"<pre>{html.escape(userinput)}</pre>"+ALREADY_CONVERTED_MARK
+
+def detect_converted_mark(userinput):
+    if userinput.endswith(ALREADY_CONVERTED_MARK):
+        return True
+    else:
+        return False
 
 
 def detect_language(code):
