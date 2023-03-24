@@ -278,10 +278,11 @@ def predict(
         index = construct_index(openai_api_key, file_src=files)
         embedding_token_used = find_embedding_token_usage()
         if embedding_token_used == 0:
-            msg = "调用现有索引缓存中……"
-        cost = round(embedding_token_used * 0.0000004, 7)
-        logging.info(f"索引构建完成，消耗 {embedding_token_used} embedding tokens, API费用 ${cost}. 获取回答中……")
-        msg = f"索引构建完成，消耗 {embedding_token_used} embedding tokens, API费用 ${cost}. 获取回答中……"
+            msg = "调用现有索引缓存中…… (或者因为在railway无法创建logging file, 无法获取具体费用)"
+        else:
+            cost = round(embedding_token_used * 0.0000004, 7)
+            logging.info(f"索引构建完成，消耗 {embedding_token_used} embedding tokens, API费用 ${cost}. 获取回答中……")
+            msg = f"索引构建完成，消耗 {embedding_token_used} embedding tokens, API费用 ${cost}. 获取回答中……"
         yield chatbot+[(inputs, "")], history, msg, all_token_counts
         history, chatbot, status_text = chat_ai(openai_api_key, index, inputs, history, chatbot, reply_language)
         yield chatbot, history, status_text, all_token_counts
