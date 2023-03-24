@@ -414,7 +414,7 @@ if __name__ == "__main__":
             )
         else:
             demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
-                share=False, favicon_path="./assets/favicon.ico", inbrowser=True
+                share=False, favicon_path="./assets/favicon.png", inbrowser=True
             )  # 改为 share=True 可以创建公开分享链接
         # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
         # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
