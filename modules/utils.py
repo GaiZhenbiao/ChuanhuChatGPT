@@ -115,7 +115,8 @@ def convert_mdtext(md_text):
 
 
 def convert_asis(userinput):
-    return f"<pre>{html.escape(userinput)}</pre>"+ALREADY_CONVERTED_MARK
+    escaped_html = html.escape(userinput).replace(" ", "&nbsp;").replace("\n", "<br>")
+    return f"{escaped_html}"+ALREADY_CONVERTED_MARK
 
 def detect_converted_mark(userinput):
     if userinput.endswith(ALREADY_CONVERTED_MARK):
