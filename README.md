@@ -371,6 +371,22 @@ DOMAIN-SUFFIX,openai.com,你的代理规则
 
 </details>
 
+<details><summary>找不要依赖项(No matching distribution found for tiktoken)</summary>
+
+这种情况是因为你使用的`pip`源中没有这个包。pypi的镜像源（比如清华源）的更新可能没有官方源那么及时。如果遇到了这种情况，建议换用pypi的官方源：
+
+临时换用官方源：
+```
+pip install tiktoken -i https://pypi.org/simple
+```
+
+或者永久替换为官方源：
+```
+pip config set global.index-url https://pypi.org/simple
+```
+
+</details>
+
 <details><summary><code>TypeError: Base.set () got an unexpected keyword argument</code></summary>
 
 这是因为川虎ChatGPT紧跟Gradio发展步伐，你的Gradio版本太旧了。请升级依赖：
