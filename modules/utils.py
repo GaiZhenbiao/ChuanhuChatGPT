@@ -144,7 +144,8 @@ def construct_assistant(text):
 
 
 def construct_token_message(token, stream=False):
-    return f"Token 计数: {token}"
+    cost = token * 0.000002
+    return f"Token 计数: {token} and API 费用: ${cost}"
 
 
 def delete_last_conversation(chatbot, history, previous_token_count):
