@@ -144,7 +144,7 @@ def construct_assistant(text):
 
 
 def construct_token_message(token, stream=False):
-    cost = token * 0.000002
+    cost = round(token * 0.000002, 6)
     return f"Token 计数: {token} and API 费用: ${cost}"
 
 
