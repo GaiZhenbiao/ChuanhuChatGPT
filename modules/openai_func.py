@@ -61,7 +61,7 @@ def get_balance(openai_api_key):
             logging.error(f"balance解析失败:"+str(e))
             balance = 0
             total_used=0 
-        return f"**API使用情况** 已使用: {total_used}美元 剩余: {balance}美元"
+        return f"**API使用情况**（已使用/余额） {total_used}$/{balance}$"
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
         return status_text

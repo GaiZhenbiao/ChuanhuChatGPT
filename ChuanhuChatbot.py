@@ -102,7 +102,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         visible=not HIDE_MY_KEY,
                         label="API-Key",
                     )
-                    balanceTxt = gr.Markdown(get_balance(my_api_key))
+                    balanceTxt = gr.Markdown(get_balance(my_api_key), elem_id="usage_display")
                     balanceUpdateBtn = gr.Button("🔄 更新API使用情况")
                     model_select_dropdown = gr.Dropdown(
                         label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0]

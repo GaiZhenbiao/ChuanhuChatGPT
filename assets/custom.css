@@ -19,6 +19,19 @@
 #chuanhu_chatbot, #status_display {
     transition: all 0.6s;
 }
+
+/* usage_display */
+#usage_display {
+    display: flex;
+    min-height: 1em;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+#usage_display p{
+    font-size: .85em;
+    font-family: monospace;
+    color: var(--body-text-color-subdued);
+}
 /* list */
 ol:not(.options), ul:not(.options) {
     padding-inline-start: 2em !important;
