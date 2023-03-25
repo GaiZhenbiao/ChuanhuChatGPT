@@ -218,11 +218,6 @@ pre code {
         --side-bar-display: none;
         --side-bar-bg: var(--primary-800);
     }
-    #app_box{
-        max-width: 1280px!important;
-        display: flex;
-        align-self: center;
-    }
     
     #right_column{
         /* 鼠标不移上去时缩小到最右侧宽度20px不显示内容 全部css加上!important */
