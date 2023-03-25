@@ -337,7 +337,7 @@ pip install gradio --upgrade --force-reinstall
 
 ### 常见问题
 
-<details><summary>配置代理</summary>
+<details><summary><code>配置代理</code></summary>
 
 OpenAI不允许在不受支持的地区使用API，否则可能会导致账号被风控。下面给出代理配置示例：
 
@@ -371,7 +371,7 @@ DOMAIN-SUFFIX,openai.com,你的代理规则
 
 </details>
 
-<details><summary>找不要依赖项(No matching distribution found for tiktoken)</summary>
+<details><summary><code>找不要依赖项(No matching distribution found for tiktoken)</code></summary>
 
 这种情况是因为你使用的`pip`源中没有这个包。pypi的镜像源（比如清华源）的更新可能没有官方源那么及时。如果遇到了这种情况，建议换用pypi的官方源：
 
