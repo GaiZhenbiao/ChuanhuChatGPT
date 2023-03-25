@@ -5,7 +5,7 @@ from modules import shared
 import os
 
 
-def get_balance_response(openai_api_key):
+def get_usage_response(openai_api_key):
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {openai_api_key}",
@@ -48,9 +48,9 @@ def get_balance_response(openai_api_key):
         )
     return response
 
-def get_balance(openai_api_key):
+def get_usage(openai_api_key):
     try:
-        response=get_balance_response(openai_api_key=openai_api_key)
+        response=get_usage_response(openai_api_key=openai_api_key)
         print(response.json())
         try:
             balance = response.json().get("total_available") if response.json().get(
@@ -58,7 +58,7 @@ def get_balance(openai_api_key):
             total_used = response.json().get("total_used") if response.json().get(
                 "total_used") else 0
         except Exception as e:
-            logging.error(f"balance解析失败:"+str(e))
+            logging.error(f"API使用情况解析失败:"+str(e))
             balance = 0
             total_used=0 
         return f"**API使用情况**（已使用/余额） {total_used}$/{balance}$"

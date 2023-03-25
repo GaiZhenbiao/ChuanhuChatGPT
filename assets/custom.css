@@ -22,7 +22,6 @@
 
 /* usage_display */
 #usage_display {
-    display: flex;
     min-height: 1em;
     align-items: flex-end;
     justify-content: flex-end;
