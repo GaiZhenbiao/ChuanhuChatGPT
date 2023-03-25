@@ -9,6 +9,7 @@ from modules.utils import *
 from modules.presets import *
 from modules.overwrites import *
 from modules.chat_func import *
+from modules.openai_func import get_usage
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -101,6 +102,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         visible=not HIDE_MY_KEY,
                         label="API-Key",
                     )
+                    usageTxt = gr.Markdown(get_usage(my_api_key), elem_id="usage_display")
+                    usageUpdateBtn = gr.Button("🔄 更新API使用情况")
                     model_select_dropdown = gr.Dropdown(
                         label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0]
                     )
@@ -260,10 +263,12 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         fn=transfer_input, inputs=[user_input], outputs=[user_question, user_input, submitBtn, cancelBtn], show_progress=True
     )
 
-    keyTxt.submit(submit_key, keyTxt, [user_api_key, status_display])
-    keyTxt.change(submit_key, keyTxt, [user_api_key, status_display])
+    keyTxt.submit(submit_key, keyTxt, [user_api_key, status_display, usageTxt])
+    keyTxt.change(submit_key, keyTxt, [user_api_key, status_display, usageTxt])
     # Chatbot
     cancelBtn.click(cancel_outputing, [], [])
+
+    usageUpdateBtn.click(get_usage, [user_api_key], [usageTxt], show_progress=True)
 
     user_input.submit(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
 

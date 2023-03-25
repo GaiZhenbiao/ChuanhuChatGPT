@@ -22,6 +22,7 @@ from pygments.formatters import HtmlFormatter
 
 from modules.presets import *
 import modules.shared as shared
+from modules.openai_func import get_usage
 
 logging.basicConfig(
     level=logging.INFO,
@@ -349,7 +350,7 @@ def submit_key(key):
     key = key.strip()
     msg = f"API密钥更改为了{hide_middle_chars(key)}"
     logging.info(msg)
-    return key, msg
+    return key, msg, get_usage(key)
 
 
 def sha1sum(filename):

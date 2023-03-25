@@ -4,6 +4,7 @@ import gradio as gr
 # ChatGPT 设置
 initial_prompt = "You are a helpful assistant."
 API_URL = "https://api.openai.com/v1/chat/completions"
+BALANCE_API_URL="https://api.openai.com/dashboard/billing/credit_grants"
 HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"
 
