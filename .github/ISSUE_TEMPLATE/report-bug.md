@@ -8,8 +8,9 @@ assignees: ''
 ---
 
 > 感谢提交 issue! 请尽可能完整填写以下信息，帮助我们更好地定位问题~ 
+> 在一切开始之前，请确保您已经阅读过 [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) 页面。
 > 如果您确信这是一个我们的 bug，而不是因为您的原因部署失败，欢迎提交该issue！如果您不能确定这是bug还是您的问题，请选择其他类型的issue模板。
-> 注意，请编辑issue标题栏“简短的错误描述”部分，也请替换我们的issue模板中的原文。
+> 注意，请编辑issue标题栏“简短的错误描述”部分，也请替换我们的issue模板中的正文（但不要把所有内容都删完）。
 
 ### 错误描述
 请简明描述该bug。
@@ -36,7 +37,7 @@ assignees: ''
  - OS: [e.g. Windows11 22H2]
  - Browser: [e.g. Chrome, safari]
  - Gradio version:
- - Python (或Python3) version:
+ - Python version:
 
 ### 其他
 补充说明
