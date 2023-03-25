@@ -14,8 +14,8 @@ from langchain.llms import OpenAI
 import colorama
 
 
-from presets import *
-from utils import *
+from modules.presets import *
+from modules.utils import *
 
 
 def get_documents(file_src):
@@ -102,6 +102,7 @@ def chat_ai(
     question,
     context,
     chatbot,
+    reply_language,
 ):
     os.environ["OPENAI_API_KEY"] = api_key
 
@@ -116,6 +117,7 @@ def chat_ai(
         SIM_K,
         INDEX_QUERY_TEMPRATURE,
         context,
+        reply_language,
     )
     if response is None:
         status_text = "查询失败，请换个问法试试"
@@ -139,6 +141,7 @@ def ask_ai(
     sim_k=1,
     temprature=0,
     prefix_messages=[],
+    reply_language="中文",
 ):
     os.environ["OPENAI_API_KEY"] = api_key
 
@@ -153,8 +156,8 @@ def ask_ai(
     )
 
     response = None  # Initialize response variable to avoid UnboundLocalError
-    qa_prompt = QuestionAnswerPrompt(prompt_tmpl)
-    rf_prompt = RefinePrompt(refine_tmpl)
+    qa_prompt = QuestionAnswerPrompt(prompt_tmpl.replace("{reply_language}", reply_language))
+    rf_prompt = RefinePrompt(refine_tmpl.replace("{reply_language}", reply_language))
     response = index.query(
         question,
         llm_predictor=llm_predictor,

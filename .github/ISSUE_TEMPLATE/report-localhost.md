@@ -8,8 +8,10 @@ assignees: ''
 ---
 
 > 感谢提交 issue! 请尽可能完整填写以下信息，帮助我们更好地定位问题~ 
-> 请务必先查看 README 中是否已经对您的问题做出了解答。如果没有，请检索issue，查看有没有相同或类似的问题。如果您确信这是一个前人没有遇到的问题，欢迎提交该issue！注意，请编辑issue标题栏“简短的错误描述”部分，也请替换我们的issue模板中的原文。
-> 如果您想问的是 `Something went wrong Expecting value: line 1 column 1 (char 0)`，请再好好看一遍 README！！
+> 在一切开始之前，请确保您已经阅读过 [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) 页面，查看它是否已经对您的问题做出了解答。如果没有，请检索issue与discussion，查看有没有相同或类似的问题。
+> 如果您确信这是一个前人没有遇到的问题，欢迎提交该issue！
+> 注意，请编辑issue标题栏“简短的错误描述”部分，也请替换我们的issue模板中的正文（但不要把所有内容都删完）。
+> 请不要再提交 `Something went wrong Expecting value: line 1 column 1 (char 0)` 和 代理配置 相关的问题，请再看一遍 常见问题 页，实在不行请前往discussion。
 
 ### 错误描述
 请简明描述该错误。另外，请注意替换issue标题中的“简短的错误描述”。
@@ -44,10 +46,9 @@ assignees: ''
 > pip show gradio
 > python --version
 > ```
-> （如果你使用Python3，请将`pip`替换为`pip3`，`python`替换为`python3`）
 
 - Gradio version:
-- Python (或Python3) version:
+- Python version:
 
 ### 其他
 补充说明

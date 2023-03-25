@@ -5,8 +5,8 @@ from llama_index import Prompt
 from typing import List, Tuple
 import mdtex2html
 
-from presets import *
-from llama_func import *
+from modules.presets import *
+from modules.llama_func import *
 
 
 def compact_text_chunks(self, prompt: Prompt, text_chunks: List[str]) -> List[str]:
@@ -30,9 +30,27 @@ def postprocess(
     """
     if y is None or y == []:
         return []
-    tag_regex = re.compile(r"^<\w+>[^<]+</\w+>")
-    if tag_regex.search(y[-1][1]):
-        y[-1] = (y[-1][0].replace("\n", "<br>"), y[-1][1])
-    else:
-        y[-1] = (y[-1][0].replace("\n", "<br>"), convert_mdtext(y[-1][1]))
+    user, bot = y[-1]
+    if not detect_converted_mark(user):
+        user = convert_asis(user)
+    if not detect_converted_mark(bot):
+        bot = convert_mdtext(bot)
+    y[-1] = (user, bot)
     return y
+
+with open("./assets/custom.js", "r", encoding="utf-8") as f, open("./assets/Kelpy-Codos.js", "r", encoding="utf-8") as f2:
+    customJS = f.read()
+    kelpyCodos = f2.read()
+
+def reload_javascript():
+    print("Reloading javascript...")
+    js = f'<script>{customJS}</script><script>{kelpyCodos}</script>'
+    def template_response(*args, **kwargs):
+        res = GradioTemplateResponseOriginal(*args, **kwargs)
+        res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))
+        res.init_headers()
+        return res
+
+    gr.routes.templates.TemplateResponse = template_response
+
+GradioTemplateResponseOriginal = gr.routes.templates.TemplateResponse

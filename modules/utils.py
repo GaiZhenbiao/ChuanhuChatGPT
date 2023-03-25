@@ -9,6 +9,7 @@ import hashlib
 import csv
 import requests
 import re
+import html
 
 import gradio as gr
 from pypinyin import lazy_pinyin
@@ -19,9 +20,13 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-from presets import *
+from modules.presets import *
+import modules.shared as shared
 
-# logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
+)
 
 if TYPE_CHECKING:
     from typing import TypedDict
@@ -101,11 +106,23 @@ def convert_mdtext(md_text):
         if code.strip():
             # _, code = detect_language(code)  # 暂时去除代码高亮功能，因为在大段代码的情况下会出现问题
             # code = code.replace("\n\n", "\n") # 暂时去除代码中的空行，因为在大段代码的情况下会出现问题
-            code = f"```{code}\n\n```"
+            code = f"\n```{code}\n\n```"
             code = markdown_to_html_with_syntax_highlight(code)
             result.append(code)
     result = "".join(result)
+    result += ALREADY_CONVERTED_MARK
     return result
+
+
+def convert_asis(userinput):
+    escaped_html = html.escape(userinput).replace(" ", "&nbsp;").replace("\n", "<br>")
+    return f"{escaped_html}"+ALREADY_CONVERTED_MARK
+
+def detect_converted_mark(userinput):
+    if userinput.endswith(ALREADY_CONVERTED_MARK):
+        return True
+    else:
+        return False
 
 
 def detect_language(code):
@@ -294,20 +311,19 @@ def reset_state():
 
 
 def reset_textbox():
+    logging.debug("重置文本框")
     return gr.update(value="")
 
 
 def reset_default():
-    global API_URL
-    API_URL = "https://api.openai.com/v1/chat/completions"
+    newurl = shared.state.reset_api_url()
     os.environ.pop("HTTPS_PROXY", None)
     os.environ.pop("https_proxy", None)
-    return gr.update(value=API_URL), gr.update(value=""), "API URL 和代理已重置"
+    return gr.update(value=newurl), gr.update(value=""), "API URL 和代理已重置"
 
 
 def change_api_url(url):
-    global API_URL
-    API_URL = url
+    shared.state.set_api_url(url)
     msg = f"API地址更改为了{url}"
     logging.info(msg)
     return msg
@@ -381,6 +397,29 @@ def find_n(lst, max_num):
 
     for i in range(len(lst)):
         if total - lst[i] < max_num:
-            return n - i -1
+            return n - i - 1
         total = total - lst[i]
     return 1
+
+
+def start_outputing():
+    logging.debug("显示取消按钮，隐藏发送按钮")
+    return gr.Button.update(visible=False), gr.Button.update(visible=True)
+
+
+def end_outputing():
+    return (
+        gr.Button.update(visible=True),
+        gr.Button.update(visible=False),
+    )
+
+
+def cancel_outputing():
+    logging.info("中止输出……")
+    shared.state.interrupt()
+
+def transfer_input(inputs):
+    # 一次性返回，降低延迟
+    textbox = reset_textbox()
+    outputing = start_outputing()
+    return inputs, gr.update(value=""), gr.Button.update(visible=False), gr.Button.update(visible=True)
