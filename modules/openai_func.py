@@ -1,11 +1,11 @@
 import requests
 import logging
-from modules.presets import timeout_all, BALANCE_API_URL
+from modules.presets import timeout_all, BALANCE_API_URL,standard_error_msg,connection_timeout_prompt,error_retrieve_prompt,read_timeout_prompt
 from modules import shared
 import os
 
 
-def get_balance(openai_api_key):
+def get_balance_response(openai_api_key):
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {openai_api_key}",
@@ -46,10 +46,26 @@ def get_balance(openai_api_key):
             headers=headers,
             timeout=timeout,
         )
+    return response
+
+def get_balance(openai_api_key):
     try:
-        balance = response.json().get("total_available") if response.json().get(
-            "total_available") else 0
-    except Exception as e:
-        logging.error(f"balance解析失败:"+str(e))
-        balance = 0
-    return balance
+        response=get_balance_response(openai_api_key=openai_api_key)
+        print(response.json())
+        try:
+            balance = response.json().get("total_available") if response.json().get(
+                "total_available") else 0
+            total_used = response.json().get("total_used") if response.json().get(
+                "total_used") else 0
+        except Exception as e:
+            logging.error(f"balance解析失败:"+str(e))
+            balance = 0
+            total_used=0 
+        return f"**API使用情况** 已使用: {total_used}美元 剩余: {balance}美元"
+    except requests.exceptions.ConnectTimeout:
+        status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
+        return status_text
+    except requests.exceptions.ReadTimeout:
+        status_text = standard_error_msg + read_timeout_prompt + error_retrieve_prompt
+        return status_text
+    

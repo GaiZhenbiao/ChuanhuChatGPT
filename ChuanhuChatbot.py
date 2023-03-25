@@ -102,15 +102,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         visible=not HIDE_MY_KEY,
                         label="API-Key",
                     )
-                    balanceTxt = gr.Textbox(
-                        show_label=True,
-                        placeholder=f"余额",
-                        value=get_balance(my_api_key),
-                        type="text",
-                        visible=True,
-                        label="余额:(单位:美元)",
-                    )
-                    balanceUpdateBtn = gr.Button("♻️ 更新余额")
+                    balanceTxt = gr.Markdown(get_balance(my_api_key))
+                    balanceUpdateBtn = gr.Button("🔄 更新API使用情况")
                     model_select_dropdown = gr.Dropdown(
                         label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0]
                     )
