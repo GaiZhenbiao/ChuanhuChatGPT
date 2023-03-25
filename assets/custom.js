@@ -17,12 +17,14 @@ window.onload = function() {
                 elem.style.setProperty('--side-bar-display', 'flex');
 
                 elem.style.setProperty('--side-bar-bg', 'var(--neutral-950)');
+                elem.style.setProperty('--side-bar-icon', 'none');
             } else {
                 console.log("unpinned");
                 elem.style.setProperty('--side-bar-width', '20px');
                 elem.style.setProperty('--side-bar-display', 'none');
 
                 elem.style.setProperty('--side-bar-bg', 'var(--primary-800)');
+                elem.style.setProperty('--side-bar-icon', 'inline');
             }
 
         });

@@ -217,6 +217,7 @@ pre code {
         --side-bar-width: 20px;
         --side-bar-display: none;
         --side-bar-bg: var(--primary-800);
+        --side-bar-icon: inline;
     }
     
     #right_column{
@@ -246,5 +247,25 @@ pre code {
     
     #right_column:hover>*{
         display: flex!important;
+    }
+
+    #right_column::before{
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--neutral-950);
+        font-size: 1.5rem;
+        font-weight: 600;
+        display: var(--side-bar-icon);
+        width:30px;
+        height:30px;
+        background-color: var(--primary-500);
+        border-radius: var(--radius-md);
+    }
+
+    #right_column:hover::before{
+        display: none;
     }
 }
