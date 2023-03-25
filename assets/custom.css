@@ -220,6 +220,8 @@ pre code {
     }
     #app_box{
         max-width: 1280px!important;
+        display: flex;
+        align-self: center;
     }
     
     #right_column{
