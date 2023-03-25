@@ -260,7 +260,7 @@ pre code {
         font-weight: 600;
         display: var(--side-bar-icon);
         width:30px;
-        height:30px;
+        height:70px;
         background-color: var(--primary-500);
         border-radius: var(--radius-md);
     }
