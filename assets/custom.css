@@ -22,11 +22,10 @@
 
 /* usage_display */
 #usage_display {
-    min-height: 1em;
-    align-items: flex-end;
-    justify-content: flex-end;
+    height: 1em;
 }
 #usage_display p{
+    padding: 0 1em;
     font-size: .85em;
     font-family: monospace;
     color: var(--body-text-color-subdued);
