@@ -51,7 +51,7 @@ def get_usage_response(openai_api_key):
 def get_usage(openai_api_key):
     try:
         response=get_usage_response(openai_api_key=openai_api_key)
-        print(response.json())
+        logging.debug(response.json())
         try:
             balance = response.json().get("total_available") if response.json().get(
                 "total_available") else 0
@@ -60,7 +60,7 @@ def get_usage(openai_api_key):
         except Exception as e:
             logging.error(f"API使用情况解析失败:"+str(e))
             balance = 0
-            total_used=0 
+            total_used=0
         return f"**API使用情况**（已用/余额）\u3000{total_used}$ / {balance}$"
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
@@ -68,4 +68,3 @@ def get_usage(openai_api_key):
     except requests.exceptions.ReadTimeout:
         status_text = standard_error_msg + read_timeout_prompt + error_retrieve_prompt
         return status_text
-    
