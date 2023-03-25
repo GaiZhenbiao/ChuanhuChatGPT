@@ -40,7 +40,7 @@ body:
   - type: textarea
     attributes:
       label: 复现操作
-      description: 你之前干了什么，然后出现了bug呢？
+      description: 你之前干了什么，然后出现了错误呢？
       placeholder: |
         1. 正常完成本地部署
         2. 在对话框中要求 ChatGPT “以LaTeX格式输出三角函数”

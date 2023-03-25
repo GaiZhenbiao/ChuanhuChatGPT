@@ -17,7 +17,7 @@ body:
     attributes:
       label: 可能的解决办法
       description: 如果可以，给出一个解决思路~ 或者，你希望实现什么功能？
-      placeholder: 发送失败仍然显示发送的文本
+      placeholder: 发送失败后在输入框或聊天气泡保留发送的文本
     validations:
       required: true
   - type: checkboxes
@@ -25,7 +25,7 @@ body:
       label: 帮助开发
       description: 如果您能帮助开发并提交一个pull request，那再好不过了！
       options:
-        - label: 我愿意帮忙帮助开发！
+        - label: 我愿意协助开发！
           required: false
   - type: textarea
     attributes:
