@@ -1,0 +1,74 @@
+name: 服务器部署错误
+description: "报告在远程服务器上部署时的问题或错误"
+title: "[远程部署]: "
+labels: ["question","server deployment"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢提交 issue! 请尽可能完整填写以下信息，帮助我们更好地定位问题~ 
+        **在一切开始之前，请确保您已经阅读过 [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) 页面**，查看它是否已经对您的问题做出了解答。
+        如果没有，请检索 [issue](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues) 与 [discussion](https://github.com/GaiZhenbiao/ChuanhuChatGPT/discussions) ，查看有没有相同或类似的问题。
+
+        ------
+  - type: checkboxes
+    attributes:
+      label: 是否已存在现有反馈与解答？
+      description: 请搜索issue、discussion和[常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题)以查看您想报告的issue是否已存在。
+      options:
+      - label: 我确认没有已有issue或discussion，且已阅读**常见问题**。
+        required: true
+  - type: checkboxes
+    attributes:
+      label: 是否是一个代理配置相关的疑问？
+      description: 请不要提交代理配置相关的issue。如有疑问请前往 [讨论区](https://github.com/GaiZhenbiao/ChuanhuChatGPT/discussions)。
+      options:
+      - label: 我确认这不是一个代理配置相关的疑问。
+        required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 错误描述
+      description: 请描述您遇到的错误或问题。<br />
+        提示：如果可以，也请提供错误的截图，如本地部署的网页截图与终端错误报告的截图。
+        如果可以，也请提供`.json`格式的对话记录。
+      placeholder: 发生什么事了？
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 复现操作
+      description: 你之前干了什么，然后出现了bug呢？
+      placeholder: |
+        1. 正常完成本地部署
+        2. 在对话框中要求 ChatGPT “以LaTeX格式输出三角函数”
+        3. ChatGPT 输出部分内容后程序被自动终止
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 错误日志
+      description: 请将终端中的主要错误报告粘贴至此处。
+      render: shell
+  - type: textarea
+    attributes:
+      label: 运行环境
+      description: |
+        以下是一个例子：
+        - **OS**: Windows11 22H2
+        - **Browser**: Chrome
+        - **Gradio version**: 3.22.1
+        - **Python version**: 3.11.1
+      value: |
+        - OS: 
+        - Browser: 
+        - Gradio version: 
+        - Python version: 
+      render: markdown
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 补充说明
+      description: 链接？参考资料？任何更多背景信息！

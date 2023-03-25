@@ -1,0 +1,68 @@
+name: 报告BUG
+description: "报告一个bug，且您确信这是bug而不是您的问题"
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢提交 issue! 请尽可能完整填写以下信息，帮助我们更好地定位问题~ 
+        **在一切开始之前，请确保您已经阅读过 [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) 页面**。
+        如果您确信这是一个我们的 bug，而不是因为您的原因部署失败，欢迎提交该issue！
+        如果您不能确定这是bug还是您的问题，请选择 [其他类型的issue模板](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/new/choose)。
+
+        ------
+  - type: checkboxes
+    attributes:
+      label: 这个bug是否已存在现有issue了？
+      description: 请搜索以查看您想报告的issue是否已存在。
+      options:
+      - label: 我确认没有已有issue。
+        required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 错误表现
+      description: 请描述您遇到的bug。<br />
+        提示：如果可以，也请提供错误的截图，如本地部署的网页截图与终端错误报告的截图。
+        如果可以，也请提供`.json`格式的对话记录。
+      placeholder: 发生什么事了？
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 复现操作
+      description: 你之前干了什么，然后出现了bug呢？
+      placeholder: |
+        1. 正常完成本地部署
+        2. 在对话框中要求 ChatGPT “以LaTeX格式输出三角函数”
+        3. ChatGPT 输出部分内容后程序被自动终止
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 错误日志
+      description: 请将终端中的主要错误报告粘贴至此处。
+      render: shell
+  - type: textarea
+    attributes:
+      label: 运行环境
+      description: |
+        以下是一个例子：
+        - **OS**: Windows11 22H2
+        - **Browser**: Chrome
+        - **Gradio version**: 3.22.1
+        - **Python version**: 3.11.1
+      value: |
+        - OS: 
+        - Browser: 
+        - Gradio version: 
+        - Python version: 
+      render: markdown
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 补充说明
+      description: 链接？参考资料？任何更多背景信息！

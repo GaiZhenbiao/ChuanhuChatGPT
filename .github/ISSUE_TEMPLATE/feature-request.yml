@@ -1,0 +1,34 @@
+name: 功能请求
+description: "请求更多功能！"
+title: "[功能请求]: "
+labels: ["feature request"]
+body:
+  - type: markdown
+    attributes:
+      value: 您可以请求更多功能！麻烦您花些时间填写以下信息~
+  - type: textarea
+    attributes:
+      label: 相关问题
+      description: 该功能请求是否与某个问题相关？
+      placeholder: 发送信息后有概率ChatGPT返回error，刷新后又要重新打一遍文字，较为麻烦
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 可能的解决办法
+      description: 如果可以，给出一个解决思路~ 或者，你希望实现什么功能？
+      placeholder: 发送失败仍然显示发送的文本
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: 帮助开发
+      description: 如果您能帮助开发并提交一个pull request，那再好不过了！
+      options:
+        - label: 我愿意帮忙帮助开发！
+          required: false
+  - type: textarea
+    attributes:
+      label: 补充说明
+      description: |
+        链接？参考资料？任何更多背景信息！
