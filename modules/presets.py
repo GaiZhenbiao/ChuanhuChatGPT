@@ -100,6 +100,8 @@ Reply in {reply_language}
 If the context isn't useful, return the original answer.
 """
 
+ALREADY_CONVERTED_MARK = "<!-- ALREADY CONVERTED BY PARSER. -->"
+
 small_and_beautiful_theme = gr.themes.Soft(
         primary_hue=gr.themes.Color(
             c50="#02C160",

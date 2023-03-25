@@ -30,11 +30,12 @@ def postprocess(
     """
     if y is None or y == []:
         return []
-    tag_regex = re.compile(r"^<\w+>[^<]+</\w+>")
-    if tag_regex.search(y[-1][1]):
-        y[-1] = (convert_user(y[-1][0]), y[-1][1])
-    else:
-        y[-1] = (convert_user(y[-1][0]), convert_mdtext(y[-1][1]))
+    user, bot = y[-1]
+    if not detect_converted_mark(user):
+        user = convert_asis(user)
+    if not detect_converted_mark(bot):
+        bot = convert_mdtext(bot)
+    y[-1] = (user, bot)
     return y
 
 with open("./assets/custom.js", "r", encoding="utf-8") as f, open("./assets/Kelpy-Codos.js", "r", encoding="utf-8") as f2:
