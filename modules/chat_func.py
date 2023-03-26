@@ -1,20 +1,11 @@
 # -*- coding:utf-8 -*-
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
 
-import logging
-import json
-import os
-import requests
 import urllib3
 
 from tqdm import tqdm
-import colorama
 from duckduckgo_search import ddg
-import asyncio
-import aiohttp
 
-from modules.presets import *
 from modules.llama_func import *
 from modules.utils import *
 import modules.shared as shared
@@ -24,17 +15,18 @@ import modules.shared as shared
 if TYPE_CHECKING:
     from typing import TypedDict
 
+
     class DataframeData(TypedDict):
         headers: List[str]
         data: List[List[str | int | bool]]
-
 
 initial_prompt = "You are a helpful assistant."
 HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"
 
+
 def get_response(
-    openai_api_key, system_prompt, history, temperature, top_p, stream, selected_model
+        openai_api_key, system_prompt, history, temperature, top_p, stream, selected_model
 ):
     headers = {
         "Content-Type": "application/json",
@@ -95,17 +87,17 @@ def get_response(
 
 
 def stream_predict(
-    openai_api_key,
-    system_prompt,
-    history,
-    inputs,
-    chatbot,
-    all_token_counts,
-    top_p,
-    temperature,
-    selected_model,
-    fake_input=None,
-    display_append=""
+        openai_api_key,
+        system_prompt,
+        history,
+        inputs,
+        chatbot,
+        all_token_counts,
+        top_p,
+        temperature,
+        selected_model,
+        fake_input=None,
+        display_append=""
 ):
     def get_return_value():
         return chatbot, history, status_text, all_token_counts
@@ -120,11 +112,10 @@ def stream_predict(
         chatbot.append((fake_input, ""))
     else:
         chatbot.append((inputs, ""))
-    user_token_count = 0
     if len(all_token_counts) == 0:
         system_prompt_token_count = count_token(construct_system(system_prompt))
         user_token_count = (
-            count_token(construct_user(inputs)) + system_prompt_token_count
+                count_token(construct_user(inputs)) + system_prompt_token_count
         )
     else:
         user_token_count = count_token(construct_user(inputs))
@@ -143,7 +134,7 @@ def stream_predict(
         )
     except requests.exceptions.ConnectTimeout:
         status_text = (
-            standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
+                standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
         )
         yield get_return_value()
         return
@@ -183,34 +174,34 @@ def stream_predict(
                     break
                 try:
                     partial_words = (
-                        partial_words + chunk["choices"][0]["delta"]["content"]
+                            partial_words + chunk["choices"][0]["delta"]["content"]
                     )
                 except KeyError:
                     status_text = (
-                        standard_error_msg
-                        + "API回复中找不到内容。很可能是Token计数达到上限了。请重置对话。当前Token计数: "
-                        + str(sum(all_token_counts))
+                            standard_error_msg
+                            + "API回复中找不到内容。很可能是Token计数达到上限了。请重置对话。当前Token计数: "
+                            + str(sum(all_token_counts))
                     )
                     yield get_return_value()
                     break
                 history[-1] = construct_assistant(partial_words)
-                chatbot[-1] = (chatbot[-1][0], partial_words+display_append)
+                chatbot[-1] = (chatbot[-1][0], partial_words + display_append)
                 all_token_counts[-1] += 1
                 yield get_return_value()
 
 
 def predict_all(
-    openai_api_key,
-    system_prompt,
-    history,
-    inputs,
-    chatbot,
-    all_token_counts,
-    top_p,
-    temperature,
-    selected_model,
-    fake_input=None,
-    display_append=""
+        openai_api_key,
+        system_prompt,
+        history,
+        inputs,
+        chatbot,
+        all_token_counts,
+        top_p,
+        temperature,
+        selected_model,
+        fake_input=None,
+        display_append=""
 ):
     logging.info("一次性回答模式")
     history.append(construct_user(inputs))
@@ -232,7 +223,7 @@ def predict_all(
         )
     except requests.exceptions.ConnectTimeout:
         status_text = (
-            standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
+                standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
         )
         return chatbot, history, status_text, all_token_counts
     except requests.exceptions.ProxyError:
@@ -244,7 +235,7 @@ def predict_all(
     response = json.loads(response.text)
     content = response["choices"][0]["message"]["content"]
     history[-1] = construct_assistant(content)
-    chatbot[-1] = (chatbot[-1][0], content+display_append)
+    chatbot[-1] = (chatbot[-1][0], content + display_append)
     total_token_count = response["usage"]["total_tokens"]
     all_token_counts[-1] = total_token_count - sum(all_token_counts)
     status_text = construct_token_message(total_token_count)
@@ -252,32 +243,32 @@ def predict_all(
 
 
 def predict(
-    openai_api_key,
-    system_prompt,
-    history,
-    inputs,
-    chatbot,
-    all_token_counts,
-    top_p,
-    temperature,
-    stream=False,
-    selected_model=MODELS[0],
-    use_websearch=False,
-    files = None,
-    reply_language="中文",
-    should_check_token_count=True,
+        openai_api_key,
+        system_prompt,
+        history,
+        inputs,
+        chatbot,
+        all_token_counts,
+        top_p,
+        temperature,
+        stream=False,
+        selected_model=MODELS[0],
+        use_websearch=False,
+        files=None,
+        reply_language="中文",
+        should_check_token_count=True,
 ):  # repetition_penalty, top_k
     logging.info("输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
-    yield chatbot+[(inputs, "")], history, "开始生成回答……", all_token_counts
+    yield chatbot + [(inputs, "")], history, "开始生成回答……", all_token_counts
     if reply_language == "跟随问题语言（不稳定）":
         reply_language = "the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch."
     if files:
         msg = "构建索引中……（这可能需要比较久的时间）"
         logging.info(msg)
-        yield chatbot+[(inputs, "")], history, msg, all_token_counts
+        yield chatbot + [(inputs, "")], history, msg, all_token_counts
         index = construct_index(openai_api_key, file_src=files)
         msg = "索引构建完成，获取回答中……"
-        yield chatbot+[(inputs, "")], history, msg, all_token_counts
+        yield chatbot + [(inputs, "")], history, msg, all_token_counts
         history, chatbot, status_text = chat_ai(openai_api_key, index, inputs, history, chatbot, reply_language)
         yield chatbot, history, status_text, all_token_counts
         return
@@ -291,14 +282,14 @@ def predict(
         for idx, result in enumerate(search_results):
             logging.info(f"搜索结果{idx + 1}：{result}")
             domain_name = urllib3.util.parse_url(result["href"]).host
-            web_results.append(f'[{idx+1}]"{result["body"]}"\nURL: {result["href"]}')
-            link_references.append(f"{idx+1}. [{domain_name}]({result['href']})\n")
+            web_results.append(f'[{idx + 1}]"{result["body"]}"\nURL: {result["href"]}')
+            link_references.append(f"{idx + 1}. [{domain_name}]({result['href']})\n")
         link_references = "\n\n" + "".join(link_references)
         inputs = (
             replace_today(WEBSEARCH_PTOMPT_TEMPLATE)
             .replace("{query}", inputs)
             .replace("{web_results}", "\n\n".join(web_results))
-            .replace("{reply_language}", reply_language )
+            .replace("{reply_language}", reply_language)
         )
     else:
         link_references = ""
@@ -313,17 +304,17 @@ def predict(
             all_token_counts.append(0)
         else:
             history[-2] = construct_user(inputs)
-        yield chatbot+[(inputs, "")], history, status_text, all_token_counts
+        yield chatbot + [(inputs, "")], history, status_text, all_token_counts
         return
     elif len(inputs.strip()) == 0:
         status_text = standard_error_msg + no_input_msg
         logging.info(status_text)
-        yield chatbot+[(inputs, "")], history, status_text, all_token_counts
+        yield chatbot + [(inputs, "")], history, status_text, all_token_counts
         return
 
     if stream:
         logging.info("使用流式传输")
-        iter = stream_predict(
+        _iter = stream_predict(
             openai_api_key,
             system_prompt,
             history,
@@ -336,7 +327,7 @@ def predict(
             fake_input=old_inputs,
             display_append=link_references
         )
-        for chatbot, history, status_text, all_token_counts in iter:
+        for chatbot, history, status_text, all_token_counts in _iter:
             if shared.state.interrupted:
                 shared.state.recover()
                 return
@@ -376,7 +367,7 @@ def predict(
         status_text = f"精简token中{all_token_counts}/{max_token}"
         logging.info(status_text)
         yield chatbot, history, status_text, all_token_counts
-        iter = reduce_token_size(
+        _iter = reduce_token_size(
             openai_api_key,
             system_prompt,
             history,
@@ -384,25 +375,25 @@ def predict(
             all_token_counts,
             top_p,
             temperature,
-            max_token//2,
+            max_token // 2,
             selected_model=selected_model,
         )
-        for chatbot, history, status_text, all_token_counts in iter:
+        for chatbot, history, status_text, all_token_counts in _iter:
             status_text = f"Token 达到上限，已自动降低Token计数至 {status_text}"
             yield chatbot, history, status_text, all_token_counts
 
 
 def retry(
-    openai_api_key,
-    system_prompt,
-    history,
-    chatbot,
-    token_count,
-    top_p,
-    temperature,
-    stream=False,
-    selected_model=MODELS[0],
-    reply_language="中文",
+        openai_api_key,
+        system_prompt,
+        history,
+        chatbot,
+        token_count,
+        top_p,
+        temperature,
+        stream=False,
+        selected_model=MODELS[0],
+        reply_language="中文",
 ):
     logging.info("重试中……")
     if len(history) == 0:
@@ -411,7 +402,7 @@ def retry(
     history.pop()
     inputs = history.pop()["content"]
     token_count.pop()
-    iter = predict(
+    _iter = predict(
         openai_api_key,
         system_prompt,
         history,
@@ -425,25 +416,25 @@ def retry(
         reply_language=reply_language,
     )
     logging.info("重试中……")
-    for x in iter:
+    for x in _iter:
         yield x
     logging.info("重试完毕")
 
 
 def reduce_token_size(
-    openai_api_key,
-    system_prompt,
-    history,
-    chatbot,
-    token_count,
-    top_p,
-    temperature,
-    max_token_count,
-    selected_model=MODELS[0],
-    reply_language="中文",
+        openai_api_key,
+        system_prompt,
+        history,
+        chatbot,
+        token_count,
+        top_p,
+        temperature,
+        max_token_count,
+        selected_model=MODELS[0],
+        reply_language="中文",
 ):
     logging.info("开始减少token数量……")
-    iter = predict(
+    _iter = predict(
         openai_api_key,
         system_prompt,
         history,
@@ -458,12 +449,13 @@ def reduce_token_size(
     )
     logging.info(f"chatbot: {chatbot}")
     flag = False
-    for chatbot, history, status_text, previous_token_count in iter:
+    msg = None
+    for chatbot, history, status_text, previous_token_count in _iter:
         num_chat = find_n(previous_token_count, max_token_count)
         if flag:
             chatbot = chatbot[:-1]
         flag = True
-        history = history[-2*num_chat:] if num_chat > 0 else []
+        history = history[-2 * num_chat:] if num_chat > 0 else []
         token_count = previous_token_count[-num_chat:] if num_chat > 0 else []
         msg = f"保留了最近{num_chat}轮对话"
         yield chatbot, history, msg + "，" + construct_token_message(

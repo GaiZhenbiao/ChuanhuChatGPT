@@ -1,5 +1,6 @@
 from modules.presets import API_URL
 
+
 class State:
     interrupted = False
     api_url = API_URL
@@ -20,5 +21,6 @@ class State:
     def reset_all(self):
         self.interrupted = False
         self.api_url = API_URL
+
 
 state = State()

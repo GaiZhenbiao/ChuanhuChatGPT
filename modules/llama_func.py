@@ -1,6 +1,3 @@
-import os
-import logging
-
 from llama_index import GPTSimpleVectorIndex
 from llama_index import download_loader
 from llama_index import (
@@ -13,8 +10,6 @@ from llama_index import (
 from langchain.llms import OpenAI
 import colorama
 
-
-from modules.presets import *
 from modules.utils import *
 
 
@@ -51,16 +46,16 @@ def get_documents(file_src):
 
 
 def construct_index(
-    api_key,
-    file_src,
-    max_input_size=4096,
-    num_outputs=1,
-    max_chunk_overlap=20,
-    chunk_size_limit=600,
-    embedding_limit=None,
-    separator=" ",
-    num_children=10,
-    max_keywords_per_chunk=10,
+        api_key,
+        file_src,
+        max_input_size=4096,
+        num_outputs=1,
+        max_chunk_overlap=20,
+        chunk_size_limit=600,
+        embedding_limit=None,
+        separator=" ",
+        num_children=10,
+        max_keywords_per_chunk=10,
 ):
     os.environ["OPENAI_API_KEY"] = api_key
     chunk_size_limit = None if chunk_size_limit == 0 else chunk_size_limit
@@ -97,12 +92,12 @@ def construct_index(
 
 
 def chat_ai(
-    api_key,
-    index,
-    question,
-    context,
-    chatbot,
-    reply_language,
+        api_key,
+        index,
+        question,
+        context,
+        chatbot,
+        reply_language,
 ):
     os.environ["OPENAI_API_KEY"] = api_key
 
@@ -133,16 +128,18 @@ def chat_ai(
 
 
 def ask_ai(
-    api_key,
-    index,
-    question,
-    prompt_tmpl,
-    refine_tmpl,
-    sim_k=1,
-    temprature=0,
-    prefix_messages=[],
-    reply_language="中文",
+        api_key,
+        index,
+        question,
+        prompt_tmpl,
+        refine_tmpl,
+        sim_k=1,
+        temprature=0,
+        prefix_messages=None,
+        reply_language="中文",
 ):
+    if prefix_messages is None:
+        prefix_messages = []
     os.environ["OPENAI_API_KEY"] = api_key
 
     logging.debug("Index file found")
@@ -174,7 +171,7 @@ def ask_ai(
         for index, node in enumerate(response.source_nodes):
             brief = node.source_text[:25].replace("\n", "")
             nodes.append(
-                f"<details><summary>[{index+1}]\t{brief}...</summary><p>{node.source_text}</p></details>"
+                f"<details><summary>[{index + 1}]\t{brief}...</summary><p>{node.source_text}</p></details>"
             )
         new_response = ret_text + "\n----------\n" + "\n\n".join(nodes)
         logging.info(

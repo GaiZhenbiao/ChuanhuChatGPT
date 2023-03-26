@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from __future__ import annotations
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple, Type
+from typing import TYPE_CHECKING, List
 import logging
 import json
 import os
@@ -11,7 +11,6 @@ import requests
 import re
 import html
 
-import gradio as gr
 from pypinyin import lazy_pinyin
 import tiktoken
 import mdtex2html
@@ -30,6 +29,7 @@ logging.basicConfig(
 
 if TYPE_CHECKING:
     from typing import TypedDict
+
 
     class DataframeData(TypedDict):
         headers: List[str]
@@ -78,7 +78,7 @@ def normalize_markdown(md_text: str) -> str:
             normalized_lines.append(line)
         elif inside_list and line.strip() == "":
             if i < len(lines) - 1 and not re.match(
-                r"^(\d+\.|-|\*|\+)\s", lines[i + 1].strip()
+                    r"^(\d+\.|-|\*|\+)\s", lines[i + 1].strip()
             ):
                 normalized_lines.append(line)
             continue
@@ -116,7 +116,8 @@ def convert_mdtext(md_text):
 
 def convert_asis(userinput):
     escaped_html = html.escape(userinput).replace(" ", "&nbsp;").replace("\n", "<br>")
-    return f"{escaped_html}"+ALREADY_CONVERTED_MARK
+    return f"{escaped_html}" + ALREADY_CONVERTED_MARK
+
 
 def detect_converted_mark(userinput):
     if userinput.endswith(ALREADY_CONVERTED_MARK):
@@ -131,7 +132,7 @@ def detect_language(code):
     else:
         first_line = code.strip().split("\n", 1)[0]
     language = first_line.lower() if first_line else ""
-    code_without_language = code[len(first_line) :].lstrip() if first_line else code
+    code_without_language = code[len(first_line):].lstrip() if first_line else code
     return language, code_without_language
 
 
@@ -240,20 +241,22 @@ def load_chat_history(filename, system, history, chatbot):
         return filename, system, history, chatbot
 
 
-def sorted_by_pinyin(list):
-    return sorted(list, key=lambda char: lazy_pinyin(char)[0][0])
+def sorted_by_pinyin(_list):
+    return sorted(_list, key=lambda char: lazy_pinyin(char)[0][0])
 
 
-def get_file_names(dir, plain=False, filetypes=[".json"]):
-    logging.info(f"获取文件名列表，目录为{dir}，文件类型为{filetypes}，是否为纯文本列表{plain}")
+def get_file_names(_dir, plain=False, filetypes=None):
+    if filetypes is None:
+        filetypes = [".json"]
+    logging.info(f"获取文件名列表，目录为{_dir}，文件类型为{filetypes}，是否为纯文本列表{plain}")
     files = []
     try:
-        for type in filetypes:
-            files += [f for f in os.listdir(dir) if f.endswith(type)]
+        for _type in filetypes:
+            files += [f for f in os.listdir(_dir) if f.endswith(_type)]
     except FileNotFoundError:
         files = []
     files = sorted_by_pinyin(files)
-    if files == []:
+    if not files:
         files = [""]
     if plain:
         return files
@@ -268,7 +271,6 @@ def get_history_names(plain=False):
 
 def load_template(filename, mode=0):
     logging.info(f"加载模板文件{filename}，模式为{mode}（0为返回字典和下拉菜单，1为返回下拉菜单，2为返回字典）")
-    lines = []
     logging.info("Loading template...")
     if filename.endswith(".json"):
         with open(os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8") as f:
@@ -276,7 +278,7 @@ def load_template(filename, mode=0):
         lines = [[i["act"], i["prompt"]] for i in lines]
     else:
         with open(
-            os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8"
+                os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8"
         ) as csvfile:
             reader = csv.reader(csvfile)
             lines = list(reader)
@@ -418,8 +420,9 @@ def cancel_outputing():
     logging.info("中止输出……")
     shared.state.interrupt()
 
+
 def transfer_input(inputs):
     # 一次性返回，降低延迟
-    textbox = reset_textbox()
-    outputing = start_outputing()
+    reset_textbox()
+    start_outputing()
     return inputs, gr.update(value=""), gr.Button.update(visible=False), gr.Button.update(visible=True)

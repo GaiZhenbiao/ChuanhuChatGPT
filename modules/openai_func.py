@@ -1,7 +1,7 @@
 import requests
 import logging
-from modules.presets import timeout_all, BALANCE_API_URL,standard_error_msg,connection_timeout_prompt,error_retrieve_prompt,read_timeout_prompt
-from modules import shared
+from modules.presets import timeout_all, BALANCE_API_URL, standard_error_msg, connection_timeout_prompt, \
+    error_retrieve_prompt, read_timeout_prompt
 import os
 
 
@@ -48,9 +48,10 @@ def get_usage_response(openai_api_key):
         )
     return response
 
+
 def get_usage(openai_api_key):
     try:
-        response=get_usage_response(openai_api_key=openai_api_key)
+        response = get_usage_response(openai_api_key=openai_api_key)
         logging.debug(response.json())
         try:
             balance = response.json().get("total_available") if response.json().get(
@@ -58,9 +59,9 @@ def get_usage(openai_api_key):
             total_used = response.json().get("total_used") if response.json().get(
                 "total_used") else 0
         except Exception as e:
-            logging.error(f"API使用情况解析失败:"+str(e))
+            logging.error(f"API使用情况解析失败:" + str(e))
             balance = 0
-            total_used=0
+            total_used = 0
         return f"**API使用情况**（已用/余额）\u3000{total_used}$ / {balance}$"
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
