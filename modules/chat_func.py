@@ -272,7 +272,7 @@ def predict(
     if reply_language == "跟随问题语言（不稳定）":
         reply_language = "the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch."
     if files:
-        msg = "构建索引中……（这可能需要比较久的时间）"
+        msg = "加载索引中……（这可能需要几分钟）"
         logging.info(msg)
         yield chatbot+[(inputs, "")], history, msg, all_token_counts
         index = construct_index(openai_api_key, file_src=files)

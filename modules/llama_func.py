@@ -16,15 +16,19 @@ import colorama
 from modules.presets import *
 from modules.utils import *
 
+def get_index_name(file_src):
+    index_name = ""
+    for file in file_src:
+        index_name += os.path.basename(file.name)
+    index_name = sha1sum(index_name)
+    return index_name
 
 def get_documents(file_src):
     documents = []
-    index_name = ""
     logging.debug("Loading documents...")
     logging.debug(f"file_src: {file_src}")
     for file in file_src:
-        logging.debug(f"file: {file.name}")
-        index_name += file.name
+        logging.info(f"loading file: {file.name}")
         if os.path.splitext(file.name)[1] == ".pdf":
             logging.debug("Loading PDF...")
             CJKPDFReader = download_loader("CJKPDFReader")
@@ -46,8 +50,7 @@ def get_documents(file_src):
                 text_raw = f.read()
         text = add_space(text_raw)
         documents += [Document(text)]
-    index_name = sha1sum(index_name)
-    return documents, index_name
+    return documents
 
 
 def construct_index(
@@ -78,7 +81,8 @@ def construct_index(
         chunk_size_limit,
         separator=separator,
     )
-    documents, index_name = get_documents(file_src)
+    index_name = get_index_name(file_src)
+    documents = get_documents(file_src)
     if os.path.exists(f"./index/{index_name}.json"):
         logging.info("找到了缓存的索引文件，加载中……")
         return GPTSimpleVectorIndex.load_from_disk(f"./index/{index_name}.json")
