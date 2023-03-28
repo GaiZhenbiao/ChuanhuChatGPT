@@ -261,7 +261,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     transfer_input_args = dict(
         fn=transfer_input, inputs=[user_input], outputs=[user_question, user_input, submitBtn, cancelBtn], show_progress=True
     )
-    
+
     get_usage_args = dict(
         fn=get_usage, inputs=[user_api_key], outputs=[usageTxt], show_progress=False
     )
@@ -318,7 +318,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             token_count,
             top_p,
             temperature,
-            gr.State(0),
+            gr.State(max_token_streaming if use_streaming_checkbox.value else max_token_all),
             model_select_dropdown,
             language_select_dropdown,
         ],
@@ -326,7 +326,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         show_progress=True,
     )
     reduceTokenBtn.click(**get_usage_args)
-    
+
     # ChatGPT
     keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_usage_args)
 
