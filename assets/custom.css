@@ -39,6 +39,7 @@ ol:not(.options), ul:not(.options) {
 @media (prefers-color-scheme: light) {
     #chuanhu_chatbot {
         background-color: var(--chatbot-color-light) !important;
+        color: #000000 !important;
     }
     [data-testid = "bot"] {
         background-color: #FFFFFF !important;
@@ -51,6 +52,7 @@ ol:not(.options), ul:not(.options) {
 @media (prefers-color-scheme: dark) {
     #chuanhu_chatbot {
         background-color: var(--chatbot-color-dark) !important;
+        color: #FFFFFF !important;
     }
     [data-testid = "bot"] {
         background-color: #2C2C2C !important;

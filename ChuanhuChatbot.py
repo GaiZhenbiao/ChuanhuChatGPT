@@ -88,8 +88,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     "🧹 新的对话",
                 )
                 retryBtn = gr.Button("🔄 重新生成")
-                delFirstBtn = gr.Button("🗑️ 删除早期历史")
-                delLastBtn = gr.Button("🗑️ 删除最后对话")
+                delFirstBtn = gr.Button("🗑️ 删除最旧对话")
+                delLastBtn = gr.Button("🗑️ 删除最新对话")
                 reduceTokenBtn = gr.Button("♻️ 总结对话")
 
         with gr.Column():
