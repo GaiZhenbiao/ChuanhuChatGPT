@@ -115,7 +115,11 @@ def convert_mdtext(md_text):
 
 
 def convert_asis(userinput):
-    return f"<p style=\"white-space:pre-wrap;\">{html.escape(userinput)}</p>"+ALREADY_CONVERTED_MARK
+    return (
+        f'<p style="white-space:pre-wrap;">{html.escape(userinput)}</p>'
+        + ALREADY_CONVERTED_MARK
+    )
+
 
 def detect_converted_mark(userinput):
     if userinput.endswith(ALREADY_CONVERTED_MARK):
@@ -152,6 +156,17 @@ def construct_assistant(text):
 
 def construct_token_message(token, stream=False):
     return f"Token 计数: {token}"
+
+
+def delete_first_conversation(history, previous_token_count):
+    if history:
+        del history[:2]
+        del previous_token_count[0]
+    return (
+        history,
+        previous_token_count,
+        construct_token_message(sum(previous_token_count)),
+    )
 
 
 def delete_last_conversation(chatbot, history, previous_token_count):
@@ -417,8 +432,14 @@ def cancel_outputing():
     logging.info("中止输出……")
     shared.state.interrupt()
 
+
 def transfer_input(inputs):
     # 一次性返回，降低延迟
     textbox = reset_textbox()
     outputing = start_outputing()
-    return inputs, gr.update(value=""), gr.Button.update(visible=False), gr.Button.update(visible=True)
+    return (
+        inputs,
+        gr.update(value=""),
+        gr.Button.update(visible=False),
+        gr.Button.update(visible=True),
+    )

@@ -88,7 +88,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     "🧹 新的对话",
                 )
                 retryBtn = gr.Button("🔄 重新生成")
-                delLastBtn = gr.Button("🗑️ 删除一条对话")
+                delFirstBtn = gr.Button("🗑️ 删除早期历史")
+                delLastBtn = gr.Button("🗑️ 删除最后对话")
                 reduceTokenBtn = gr.Button("♻️ 总结对话")
 
         with gr.Column():
@@ -300,6 +301,12 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         show_progress=True,
     ).then(**end_outputing_args)
     retryBtn.click(**get_usage_args)
+
+    delFirstBtn.click(
+        delete_first_conversation,
+        [history, token_count],
+        [history, token_count, status_display],
+    )
 
     delLastBtn.click(
         delete_last_conversation,
