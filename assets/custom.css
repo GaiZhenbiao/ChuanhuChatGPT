@@ -77,7 +77,7 @@ ol:not(.options), ul:not(.options) {
         height: calc(100vh - 140px);
     }
     #chuanhu_chatbot .wrap {
-        max-height: calc(100vh - 140 - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+        max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     }
 }
 /* 对话气泡 */
