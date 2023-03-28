@@ -17,9 +17,11 @@ from modules.presets import *
 from modules.utils import *
 
 def get_index_name(file_src):
-    index_name = ""
+    index_name = []
     for file in file_src:
-        index_name += os.path.basename(file.name)
+        index_name.append(os.path.basename(file.name))
+    index_name = sorted(index_name)
+    index_name = "".join(index_name)
     index_name = sha1sum(index_name)
     return index_name
 
