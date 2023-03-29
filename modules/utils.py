@@ -367,12 +367,6 @@ def submit_key(key):
     return key, msg
 
 
-def sha1sum(filename):
-    sha1 = hashlib.sha1()
-    sha1.update(filename.encode("utf-8"))
-    return sha1.hexdigest()
-
-
 def replace_today(prompt):
     today = datetime.datetime.today().strftime("%Y-%m-%d")
     return prompt.replace("{current_date}", today)

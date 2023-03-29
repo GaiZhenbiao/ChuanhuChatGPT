@@ -17,13 +17,17 @@ from modules.presets import *
 from modules.utils import *
 
 def get_index_name(file_src):
-    index_name = []
-    for file in file_src:
-        index_name.append(os.path.basename(file.name))
-    index_name = sorted(index_name)
-    index_name = "".join(index_name)
-    index_name = sha1sum(index_name)
-    return index_name
+    file_paths = [x.name for x in file_src]
+    file_paths.sort(key=lambda x: os.path.basename(x))
+
+    md5_hash = hashlib.md5()
+    for file_path in file_paths:
+        with open(file_path, "rb") as f:
+            while chunk := f.read(8192):
+                md5_hash.update(chunk)
+
+    return md5_hash.hexdigest()
+
 
 def get_documents(file_src):
     documents = []
