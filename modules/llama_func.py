@@ -1,7 +1,7 @@
 import os
 import logging
 
-from llama_index import GPTSimpleVectorIndex
+from llama_index import GPTSimpleVectorIndex, ServiceContext
 from llama_index import download_loader
 from llama_index import (
     Document,
@@ -11,6 +11,7 @@ from llama_index import (
     RefinePrompt,
 )
 from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
 import colorama
 
 from modules.presets import *
@@ -56,6 +57,7 @@ def get_documents(file_src):
                 text_raw = f.read()
         text = add_space(text_raw)
         documents += [Document(text)]
+    logging.debug("Documents loaded.")
     return documents
 
 
@@ -77,7 +79,7 @@ def construct_index(
     separator = " " if separator == "" else separator
 
     llm_predictor = LLMPredictor(
-        llm=OpenAI(model_name="gpt-3.5-turbo-0301", openai_api_key=api_key)
+        llm=ChatOpenAI(model_name="gpt-3.5-turbo-0301", openai_api_key=api_key)
     )
     prompt_helper = PromptHelper(
         max_input_size,
@@ -94,13 +96,19 @@ def construct_index(
     else:
         try:
             documents = get_documents(file_src)
-            logging.debug("构建索引中……")
-            index = GPTSimpleVectorIndex(
-                documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper
-            )
-            os.makedirs("./index", exist_ok=True)
-            index.save_to_disk(f"./index/{index_name}.json")
-            return index
+            logging.info("构建索引中……")
+            service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor, prompt_helper=prompt_helper)
+            try:
+                index = GPTSimpleVectorIndex.from_documents(
+                    documents,  service_context=service_context
+                )
+                logging.info("索引构建完成！")
+                os.makedirs("./index", exist_ok=True)
+                index.save_to_disk(f"./index/{index_name}.json")
+                logging.info("索引已保存至本地!")
+                return index
+            except Exception as e:
+                logging.error("索引构建失败！", e)
         except Exception as e:
             print(e)
             return None
@@ -158,7 +166,7 @@ def ask_ai(
     logging.debug("Index file found")
     logging.debug("Querying index...")
     llm_predictor = LLMPredictor(
-        llm=OpenAI(
+        llm=ChatOpenAI(
             temperature=temprature,
             model_name="gpt-3.5-turbo-0301",
             prefix_messages=prefix_messages,
@@ -170,7 +178,6 @@ def ask_ai(
     rf_prompt = RefinePrompt(refine_tmpl.replace("{reply_language}", reply_language))
     response = index.query(
         question,
-        llm_predictor=llm_predictor,
         similarity_top_k=sim_k,
         text_qa_template=qa_prompt,
         refine_template=rf_prompt,
