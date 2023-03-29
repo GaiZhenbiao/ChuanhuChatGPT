@@ -98,18 +98,17 @@ def construct_index(
             documents = get_documents(file_src)
             logging.info("构建索引中……")
             service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor, prompt_helper=prompt_helper)
-            try:
-                index = GPTSimpleVectorIndex.from_documents(
-                    documents,  service_context=service_context
-                )
-                logging.info("索引构建完成！")
-                os.makedirs("./index", exist_ok=True)
-                index.save_to_disk(f"./index/{index_name}.json")
-                logging.info("索引已保存至本地!")
-                return index
-            except Exception as e:
-                logging.error("索引构建失败！", e)
+            index = GPTSimpleVectorIndex.from_documents(
+                documents,  service_context=service_context
+            )
+            logging.debug("索引构建完成！")
+            os.makedirs("./index", exist_ok=True)
+            index.save_to_disk(f"./index/{index_name}.json")
+            logging.debug("索引已保存至本地!")
+            return index
+
         except Exception as e:
+            logging.error("索引构建失败！", e)
             print(e)
             return None
 
