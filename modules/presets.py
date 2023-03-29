@@ -41,6 +41,10 @@ description = """\
 </div>
 """
 
+footer = """\
+<div class="versions">{versions}</div>
+"""
+
 summarize_prompt = "你是谁？我们刚才聊了什么？"  # 总结对话时的 prompt
 
 MODELS = [
