@@ -7,6 +7,8 @@ API_URL = "https://api.openai.com/v1/chat/completions"
 BALANCE_API_URL="https://api.openai.com/dashboard/billing/credit_grants"
 HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"
+CONFIG_FILE_API_URL = "./api_url.txt"
+CONFIG_FILE_PROXY_URL = "./proxy.txt"
 
 # 错误信息
 standard_error_msg = "☹️发生了错误："  # 错误信息的标准前缀

@@ -16,13 +16,35 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
 )
 
-my_api_key = ""  # 在这里输入你的 API 密钥
+# 在这里输入你的 API 密钥
+my_api_key = ""
+# 在这里输入你的 自定义API地址 
+my_api_url = API_URL
+# 在这里输入你的 自定义代理地址
+my_proxy_url = ""
+
+# 读取配置文件中的API地址
+if os.path.exists(CONFIG_FILE_API_URL):
+    with open(CONFIG_FILE_API_URL, mode="r", encoding="utf-8") as f:
+        api_url_from_file = f.readline()
+
+    # 空值判断
+    if api_url_from_file and not api_url_from_file.isspace():
+        my_api_url = api_url_from_file
+        change_api_url(my_api_url)
+
+# 读取配置文件中的代理地址
+if os.path.exists(CONFIG_FILE_PROXY_URL):
+    with open(CONFIG_FILE_PROXY_URL, mode="r", encoding="utf-8") as f:
+        proxy_url_from_file = f.readline()
+    
+    # 空值判断
+    if api_url_from_file and not api_url_from_file.isspace():
+        my_proxy_url = proxy_url_from_file
+        change_proxy(my_proxy_url)
 
 # if we are running in Docker
-if os.environ.get("dockerrun") == "yes":
-    dockerflag = True
-else:
-    dockerflag = False
+dockerflag = os.environ.get("dockerrun") == "yes"
 
 authflag = False
 auth_list = []
@@ -213,7 +235,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             show_label=True,
                             placeholder=f"在这里输入API地址...",
                             label="API地址",
-                            value="https://api.openai.com/v1/chat/completions",
+                            value=my_api_url,
                             lines=2,
                         )
                         changeAPIURLBtn = gr.Button("🔄 切换API地址")
@@ -221,7 +243,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             show_label=True,
                             placeholder=f"在这里输入代理地址...",
                             label="代理地址（示例：http://127.0.0.1:10809）",
-                            value="",
+                            value=my_proxy_url,
                             lines=2,
                         )
                         changeProxyBtn = gr.Button("🔄 设置代理地址")
