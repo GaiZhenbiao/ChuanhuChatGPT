@@ -227,7 +227,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         changeProxyBtn = gr.Button("🔄 设置代理地址")
 
     gr.Markdown(description)
-
+    gr.HTML(footer.format(versions=versions_html()), elem_id="footer")
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[
