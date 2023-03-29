@@ -37,8 +37,9 @@ footer {
 
 /* usage_display */
 #usage_display {
-    height: 1em;
+    height: 2em;
 }
+
 #usage_display p{
     padding: 0 1em;
     font-size: .85em;
