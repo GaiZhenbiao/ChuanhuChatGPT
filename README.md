@@ -156,6 +156,72 @@
 	如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
 <br />
 
+5. **（可选）填写自定义的API地址**
+
+	只需要填写到域名，例如：`https://yourdomain.com`（此地址仅作举例，并非真实地址，请勿使用！）。
+
+	同样，以下3种方法任选其一：
+
+	<details><summary>1. 在图形界面中填写你的API地址</summary>
+
+	这样设置的API地址会在页面刷新后被清除。
+
+	在`川虎ChatGPT网页`->`高级`->`网络参数`->`API地址中填写`
+
+	</details>
+
+	<details><summary>2. 在直接代码中填入你的代理地址</summary>
+
+	这样设置的API地址会成为默认地址，修改代码中的`my_api_url`变量，将其改为你自己的地址。
+
+	</details>
+
+	<details><summary>3. 在文件中设定默认代理地址</summary>
+
+	这样设置的API地址可以在拉取项目更新之后保留。
+
+	在项目文件夹中新建文件：`api_url.txt`。
+
+	在`api_url.txt`中填写你的自定义API地址，注意不要填写任何无关内容。
+
+	**重要！！！**：不要使用别人提供的第三方API地址，他人可以在代理服务器上获取你的API Key！
+
+	这里提供一些搭建自定义API地址的建议：
+
+	- 在服务器上使用Nginx做反向代理
+	- 使用Cloud Flare的Worker功能反向代理，参考[这篇文章](https://github.com/noobnooc/noobnooc/discussions/9)。
+
+	</details>
+
+
+6. **（可选）填写自定义的代理地址**
+
+	同样，以下3种方法任选其一：
+
+	<details><summary>1. 在图形界面中填写你的代理地址</summary>
+
+	这样设置的代理地址会在页面刷新后被清除。
+
+	在`川虎ChatGPT网页`->`高级`->`网络参数`->`代理地址中填写`
+
+	</details>
+
+	<details><summary>2. 在直接代码中填入你的API地址</summary>
+
+	这样设置的代理地址会成为默认地址，修改代码中的`my_proxy_url`变量，将其改为你自己的地址。
+
+	</details>
+
+	<details><summary>3. 在文件中设定默认API地址</summary>
+
+	这样设置的API地址可以在拉取项目更新之后保留。
+
+	在项目文件夹中新建文件：`proxy.txt`。
+
+	在`proxy.txt`中填写你的自定义代理地址，注意不要填写任何无关内容。
+
+	</details>
+
 如果一切顺利，现在，你应该已经可以在浏览器地址栏中输入 [`http://localhost:7860`](http://localhost:7860) 查看并使用 ChuanhuChatGPT 了。
 
 **如果你在安装过程中碰到了问题，请先查看[疑难杂症解决](#疑难杂症解决)部分。**
