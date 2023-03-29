@@ -3,6 +3,21 @@
     --chatbot-color-dark: #121111;
 }
 
+/* 覆盖gradio的页脚信息QAQ */
+footer {
+    display: none !important;
+}
+#footer{
+    text-align: center;
+}
+#footer div{
+    display: inline-block;
+}
+#footer .versions{
+    font-size: 85%;
+    opacity: 0.85;
+}
+
 /* status_display */
 #status_display {
     display: flex;
