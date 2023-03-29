@@ -108,8 +108,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         visible=not HIDE_MY_KEY,
                         label="API-Key",
                     )
-                    usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示免费额度", elem_id="usage_display")
-                    dollarUsageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示API使用情况", elem_id="usage_display")
+                    usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display")
                     model_select_dropdown = gr.Dropdown(
                         label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0]
                     )
@@ -274,7 +273,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     )
 
     get_dollar_usage_args = dict(
-        fn=get_dollar_usage_for_current_month, inputs=[user_api_key], outputs=[dollarUsageTxt], show_progress=False
+        fn=get_dollar_usage_for_current_month, inputs=[user_api_key], outputs=[usageTxt], show_progress=False
     )
 
     # Chatbot
@@ -349,8 +348,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     reduceTokenBtn.click(**get_dollar_usage_args)
 
     # ChatGPT
-    keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_usage_args)
-    keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_dollar_usage_args)
+    if get_usage(user_api_key) == "**您的免费额度已用完**":
+        keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_dollar_usage_args)
+    else:
+        keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_usage_args)
 
     # Template
     templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])

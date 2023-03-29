@@ -51,6 +51,9 @@ def get_usage(openai_api_key):
             logging.error(f"API使用情况解析失败:"+str(e))
             balance = 0
             total_used=0
+            return f"**API使用情况解析失败**"
+        if balance == 0:
+            return f"**您的免费额度已用完**"
         return f"**API免费额度使用情况**（已用/余额）\u3000${total_used} / ${balance}"
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
