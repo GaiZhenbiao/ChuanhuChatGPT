@@ -342,6 +342,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     # ChatGPT
     keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_usage_args)
+    keyTxt.submit(**get_usage_args)
 
     # Template
     templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
