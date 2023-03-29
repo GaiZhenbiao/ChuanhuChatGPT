@@ -25,6 +25,7 @@ else:
     dockerflag = False
 
 authflag = False
+auth_list = []
 
 if dockerflag:
     my_api_key = os.environ.get("my_api_key")
@@ -35,6 +36,7 @@ if dockerflag:
     username = os.environ.get("USERNAME")
     password = os.environ.get("PASSWORD")
     if not (isinstance(username, type(None)) or isinstance(password, type(None))):
+        auth_list.append((os.environ.get("USERNAME"), os.environ.get("PASSWORD")))
         authflag = True
 else:
     if (
@@ -45,12 +47,15 @@ else:
         with open("api_key.txt", "r") as f:
             my_api_key = f.read().strip()
     if os.path.exists("auth.json"):
+        authflag = True
         with open("auth.json", "r", encoding='utf-8') as f:
             auth = json.load(f)
-            username = auth["username"]
-            password = auth["password"]
-            if username != "" and password != "":
-                authflag = True
+            for _ in auth:
+                if auth[_]["username"] and auth[_]["password"]:
+                    auth_list.append((auth[_]["username"], auth[_]["password"]))
+                else:
+                    logging.error("请检查auth.json文件中的用户名和密码！")
+                    sys.exit(1)
 
 gr.Chatbot.postprocess = postprocess
 PromptHelper.compact_text_chunks = compact_text_chunks
@@ -71,11 +76,11 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         gr.HTML(title)
         status_display = gr.Markdown(get_geoip(), elem_id="status_display")
 
-    with gr.Row(scale=1).style(equal_height=True):
+    with gr.Row().style(equal_height=True):
         with gr.Column(scale=5):
-            with gr.Row(scale=1):
+            with gr.Row():
                 chatbot = gr.Chatbot(elem_id="chuanhu_chatbot").style(height="100%")
-            with gr.Row(scale=1):
+            with gr.Row():
                 with gr.Column(scale=12):
                     user_input = gr.Textbox(
                         show_label=False, placeholder="在这里输入"
@@ -83,7 +88,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                 with gr.Column(min_width=70, scale=1):
                     submitBtn = gr.Button("发送", variant="primary")
                     cancelBtn = gr.Button("取消", variant="secondary", visible=False)
-            with gr.Row(scale=1):
+            with gr.Row():
                 emptyBtn = gr.Button(
                     "🧹 新的对话",
                 )
@@ -412,7 +417,7 @@ if __name__ == "__main__":
             demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
                 server_name="0.0.0.0",
                 server_port=7860,
-                auth=(username, password),
+                auth=auth_list,
                 favicon_path="./assets/favicon.ico",
             )
         else:
@@ -427,7 +432,7 @@ if __name__ == "__main__":
         if authflag:
             demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
                 share=False,
-                auth=(username, password),
+                auth=auth_list,
                 favicon_path="./assets/favicon.ico",
                 inbrowser=True,
             )

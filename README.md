@@ -108,12 +108,14 @@
 
 	在`api_key.txt`中填写你的API-Key，注意不要填写任何无关内容。
 
-	在`auth.json`中填写你的用户名和密码。
+	在`auth.json`中填写你的用户名和密码，支持多用户。格式如下：
 
 	```
 	{
-    "username": "用户名",
-    "password": "密码"
+		"user1": {
+			"username": "用户名",
+			"password": "密码"
+		}
 	}
 	```
 
