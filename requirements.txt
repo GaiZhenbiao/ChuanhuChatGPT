@@ -7,6 +7,6 @@ tqdm
 colorama
 duckduckgo_search
 Pygments
-llama_index
+llama_index==0.4.40
 langchain
 markdown
