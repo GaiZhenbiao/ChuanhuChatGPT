@@ -108,7 +108,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         visible=not HIDE_MY_KEY,
                         label="API-Key",
                     )
-                    usageTxt = gr.Markdown(get_usage(my_api_key), elem_id="usage_display")
+                    usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示余额", elem_id="usage_display")
                     model_select_dropdown = gr.Dropdown(
                         label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0]
                     )

@@ -437,3 +437,23 @@ def transfer_input(inputs):
         gr.Button.update(visible=False),
         gr.Button.update(visible=True),
     )
+
+
+def get_proxies():
+    # 获取环境变量中的代理设置
+    http_proxy = os.environ.get("HTTP_PROXY") or os.environ.get("http_proxy")
+    https_proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
+
+    # 如果存在代理设置，使用它们
+    proxies = {}
+    if http_proxy:
+        logging.info(f"使用 HTTP 代理: {http_proxy}")
+        proxies["http"] = http_proxy
+    if https_proxy:
+        logging.info(f"使用 HTTPS 代理: {https_proxy}")
+        proxies["https"] = https_proxy
+
+    if proxies == {}:
+        proxies = None
+        
+    return proxies

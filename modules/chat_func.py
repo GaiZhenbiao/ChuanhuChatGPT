@@ -58,39 +58,21 @@ def get_response(
     else:
         timeout = timeout_all
 
-    # 获取环境变量中的代理设置
-    http_proxy = os.environ.get("HTTP_PROXY") or os.environ.get("http_proxy")
-    https_proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
-
-    # 如果存在代理设置，使用它们
-    proxies = {}
-    if http_proxy:
-        logging.info(f"使用 HTTP 代理: {http_proxy}")
-        proxies["http"] = http_proxy
-    if https_proxy:
-        logging.info(f"使用 HTTPS 代理: {https_proxy}")
-        proxies["https"] = https_proxy
+    proxies = get_proxies()
 
     # 如果有自定义的api-url，使用自定义url发送请求，否则使用默认设置发送请求
     if shared.state.api_url != API_URL:
         logging.info(f"使用自定义API URL: {shared.state.api_url}")
-    if proxies:
-        response = requests.post(
-            shared.state.api_url,
-            headers=headers,
-            json=payload,
-            stream=True,
-            timeout=timeout,
-            proxies=proxies,
-        )
-    else:
-        response = requests.post(
-            shared.state.api_url,
-            headers=headers,
-            json=payload,
-            stream=True,
-            timeout=timeout,
-        )
+        
+    response = requests.post(
+        shared.state.api_url,
+        headers=headers,
+        json=payload,
+        stream=True,
+        timeout=timeout,
+        proxies=proxies,
+    )
+    
     return response
 
 
