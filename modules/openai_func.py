@@ -12,91 +12,55 @@ from modules.presets import (
 
 from modules import shared
 from modules.utils import get_proxies
-import os
-from datetime import datetime, timedelta
+import os, datetime
 
-def get_usage_response(openai_api_key):
+def get_billing_data(openai_api_key, billing_url):
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {openai_api_key}",
+        "Authorization": f"Bearer {openai_api_key}"
     }
-
+    
     timeout = timeout_all
-
     proxies = get_proxies()
-    """
-    暂不支持修改
-    if shared.state.balance_api_url != BALANCE_API_URL:
-        logging.info(f"使用自定义BALANCE API URL: {shared.state.balance_api_url}")
-    """
     response = requests.get(
-        BALANCE_API_URL,
+        billing_url,
         headers=headers,
         timeout=timeout,
         proxies=proxies,
     )
-        
-    return response
+    
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    else:
+        raise Exception(f"API request failed with status code {response.status_code}: {response.text}")
+    
 
 def get_usage(openai_api_key):
     try:
-        response=get_usage_response(openai_api_key=openai_api_key)
-        logging.debug(response.json())
+        balance_data=get_billing_data(openai_api_key, BALANCE_API_URL)
+        logging.debug(balance_data)
         try:
-            balance = response.json().get("total_available") if response.json().get(
-                "total_available") else 0
-            total_used = response.json().get("total_used") if response.json().get(
-                "total_used") else 0
+            balance = balance_data["total_available"] if balance_data["total_available"] else 0
+            total_used = balance_data["total_used"] if balance_data["total_used"] else 0
         except Exception as e:
             logging.error(f"API使用情况解析失败:"+str(e))
             balance = 0
             total_used=0
             return f"**API使用情况解析失败**"
-        if balance == 0:
-            return f"**您的免费额度已用完**"
-        return f"**API免费额度使用情况**（已用/余额）\u3000${total_used} / ${balance}"
-    except requests.exceptions.ConnectTimeout:
-        status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
-        return status_text
-    except requests.exceptions.ReadTimeout:
-        status_text = standard_error_msg + read_timeout_prompt + error_retrieve_prompt
-        return status_text
-    except Exception as e:
-        logging.error(f"获取API使用情况失败:"+str(e))
-        return standard_error_msg + error_retrieve_prompt
-
-def get_usage_for_current_month_response(openai_api_key):
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {openai_api_key}",
-    }
-
-    timeout = timeout_all
-    today = datetime.today()
-    first_day_of_month = today.replace(day=1).date()
-    last_day_of_month = get_last_day_of_month(today).date()
-    
-    proxies = get_proxies()
-    response = requests.get(
-        f"{USAGE_API_URL}?start_date={first_day_of_month}&end_date={last_day_of_month}",
-        headers=headers,
-        timeout=timeout,
-        proxies=proxies,
-    )
         
-    return response
-
-def get_dollar_usage_for_current_month(openai_api_key):
-    try:
-        response=get_usage_for_current_month_response(openai_api_key=openai_api_key)
-        usage = 0
-        upper_limit = "120" # hardcoded as 120 dollars for now
-        try:
-            usage = round(response.json().get("total_usage")/100, 2) if response.json().get(
-                "total_usage") else 0
-        except Exception as e:
-            logging.error(f"API使用情况解析失败:"+str(e))
-        return f"**本月API使用情况**（已用/限额）\u3000${usage} / ${upper_limit}"
+        if balance == 0:
+            last_day_of_month = datetime.datetime.now().strftime("%Y-%m-%d")
+            first_day_of_month = datetime.datetime.now().replace(day=1).strftime("%Y-%m-%d")
+            usage_url = f"{USAGE_API_URL}?start_date={first_day_of_month}&end_date={last_day_of_month}"
+            try:
+                usage_data = get_billing_data(openai_api_key, usage_url)
+            except Exception as e:
+                logging.error(f"获取API使用情况失败:"+str(e))
+                return f"**获取API使用情况失败**"
+            return f"**本月使用金额** \u3000 ${usage_data['total_usage'] / 100}"
+        
+        return f"**免费额度**（已用/余额）\u3000${total_used} / ${balance}"
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
         return status_text
@@ -106,9 +70,3 @@ def get_dollar_usage_for_current_month(openai_api_key):
     except Exception as e:
         logging.error(f"获取API使用情况失败:"+str(e))
         return standard_error_msg + error_retrieve_prompt
-    
-def get_last_day_of_month(any_day):
-    # The day 28 exists in every month. 4 days later, it's always next month
-    next_month = any_day.replace(day=28) + timedelta(days=4)
-    # subtracting the number of the current day brings us back one month
-    return next_month - timedelta(days=next_month.day)

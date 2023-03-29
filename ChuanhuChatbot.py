@@ -9,7 +9,7 @@ from modules.utils import *
 from modules.presets import *
 from modules.overwrites import *
 from modules.chat_func import *
-from modules.openai_func import get_usage, get_dollar_usage_for_current_month
+from modules.openai_func import get_usage
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -272,20 +272,15 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         fn=get_usage, inputs=[user_api_key], outputs=[usageTxt], show_progress=False
     )
 
-    get_dollar_usage_args = dict(
-        fn=get_dollar_usage_for_current_month, inputs=[user_api_key], outputs=[usageTxt], show_progress=False
-    )
 
     # Chatbot
     cancelBtn.click(cancel_outputing, [], [])
 
     user_input.submit(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
     user_input.submit(**get_usage_args)
-    user_input.submit(**get_dollar_usage_args)
 
     submitBtn.click(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
     submitBtn.click(**get_usage_args)
-    submitBtn.click(**get_dollar_usage_args)
 
     emptyBtn.click(
         reset_state,
@@ -312,7 +307,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         show_progress=True,
     ).then(**end_outputing_args)
     retryBtn.click(**get_usage_args)
-    retryBtn.click(**get_dollar_usage_args)
 
     delFirstBtn.click(
         delete_first_conversation,
@@ -345,13 +339,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         show_progress=True,
     )
     reduceTokenBtn.click(**get_usage_args)
-    reduceTokenBtn.click(**get_dollar_usage_args)
 
     # ChatGPT
-    if get_usage(user_api_key) == "**您的免费额度已用完**":
-        keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_dollar_usage_args)
-    else:
-        keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_usage_args)
+    keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_usage_args)
 
     # Template
     templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
