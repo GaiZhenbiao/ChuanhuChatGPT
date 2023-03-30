@@ -19,29 +19,37 @@ logging.basicConfig(
 # 在这里输入你的 API 密钥
 my_api_key = ""
 # 在这里输入你的 自定义API地址 
-my_api_url = API_URL
+my_api_url = BASE_API_URL
 # 在这里输入你的 自定义代理地址
 my_proxy_url = ""
 
-# 读取配置文件中的API地址
-if os.path.exists(CONFIG_FILE_API_URL):
+# 判断代码中是否修改my_api_url & 读取配置文件中的API地址
+# 如果代码中修改过my_api_url，为了保证代码中填写值得优先级最高，不会再读取文件中的内容
+if my_api_url != BASE_API_URL and os.path.exists(CONFIG_FILE_API_URL):
     with open(CONFIG_FILE_API_URL, mode="r", encoding="utf-8") as f:
-        api_url_from_file = f.readline()
+        api_url_from_file = f.readline().strip()
 
     # 空值判断
-    if api_url_from_file and not api_url_from_file.isspace():
+    if api_url_from_file:
         my_api_url = api_url_from_file
-        change_api_url(my_api_url)
 
-# 读取配置文件中的代理地址
-if os.path.exists(CONFIG_FILE_PROXY_URL):
+# 判断my_api_url是否变化，变化则修改自定义API URL
+if my_api_url != BASE_API_URL:
+    change_api_url(my_api_url)
+
+# 判断代码中是否修改my_proxy_url and 读取配置文件中的代理地址
+# 如果代码中修改过my_proxy_url，为了保证代码中填写值得优先级最高，不会再读取文件中的内容
+if (not my_proxy_url.strip()) and os.path.exists(CONFIG_FILE_PROXY_URL):
     with open(CONFIG_FILE_PROXY_URL, mode="r", encoding="utf-8") as f:
-        proxy_url_from_file = f.readline()
+        proxy_url_from_file = f.readline().strip()
     
     # 空值判断
-    if proxy_url_from_file and not proxy_url_from_file.isspace():
+    if proxy_url_from_file:
         my_proxy_url = proxy_url_from_file
-        change_proxy(my_proxy_url)
+
+# 判断my_proxy_url是否填写，填写则修改自定义代理
+if my_proxy_url.strip():
+    change_proxy(my_proxy_url)
 
 # if we are running in Docker
 dockerflag = os.environ.get("dockerrun") == "yes"
