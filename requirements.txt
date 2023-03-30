@@ -7,7 +7,7 @@ tqdm
 colorama
 duckduckgo_search
 Pygments
-llama_index==0.4.40
+llama_index
 langchain
 markdown
 PyPDF2
