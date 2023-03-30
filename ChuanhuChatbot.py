@@ -25,7 +25,7 @@ my_proxy_url = ""
 
 # 判断代码中是否修改my_api_url & 读取配置文件中的API地址
 # 如果代码中修改过my_api_url，为了保证代码中填写值得优先级最高，不会再读取文件中的内容
-if my_api_url != BASE_API_URL and os.path.exists(CONFIG_FILE_API_URL):
+if my_api_url == BASE_API_URL and os.path.exists(CONFIG_FILE_API_URL):
     with open(CONFIG_FILE_API_URL, mode="r", encoding="utf-8") as f:
         api_url_from_file = f.readline().strip()
 
