@@ -37,13 +37,44 @@ footer {
 
 /* usage_display */
 #usage_display {
-    height: 1em;
+    position: relative;
+    margin: 0;
+    box-shadow: var(--block-shadow);
+    border-width: var(--block-border-width);
+    border-color: var(--block-border-color);
+    border-radius: var(--block-radius);
+    background: var(--block-background-fill);
+    width: 100%;
+    line-height: var(--line-sm);
+    min-height: 2em;
 }
-#usage_display p{
-    padding: 0 1em;
+#usage_display p, #usage_display span {
+    margin: 0;
+    padding: .5em 1em;
     font-size: .85em;
-    font-family: monospace;
     color: var(--body-text-color-subdued);
+}
+.progress-bar {
+    background-color: var(--input-background-fill);;
+    margin: 0 1em;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.progress {
+    background-color: var(--block-title-background-fill);;
+    height: 100%;
+    border-radius: 10px;
+    text-align: right;
+    transition: width 0.5s ease-in-out;
+}
+.progress-text {
+    /* color: white; */
+    color: var(--color-accent) !important;
+    font-size: 1em !important;
+    font-weight: bold;
+    padding-right: 10px;
+    line-height: 20px;
 }
 /* list */
 ol:not(.options), ul:not(.options) {

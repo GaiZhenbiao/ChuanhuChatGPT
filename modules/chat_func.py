@@ -61,11 +61,11 @@ def get_response(
     proxies = get_proxies()
 
     # 如果有自定义的api-url，使用自定义url发送请求，否则使用默认设置发送请求
-    if shared.state.api_url != API_URL:
-        logging.info(f"使用自定义API URL: {shared.state.api_url}")
+    if shared.state.base_url != API_URL:
+        logging.info(f"使用自定义API URL: {shared.state.base_url}")
         
     response = requests.post(
-        shared.state.api_url,
+        shared.state.get_api_url(),
         headers=headers,
         json=payload,
         stream=True,
