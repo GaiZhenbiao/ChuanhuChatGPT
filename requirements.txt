@@ -10,3 +10,4 @@ Pygments
 llama_index==0.4.40
 langchain
 markdown
+PyPDF2

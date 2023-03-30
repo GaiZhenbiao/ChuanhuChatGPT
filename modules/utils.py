@@ -375,8 +375,8 @@ def replace_today(prompt):
 
 
 def get_geoip():
-    response = requests.get("https://ipapi.co/json/", timeout=5)
     try:
+        response = requests.get("https://ipapi.co/json/", timeout=5)
         data = response.json()
     except:
         data = {"error": True, "reason": "连接ipapi失败"}
@@ -384,7 +384,7 @@ def get_geoip():
         logging.warning(f"无法获取IP地址信息。\n{data}")
         if data["reason"] == "RateLimited":
             return (
-                f"获取IP地理位置失败，因为达到了检测IP的速率限制。聊天功能可能仍然可用，但请注意，如果您的IP地址在不受支持的地区，您可能会遇到问题。"
+                f"获取IP地理位置失败，因为达到了检测IP的速率限制。聊天功能可能仍然可用。"
             )
         else:
             return f"获取IP地理位置失败。原因：{data['reason']}。你仍然可以使用聊天功能。"
@@ -457,7 +457,7 @@ def get_proxies():
 
     if proxies == {}:
         proxies = None
-        
+
     return proxies
 
 def run(command, desc=None, errdesc=None, custom_env=None, live=False):
@@ -501,3 +501,18 @@ Gradio: {gr.__version__}
  • 
 Commit: {commit_info}
 """
+
+def add_source_numbers(lst, source_name = "Source", use_source = True):
+    if use_source:
+        return [f'[{idx+1}]\t "{item[0]}"\n{source_name}: {item[1]}' for idx, item in enumerate(lst)]
+    else:
+        return [f'[{idx+1}]\t "{item}"' for idx, item in enumerate(lst)]
+
+def add_details(lst):
+    nodes = []
+    for index, txt in enumerate(lst):
+        brief = txt[:25].replace("\n", "")
+        nodes.append(
+            f"<details><summary>{brief}...</summary><p>{txt}</p></details>"
+        )
+    return nodes
