@@ -1,8 +1,9 @@
-from modules.presets import API_URL
+from modules.presets import BASE_API_URL, API_URL, USAGE_API_URL, BALANCE_API_URL
 
 class State:
     interrupted = False
-    api_url = API_URL
+    def __init__(self) -> None:
+        self.base_url = BASE_API_URL
 
     def interrupt(self):
         self.interrupted = True
@@ -10,15 +11,23 @@ class State:
     def recover(self):
         self.interrupted = False
 
-    def set_api_url(self, api_url):
-        self.api_url = api_url
+    def set_base_url(self, api_url):
+        self.base_url = api_url
 
-    def reset_api_url(self):
-        self.api_url = API_URL
-        return self.api_url
+    # API URL 相关
+    def get_api_url(self):
+        return self.base_url + API_URL
 
-    def reset_all(self):
+    # USAGE URL相关
+    def get_usage_url(self):
+        return self.base_url + USAGE_API_URL
+
+    # BALANCE URL相关
+    def get_balance_url(self):
+        return self.base_url + BALANCE_API_URL
+
+    def reset(self):
         self.interrupted = False
-        self.api_url = API_URL
+        self.base_url = BASE_API_URL
 
 state = State()
