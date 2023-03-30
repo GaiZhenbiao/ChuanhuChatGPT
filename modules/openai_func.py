@@ -43,12 +43,12 @@ def get_usage(openai_api_key):
         try:
             balance = balance_data["total_available"] if balance_data["total_available"] else 0
             total_used = balance_data["total_used"] if balance_data["total_used"] else 0
+            usage_percent = round(total_used / (total_used+balance) * 100, 2)
         except Exception as e:
             logging.error(f"API使用情况解析失败:"+str(e))
             balance = 0
             total_used=0
             return f"**API使用情况解析失败**"
-        
         if balance == 0:
             last_day_of_month = datetime.datetime.now().strftime("%Y-%m-%d")
             first_day_of_month = datetime.datetime.now().replace(day=1).strftime("%Y-%m-%d")
@@ -60,7 +60,17 @@ def get_usage(openai_api_key):
                 return f"**获取API使用情况失败**"
             return f"**本月使用金额** \u3000 ${usage_data['total_usage'] / 100}"
         
-        return f"**免费额度**（已用/余额）\u3000${total_used} / ${balance}"
+        # return f"**免费额度**（已用/余额）\u3000${total_used} / ${balance}"
+        return f"""\
+        <b>免费额度使用情况</b>
+        <div class="progress-bar">
+            <div class="progress" style="width: {usage_percent}%;">
+                <span class="progress-text">{usage_percent}%</span>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between;"><span>已用 ${total_used}</span><span>可用 ${balance}</span></div>
+        """
+    
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
         return status_text
