@@ -57,7 +57,8 @@ MODELS = [
 ]  # 可选的模型
 
 REPLY_LANGUAGES = [
-    "中文",
+    "简体中文",
+    "繁體中文",
     "English",
     "日本語",
     "Español",
