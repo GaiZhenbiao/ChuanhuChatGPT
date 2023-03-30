@@ -39,7 +39,7 @@ if os.path.exists(CONFIG_FILE_PROXY_URL):
         proxy_url_from_file = f.readline()
     
     # 空值判断
-    if api_url_from_file and not api_url_from_file.isspace():
+    if proxy_url_from_file and not proxy_url_from_file.isspace():
         my_proxy_url = proxy_url_from_file
         change_proxy(my_proxy_url)
 
