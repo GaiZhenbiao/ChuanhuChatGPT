@@ -155,7 +155,7 @@ def ask_ai(
         question,
         prompt_tmpl,
         refine_tmpl,
-        sim_k=1,
+        sim_k=5,
         temprature=0,
         prefix_messages=[],
         reply_language="中文",
