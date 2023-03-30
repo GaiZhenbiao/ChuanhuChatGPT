@@ -361,7 +361,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             token_count,
             top_p,
             temperature,
-            gr.State(max_token_streaming//2 if use_streaming_checkbox.value else max_token_all//2),
+            gr.State(sum(token_count.value[-4:])),
             model_select_dropdown,
             language_select_dropdown,
         ],

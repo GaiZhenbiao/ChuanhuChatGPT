@@ -61,6 +61,7 @@ def get_response(
     proxies = get_proxies()
 
     # 如果有自定义的api-url，使用自定义url发送请求，否则使用默认设置发送请求
+
     if shared.state.base_url != API_URL:
         logging.info(f"使用自定义API URL: {shared.state.base_url}")
         
@@ -72,7 +73,7 @@ def get_response(
         timeout=timeout,
         proxies=proxies,
     )
-    
+
     return response
 
 
@@ -351,9 +352,9 @@ def predict(
         )
 
     if stream:
-        max_token = max_token_streaming
+        max_token = MODEL_SOFT_TOKEN_LIMIT[selected_model]["streaming"]
     else:
-        max_token = max_token_all
+        max_token = MODEL_SOFT_TOKEN_LIMIT[selected_model]["all"]
 
     if sum(all_token_counts) > max_token and should_check_token_count:
         status_text = f"精简token中{all_token_counts}/{max_token}"
