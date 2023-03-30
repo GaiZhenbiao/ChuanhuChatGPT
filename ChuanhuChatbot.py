@@ -27,8 +27,9 @@ else:
 authflag = False
 auth_list = []
 
-if dockerflag:
+if not my_api_key:
     my_api_key = os.environ.get("my_api_key")
+if dockerflag:
     if my_api_key == "empty":
         logging.error("Please give a api key!")
         sys.exit(1)

@@ -353,6 +353,8 @@ def change_proxy(proxy):
 
 
 def hide_middle_chars(s):
+    if s is None:
+        return ""
     if len(s) <= 8:
         return s
     else:
