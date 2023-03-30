@@ -63,7 +63,7 @@ def get_response(
     # 如果有自定义的api-url，使用自定义url发送请求，否则使用默认设置发送请求
     if shared.state.api_url != API_URL:
         logging.info(f"使用自定义API URL: {shared.state.api_url}")
-        
+
     response = requests.post(
         shared.state.api_url,
         headers=headers,
@@ -72,7 +72,7 @@ def get_response(
         timeout=timeout,
         proxies=proxies,
     )
-    
+
     return response
 
 
@@ -350,29 +350,29 @@ def predict(
             + colorama.Style.RESET_ALL
         )
 
-    if stream:
-        max_token = max_token_streaming
-    else:
-        max_token = max_token_all
+    # if stream:
+    #     max_token = max_token_streaming
+    # else:
+    #     max_token = max_token_all
 
-    if sum(all_token_counts) > max_token and should_check_token_count:
-        status_text = f"精简token中{all_token_counts}/{max_token}"
-        logging.info(status_text)
-        yield chatbot, history, status_text, all_token_counts
-        iter = reduce_token_size(
-            openai_api_key,
-            system_prompt,
-            history,
-            chatbot,
-            all_token_counts,
-            top_p,
-            temperature,
-            max_token//2,
-            selected_model=selected_model,
-        )
-        for chatbot, history, status_text, all_token_counts in iter:
-            status_text = f"Token 达到上限，已自动降低Token计数至 {status_text}"
-            yield chatbot, history, status_text, all_token_counts
+    # if sum(all_token_counts) > max_token and should_check_token_count:
+    #     status_text = f"精简token中{all_token_counts}/{max_token}"
+    #     logging.info(status_text)
+    #     yield chatbot, history, status_text, all_token_counts
+    #     iter = reduce_token_size(
+    #         openai_api_key,
+    #         system_prompt,
+    #         history,
+    #         chatbot,
+    #         all_token_counts,
+    #         top_p,
+    #         temperature,
+    #         max_token//2,
+    #         selected_model=selected_model,
+    #     )
+    #     for chatbot, history, status_text, all_token_counts in iter:
+    #         status_text = f"Token 达到上限，已自动降低Token计数至 {status_text}"
+    #         yield chatbot, history, status_text, all_token_counts
 
 
 def retry(
