@@ -46,11 +46,16 @@ def get_documents(file_src):
         logging.info(f"loading file: {file.name}")
         if os.path.splitext(file.name)[1] == ".pdf":
             logging.debug("Loading PDF...")
-            pdftext = ""
-            with open(file.name, 'rb') as pdfFileObj:
-                pdfReader = PyPDF2.PdfReader(pdfFileObj)
-                for page in tqdm(pdfReader.pages):
-                    pdftext += page.extract_text()
+            try:
+                from modules.pdf_func import parse_pdf
+                from modules.config import advance_pdf
+                text = parse_pdf(file.name, advance_pdf.get("two_column", False)).text
+            except:
+                pdftext = ""
+                with open(file.name, 'rb') as pdfFileObj:
+                    pdfReader = PyPDF2.PdfReader(pdfFileObj)
+                    for page in tqdm(pdfReader.pages):
+                        pdftext += page.extract_text()
             text_raw = pdftext
         elif os.path.splitext(file.name)[1] == ".docx":
             logging.debug("Loading DOCX...")

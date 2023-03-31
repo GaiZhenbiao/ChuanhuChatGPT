@@ -11,7 +11,7 @@ from modules.presets import (
 )
 
 from modules import shared
-from modules.utils import get_proxies
+from modules.config import retrieve_proxy
 import os, datetime
 
 def get_billing_data(openai_api_key, billing_url):
@@ -21,13 +21,12 @@ def get_billing_data(openai_api_key, billing_url):
     }
     
     timeout = timeout_all
-    proxies = get_proxies()
-    response = requests.get(
-        billing_url,
-        headers=headers,
-        timeout=timeout,
-        proxies=proxies,
-    )
+    with retrieve_proxy():
+        response = requests.get(
+            billing_url,
+            headers=headers,
+            timeout=timeout,
+        )
     
     if response.status_code == 200:
         data = response.json()

@@ -134,6 +134,6 @@ dmypy.json
 **/.DS_Store
 
 api_key.txt
-
+config.json
 auth.json
 .idea

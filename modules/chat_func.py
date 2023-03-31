@@ -21,6 +21,7 @@ from modules.presets import *
 from modules.llama_func import *
 from modules.utils import *
 import modules.shared as shared
+from modules.config import retrieve_proxy
 
 # logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s")
 
@@ -61,20 +62,19 @@ def get_response(
     else:
         timeout = timeout_all
 
-    proxies = get_proxies()
 
     # 如果有自定义的api-url，使用自定义url发送请求，否则使用默认设置发送请求
     if shared.state.api_url != API_URL:
         logging.info(f"使用自定义API URL: {shared.state.api_url}")
 
-    response = requests.post(
-        shared.state.api_url,
-        headers=headers,
-        json=payload,
-        stream=True,
-        timeout=timeout,
-        proxies=proxies,
-    )
+    with retrieve_proxy():
+        response = requests.post(
+            shared.state.api_url,
+            headers=headers,
+            json=payload,
+            stream=True,
+            timeout=timeout,
+        )
 
     return response
 

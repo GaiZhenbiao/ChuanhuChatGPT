@@ -5,58 +5,12 @@ import sys
 
 import gradio as gr
 
+from modules.config import *
 from modules.utils import *
 from modules.presets import *
 from modules.overwrites import *
 from modules.chat_func import *
 from modules.openai_func import get_usage
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
-)
-
-my_api_key = ""  # 在这里输入你的 API 密钥
-
-# if we are running in Docker
-if os.environ.get("dockerrun") == "yes":
-    dockerflag = True
-else:
-    dockerflag = False
-
-authflag = False
-auth_list = []
-
-if not my_api_key:
-    my_api_key = os.environ.get("my_api_key")
-if dockerflag:
-    if my_api_key == "empty":
-        logging.error("Please give a api key!")
-        sys.exit(1)
-    # auth
-    username = os.environ.get("USERNAME")
-    password = os.environ.get("PASSWORD")
-    if not (isinstance(username, type(None)) or isinstance(password, type(None))):
-        auth_list.append((os.environ.get("USERNAME"), os.environ.get("PASSWORD")))
-        authflag = True
-else:
-    if (
-        not my_api_key
-        and os.path.exists("api_key.txt")
-        and os.path.getsize("api_key.txt")
-    ):
-        with open("api_key.txt", "r") as f:
-            my_api_key = f.read().strip()
-    if os.path.exists("auth.json"):
-        authflag = True
-        with open("auth.json", "r", encoding='utf-8') as f:
-            auth = json.load(f)
-            for _ in auth:
-                if auth[_]["username"] and auth[_]["password"]:
-                    auth_list.append((auth[_]["username"], auth[_]["password"]))
-                else:
-                    logging.error("请检查auth.json文件中的用户名和密码！")
-                    sys.exit(1)
 
 gr.Chatbot.postprocess = postprocess
 PromptHelper.compact_text_chunks = compact_text_chunks
