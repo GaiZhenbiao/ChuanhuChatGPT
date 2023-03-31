@@ -13,9 +13,7 @@ import colorama
 from duckduckgo_search import ddg
 import asyncio
 import aiohttp
-from llama_index.indices.query.vector_store import GPTVectorStoreIndexQuery
-from llama_index.indices.query.schema import QueryBundle
-from langchain.llms import OpenAIChat
+
 
 from modules.presets import *
 from modules.llama_func import *
@@ -63,13 +61,13 @@ def get_response(
         timeout = timeout_all
 
 
-    # 如果有自定义的api-url，使用自定义url发送请求，否则使用默认设置发送请求
-    if shared.state.api_url != API_URL:
-        logging.info(f"使用自定义API URL: {shared.state.api_url}")
+    # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
+    if shared.state.completion_url != COMPLETION_URL:
+        logging.info(f"使用自定义API URL: {shared.state.completion_url}")
 
     with retrieve_proxy():
         response = requests.post(
-            shared.state.api_url,
+            shared.state.completion_url,
             headers=headers,
             json=payload,
             stream=True,
@@ -270,6 +268,11 @@ def predict(
     reply_language="中文",
     should_check_token_count=True,
 ):  # repetition_penalty, top_k
+    from llama_index.indices.query.vector_store import GPTVectorStoreIndexQuery
+    from llama_index.indices.query.schema import QueryBundle
+    from langchain.llms import OpenAIChat
+
+    
     logging.info("输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
     if should_check_token_count:
         yield chatbot+[(inputs, "")], history, "开始生成回答……", all_token_counts

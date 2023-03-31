@@ -328,14 +328,14 @@ def reset_textbox():
 
 
 def reset_default():
-    newurl = shared.state.reset_api_url()
+    default_host = shared.state.reset_api_host()
     retrieve_proxy("")
-    return gr.update(value=newurl), gr.update(value=""), "API URL 和代理已重置"
+    return gr.update(value=default_host), gr.update(value=""), "API-Host 和代理已重置"
 
 
-def change_api_url(url):
-    shared.state.set_api_url(url)
-    msg = f"API地址更改为了{url}"
+def change_api_host(host):
+    shared.state.set_api_host(host)
+    msg = f"API-Host更改为了{host}"
     logging.info(msg)
     return msg
 

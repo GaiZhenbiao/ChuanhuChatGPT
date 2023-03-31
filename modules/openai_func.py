@@ -37,7 +37,7 @@ def get_billing_data(openai_api_key, billing_url):
 
 def get_usage(openai_api_key):
     try:
-        balance_data=get_billing_data(openai_api_key, BALANCE_API_URL)
+        balance_data=get_billing_data(openai_api_key, shared.state.balance_api_url)
         logging.debug(balance_data)
         try:
             balance = balance_data["total_available"] if balance_data["total_available"] else 0
@@ -51,7 +51,7 @@ def get_usage(openai_api_key):
         if balance == 0:
             last_day_of_month = datetime.datetime.now().strftime("%Y-%m-%d")
             first_day_of_month = datetime.datetime.now().replace(day=1).strftime("%Y-%m-%d")
-            usage_url = f"{USAGE_API_URL}?start_date={first_day_of_month}&end_date={last_day_of_month}"
+            usage_url = f"{shared.state.usage_api_url}?start_date={first_day_of_month}&end_date={last_day_of_month}"
             try:
                 usage_data = get_billing_data(openai_api_key, usage_url)
             except Exception as e:

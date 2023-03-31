@@ -1,8 +1,10 @@
-from modules.presets import API_URL
-
+from modules.presets import COMPLETION_URL, BALANCE_API_URL, USAGE_API_URL, API_HOST
+import os
 class State:
     interrupted = False
-    api_url = API_URL
+    completion_url = COMPLETION_URL
+    balance_api_url = BALANCE_API_URL
+    usage_api_url = USAGE_API_URL
 
     def interrupt(self):
         self.interrupted = True
@@ -10,15 +12,21 @@ class State:
     def recover(self):
         self.interrupted = False
 
-    def set_api_url(self, api_url):
-        self.api_url = api_url
+    def set_api_host(self, api_host):
+        self.completion_url = f"https://{api_host}/v1/chat/completions"
+        self.balance_api_url = f"https://{api_host}/dashboard/billing/credit_grants"
+        self.usage_api_url = f"https://{api_host}/dashboard/billing/usage"
+        os.environ["OPENAI_API_BASE"] = f"https://{api_host}/v1"
 
-    def reset_api_url(self):
-        self.api_url = API_URL
-        return self.api_url
+    def reset_api_host(self):
+        self.completion_url = COMPLETION_URL
+        self.balance_api_url = BALANCE_API_URL
+        self.usage_api_url = USAGE_API_URL
+        os.environ["OPENAI_API_BASE"] = f"https://{API_HOST}/v1"
+        return API_HOST
 
     def reset_all(self):
         self.interrupted = False
-        self.api_url = API_URL
+        self.completion_url = COMPLETION_URL
 
 state = State()

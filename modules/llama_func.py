@@ -1,7 +1,6 @@
 import os
 import logging
 
-from llama_index import GPTSimpleVectorIndex, ServiceContext
 from llama_index import download_loader
 from llama_index import (
     Document,
@@ -10,8 +9,6 @@ from llama_index import (
     QuestionAnswerPrompt,
     RefinePrompt,
 )
-from langchain.llms import OpenAI
-from langchain.chat_models import ChatOpenAI
 import colorama
 import PyPDF2
 from tqdm import tqdm
@@ -89,6 +86,9 @@ def construct_index(
         embedding_limit=None,
         separator=" "
 ):
+    from langchain.chat_models import ChatOpenAI
+    from llama_index import GPTSimpleVectorIndex, ServiceContext
+    
     os.environ["OPENAI_API_KEY"] = api_key
     chunk_size_limit = None if chunk_size_limit == 0 else chunk_size_limit
     embedding_limit = None if embedding_limit == 0 else embedding_limit
@@ -120,98 +120,7 @@ def construct_index(
             logging.error("索引构建失败！", e)
             print(e)
             return None
-
-
-def chat_ai(
-        api_key,
-        index,
-        question,
-        context,
-        chatbot,
-        reply_language,
-):
-    os.environ["OPENAI_API_KEY"] = api_key
-
-    logging.info(f"Question: {question}")
-
-    response, chatbot_display, status_text = ask_ai(
-        api_key,
-        index,
-        question,
-        replace_today(PROMPT_TEMPLATE),
-        REFINE_TEMPLATE,
-        SIM_K,
-        INDEX_QUERY_TEMPRATURE,
-        context,
-        reply_language,
-    )
-    if response is None:
-        status_text = "查询失败，请换个问法试试"
-        return context, chatbot
-    response = response
-
-    context.append({"role": "user", "content": question})
-    context.append({"role": "assistant", "content": response})
-    chatbot.append((question, chatbot_display))
-
-    os.environ["OPENAI_API_KEY"] = ""
-    return context, chatbot, status_text
-
-
-def ask_ai(
-        api_key,
-        index,
-        question,
-        prompt_tmpl,
-        refine_tmpl,
-        sim_k=5,
-        temprature=0,
-        prefix_messages=[],
-        reply_language="中文",
-):
-    os.environ["OPENAI_API_KEY"] = api_key
-
-    logging.debug("Index file found")
-    logging.debug("Querying index...")
-    llm_predictor = LLMPredictor(
-        llm=ChatOpenAI(
-            temperature=temprature,
-            model_name="gpt-3.5-turbo-0301",
-            prefix_messages=prefix_messages,
-        )
-    )
-
-    response = None  # Initialize response variable to avoid UnboundLocalError
-    qa_prompt = QuestionAnswerPrompt(prompt_tmpl.replace("{reply_language}", reply_language))
-    rf_prompt = RefinePrompt(refine_tmpl.replace("{reply_language}", reply_language))
-    response = index.query(
-        question,
-        similarity_top_k=sim_k,
-        text_qa_template=qa_prompt,
-        refine_template=rf_prompt,
-        response_mode="compact",
-    )
-
-    if response is not None:
-        logging.info(f"Response: {response}")
-        ret_text = response.response
-        nodes = []
-        for index, node in enumerate(response.source_nodes):
-            brief = node.source_text[:25].replace("\n", "")
-            nodes.append(
-                f"<details><summary>[{index + 1}]\t{brief}...</summary><p>{node.source_text}</p></details>"
-            )
-        new_response = ret_text + "\n----------\n" + "\n\n".join(nodes)
-        logging.info(
-            f"Response: {colorama.Fore.BLUE}{ret_text}{colorama.Style.RESET_ALL}"
-        )
-        os.environ["OPENAI_API_KEY"] = ""
-        return ret_text, new_response, f"查询消耗了{llm_predictor.last_token_usage} tokens"
-    else:
-        logging.warning("No response found, returning None")
-        os.environ["OPENAI_API_KEY"] = ""
-        return None
-
+        
 
 def add_space(text):
     punctuations = {"，": "， ", "。": "。 ", "？": "？ ", "！": "！ ", "：": "： ", "；": "； "}

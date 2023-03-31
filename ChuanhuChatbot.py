@@ -164,12 +164,12 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
 
                     with gr.Accordion("网络设置", open=False):
-                        apiurlTxt = gr.Textbox(
+                        apihostTxt = gr.Textbox(
                             show_label=True,
-                            placeholder=f"在这里输入API地址...",
-                            label="API地址",
-                            value="https://api.openai.com/v1/chat/completions",
-                            lines=2,
+                            placeholder=f"在这里输入API-Host...",
+                            label="API-Host",
+                            value="api.openai.com",
+                            lines=1,
                         )
                         changeAPIURLBtn = gr.Button("🔄 切换API地址")
                         proxyTxt = gr.Textbox(
@@ -343,11 +343,11 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     # Advanced
     default_btn.click(
-        reset_default, [], [apiurlTxt, proxyTxt, status_display], show_progress=True
+        reset_default, [], [apihostTxt, proxyTxt, status_display], show_progress=True
     )
     changeAPIURLBtn.click(
-        change_api_url,
-        [apiurlTxt],
+        change_api_host,
+        [apihostTxt],
         [status_display],
         show_progress=True,
     )
