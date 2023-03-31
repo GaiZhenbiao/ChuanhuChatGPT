@@ -24,11 +24,7 @@ from pygments.formatters import HtmlFormatter
 
 from modules.presets import *
 import modules.shared as shared
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
-)
+from modules.config import retrieve_proxy
 
 if TYPE_CHECKING:
     from typing import TypedDict
@@ -333,8 +329,7 @@ def reset_textbox():
 
 def reset_default():
     newurl = shared.state.reset_api_url()
-    os.environ.pop("HTTPS_PROXY", None)
-    os.environ.pop("https_proxy", None)
+    retrieve_proxy("")
     return gr.update(value=newurl), gr.update(value=""), "API URL 和代理已重置"
 
 
@@ -346,6 +341,7 @@ def change_api_url(url):
 
 
 def change_proxy(proxy):
+    retrieve_proxy(proxy)
     os.environ["HTTPS_PROXY"] = proxy
     msg = f"代理更改为了{proxy}"
     logging.info(msg)
@@ -443,24 +439,6 @@ def transfer_input(inputs):
     )
 
 
-def get_proxies():
-    # 获取环境变量中的代理设置
-    http_proxy = os.environ.get("HTTP_PROXY") or os.environ.get("http_proxy")
-    https_proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
-
-    # 如果存在代理设置，使用它们
-    proxies = {}
-    if http_proxy:
-        logging.info(f"使用 HTTP 代理: {http_proxy}")
-        proxies["http"] = http_proxy
-    if https_proxy:
-        logging.info(f"使用 HTTPS 代理: {https_proxy}")
-        proxies["https"] = https_proxy
-
-    if proxies == {}:
-        proxies = None
-
-    return proxies
 
 def run(command, desc=None, errdesc=None, custom_env=None, live=False):
     if desc is not None:

@@ -11,3 +11,4 @@ llama_index
 langchain
 markdown
 PyPDF2
+pdfplumber
