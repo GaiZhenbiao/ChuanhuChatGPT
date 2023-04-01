@@ -30,7 +30,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     with gr.Row():
         gr.HTML(title)
-        user_ip = gr.Markdown(value="")
+        user_ip = gr.Markdown(value="", elem_id="user_ip")
         status_display = gr.Markdown(get_geoip(), elem_id="status_display")
 
         # https://github.com/gradio-app/gradio/pull/3296
@@ -38,6 +38,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             if hasattr(request, "username") and request.username: # is not None or is not ""
                 logging.info(f"Get User Name: {request.username}")
                 return gr.Markdown.update(value=f"User: {request.username}"), request.username
+            else:
+                return gr.Markdown.update(value=f"User: 管理员"), ""
         demo.load(create_greeting, inputs=None, outputs=[user_ip, user_name])
 
     with gr.Row().style(equal_height=True):
