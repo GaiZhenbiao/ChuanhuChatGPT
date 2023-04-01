@@ -30,12 +30,12 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     with gr.Row():
         gr.HTML(title)
-        user_ip = gr.Markdown(value="Not logged in")
+        user_ip = gr.Markdown(value="")
         status_display = gr.Markdown(get_geoip(), elem_id="status_display")
 
         # https://github.com/gradio-app/gradio/pull/3296
         def create_greeting(request: gr.Request):
-            if hasattr(request, "username"):
+            if hasattr(request, "username") and request.username: # is not None or is not ""
                 logging.info(f"Get User Name: {request.username}")
                 return gr.Markdown.update(value=f"User: {request.username}"), request.username
         demo.load(create_greeting, inputs=None, outputs=[user_ip, user_name])
