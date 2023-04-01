@@ -48,7 +48,7 @@ body:
     attributes:
       label: 运行环境
       description: |
-        以下是一个例子：
+        网页底部会列出您运行环境的版本信息，请务必填写。以下是一个例子：
         - **OS**: Windows11 22H2
         - **Browser**: Chrome
         - **Gradio version**: 3.22.1
@@ -59,7 +59,6 @@ body:
         - Gradio version: 
         - Python version: 
         (或您的其他运行环境信息)
-      render: markdown
     validations:
       required: false
   - type: textarea
