@@ -40,7 +40,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                 logging.info(f"Get User Name: {request.username}")
                 return gr.Markdown.update(value=f"User: {request.username}"), request.username
             else:
-                return gr.Markdown.update(value=f"User: 管理员"), ""
+                return gr.Markdown.update(value=f"User: default", visible=False), ""
         demo.load(create_greeting, inputs=None, outputs=[user_info, user_name])
 
     with gr.Row().style(equal_height=True):
