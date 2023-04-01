@@ -29,8 +29,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     topic = gr.State("未命名对话历史记录")
 
     with gr.Row():
-        gr.HTML(title)
-        user_ip = gr.Markdown(value="", elem_id="user_ip")
+        with gr.Column():
+            gr.HTML(title)
+            user_info = gr.Markdown(value="", elem_id="user_info")
         status_display = gr.Markdown(get_geoip(), elem_id="status_display")
 
         # https://github.com/gradio-app/gradio/pull/3296
@@ -40,7 +41,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                 return gr.Markdown.update(value=f"User: {request.username}"), request.username
             else:
                 return gr.Markdown.update(value=f"User: 管理员"), ""
-        demo.load(create_greeting, inputs=None, outputs=[user_ip, user_name])
+        demo.load(create_greeting, inputs=None, outputs=[user_info, user_name])
 
     with gr.Row().style(equal_height=True):
         with gr.Column(scale=5):

@@ -18,14 +18,13 @@ footer {
     opacity: 0.85;
 }
 
-/* user_ip */
-#user_ip {
-    display: flex;
-    min-height: 2.5em;
-    align-items: flex-end;
-    justify-content: flex-end;
+/* user_info */
+#user_info {
+    white-space: nowrap;
+    margin-top: -1.3em !important;
+    padding-left: 112px !important;
 }
-#user_ip p {
+#user_info p {
     font-size: .85em;
     font-family: monospace;
     color: var(--body-text-color-subdued);
@@ -34,7 +33,7 @@ footer {
 /* status_display */
 #status_display {
     display: flex;
-    min-height: 2.5em;
+    min-height: 2em;
     align-items: flex-end;
     justify-content: flex-end;
 }

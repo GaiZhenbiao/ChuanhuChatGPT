@@ -30,7 +30,7 @@ CONCURRENT_COUNT = 100 # 允许同时使用的用户数量
 SIM_K = 5
 INDEX_QUERY_TEMPRATURE = 1.0
 
-title = """<h1 align="left" style="min-width:200px; margin-top:0;">川虎ChatGPT 🚀</h1>"""
+title = """<h1 align="left" style="min-width:200px; margin-top:6px; white-space: nowrap;">川虎ChatGPT 🚀</h1>"""
 description = """\
 <div align="center" style="margin:16px 0">
 
