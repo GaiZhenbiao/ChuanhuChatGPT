@@ -42,7 +42,7 @@ def get_usage(openai_api_key):
         try:
             balance = balance_data["total_available"] if balance_data["total_available"] else 0
             total_used = balance_data["total_used"] if balance_data["total_used"] else 0
-            usage_percent = round(total_used / (total_used+balance) * 100, 2)
+            usage_percent = round(total_used / (total_used+balance) * 100, 2) if balance > 0 else 0
         except Exception as e:
             logging.error(f"API使用情况解析失败:"+str(e))
             balance = 0
@@ -57,7 +57,8 @@ def get_usage(openai_api_key):
             except Exception as e:
                 logging.error(f"获取API使用情况失败:"+str(e))
                 return f"**获取API使用情况失败**"
-            return f"**本月使用金额** \u3000 ${usage_data['total_usage'] / 100}"
+            usage_rounded = round(usage_data['total_usage'] / 100, 2)
+            return f"**本月使用金额** \u3000 ${usage_rounded}"
         
         # return f"**免费额度**（已用/余额）\u3000${total_used} / ${balance}"
         return f"""\
