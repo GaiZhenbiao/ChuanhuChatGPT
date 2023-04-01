@@ -57,17 +57,11 @@ body:
     attributes:
       label: 运行环境
       description: |
-        以下是一个例子：
+        网页底部会列出您运行环境的版本信息，请务必填写。以下是一个例子：
         - **OS**: Windows11 22H2
         - **Browser**: Chrome
         - **Gradio version**: 3.22.1
         - **Python version**: 3.11.1
-        
-        提示：你可以在终端中依次输入以下指令以查看gradio和python的版本：
-        ```shell
-        pip show gradio
-        python3 --version
-        ```
       value: |
         - OS: 
         - Browser: 

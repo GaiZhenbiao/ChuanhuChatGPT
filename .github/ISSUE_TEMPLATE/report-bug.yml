@@ -15,9 +15,9 @@ body:
   - type: checkboxes
     attributes:
       label: 这个bug是否已存在现有issue了？
-      description: 请搜索以查看您想报告的issue是否已存在。
+      description: 请搜索全部issue和[常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题)以查看您想报告的issue是否已存在。
       options:
-      - label: 我确认没有已有issue。
+      - label: 我确认没有已有issue，且已阅读**常见问题**。
         required: true
   - type: textarea
     id: what-happened
@@ -49,7 +49,7 @@ body:
     attributes:
       label: 运行环境
       description: |
-        以下是一个例子：
+        网页底部会列出您运行环境的版本信息，请务必填写。以下是一个例子：
         - **OS**: Windows11 22H2
         - **Browser**: Chrome
         - **Gradio version**: 3.22.1
@@ -59,9 +59,16 @@ body:
         - Browser: 
         - Gradio version: 
         - Python version: 
-      render: markdown
     validations:
       required: false
+  - type: checkboxes
+    attributes:
+      label: 帮助解决
+      description: 如果您能够并愿意协助解决该问题，向我们提交一个pull request，那再好不过了！<br />
+        参考：[贡献指南](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
+      options:
+        - label: 我愿意协助解决！
+          required: false
   - type: textarea
     attributes:
       label: 补充说明

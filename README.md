@@ -87,37 +87,31 @@
 
 2. **填写API密钥**
 
-	以下3种方法任选其一：
+	以下2种方法任选其一：
 
 	<details><summary>1. 在图形界面中填写你的API密钥</summary>
 
 	这样设置的密钥会在页面刷新后被清除。
 
 	<img width="760" alt="image" src="https://user-images.githubusercontent.com/51039745/222873756-3858bb82-30b9-49bc-9019-36e378ee624d.png"></details>
-	<details><summary>2. 在直接代码中填入你的 OpenAI API 密钥</summary>
 
-	这样设置的密钥会成为默认密钥。在这里还可以选择是否在UI中隐藏密钥输入框。
+	<details><summary>2. 在文件中设定默认密钥、用户名密码以及更多设置（推荐）</summary>
 
-	<img width="525" alt="image" src="https://user-images.githubusercontent.com/51039745/223440375-d472de4b-aa7f-4eae-9170-6dc2ed9f5480.png"></details>
+	这样设置的密钥以及其他设置项可以在拉取项目更新之后保留。
 
-	<details><summary>3. 在文件中设定默认密钥、用户名密码</summary>
-
-	这样设置的密钥可以在拉取项目更新之后保留。
-
-	在项目文件夹中新建这两个文件：`api_key.txt` 和 `auth.json`。
-
-	在`api_key.txt`中填写你的API-Key，注意不要填写任何无关内容。
-
-	在`auth.json`中填写你的用户名和密码，支持多用户。格式如下：
+	在项目文件夹中复制一份 `config_example.json`，并将其重命名为 `config.json`，在其中填入 API-Key、用户名密码（可选）、API host（可选）、代理地址（可选）等设置。用户名密码支持多用户。
 
 	```
 	{
-		"user1": {
-			"username": "用户名",
-			"password": "密码"
-		}
+		"openai_api_key": "sk-xxxxxxxxxxxxxxxxxxxxxxxxx",
+		"users": [
+			["username-0", "password-0"],
+			["username-1", "password-1"]
+		], 
 	}
 	```
+
+	* *原本在 `api_key.txt` 和 `auth.json` 中填写相关设置的方法仍然可用，但不再推荐。*
 
 	</details>
 
@@ -137,7 +131,7 @@
 
 	如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
 
-	如果下载慢，建议[配置清华源](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)，或者科学上网。
+	如果下载慢，建议[配置清华源](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)（但清华镜像部分包版本可能落后于官方源），或者科学上网。
 
 4. **启动**
 
@@ -154,6 +148,7 @@
 	```
 
 	如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
+
 <br />
 
 如果一切顺利，现在，你应该已经可以在浏览器地址栏中输入 [`http://localhost:7860`](http://localhost:7860) 查看并使用 ChuanhuChatGPT 了。
@@ -342,6 +337,13 @@ docker run -d --name chatgpt \
 如果问题仍然存在，请查阅该页面：[常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题)
 
 该页面列出了**几乎所有**您可能遇到的各种问题，包括如何配置代理，以及遇到问题后您该采取的措施，**请务必认真阅读**。
+
+## 了解更多
+
+若需了解更多信息，请查看我们的 [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki)：
+
+- [想要做出贡献？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
+- [项目更新情况？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
 
 ## Starchart
 

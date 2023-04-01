@@ -1,7 +1,7 @@
-name: Docker部署错误
-description: "报告使用 Docker 部署时的问题或错误"
-title: "[Docker]: "
-labels: ["question","docker deployment"]
+name: 服务器部署错误
+description: "报告在远程服务器上部署时的问题或错误"
+title: "[远程部署]: "
+labels: ["question","server deployment"]
 body:
   - type: markdown
     attributes:
@@ -55,17 +55,16 @@ body:
     attributes:
       label: 运行环境
       description: |
-        以下是一个例子：
-        - **OS**: Linux/amd64
-        - **Browser**: Chrome
+        网页底部会列出您运行环境的版本信息，请务必填写。以下是一个例子：
+        - **OS**: Windows11 22H2
+        - **Docker version**: 1.8.2
         - **Gradio version**: 3.22.1
         - **Python version**: 3.11.1
       value: |
         - OS: 
-        - Browser: 
+        - Server: 
         - Gradio version: 
         - Python version: 
-      render: markdown
     validations:
       required: false
   - type: textarea

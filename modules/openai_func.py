@@ -42,22 +42,24 @@ def get_usage(openai_api_key):
         try:
             balance = balance_data["total_available"] if balance_data["total_available"] else 0
             total_used = balance_data["total_used"] if balance_data["total_used"] else 0
-            usage_percent = round(total_used / (total_used+balance) * 100, 2)
+            usage_percent = round(total_used / (total_used+balance) * 100, 2) if balance > 0 else 0
         except Exception as e:
             logging.error(f"API使用情况解析失败:"+str(e))
             balance = 0
             total_used=0
             return f"**API使用情况解析失败**"
         if balance == 0:
-            last_day_of_month = datetime.datetime.now().strftime("%Y-%m-%d")
-            first_day_of_month = datetime.datetime.now().replace(day=1).strftime("%Y-%m-%d")
+            curr_time = datetime.datetime.now()
+            last_day_of_month = get_last_day_of_month(curr_time).strftime("%Y-%m-%d")
+            first_day_of_month = curr_time.replace(day=1).strftime("%Y-%m-%d")
             usage_url = f"{shared.state.usage_api_url}?start_date={first_day_of_month}&end_date={last_day_of_month}"
             try:
                 usage_data = get_billing_data(openai_api_key, usage_url)
             except Exception as e:
                 logging.error(f"获取API使用情况失败:"+str(e))
                 return f"**获取API使用情况失败**"
-            return f"**本月使用金额** \u3000 ${usage_data['total_usage'] / 100}"
+            usage_rounded = round(usage_data['total_usage'] / 100, 2)
+            return f"**本月使用金额** \u3000 ${usage_rounded}"
         
         # return f"**免费额度**（已用/余额）\u3000${total_used} / ${balance}"
         return f"""\
@@ -79,3 +81,9 @@ def get_usage(openai_api_key):
     except Exception as e:
         logging.error(f"获取API使用情况失败:"+str(e))
         return standard_error_msg + error_retrieve_prompt
+
+def get_last_day_of_month(any_day):
+    # The day 28 exists in every month. 4 days later, it's always next month
+    next_month = any_day.replace(day=28) + datetime.timedelta(days=4)
+    # subtracting the number of the current day brings us back one month
+    return next_month - datetime.timedelta(days=next_month.day)

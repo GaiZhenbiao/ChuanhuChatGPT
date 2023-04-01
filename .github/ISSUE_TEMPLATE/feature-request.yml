@@ -23,7 +23,8 @@ body:
   - type: checkboxes
     attributes:
       label: 帮助开发
-      description: 如果您能帮助开发并提交一个pull request，那再好不过了！
+      description: 如果您能帮助开发并提交一个pull request，那再好不过了！<br />
+        参考：[贡献指南](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
       options:
         - label: 我愿意协助开发！
           required: false
