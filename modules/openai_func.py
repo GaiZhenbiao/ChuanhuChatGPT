@@ -57,7 +57,8 @@ def get_usage(openai_api_key):
             except Exception as e:
                 logging.error(f"获取API使用情况失败:"+str(e))
                 return f"**获取API使用情况失败**"
-            return f"**本月使用金额** \u3000 ${usage_data['total_usage'] / 100}"
+            usage_rounded = round(usage_data['total_usage'] / 100, 2)
+            return f"**本月使用金额** \u3000 ${usage_rounded}"
         
         # return f"**免费额度**（已用/余额）\u3000${total_used} / ${balance}"
         return f"""\
