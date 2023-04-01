@@ -181,6 +181,7 @@ docker pull tuchuanhuhuhu/chuanhuchatgpt:latest
 ```shell
 docker run -d --name chatgpt \
 	-e my_api_key="替换成API" \
+	-e api_host="替换成自定义的api请求地址" \
 	-e USERNAME="替换成用户名" \
 	-e PASSWORD="替换成密码" \
 	-v ~/chatGPThistory:/app/history \
@@ -302,6 +303,7 @@ docker run --detach \
 ```
 docker run -d --name chatgpt \
 	-e my_api_key="你的API" \
+	-e api_host="替换成自定义的api请求地址" \
 	-e USERNAME="替换成用户名" \
 	-e PASSWORD="替换成密码" \
 	-v ~/chatGPThistory:/app/history \

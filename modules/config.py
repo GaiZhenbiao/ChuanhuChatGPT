@@ -5,6 +5,9 @@ import logging
 import sys
 import json
 
+from modules import shared
+
+
 __all__ = [
     "my_api_key",
     "authflag",
@@ -31,9 +34,16 @@ if os.environ.get("dockerrun") == "yes":
 
 ## 处理 api-key 以及 允许的用户列表
 my_api_key = config.get("openai_api_key", "") # 在这里输入你的 API 密钥
-authflag = "users" in config
-auth_list = config.get("users", []) # 实际上是使用者的列表
 my_api_key = os.environ.get("my_api_key", my_api_key)
+
+auth_list = config.get("users", []) # 实际上是使用者的列表
+authflag = len(auth_list) > 0  # 是否开启认证的状态值，改为判断auth_list长度
+
+# 处理自定义的api_host，优先读环境变量的配置，如果存在则自动装配
+api_host = os.environ.get("api_host", config.get("api_host", ""))
+if api_host:
+    shared.state.set_api_host(api_host)
+
 if dockerflag:
     if my_api_key == "empty":
         logging.error("Please give a api key!")
