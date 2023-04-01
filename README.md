@@ -56,6 +56,19 @@
 - 获取公共链接：将程序最后一句改成`demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问。
 - 在Hugging Face上使用：建议在右上角 **复制Space** 再使用，这样App反应可能会快一点。
 
+### config文件配置：
+
+在clone到本地后，执行复制：
+```bash
+cp config_example.json config.json
+```
+
+config 参数解释：
+
+- `openai_api_key` 申请的API-Key
+- `https_proxy/http_proxy` 代理（中国ip需使用）
+- `advance_docs` 阅读学术pdf时遇到双栏pdf时，可通过此config解决（后续将支持公式识别等功能）
+- `users` 想要分发给更多人使用？添加用户名和密码即可（添加后，历史信息彼此独立，不可相互查阅）
 
 ## 安装方式
 

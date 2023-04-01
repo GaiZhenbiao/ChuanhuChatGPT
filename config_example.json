@@ -4,11 +4,11 @@
     "http_proxy": "http://127.0.0.1:1079",
     "advance_docs": {
         "pdf": {
-            "two_column": true,
+            "two_column": false,
             "formula_ocr": true
         }
     },
     "users": [
-        ["root", "root"]
+        ["username", "password"]
     ]
 }
