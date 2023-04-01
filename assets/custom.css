@@ -18,6 +18,19 @@ footer {
     opacity: 0.85;
 }
 
+/* user_ip */
+#user_ip {
+    display: flex;
+    min-height: 2.5em;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+#user_ip p {
+    font-size: .85em;
+    font-family: monospace;
+    color: var(--body-text-color-subdued);
+}
+
 /* status_display */
 #status_display {
     display: flex;

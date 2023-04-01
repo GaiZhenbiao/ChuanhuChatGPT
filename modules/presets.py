@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 import gradio as gr
+from pathlib import Path
 
 # ChatGPT 设置
 initial_prompt = "You are a helpful assistant."
@@ -7,7 +8,7 @@ API_HOST = "api.openai.com"
 COMPLETION_URL = "https://api.openai.com/v1/chat/completions"
 BALANCE_API_URL="https://api.openai.com/dashboard/billing/credit_grants"
 USAGE_API_URL="https://api.openai.com/dashboard/billing/usage"
-HISTORY_DIR = "history"
+HISTORY_DIR = Path("history")
 TEMPLATES_DIR = "templates"
 
 # 错误信息

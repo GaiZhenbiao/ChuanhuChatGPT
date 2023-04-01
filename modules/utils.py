@@ -190,46 +190,46 @@ def delete_last_conversation(chatbot, history, previous_token_count):
     )
 
 
-def save_file(filename, system, history, chatbot):
-    logging.info("保存对话历史中……")
-    os.makedirs(HISTORY_DIR, exist_ok=True)
+def save_file(filename, system, history, chatbot, user_name):
+    logging.info(f"{user_name} 保存对话历史中……")
+    os.makedirs(HISTORY_DIR / user_name, exist_ok=True)
     if filename.endswith(".json"):
         json_s = {"system": system, "history": history, "chatbot": chatbot}
         print(json_s)
-        with open(os.path.join(HISTORY_DIR, filename), "w") as f:
+        with open(os.path.join(HISTORY_DIR / user_name, filename), "w") as f:
             json.dump(json_s, f)
     elif filename.endswith(".md"):
         md_s = f"system: \n- {system} \n"
         for data in history:
             md_s += f"\n{data['role']}: \n- {data['content']} \n"
-        with open(os.path.join(HISTORY_DIR, filename), "w", encoding="utf8") as f:
+        with open(os.path.join(HISTORY_DIR / user_name, filename), "w", encoding="utf8") as f:
             f.write(md_s)
-    logging.info("保存对话历史完毕")
-    return os.path.join(HISTORY_DIR, filename)
+    logging.info(f"{user_name} 保存对话历史完毕")
+    return os.path.join(HISTORY_DIR / user_name, filename)
 
 
-def save_chat_history(filename, system, history, chatbot):
+def save_chat_history(filename, system, history, chatbot, user_name):
     if filename == "":
         return
     if not filename.endswith(".json"):
         filename += ".json"
-    return save_file(filename, system, history, chatbot)
+    return save_file(filename, system, history, chatbot, user_name)
 
 
-def export_markdown(filename, system, history, chatbot):
+def export_markdown(filename, system, history, chatbot, user_name):
     if filename == "":
         return
     if not filename.endswith(".md"):
         filename += ".md"
-    return save_file(filename, system, history, chatbot)
+    return save_file(filename, system, history, chatbot, user_name)
 
 
-def load_chat_history(filename, system, history, chatbot):
-    logging.info("加载对话历史中……")
+def load_chat_history(filename, system, history, chatbot, user_name):
+    logging.info(f"{user_name} 加载对话历史中……")
     if type(filename) != str:
         filename = filename.name
     try:
-        with open(os.path.join(HISTORY_DIR, filename), "r") as f:
+        with open(os.path.join(HISTORY_DIR / user_name, filename), "r") as f:
             json_s = json.load(f)
         try:
             if type(json_s["history"][0]) == str:
@@ -245,10 +245,10 @@ def load_chat_history(filename, system, history, chatbot):
         except:
             # 没有对话历史
             pass
-        logging.info("加载对话历史完毕")
+        logging.info(f"{user_name} 加载对话历史完毕")
         return filename, json_s["system"], json_s["history"], json_s["chatbot"]
     except FileNotFoundError:
-        logging.info("没有找到对话历史文件，不执行任何操作")
+        logging.info(f"{user_name} 没有找到对话历史文件，不执行任何操作")
         return filename, system, history, chatbot
 
 
@@ -267,15 +267,16 @@ def get_file_names(dir, plain=False, filetypes=[".json"]):
     files = sorted_by_pinyin(files)
     if files == []:
         files = [""]
+    logging.debug(f"files are:{files}")
     if plain:
         return files
     else:
         return gr.Dropdown.update(choices=files)
 
 
-def get_history_names(plain=False):
-    logging.info("获取历史记录文件名列表")
-    return get_file_names(HISTORY_DIR, plain)
+def get_history_names(plain=False, user_name=""):
+    logging.info(f"从用户 {user_name} 中获取历史记录文件名列表")
+    return get_file_names(HISTORY_DIR / user_name, plain)
 
 
 def load_template(filename, mode=0):
