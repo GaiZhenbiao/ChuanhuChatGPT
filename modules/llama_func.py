@@ -45,8 +45,9 @@ def get_documents(file_src):
             logging.debug("Loading PDF...")
             try:
                 from modules.pdf_func import parse_pdf
-                from modules.config import advance_pdf
-                text = parse_pdf(file.name, advance_pdf.get("two_column", False)).text
+                from modules.config import advance_docs
+                two_column = advance_docs["pdf"].get("two_column", False)
+                pdftext = parse_pdf(file.name, two_column).text
             except:
                 pdftext = ""
                 with open(file.name, 'rb') as pdfFileObj:
@@ -106,10 +107,11 @@ def construct_index(
         try:
             documents = get_documents(file_src)
             logging.info("构建索引中……")
-            service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor, prompt_helper=prompt_helper, chunk_size_limit=chunk_size_limit)
-            index = GPTSimpleVectorIndex.from_documents(
-                documents,  service_context=service_context
-            )
+            with retrieve_proxy():
+                service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor, prompt_helper=prompt_helper, chunk_size_limit=chunk_size_limit)
+                index = GPTSimpleVectorIndex.from_documents(
+                    documents,  service_context=service_context
+                )
             logging.debug("索引构建完成！")
             os.makedirs("./index", exist_ok=True)
             index.save_to_disk(f"./index/{index_name}.json")

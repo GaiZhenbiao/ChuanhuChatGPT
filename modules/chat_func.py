@@ -291,12 +291,14 @@ def predict(
         msg = "索引构建完成，获取回答中……"
         logging.info(msg)
         yield chatbot+[(inputs, "")], history, msg, all_token_counts
-        llm_predictor = LLMPredictor(llm=OpenAIChat(temperature=0, model_name=selected_model))
-        prompt_helper = PromptHelper(max_input_size = 4096, num_output = 5, max_chunk_overlap = 20, chunk_size_limit=600)
-        service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor, prompt_helper=prompt_helper)
-        query_object = GPTVectorStoreIndexQuery(index.index_struct, service_context=service_context, similarity_top_k=5, vector_store=index._vector_store, docstore=index._docstore)
-        query_bundle = QueryBundle(inputs)
-        nodes = query_object.retrieve(query_bundle)
+        with retrieve_proxy():
+            llm_predictor = LLMPredictor(llm=OpenAIChat(temperature=0, model_name=selected_model))
+            prompt_helper = PromptHelper(max_input_size = 4096, num_output = 5, max_chunk_overlap = 20, chunk_size_limit=600)
+            from llama_index import ServiceContext
+            service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor, prompt_helper=prompt_helper)
+            query_object = GPTVectorStoreIndexQuery(index.index_struct, service_context=service_context, similarity_top_k=5, vector_store=index._vector_store, docstore=index._docstore)
+            query_bundle = QueryBundle(inputs)
+            nodes = query_object.retrieve(query_bundle)
         reference_results = [n.node.text for n in nodes]
         reference_results = add_source_numbers(reference_results, use_source=False)
         display_reference = add_details(reference_results)

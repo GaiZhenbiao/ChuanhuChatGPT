@@ -78,6 +78,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         value=REPLY_LANGUAGES[0],
                     )
                     index_files = gr.Files(label="上传索引文件", type="file", multiple=True)
+                    two_column = gr.Checkbox(label="双栏pdf", value=advance_docs["pdf"].get("two_column", False))
+                    # TODO: 公式ocr
+                    # formula_ocr = gr.Checkbox(label="识别公式", value=advance_docs["pdf"].get("formula_ocr", False))
+                    updateDocConfigBtn = gr.Button("更新解析文件参数")
 
                 with gr.Tab(label="Prompt"):
                     systemPromptTxt = gr.Textbox(
@@ -294,6 +298,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         show_progress=True,
     )
     reduceTokenBtn.click(**get_usage_args)
+
+    updateDocConfigBtn.click(update_doc_config, [two_column], None)
 
     # ChatGPT
     keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_usage_args)

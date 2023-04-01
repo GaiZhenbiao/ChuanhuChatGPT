@@ -1,3 +1,4 @@
+from collections import defaultdict
 from contextlib import contextmanager
 import os
 import logging
@@ -11,6 +12,8 @@ __all__ = [
     "dockerflag",
     "retrieve_proxy",
     "log_level",
+    "advance_docs",
+    "update_doc_config"
 ]
 
 # 添加一个统一的config文件，避免文件过多造成的疑惑（优先级最低）
@@ -109,5 +112,12 @@ def retrieve_proxy(proxy=None):
         os.environ["HTTP_PROXY"], os.environ["HTTPS_PROXY"] = old_var
 
 
-## 处理advance pdf
-advance_pdf = config.get("advance_pdf", {})
+## 处理advance docs
+advance_docs = defaultdict(lambda: defaultdict(dict))
+advance_docs.update(config.get("advance_docs", {}))
+def update_doc_config(two_column_pdf):
+    global advance_docs
+    if two_column_pdf:
+        advance_docs["pdf"]["two_column"] = True
+    
+    logging.info(f"更新后的文件参数为：{advance_docs}")
