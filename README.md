@@ -99,18 +99,18 @@
 
 	这样设置的密钥以及其他设置项可以在拉取项目更新之后保留。
 
-	在项目文件夹中复制一份 `config_example.json`，并将其重命名为 `config.json`，在其中填入 API-Key、用户名密码（可选）、API host（可选）、代理地址（可选）等设置。用户名密码支持多用户。
+	在项目文件夹中复制一份 `config_example.json`，并将其重命名为 `config.json`，在其中填入 API-Key、用户名密码（可选）、API host（可选）、代理地址（可选）等设置。用户名密码支持多用户。示例：
 
 	```
 	{
 		"openai_api_key": "sk-xxxxxxxxxxxxxxxxxxxxxxxxx",
 		"users": [
-			["username-0", "password-0"],
-			["username-1", "password-1"]
+			["用户1的用户名", "用户1的密码"],
+			["用户2的用户名", "用户2的密码"]
 		], 
 	}
 	```
-
+	* 如果不设置用户名与密码，可以直接将“users”字段整段删去，或留空为 `"users": [], `
 	* *原本在 `api_key.txt` 和 `auth.json` 中填写相关设置的方法仍然可用，但不再推荐。*
 
 	</details>
@@ -181,6 +181,7 @@ docker pull tuchuanhuhuhu/chuanhuchatgpt:latest
 ```shell
 docker run -d --name chatgpt \
 	-e my_api_key="替换成API" \
+	-e api_host="替换成自定义的api请求地址" \
 	-e USERNAME="替换成用户名" \
 	-e PASSWORD="替换成密码" \
 	-v ~/chatGPThistory:/app/history \
@@ -302,6 +303,7 @@ docker run --detach \
 ```
 docker run -d --name chatgpt \
 	-e my_api_key="你的API" \
+	-e api_host="替换成自定义的api请求地址" \
 	-e USERNAME="替换成用户名" \
 	-e PASSWORD="替换成密码" \
 	-v ~/chatGPThistory:/app/history \

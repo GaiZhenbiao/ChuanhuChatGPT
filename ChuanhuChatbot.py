@@ -5,6 +5,7 @@ import sys
 
 import gradio as gr
 
+from modules import config
 from modules.config import *
 from modules.utils import *
 from modules.presets import *
@@ -180,11 +181,12 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
 
                     with gr.Accordion("网络设置", open=False):
+                        # 优先展示自定义的api_host
                         apihostTxt = gr.Textbox(
                             show_label=True,
                             placeholder=f"在这里输入API-Host...",
                             label="API-Host",
-                            value="api.openai.com",
+                            value=config.api_host or shared.API_HOST,
                             lines=1,
                         )
                         changeAPIURLBtn = gr.Button("🔄 切换API地址")

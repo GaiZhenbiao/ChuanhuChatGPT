@@ -10,7 +10,7 @@ from modules.presets import (
     read_timeout_prompt
 )
 
-from modules import shared
+from . import shared
 from modules.config import retrieve_proxy
 import os, datetime
 
