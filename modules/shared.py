@@ -1,7 +1,10 @@
 from modules.presets import COMPLETION_URL, BALANCE_API_URL, USAGE_API_URL, API_HOST
 import os
+import queue
+
 class State:
     interrupted = False
+    multi_api_key = False
     completion_url = COMPLETION_URL
     balance_api_url = BALANCE_API_URL
     usage_api_url = USAGE_API_URL
@@ -28,5 +31,25 @@ class State:
     def reset_all(self):
         self.interrupted = False
         self.completion_url = COMPLETION_URL
+    
+    def set_api_key_queue(self, api_key_list):
+        self.multi_api_key = True
+        self.api_key_queue = queue.Queue()
+        for api_key in api_key_list:
+            self.api_key_queue.put(api_key)
+
+    def switching_api_key(self, func):
+        if not hasattr(self, "api_key_queue"):
+            return func
+        
+        def wrapped(*args, **kwargs):
+            api_key = self.api_key_queue.get()
+            args = list(args)[1:]
+            ret = func(api_key, *args, **kwargs)
+            self.api_key_queue.put(api_key)
+            return ret
+
+        return wrapped
+        
 
 state = State()
