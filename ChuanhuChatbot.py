@@ -50,6 +50,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             with gr.Row():
                 with gr.Column(scale=12):
                     user_input = gr.Textbox(
+                        elem_id="user_input_tb",
                         show_label=False, placeholder="在这里输入"
                     ).style(container=False)
                 with gr.Column(min_width=70, scale=1):
