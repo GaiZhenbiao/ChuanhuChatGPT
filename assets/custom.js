@@ -1,4 +1,6 @@
 // custom javascript here
+const MAX_HISTORY_LENGTH = 32;
+
 var key_down_history = [];
 var currentIndex = -1;
 var user_input_ta;
@@ -48,7 +50,7 @@ var observer = new MutationObserver(function(mutations) {
                             currentIndex = -1;
                             if(key_down_history.indexOf(value) === -1){
                                 key_down_history.push(value);
-                                if (key_down_history.length > 10) {
+                                if (key_down_history.length > MAX_HISTORY_LENGTH) {
                                     key_down_history.shift();
                                 }
                             }
