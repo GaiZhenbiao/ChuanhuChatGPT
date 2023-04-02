@@ -22,10 +22,11 @@ var observer = new MutationObserver(function(mutations) {
                     var value = user_input_ta.value.trim();               
                     // 判断按下的是否为方向键
                     if (event.code === 'ArrowUp' || event.code === 'ArrowDown') {
-                        event.preventDefault();
                         // 如果按下的是方向键，且输入框中有内容，且历史记录中没有该内容，则不执行操作
                         if(value && key_down_history.indexOf(value) === -1)
                             return;
+                        // 对于需要响应的动作，阻止默认行为。
+                        event.preventDefault();
                         var length = key_down_history.length;
                         if(length === 0) {
                             currentIndex = -1; // 如果历史记录为空，直接将当前选中的记录重置
