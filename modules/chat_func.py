@@ -35,6 +35,7 @@ initial_prompt = "You are a helpful assistant."
 HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"
 
+@shared.state.switching_api_key # 在不开启多账号模式的时候，这个装饰器不会起作用
 def get_response(
     openai_api_key, system_prompt, history, temperature, top_p, stream, selected_model
 ):
@@ -330,7 +331,7 @@ def predict(
     else:
         display_reference = ""
 
-    if len(openai_api_key) != 51:
+    if len(openai_api_key) != 51 and not shared.state.multi_api_key:
         status_text = standard_error_msg + no_apikey_msg
         logging.info(status_text)
         chatbot.append((inputs, ""))
