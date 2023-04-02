@@ -5,7 +5,7 @@ import logging
 import sys
 import json
 
-from modules import shared
+from . import shared
 
 
 __all__ = [

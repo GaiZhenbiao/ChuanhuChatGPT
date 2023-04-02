@@ -23,7 +23,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 from modules.presets import *
-import modules.shared as shared
+from . import shared
 from modules.config import retrieve_proxy
 
 if TYPE_CHECKING:

@@ -18,7 +18,7 @@ import aiohttp
 from modules.presets import *
 from modules.llama_func import *
 from modules.utils import *
-import modules.shared as shared
+from . import shared
 from modules.config import retrieve_proxy
 
 # logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s")
