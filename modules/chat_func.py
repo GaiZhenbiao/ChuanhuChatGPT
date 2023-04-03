@@ -269,7 +269,7 @@ def predict(
     reply_language="中文",
     should_check_token_count=True,
 ):  # repetition_penalty, top_k
-    from llama_index.indices.query.vector_store import GPTVectorStoreIndexQuery
+    from llama_index.indices.vector_store.base_query import GPTVectorStoreIndexQuery
     from llama_index.indices.query.schema import QueryBundle
     from langchain.llms import OpenAIChat
 
