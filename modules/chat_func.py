@@ -273,7 +273,7 @@ def predict(
     from llama_index.indices.query.schema import QueryBundle
     from langchain.llms import OpenAIChat
 
-    
+
     logging.info("输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL)
     if should_check_token_count:
         yield chatbot+[(inputs, "")], history, "开始生成回答……", all_token_counts
@@ -331,7 +331,7 @@ def predict(
     else:
         display_reference = ""
 
-    if len(openai_api_key) != 51 and not shared.state.multi_api_key:
+    if len(openai_api_key) == 0 and not shared.state.multi_api_key:
         status_text = standard_error_msg + no_apikey_msg
         logging.info(status_text)
         chatbot.append((inputs, ""))
