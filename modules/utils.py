@@ -301,7 +301,7 @@ def load_template(filename, mode=0):
     else:
         choices = sorted_by_pinyin([row[0] for row in lines])
         return {row[0]: row[1] for row in lines}, gr.Dropdown.update(
-            choices=choices, value=choices[0]
+            choices=choices
         )
 
 

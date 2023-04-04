@@ -128,9 +128,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                             get_template_names(plain=True)[0], mode=1
                                         ),
                                         multiselect=False,
-                                        value=load_template(
-                                            get_template_names(plain=True)[0], mode=1
-                                        )[0],
                                     ).style(container=False)
 
                 with gr.Tab(label="保存/加载"):
