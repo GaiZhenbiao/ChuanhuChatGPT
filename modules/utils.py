@@ -153,8 +153,11 @@ def construct_assistant(text):
     return construct_text("assistant", text)
 
 
-def construct_token_message(token, stream=False):
-    return f"Token 计数: {token}"
+def construct_token_message(tokens: List[int]):
+    token_sum = 0
+    for i in range(len(tokens)):
+        token_sum += sum(tokens[: i + 1])
+    return f"Token 计数: {sum(tokens)}，本次对话累计消耗了 {token_sum} tokens"
 
 
 def delete_first_conversation(history, previous_token_count):
@@ -164,7 +167,7 @@ def delete_first_conversation(history, previous_token_count):
     return (
         history,
         previous_token_count,
-        construct_token_message(sum(previous_token_count)),
+        construct_token_message(previous_token_count),
     )
 
 
@@ -187,7 +190,7 @@ def delete_last_conversation(chatbot, history, previous_token_count):
         chatbot,
         history,
         previous_token_count,
-        construct_token_message(sum(previous_token_count)),
+        construct_token_message(previous_token_count),
     )
 
 
@@ -321,7 +324,7 @@ def get_template_content(templates, selection, original_system_prompt):
 
 def reset_state():
     logging.info("重置状态")
-    return [], [], [], construct_token_message(0)
+    return [], [], [], construct_token_message([0])
 
 
 def reset_textbox():

@@ -165,9 +165,7 @@ def stream_predict(
             # decode each line as response data is in bytes
             if chunklength > 6 and "delta" in chunk["choices"][0]:
                 finish_reason = chunk["choices"][0]["finish_reason"]
-                status_text = construct_token_message(
-                    sum(all_token_counts), stream=True
-                )
+                status_text = construct_token_message(all_token_counts)
                 if finish_reason == "stop":
                     yield get_return_value()
                     break
@@ -493,7 +491,7 @@ def reduce_token_size(
         token_count = previous_token_count[-num_chat:] if num_chat > 0 else []
         msg = f"保留了最近{num_chat}轮对话"
         yield chatbot, history, msg + "，" + construct_token_message(
-            sum(token_count) if len(token_count) > 0 else 0,
+            token_count if len(token_count) > 0 else [0],
         ), token_count
     logging.info(msg)
     logging.info("减少token数量完毕")
