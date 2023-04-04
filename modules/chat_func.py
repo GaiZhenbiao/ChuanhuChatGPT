@@ -406,23 +406,15 @@ def predict(
         max_token = MODEL_SOFT_TOKEN_LIMIT[selected_model]["all"]
 
     if sum(all_token_counts) > max_token and should_check_token_count:
-        status_text = f"精简token中{all_token_counts}/{max_token}"
+        print(all_token_counts)
+        count = 0
+        while sum(all_token_counts) > max_token - 500 and sum(all_token_counts) > 0:
+            count += 1
+            del all_token_counts[0]
+            del history[:2]
         logging.info(status_text)
+        status_text = f"为了防止token超限，模型忘记了早期的 {count} 轮对话"
         yield chatbot, history, status_text, all_token_counts
-        iter = reduce_token_size(
-            openai_api_key,
-            system_prompt,
-            history,
-            chatbot,
-            all_token_counts,
-            top_p,
-            temperature,
-            max_token//2,
-            selected_model=selected_model,
-        )
-        for chatbot, history, status_text, all_token_counts in iter:
-            status_text = f"Token 达到上限，已自动降低Token计数至 {status_text}"
-            yield chatbot, history, status_text, all_token_counts
 
 
 def retry(
