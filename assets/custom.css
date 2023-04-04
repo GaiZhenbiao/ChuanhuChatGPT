@@ -3,14 +3,18 @@
     --chatbot-color-dark: #121111;
 }
 
+#app_title {
+    margin-top: 6px; 
+    white-space: nowrap;
+}
 /* 覆盖gradio的页脚信息QAQ */
 footer {
     display: none !important;
 }
-#footer{
+#footer {
     text-align: center;
 }
-#footer div{
+#footer div {
     display: inline-block;
 }
 #footer .versions{
@@ -18,16 +22,34 @@ footer {
     opacity: 0.85;
 }
 
-/* user_info */
+#float_display {
+    position: absolute;
+    max-height: 30px;
+}
+/* user_info */ 
 #user_info {
     white-space: nowrap;
-    margin-top: -1.3em !important;
-    padding-left: 112px !important;
+    position: absolute; left: 8em; top: .2em;
+    z-index: var(--layer-2);
+    box-shadow: var(--block-shadow);
+    border: none; border-radius: var(--block-label-radius);
+    background: var(--color-accent);
+    padding: var(--block-label-padding);
+    font-size: var(--block-label-text-size); line-height: var(--line-sm);
+    width: auto; min-height: 30px!important;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+#user_info .wrap {
+    opacity: 0;
 }
 #user_info p {
-    font-size: .85em;
-    font-family: monospace;
-    color: var(--body-text-color-subdued);
+    color: white;
+    font-weight: var(--block-label-text-weight);
+}
+#user_info.hideK {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
 /* status_display */
@@ -74,7 +96,7 @@ footer {
     overflow: hidden;
 }
 .progress {
-    background-color: var(--block-title-background-fill);;
+    background-color: var(--block-title-background-fill);
     height: 100%;
     border-radius: 10px;
     text-align: right;
@@ -138,6 +160,12 @@ ol:not(.options), ul:not(.options) {
     }
     #chuanhu_chatbot .wrap {
         max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+    }
+    [data-testid = "bot"] {
+        max-width: 98% !important;
+    }
+    #app_title h1{
+        letter-spacing: -1px; font-size: 22px;
     }
 }
 /* 对话气泡 */

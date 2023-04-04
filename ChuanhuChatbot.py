@@ -30,10 +30,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     topic = gr.State("未命名对话历史记录")
 
     with gr.Row():
-        with gr.Column():
-            gr.HTML(title)
-            user_info = gr.Markdown(value="", elem_id="user_info")
+        gr.HTML(title, elem_id="app_title")
         status_display = gr.Markdown(get_geoip(), elem_id="status_display")
+    with gr.Row(elem_id="float_display"):
+        user_info = gr.Markdown(value="getting user info...", elem_id="user_info")
 
         # https://github.com/gradio-app/gradio/pull/3296
         def create_greeting(request: gr.Request):
@@ -54,8 +54,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         elem_id="user_input_tb",
                         show_label=False, placeholder="在这里输入"
                     ).style(container=False)
-                with gr.Column(min_width=70, scale=1):
-                    submitBtn = gr.Button("发送", variant="primary")
+                with gr.Column(min_width=65, scale=1):
+                    submitBtn = gr.Button("发送", variant="primary", elem_id="submit_btn")
                     cancelBtn = gr.Button("取消", variant="secondary", visible=False)
             with gr.Row():
                 emptyBtn = gr.Button(
