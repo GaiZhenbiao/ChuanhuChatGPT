@@ -46,8 +46,8 @@ def get_usage(openai_api_key):
         except Exception as e:
             logging.error(f"获取API使用情况失败:"+str(e))
             return f"**获取API使用情况失败**"
-        usage_rounded = round(usage_data['total_usage'] / 100, 2)
-        return f"**本月使用金额** \u3000 ${usage_rounded}"
+        rounded_usage = "{:.5f}".format(usage_data['total_usage']/100)
+        return f"**本月使用金额** \u3000 ${rounded_usage}"
     except requests.exceptions.ConnectTimeout:
         status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
         return status_text
