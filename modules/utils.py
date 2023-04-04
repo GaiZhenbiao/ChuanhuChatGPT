@@ -21,6 +21,7 @@ from markdown import markdown
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
+import pandas as pd
 
 from modules.presets import *
 from . import shared
@@ -498,3 +499,35 @@ def add_details(lst):
             f"<details><summary>{brief}...</summary><p>{txt}</p></details>"
         )
     return nodes
+
+
+def sheet_to_string(sheet):
+    result = ""
+    for index, row in sheet.iterrows():
+        row_string = ""
+        for column in sheet.columns:
+            row_string += f"{column}: {row[column]}, "
+        row_string = row_string.rstrip(", ")
+        row_string += "."
+        result += row_string + "\n"
+    return result
+
+def excel_to_string(file_path):
+    # 读取Excel文件中的所有工作表
+    excel_file = pd.read_excel(file_path, engine='openpyxl', sheet_name=None)
+
+    # 初始化结果字符串
+    result = ""
+
+    # 遍历每一个工作表
+    for sheet_name, sheet_data in excel_file.items():
+        # 将工作表名称添加到结果字符串
+        result += f"Sheet: {sheet_name}\n"
+
+        # 处理当前工作表并添加到结果字符串
+        result += sheet_to_string(sheet_data)
+
+        # 在不同工作表之间添加分隔符
+        result += "\n" + ("-" * 20) + "\n\n"
+
+    return result

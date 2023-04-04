@@ -40,34 +40,40 @@ def get_documents(file_src):
     logging.debug("Loading documents...")
     logging.debug(f"file_src: {file_src}")
     for file in file_src:
-        logging.info(f"loading file: {file.name}")
-        if os.path.splitext(file.name)[1] == ".pdf":
+        filepath = file.name
+        filename = os.path.basename(filepath)
+        file_type = os.path.splitext(filepath)[1]
+        logging.info(f"loading file: {filename}")
+        if file_type == ".pdf":
             logging.debug("Loading PDF...")
             try:
                 from modules.pdf_func import parse_pdf
                 from modules.config import advance_docs
                 two_column = advance_docs["pdf"].get("two_column", False)
-                pdftext = parse_pdf(file.name, two_column).text
+                pdftext = parse_pdf(filepath, two_column).text
             except:
                 pdftext = ""
-                with open(file.name, 'rb') as pdfFileObj:
+                with open(filepath, 'rb') as pdfFileObj:
                     pdfReader = PyPDF2.PdfReader(pdfFileObj)
                     for page in tqdm(pdfReader.pages):
                         pdftext += page.extract_text()
             text_raw = pdftext
-        elif os.path.splitext(file.name)[1] == ".docx":
-            logging.debug("Loading DOCX...")
+        elif file_type == ".docx":
+            logging.debug("Loading Word...")
             DocxReader = download_loader("DocxReader")
             loader = DocxReader()
-            text_raw = loader.load_data(file=file.name)[0].text
-        elif os.path.splitext(file.name)[1] == ".epub":
+            text_raw = loader.load_data(file=filepath)[0].text
+        elif file_type == ".epub":
             logging.debug("Loading EPUB...")
             EpubReader = download_loader("EpubReader")
             loader = EpubReader()
-            text_raw = loader.load_data(file=file.name)[0].text
+            text_raw = loader.load_data(file=filepath)[0].text
+        elif file_type == ".xlsx":
+            logging.debug("Loading Excel...")
+            text_raw = excel_to_string(filepath)
         else:
             logging.debug("Loading text file...")
-            with open(file.name, "r", encoding="utf-8") as f:
+            with open(filepath, "r", encoding="utf-8") as f:
                 text_raw = f.read()
         text = add_space(text_raw)
         # text = block_split(text)
@@ -89,7 +95,7 @@ def construct_index(
 ):
     from langchain.chat_models import ChatOpenAI
     from llama_index import GPTSimpleVectorIndex, ServiceContext
-    
+
     os.environ["OPENAI_API_KEY"] = api_key
     chunk_size_limit = None if chunk_size_limit == 0 else chunk_size_limit
     embedding_limit = None if embedding_limit == 0 else embedding_limit
@@ -122,7 +128,7 @@ def construct_index(
             logging.error("索引构建失败！", e)
             print(e)
             return None
-        
+
 
 def add_space(text):
     punctuations = {"，": "， ", "。": "。 ", "？": "？ ", "！": "！ ", "：": "： ", "；": "； "}
