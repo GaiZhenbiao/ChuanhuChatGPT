@@ -3,14 +3,18 @@
     --chatbot-color-dark: #121111;
 }
 
+#app_title {
+    margin-top: 6px; 
+    white-space: nowrap;
+}
 /* 覆盖gradio的页脚信息QAQ */
 footer {
     display: none !important;
 }
-#footer{
+#footer {
     text-align: center;
 }
-#footer div{
+#footer div {
     display: inline-block;
 }
 #footer .versions{
@@ -18,16 +22,34 @@ footer {
     opacity: 0.85;
 }
 
-/* user_info */
+#float_display {
+    position: absolute;
+    max-height: 30px;
+}
+/* user_info */ 
 #user_info {
     white-space: nowrap;
-    margin-top: -1.3em !important;
-    padding-left: 112px !important;
+    position: absolute; left: 8em; top: .2em;
+    z-index: var(--layer-2);
+    box-shadow: var(--block-shadow);
+    border: none; border-radius: var(--block-label-radius);
+    background: var(--color-accent);
+    padding: var(--block-label-padding);
+    font-size: var(--block-label-text-size); line-height: var(--line-sm);
+    width: auto; min-height: 30px!important;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+#user_info .wrap {
+    opacity: 0;
 }
 #user_info p {
-    font-size: .85em;
-    font-family: monospace;
-    color: var(--body-text-color-subdued);
+    color: white;
+    font-weight: var(--block-label-text-weight);
+}
+#user_info.hideK {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
 /* status_display */
@@ -74,7 +96,7 @@ footer {
     overflow: hidden;
 }
 .progress {
-    background-color: var(--block-title-background-fill);;
+    background-color: var(--block-title-background-fill);
     height: 100%;
     border-radius: 10px;
     text-align: right;
@@ -87,6 +109,18 @@ footer {
     font-weight: bold;
     padding-right: 10px;
     line-height: 20px;
+}
+
+#submit_btn, #cancel_btn {
+    height: 42px !important;
+}
+#submit_btn::before {
+    content: url("data:image/svg+xml, %3Csvg width='21px' height='20px' viewBox='0 0 21 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cg id='page' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send' transform='translate(0.435849, 0.088463)' fill='%23FFFFFF' fill-rule='nonzero'%3E %3Cpath d='M0.579148261,0.0428666046 C0.301105539,-0.0961547561 -0.036517765,0.122307382 0.0032026237,0.420210298 L1.4927172,18.1553639 C1.5125774,18.4334066 1.79062012,18.5922882 2.04880264,18.4929872 L8.24518329,15.8913017 L11.6412765,19.7441794 C11.8597387,19.9825018 12.2370824,19.8832008 12.3165231,19.5852979 L13.9450591,13.4882182 L19.7839562,11.0255541 C20.0619989,10.8865327 20.0818591,10.4694687 19.7839562,10.3105871 L0.579148261,0.0428666046 Z M11.6138902,17.0883151 L9.85385903,14.7195502 L0.718169621,0.618812241 L12.69945,12.9346347 L11.6138902,17.0883151 Z' id='shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E");
+    height: 21px;
+}
+#cancel_btn::before {
+    content: url("data:image/svg+xml,%3Csvg width='21px' height='21px' viewBox='0 0 21 21' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cg id='page' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='cancel' transform='translate(0.202054, 0.088463)' fill='%23FFFFFF' fill-rule='nonzero'%3E %3Cpath d='M10.0051467,20 C11.3707325,20 12.6574026,19.7375193 13.865157,19.2125579 C15.0729113,18.6875965 16.1365586,17.9653457 17.0560988,17.0458055 C17.975639,16.1262652 18.6961743,15.0643335 19.2177046,13.8600103 C19.7392349,12.6556871 20,11.3673014 20,9.99485332 C20,8.62926746 19.7375193,7.34259736 19.2125579,6.13484303 C18.6875965,4.92708869 17.9653457,3.86172585 17.0458055,2.9387545 C16.1262652,2.01578315 15.0626179,1.2952479 13.8548636,0.777148739 C12.6471093,0.25904958 11.3604392,0 9.99485332,0 C8.62926746,0 7.34431292,0.25904958 6.13998971,0.777148739 C4.9356665,1.2952479 3.87201921,2.01578315 2.94904786,2.9387545 C2.02607651,3.86172585 1.3038257,4.92708869 0.782295419,6.13484303 C0.26076514,7.34259736 0,8.62926746 0,9.99485332 C0,11.3673014 0.2624807,12.6556871 0.7874421,13.8600103 C1.3124035,15.0643335 2.03465431,16.1262652 2.95419454,17.0458055 C3.87373477,17.9653457 4.9356665,18.6875965 6.13998971,19.2125579 C7.34431292,19.7375193 8.63269858,20 10.0051467,20 Z M10.0051467,18.1677818 C8.87287699,18.1677818 7.81266083,17.9567679 6.8244982,17.5347401 C5.83633556,17.1127123 4.96826214,16.5277063 4.22027792,15.7797221 C3.4722937,15.0317379 2.88900326,14.1636644 2.47040659,13.1755018 C2.05180992,12.1873392 1.84251158,11.127123 1.84251158,9.99485332 C1.84251158,8.86258363 2.05180992,7.80236747 2.47040659,6.81420484 C2.88900326,5.8260422 3.4722937,4.95796878 4.22027792,4.20998456 C4.96826214,3.46200034 5.83462,2.8787099 6.81935152,2.46011323 C7.80408303,2.04151656 8.86258363,1.83221822 9.99485332,1.83221822 C11.127123,1.83221822 12.1890547,2.04151656 13.1806485,2.46011323 C14.1722422,2.8787099 15.0420312,3.46200034 15.7900154,4.20998456 C16.5379997,4.95796878 17.1212901,5.8260422 17.5398868,6.81420484 C17.9584834,7.80236747 18.1677818,8.86258363 18.1677818,9.99485332 C18.1677818,11.127123 17.9584834,12.1873392 17.5398868,13.1755018 C17.1212901,14.1636644 16.5379997,15.0317379 15.7900154,15.7797221 C15.0420312,16.5277063 14.1739578,17.1127123 13.1857952,17.5347401 C12.1976325,17.9567679 11.1374164,18.1677818 10.0051467,18.1677818 Z M7.45239321,13.5357694 L12.5476068,13.5357694 C12.8564076,13.5357694 13.0983016,13.4499914 13.2732887,13.2784354 C13.4482759,13.1068794 13.5357694,12.8701321 13.5357694,12.5681935 L13.5357694,7.41121976 C13.5357694,7.10928118 13.4482759,6.87253388 13.2732887,6.70097787 C13.0983016,6.52942186 12.8564076,6.44364385 12.5476068,6.44364385 L7.45239321,6.44364385 C7.13673014,6.44364385 6.89140504,6.52942186 6.71641791,6.70097787 C6.54143078,6.87253388 6.45393721,7.10928118 6.45393721,7.41121976 L6.45393721,12.5681935 C6.45393721,12.8701321 6.54143078,13.1068794 6.71641791,13.2784354 C6.89140504,13.4499914 7.13673014,13.5357694 7.45239321,13.5357694 Z' id='shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E");
+    height: 21px;
 }
 /* list */
 ol:not(.options), ul:not(.options) {
@@ -138,6 +172,12 @@ ol:not(.options), ul:not(.options) {
     }
     #chuanhu_chatbot .wrap {
         max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+    }
+    [data-testid = "bot"] {
+        max-width: 98% !important;
+    }
+    #app_title h1{
+        letter-spacing: -1px; font-size: 22px;
     }
 }
 /* 对话气泡 */
