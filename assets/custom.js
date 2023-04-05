@@ -134,6 +134,26 @@ function showOrHideUserInfo() {
     }, 2000);
 }
 
+function setChatbotHeight() {
+    const screenWidth = window.innerWidth;
+    const statusDisplay = document.querySelector('#status_display');
+    const statusDisplayHeight = statusDisplay ? statusDisplay.offsetHeight : 0;
+    if (screenWidth <= 499) {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+        const chatbot = document.querySelector('#chuanhu_chatbot');
+        if (chatbot) {
+            chatbot.style.height = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 100}px)`;
+            const wrap = chatbot.querySelector('.wrap');
+            if (wrap) {
+                wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 100}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
+            }
+        }
+    }
+}
+
+setChatbotHeight();
 
 var observer = new MutationObserver(function (mutations) {
     selectHistory(mutations);
@@ -144,7 +164,13 @@ observer.observe(targetNode, { childList: true, subtree: true });
 
 
 window.addEventListener("DOMContentLoaded", function () {
+    setChatbotHeight();
     setTimeout(function () {
         showOrHideUserInfo();
+        setChatbotHeight();
     }, 2000);
 });
+
+window.addEventListener('resize', setChatbotHeight);
+window.addEventListener('scroll', setChatbotHeight);
+  
