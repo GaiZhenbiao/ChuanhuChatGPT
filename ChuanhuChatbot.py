@@ -49,7 +49,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             with gr.Row():
                 chatbot = gr.Chatbot(elem_id="chuanhu_chatbot").style(height="100%")
             with gr.Row():
-                with gr.Column(min_width=280, scale=12):
+                with gr.Column(min_width=225, scale=12):
                     user_input = gr.Textbox(
                         elem_id="user_input_tb",
                         show_label=False, placeholder="在这里输入"

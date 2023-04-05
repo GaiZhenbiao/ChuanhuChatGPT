@@ -138,16 +138,31 @@ function setChatbotHeight() {
     const screenWidth = window.innerWidth;
     const statusDisplay = document.querySelector('#status_display');
     const statusDisplayHeight = statusDisplay ? statusDisplay.offsetHeight : 0;
-    if (screenWidth <= 499) {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-        const chatbot = document.querySelector('#chuanhu_chatbot');
+    const chatbot = document.querySelector('#chuanhu_chatbot');
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    if (screenWidth <= 320) {
+        if (chatbot) {
+            chatbot.style.height = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 150}px)`;
+            const wrap = chatbot.querySelector('.wrap');
+            if (wrap) {
+                wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 150}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
+            }
+        } 
+    } else if (screenWidth <= 499) {
         if (chatbot) {
             chatbot.style.height = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 100}px)`;
             const wrap = chatbot.querySelector('.wrap');
             if (wrap) {
                 wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 100}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
+            }
+        }
+    } else {
+        if (chatbot) {
+            chatbot.style.height = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 160}px)`;
+            const wrap = chatbot.querySelector('.wrap');
+            if (wrap) {
+                wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 160}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
             }
         }
     }
