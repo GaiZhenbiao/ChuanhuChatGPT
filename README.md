@@ -13,14 +13,8 @@
       <a href="https://gradio.app/">
         <img alt="GitHub Contributors" src="https://img.shields.io/badge/Base-Gradio-fb7d1a?style=flat" />
       </a>
-      <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT/graphs/contributors">
-        <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/GaiZhenBiao/ChuanhuChatGPT" />
-      </a>
-      <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT/issues">
-        <img alt="Issues" src="https://img.shields.io/github/issues/GaiZhenBiao/ChuanhuChatGPT?color=0088ff" />
-      </a>
-      <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT/pulls">
-        <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/GaiZhenBiao/ChuanhuChatGPT?color=0088ff" />
+      <a href="https://t.me/tkdifferent">
+        <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
       	实时回复 / 无限对话 / 保存对话记录 / 预设Prompt集 / 联网搜索 / 根据文件回答
