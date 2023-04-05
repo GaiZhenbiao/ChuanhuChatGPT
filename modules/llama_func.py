@@ -70,7 +70,10 @@ def get_documents(file_src):
             text_raw = loader.load_data(file=filepath)[0].text
         elif file_type == ".xlsx":
             logging.debug("Loading Excel...")
-            text_raw = excel_to_string(filepath)
+            text_list = excel_to_string(filepath)
+            for elem in text_list:
+                documents.append(Document(elem))
+            continue
         else:
             logging.debug("Loading text file...")
             with open(filepath, "r", encoding="utf-8") as f:

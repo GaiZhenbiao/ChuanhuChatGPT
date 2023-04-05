@@ -504,15 +504,15 @@ def add_details(lst):
     return nodes
 
 
-def sheet_to_string(sheet):
-    result = ""
+def sheet_to_string(sheet, sheet_name = None):
+    result = []
     for index, row in sheet.iterrows():
         row_string = ""
         for column in sheet.columns:
             row_string += f"{column}: {row[column]}, "
         row_string = row_string.rstrip(", ")
         row_string += "."
-        result += row_string + "\n"
+        result.append(row_string)
     return result
 
 def excel_to_string(file_path):
@@ -520,17 +520,13 @@ def excel_to_string(file_path):
     excel_file = pd.read_excel(file_path, engine='openpyxl', sheet_name=None)
 
     # 初始化结果字符串
-    result = ""
+    result = []
 
     # 遍历每一个工作表
     for sheet_name, sheet_data in excel_file.items():
-        # 将工作表名称添加到结果字符串
-        result += f"Sheet: {sheet_name}\n"
 
         # 处理当前工作表并添加到结果字符串
-        result += sheet_to_string(sheet_data)
+        result += sheet_to_string(sheet_data, sheet_name=sheet_name)
 
-        # 在不同工作表之间添加分隔符
-        result += "\n" + ("-" * 20) + "\n\n"
 
     return result
