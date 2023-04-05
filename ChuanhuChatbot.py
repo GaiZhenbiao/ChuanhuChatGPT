@@ -49,14 +49,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             with gr.Row():
                 chatbot = gr.Chatbot(elem_id="chuanhu_chatbot").style(height="100%")
             with gr.Row():
-                with gr.Column(scale=12):
+                with gr.Column(min_width=280, scale=12):
                     user_input = gr.Textbox(
                         elem_id="user_input_tb",
                         show_label=False, placeholder="在这里输入"
                     ).style(container=False)
-                with gr.Column(min_width=65, scale=1):
-                    submitBtn = gr.Button("发送", variant="primary", elem_id="submit_btn")
-                    cancelBtn = gr.Button("取消", variant="secondary", visible=False)
+                with gr.Column(min_width=42, scale=1):
+                    submitBtn = gr.Button(value="", variant="primary", elem_id="submit_btn")
+                    cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel_btn")
             with gr.Row():
                 emptyBtn = gr.Button(
                     "🧹 新的对话",
