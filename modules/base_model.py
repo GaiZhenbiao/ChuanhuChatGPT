@@ -357,6 +357,10 @@ class BaseLLMModel:
     def recover(self):
         self.interrupted = False
 
+    def set_token_upper_limit(self, new_upper_limit):
+        self.token_upper_limit = new_upper_limit
+        print(f"token上限设置为{new_upper_limit}")
+
     def set_temperature(self, new_temperature):
         self.temperature = new_temperature
 
