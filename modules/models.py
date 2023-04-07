@@ -168,11 +168,13 @@ class OpenAIClient(BaseLLMModel):
                         # logging.error(f"Error: {e}")
                         continue
 
-def get_model(model_name, access_key=None, temprature=None, top_p=None, system_prompt = None) -> BaseLLMModel:
+def get_model(model_name, access_key=None, temperature=None, top_p=None, system_prompt = None) -> BaseLLMModel:
+    msg = f"模型设置为了： {model_name}"
+    logging.info(msg)
     model_type = ModelType.get_type(model_name)
     if model_type == ModelType.OpenAI:
-        model = OpenAIClient(model_name, access_key, system_prompt, temprature, top_p)
-    return model
+        model = OpenAIClient(model_name=model_name, api_key=access_key,system_prompt=system_prompt, temperature=temperature, top_p=top_p)
+    return model, msg
 
 if __name__=="__main__":
     with open("config.json", "r") as f:

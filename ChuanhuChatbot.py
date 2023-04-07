@@ -23,7 +23,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     user_api_key = gr.State(my_api_key)
     user_question = gr.State("")
-    current_model = gr.State(get_model(MODELS[0], my_api_key))
+    current_model = gr.State(get_model(MODELS[0], my_api_key)[0])
 
     topic = gr.State("未命名对话历史记录")
 
@@ -79,7 +79,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     else:
                         usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display")
                     model_select_dropdown = gr.Dropdown(
-                        label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0]
+                        label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0], interactive=True
                     )
                     use_streaming_checkbox = gr.Checkbox(
                         label="实时传输回答", value=True, visible=enable_streaming_option
@@ -287,9 +287,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     two_column.change(update_doc_config, [two_column], None)
 
-    # ChatGPT
+    # LLM Models
     keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
+    model_select_dropdown.change(get_model, [model_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [current_model, status_display], show_progress=True)
 
     # Template
     systemPromptTxt.change(current_model.value.set_system_prompt, [systemPromptTxt], None)
