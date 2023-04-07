@@ -15,3 +15,7 @@ pdfplumber
 pandas
 transformers
 torch
+mpi4py
+icetk
+git+https://github.com/OptimalScale/LMFlow.git
+cpm-kernels

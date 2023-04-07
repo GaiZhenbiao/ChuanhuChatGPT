@@ -22,7 +22,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     user_name = gr.State("")
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     user_question = gr.State("")
-    current_model = gr.State(get_model(MODELS[0], my_api_key)[0])
+    current_model = gr.State(get_model(MODELS[DEFAULT_MODEL], my_api_key)[0])
 
     topic = gr.State("未命名对话历史记录")
 
@@ -78,7 +78,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     else:
                         usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display")
                     model_select_dropdown = gr.Dropdown(
-                        label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0], interactive=True
+                        label="选择模型", choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
                     )
                     use_streaming_checkbox = gr.Checkbox(
                         label="实时传输回答", value=True, visible=ENABLE_STREAMING_OPTION

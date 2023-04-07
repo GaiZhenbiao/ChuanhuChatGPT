@@ -33,7 +33,7 @@ class ModelType(Enum):
         model_type = None
         if "gpt" in model_name.lower():
             model_type = ModelType.OpenAI
-        elif "chatglm" in model_name.upper():
+        elif "chatglm" in model_name.lower():
             model_type = ModelType.ChatGLM
         else:
             model_type = ModelType.LLaMA
@@ -59,7 +59,10 @@ class BaseLLMModel:
         self.all_token_counts = []
         self.model_name = model_name
         self.model_type = ModelType.get_type(model_name)
-        self.token_upper_limit = MODEL_TOKEN_LIMIT[model_name]
+        try:
+            self.token_upper_limit = MODEL_TOKEN_LIMIT[model_name]
+        except KeyError:
+            self.token_upper_limit = DEFAULT_TOKEN_LIMIT
         self.interrupted = False
         self.system_prompt = system_prompt
         self.api_key = None
@@ -79,7 +82,9 @@ class BaseLLMModel:
         conversations are stored in self.history, with the most recent question, in OpenAI format
         should return a generator, each time give the next word (str) in the answer
         """
-        pass
+        logging.warning("stream predict not implemented, using at once predict instead")
+        response, _ = self.get_answer_at_once()
+        yield response
 
     def get_answer_at_once(self):
         """predict at once, need to be implemented
@@ -88,15 +93,22 @@ class BaseLLMModel:
         the answer (str)
         total token count (int)
         """
-        pass
+        logging.warning("at once predict not implemented, using stream predict instead")
+        response_iter = self.get_answer_stream_iter()
+        count = 0
+        for response in response_iter:
+            count += 1
+        return response, sum(self.all_token_counts) + count
 
     def billing_info(self):
         """get billing infomation, inplement if needed"""
+        logging.warning("billing info not implemented, using default")
         return BILLING_NOT_APPLICABLE_MSG
 
     def count_token(self, user_input):
         """get token count from input, implement if needed"""
-        return 0
+        logging.warning("token count not implemented, using default")
+        return len(user_input)
 
     def stream_next_chatbot(self, inputs, chatbot, fake_input=None, display_append=""):
         def get_return_value():
@@ -234,7 +246,7 @@ class BaseLLMModel:
         else:
             display_reference = ""
 
-        if len(self.api_key) == 0 and not shared.state.multi_api_key:
+        if self.api_key is not None and len(self.api_key) == 0 and not shared.state.multi_api_key:
             status_text = STANDARD_ERROR_MSG + NO_APIKEY_MSG
             logging.info(status_text)
             chatbot.append((inputs, ""))

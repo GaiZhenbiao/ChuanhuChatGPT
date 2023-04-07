@@ -10,6 +10,14 @@ import requests
 import urllib3
 import platform
 
+from dataclasses import dataclass, field
+from transformers import HfArgumentParser
+
+from lmflow.datasets.dataset import Dataset
+from lmflow.pipeline.auto_pipeline import AutoPipeline
+from lmflow.models.auto_model import AutoModel
+from lmflow.args import ModelArguments, DatasetArguments, AutoArguments
+
 from tqdm import tqdm
 import colorama
 from duckduckgo_search import ddg
@@ -213,33 +221,139 @@ class ChatGLM_Client(BaseLLMModel):
         else:
             model_source = f"THUDM/{model_name}"
         self.tokenizer = AutoTokenizer.from_pretrained(model_source, trust_remote_code=True)
+        quantified = False
+        if "int4" in model_name:
+            quantified = True
+        if quantified:
+            model = AutoModel.from_pretrained(model_source, trust_remote_code=True).float()
+        else:
+            model = AutoModel.from_pretrained(model_source, trust_remote_code=True).half()
         if torch.cuda.is_available():
             # run on CUDA
-            model = AutoModel.from_pretrained(model_source, trust_remote_code=True).half().cuda()
-        elif system_name == "Darwin" and model_path is not None:
-            # running on macOS and model already downloaded
-            model = AutoModel.from_pretrained(model_path, trust_remote_code=True).half().to('mps')
+            logging.info("CUDA is available, using CUDA")
+            model = model.cuda()
+        # mps加速还存在一些问题，暂时不使用
+        # elif system_name == "Darwin" and model_path is not None:
+        #     logging.info("Running on macOS, using MPS")
+        #     # running on macOS and model already downloaded
+        #     model = model.to('mps')
         else:
-            # run on CPU
-            model = AutoModel.from_pretrained(model_source, trust_remote_code=True).float()
+            logging.info("GPU is not available, using CPU")
         model = model.eval()
         self.model = model
 
     def _get_glm_style_input(self):
         history = [x["content"] for x in self.history]
         query = history.pop()
+        logging.info(colorama.Fore.YELLOW + f"{history}" + colorama.Fore.RESET)
+        assert len(history) % 2 == 0
+        history = [[history[i], history[i+1]] for i in range(0, len(history), 2)]
         return history, query
 
     def get_answer_at_once(self):
         history, query = self._get_glm_style_input()
         response, _ = self.model.chat(self.tokenizer, query, history=history)
-        return response
+        return response, len(response)
 
     def get_answer_stream_iter(self):
         history, query = self._get_glm_style_input()
         for response, history in self.model.stream_chat(self.tokenizer, query, history, max_length=self.token_upper_limit, top_p=self.top_p,
                                                temperature=self.temperature):
             yield response
+
+@dataclass
+class ChatbotArguments:
+    pass
+
+class LLaMA_Client(BaseLLMModel):
+    def __init__(
+        self,
+        model_name,
+        lora_path = None,
+    ) -> None:
+        super().__init__(
+            model_name=model_name
+        )
+        self.max_generation_token = 1000
+        pipeline_name = "inferencer"
+        PipelineArguments = AutoArguments.get_pipeline_args_class(pipeline_name)
+
+        parser = HfArgumentParser((
+            ModelArguments,
+            PipelineArguments,
+            ChatbotArguments,
+        ))
+        model_args, pipeline_args, chatbot_args = (
+            parser.parse_args_into_dataclasses()
+        )
+
+        with open (pipeline_args.deepspeed, "r") as f:
+            ds_config = json.load(f)
+
+        self.model = AutoModel.get_model(
+            model_args,
+            tune_strategy='none',
+            ds_config=ds_config,
+        )
+
+        # We don't need input data, we will read interactively from stdin
+        data_args = DatasetArguments(dataset_path=None)
+        self.dataset = Dataset(data_args)
+
+        self.inferencer = AutoPipeline.get_pipeline(
+            pipeline_name=pipeline_name,
+            model_args=model_args,
+            data_args=data_args,
+            pipeline_args=pipeline_args,
+        )
+
+        # Chats
+        model_name = model_args.model_name_or_path
+        if model_args.lora_model_path is not None:
+            model_name += f" + {model_args.lora_model_path}"
+
+        # context = (
+        #     "You are a helpful assistant who follows the given instructions"
+        #     " unconditionally."
+        # )
+        self.end_string = "\n\n"
+
+    def _get_llama_style_input(self):
+        history = [x["content"] for x in self.history]
+        context = "\n".join(history)
+        return context
+
+
+    def get_answer_at_once(self):
+        context = self._get_llama_style_input()
+
+        input_dataset = self.dataset.from_dict({
+            "type": "text_only",
+            "instances": [ { "text": context } ]
+        })
+
+        output_dataset = self.inferencer.inference(
+            model=self.model,
+            dataset=input_dataset,
+            max_new_tokens=self.max_generation_token,
+            temperature=self.temperature,
+        )
+
+        response = output_dataset.to_dict()["instances"][0]["text"]
+
+        try:
+            index = response.index(self.end_string)
+        except ValueError:
+            response += self.end_string
+            index = response.index(self.end_string)
+
+        response = response[:index + 1]
+        return response, len(response)
+
+    def get_answer_stream_iter(self):
+        response, _ = self.get_answer_at_once()
+        yield response
+
 
 
 def get_model(
@@ -248,7 +362,7 @@ def get_model(
     msg = f"模型设置为了： {model_name}"
     logging.info(msg)
     model_type = ModelType.get_type(model_name)
-    del model
+    print(model_type.name)
     if model_type == ModelType.OpenAI:
         model = OpenAIClient(
             model_name=model_name,
@@ -265,29 +379,30 @@ def get_model(
 if __name__ == "__main__":
     with open("config.json", "r") as f:
         openai_api_key = cjson.load(f)["openai_api_key"]
-    client = OpenAIClient("gpt-3.5-turbo", openai_api_key)
+    # client, _ = get_model("gpt-3.5-turbo", openai_api_key)
+    client, _ = get_model("chatglm-6b-int4")
     chatbot = []
-    stream = False
+    stream = True
     # 测试账单功能
-    print(colorama.Back.GREEN + "测试账单功能" + colorama.Back.RESET)
-    print(client.billing_info())
+    logging.info(colorama.Back.GREEN + "测试账单功能" + colorama.Back.RESET)
+    logging.info(client.billing_info())
     # 测试问答
-    print(colorama.Back.GREEN + "测试问答" + colorama.Back.RESET)
+    logging.info(colorama.Back.GREEN + "测试问答" + colorama.Back.RESET)
     question = "巴黎是中国的首都吗？"
     for i in client.predict(inputs=question, chatbot=chatbot, stream=stream):
-        print(i)
-    print(f"测试问答后history : {client.history}")
+        logging.info(i)
+    logging.info(f"测试问答后history : {client.history}")
     # 测试记忆力
-    print(colorama.Back.GREEN + "测试记忆力" + colorama.Back.RESET)
+    logging.info(colorama.Back.GREEN + "测试记忆力" + colorama.Back.RESET)
     question = "我刚刚问了你什么问题？"
     for i in client.predict(inputs=question, chatbot=chatbot, stream=stream):
-        print(i)
-    print(f"测试记忆力后history : {client.history}")
+        logging.info(i)
+    logging.info(f"测试记忆力后history : {client.history}")
     # 测试重试功能
-    print(colorama.Back.GREEN + "测试重试功能" + colorama.Back.RESET)
+    logging.info(colorama.Back.GREEN + "测试重试功能" + colorama.Back.RESET)
     for i in client.retry(chatbot=chatbot, stream=stream):
-        print(i)
-    print(f"重试后history : {client.history}")
+        logging.info(i)
+    logging.info(f"重试后history : {client.history}")
     # # 测试总结功能
     # print(colorama.Back.GREEN + "测试总结功能" + colorama.Back.RESET)
     # chatbot, msg = client.reduce_token_size(chatbot=chatbot)

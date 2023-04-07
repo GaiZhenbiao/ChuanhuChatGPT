@@ -62,6 +62,8 @@ MODELS = [
     "chatglm-6b-int4-qe"
 ]  # 可选的模型
 
+DEFAULT_MODEL = 0  # 默认的模型在MODELS中的序号，从0开始数
+
 MODEL_TOKEN_LIMIT = {
     "gpt-3.5-turbo": 4096,
     "gpt-3.5-turbo-0301": 4096,
@@ -72,6 +74,7 @@ MODEL_TOKEN_LIMIT = {
 }
 
 TOKEN_OFFSET = 1000 # 模型的token上限减去这个值，得到软上限。到达软上限之后，自动尝试减少token占用。
+DEFAULT_TOKEN_LIMIT = 3000 # 默认的token上限
 REDUCE_TOKEN_FACTOR = 0.5 # 与模型token上限想乘，得到目标token数。减少token占用时，将token占用减少到目标token数以下。
 
 REPLY_LANGUAGES = [
