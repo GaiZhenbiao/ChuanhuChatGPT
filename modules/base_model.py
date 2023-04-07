@@ -41,19 +41,42 @@ class ModelType(Enum):
 
 
 class BaseLLMModel:
-    def __init__(self, model_name, temperature=1.0, top_p=1.0, max_generation_token=None, system_prompt="") -> None:
+    def __init__(
+        self,
+        model_name,
+        system_prompt="",
+        temperature=1.0,
+        top_p=1.0,
+        n_choices=1,
+        stop=None,
+        max_generation_token=None,
+        presence_penalty=0,
+        frequency_penalty=0,
+        logit_bias=None,
+        user="",
+    ) -> None:
         self.history = []
         self.all_token_counts = []
         self.model_name = model_name
         self.model_type = ModelType.get_type(model_name)
         self.token_upper_limit = MODEL_TOKEN_LIMIT[model_name]
-        self.max_generation_token = max_generation_token if max_generation_token is not None else self.token_upper_limit
         self.interrupted = False
-        self.temperature = temperature
-        self.top_p = top_p
         self.system_prompt = system_prompt
         self.api_key = None
 
+        self.temperature = temperature
+        self.top_p = top_p
+        self.n_choices = n_choices
+        self.stop = stop
+        self.max_generation_token = (
+            max_generation_token
+            if max_generation_token is not None
+            else self.token_upper_limit
+        )
+        self.presence_penalty = presence_penalty
+        self.frequency_penalty = frequency_penalty
+        self.logit_bias = logit_bias
+        self.user = user
 
     def get_answer_stream_iter(self):
         """stream predict, need to be implemented
@@ -75,15 +98,11 @@ class BaseLLMModel:
         """get billing infomation, inplement if needed"""
         return BILLING_NOT_APPLICABLE_MSG
 
-
     def count_token(self, user_input):
-        """get token count from input, implement if needed
-        """
+        """get token count from input, implement if needed"""
         return 0
 
-    def stream_next_chatbot(
-        self, inputs, chatbot, fake_input=None, display_append=""
-    ):
+    def stream_next_chatbot(self, inputs, chatbot, fake_input=None, display_append=""):
         def get_return_value():
             return chatbot, status_text
 
@@ -106,9 +125,7 @@ class BaseLLMModel:
             status_text = self.token_message()
             yield get_return_value()
 
-    def next_chatbot_at_once(
-        self, inputs, chatbot, fake_input=None, display_append=""
-    ):
+    def next_chatbot_at_once(self, inputs, chatbot, fake_input=None, display_append=""):
         if fake_input:
             chatbot.append((fake_input, ""))
         else:
@@ -122,7 +139,7 @@ class BaseLLMModel:
         if fake_input is not None:
             self.history[-2] = construct_user(fake_input)
         self.history[-1] = construct_assistant(ai_reply)
-        chatbot[-1] = (chatbot[-1][0], ai_reply+display_append)
+        chatbot[-1] = (chatbot[-1][0], ai_reply + display_append)
         if fake_input is not None:
             self.all_token_counts[-1] += count_token(construct_assistant(ai_reply))
         else:
@@ -277,12 +294,15 @@ class BaseLLMModel:
             self.history = self.history[-4:]
             self.all_token_counts = self.all_token_counts[-2:]
 
-
         max_token = self.token_upper_limit - TOKEN_OFFSET
 
         if sum(self.all_token_counts) > max_token and should_check_token_count:
             count = 0
-            while sum(self.all_token_counts) > self.token_upper_limit * REDUCE_TOKEN_FACTOR and sum(self.all_token_counts) > 0:
+            while (
+                sum(self.all_token_counts)
+                > self.token_upper_limit * REDUCE_TOKEN_FACTOR
+                and sum(self.all_token_counts) > 0
+            ):
                 count += 1
                 del self.all_token_counts[0]
                 del self.history[:2]
@@ -385,7 +405,7 @@ class BaseLLMModel:
         msg = "删除了一组对话"
         return chatbot, msg
 
-    def token_message(self, token_lst = None):
+    def token_message(self, token_lst=None):
         if token_lst is None:
             token_lst = self.all_token_counts
         token_sum = 0

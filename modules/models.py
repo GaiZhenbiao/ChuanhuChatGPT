@@ -26,15 +26,24 @@ from .base_model import BaseLLMModel, ModelType
 
 class OpenAIClient(BaseLLMModel):
     def __init__(
-        self, model_name, api_key, system_prompt=INITIAL_SYSTEM_PROMPT, temperature=1.0, top_p=1.0
+        self,
+        model_name,
+        api_key,
+        system_prompt=INITIAL_SYSTEM_PROMPT,
+        temperature=1.0,
+        top_p=1.0,
     ) -> None:
-        super().__init__(model_name=model_name, temperature=temperature, top_p=top_p, system_prompt=system_prompt)
+        super().__init__(
+            model_name=model_name,
+            temperature=temperature,
+            top_p=top_p,
+            system_prompt=system_prompt,
+        )
         self.api_key = api_key
         self.headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",
         }
-
 
     def get_answer_stream_iter(self):
         response = self._get_response(stream=True)
@@ -57,7 +66,9 @@ class OpenAIClient(BaseLLMModel):
     def count_token(self, user_input):
         input_token_count = count_token(construct_user(user_input))
         if self.system_prompt is not None and len(self.all_token_counts) == 0:
-            system_prompt_token_count = count_token(construct_system(self.system_prompt))
+            system_prompt_token_count = count_token(
+                construct_system(self.system_prompt)
+            )
             return input_token_count + system_prompt_token_count
         return input_token_count
 
@@ -70,18 +81,20 @@ class OpenAIClient(BaseLLMModel):
             try:
                 usage_data = self._get_billing_data(usage_url)
             except Exception as e:
-                logging.error(f"获取API使用情况失败:"+str(e))
+                logging.error(f"获取API使用情况失败:" + str(e))
                 return f"**获取API使用情况失败**"
-            rounded_usage = "{:.5f}".format(usage_data['total_usage']/100)
+            rounded_usage = "{:.5f}".format(usage_data["total_usage"] / 100)
             return f"**本月使用金额** \u3000 ${rounded_usage}"
         except requests.exceptions.ConnectTimeout:
-            status_text = STANDARD_ERROR_MSG + CONNECTION_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
+            status_text = (
+                STANDARD_ERROR_MSG + CONNECTION_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
+            )
             return status_text
         except requests.exceptions.ReadTimeout:
             status_text = STANDARD_ERROR_MSG + READ_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
             return status_text
         except Exception as e:
-            logging.error(f"获取API使用情况失败:"+str(e))
+            logging.error(f"获取API使用情况失败:" + str(e))
             return STANDARD_ERROR_MSG + ERROR_RETRIEVE_MSG
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
@@ -110,6 +123,7 @@ class OpenAIClient(BaseLLMModel):
             "stream": stream,
             "presence_penalty": 0,
             "frequency_penalty": 0,
+            "max_tokens": self.max_generation_token,
         }
         if stream:
             timeout = TIMEOUT_STREAMING
@@ -145,7 +159,9 @@ class OpenAIClient(BaseLLMModel):
             data = response.json()
             return data
         else:
-            raise Exception(f"API request failed with status code {response.status_code}: {response.text}")
+            raise Exception(
+                f"API request failed with status code {response.status_code}: {response.text}"
+            )
 
     def _decode_chat_response(self, response):
         for chunk in response.iter_lines():
@@ -166,15 +182,25 @@ class OpenAIClient(BaseLLMModel):
                         # logging.error(f"Error: {e}")
                         continue
 
-def get_model(model_name, access_key=None, temperature=None, top_p=None, system_prompt = None) -> BaseLLMModel:
+
+def get_model(
+    model_name, access_key=None, temperature=None, top_p=None, system_prompt=None
+) -> BaseLLMModel:
     msg = f"模型设置为了： {model_name}"
     logging.info(msg)
     model_type = ModelType.get_type(model_name)
     if model_type == ModelType.OpenAI:
-        model = OpenAIClient(model_name=model_name, api_key=access_key,system_prompt=system_prompt, temperature=temperature, top_p=top_p)
+        model = OpenAIClient(
+            model_name=model_name,
+            api_key=access_key,
+            system_prompt=system_prompt,
+            temperature=temperature,
+            top_p=top_p,
+        )
     return model, msg
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     with open("config.json", "r") as f:
         openai_api_key = cjson.load(f)["openai_api_key"]
     client = OpenAIClient("gpt-3.5-turbo", openai_api_key)

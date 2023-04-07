@@ -159,21 +159,74 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     default_btn = gr.Button("🔙 恢复默认设置")
 
                     with gr.Accordion("参数", open=False):
-                        top_p_slider = gr.Slider(
-                            minimum=-0,
-                            maximum=1.0,
-                            value=1.0,
-                            step=0.05,
-                            interactive=True,
-                            label="Top-p",
-                        )
                         temperature_slider = gr.Slider(
                             minimum=-0,
                             maximum=2.0,
                             value=1.0,
                             step=0.1,
                             interactive=True,
-                            label="Temperature",
+                            label="temperature",
+                        )
+                        top_p_slider = gr.Slider(
+                            minimum=-0,
+                            maximum=1.0,
+                            value=1.0,
+                            step=0.05,
+                            interactive=True,
+                            label="top-p",
+                        )
+                        n_choices_slider = gr.Slider(
+                            minimum=1,
+                            maximum=1,
+                            value=1,
+                            step=1,
+                            interactive=True,
+                            label="n choices",
+                        )
+                        stop_sequence_txt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"在这里输入停止符，用英文逗号隔开...",
+                            label="stop",
+                            value="",
+                            lines=1,
+                        )
+                        max_tokens_slider = gr.Slider(
+                            minimum=1,
+                            maximum=4096,
+                            value=4096,
+                            step=1,
+                            interactive=True,
+                            label="max tokens",
+                        )
+                        presence_penalty_slider = gr.Slider(
+                            minimum=-2.0,
+                            maximum=2.0,
+                            value=0.0,
+                            step=0.01,
+                            interactive=True,
+                            label="presence penalty",
+                        )
+                        frequency_penalty_slider = gr.Slider(
+                            minimum=-2.0,
+                            maximum=2.0,
+                            value=0.0,
+                            step=0.01,
+                            interactive=True,
+                            label="frequency penalty",
+                        )
+                        logit_bias_txt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"word:likelihood",
+                            label="logit bias",
+                            value="",
+                            lines=1,
+                        )
+                        user = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"用于定位滥用行为",
+                            label="用户名",
+                            value=user_name.value,
+                            lines=1,
                         )
 
                     with gr.Accordion("网络设置", open=False):
