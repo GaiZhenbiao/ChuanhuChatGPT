@@ -21,7 +21,7 @@ ssl_error_prompt = "SSL错误，无法获取对话。"  # SSL 错误
 no_apikey_msg = "API key长度不是51位，请检查是否输入正确。"  # API key 长度不足 51 位
 no_input_msg = "请输入对话内容。"  # 未输入对话内容
 
-timeout_streaming = 10  # 流式对话时的超时时间
+timeout_streaming = 60  # 流式对话时的超时时间
 timeout_all = 200  # 非流式对话时的超时时间
 enable_streaming_option = True  # 是否启用选择选择是否实时显示回答的勾选框
 HIDE_MY_KEY = False  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
