@@ -340,8 +340,8 @@ class BaseLLMModel:
     def recover(self):
         self.interrupted = False
 
-    def set_temprature(self, new_temprature):
-        self.temperature = new_temprature
+    def set_temperature(self, new_temperature):
+        self.temperature = new_temperature
 
     def set_top_p(self, new_top_p):
         self.top_p = new_top_p
