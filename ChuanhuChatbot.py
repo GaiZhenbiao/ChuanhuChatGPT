@@ -156,7 +156,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
                 with gr.Tab(label="高级"):
                     gr.Markdown("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置")
-                    default_btn = gr.Button("🔙 恢复默认设置")
 
                     with gr.Accordion("参数", open=False):
                         temperature_slider = gr.Slider(
@@ -177,7 +176,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
                         n_choices_slider = gr.Slider(
                             minimum=1,
-                            maximum=1,
+                            maximum=10,
                             value=1,
                             step=1,
                             interactive=True,
@@ -192,8 +191,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
                         max_tokens_slider = gr.Slider(
                             minimum=1,
-                            maximum=4096,
-                            value=4096,
+                            maximum=32768,
+                            value=1000,
                             step=1,
                             interactive=True,
                             label="max tokens",
@@ -247,6 +246,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             lines=2,
                         )
                         changeProxyBtn = gr.Button("🔄 设置代理地址")
+                        default_btn = gr.Button("🔙 恢复默认设置")
 
     gr.Markdown(CHUANHU_DESCRIPTION)
     gr.HTML(FOOTER.format(versions=versions_html()), elem_id="footer")
