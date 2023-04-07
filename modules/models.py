@@ -47,7 +47,7 @@ class OpenAIClient(BaseLLMModel):
                 partial_text += i
                 yield partial_text
         else:
-            yield standard_error_msg + general_error_msg
+            yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
 
     def get_answer_at_once(self):
         response = self._get_response()
@@ -77,14 +77,14 @@ class OpenAIClient(BaseLLMModel):
             rounded_usage = "{:.5f}".format(usage_data['total_usage']/100)
             return f"**本月使用金额** \u3000 ${rounded_usage}"
         except requests.exceptions.ConnectTimeout:
-            status_text = standard_error_msg + connection_timeout_prompt + error_retrieve_prompt
+            status_text = STANDARD_ERROR_MSG + CONNECTION_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
             return status_text
         except requests.exceptions.ReadTimeout:
-            status_text = standard_error_msg + read_timeout_prompt + error_retrieve_prompt
+            status_text = STANDARD_ERROR_MSG + READ_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
             return status_text
         except Exception as e:
             logging.error(f"获取API使用情况失败:"+str(e))
-            return standard_error_msg + error_retrieve_prompt
+            return STANDARD_ERROR_MSG + ERROR_RETRIEVE_MSG
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
     def _get_response(self, stream=False):
@@ -114,7 +114,7 @@ class OpenAIClient(BaseLLMModel):
             "frequency_penalty": 0,
         }
         if stream:
-            timeout = timeout_streaming
+            timeout = TIMEOUT_STREAMING
         else:
             timeout = TIMEOUT_ALL
 

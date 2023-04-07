@@ -72,7 +72,7 @@ class BaseLLMModel:
 
     def billing_info(self):
         """get billing infomation, inplement if needed"""
-        return billing_not_applicable_msg
+        return BILLING_NOT_APPLICABLE_MSG
 
 
     def count_token(self, user_input):
@@ -221,7 +221,7 @@ class BaseLLMModel:
             display_reference = ""
 
         if len(self.api_key) == 0 and not shared.state.multi_api_key:
-            status_text = standard_error_msg + no_apikey_msg
+            status_text = STANDARD_ERROR_MSG + NO_APIKEY_MSG
             logging.info(status_text)
             chatbot.append((inputs, ""))
             if len(self.history) == 0:
@@ -233,7 +233,7 @@ class BaseLLMModel:
             yield chatbot + [(inputs, "")], status_text
             return
         elif len(inputs.strip()) == 0:
-            status_text = standard_error_msg + no_input_msg
+            status_text = STANDARD_ERROR_MSG + NO_INPUT_MSG
             logging.info(status_text)
             yield chatbot + [(inputs, "")], status_text
             return
@@ -299,7 +299,7 @@ class BaseLLMModel:
     ):
         logging.info("重试中……")
         if len(self.history) == 0:
-            yield chatbot, f"{standard_error_msg}上下文是空的"
+            yield chatbot, f"{STANDARD_ERROR_MSG}上下文是空的"
             return
 
         del self.history[-2:]
@@ -362,7 +362,7 @@ class BaseLLMModel:
         return self.token_message()
 
     def delete_last_conversation(self, chatbot):
-        if len(chatbot) > 0 and standard_error_msg in chatbot[-1][1]:
+        if len(chatbot) > 0 and STANDARD_ERROR_MSG in chatbot[-1][1]:
             msg = "由于包含报错信息，只删除chatbot记录"
             chatbot.pop()
             return chatbot, self.history

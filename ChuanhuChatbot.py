@@ -29,7 +29,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     with gr.Row():
         with gr.Column():
-            gr.HTML(title)
+            gr.HTML(CHUANHU_TITLE)
             user_info = gr.Markdown(value="", elem_id="user_info")
         status_display = gr.Markdown(get_geoip(), elem_id="status_display")
 
@@ -82,7 +82,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         label="选择模型", choices=MODELS, multiselect=False, value=MODELS[0], interactive=True
                     )
                     use_streaming_checkbox = gr.Checkbox(
-                        label="实时传输回答", value=True, visible=enable_streaming_option
+                        label="实时传输回答", value=True, visible=ENABLE_STREAMING_OPTION
                     )
                     use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
                     language_select_dropdown = gr.Dropdown(
@@ -196,8 +196,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
                         changeProxyBtn = gr.Button("🔄 设置代理地址")
 
-    gr.Markdown(description)
-    gr.HTML(footer.format(versions=versions_html()), elem_id="footer")
+    gr.Markdown(CHUANHU_DESCRIPTION)
+    gr.HTML(FOOTER.format(versions=versions_html()), elem_id="footer")
     chatgpt_predict_args = dict(
         fn=current_model.value.predict,
         inputs=[
