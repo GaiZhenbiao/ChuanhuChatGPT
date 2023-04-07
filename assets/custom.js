@@ -16,26 +16,28 @@ var chatbot = null;
 
 var ga = document.getElementsByTagName("gradio-app");
 var targetNode = ga[0];
+var isInIframe = (window.self !== window.top);
 
-// gradio 页面加载好了么???
+// gradio 页面加载好了么??? 我能动你的元素了么??
 function gradioLoaded(mutations) {
     for (var i = 0; i < mutations.length; i++) {
         if (mutations[i].addedNodes.length) {  
             gradioContainer = document.querySelector(".gradio-container");
             user_input_tb = document.getElementById('user_input_tb');
             userInfoDiv = document.getElementById("user_info");
+            appTitleDiv = document.getElementById("app_title");
             chatbot = document.querySelector('#chuanhu_chatbot');
 
-            if (gradioContainer) {  // user_input_tb 加载出来了没?
+            if (gradioContainer) {  // gradioCainter 加载出来了没?
                 adjustDarkMode();
             }
             if (user_input_tb) {  // user_input_tb 加载出来了没?
                 selectHistory();
             }
-            if (userInfoDiv) {  // user_input_tb 加载出来了没?
+            if (userInfoDiv && appTitleDiv) {  // userInfoDiv 和 appTitleDiv 加载出来了没?
                 setTimeout(showOrHideUserInfo(), 2000);
             }
-            if (chatbot) {  // user_input_tb 加载出来了没?
+            if (chatbot) {  // chatbot 加载出来了没?
                 setChatbotHeight()
             }
         }
@@ -89,6 +91,7 @@ function selectHistory() {
         });
     }
 }
+
 function toggleUserInfoVisibility(shouldHide) {
     if (userInfoDiv) {
         if (shouldHide) {
@@ -99,8 +102,6 @@ function toggleUserInfoVisibility(shouldHide) {
     }
 }
 function showOrHideUserInfo() {
-    userInfoDiv = document.getElementById("user_info");
-    appTitleDiv = document.getElementById("app_title");
     var sendBtn = document.getElementById("submit_btn");
 
     // Bind mouse/touch events to show/hide user info
@@ -179,50 +180,35 @@ function setChatbotHeight() {
     const screenWidth = window.innerWidth;
     const statusDisplay = document.querySelector('#status_display');
     const statusDisplayHeight = statusDisplay ? statusDisplay.offsetHeight : 0;
-    // const chatbot = document.querySelector('#chuanhu_chatbot');
+    const wrap = chatbot.querySelector('.wrap');
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
-    if (screenWidth <= 320) {
-        if (chatbot) {
-            chatbot.style.height = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 150}px)`;
-            const wrap = chatbot.querySelector('.wrap');
-            if (wrap) {
-                wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 150}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
-            }
-        } 
-    } else if (screenWidth <= 499) {
-        if (chatbot) {
-            chatbot.style.height = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 100}px)`;
-            const wrap = chatbot.querySelector('.wrap');
-            if (wrap) {
-                wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 100}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
-            }
-        }
+    if (isInIframe) {
+        chatbot.style.height = `700px`;
+        wrap.style.maxHeight = `calc(700px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`
     } else {
-        if (chatbot) {
+        if (screenWidth <= 320) {
+            chatbot.style.height = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 150}px)`;
+            wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 150}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
+        } else if (screenWidth <= 499) {
+            chatbot.style.height = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 100}px)`;
+            wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 100}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
+        } else {
             chatbot.style.height = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 160}px)`;
-            const wrap = chatbot.querySelector('.wrap');
-            if (wrap) {
-                wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 160}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
-            }
+            wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 160}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
         }
     }
 }
 
-
+// 监视页面内部 DOM 变动
 var observer = new MutationObserver(function (mutations) {
     gradioLoaded(mutations);
 });
 observer.observe(targetNode, { childList: true, subtree: true });
 
-
+// 监视页面变化
 window.addEventListener("DOMContentLoaded", function () {
-    // setChatbotHeight();
-    // setTimeout(function () {
-    //     showOrHideUserInfo();
-    //     setChatbotHeight();
-    // }, 2000);
-    // 本来是为了页面刷出来等两秒重试的，现在这么写不需要了~ 但框架先留着万一需要呢QAQ
+    isInIframe = (window.self !== window.top);
 });
 window.addEventListener('resize', setChatbotHeight);
 window.addEventListener('scroll', setChatbotHeight);
