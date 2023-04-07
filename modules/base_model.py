@@ -46,7 +46,6 @@ class BaseLLMModel:
         self.all_token_counts = []
         self.model_name = model_name
         self.model_type = ModelType.get_type(model_name)
-        self.api_key = None
         self.token_upper_limit = MODEL_TOKEN_LIMIT[model_name]
         self.max_generation_token = max_generation_token if max_generation_token is not None else self.token_upper_limit
         self.interrupted = False
@@ -346,6 +345,9 @@ class BaseLLMModel:
 
     def set_top_p(self, new_top_p):
         self.top_p = new_top_p
+
+    def set_system_prompt(self, new_system_prompt):
+        self.system_prompt = new_system_prompt
 
     def reset(self):
         self.history = []

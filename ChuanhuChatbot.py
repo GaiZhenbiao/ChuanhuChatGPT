@@ -292,6 +292,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     keyTxt.submit(**get_usage_args)
 
     # Template
+    systemPromptTxt.change(current_model.value.set_system_prompt, [systemPromptTxt], None)
     templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
     templateFileSelectDropdown.change(
         load_template,

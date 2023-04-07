@@ -63,9 +63,6 @@ class OpenAIClient(BaseLLMModel):
             return input_token_count + system_prompt_token_count
         return input_token_count
 
-    def set_system_prompt(self, new_system_prompt):
-        self.system_prompt = new_system_prompt
-
     def billing_info(self):
         try:
             curr_time = datetime.datetime.now()

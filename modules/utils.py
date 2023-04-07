@@ -229,7 +229,7 @@ def get_template_names(plain=False):
 
 
 def get_template_content(templates, selection, original_system_prompt):
-    logging.info(f"应用模板中，选择为{selection}，原始系统提示为{original_system_prompt}")
+    logging.debug(f"应用模板中，选择为{selection}，原始系统提示为{original_system_prompt}")
     try:
         return templates[selection]
     except:
