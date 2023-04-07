@@ -3,7 +3,7 @@ from contextlib import contextmanager
 import os
 import logging
 import sys
-import json
+import commentjson as json
 
 from . import shared
 

@@ -1,14 +1,20 @@
 {
+    // 你的OpenAI API Key，一般必填，
+    // 若缺省填为 "openai_api_key": "" 则必须再在图形界面中填入API Key
     "openai_api_key": "sk-xxxxxxxxxxxxxxxxxxxxxxxxx",
-    "https_proxy": "http://127.0.0.1:1079",
-    "http_proxy": "http://127.0.0.1:1079",
-    "users": [], 
+    // 如果使用代理，请取消注释下面的两行，并替换代理URL
+    // "https_proxy": "http://127.0.0.1:1079",
+    // "http_proxy": "http://127.0.0.1:1079",
+    "users": [],
     "advance_docs": {
         "pdf": {
+            // 是否认为PDF是双栏的
             "two_column": false,
+            // 是否使用OCR识别PDF中的公式
             "formula_ocr": true
         }
     },
+    // 是否多个API Key轮换使用
     "multi_api_key": false,
     "api_key_list": [
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx1",
