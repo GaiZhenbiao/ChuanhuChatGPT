@@ -30,8 +30,6 @@ class OpenAIClient(BaseLLMModel):
     ) -> None:
         super().__init__(model_name=model_name, temperature=temperature, top_p=top_p, system_prompt=system_prompt)
         self.api_key = api_key
-        self.completion_url = shared.state.completion_url
-        self.usage_api_url = shared.state.usage_api_url
         self.headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",
@@ -68,7 +66,7 @@ class OpenAIClient(BaseLLMModel):
             curr_time = datetime.datetime.now()
             last_day_of_month = get_last_day_of_month(curr_time).strftime("%Y-%m-%d")
             first_day_of_month = curr_time.replace(day=1).strftime("%Y-%m-%d")
-            usage_url = f"{self.usage_api_url}?start_date={first_day_of_month}&end_date={last_day_of_month}"
+            usage_url = f"{shared.state.usage_api_url}?start_date={first_day_of_month}&end_date={last_day_of_month}"
             try:
                 usage_data = self._get_billing_data(usage_url)
             except Exception as e:
