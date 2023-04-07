@@ -21,7 +21,6 @@ with open("assets/custom.css", "r", encoding="utf-8") as f:
 with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     user_name = gr.State("")
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
-    user_api_key = gr.State(my_api_key)
     user_question = gr.State("")
     current_model = gr.State(get_model(MODELS[0], my_api_key)[0])
 
@@ -288,7 +287,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     two_column.change(update_doc_config, [two_column], None)
 
     # LLM Models
-    keyTxt.change(submit_key, keyTxt, [user_api_key, status_display]).then(**get_usage_args)
+    keyTxt.change(current_model.value.set_key, keyTxt, [status_display]).then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
     model_select_dropdown.change(get_model, [model_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [current_model, status_display], show_progress=True)
 

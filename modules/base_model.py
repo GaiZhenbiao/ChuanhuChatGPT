@@ -52,6 +52,7 @@ class BaseLLMModel:
         self.temperature = temperature
         self.top_p = top_p
         self.system_prompt = system_prompt
+        self.api_key = None
 
 
     def get_answer_stream_iter(self):
@@ -348,6 +349,12 @@ class BaseLLMModel:
 
     def set_system_prompt(self, new_system_prompt):
         self.system_prompt = new_system_prompt
+
+    def set_key(self, new_access_key):
+        self.api_key = new_access_key.strip()
+        msg = f"API密钥更改为了{hide_middle_chars(self.api_key)}"
+        logging.info(msg)
+        return msg
 
     def reset(self):
         self.history = []
