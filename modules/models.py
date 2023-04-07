@@ -8,6 +8,7 @@ import os
 import sys
 import requests
 import urllib3
+import platform
 
 from tqdm import tqdm
 import colorama
@@ -191,6 +192,55 @@ class OpenAIClient(BaseLLMModel):
                         # logging.error(f"Error: {e}")
                         continue
 
+class ChatGLM_Client(BaseLLMModel):
+    def __init__(
+        self,
+        model_name,
+        model_path = None
+    ) -> None:
+        super().__init__(
+            model_name=model_name
+        )
+        from transformers import AutoTokenizer, AutoModel
+        import torch
+        system_name = platform.system()
+        if os.path.exists("models"):
+            model_dirs = os.listdir("models")
+            if model_name in model_dirs:
+                model_path = f"models/{model_name}"
+        if model_path is not None:
+            model_source = model_path
+        else:
+            model_source = f"THUDM/{model_name}"
+        self.tokenizer = AutoTokenizer.from_pretrained(model_source, trust_remote_code=True)
+        if torch.cuda.is_available():
+            # run on CUDA
+            model = AutoModel.from_pretrained(model_source, trust_remote_code=True).half().cuda()
+        elif system_name == "Darwin" and model_path is not None:
+            # running on macOS and model already downloaded
+            model = AutoModel.from_pretrained(model_path, trust_remote_code=True).half().to('mps')
+        else:
+            # run on CPU
+            model = AutoModel.from_pretrained(model_source, trust_remote_code=True).float()
+        model = model.eval()
+        self.model = model
+
+    def _get_glm_style_input(self):
+        history = [x["content"] for x in self.history]
+        query = history.pop()
+        return history, query
+
+    def get_answer_at_once(self):
+        history, query = self._get_glm_style_input()
+        response, _ = self.model.chat(self.tokenizer, query, history=history)
+        return response
+
+    def get_answer_stream_iter(self):
+        history, query = self._get_glm_style_input()
+        for response, history in self.model.stream_chat(self.tokenizer, query, history, max_length=self.token_upper_limit, top_p=self.top_p,
+                                               temperature=self.temperature):
+            yield response
+
 
 def get_model(
     model_name, access_key=None, temperature=None, top_p=None, system_prompt=None
@@ -198,6 +248,7 @@ def get_model(
     msg = f"模型设置为了： {model_name}"
     logging.info(msg)
     model_type = ModelType.get_type(model_name)
+    del model
     if model_type == ModelType.OpenAI:
         model = OpenAIClient(
             model_name=model_name,
@@ -206,6 +257,8 @@ def get_model(
             temperature=temperature,
             top_p=top_p,
         )
+    elif model_type == ModelType.ChatGLM:
+        model = ChatGLM_Client(model_name)
     return model, msg
 
 

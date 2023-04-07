@@ -13,3 +13,5 @@ markdown
 PyPDF2
 pdfplumber
 pandas
+transformers
+torch

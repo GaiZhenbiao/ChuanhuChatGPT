@@ -57,6 +57,9 @@ MODELS = [
     "gpt-4-0314",
     "gpt-4-32k",
     "gpt-4-32k-0314",
+    "chatglm-6b",
+    "chatglm-6b-int4",
+    "chatglm-6b-int4-qe"
 ]  # 可选的模型
 
 MODEL_TOKEN_LIMIT = {
