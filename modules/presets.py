@@ -24,7 +24,7 @@ NO_APIKEY_MSG = "API key长度不是51位，请检查是否输入正确。"  # A
 NO_INPUT_MSG = "请输入对话内容。"  # 未输入对话内容
 BILLING_NOT_APPLICABLE_MSG = "模型本地运行中" # 本地运行的模型返回的账单信息
 
-TIMEOUT_STREAMING = 10  # 流式对话时的超时时间
+TIMEOUT_STREAMING = 30  # 流式对话时的超时时间
 TIMEOUT_ALL = 200  # 非流式对话时的超时时间
 ENABLE_STREAMING_OPTION = True  # 是否启用选择选择是否实时显示回答的勾选框
 HIDE_MY_KEY = False  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
