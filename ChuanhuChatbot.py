@@ -10,8 +10,7 @@ from modules.config import *
 from modules.utils import *
 from modules.presets import *
 from modules.overwrites import *
-from modules.chat_func import *
-from modules.openai_func import get_usage
+from modules.models import get_model
 
 gr.Chatbot.postprocess = postprocess
 PromptHelper.compact_text_chunks = compact_text_chunks
@@ -21,12 +20,11 @@ with open("assets/custom.css", "r", encoding="utf-8") as f:
 
 with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     user_name = gr.State("")
-    history = gr.State([])
-    token_count = gr.State([])
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     user_api_key = gr.State(my_api_key)
     user_question = gr.State("")
-    outputing = gr.State(False)
+    current_model = gr.State(get_model(MODELS[0], my_api_key))
+
     topic = gr.State("未命名对话历史记录")
 
     with gr.Row():
@@ -64,7 +62,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                 retryBtn = gr.Button("🔄 重新生成")
                 delFirstBtn = gr.Button("🗑️ 删除最旧对话")
                 delLastBtn = gr.Button("🗑️ 删除最新对话")
-                reduceTokenBtn = gr.Button("♻️ 总结对话")
 
         with gr.Column():
             with gr.Column(min_width=50, scale=1):
@@ -94,7 +91,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         multiselect=False,
                         value=REPLY_LANGUAGES[0],
                     )
-                    index_files = gr.Files(label="上传索引文件", type="file", multiple=True)
+                    index_files = gr.Files(label="上传索引文件", type="file")
                     two_column = gr.Checkbox(label="双栏pdf", value=advance_docs["pdf"].get("two_column", False))
                     # TODO: 公式ocr
                     # formula_ocr = gr.Checkbox(label="识别公式", value=advance_docs["pdf"].get("formula_ocr", False))
@@ -104,7 +101,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         show_label=True,
                         placeholder=f"在这里输入System Prompt...",
                         label="System prompt",
-                        value=initial_prompt,
+                        value=INITIAL_SYSTEM_PROMPT,
                         lines=10,
                     ).style(container=False)
                     with gr.Accordion(label="加载Prompt模板", open=True):
@@ -202,23 +199,16 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     gr.Markdown(description)
     gr.HTML(footer.format(versions=versions_html()), elem_id="footer")
     chatgpt_predict_args = dict(
-        fn=predict,
+        fn=current_model.value.predict,
         inputs=[
-            user_api_key,
-            systemPromptTxt,
-            history,
             user_question,
             chatbot,
-            token_count,
-            top_p,
-            temperature,
             use_streaming_checkbox,
-            model_select_dropdown,
             use_websearch_checkbox,
             index_files,
             language_select_dropdown,
         ],
-        outputs=[chatbot, history, status_display, token_count],
+        outputs=[chatbot, status_display],
         show_progress=True,
     )
 
@@ -242,12 +232,18 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     )
 
     get_usage_args = dict(
-        fn=get_usage, inputs=[user_api_key], outputs=[usageTxt], show_progress=False
+        fn=current_model.value.billing_info, inputs=None, outputs=[usageTxt], show_progress=False
+    )
+
+    load_history_from_file_args = dict(
+        fn=current_model.value.load_chat_history,
+        inputs=[historyFileSelectDropdown, chatbot, user_name],
+        outputs=[saveFileName, systemPromptTxt, chatbot]
     )
 
 
     # Chatbot
-    cancelBtn.click(cancel_outputing, [], [])
+    cancelBtn.click(current_model.value.interrupt, [], [])
 
     user_input.submit(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
     user_input.submit(**get_usage_args)
@@ -256,62 +252,38 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     submitBtn.click(**get_usage_args)
 
     emptyBtn.click(
-        reset_state,
-        outputs=[chatbot, history, token_count, status_display],
+        current_model.value.reset,
+        outputs=[chatbot, status_display],
         show_progress=True,
     )
     emptyBtn.click(**reset_textbox_args)
 
     retryBtn.click(**start_outputing_args).then(
-        retry,
+        current_model.value.retry,
         [
-            user_api_key,
-            systemPromptTxt,
-            history,
             chatbot,
-            token_count,
-            top_p,
-            temperature,
             use_streaming_checkbox,
-            model_select_dropdown,
+            use_websearch_checkbox,
+            index_files,
             language_select_dropdown,
         ],
-        [chatbot, history, status_display, token_count],
+        [chatbot, status_display],
         show_progress=True,
     ).then(**end_outputing_args)
     retryBtn.click(**get_usage_args)
 
     delFirstBtn.click(
-        delete_first_conversation,
-        [history, token_count],
-        [history, token_count, status_display],
+        current_model.value.delete_first_conversation,
+        None,
+        [status_display],
     )
 
     delLastBtn.click(
-        delete_last_conversation,
-        [chatbot, history, token_count],
-        [chatbot, history, token_count, status_display],
-        show_progress=True,
+        current_model.value.delete_last_conversation,
+        [chatbot],
+        [chatbot, status_display],
+        show_progress=False
     )
-
-    reduceTokenBtn.click(
-        reduce_token_size,
-        [
-            user_api_key,
-            systemPromptTxt,
-            history,
-            chatbot,
-            token_count,
-            top_p,
-            temperature,
-            gr.State(sum(token_count.value[-4:])),
-            model_select_dropdown,
-            language_select_dropdown,
-        ],
-        [chatbot, history, status_display, token_count],
-        show_progress=True,
-    )
-    reduceTokenBtn.click(**get_usage_args)
 
     two_column.change(update_doc_config, [two_column], None)
 
@@ -336,30 +308,21 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     # S&L
     saveHistoryBtn.click(
-        save_chat_history,
-        [saveFileName, systemPromptTxt, history, chatbot, user_name],
+        current_model.value.save_chat_history,
+        [saveFileName, chatbot, user_name],
         downloadFile,
         show_progress=True,
     )
     saveHistoryBtn.click(get_history_names, [gr.State(False), user_name], [historyFileSelectDropdown])
     exportMarkdownBtn.click(
-        export_markdown,
-        [saveFileName, systemPromptTxt, history, chatbot, user_name],
+        current_model.value.export_markdown,
+        [saveFileName, chatbot, user_name],
         downloadFile,
         show_progress=True,
     )
     historyRefreshBtn.click(get_history_names, [gr.State(False), user_name], [historyFileSelectDropdown])
-    historyFileSelectDropdown.change(
-        load_chat_history,
-        [historyFileSelectDropdown, systemPromptTxt, history, chatbot, user_name],
-        [saveFileName, systemPromptTxt, history, chatbot],
-        show_progress=True,
-    )
-    downloadFile.change(
-        load_chat_history,
-        [downloadFile, systemPromptTxt, history, chatbot, user_name],
-        [saveFileName, systemPromptTxt, history, chatbot],
-    )
+    historyFileSelectDropdown.change(**load_history_from_file_args)
+    downloadFile.change(**load_history_from_file_args)
 
     # Advanced
     default_btn.click(

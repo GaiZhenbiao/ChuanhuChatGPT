@@ -44,40 +44,44 @@ def get_documents(file_src):
         filename = os.path.basename(filepath)
         file_type = os.path.splitext(filepath)[1]
         logging.info(f"loading file: {filename}")
-        if file_type == ".pdf":
-            logging.debug("Loading PDF...")
-            try:
-                from modules.pdf_func import parse_pdf
-                from modules.config import advance_docs
-                two_column = advance_docs["pdf"].get("two_column", False)
-                pdftext = parse_pdf(filepath, two_column).text
-            except:
-                pdftext = ""
-                with open(filepath, 'rb') as pdfFileObj:
-                    pdfReader = PyPDF2.PdfReader(pdfFileObj)
-                    for page in tqdm(pdfReader.pages):
-                        pdftext += page.extract_text()
-            text_raw = pdftext
-        elif file_type == ".docx":
-            logging.debug("Loading Word...")
-            DocxReader = download_loader("DocxReader")
-            loader = DocxReader()
-            text_raw = loader.load_data(file=filepath)[0].text
-        elif file_type == ".epub":
-            logging.debug("Loading EPUB...")
-            EpubReader = download_loader("EpubReader")
-            loader = EpubReader()
-            text_raw = loader.load_data(file=filepath)[0].text
-        elif file_type == ".xlsx":
-            logging.debug("Loading Excel...")
-            text_list = excel_to_string(filepath)
-            for elem in text_list:
-                documents.append(Document(elem))
-            continue
-        else:
-            logging.debug("Loading text file...")
-            with open(filepath, "r", encoding="utf-8") as f:
-                text_raw = f.read()
+        try:
+            if file_type == ".pdf":
+                logging.debug("Loading PDF...")
+                try:
+                    from modules.pdf_func import parse_pdf
+                    from modules.config import advance_docs
+                    two_column = advance_docs["pdf"].get("two_column", False)
+                    pdftext = parse_pdf(filepath, two_column).text
+                except:
+                    pdftext = ""
+                    with open(filepath, 'rb') as pdfFileObj:
+                        pdfReader = PyPDF2.PdfReader(pdfFileObj)
+                        for page in tqdm(pdfReader.pages):
+                            pdftext += page.extract_text()
+                text_raw = pdftext
+            elif file_type == ".docx":
+                logging.debug("Loading Word...")
+                DocxReader = download_loader("DocxReader")
+                loader = DocxReader()
+                text_raw = loader.load_data(file=filepath)[0].text
+            elif file_type == ".epub":
+                logging.debug("Loading EPUB...")
+                EpubReader = download_loader("EpubReader")
+                loader = EpubReader()
+                text_raw = loader.load_data(file=filepath)[0].text
+            elif file_type == ".xlsx":
+                logging.debug("Loading Excel...")
+                text_list = excel_to_string(filepath)
+                for elem in text_list:
+                    documents.append(Document(elem))
+                continue
+            else:
+                logging.debug("Loading text file...")
+                with open(filepath, "r", encoding="utf-8") as f:
+                    text_raw = f.read()
+        except Exception as e:
+            logging.error(f"Error loading file: {filename}")
+            pass
         text = add_space(text_raw)
         # text = block_split(text)
         # documents += text

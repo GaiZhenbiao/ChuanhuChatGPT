@@ -3,26 +3,29 @@ import gradio as gr
 from pathlib import Path
 
 # ChatGPT 设置
-initial_prompt = "You are a helpful assistant."
+INITIAL_SYSTEM_PROMPT = "You are a helpful assistant."
 API_HOST = "api.openai.com"
 COMPLETION_URL = "https://api.openai.com/v1/chat/completions"
 BALANCE_API_URL="https://api.openai.com/dashboard/billing/credit_grants"
 USAGE_API_URL="https://api.openai.com/dashboard/billing/usage"
 HISTORY_DIR = Path("history")
+HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"
 
 # 错误信息
 standard_error_msg = "☹️发生了错误："  # 错误信息的标准前缀
-error_retrieve_prompt = "请检查网络连接，或者API-Key是否有效。"  # 获取对话时发生错误
+general_error_msg = "获取对话时发生错误，请查看后台日志"
+error_retrieve_prompt = "请检查网络连接，或者API-Key是否有效。"
 connection_timeout_prompt = "连接超时，无法获取对话。"  # 连接超时
 read_timeout_prompt = "读取超时，无法获取对话。"  # 读取超时
 proxy_error_prompt = "代理错误，无法获取对话。"  # 代理错误
 ssl_error_prompt = "SSL错误，无法获取对话。"  # SSL 错误
 no_apikey_msg = "API key长度不是51位，请检查是否输入正确。"  # API key 长度不足 51 位
 no_input_msg = "请输入对话内容。"  # 未输入对话内容
+billing_not_applicable_msg = "模型本地运行中" # 本地运行的模型返回的账单信息
 
 timeout_streaming = 10  # 流式对话时的超时时间
-timeout_all = 200  # 非流式对话时的超时时间
+TIMEOUT_ALL = 200  # 非流式对话时的超时时间
 enable_streaming_option = True  # 是否启用选择选择是否实时显示回答的勾选框
 HIDE_MY_KEY = False  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
 CONCURRENT_COUNT = 100 # 允许同时使用的用户数量
@@ -57,32 +60,17 @@ MODELS = [
     "gpt-4-32k-0314",
 ]  # 可选的模型
 
-MODEL_SOFT_TOKEN_LIMIT = {
-    "gpt-3.5-turbo": {
-        "streaming": 3500,
-        "all": 3500
-    },
-    "gpt-3.5-turbo-0301": {
-        "streaming": 3500,
-        "all": 3500
-    },
-    "gpt-4": {
-        "streaming": 7500,
-        "all": 7500
-    },
-    "gpt-4-0314": {
-        "streaming": 7500,
-        "all": 7500
-    },
-    "gpt-4-32k": {
-        "streaming": 31000,
-        "all": 31000
-    },
-    "gpt-4-32k-0314": {
-        "streaming": 31000,
-        "all": 31000
-    }
+MODEL_TOKEN_LIMIT = {
+    "gpt-3.5-turbo": 4096,
+    "gpt-3.5-turbo-0301": 4096,
+    "gpt-4": 8192,
+    "gpt-4-0314": 8192,
+    "gpt-4-32k": 32768,
+    "gpt-4-32k-0314": 32768
 }
+
+TOKEN_OFFSET = 1000 # 模型的token上限减去这个值，得到软上限。到达软上限之后，自动尝试减少token占用。
+REDUCE_TOKEN_FACTOR = 0.5 # 与模型token上限想乘，得到目标token数。减少token占用时，将token占用减少到目标token数以下。
 
 REPLY_LANGUAGES = [
     "简体中文",
