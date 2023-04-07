@@ -408,11 +408,11 @@ class BaseLLMModel:
         return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
 
     def load_chat_history(self, filename, chatbot, user_name):
-        logging.info(f"{user_name} 加载对话历史中……")
+        logging.debug(f"{user_name} 加载对话历史中……")
         if type(filename) != str:
             filename = filename.name
         try:
-            with open(os.path.join(HISTORY_DIR / user_name, filename), "r") as f:
+            with open(os.path.join(HISTORY_DIR, user_name, filename), "r") as f:
                 json_s = json.load(f)
             try:
                 if type(json_s["history"][0]) == str:
@@ -428,9 +428,9 @@ class BaseLLMModel:
             except:
                 # 没有对话历史
                 pass
-            logging.info(f"{user_name} 加载对话历史完毕")
+            logging.debug(f"{user_name} 加载对话历史完毕")
             self.history = json_s["history"]
             return filename, json_s["system"], json_s["chatbot"]
         except FileNotFoundError:
-            logging.info(f"{user_name} 没有找到对话历史文件，不执行任何操作")
+            logging.warning(f"{user_name} 没有找到对话历史文件，不执行任何操作")
             return filename, self.system_prompt, chatbot

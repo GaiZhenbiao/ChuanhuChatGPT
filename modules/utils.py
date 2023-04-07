@@ -154,21 +154,21 @@ def construct_assistant(text):
 
 
 def save_file(filename, system, history, chatbot, user_name):
-    logging.info(f"{user_name} 保存对话历史中……")
-    os.makedirs(HISTORY_DIR / user_name, exist_ok=True)
+    logging.debug(f"{user_name} 保存对话历史中……")
+    os.makedirs(os.path.join(HISTORY_DIR, user_name), exist_ok=True)
     if filename.endswith(".json"):
         json_s = {"system": system, "history": history, "chatbot": chatbot}
         print(json_s)
-        with open(os.path.join(HISTORY_DIR / user_name, filename), "w") as f:
+        with open(os.path.join(HISTORY_DIR, user_name, filename), "w") as f:
             json.dump(json_s, f)
     elif filename.endswith(".md"):
         md_s = f"system: \n- {system} \n"
         for data in history:
             md_s += f"\n{data['role']}: \n- {data['content']} \n"
-        with open(os.path.join(HISTORY_DIR / user_name, filename), "w", encoding="utf8") as f:
+        with open(os.path.join(HISTORY_DIR, user_name, filename), "w", encoding="utf8") as f:
             f.write(md_s)
-    logging.info(f"{user_name} 保存对话历史完毕")
-    return os.path.join(HISTORY_DIR / user_name, filename)
+    logging.debug(f"{user_name} 保存对话历史完毕")
+    return os.path.join(HISTORY_DIR, user_name, filename)
 
 
 def sorted_by_pinyin(list):
