@@ -221,7 +221,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             value="",
                             lines=1,
                         )
-                        user = gr.Textbox(
+                        user_identifier_txt = gr.Textbox(
                             show_label=True,
                             placeholder=f"用于定位滥用行为",
                             label="用户名",
@@ -379,8 +379,16 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     downloadFile.change(**load_history_from_file_args)
 
     # Advanced
-    top_p_slider.change(current_model.value.set_top_p, [top_p_slider], None)
     temperature_slider.change(current_model.value.set_temperature, [temperature_slider], None)
+    top_p_slider.change(current_model.value.set_top_p, [top_p_slider], None)
+    n_choices_slider.change(current_model.value.set_n_choices, [n_choices_slider], None)
+    stop_sequence_txt.change(current_model.value.set_stop_sequence, [stop_sequence_txt], None)
+    max_tokens_slider.change(current_model.value.set_max_tokens, [max_tokens_slider], None)
+    presence_penalty_slider.change(current_model.value.set_presence_penalty, [presence_penalty_slider], None)
+    frequency_penalty_slider.change(current_model.value.set_frequency_penalty, [frequency_penalty_slider], None)
+    logit_bias_txt.change(current_model.value.set_logit_bias, [logit_bias_txt], None)
+    user_identifier_txt.change(current_model.value.set_user_identifier, [user_identifier_txt], None)
+
     default_btn.click(
         reset_default, [], [apihostTxt, proxyTxt, status_display], show_progress=True
     )

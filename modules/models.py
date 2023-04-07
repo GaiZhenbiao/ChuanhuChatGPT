@@ -103,9 +103,6 @@ class OpenAIClient(BaseLLMModel):
         system_prompt = self.system_prompt
         history = self.history
         logging.debug(colorama.Fore.YELLOW + f"{history}" + colorama.Fore.RESET)
-        temperature = self.temperature
-        top_p = self.top_p
-        selected_model = self.model_name
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {openai_api_key}",
@@ -115,16 +112,25 @@ class OpenAIClient(BaseLLMModel):
             history = [construct_system(system_prompt), *history]
 
         payload = {
-            "model": selected_model,
-            "messages": history,  # [{"role": "user", "content": f"{inputs}"}],
-            "temperature": temperature,  # 1.0,
-            "top_p": top_p,  # 1.0,
-            "n": 1,
+            "model": self.model_name,
+            "messages": history,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+            "n": self.n_choices,
             "stream": stream,
-            "presence_penalty": 0,
-            "frequency_penalty": 0,
-            "max_tokens": self.max_generation_token,
+            "presence_penalty": self.presence_penalty,
+            "frequency_penalty": self.frequency_penalty,
         }
+
+        if self.max_generation_token is not None:
+            payload["max_tokens"] = self.max_generation_token
+        if self.stop_sequence is not None:
+            payload["stop"] = self.stop_sequence
+        if self.logit_bias is not None:
+            payload["logit_bias"] = self.logit_bias
+        if self.user_identifier is not None:
+            payload["user"] = self.user_identifier
+
         if stream:
             timeout = TIMEOUT_STREAMING
         else:

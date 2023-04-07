@@ -67,16 +67,12 @@ class BaseLLMModel:
         self.temperature = temperature
         self.top_p = top_p
         self.n_choices = n_choices
-        self.stop = stop
-        self.max_generation_token = (
-            max_generation_token
-            if max_generation_token is not None
-            else self.token_upper_limit
-        )
+        self.stop_sequence = stop
+        self.max_generation_token = None
         self.presence_penalty = presence_penalty
         self.frequency_penalty = frequency_penalty
         self.logit_bias = logit_bias
-        self.user = user
+        self.user_identifier = user
 
     def get_answer_stream_iter(self):
         """stream predict, need to be implemented
@@ -366,6 +362,36 @@ class BaseLLMModel:
 
     def set_top_p(self, new_top_p):
         self.top_p = new_top_p
+
+    def set_n_choices(self, new_n_choices):
+        self.n_choices = new_n_choices
+
+    def set_stop_sequence(self, new_stop_sequence: str):
+        new_stop_sequence = new_stop_sequence.split(",")
+        self.stop_sequence = new_stop_sequence
+
+    def set_max_tokens(self, new_max_tokens):
+        self.max_generation_token = new_max_tokens
+
+    def set_presence_penalty(self, new_presence_penalty):
+        self.presence_penalty = new_presence_penalty
+
+    def set_frequency_penalty(self, new_frequency_penalty):
+        self.frequency_penalty = new_frequency_penalty
+
+    def set_logit_bias(self, logit_bias):
+        logit_bias = logit_bias.split()
+        bias_map = {}
+        encoding = tiktoken.get_encoding("cl100k_base")
+        for line in logit_bias:
+            word, bias_amount = line.split(":")
+            if word:
+                for token in encoding.encode(word):
+                    bias_map[token] = float(bias_amount)
+        self.logit_bias = bias_map
+
+    def set_user_identifier(self, new_user_identifier):
+        self.user_identifier = new_user_identifier
 
     def set_system_prompt(self, new_system_prompt):
         self.system_prompt = new_system_prompt
