@@ -126,6 +126,7 @@ class BaseLLMModel:
 
         stream_iter = self.get_answer_stream_iter()
 
+        self.history.append(construct_assistant(""))
         for partial_text in stream_iter:
             self.history[-1] = construct_assistant(partial_text)
             chatbot[-1] = (chatbot[-1][0], partial_text + display_append)
@@ -144,9 +145,9 @@ class BaseLLMModel:
             user_token_count = self.count_token(inputs)
         self.all_token_counts.append(user_token_count)
         ai_reply, total_token_count = self.get_answer_at_once()
+        self.history.append(construct_assistant(ai_reply))
         if fake_input is not None:
             self.history[-2] = construct_user(fake_input)
-        self.history[-1] = construct_assistant(ai_reply)
         chatbot[-1] = (chatbot[-1][0], ai_reply + display_append)
         if fake_input is not None:
             self.all_token_counts[-1] += count_token(construct_assistant(ai_reply))
@@ -265,7 +266,6 @@ class BaseLLMModel:
             return
 
         self.history.append(construct_user(inputs))
-        self.history.append(construct_assistant(""))
 
         if stream:
             logging.debug("使用流式传输")

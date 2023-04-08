@@ -200,17 +200,13 @@ class OpenAIClient(BaseLLMModel):
                         # logging.error(f"Error: {e}")
                         continue
 
+
 class ChatGLM_Client(BaseLLMModel):
-    def __init__(
-        self,
-        model_name,
-        model_path = None
-    ) -> None:
-        super().__init__(
-            model_name=model_name
-        )
+    def __init__(self, model_name, model_path=None) -> None:
+        super().__init__(model_name=model_name)
         from transformers import AutoTokenizer, AutoModel
         import torch
+
         system_name = platform.system()
         if os.path.exists("models"):
             model_dirs = os.listdir("models")
@@ -220,23 +216,29 @@ class ChatGLM_Client(BaseLLMModel):
             model_source = model_path
         else:
             model_source = f"THUDM/{model_name}"
-        self.tokenizer = AutoTokenizer.from_pretrained(model_source, trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_source, trust_remote_code=True
+        )
         quantified = False
         if "int4" in model_name:
             quantified = True
         if quantified:
-            model = AutoModel.from_pretrained(model_source, trust_remote_code=True).float()
+            model = AutoModel.from_pretrained(
+                model_source, trust_remote_code=True
+            ).float()
         else:
-            model = AutoModel.from_pretrained(model_source, trust_remote_code=True).half()
+            model = AutoModel.from_pretrained(
+                model_source, trust_remote_code=True
+            ).half()
         if torch.cuda.is_available():
             # run on CUDA
             logging.info("CUDA is available, using CUDA")
             model = model.cuda()
         # mps加速还存在一些问题，暂时不使用
-        # elif system_name == "Darwin" and model_path is not None:
-        #     logging.info("Running on macOS, using MPS")
-        #     # running on macOS and model already downloaded
-        #     model = model.to('mps')
+        elif system_name == "Darwin" and model_path is not None and not quantified:
+            logging.info("Running on macOS, using MPS")
+            # running on macOS and model already downloaded
+            model = model.to("mps")
         else:
             logging.info("GPU is not available, using CPU")
         model = model.eval()
@@ -246,8 +248,10 @@ class ChatGLM_Client(BaseLLMModel):
         history = [x["content"] for x in self.history]
         query = history.pop()
         logging.info(colorama.Fore.YELLOW + f"{history}" + colorama.Fore.RESET)
-        assert len(history) % 2 == 0
-        history = [[history[i], history[i+1]] for i in range(0, len(history), 2)]
+        assert (
+            len(history) % 2 == 0
+        ), f"History should be even length. current history is: {history}"
+        history = [[history[i], history[i + 1]] for i in range(0, len(history), 2)]
         return history, query
 
     def get_answer_at_once(self):
@@ -257,42 +261,48 @@ class ChatGLM_Client(BaseLLMModel):
 
     def get_answer_stream_iter(self):
         history, query = self._get_glm_style_input()
-        for response, history in self.model.stream_chat(self.tokenizer, query, history, max_length=self.token_upper_limit, top_p=self.top_p,
-                                               temperature=self.temperature):
+        for response, history in self.model.stream_chat(
+            self.tokenizer,
+            query,
+            history,
+            max_length=self.token_upper_limit,
+            top_p=self.top_p,
+            temperature=self.temperature,
+        ):
             yield response
+
 
 @dataclass
 class ChatbotArguments:
     pass
 
+
 class LLaMA_Client(BaseLLMModel):
     def __init__(
         self,
         model_name,
-        lora_path = None,
+        lora_path=None,
     ) -> None:
-        super().__init__(
-            model_name=model_name
-        )
+        super().__init__(model_name=model_name)
         self.max_generation_token = 1000
         pipeline_name = "inferencer"
         PipelineArguments = AutoArguments.get_pipeline_args_class(pipeline_name)
 
-        parser = HfArgumentParser((
-            ModelArguments,
-            PipelineArguments,
-            ChatbotArguments,
-        ))
-        model_args, pipeline_args, chatbot_args = (
-            parser.parse_args_into_dataclasses()
+        parser = HfArgumentParser(
+            (
+                ModelArguments,
+                PipelineArguments,
+                ChatbotArguments,
+            )
         )
+        model_args, pipeline_args, chatbot_args = parser.parse_args_into_dataclasses()
 
-        with open (pipeline_args.deepspeed, "r") as f:
+        with open(pipeline_args.deepspeed, "r") as f:
             ds_config = json.load(f)
 
         self.model = AutoModel.get_model(
             model_args,
-            tune_strategy='none',
+            tune_strategy="none",
             ds_config=ds_config,
         )
 
@@ -323,14 +333,12 @@ class LLaMA_Client(BaseLLMModel):
         context = "\n".join(history)
         return context
 
-
     def get_answer_at_once(self):
         context = self._get_llama_style_input()
 
-        input_dataset = self.dataset.from_dict({
-            "type": "text_only",
-            "instances": [ { "text": context } ]
-        })
+        input_dataset = self.dataset.from_dict(
+            {"type": "text_only", "instances": [{"text": context}]}
+        )
 
         output_dataset = self.inferencer.inference(
             model=self.model,
@@ -347,7 +355,7 @@ class LLaMA_Client(BaseLLMModel):
             response += self.end_string
             index = response.index(self.end_string)
 
-        response = response[:index + 1]
+        response = response[: index + 1]
         return response, len(response)
 
     def get_answer_stream_iter(self):
@@ -355,34 +363,44 @@ class LLaMA_Client(BaseLLMModel):
         yield response
 
 
+class ModelManager:
+    def __init__(self, **kwargs) -> None:
+        self.model, self.msg = self.get_model(**kwargs)
 
-def get_model(
-    model_name, access_key=None, temperature=None, top_p=None, system_prompt=None
-) -> BaseLLMModel:
-    msg = f"模型设置为了： {model_name}"
-    logging.info(msg)
-    model_type = ModelType.get_type(model_name)
-    print(model_type.name)
-    if model_type == ModelType.OpenAI:
-        model = OpenAIClient(
-            model_name=model_name,
-            api_key=access_key,
-            system_prompt=system_prompt,
-            temperature=temperature,
-            top_p=top_p,
-        )
-    elif model_type == ModelType.ChatGLM:
-        model = ChatGLM_Client(model_name)
-    return model, msg
+    def get_model(
+        self,
+        model_name,
+        access_key=None,
+        temperature=None,
+        top_p=None,
+        system_prompt=None,
+    ) -> BaseLLMModel:
+        msg = f"模型设置为了： {model_name}"
+        logging.info(msg)
+        model_type = ModelType.get_type(model_name)
+        print(model_type.name)
+        if model_type == ModelType.OpenAI:
+            model = OpenAIClient(
+                model_name=model_name,
+                api_key=access_key,
+                system_prompt=system_prompt,
+                temperature=temperature,
+                top_p=top_p,
+            )
+        elif model_type == ModelType.ChatGLM:
+            model = ChatGLM_Client(model_name)
+        return model, msg
 
 
 if __name__ == "__main__":
     with open("config.json", "r") as f:
         openai_api_key = cjson.load(f)["openai_api_key"]
+    # set logging level to debug
+    logging.basicConfig(level=logging.DEBUG)
     # client, _ = get_model("gpt-3.5-turbo", openai_api_key)
     client, _ = get_model("chatglm-6b-int4")
     chatbot = []
-    stream = True
+    stream = False
     # 测试账单功能
     logging.info(colorama.Back.GREEN + "测试账单功能" + colorama.Back.RESET)
     logging.info(client.billing_info())
