@@ -44,6 +44,15 @@ description = """\
 
 footer = """<div class="versions">{versions}</div>"""
 
+appearance_switcher = """
+<div style="display: flex; justify-content: space-between;">
+<span style="margin-top: 4px !important;">切换亮暗色主题</span>
+<span><label class="apSwitch" for="checkbox">
+    <input type="checkbox" id="checkbox">
+    <div class="apSlider"></div>
+</label></span>
+</div>
+"""
 summarize_prompt = "你是谁？我们刚才聊了什么？"  # 总结对话时的 prompt
 
 MODELS = [

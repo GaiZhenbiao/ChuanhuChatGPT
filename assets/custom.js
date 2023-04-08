@@ -13,6 +13,7 @@ var user_input_tb = null;
 var userInfoDiv = null;
 var appTitleDiv = null;
 var chatbot = null;
+var apSwitch = null;
 
 var ga = document.getElementsByTagName("gradio-app");
 var targetNode = ga[0];
@@ -27,8 +28,9 @@ function gradioLoaded(mutations) {
             userInfoDiv = document.getElementById("user_info");
             appTitleDiv = document.getElementById("app_title");
             chatbot = document.querySelector('#chuanhu_chatbot');
+            apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
 
-            if (gradioContainer) {  // gradioCainter 加载出来了没?
+            if (gradioContainer && apSwitch) {  // gradioCainter 加载出来了没?
                 adjustDarkMode();
             }
             if (user_input_tb) {  // user_input_tb 加载出来了没?
@@ -158,21 +160,26 @@ function showOrHideUserInfo() {
 }
 
 function toggleDarkMode(isEnabled) {
-    gradioContainer = document.querySelector(".gradio-container");
     if (isEnabled) {
         gradioContainer.classList.add("dark");
-        document.body.style.backgroundColor = "";
+        document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
     } else {
         gradioContainer.classList.remove("dark");
+        document.body.style.backgroundColor = "";
     }
 }
 function adjustDarkMode() {
     const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
     // 根据当前颜色模式设置初始状态
     toggleDarkMode(darkModeQuery.matches);
     // 监听颜色模式变化
     darkModeQuery.addEventListener("change", (e) => {
         toggleDarkMode(e.matches);
+    });
+    // apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
+    apSwitch.addEventListener("change", (e) => {
+        toggleDarkMode(e.target.checked);
     });
 }
 
