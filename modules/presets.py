@@ -59,7 +59,15 @@ MODELS = [
     "gpt-4-32k-0314",
     "chatglm-6b",
     "chatglm-6b-int4",
-    "chatglm-6b-int4-qe"
+    "chatglm-6b-int4-qe",
+    "llama-7b-hf",
+    "llama-7b-hf-int4",
+    "llama-7b-hf-int8",
+    "llama-13b-hf",
+    "llama-13b-hf-int4",
+    "llama-30b-hf",
+    "llama-30b-hf-int4",
+    "llama-65b-hf",
 ]  # 可选的模型
 
 DEFAULT_MODEL = 0  # 默认的模型在MODELS中的序号，从0开始数

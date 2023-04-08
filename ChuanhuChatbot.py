@@ -80,6 +80,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     model_select_dropdown = gr.Dropdown(
                         label="选择模型", choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
                     )
+                    lora_select_dropdown = gr.Dropdown(
+                        label="选择LoRA模型", choices=[], multiselect=False, interactive=True, visible=False
+                    )
                     use_streaming_checkbox = gr.Checkbox(
                         label="实时传输回答", value=True, visible=ENABLE_STREAMING_OPTION
                     )
@@ -350,7 +353,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     # LLM Models
     keyTxt.change(current_model.value.set_key, keyTxt, [status_display]).then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
-    model_select_dropdown.change(current_model.value.get_model, [model_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display], show_progress=True)
+    model_select_dropdown.change(current_model.value.get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display, lora_select_dropdown], show_progress=True)
+    lora_select_dropdown.change(current_model.value.get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display], show_progress=True)
 
     # Template
     systemPromptTxt.change(current_model.value.set_system_prompt, [systemPromptTxt], None)

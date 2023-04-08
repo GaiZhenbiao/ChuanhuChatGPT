@@ -24,6 +24,7 @@ from .config import retrieve_proxy
 
 
 class ModelType(Enum):
+    Unknown = -1
     OpenAI = 0
     ChatGLM = 1
     LLaMA = 2
@@ -31,12 +32,15 @@ class ModelType(Enum):
     @classmethod
     def get_type(cls, model_name: str):
         model_type = None
-        if "gpt" in model_name.lower():
+        model_name_lower = model_name.lower()
+        if "gpt" in model_name_lower:
             model_type = ModelType.OpenAI
-        elif "chatglm" in model_name.lower():
+        elif "chatglm" in model_name_lower:
             model_type = ModelType.ChatGLM
-        else:
+        elif "llama" in model_name_lower:
             model_type = ModelType.LLaMA
+        else:
+            model_type = ModelType.Unknown
         return model_type
 
 

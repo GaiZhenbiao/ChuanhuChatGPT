@@ -13,11 +13,6 @@ import platform
 from dataclasses import dataclass, field
 from transformers import HfArgumentParser
 
-from lmflow.datasets.dataset import Dataset
-from lmflow.pipeline.auto_pipeline import AutoPipeline
-from lmflow.models.auto_model import AutoModel
-from lmflow.args import ModelArguments, DatasetArguments, AutoArguments
-
 from tqdm import tqdm
 import colorama
 from duckduckgo_search import ddg
@@ -203,12 +198,13 @@ class OpenAIClient(BaseLLMModel):
 
 
 class ChatGLM_Client(BaseLLMModel):
-    def __init__(self, model_name, model_path=None) -> None:
+    def __init__(self, model_name) -> None:
         super().__init__(model_name=model_name)
         from transformers import AutoTokenizer, AutoModel
         import torch
 
         system_name = platform.system()
+        model_path=None
         if os.path.exists("models"):
             model_dirs = os.listdir("models")
             if model_name in model_dirs:
@@ -285,18 +281,49 @@ class LLaMA_Client(BaseLLMModel):
         lora_path=None,
     ) -> None:
         super().__init__(model_name=model_name)
+        from lmflow.datasets.dataset import Dataset
+        from lmflow.pipeline.auto_pipeline import AutoPipeline
+        from lmflow.models.auto_model import AutoModel
+        from lmflow.args import ModelArguments, DatasetArguments, AutoArguments, InferencerArguments
+        model_path = None
+        if os.path.exists("models"):
+            model_dirs = os.listdir("models")
+            if model_name in model_dirs:
+                model_path = f"models/{model_name}"
+        if model_path is not None:
+            model_source = model_path
+        else:
+            raise Exception(f"models目录下没有这个模型: {model_name}")
         self.max_generation_token = 1000
         pipeline_name = "inferencer"
         PipelineArguments = AutoArguments.get_pipeline_args_class(pipeline_name)
 
-        parser = HfArgumentParser(
-            (
-                ModelArguments,
-                PipelineArguments,
-                ChatbotArguments,
-            )
-        )
-        model_args, pipeline_args, chatbot_args = parser.parse_args_into_dataclasses()
+        """
+        if [ $# -ge 2 ]; then
+        lora_args="--lora_model_path $2"
+        fi
+        CUDA_VISIBLE_DEVICES=2 \
+        deepspeed examples/chatbot.py \
+            --deepspeed configs/ds_config_chatbot.json \
+            --model_name_or_path ${model} \
+            ${lora_args}
+
+        model_args:
+        ModelArguments(model_name_or_path='/home/guest/llm_models/llama/7B', lora_model_path='/home/guest/llm_models/lora/baize-lora-7B', model_type=None, config_overrides=None, config_name=None, tokenizer_name=None, cache_dir=None, use_fast_tokenizer=True, model_revision='main', use_auth_token=False, torch_dtype=None, use_lora=False, lora_r=8, lora_alpha=32, lora_dropout=0.1, use_ram_optimized_load=True)
+        pipeline_args:
+        InferencerArguments(local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
+        """
+
+        # parser = HfArgumentParser(
+        #     (
+        #         ModelArguments,
+        #         PipelineArguments,
+        #         ChatbotArguments,
+        #     )
+        # )
+        model_args = ModelArguments(model_name_or_path=model_source, lora_model_path=lora_path, model_type=None, config_overrides=None, config_name=None, tokenizer_name=None, cache_dir=None, use_fast_tokenizer=True, model_revision='main', use_auth_token=False, torch_dtype=None, use_lora=False, lora_r=8, lora_alpha=32, lora_dropout=0.1, use_ram_optimized_load=True)
+        pipeline_args = InferencerArguments(local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
+        # model_args, pipeline_args, chatbot_args = parser.parse_args_into_dataclasses()
 
         with open(pipeline_args.deepspeed, "r") as f:
             ds_config = json.load(f)
@@ -377,23 +404,54 @@ class ModelManager:
         top_p=None,
         system_prompt=None,
     ) -> BaseLLMModel:
+        print(lora_model_path)
         msg = f"模型设置为了： {model_name}"
         logging.info(msg)
         model_type = ModelType.get_type(model_name)
+        lora_selector_visibility = False
+        lora_choices = []
+        dont_change_lora_selector = False
         if model_type != ModelType.OpenAI:
             config.local_embedding = True
-        if model_type == ModelType.OpenAI:
-            model = OpenAIClient(
-                model_name=model_name,
-                api_key=access_key,
-                system_prompt=system_prompt,
-                temperature=temperature,
-                top_p=top_p,
-            )
-        elif model_type == ModelType.ChatGLM:
-            model = ChatGLM_Client(model_name)
-        self.model = model
-        return msg
+        model = None
+        try:
+            if model_type == ModelType.OpenAI:
+                model = OpenAIClient(
+                    model_name=model_name,
+                    api_key=access_key,
+                    system_prompt=system_prompt,
+                    temperature=temperature,
+                    top_p=top_p,
+                )
+            elif model_type == ModelType.ChatGLM:
+                model = ChatGLM_Client(model_name)
+            elif model_type == ModelType.LLaMA and lora_model_path == "":
+                msg = "现在请选择LoRA模型"
+                logging.info(msg)
+                lora_selector_visibility = True
+                if os.path.isdir("lora"):
+                    lora_choices = get_file_names("lora", plain=True, filetypes=[""])
+                lora_choices = ["No LoRA"] + lora_choices
+            elif model_type == ModelType.LLaMA and lora_model_path != "":
+                dont_change_lora_selector = True
+                if lora_model_path == "No LoRA":
+                    lora_model_path = None
+                    msg += " + No LoRA"
+                else:
+                    msg += f" + {lora_model_path}"
+                model = LLaMA_Client(model_name, lora_model_path)
+                pass
+            elif model_type == ModelType.Unknown:
+                raise ValueError(f"未知模型: {model_name}")
+        except Exception as e:
+            logging.error(e)
+            msg = f"{STANDARD_ERROR_MSG}: {e}"
+        if model is not None:
+            self.model = model
+        if dont_change_lora_selector:
+            return msg
+        else:
+            return msg, gr.Dropdown.update(choices=lora_choices, visible=lora_selector_visibility)
 
     def predict(self, *args):
         iter = self.model.predict(*args)
