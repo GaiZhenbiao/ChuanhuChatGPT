@@ -247,7 +247,7 @@ class ChatGLM_Client(BaseLLMModel):
     def _get_glm_style_input(self):
         history = [x["content"] for x in self.history]
         query = history.pop()
-        logging.info(colorama.Fore.YELLOW + f"{history}" + colorama.Fore.RESET)
+        logging.debug(colorama.Fore.YELLOW + f"{history}" + colorama.Fore.RESET)
         assert (
             len(history) % 2 == 0
         ), f"History should be even length. current history is: {history}"
@@ -365,11 +365,12 @@ class LLaMA_Client(BaseLLMModel):
 
 class ModelManager:
     def __init__(self, **kwargs) -> None:
-        self.model, self.msg = self.get_model(**kwargs)
+        self.get_model(**kwargs)
 
     def get_model(
         self,
         model_name,
+        lora_model_path=None,
         access_key=None,
         temperature=None,
         top_p=None,
@@ -378,7 +379,6 @@ class ModelManager:
         msg = f"模型设置为了： {model_name}"
         logging.info(msg)
         model_type = ModelType.get_type(model_name)
-        print(model_type.name)
         if model_type == ModelType.OpenAI:
             model = OpenAIClient(
                 model_name=model_name,
@@ -389,7 +389,93 @@ class ModelManager:
             )
         elif model_type == ModelType.ChatGLM:
             model = ChatGLM_Client(model_name)
-        return model, msg
+        self.model = model
+        return msg
+
+    def predict(self, *args):
+        iter = self.model.predict(*args)
+        for i in iter:
+            yield i
+
+    def billing_info(self):
+        return self.model.billing_info()
+
+    def set_key(self, *args):
+        return self.model.set_key(*args)
+
+    def load_chat_history(self, *args):
+        return self.model.load_chat_history(*args)
+
+    def interrupt(self, *args):
+        return self.model.interrupt(*args)
+
+    def reset(self, *args):
+        return self.model.reset(*args)
+
+    def retry(self, *args):
+        iter = self.model.retry(*args)
+        for i in iter:
+            yield i
+
+    def delete_first_conversation(self, *args):
+        return self.model.delete_first_conversation(*args)
+
+    def delete_last_conversation(self, *args):
+        return self.model.delete_last_conversation(*args)
+
+    def set_system_prompt(self, *args):
+        return self.model.set_system_prompt(*args)
+
+    def save_chat_history(self, *args):
+        return self.model.save_chat_history(*args)
+
+    def export_markdown(self, *args):
+        return self.model.export_markdown(*args)
+
+    def load_chat_history(self, *args):
+        return self.model.load_chat_history(*args)
+
+    def set_token_upper_limit(self, *args):
+        return self.model.set_token_upper_limit(*args)
+
+    # temperature_slider.change(current_model.value.set_temperature, [temperature_slider], None)
+    # top_p_slider.change(current_model.value.set_top_p, [top_p_slider], None)
+    # n_choices_slider.change(current_model.value.set_n_choices, [n_choices_slider], None)
+    # stop_sequence_txt.change(current_model.value.set_stop_sequence, [stop_sequence_txt], None)
+    # max_tokens_slider.change(current_model.value.set_max_tokens, [max_tokens_slider], None)
+    # presence_penalty_slider.change(current_model.value.set_presence_penalty, [presence_penalty_slider], None)
+    # frequency_penalty_slider.change(current_model.value.set_frequency_penalty, [frequency_penalty_slider], None)
+    # logit_bias_txt.change(current_model.value.set_logit_bias, [logit_bias_txt], None)
+    # user_identifier_txt.change(current_model.value.set_user_identifier, [user_identifier_txt], None)
+
+    def set_temperature(self, *args):
+        self.model.set_temperature(*args)
+
+    def set_top_p(self, *args):
+        self.model.set_top_p(*args)
+
+    def set_n_choices(self, *args):
+        self.model.set_n_choices(*args)
+
+    def set_stop_sequence(self, *args):
+        self.model.set_stop_sequence(*args)
+
+    def set_max_tokens(self, *args):
+        self.model.set_max_tokens(*args)
+
+    def set_presence_penalty(self, *args):
+        self.model.set_presence_penalty(*args)
+
+    def set_frequency_penalty(self, *args):
+        self.model.set_frequency_penalty(*args)
+
+    def set_logit_bias(self, *args):
+        self.model.set_logit_bias(*args)
+
+    def set_user_identifier(self, *args):
+        self.model.set_user_identifier(*args)
+
+
 
 
 if __name__ == "__main__":
@@ -397,8 +483,8 @@ if __name__ == "__main__":
         openai_api_key = cjson.load(f)["openai_api_key"]
     # set logging level to debug
     logging.basicConfig(level=logging.DEBUG)
-    # client, _ = get_model("gpt-3.5-turbo", openai_api_key)
-    client, _ = get_model("chatglm-6b-int4")
+    # client = ModelManager(model_name="gpt-3.5-turbo", access_key=openai_api_key)
+    client = ModelManager(model_name="chatglm-6b-int4")
     chatbot = []
     stream = False
     # 测试账单功能

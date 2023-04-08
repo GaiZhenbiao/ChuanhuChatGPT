@@ -10,7 +10,7 @@ from modules.config import *
 from modules.utils import *
 from modules.presets import *
 from modules.overwrites import *
-from modules.models import get_model
+from modules.models import ModelManager
 
 gr.Chatbot.postprocess = postprocess
 PromptHelper.compact_text_chunks = compact_text_chunks
@@ -22,7 +22,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     user_name = gr.State("")
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     user_question = gr.State("")
-    current_model = gr.State(get_model(MODELS[DEFAULT_MODEL], my_api_key)[0])
+    current_model = gr.State(ModelManager(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key))
 
     topic = gr.State("未命名对话历史记录")
 
@@ -197,7 +197,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             interactive=True,
                             label="max context",
                         )
-                        max_tokens_slider = gr.Slider(
+                        max_generation_slider = gr.Slider(
                             minimum=1,
                             maximum=32768,
                             value=1000,
@@ -350,7 +350,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     # LLM Models
     keyTxt.change(current_model.value.set_key, keyTxt, [status_display]).then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
-    model_select_dropdown.change(get_model, [model_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [current_model, status_display], show_progress=True)
+    model_select_dropdown.change(current_model.value.get_model, [model_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display], show_progress=True)
 
     # Template
     systemPromptTxt.change(current_model.value.set_system_prompt, [systemPromptTxt], None)
@@ -392,7 +392,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     top_p_slider.change(current_model.value.set_top_p, [top_p_slider], None)
     n_choices_slider.change(current_model.value.set_n_choices, [n_choices_slider], None)
     stop_sequence_txt.change(current_model.value.set_stop_sequence, [stop_sequence_txt], None)
-    max_tokens_slider.change(current_model.value.set_max_tokens, [max_tokens_slider], None)
+    max_generation_slider.change(current_model.value.set_max_tokens, [max_generation_slider], None)
     presence_penalty_slider.change(current_model.value.set_presence_penalty, [presence_penalty_slider], None)
     frequency_penalty_slider.change(current_model.value.set_frequency_penalty, [frequency_penalty_slider], None)
     logit_bias_txt.change(current_model.value.set_logit_bias, [logit_bias_txt], None)

@@ -126,13 +126,15 @@ class BaseLLMModel:
 
         stream_iter = self.get_answer_stream_iter()
 
-        self.history.append(construct_assistant(""))
         for partial_text in stream_iter:
-            self.history[-1] = construct_assistant(partial_text)
             chatbot[-1] = (chatbot[-1][0], partial_text + display_append)
             self.all_token_counts[-1] += 1
             status_text = self.token_message()
             yield get_return_value()
+            if self.interrupted:
+                    self.recover()
+                    break
+        self.history.append(construct_assistant(partial_text))
 
     def next_chatbot_at_once(self, inputs, chatbot, fake_input=None, display_append=""):
         if fake_input:
@@ -277,9 +279,6 @@ class BaseLLMModel:
             )
             for chatbot, status_text in iter:
                 yield chatbot, status_text
-                if self.interrupted:
-                    self.recover()
-                    break
         else:
             logging.debug("不使用流式传输")
             chatbot, status_text = self.next_chatbot_at_once(
@@ -326,13 +325,13 @@ class BaseLLMModel:
         files=None,
         reply_language="中文",
     ):
-        logging.info("重试中……")
+        logging.debug("重试中……")
         if len(self.history) == 0:
             yield chatbot, f"{STANDARD_ERROR_MSG}上下文是空的"
             return
 
+        inputs = self.history[-2]["content"]
         del self.history[-2:]
-        inputs = chatbot[-1][0]
         self.all_token_counts.pop()
         iter = self.predict(
             inputs,
@@ -344,7 +343,7 @@ class BaseLLMModel:
         )
         for x in iter:
             yield x
-        logging.info("重试完毕")
+        logging.debug("重试完毕")
 
     # def reduce_token_size(self, chatbot):
     #     logging.info("开始减少token数量……")
