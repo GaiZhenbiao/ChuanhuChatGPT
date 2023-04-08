@@ -30,6 +30,7 @@ from .llama_func import *
 from .utils import *
 from . import shared
 from .config import retrieve_proxy
+from modules import config
 from .base_model import BaseLLMModel, ModelType
 
 
@@ -379,6 +380,8 @@ class ModelManager:
         msg = f"模型设置为了： {model_name}"
         logging.info(msg)
         model_type = ModelType.get_type(model_name)
+        if model_type != ModelType.OpenAI:
+            config.local_embedding = True
         if model_type == ModelType.OpenAI:
             model = OpenAIClient(
                 model_name=model_name,

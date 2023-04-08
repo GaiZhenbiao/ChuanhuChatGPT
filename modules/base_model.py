@@ -132,8 +132,8 @@ class BaseLLMModel:
             status_text = self.token_message()
             yield get_return_value()
             if self.interrupted:
-                    self.recover()
-                    break
+                self.recover()
+                break
         self.history.append(construct_assistant(partial_text))
 
     def next_chatbot_at_once(self, inputs, chatbot, fake_input=None, display_append=""):
@@ -170,7 +170,14 @@ class BaseLLMModel:
     ):  # repetition_penalty, top_k
         from llama_index.indices.vector_store.base_query import GPTVectorStoreIndexQuery
         from llama_index.indices.query.schema import QueryBundle
-        from langchain.llms import OpenAIChat
+        from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+        from langchain.chat_models import ChatOpenAI
+        from llama_index import (
+            GPTSimpleVectorIndex,
+            ServiceContext,
+            LangchainEmbedding,
+            OpenAIEmbedding,
+        )
 
         logging.info(
             "输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL
@@ -182,20 +189,22 @@ class BaseLLMModel:
         old_inputs = None
         display_reference = []
         limited_context = False
-        if files and self.api_key:
+        if files:
             limited_context = True
             old_inputs = inputs
             msg = "加载索引中……（这可能需要几分钟）"
             logging.info(msg)
             yield chatbot + [(inputs, "")], msg
             index = construct_index(self.api_key, file_src=files)
+            assert index is not None, "索引构建失败"
             msg = "索引构建完成，获取回答中……"
+            if local_embedding:
+                embed_model = LangchainEmbedding(HuggingFaceEmbeddings())
+            else:
+                embed_model = OpenAIEmbedding()
             logging.info(msg)
             yield chatbot + [(inputs, "")], msg
             with retrieve_proxy():
-                llm_predictor = LLMPredictor(
-                    llm=OpenAIChat(temperature=0, model_name=self.model_name)
-                )
                 prompt_helper = PromptHelper(
                     max_input_size=4096,
                     num_output=5,
@@ -205,7 +214,7 @@ class BaseLLMModel:
                 from llama_index import ServiceContext
 
                 service_context = ServiceContext.from_defaults(
-                    llm_predictor=llm_predictor, prompt_helper=prompt_helper
+                    prompt_helper=prompt_helper, embed_model=embed_model
                 )
                 query_object = GPTVectorStoreIndexQuery(
                     index.index_struct,
@@ -249,7 +258,11 @@ class BaseLLMModel:
         else:
             display_reference = ""
 
-        if self.api_key is not None and len(self.api_key) == 0 and not shared.state.multi_api_key:
+        if (
+            self.api_key is not None
+            and len(self.api_key) == 0
+            and not shared.state.multi_api_key
+        ):
             status_text = STANDARD_ERROR_MSG + NO_APIKEY_MSG
             logging.info(status_text)
             chatbot.append((inputs, ""))
