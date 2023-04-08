@@ -17,9 +17,9 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-      	实时回复 / 无限对话 / 保存对话记录 / 预设Prompt集 / 联网搜索 / 根据文件回答 <br />
-		渲染LaTeX / 渲染表格 / 代码高亮 / 自动亮暗色切换 / 自适应输入框位置 / “小而美”的体验 <br />
-		自定义api-Host / 多API Key均衡负载 / 多用户显示 / 适配GPT-4
+        实时回复 / 无限对话 / 保存对话记录 / 预设Prompt集 / 联网搜索 / 根据文件回答 <br />
+        渲染LaTeX / 渲染表格 / 代码高亮 / 自动亮暗色切换 / 自适应输入框位置 / “小而美”的体验 <br />
+        自定义api-Host / 多API Key均衡负载 / 多用户显示 / 适配GPT-4
       </p>
       <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
         ·

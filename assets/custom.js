@@ -161,9 +161,10 @@ function toggleDarkMode(isEnabled) {
     gradioContainer = document.querySelector(".gradio-container");
     if (isEnabled) {
         gradioContainer.classList.add("dark");
-        document.body.style.backgroundColor = "";
+        document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
     } else {
         gradioContainer.classList.remove("dark");
+        document.body.style.backgroundColor = "";
     }
 }
 function adjustDarkMode() {

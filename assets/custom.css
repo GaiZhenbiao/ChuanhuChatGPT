@@ -65,8 +65,11 @@ footer {
     color: var(--body-text-color-subdued);
 }
 
-#chuanhu_chatbot, #status_display {
+#status_display {
     transition: all 0.6s;
+}
+#chuanhu_chatbot {
+    transition: height 0.3s ease;
 }
 
 /* usage_display */
@@ -127,36 +130,31 @@ ol:not(.options), ul:not(.options) {
     padding-inline-start: 2em !important;
 }
 
-/* 亮色 */
-@media (prefers-color-scheme: light) {
-    #chuanhu_chatbot {
-        background-color: var(--chatbot-color-light) !important;
-        color: #000000 !important;
-    }
-    [data-testid = "bot"] {
-        background-color: #FFFFFF !important;
-    }
-    [data-testid = "user"] {
-        background-color: #95EC69 !important;
-    }
+/* 亮色（默认） */
+#chuanhu_chatbot {
+    background-color: var(--chatbot-color-light) !important;
+    color: #000000 !important;
+}
+[data-testid = "bot"] {
+    background-color: #FFFFFF !important;
+}
+[data-testid = "user"] {
+    background-color: #95EC69 !important;
 }
 /* 暗色 */
-@media (prefers-color-scheme: dark) {
-    #chuanhu_chatbot {
-        background-color: var(--chatbot-color-dark) !important;
-        color: #FFFFFF !important;
-    }
-    [data-testid = "bot"] {
-        background-color: #2C2C2C !important;
-    }
-    [data-testid = "user"] {
-        background-color: #26B561 !important;
-    }
-    body {
-        background-color: var(--neutral-950) !important;
-    }
+.dark #chuanhu_chatbot {
+    background-color: var(--chatbot-color-dark) !important;
+    color: #FFFFFF !important;
 }
+.dark [data-testid = "bot"] {
+    background-color: #2C2C2C !important;
+}
+.dark [data-testid = "user"] {
+    background-color: #26B561 !important;
+}
+
 /* 屏幕宽度大于等于500px的设备 */
+/* update on 2023.4.8: 高度的细致调整已写入JavaScript */
 @media screen and (min-width: 500px) {
     #chuanhu_chatbot {
         height: calc(100vh - 200px);
