@@ -287,24 +287,28 @@ class BaseLLMModel:
 
         self.history.append(construct_user(inputs))
 
-        if stream:
-            logging.debug("使用流式传输")
-            iter = self.stream_next_chatbot(
-                inputs,
-                chatbot,
-                fake_input=old_inputs,
-                display_append=display_reference,
-            )
-            for chatbot, status_text in iter:
+        try:
+            if stream:
+                logging.debug("使用流式传输")
+                iter = self.stream_next_chatbot(
+                    inputs,
+                    chatbot,
+                    fake_input=old_inputs,
+                    display_append=display_reference,
+                )
+                for chatbot, status_text in iter:
+                    yield chatbot, status_text
+            else:
+                logging.debug("不使用流式传输")
+                chatbot, status_text = self.next_chatbot_at_once(
+                    inputs,
+                    chatbot,
+                    fake_input=old_inputs,
+                    display_append=display_reference,
+                )
                 yield chatbot, status_text
-        else:
-            logging.debug("不使用流式传输")
-            chatbot, status_text = self.next_chatbot_at_once(
-                inputs,
-                chatbot,
-                fake_input=old_inputs,
-                display_append=display_reference,
-            )
+        except Exception as e:
+            status_text = STANDARD_ERROR_MSG + str(e)
             yield chatbot, status_text
 
         if len(self.history) > 1 and self.history[-1]["content"] != inputs:

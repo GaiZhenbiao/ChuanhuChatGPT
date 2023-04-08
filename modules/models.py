@@ -186,6 +186,7 @@ class OpenAIClient(BaseLLMModel):
             )
 
     def _decode_chat_response(self, response):
+        error_msg = ""
         for chunk in response.iter_lines():
             if chunk:
                 chunk = chunk.decode()
@@ -194,6 +195,7 @@ class OpenAIClient(BaseLLMModel):
                     chunk = json.loads(chunk[6:])
                 except json.JSONDecodeError:
                     print(f"JSON解析错误,收到的内容: {chunk}")
+                    error_msg+=chunk
                     continue
                 if chunk_length > 6 and "delta" in chunk["choices"][0]:
                     if chunk["choices"][0]["finish_reason"] == "stop":
@@ -203,6 +205,8 @@ class OpenAIClient(BaseLLMModel):
                     except Exception as e:
                         # logging.error(f"Error: {e}")
                         continue
+        if error_msg:
+            raise Exception(error_msg)
 
 
 class ChatGLM_Client(BaseLLMModel):
