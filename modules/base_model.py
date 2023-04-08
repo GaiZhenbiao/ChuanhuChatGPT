@@ -259,8 +259,7 @@ class BaseLLMModel:
             display_reference = ""
 
         if (
-            self.api_key is not None
-            and len(self.api_key) == 0
+            self.api_key is None
             and not shared.state.multi_api_key
         ):
             status_text = STANDARD_ERROR_MSG + NO_APIKEY_MSG

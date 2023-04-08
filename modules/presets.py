@@ -20,7 +20,7 @@ CONNECTION_TIMEOUT_MSG = "连接超时，无法获取对话。"  # 连接超时
 READ_TIMEOUT_MSG = "读取超时，无法获取对话。"  # 读取超时
 PROXY_ERROR_MSG = "代理错误，无法获取对话。"  # 代理错误
 SSL_ERROR_PROMPT = "SSL错误，无法获取对话。"  # SSL 错误
-NO_APIKEY_MSG = "API key长度不是51位，请检查是否输入正确。"  # API key 长度不足 51 位
+NO_APIKEY_MSG = "API key为空，请检查是否输入正确。"  # API key 长度不足 51 位
 NO_INPUT_MSG = "请输入对话内容。"  # 未输入对话内容
 BILLING_NOT_APPLICABLE_MSG = "模型本地运行中" # 本地运行的模型返回的账单信息
 
