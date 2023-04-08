@@ -26,6 +26,7 @@ import pandas as pd
 from modules.presets import *
 from . import shared
 from modules.config import retrieve_proxy
+from typing import Union, List
 
 if TYPE_CHECKING:
     from typing import TypedDict
@@ -153,10 +154,14 @@ def construct_assistant(text):
     return construct_text("assistant", text)
 
 
-def construct_token_message(tokens: List[int]):
+def construct_token_message(tokens: Union[int, List[int]]):
+    if isinstance(tokens, int):
+        tokens = [tokens]
     token_sum = 0
-    for i in range(len(tokens)):
-        token_sum += sum(tokens[: i + 1])
+    cum_sum = 0
+    for token in tokens:
+        cum_sum += token
+        token_sum += cum_sum
     return f"Token 计数: {sum(tokens)}，本次对话累计消耗了 {token_sum} tokens"
 
 
