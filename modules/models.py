@@ -42,6 +42,7 @@ class OpenAIClient(BaseLLMModel):
             system_prompt=system_prompt,
         )
         self.api_key = api_key
+        self.need_api_key = True
         self.headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",
@@ -276,7 +277,7 @@ class LLaMA_Client(BaseLLMModel):
         from lmflow.datasets.dataset import Dataset
         from lmflow.pipeline.auto_pipeline import AutoPipeline
         from lmflow.models.auto_model import AutoModel
-        from lmflow.args import ModelArguments, DatasetArguments, AutoArguments, InferencerArguments
+        from lmflow.args import ModelArguments, DatasetArguments, InferencerArguments
         model_path = None
         if os.path.exists("models"):
             model_dirs = os.listdir("models")
@@ -286,36 +287,12 @@ class LLaMA_Client(BaseLLMModel):
             model_source = model_path
         else:
             raise Exception(f"models目录下没有这个模型: {model_name}")
+        if lora_path is not None:
+            lora_path = f"lora/{lora_path}"
         self.max_generation_token = 1000
         pipeline_name = "inferencer"
-        PipelineArguments = AutoArguments.get_pipeline_args_class(pipeline_name)
-
-        """
-        if [ $# -ge 2 ]; then
-        lora_args="--lora_model_path $2"
-        fi
-        CUDA_VISIBLE_DEVICES=2 \
-        deepspeed examples/chatbot.py \
-            --deepspeed configs/ds_config_chatbot.json \
-            --model_name_or_path ${model} \
-            ${lora_args}
-
-        model_args:
-        ModelArguments(model_name_or_path='/home/guest/llm_models/llama/7B', lora_model_path='/home/guest/llm_models/lora/baize-lora-7B', model_type=None, config_overrides=None, config_name=None, tokenizer_name=None, cache_dir=None, use_fast_tokenizer=True, model_revision='main', use_auth_token=False, torch_dtype=None, use_lora=False, lora_r=8, lora_alpha=32, lora_dropout=0.1, use_ram_optimized_load=True)
-        pipeline_args:
-        InferencerArguments(local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
-        """
-
-        # parser = HfArgumentParser(
-        #     (
-        #         ModelArguments,
-        #         PipelineArguments,
-        #         ChatbotArguments,
-        #     )
-        # )
         model_args = ModelArguments(model_name_or_path=model_source, lora_model_path=lora_path, model_type=None, config_overrides=None, config_name=None, tokenizer_name=None, cache_dir=None, use_fast_tokenizer=True, model_revision='main', use_auth_token=False, torch_dtype=None, use_lora=False, lora_r=8, lora_alpha=32, lora_dropout=0.1, use_ram_optimized_load=True)
         pipeline_args = InferencerArguments(local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
-        # model_args, pipeline_args, chatbot_args = parser.parse_args_into_dataclasses()
 
         with open(pipeline_args.deepspeed, "r") as f:
             ds_config = json.load(f)
@@ -326,7 +303,7 @@ class LLaMA_Client(BaseLLMModel):
             ds_config=ds_config,
         )
 
-        # We don't need input data, we will read interactively from stdin
+        # We don't need input data
         data_args = DatasetArguments(dataset_path=None)
         self.dataset = Dataset(data_args)
 
@@ -379,7 +356,28 @@ class LLaMA_Client(BaseLLMModel):
         return response, len(response)
 
     def get_answer_stream_iter(self):
-        response, _ = self.get_answer_at_once()
+        context = self._get_llama_style_input()
+
+        input_dataset = self.dataset.from_dict(
+            {"type": "text_only", "instances": [{"text": context}]}
+        )
+
+        output_dataset = self.inferencer.inference(
+            model=self.model,
+            dataset=input_dataset,
+            max_new_tokens=self.max_generation_token,
+            temperature=self.temperature,
+        )
+
+        response = output_dataset.to_dict()["instances"][0]["text"]
+
+        try:
+            index = response.index(self.end_string)
+        except ValueError:
+            response += self.end_string
+            index = response.index(self.end_string)
+
+        response = response[: index + 1]
         yield response
 
 
@@ -396,9 +394,7 @@ class ModelManager:
         top_p=None,
         system_prompt=None,
     ) -> BaseLLMModel:
-        print(lora_model_path)
         msg = f"模型设置为了： {model_name}"
-        logging.info(msg)
         model_type = ModelType.get_type(model_name)
         lora_selector_visibility = False
         lora_choices = []
@@ -435,6 +431,7 @@ class ModelManager:
                 pass
             elif model_type == ModelType.Unknown:
                 raise ValueError(f"未知模型: {model_name}")
+            logging.info(msg)
         except Exception as e:
             logging.error(e)
             msg = f"{STANDARD_ERROR_MSG}: {e}"

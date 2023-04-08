@@ -70,6 +70,7 @@ class BaseLLMModel:
         self.interrupted = False
         self.system_prompt = system_prompt
         self.api_key = None
+        self.need_api_key = False
 
         self.temperature = temperature
         self.top_p = top_p
@@ -263,6 +264,7 @@ class BaseLLMModel:
             display_reference = ""
 
         if (
+            self.need_api_key and
             self.api_key is None
             and not shared.state.multi_api_key
         ):
