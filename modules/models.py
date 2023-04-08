@@ -43,10 +43,7 @@ class OpenAIClient(BaseLLMModel):
         )
         self.api_key = api_key
         self.need_api_key = True
-        self.headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}",
-        }
+        self._refresh_header()
 
     def get_answer_stream_iter(self):
         response = self._get_response(stream=True)
@@ -102,6 +99,13 @@ class OpenAIClient(BaseLLMModel):
 
     def set_token_upper_limit(self, new_upper_limit):
         pass
+
+    def set_key(self, new_access_key):
+        self.api_key = new_access_key.strip()
+        self._refresh_header()
+        msg = f"API密钥更改为了{hide_middle_chars(self.api_key)}"
+        logging.info(msg)
+        return msg
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
     def _get_response(self, stream=False):
@@ -159,10 +163,16 @@ class OpenAIClient(BaseLLMModel):
                 return None
         return response
 
-    def _get_billing_data(self, usage_url):
+    def _refresh_header(self):
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}",
+        }
+
+    def _get_billing_data(self, billing_url):
         with retrieve_proxy():
             response = requests.get(
-                usage_url,
+                billing_url,
                 headers=self.headers,
                 timeout=TIMEOUT_ALL,
             )
