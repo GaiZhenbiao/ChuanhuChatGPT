@@ -73,9 +73,10 @@ footer {
 }
 
 /* usage_display */
-#usage_display {
+.insert_block {
     position: relative;
     margin: 0;
+    padding: .5em 1em;
     box-shadow: var(--block-shadow);
     border-width: var(--block-border-width);
     border-color: var(--block-border-color);
@@ -87,7 +88,6 @@ footer {
 }
 #usage_display p, #usage_display span {
     margin: 0;
-    padding: .5em 1em;
     font-size: .85em;
     color: var(--body-text-color-subdued);
 }
@@ -112,6 +112,44 @@ footer {
     font-weight: bold;
     padding-right: 10px;
     line-height: 20px;
+}
+
+.apSwitch {
+    top: 2px;
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 48px;
+    border-radius: 12px;
+}
+.apSwitch input {
+    display: none !important;    
+}
+.apSlider {
+    background-color: var(--block-label-background-fill);
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    font-size: 18px;
+    border-radius: 12px;
+}
+.apSlider::before {    
+    bottom: -1.5px;
+    left: 1px;
+    position: absolute;
+    transition: .4s;
+    content: "🌞";
+}
+input:checked + .apSlider {
+    background-color: var(--block-label-background-fill);
+}
+input:checked + .apSlider::before {
+    transform: translateX(23px);
+    content:"🌚";
 }
 
 #submit_btn, #cancel_btn {
