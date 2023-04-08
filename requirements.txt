@@ -15,8 +15,8 @@ pdfplumber
 pandas
 transformers
 torch
-mpi4py
 icetk
-git+https://github.com/OptimalScale/LMFlow.git
+protobuf==3.19.0
+git+https://github.com/OptimalScale/LMFlow.git#egg=lmflow
 cpm-kernels
 sentence_transformers
