@@ -143,7 +143,7 @@ def construct_index(
                     llm_predictor=llm_predictor,
                     prompt_helper=prompt_helper,
                     chunk_size_limit=chunk_size_limit,
-                    embed_model=LangchainEmbedding(HuggingFaceEmbeddings()),
+                    embed_model=embed_model,
                 )
                 index = GPTSimpleVectorIndex.from_documents(
                     documents, service_context=service_context
