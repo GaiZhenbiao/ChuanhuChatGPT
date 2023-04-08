@@ -244,7 +244,7 @@ def predict_all(
             all_token_counts[-1] += count_token(construct_assistant(content))
         else:
             all_token_counts[-1] = total_token_count - sum(all_token_counts)
-        status_text = construct_token_message(total_token_count)
+        status_text = construct_token_message([total_token_count])
         return chatbot, history, status_text, all_token_counts
     except KeyError:
         status_text = standard_error_msg + str(response)
