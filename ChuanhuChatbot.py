@@ -64,7 +64,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
         with gr.Column():
             with gr.Column(min_width=50, scale=1):
-                with gr.Tab(label="ChatGPT"):
+                with gr.Tab(label="模型"):
                     keyTxt = gr.Textbox(
                         show_label=True,
                         placeholder=f"OpenAI API-key...",
