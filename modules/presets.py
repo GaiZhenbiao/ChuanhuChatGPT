@@ -24,7 +24,7 @@ NO_APIKEY_MSG = "API key为空，请检查是否输入正确。"  # API key 长�
 NO_INPUT_MSG = "请输入对话内容。"  # 未输入对话内容
 BILLING_NOT_APPLICABLE_MSG = "模型本地运行中" # 本地运行的模型返回的账单信息
 
-TIMEOUT_STREAMING = 30  # 流式对话时的超时时间
+TIMEOUT_STREAMING = 60  # 流式对话时的超时时间
 TIMEOUT_ALL = 200  # 非流式对话时的超时时间
 ENABLE_STREAMING_OPTION = True  # 是否启用选择选择是否实时显示回答的勾选框
 HIDE_MY_KEY = False  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
@@ -33,7 +33,7 @@ CONCURRENT_COUNT = 100 # 允许同时使用的用户数量
 SIM_K = 5
 INDEX_QUERY_TEMPRATURE = 1.0
 
-CHUANHU_TITLE = """<h1 align="left" style="min-width:200px; margin-top:6px; white-space: nowrap;">川虎ChatGPT 🚀</h1>"""
+CHUANHU_TITLE = """<h1 align="left">川虎ChatGPT 🚀</h1>"""
 CHUANHU_DESCRIPTION = """\
 <div align="center" style="margin:16px 0">
 
@@ -44,8 +44,16 @@ CHUANHU_DESCRIPTION = """\
 </div>
 """
 
-FOOTER = """\
-<div class="versions">{versions}</div>
+FOOTER = """<div class="versions">{versions}</div>"""
+
+APPEARANCE_SWITCHER = """
+<div style="display: flex; justify-content: space-between;">
+<span style="margin-top: 4px !important;">切换亮暗色主题</span>
+<span><label class="apSwitch" for="checkbox">
+    <input type="checkbox" id="checkbox">
+    <div class="apSlider"></div>
+</label></span>
+</div>
 """
 
 SUMMARIZE_PROMPT = "你是谁？我们刚才聊了什么？"  # 总结对话时的 prompt

@@ -27,10 +27,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     topic = gr.State("未命名对话历史记录")
 
     with gr.Row():
-        with gr.Column():
-            gr.HTML(CHUANHU_TITLE)
-            user_info = gr.Markdown(value="", elem_id="user_info")
+        gr.HTML(CHUANHU_TITLE, elem_id="app_title")
         status_display = gr.Markdown(get_geoip(), elem_id="status_display")
+    with gr.Row(elem_id="float_display"):
+        user_info = gr.Markdown(value="getting user info...", elem_id="user_info")
 
         # https://github.com/gradio-app/gradio/pull/3296
         def create_greeting(request: gr.Request):
@@ -46,14 +46,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             with gr.Row():
                 chatbot = gr.Chatbot(elem_id="chuanhu_chatbot").style(height="100%")
             with gr.Row():
-                with gr.Column(scale=12):
+                with gr.Column(min_width=225, scale=12):
                     user_input = gr.Textbox(
                         elem_id="user_input_tb",
                         show_label=False, placeholder="在这里输入"
                     ).style(container=False)
-                with gr.Column(min_width=70, scale=1):
-                    submitBtn = gr.Button("发送", variant="primary")
-                    cancelBtn = gr.Button("取消", variant="secondary", visible=False)
+                with gr.Column(min_width=42, scale=1):
+                    submitBtn = gr.Button(value="", variant="primary", elem_id="submit_btn")
+                    cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel_btn")
             with gr.Row():
                 emptyBtn = gr.Button(
                     "🧹 新的对话",
@@ -74,9 +74,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         label="API-Key",
                     )
                     if multi_api_key:
-                        usageTxt = gr.Markdown("多账号模式已开启，无需输入key，可直接开始对话", elem_id="usage_display")
+                        usageTxt = gr.Markdown("多账号模式已开启，无需输入key，可直接开始对话", elem_id="usage_display", elem_classes="insert_block")
                     else:
-                        usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display")
+                        usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display", elem_classes="insert_block")
                     model_select_dropdown = gr.Dropdown(
                         label="选择模型", choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
                     )
@@ -159,7 +159,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
                 with gr.Tab(label="高级"):
                     gr.Markdown("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置")
-
+                    gr.HTML(APPEARANCE_SWITCHER, elem_classes="insert_block")
                     with gr.Accordion("参数", open=False):
                         temperature_slider = gr.Slider(
                             minimum=-0,

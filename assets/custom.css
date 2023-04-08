@@ -3,14 +3,18 @@
     --chatbot-color-dark: #121111;
 }
 
+#app_title {
+    margin-top: 6px; 
+    white-space: nowrap;
+}
 /* 覆盖gradio的页脚信息QAQ */
 footer {
     display: none !important;
 }
-#footer{
+#footer {
     text-align: center;
 }
-#footer div{
+#footer div {
     display: inline-block;
 }
 #footer .versions{
@@ -18,16 +22,34 @@ footer {
     opacity: 0.85;
 }
 
-/* user_info */
+#float_display {
+    position: absolute;
+    max-height: 30px;
+}
+/* user_info */ 
 #user_info {
     white-space: nowrap;
-    margin-top: -1.3em !important;
-    padding-left: 112px !important;
+    position: absolute; left: 8em; top: .2em;
+    z-index: var(--layer-2);
+    box-shadow: var(--block-shadow);
+    border: none; border-radius: var(--block-label-radius);
+    background: var(--color-accent);
+    padding: var(--block-label-padding);
+    font-size: var(--block-label-text-size); line-height: var(--line-sm);
+    width: auto; min-height: 30px!important;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+#user_info .wrap {
+    opacity: 0;
 }
 #user_info p {
-    font-size: .85em;
-    font-family: monospace;
-    color: var(--body-text-color-subdued);
+    color: white;
+    font-weight: var(--block-label-text-weight);
+}
+#user_info.hideK {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
 /* status_display */
@@ -43,14 +65,18 @@ footer {
     color: var(--body-text-color-subdued);
 }
 
-#chuanhu_chatbot, #status_display {
+#status_display {
     transition: all 0.6s;
+}
+#chuanhu_chatbot {
+    transition: height 0.3s ease;
 }
 
 /* usage_display */
-#usage_display {
+.insert_block {
     position: relative;
     margin: 0;
+    padding: .5em 1em;
     box-shadow: var(--block-shadow);
     border-width: var(--block-border-width);
     border-color: var(--block-border-color);
@@ -62,7 +88,6 @@ footer {
 }
 #usage_display p, #usage_display span {
     margin: 0;
-    padding: .5em 1em;
     font-size: .85em;
     color: var(--body-text-color-subdued);
 }
@@ -74,7 +99,7 @@ footer {
     overflow: hidden;
 }
 .progress {
-    background-color: var(--block-title-background-fill);;
+    background-color: var(--block-title-background-fill);
     height: 100%;
     border-radius: 10px;
     text-align: right;
@@ -88,41 +113,86 @@ footer {
     padding-right: 10px;
     line-height: 20px;
 }
+
+.apSwitch {
+    top: 2px;
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 48px;
+    border-radius: 12px;
+}
+.apSwitch input {
+    display: none !important;    
+}
+.apSlider {
+    background-color: var(--block-label-background-fill);
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    font-size: 18px;
+    border-radius: 12px;
+}
+.apSlider::before {    
+    bottom: -1.5px;
+    left: 1px;
+    position: absolute;
+    transition: .4s;
+    content: "🌞";
+}
+input:checked + .apSlider {
+    background-color: var(--block-label-background-fill);
+}
+input:checked + .apSlider::before {
+    transform: translateX(23px);
+    content:"🌚";
+}
+
+#submit_btn, #cancel_btn {
+    height: 42px !important;
+}
+#submit_btn::before {
+    content: url("data:image/svg+xml, %3Csvg width='21px' height='20px' viewBox='0 0 21 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cg id='page' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send' transform='translate(0.435849, 0.088463)' fill='%23FFFFFF' fill-rule='nonzero'%3E %3Cpath d='M0.579148261,0.0428666046 C0.301105539,-0.0961547561 -0.036517765,0.122307382 0.0032026237,0.420210298 L1.4927172,18.1553639 C1.5125774,18.4334066 1.79062012,18.5922882 2.04880264,18.4929872 L8.24518329,15.8913017 L11.6412765,19.7441794 C11.8597387,19.9825018 12.2370824,19.8832008 12.3165231,19.5852979 L13.9450591,13.4882182 L19.7839562,11.0255541 C20.0619989,10.8865327 20.0818591,10.4694687 19.7839562,10.3105871 L0.579148261,0.0428666046 Z M11.6138902,17.0883151 L9.85385903,14.7195502 L0.718169621,0.618812241 L12.69945,12.9346347 L11.6138902,17.0883151 Z' id='shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E");
+    height: 21px;
+}
+#cancel_btn::before {
+    content: url("data:image/svg+xml,%3Csvg width='21px' height='21px' viewBox='0 0 21 21' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cg id='pg' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M10.2072007,20.088463 C11.5727865,20.088463 12.8594566,19.8259823 14.067211,19.3010209 C15.2749653,18.7760595 16.3386126,18.0538087 17.2581528,17.1342685 C18.177693,16.2147282 18.8982283,15.1527965 19.4197586,13.9484733 C19.9412889,12.7441501 20.202054,11.4557644 20.202054,10.0833163 C20.202054,8.71773046 19.9395733,7.43106036 19.4146119,6.22330603 C18.8896505,5.01555169 18.1673997,3.95018885 17.2478595,3.0272175 C16.3283192,2.10424615 15.2646719,1.3837109 14.0569176,0.865611739 C12.8491633,0.34751258 11.5624932,0.088463 10.1969073,0.088463 C8.83132146,0.088463 7.54636692,0.34751258 6.34204371,0.865611739 C5.1377205,1.3837109 4.07407321,2.10424615 3.15110186,3.0272175 C2.22813051,3.95018885 1.5058797,5.01555169 0.984349419,6.22330603 C0.46281914,7.43106036 0.202054,8.71773046 0.202054,10.0833163 C0.202054,11.4557644 0.4645347,12.7441501 0.9894961,13.9484733 C1.5144575,15.1527965 2.23670831,16.2147282 3.15624854,17.1342685 C4.07578877,18.0538087 5.1377205,18.7760595 6.34204371,19.3010209 C7.54636692,19.8259823 8.83475258,20.088463 10.2072007,20.088463 Z M10.2072007,18.2562448 C9.07493099,18.2562448 8.01471483,18.0452309 7.0265522,17.6232031 C6.03838956,17.2011753 5.17031614,16.6161693 4.42233192,15.8681851 C3.6743477,15.1202009 3.09105726,14.2521274 2.67246059,13.2639648 C2.25386392,12.2758022 2.04456558,11.215586 2.04456558,10.0833163 C2.04456558,8.95104663 2.25386392,7.89083047 2.67246059,6.90266784 C3.09105726,5.9145052 3.6743477,5.04643178 4.42233192,4.29844756 C5.17031614,3.55046334 6.036674,2.9671729 7.02140552,2.54857623 C8.00613703,2.12997956 9.06463763,1.92068122 10.1969073,1.92068122 C11.329177,1.92068122 12.3911087,2.12997956 13.3827025,2.54857623 C14.3742962,2.9671729 15.2440852,3.55046334 15.9920694,4.29844756 C16.7400537,5.04643178 17.3233441,5.9145052 17.7419408,6.90266784 C18.1605374,7.89083047 18.3698358,8.95104663 18.3698358,10.0833163 C18.3698358,11.215586 18.1605374,12.2758022 17.7419408,13.2639648 C17.3233441,14.2521274 16.7400537,15.1202009 15.9920694,15.8681851 C15.2440852,16.6161693 14.3760118,17.2011753 13.3878492,17.6232031 C12.3996865,18.0452309 11.3394704,18.2562448 10.2072007,18.2562448 Z M7.65444721,13.6242324 L12.7496608,13.6242324 C13.0584616,13.6242324 13.3003556,13.5384544 13.4753427,13.3668984 C13.6503299,13.1953424 13.7378234,12.9585951 13.7378234,12.6566565 L13.7378234,7.49968276 C13.7378234,7.19774418 13.6503299,6.96099688 13.4753427,6.78944087 C13.3003556,6.61788486 13.0584616,6.53210685 12.7496608,6.53210685 L7.65444721,6.53210685 C7.33878414,6.53210685 7.09345904,6.61788486 6.91847191,6.78944087 C6.74348478,6.96099688 6.65599121,7.19774418 6.65599121,7.49968276 L6.65599121,12.6566565 C6.65599121,12.9585951 6.74348478,13.1953424 6.91847191,13.3668984 C7.09345904,13.5384544 7.33878414,13.6242324 7.65444721,13.6242324 Z' id='shape' fill='%23FF3B30' fill-rule='nonzero'%3E%3C/path%3E %3C/g%3E %3C/svg%3E");
+    height: 21px;
+}
 /* list */
 ol:not(.options), ul:not(.options) {
     padding-inline-start: 2em !important;
 }
 
-/* 亮色 */
-@media (prefers-color-scheme: light) {
-    #chuanhu_chatbot {
-        background-color: var(--chatbot-color-light) !important;
-        color: #000000 !important;
-    }
-    [data-testid = "bot"] {
-        background-color: #FFFFFF !important;
-    }
-    [data-testid = "user"] {
-        background-color: #95EC69 !important;
-    }
+/* 亮色（默认） */
+#chuanhu_chatbot {
+    background-color: var(--chatbot-color-light) !important;
+    color: #000000 !important;
+}
+[data-testid = "bot"] {
+    background-color: #FFFFFF !important;
+}
+[data-testid = "user"] {
+    background-color: #95EC69 !important;
 }
 /* 暗色 */
-@media (prefers-color-scheme: dark) {
-    #chuanhu_chatbot {
-        background-color: var(--chatbot-color-dark) !important;
-        color: #FFFFFF !important;
-    }
-    [data-testid = "bot"] {
-        background-color: #2C2C2C !important;
-    }
-    [data-testid = "user"] {
-        background-color: #26B561 !important;
-    }
-    body {
-        background-color: var(--neutral-950) !important;
-    }
+.dark #chuanhu_chatbot {
+    background-color: var(--chatbot-color-dark) !important;
+    color: #FFFFFF !important;
 }
+.dark [data-testid = "bot"] {
+    background-color: #2C2C2C !important;
+}
+.dark [data-testid = "user"] {
+    background-color: #26B561 !important;
+}
+
 /* 屏幕宽度大于等于500px的设备 */
+/* update on 2023.4.8: 高度的细致调整已写入JavaScript */
 @media screen and (min-width: 500px) {
     #chuanhu_chatbot {
         height: calc(100vh - 200px);
@@ -138,6 +208,12 @@ ol:not(.options), ul:not(.options) {
     }
     #chuanhu_chatbot .wrap {
         max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+    }
+    [data-testid = "bot"] {
+        max-width: 98% !important;
+    }
+    #app_title h1{
+        letter-spacing: -1px; font-size: 22px;
     }
 }
 /* 对话气泡 */
