@@ -10,9 +10,6 @@ import requests
 import urllib3
 import platform
 
-from dataclasses import dataclass, field
-from transformers import HfArgumentParser
-
 from tqdm import tqdm
 import colorama
 from duckduckgo_search import ddg
@@ -267,11 +264,6 @@ class ChatGLM_Client(BaseLLMModel):
             temperature=self.temperature,
         ):
             yield response
-
-
-@dataclass
-class ChatbotArguments:
-    pass
 
 
 class LLaMA_Client(BaseLLMModel):
