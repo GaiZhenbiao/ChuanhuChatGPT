@@ -383,7 +383,7 @@ class LLaMA_Client(BaseLLMModel):
                 temperature=self.temperature,
             )
             response = output_dataset.to_dict()["instances"][0]["text"]
-            if response == "":
+            if response == "" or response == self.end_string:
                 break
             partial_text += response
             yield partial_text
