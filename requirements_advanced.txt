@@ -2,6 +2,6 @@ transformers
 torch
 icetk
 protobuf==3.19.0
-git+https://github.com/OptimalScale/LMFlow.git#egg=lmflow
+git+https://github.com/OptimalScale/LMFlow.git
 cpm-kernels
 sentence_transformers

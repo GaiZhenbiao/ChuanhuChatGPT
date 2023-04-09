@@ -340,9 +340,14 @@ class LLaMA_Client(BaseLLMModel):
         self.end_string = "\n\n"
 
     def _get_llama_style_input(self):
-        history = [x["content"] for x in self.history]
-        context = "\n".join(history)
-        context += "\nOutput:"
+        history = []
+        for x in self.history:
+            if x["role"] == "user":
+                history.append(f"Input: {x['content']}")
+            else:
+                history.append(f"Output: {x['content']}")
+        context = "\n\n".join(history)
+        context += "\n\nOutput: "
         return context
 
     def get_answer_at_once(self):
@@ -365,14 +370,15 @@ class LLaMA_Client(BaseLLMModel):
     def get_answer_stream_iter(self):
         context = self._get_llama_style_input()
         partial_text = ""
-        for i in range(self.max_generation_token):
+        step = 1
+        for _ in range(0, self.max_generation_token, step):
             input_dataset = self.dataset.from_dict(
                 {"type": "text_only", "instances": [{"text": context+partial_text}]}
             )
             output_dataset = self.inferencer.inference(
                 model=self.model,
                 dataset=input_dataset,
-                max_new_tokens=1,
+                max_new_tokens=step,
                 temperature=self.temperature,
             )
             response = output_dataset.to_dict()["instances"][0]["text"]
@@ -402,9 +408,11 @@ class ModelManager:
         dont_change_lora_selector = False
         if model_type != ModelType.OpenAI:
             config.local_embedding = True
+        self.model = None
         model = None
         try:
             if model_type == ModelType.OpenAI:
+                logging.info(f"正在加载OpenAI模型: {model_name}")
                 model = OpenAIClient(
                     model_name=model_name,
                     api_key=access_key,
@@ -413,15 +421,17 @@ class ModelManager:
                     top_p=top_p,
                 )
             elif model_type == ModelType.ChatGLM:
+                logging.info(f"正在加载ChatGLM模型: {model_name}")
                 model = ChatGLM_Client(model_name)
             elif model_type == ModelType.LLaMA and lora_model_path == "":
-                msg = "现在请选择LoRA模型"
+                msg = f"现在请为 {model_name} 选择LoRA模型"
                 logging.info(msg)
                 lora_selector_visibility = True
                 if os.path.isdir("lora"):
                     lora_choices = get_file_names("lora", plain=True, filetypes=[""])
                 lora_choices = ["No LoRA"] + lora_choices
             elif model_type == ModelType.LLaMA and lora_model_path != "":
+                logging.info(f"正在加载LLaMA模型: {model_name} + {lora_model_path}")
                 dont_change_lora_selector = True
                 if lora_model_path == "No LoRA":
                     lora_model_path = None
@@ -429,15 +439,13 @@ class ModelManager:
                 else:
                     msg += f" + {lora_model_path}"
                 model = LLaMA_Client(model_name, lora_model_path)
-                pass
             elif model_type == ModelType.Unknown:
                 raise ValueError(f"未知模型: {model_name}")
             logging.info(msg)
         except Exception as e:
             logging.error(e)
             msg = f"{STANDARD_ERROR_MSG}: {e}"
-        if model is not None:
-            self.model = model
+        self.model = model
         if dont_change_lora_selector:
             return msg
         else:
