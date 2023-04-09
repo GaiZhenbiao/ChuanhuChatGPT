@@ -391,6 +391,7 @@ class LLaMA_Client(BaseLLMModel):
 
 class ModelManager:
     def __init__(self, **kwargs) -> None:
+        self.model = None
         self.get_model(**kwargs)
 
     def get_model(
@@ -409,7 +410,7 @@ class ModelManager:
         dont_change_lora_selector = False
         if model_type != ModelType.OpenAI:
             config.local_embedding = True
-        self.model = None
+        del self.model
         model = None
         try:
             if model_type == ModelType.OpenAI:
