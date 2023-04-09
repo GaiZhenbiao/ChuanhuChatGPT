@@ -300,7 +300,8 @@ class LLaMA_Client(BaseLLMModel):
         if model_path is not None:
             model_source = model_path
         else:
-            raise Exception(f"models目录下没有这个模型: {model_name}")
+            model_source = f"decapoda-research/{model_name}"
+            # raise Exception(f"models目录下没有这个模型: {model_name}")
         if lora_path is not None:
             lora_path = f"lora/{lora_path}"
         self.max_generation_token = 1000
