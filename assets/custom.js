@@ -172,9 +172,11 @@ function adjustDarkMode() {
     const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     // 根据当前颜色模式设置初始状态
+    apSwitch.checked = darkModeQuery.matches;
     toggleDarkMode(darkModeQuery.matches);
     // 监听颜色模式变化
     darkModeQuery.addEventListener("change", (e) => {
+        apSwitch.checked = e.matches;
         toggleDarkMode(e.matches);
     });
     // apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
