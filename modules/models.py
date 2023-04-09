@@ -342,6 +342,7 @@ class LLaMA_Client(BaseLLMModel):
     def _get_llama_style_input(self):
         history = [x["content"] for x in self.history]
         context = "\n".join(history)
+        context += "\nOutput:"
         return context
 
     def get_answer_at_once(self):
@@ -359,40 +360,26 @@ class LLaMA_Client(BaseLLMModel):
         )
 
         response = output_dataset.to_dict()["instances"][0]["text"]
-
-        try:
-            index = response.index(self.end_string)
-        except ValueError:
-            response += self.end_string
-            index = response.index(self.end_string)
-
-        response = response[: index + 1]
         return response, len(response)
 
     def get_answer_stream_iter(self):
         context = self._get_llama_style_input()
-
-        input_dataset = self.dataset.from_dict(
-            {"type": "text_only", "instances": [{"text": context}]}
-        )
-
-        output_dataset = self.inferencer.inference(
-            model=self.model,
-            dataset=input_dataset,
-            max_new_tokens=self.max_generation_token,
-            temperature=self.temperature,
-        )
-
-        response = output_dataset.to_dict()["instances"][0]["text"]
-
-        try:
-            index = response.index(self.end_string)
-        except ValueError:
-            response += self.end_string
-            index = response.index(self.end_string)
-
-        response = response[: index + 1]
-        yield response
+        partial_text = ""
+        for i in range(self.max_generation_token):
+            input_dataset = self.dataset.from_dict(
+                {"type": "text_only", "instances": [{"text": context+partial_text}]}
+            )
+            output_dataset = self.inferencer.inference(
+                model=self.model,
+                dataset=input_dataset,
+                max_new_tokens=1,
+                temperature=self.temperature,
+            )
+            response = output_dataset.to_dict()["instances"][0]["text"]
+            if response == "":
+                break
+            partial_text += response
+            yield partial_text
 
 
 class ModelManager:
