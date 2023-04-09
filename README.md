@@ -1,11 +1,11 @@
-<h1 align="center">川虎 ChatGPT 🐯 Chuanhu ChatGPT</h1>
+<h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
 <div align="center">
   <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT">
     <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
   </a>
 
   <p align="center">
-    <h3>为ChatGPT API提供了一个轻快好用的Web图形界面</h3>
+    <h3>为ChatGPT/ChatGLM/LLaMA等多种LLM提供了一个轻快好用的Web图形界面</h3>
     <p align="center">
       <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
         <img alt="Tests Passing" src="https://img.shields.io/github/license/GaiZhenbiao/ChuanhuChatGPT" />
@@ -101,7 +101,7 @@
 		"users": [
 			["用户1的用户名", "用户1的密码"],
 			["用户2的用户名", "用户2的密码"]
-		], 
+		],
 	}
 	```
 	* 如果不设置用户名与密码，可以直接将“users”字段整段删去，或留空为 `"users": [], `
