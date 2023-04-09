@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
-import gradio as gr
+import os
 from pathlib import Path
+
+import gradio as gr
 
 # ChatGPT 设置
 INITIAL_SYSTEM_PROMPT = "You are a helpful assistant."
@@ -77,6 +79,11 @@ MODELS = [
     "llama-30b-hf-int4",
     "llama-65b-hf",
 ]  # 可选的模型
+
+for dir_name in os.listdir("models"):
+    if os.path.isdir(os.path.join("models", dir_name)):
+        if dir_name not in MODELS:
+            MODELS.append(dir_name)
 
 DEFAULT_MODEL = 0  # 默认的模型在MODELS中的序号，从0开始数
 
