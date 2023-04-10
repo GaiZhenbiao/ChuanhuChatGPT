@@ -111,13 +111,13 @@ def construct_index(
 
     if api_key:
         os.environ["OPENAI_API_KEY"] = api_key
+    else:
+        # 由于一个依赖的愚蠢的设计，这里必须要有一个API KEY
+        os.environ["OPENAI_API_KEY"] = "sk-xxxxxxx"
     chunk_size_limit = None if chunk_size_limit == 0 else chunk_size_limit
     embedding_limit = None if embedding_limit == 0 else embedding_limit
     separator = " " if separator == "" else separator
 
-    llm_predictor = LLMPredictor(
-        llm=ChatOpenAI(model_name="gpt-3.5-turbo-0301", openai_api_key=api_key)
-    )
     prompt_helper = PromptHelper(
         max_input_size=max_input_size,
         num_output=num_outputs,
@@ -140,7 +140,6 @@ def construct_index(
             logging.info("构建索引中……")
             with retrieve_proxy():
                 service_context = ServiceContext.from_defaults(
-                    llm_predictor=llm_predictor,
                     prompt_helper=prompt_helper,
                     chunk_size_limit=chunk_size_limit,
                     embed_model=embed_model,
