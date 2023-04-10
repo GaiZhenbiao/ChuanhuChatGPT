@@ -204,7 +204,7 @@ class BaseLLMModel:
             index = construct_index(self.api_key, file_src=files)
             assert index is not None, "索引构建失败"
             msg = "索引构建完成，获取回答中……"
-            if local_embedding:
+            if local_embedding or self.model_type != ModelType.OpenAI:
                 embed_model = LangchainEmbedding(HuggingFaceEmbeddings())
             else:
                 embed_model = OpenAIEmbedding()
