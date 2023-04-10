@@ -83,10 +83,12 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     lora_select_dropdown = gr.Dropdown(
                         label="选择LoRA模型", choices=[], multiselect=False, interactive=True, visible=False
                     )
-                    use_streaming_checkbox = gr.Checkbox(
-                        label="实时传输回答", value=True, visible=ENABLE_STREAMING_OPTION
-                    )
-                    use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
+                    with gr.Row():
+                        use_streaming_checkbox = gr.Checkbox(
+                            label="实时传输回答", value=True, visible=ENABLE_STREAMING_OPTION
+                        )
+                        single_turn_checkbox = gr.Checkbox(label="单轮对话", value=False)
+                        use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
                     language_select_dropdown = gr.Dropdown(
                         label="选择回复语言（针对搜索&索引功能）",
                         choices=REPLY_LANGUAGES,
@@ -353,6 +355,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     # LLM Models
     keyTxt.change(current_model.value.set_key, keyTxt, [status_display]).then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
+    single_turn_checkbox.change(current_model.value.set_single_turn, single_turn_checkbox, None)
     model_select_dropdown.change(current_model.value.get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display, lora_select_dropdown], show_progress=True)
     lora_select_dropdown.change(current_model.value.get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display], show_progress=True)
 

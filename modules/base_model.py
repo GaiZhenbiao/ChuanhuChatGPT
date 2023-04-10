@@ -71,6 +71,7 @@ class BaseLLMModel:
         self.system_prompt = system_prompt
         self.api_key = None
         self.need_api_key = False
+        self.single_turn = False
 
         self.temperature = temperature
         self.top_p = top_p
@@ -285,6 +286,9 @@ class BaseLLMModel:
             yield chatbot + [(inputs, "")], status_text
             return
 
+        if self.single_turn:
+            self.history = []
+            self.all_token_counts = []
         self.history.append(construct_user(inputs))
 
         try:
@@ -438,6 +442,9 @@ class BaseLLMModel:
         msg = f"API密钥更改为了{hide_middle_chars(self.api_key)}"
         logging.info(msg)
         return msg
+
+    def set_single_turn(self, new_single_turn):
+        self.single_turn = new_single_turn
 
     def reset(self):
         self.history = []

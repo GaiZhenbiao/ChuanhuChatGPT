@@ -526,6 +526,9 @@ class ModelManager:
     def set_user_identifier(self, *args):
         self.model.set_user_identifier(*args)
 
+    def set_single_turn(self, *args):
+        self.model.set_single_turn(*args)
+
 
 
 
