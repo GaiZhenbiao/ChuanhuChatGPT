@@ -132,13 +132,13 @@
 	请使用下面的命令。
 
 	```shell
-	python ChuanhuChatbot.py
+	python EduChatbot.py
 	```
 
 	如果报错，试试
 
 	```shell
-	python3 ChuanhuChatbot.py
+	python3 EduChatbot.py
 	```
 
 	如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
