@@ -238,7 +238,7 @@ class ChatGLM_Client(BaseLLMModel):
         else:
             model = AutoModel.from_pretrained(
                 model_source, trust_remote_code=True
-            ).float()
+            ).half()
         if torch.cuda.is_available():
             # run on CUDA
             logging.info("CUDA is available, using CUDA")
