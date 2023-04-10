@@ -324,8 +324,10 @@ class BaseLLMModel:
             )
 
         if limited_context:
-            self.history = self.history[-4:]
-            self.all_token_counts = self.all_token_counts[-2:]
+            # self.history = self.history[-4:]
+            # self.all_token_counts = self.all_token_counts[-2:]
+            self.history = []
+            self.all_token_counts = []
 
         max_token = self.token_upper_limit - TOKEN_OFFSET
 
