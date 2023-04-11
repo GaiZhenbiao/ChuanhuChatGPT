@@ -111,21 +111,21 @@
 
 3. **安装依赖**
 
-	在终端中输入下面的命令，然后回车。
+	在终端中输入下面的命令，然后回车即可。如果命令报错，请试试`pip3`。请确保您已经[安装Python](https://www.runoob.com/python/python-install.html)了，并且已经[将pip加入环境变量](https://blog.csdn.net/AlbenXie/article/details/79054409)。
 
 	```shell
 	pip install -r requirements.txt
 	```
 
-	如果报错，试试
+	如果你还想使用本地运行大模型的功能，请再执行下面的命令：
 
 	```shell
-	pip3 install -r requirements.txt
+	pip install -r requirements_advanced.txt
 	```
 
-	如果还是不行，请先[安装Python](https://www.runoob.com/python/python-install.html)。
+	如果您在使用Windows，建议通过[WSL](https://learn.microsoft.com/zh-cn/windows/wsl/install)，在Linux上安装川虎Chat。如果您没有安装CUDA，并且不想只用CPU跑大模型，请先[安装CUDA](https://developer.nvidia.com/cuda-downloads)。
 
-	如果下载慢，建议[配置清华源](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)（但清华镜像部分包版本可能落后于官方源），或者科学上网。
+	如果下载慢，建议[配置豆瓣源](https://www.cnblogs.com/zhangruoxu/p/6370107.html)，或者科学上网。
 
 4. **启动**
 
@@ -145,7 +145,7 @@
 
 <br />
 
-如果一切顺利，现在，你应该已经可以在浏览器地址栏中输入 [`http://localhost:7860`](http://localhost:7860) 查看并使用 ChuanhuChatGPT 了。
+如果一切顺利，现在，你应该已经可以在浏览器地址栏中输入 [`http://localhost:7860`](http://localhost:7860) 查看并使用 ChuanhuChatGPT 了。如果您已经有下载好的本地模型了，请将它们放在`models`文件夹下面（文件名中需要包含`llama`/`alpaca`/`chatglm`），将`LoRA`模型们放在`lora`文件夹下面。
 
 **如果你在安装过程中碰到了问题，请先查看[疑难杂症解决](#疑难杂症解决)部分。**
 
