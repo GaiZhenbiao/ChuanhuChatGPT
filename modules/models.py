@@ -195,7 +195,7 @@ class OpenAIClient(BaseLLMModel):
                     chunk = json.loads(chunk[6:])
                 except json.JSONDecodeError:
                     print(f"JSON解析错误,收到的内容: {chunk}")
-                    error_msg+=chunk
+                    error_msg += chunk
                     continue
                 if chunk_length > 6 and "delta" in chunk["choices"][0]:
                     if chunk["choices"][0]["finish_reason"] == "stop":
@@ -216,7 +216,7 @@ class ChatGLM_Client(BaseLLMModel):
         import torch
 
         system_name = platform.system()
-        model_path=None
+        model_path = None
         if os.path.exists("models"):
             model_dirs = os.listdir("models")
             if model_name in model_dirs:
@@ -292,6 +292,7 @@ class LLaMA_Client(BaseLLMModel):
         from lmflow.pipeline.auto_pipeline import AutoPipeline
         from lmflow.models.auto_model import AutoModel
         from lmflow.args import ModelArguments, DatasetArguments, InferencerArguments
+
         model_path = None
         if os.path.exists("models"):
             model_dirs = os.listdir("models")
@@ -304,10 +305,33 @@ class LLaMA_Client(BaseLLMModel):
             # raise Exception(f"models目录下没有这个模型: {model_name}")
         if lora_path is not None:
             lora_path = f"lora/{lora_path}"
+        self.lora_path = lora_path
         self.max_generation_token = 1000
         pipeline_name = "inferencer"
-        model_args = ModelArguments(model_name_or_path=model_source, lora_model_path=lora_path, model_type=None, config_overrides=None, config_name=None, tokenizer_name=None, cache_dir=None, use_fast_tokenizer=True, model_revision='main', use_auth_token=False, torch_dtype=None, use_lora=False, lora_r=8, lora_alpha=32, lora_dropout=0.1, use_ram_optimized_load=True)
-        pipeline_args = InferencerArguments(local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
+        model_args = ModelArguments(
+            model_name_or_path=model_source,
+            lora_model_path=lora_path,
+            model_type=None,
+            config_overrides=None,
+            config_name=None,
+            tokenizer_name=None,
+            cache_dir=None,
+            use_fast_tokenizer=True,
+            model_revision="main",
+            use_auth_token=False,
+            torch_dtype=None,
+            use_lora=False,
+            lora_r=8,
+            lora_alpha=32,
+            lora_dropout=0.1,
+            use_ram_optimized_load=True,
+        )
+        pipeline_args = InferencerArguments(
+            local_rank=0,
+            random_seed=1,
+            deepspeed="configs/ds_config_chatbot.json",
+            mixed_precision="bf16",
+        )
 
         with open(pipeline_args.deepspeed, "r") as f:
             ds_config = json.load(f)
@@ -374,7 +398,7 @@ class LLaMA_Client(BaseLLMModel):
         step = 1
         for _ in range(0, self.max_generation_token, step):
             input_dataset = self.dataset.from_dict(
-                {"type": "text_only", "instances": [{"text": context+partial_text}]}
+                {"type": "text_only", "instances": [{"text": context + partial_text}]}
             )
             output_dataset = self.inferencer.inference(
                 model=self.model,
@@ -404,6 +428,17 @@ class ModelManager:
         system_prompt=None,
     ) -> BaseLLMModel:
         msg = f"模型设置为了： {model_name}"
+        if self.model is not None and model_name == self.model.model_name:
+            # 如果模型名字一样，那么就不用重新加载模型
+            # if (
+            #     lora_model_path is not None
+            #     and hasattr(self.model, "lora_path")
+            #     and lora_model_path == self.model.lora_path
+            #     or lora_model_path is None
+            #     and not hasattr(self.model, "lora_path")
+            # ):
+            logging.info(f"模型 {model_name} 已经加载，不需要重新加载")
+            return msg
         model_type = ModelType.get_type(model_name)
         lora_selector_visibility = False
         lora_choices = []
@@ -451,7 +486,9 @@ class ModelManager:
         if dont_change_lora_selector:
             return msg
         else:
-            return msg, gr.Dropdown.update(choices=lora_choices, visible=lora_selector_visibility)
+            return msg, gr.Dropdown.update(
+                choices=lora_choices, visible=lora_selector_visibility
+            )
 
     def predict(self, *args):
         iter = self.model.predict(*args)
@@ -528,8 +565,6 @@ class ModelManager:
 
     def set_single_turn(self, *args):
         self.model.set_single_turn(*args)
-
-
 
 
 if __name__ == "__main__":

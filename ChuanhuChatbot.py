@@ -15,6 +15,8 @@ from modules.models import ModelManager
 gr.Chatbot.postprocess = postprocess
 PromptHelper.compact_text_chunks = compact_text_chunks
 
+current_model = ModelManager(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key)
+
 with open("assets/custom.css", "r", encoding="utf-8") as f:
     customCSS = f.read()
 
@@ -22,7 +24,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     user_name = gr.State("")
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     user_question = gr.State("")
-    current_model = gr.State(ModelManager(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key))
 
     topic = gr.State("未命名对话历史记录")
 
@@ -264,7 +265,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     gr.Markdown(CHUANHU_DESCRIPTION)
     gr.HTML(FOOTER.format(versions=versions_html()), elem_id="footer")
     chatgpt_predict_args = dict(
-        fn=current_model.value.predict,
+        fn=current_model.predict,
         inputs=[
             user_question,
             chatbot,
@@ -297,18 +298,18 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     )
 
     get_usage_args = dict(
-        fn=current_model.value.billing_info, inputs=None, outputs=[usageTxt], show_progress=False
+        fn=current_model.billing_info, inputs=None, outputs=[usageTxt], show_progress=False
     )
 
     load_history_from_file_args = dict(
-        fn=current_model.value.load_chat_history,
+        fn=current_model.load_chat_history,
         inputs=[historyFileSelectDropdown, chatbot, user_name],
         outputs=[saveFileName, systemPromptTxt, chatbot]
     )
 
 
     # Chatbot
-    cancelBtn.click(current_model.value.interrupt, [], [])
+    cancelBtn.click(current_model.interrupt, [], [])
 
     user_input.submit(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
     user_input.submit(**get_usage_args)
@@ -317,14 +318,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     submitBtn.click(**get_usage_args)
 
     emptyBtn.click(
-        current_model.value.reset,
+        current_model.reset,
         outputs=[chatbot, status_display],
         show_progress=True,
     )
     emptyBtn.click(**reset_textbox_args)
 
     retryBtn.click(**start_outputing_args).then(
-        current_model.value.retry,
+        current_model.retry,
         [
             chatbot,
             use_streaming_checkbox,
@@ -338,13 +339,13 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     retryBtn.click(**get_usage_args)
 
     delFirstBtn.click(
-        current_model.value.delete_first_conversation,
+        current_model.delete_first_conversation,
         None,
         [status_display],
     )
 
     delLastBtn.click(
-        current_model.value.delete_last_conversation,
+        current_model.delete_last_conversation,
         [chatbot],
         [chatbot, status_display],
         show_progress=False
@@ -353,14 +354,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     two_column.change(update_doc_config, [two_column], None)
 
     # LLM Models
-    keyTxt.change(current_model.value.set_key, keyTxt, [status_display]).then(**get_usage_args)
+    keyTxt.change(current_model.set_key, keyTxt, [status_display]).then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
-    single_turn_checkbox.change(current_model.value.set_single_turn, single_turn_checkbox, None)
-    model_select_dropdown.change(current_model.value.get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display, lora_select_dropdown], show_progress=True)
-    lora_select_dropdown.change(current_model.value.get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display], show_progress=True)
+    single_turn_checkbox.change(current_model.set_single_turn, single_turn_checkbox, None)
+    model_select_dropdown.change(current_model.get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display, lora_select_dropdown], show_progress=True)
+    lora_select_dropdown.change(current_model.get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [status_display], show_progress=True)
 
     # Template
-    systemPromptTxt.change(current_model.value.set_system_prompt, [systemPromptTxt], None)
+    systemPromptTxt.change(current_model.set_system_prompt, [systemPromptTxt], None)
     templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
     templateFileSelectDropdown.change(
         load_template,
@@ -377,14 +378,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     # S&L
     saveHistoryBtn.click(
-        current_model.value.save_chat_history,
+        current_model.save_chat_history,
         [saveFileName, chatbot, user_name],
         downloadFile,
         show_progress=True,
     )
     saveHistoryBtn.click(get_history_names, [gr.State(False), user_name], [historyFileSelectDropdown])
     exportMarkdownBtn.click(
-        current_model.value.export_markdown,
+        current_model.export_markdown,
         [saveFileName, chatbot, user_name],
         downloadFile,
         show_progress=True,
@@ -394,16 +395,16 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     downloadFile.change(**load_history_from_file_args)
 
     # Advanced
-    max_context_length_slider.change(current_model.value.set_token_upper_limit, [max_context_length_slider], None)
-    temperature_slider.change(current_model.value.set_temperature, [temperature_slider], None)
-    top_p_slider.change(current_model.value.set_top_p, [top_p_slider], None)
-    n_choices_slider.change(current_model.value.set_n_choices, [n_choices_slider], None)
-    stop_sequence_txt.change(current_model.value.set_stop_sequence, [stop_sequence_txt], None)
-    max_generation_slider.change(current_model.value.set_max_tokens, [max_generation_slider], None)
-    presence_penalty_slider.change(current_model.value.set_presence_penalty, [presence_penalty_slider], None)
-    frequency_penalty_slider.change(current_model.value.set_frequency_penalty, [frequency_penalty_slider], None)
-    logit_bias_txt.change(current_model.value.set_logit_bias, [logit_bias_txt], None)
-    user_identifier_txt.change(current_model.value.set_user_identifier, [user_identifier_txt], None)
+    max_context_length_slider.change(current_model.set_token_upper_limit, [max_context_length_slider], None)
+    temperature_slider.change(current_model.set_temperature, [temperature_slider], None)
+    top_p_slider.change(current_model.set_top_p, [top_p_slider], None)
+    n_choices_slider.change(current_model.set_n_choices, [n_choices_slider], None)
+    stop_sequence_txt.change(current_model.set_stop_sequence, [stop_sequence_txt], None)
+    max_generation_slider.change(current_model.set_max_tokens, [max_generation_slider], None)
+    presence_penalty_slider.change(current_model.set_presence_penalty, [presence_penalty_slider], None)
+    frequency_penalty_slider.change(current_model.set_frequency_penalty, [frequency_penalty_slider], None)
+    logit_bias_txt.change(current_model.set_logit_bias, [logit_bias_txt], None)
+    user_identifier_txt.change(current_model.set_user_identifier, [user_identifier_txt], None)
 
     default_btn.click(
         reset_default, [], [apihostTxt, proxyTxt, status_display], show_progress=True
