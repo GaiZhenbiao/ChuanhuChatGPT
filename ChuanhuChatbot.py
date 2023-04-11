@@ -431,35 +431,15 @@ demo.title = "川虎ChatGPT 🚀"
 
 if __name__ == "__main__":
     reload_javascript()
-    # if running in Docker
-    if dockerflag:
-        if authflag:
-            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
-                server_name="0.0.0.0",
-                server_port=7860,
-                auth=auth_list,
-                favicon_path="./assets/favicon.ico",
-            )
-        else:
-            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
-                server_name="0.0.0.0",
-                server_port=7860,
-                share=False,
-                favicon_path="./assets/favicon.ico",
-            )
-    # if not running in Docker
-    else:
-        if authflag:
-            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
-                share=False,
-                auth=auth_list,
-                favicon_path="./assets/favicon.ico",
-                inbrowser=True,
-            )
-        else:
-            demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
-                share=False, favicon_path="./assets/favicon.ico", inbrowser=True
-            )  # 改为 share=True 可以创建公开分享链接
-        # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
-        # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
-        # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理
+    auth = auth_list if authflag else None
+    demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
+        server_name=server_name,
+        server_port=server_port,
+        share=share,
+        auth=auth_list,
+        favicon_path="./assets/favicon.ico",
+        inbrowser=not dockerflag, # 禁止在docker下开启inbrowser
+    )
+    # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860, share=False) # 可自定义端口
+    # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(server_name="0.0.0.0", server_port=7860,auth=("在这里填写用户名", "在这里填写密码")) # 可设置用户名与密码
+    # demo.queue(concurrency_count=CONCURRENT_COUNT).launch(auth=("在这里填写用户名", "在这里填写密码")) # 适合Nginx反向代理
