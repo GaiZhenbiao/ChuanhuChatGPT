@@ -18,6 +18,9 @@ __all__ = [
     "advance_docs",
     "update_doc_config",
     "multi_api_key",
+    "server_name",
+    "server_port",
+    "share",
 ]
 
 # 添加一个统一的config文件，避免文件过多造成的疑惑（优先级最低）
@@ -148,3 +151,19 @@ def update_doc_config(two_column_pdf):
     advance_docs["pdf"]["two_column"] = two_column_pdf
 
     logging.info(f"更新后的文件参数为：{advance_docs}")
+
+## 处理gradio.launch参数
+server_name = config.get("server_name", None)
+server_port = config.get("server_port", None)
+if server_name is None:
+    if dockerflag:
+        server_name = "0.0.0.0"
+    else:
+        server_name = "127.0.0.1"
+if server_port is None:
+    if dockerflag:
+        server_port = 7860
+
+assert server_port is None or type(server_port) == int, "要求port设置为int类型"
+
+share = config.get("share", False)
