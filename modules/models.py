@@ -207,7 +207,7 @@ class OpenAIClient(BaseLLMModel):
                         continue
         if error_msg:
             raise Exception(error_msg)
-        
+
 
 class ChatGLM_Client(BaseLLMModel):
     def __init__(self, model_name) -> None:
@@ -293,12 +293,13 @@ class LLaMA_Client(BaseLLMModel):
         from lmflow.pipeline.auto_pipeline import AutoPipeline
         from lmflow.models.auto_model import AutoModel
         from lmflow.args import ModelArguments, DatasetArguments, InferencerArguments
-        
+
         self.max_generation_token = 1000
         self.end_string = "\n\n"
         # We don't need input data
         data_args = DatasetArguments(dataset_path=None)
         self.dataset = Dataset(data_args)
+        self.system_prompt = ""
 
         global LLAMA_MODEL, LLAMA_INFERENCER
         if LLAMA_MODEL is None or LLAMA_INFERENCER is None:
@@ -343,9 +344,12 @@ class LLaMA_Client(BaseLLMModel):
 
     def _get_llama_style_input(self):
         history = []
+        instruction = ""
+        if self.system_prompt:
+            instruction = (f"Instruction: {self.system_prompt}\n")
         for x in self.history:
             if x["role"] == "user":
-                history.append(f"Input: {x['content']}")
+                history.append(f"{instruction}Input: {x['content']}")
             else:
                 history.append(f"Output: {x['content']}")
         context = "\n\n".join(history)
