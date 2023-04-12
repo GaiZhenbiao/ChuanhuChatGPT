@@ -80,10 +80,6 @@ api_host = os.environ.get("api_host", config.get("api_host", ""))
 if api_host:
     shared.state.set_api_host(api_host)
 
-if not my_api_key and not shared.state.multi_api_key:
-    logging.error("Please give a api key!")
-    sys.exit(1)
-
 @contextmanager
 def retrieve_openai_api(api_key = None):
     old_api_key = os.environ.get("OPENAI_API_KEY", "")
