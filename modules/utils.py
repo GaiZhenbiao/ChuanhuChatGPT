@@ -33,6 +33,82 @@ if TYPE_CHECKING:
     class DataframeData(TypedDict):
         headers: List[str]
         data: List[List[str | int | bool]]
+        
+def predict(current_model, *args):
+    iter = current_model.predict(*args)
+    for i in iter:
+        yield i
+
+def billing_info(current_model):
+    return current_model.billing_info()
+
+def set_key(current_model, *args):
+    return current_model.set_key(*args)
+
+def load_chat_history(current_model, *args):
+    return current_model.load_chat_history(*args)
+
+def interrupt(current_model, *args):
+    return current_model.interrupt(*args)
+
+def reset(current_model, *args):
+    return current_model.reset(*args)
+
+def retry(current_model, *args):
+    iter = current_model.retry(*args)
+    for i in iter:
+        yield i
+
+def delete_first_conversation(current_model, *args):
+    return current_model.delete_first_conversation(*args)
+
+def delete_last_conversation(current_model, *args):
+    return current_model.delete_last_conversation(*args)
+
+def set_system_prompt(current_model, *args):
+    return current_model.set_system_prompt(*args)
+
+def save_chat_history(current_model, *args):
+    return current_model.save_chat_history(*args)
+
+def export_markdown(current_model, *args):
+    return current_model.export_markdown(*args)
+
+def load_chat_history(current_model, *args):
+    return current_model.load_chat_history(*args)
+
+def set_token_upper_limit(current_model, *args):
+    return current_model.set_token_upper_limit(*args)
+
+def set_temperature(current_model, *args):
+    current_model.set_temperature(*args)
+
+def set_top_p(current_model, *args):
+    current_model.set_top_p(*args)
+
+def set_n_choices(current_model, *args):
+    current_model.set_n_choices(*args)
+
+def set_stop_sequence(current_model, *args):
+    current_model.set_stop_sequence(*args)
+
+def set_max_tokens(current_model, *args):
+    current_model.set_max_tokens(*args)
+
+def set_presence_penalty(current_model, *args):
+    current_model.set_presence_penalty(*args)
+
+def set_frequency_penalty(current_model, *args):
+    current_model.set_frequency_penalty(*args)
+
+def set_logit_bias(current_model, *args):
+    current_model.set_logit_bias(*args)
+
+def set_user_identifier(current_model, *args):
+    current_model.set_user_identifier(*args)
+
+def set_single_turn(current_model, *args):
+    current_model.set_single_turn(*args)
 
 
 def count_token(message):
