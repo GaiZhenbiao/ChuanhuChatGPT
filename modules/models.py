@@ -207,51 +207,52 @@ class OpenAIClient(BaseLLMModel):
                         continue
         if error_msg:
             raise Exception(error_msg)
-
+        
 
 class ChatGLM_Client(BaseLLMModel):
     def __init__(self, model_name) -> None:
         super().__init__(model_name=model_name)
         from transformers import AutoTokenizer, AutoModel
         import torch
-
-        system_name = platform.system()
-        model_path = None
-        if os.path.exists("models"):
-            model_dirs = os.listdir("models")
-            if model_name in model_dirs:
-                model_path = f"models/{model_name}"
-        if model_path is not None:
-            model_source = model_path
-        else:
-            model_source = f"THUDM/{model_name}"
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_source, trust_remote_code=True
-        )
-        quantified = False
-        if "int4" in model_name:
-            quantified = True
-        if quantified:
-            model = AutoModel.from_pretrained(
+        global CHATGLM_TOKENIZER, CHATGLM_MODEL
+        if CHATGLM_TOKENIZER is None or CHATGLM_MODEL is None:
+            system_name = platform.system()
+            model_path=None
+            if os.path.exists("models"):
+                model_dirs = os.listdir("models")
+                if model_name in model_dirs:
+                    model_path = f"models/{model_name}"
+            if model_path is not None:
+                model_source = model_path
+            else:
+                model_source = f"THUDM/{model_name}"
+            CHATGLM_TOKENIZER = AutoTokenizer.from_pretrained(
                 model_source, trust_remote_code=True
-            ).half()
-        else:
-            model = AutoModel.from_pretrained(
-                model_source, trust_remote_code=True
-            ).half()
-        if torch.cuda.is_available():
-            # run on CUDA
-            logging.info("CUDA is available, using CUDA")
-            model = model.cuda()
-        # mps加速还存在一些问题，暂时不使用
-        elif system_name == "Darwin" and model_path is not None and not quantified:
-            logging.info("Running on macOS, using MPS")
-            # running on macOS and model already downloaded
-            model = model.to("mps")
-        else:
-            logging.info("GPU is not available, using CPU")
-        model = model.eval()
-        self.model = model
+            )
+            quantified = False
+            if "int4" in model_name:
+                quantified = True
+            if quantified:
+                model = AutoModel.from_pretrained(
+                    model_source, trust_remote_code=True
+                ).half()
+            else:
+                model = AutoModel.from_pretrained(
+                    model_source, trust_remote_code=True
+                ).half()
+            if torch.cuda.is_available():
+                # run on CUDA
+                logging.info("CUDA is available, using CUDA")
+                model = model.cuda()
+            # mps加速还存在一些问题，暂时不使用
+            elif system_name == "Darwin" and model_path is not None and not quantified:
+                logging.info("Running on macOS, using MPS")
+                # running on macOS and model already downloaded
+                model = model.to("mps")
+            else:
+                logging.info("GPU is not available, using CPU")
+            model = model.eval()
+            CHATGLM_MODEL = model
 
     def _get_glm_style_input(self):
         history = [x["content"] for x in self.history]
@@ -265,13 +266,13 @@ class ChatGLM_Client(BaseLLMModel):
 
     def get_answer_at_once(self):
         history, query = self._get_glm_style_input()
-        response, _ = self.model.chat(self.tokenizer, query, history=history)
+        response, _ = CHATGLM_MODEL.chat(CHATGLM_TOKENIZER, query, history=history)
         return response, len(response)
 
     def get_answer_stream_iter(self):
         history, query = self._get_glm_style_input()
-        for response, history in self.model.stream_chat(
-            self.tokenizer,
+        for response, history in CHATGLM_MODEL.stream_chat(
+            CHATGLM_TOKENIZER,
             query,
             history,
             max_length=self.token_upper_limit,
@@ -292,77 +293,53 @@ class LLaMA_Client(BaseLLMModel):
         from lmflow.pipeline.auto_pipeline import AutoPipeline
         from lmflow.models.auto_model import AutoModel
         from lmflow.args import ModelArguments, DatasetArguments, InferencerArguments
-
-        model_path = None
-        if os.path.exists("models"):
-            model_dirs = os.listdir("models")
-            if model_name in model_dirs:
-                model_path = f"models/{model_name}"
-        if model_path is not None:
-            model_source = model_path
-        else:
-            model_source = f"decapoda-research/{model_name}"
-            # raise Exception(f"models目录下没有这个模型: {model_name}")
-        if lora_path is not None:
-            lora_path = f"lora/{lora_path}"
-        self.lora_path = lora_path
+        
         self.max_generation_token = 1000
-        pipeline_name = "inferencer"
-        model_args = ModelArguments(
-            model_name_or_path=model_source,
-            lora_model_path=lora_path,
-            model_type=None,
-            config_overrides=None,
-            config_name=None,
-            tokenizer_name=None,
-            cache_dir=None,
-            use_fast_tokenizer=True,
-            model_revision="main",
-            use_auth_token=False,
-            torch_dtype=None,
-            use_lora=False,
-            lora_r=8,
-            lora_alpha=32,
-            lora_dropout=0.1,
-            use_ram_optimized_load=True,
-        )
-        pipeline_args = InferencerArguments(
-            local_rank=0,
-            random_seed=1,
-            deepspeed="configs/ds_config_chatbot.json",
-            mixed_precision="bf16",
-        )
-
-        with open(pipeline_args.deepspeed, "r") as f:
-            ds_config = json.load(f)
-
-        self.model = AutoModel.get_model(
-            model_args,
-            tune_strategy="none",
-            ds_config=ds_config,
-        )
-
+        self.end_string = "\n\n"
         # We don't need input data
         data_args = DatasetArguments(dataset_path=None)
         self.dataset = Dataset(data_args)
 
-        self.inferencer = AutoPipeline.get_pipeline(
-            pipeline_name=pipeline_name,
-            model_args=model_args,
-            data_args=data_args,
-            pipeline_args=pipeline_args,
-        )
+        global LLAMA_MODEL, LLAMA_INFERENCER
+        if LLAMA_MODEL is None or LLAMA_INFERENCER is None:
+            model_path = None
+            if os.path.exists("models"):
+                model_dirs = os.listdir("models")
+                if model_name in model_dirs:
+                    model_path = f"models/{model_name}"
+            if model_path is not None:
+                model_source = model_path
+            else:
+                model_source = f"decapoda-research/{model_name}"
+                # raise Exception(f"models目录下没有这个模型: {model_name}")
+            if lora_path is not None:
+                lora_path = f"lora/{lora_path}"
+            model_args = ModelArguments(model_name_or_path=model_source, lora_model_path=lora_path, model_type=None, config_overrides=None, config_name=None, tokenizer_name=None, cache_dir=None, use_fast_tokenizer=True, model_revision='main', use_auth_token=False, torch_dtype=None, use_lora=False, lora_r=8, lora_alpha=32, lora_dropout=0.1, use_ram_optimized_load=True)
+            pipeline_args = InferencerArguments(local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
 
+            with open(pipeline_args.deepspeed, "r") as f:
+                ds_config = json.load(f)
+            LLAMA_MODEL = AutoModel.get_model(
+                model_args,
+                tune_strategy="none",
+                ds_config=ds_config,
+            )
+            LLAMA_INFERENCER = AutoPipeline.get_pipeline(
+                pipeline_name="inferencer",
+                model_args=model_args,
+                data_args=data_args,
+                pipeline_args=pipeline_args,
+            )
         # Chats
-        model_name = model_args.model_name_or_path
-        if model_args.lora_model_path is not None:
-            model_name += f" + {model_args.lora_model_path}"
+        # model_name = model_args.model_name_or_path
+        # if model_args.lora_model_path is not None:
+        #     model_name += f" + {model_args.lora_model_path}"
 
         # context = (
         #     "You are a helpful assistant who follows the given instructions"
         #     " unconditionally."
         # )
-        self.end_string = "\n\n"
+
 
     def _get_llama_style_input(self):
         history = []
@@ -382,8 +359,8 @@ class LLaMA_Client(BaseLLMModel):
             {"type": "text_only", "instances": [{"text": context}]}
         )
 
-        output_dataset = self.inferencer.inference(
-            model=self.model,
+        output_dataset = LLAMA_INFERENCER.inference(
+            model=LLAMA_MODEL,
             dataset=input_dataset,
             max_new_tokens=self.max_generation_token,
             temperature=self.temperature,
@@ -400,8 +377,8 @@ class LLaMA_Client(BaseLLMModel):
             input_dataset = self.dataset.from_dict(
                 {"type": "text_only", "instances": [{"text": context + partial_text}]}
             )
-            output_dataset = self.inferencer.inference(
-                model=self.model,
+            output_dataset = LLAMA_INFERENCER.inference(
+                model=LLAMA_MODEL,
                 dataset=input_dataset,
                 max_new_tokens=step,
                 temperature=self.temperature,
@@ -413,158 +390,62 @@ class LLaMA_Client(BaseLLMModel):
             yield partial_text
 
 
-class ModelManager:
-    def __init__(self, **kwargs) -> None:
-        self.model = None
-        self.get_model(**kwargs)
-
-    def get_model(
-        self,
-        model_name,
-        lora_model_path=None,
-        access_key=None,
-        temperature=None,
-        top_p=None,
-        system_prompt=None,
-    ) -> BaseLLMModel:
-        msg = f"模型设置为了： {model_name}"
-        if self.model is not None and model_name == self.model.model_name:
-            # 如果模型名字一样，那么就不用重新加载模型
-            # if (
-            #     lora_model_path is not None
-            #     and hasattr(self.model, "lora_path")
-            #     and lora_model_path == self.model.lora_path
-            #     or lora_model_path is None
-            #     and not hasattr(self.model, "lora_path")
-            # ):
-            logging.info(f"模型 {model_name} 已经加载，不需要重新加载")
-            return msg
-        model_type = ModelType.get_type(model_name)
-        lora_selector_visibility = False
-        lora_choices = []
-        dont_change_lora_selector = False
-        if model_type != ModelType.OpenAI:
-            config.local_embedding = True
-        del self.model
-        model = None
-        try:
-            if model_type == ModelType.OpenAI:
-                logging.info(f"正在加载OpenAI模型: {model_name}")
-                model = OpenAIClient(
-                    model_name=model_name,
-                    api_key=access_key,
-                    system_prompt=system_prompt,
-                    temperature=temperature,
-                    top_p=top_p,
-                )
-            elif model_type == ModelType.ChatGLM:
-                logging.info(f"正在加载ChatGLM模型: {model_name}")
-                model = ChatGLM_Client(model_name)
-            elif model_type == ModelType.LLaMA and lora_model_path == "":
-                msg = f"现在请为 {model_name} 选择LoRA模型"
-                logging.info(msg)
-                lora_selector_visibility = True
-                if os.path.isdir("lora"):
-                    lora_choices = get_file_names("lora", plain=True, filetypes=[""])
-                lora_choices = ["No LoRA"] + lora_choices
-            elif model_type == ModelType.LLaMA and lora_model_path != "":
-                logging.info(f"正在加载LLaMA模型: {model_name} + {lora_model_path}")
-                dont_change_lora_selector = True
-                if lora_model_path == "No LoRA":
-                    lora_model_path = None
-                    msg += " + No LoRA"
-                else:
-                    msg += f" + {lora_model_path}"
-                model = LLaMA_Client(model_name, lora_model_path)
-            elif model_type == ModelType.Unknown:
-                raise ValueError(f"未知模型: {model_name}")
-            logging.info(msg)
-        except Exception as e:
-            logging.error(e)
-            msg = f"{STANDARD_ERROR_MSG}: {e}"
-        self.model = model
-        if dont_change_lora_selector:
-            return msg
-        else:
-            return msg, gr.Dropdown.update(
-                choices=lora_choices, visible=lora_selector_visibility
+def get_model(
+    model_name,
+    lora_model_path=None,
+    access_key=None,
+    temperature=None,
+    top_p=None,
+    system_prompt=None,
+) -> BaseLLMModel:
+    msg = f"模型设置为了： {model_name}"
+    model_type = ModelType.get_type(model_name)
+    lora_selector_visibility = False
+    lora_choices = []
+    dont_change_lora_selector = False
+    if model_type != ModelType.OpenAI:
+        config.local_embedding = True
+    # del current_model.model
+    model = None
+    try:
+        if model_type == ModelType.OpenAI:
+            logging.info(f"正在加载OpenAI模型: {model_name}")
+            model = OpenAIClient(
+                model_name=model_name,
+                api_key=access_key,
+                system_prompt=system_prompt,
+                temperature=temperature,
+                top_p=top_p,
             )
-
-    def predict(self, *args):
-        iter = self.model.predict(*args)
-        for i in iter:
-            yield i
-
-    def billing_info(self):
-        return self.model.billing_info()
-
-    def set_key(self, *args):
-        return self.model.set_key(*args)
-
-    def load_chat_history(self, *args):
-        return self.model.load_chat_history(*args)
-
-    def interrupt(self, *args):
-        return self.model.interrupt(*args)
-
-    def reset(self, *args):
-        return self.model.reset(*args)
-
-    def retry(self, *args):
-        iter = self.model.retry(*args)
-        for i in iter:
-            yield i
-
-    def delete_first_conversation(self, *args):
-        return self.model.delete_first_conversation(*args)
-
-    def delete_last_conversation(self, *args):
-        return self.model.delete_last_conversation(*args)
-
-    def set_system_prompt(self, *args):
-        return self.model.set_system_prompt(*args)
-
-    def save_chat_history(self, *args):
-        return self.model.save_chat_history(*args)
-
-    def export_markdown(self, *args):
-        return self.model.export_markdown(*args)
-
-    def load_chat_history(self, *args):
-        return self.model.load_chat_history(*args)
-
-    def set_token_upper_limit(self, *args):
-        return self.model.set_token_upper_limit(*args)
-
-    def set_temperature(self, *args):
-        self.model.set_temperature(*args)
-
-    def set_top_p(self, *args):
-        self.model.set_top_p(*args)
-
-    def set_n_choices(self, *args):
-        self.model.set_n_choices(*args)
-
-    def set_stop_sequence(self, *args):
-        self.model.set_stop_sequence(*args)
-
-    def set_max_tokens(self, *args):
-        self.model.set_max_tokens(*args)
-
-    def set_presence_penalty(self, *args):
-        self.model.set_presence_penalty(*args)
-
-    def set_frequency_penalty(self, *args):
-        self.model.set_frequency_penalty(*args)
-
-    def set_logit_bias(self, *args):
-        self.model.set_logit_bias(*args)
-
-    def set_user_identifier(self, *args):
-        self.model.set_user_identifier(*args)
-
-    def set_single_turn(self, *args):
-        self.model.set_single_turn(*args)
+        elif model_type == ModelType.ChatGLM:
+            logging.info(f"正在加载ChatGLM模型: {model_name}")
+            model = ChatGLM_Client(model_name)
+        elif model_type == ModelType.LLaMA and lora_model_path == "":
+            msg = f"现在请为 {model_name} 选择LoRA模型"
+            logging.info(msg)
+            lora_selector_visibility = True
+            if os.path.isdir("lora"):
+                lora_choices = get_file_names("lora", plain=True, filetypes=[""])
+            lora_choices = ["No LoRA"] + lora_choices
+        elif model_type == ModelType.LLaMA and lora_model_path != "":
+            logging.info(f"正在加载LLaMA模型: {model_name} + {lora_model_path}")
+            dont_change_lora_selector = True
+            if lora_model_path == "No LoRA":
+                lora_model_path = None
+                msg += " + No LoRA"
+            else:
+                msg += f" + {lora_model_path}"
+            model = LLaMA_Client(model_name, lora_model_path)
+        elif model_type == ModelType.Unknown:
+            raise ValueError(f"未知模型: {model_name}")
+        logging.info(msg)
+    except Exception as e:
+        logging.error(e)
+        msg = f"{STANDARD_ERROR_MSG}: {e}"
+    if dont_change_lora_selector:
+        return model, msg
+    else:
+        return model, msg, gr.Dropdown.update(choices=lora_choices, visible=lora_selector_visibility)
 
 
 if __name__ == "__main__":
@@ -573,7 +454,7 @@ if __name__ == "__main__":
     # set logging level to debug
     logging.basicConfig(level=logging.DEBUG)
     # client = ModelManager(model_name="gpt-3.5-turbo", access_key=openai_api_key)
-    client = ModelManager(model_name="chatglm-6b-int4")
+    client = get_model(model_name="chatglm-6b-int4")
     chatbot = []
     stream = False
     # 测试账单功能

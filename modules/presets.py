@@ -4,6 +4,11 @@ from pathlib import Path
 
 import gradio as gr
 
+CHATGLM_MODEL = None
+CHATGLM_TOKENIZER = None
+LLAMA_MODEL = None
+LLAMA_INFERENCER = None
+
 # ChatGPT 设置
 INITIAL_SYSTEM_PROMPT = "You are a helpful assistant."
 API_HOST = "api.openai.com"
