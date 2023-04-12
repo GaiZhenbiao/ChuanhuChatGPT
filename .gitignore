@@ -133,6 +133,9 @@ dmypy.json
 # Mac system file
 **/.DS_Store
 
+#vscode
+.vscode
+
 # 配置文件/模型文件
 api_key.txt
 config.json
@@ -140,3 +143,4 @@ auth.json
 models/
 lora/
 .idea
+templates/*
