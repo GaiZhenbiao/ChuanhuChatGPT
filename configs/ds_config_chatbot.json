@@ -1,0 +1,17 @@
+{
+    "fp16": {
+        "enabled": false
+    },
+    "bf16": {
+        "enabled": true
+    },
+    "comms_logger": {
+        "enabled": false,
+        "verbose": false,
+        "prof_all": false,
+        "debug": false
+    },
+    "steps_per_print": 20000000000000000,
+    "train_micro_batch_size_per_gpu": 1,
+    "wall_clock_breakdown": false
+}

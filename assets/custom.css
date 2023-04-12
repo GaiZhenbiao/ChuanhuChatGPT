@@ -65,14 +65,18 @@ footer {
     color: var(--body-text-color-subdued);
 }
 
-#chuanhu_chatbot, #status_display {
+#status_display {
     transition: all 0.6s;
+}
+#chuanhu_chatbot {
+    transition: height 0.3s ease;
 }
 
 /* usage_display */
-#usage_display {
+.insert_block {
     position: relative;
     margin: 0;
+    padding: .5em 1em;
     box-shadow: var(--block-shadow);
     border-width: var(--block-border-width);
     border-color: var(--block-border-color);
@@ -84,7 +88,6 @@ footer {
 }
 #usage_display p, #usage_display span {
     margin: 0;
-    padding: .5em 1em;
     font-size: .85em;
     color: var(--body-text-color-subdued);
 }
@@ -111,6 +114,44 @@ footer {
     line-height: 20px;
 }
 
+.apSwitch {
+    top: 2px;
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 48px;
+    border-radius: 12px;
+}
+.apSwitch input {
+    display: none !important;    
+}
+.apSlider {
+    background-color: var(--block-label-background-fill);
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    font-size: 18px;
+    border-radius: 12px;
+}
+.apSlider::before {    
+    bottom: -1.5px;
+    left: 1px;
+    position: absolute;
+    transition: .4s;
+    content: "🌞";
+}
+input:checked + .apSlider {
+    background-color: var(--block-label-background-fill);
+}
+input:checked + .apSlider::before {
+    transform: translateX(23px);
+    content:"🌚";
+}
+
 #submit_btn, #cancel_btn {
     height: 42px !important;
 }
@@ -127,36 +168,31 @@ ol:not(.options), ul:not(.options) {
     padding-inline-start: 2em !important;
 }
 
-/* 亮色 */
-@media (prefers-color-scheme: light) {
-    #chuanhu_chatbot {
-        background-color: var(--chatbot-color-light) !important;
-        color: #000000 !important;
-    }
-    [data-testid = "bot"] {
-        background-color: #FFFFFF !important;
-    }
-    [data-testid = "user"] {
-        background-color: #95EC69 !important;
-    }
+/* 亮色（默认） */
+#chuanhu_chatbot {
+    background-color: var(--chatbot-color-light) !important;
+    color: #000000 !important;
+}
+[data-testid = "bot"] {
+    background-color: #FFFFFF !important;
+}
+[data-testid = "user"] {
+    background-color: #95EC69 !important;
 }
 /* 暗色 */
-@media (prefers-color-scheme: dark) {
-    #chuanhu_chatbot {
-        background-color: var(--chatbot-color-dark) !important;
-        color: #FFFFFF !important;
-    }
-    [data-testid = "bot"] {
-        background-color: #2C2C2C !important;
-    }
-    [data-testid = "user"] {
-        background-color: #26B561 !important;
-    }
-    body {
-        background-color: var(--neutral-950) !important;
-    }
+.dark #chuanhu_chatbot {
+    background-color: var(--chatbot-color-dark) !important;
+    color: #FFFFFF !important;
 }
+.dark [data-testid = "bot"] {
+    background-color: #2C2C2C !important;
+}
+.dark [data-testid = "user"] {
+    background-color: #26B561 !important;
+}
+
 /* 屏幕宽度大于等于500px的设备 */
+/* update on 2023.4.8: 高度的细致调整已写入JavaScript */
 @media screen and (min-width: 500px) {
     #chuanhu_chatbot {
         height: calc(100vh - 200px);

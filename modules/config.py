@@ -117,6 +117,8 @@ https_proxy = os.environ.get("HTTPS_PROXY", https_proxy)
 os.environ["HTTP_PROXY"] = ""
 os.environ["HTTPS_PROXY"] = ""
 
+local_embedding = config.get("local_embedding", False) # 是否使用本地embedding
+
 @contextmanager
 def retrieve_proxy(proxy=None):
     """

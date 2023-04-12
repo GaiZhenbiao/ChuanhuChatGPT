@@ -41,11 +41,11 @@ class State:
     def switching_api_key(self, func):
         if not hasattr(self, "api_key_queue"):
             return func
-        
+
         def wrapped(*args, **kwargs):
             api_key = self.api_key_queue.get()
-            args = list(args)[1:]
-            ret = func(api_key, *args, **kwargs)
+            args[0].api_key = api_key
+            ret = func(*args, **kwargs)
             self.api_key_queue.put(api_key)
             return ret
 
