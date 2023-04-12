@@ -432,12 +432,11 @@ demo.title = "川虎ChatGPT 🚀"
 
 if __name__ == "__main__":
     reload_javascript()
-    auth = auth_list if authflag else None
     demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
         server_name=server_name,
         server_port=server_port,
         share=share,
-        auth=auth_list,
+        auth=auth_list if authflag else None,
         favicon_path="./assets/favicon.ico",
         inbrowser=not dockerflag, # 禁止在docker下开启inbrowser
     )
