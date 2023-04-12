@@ -62,7 +62,6 @@ if os.environ.get("dockerrun") == "yes":
 
 ## 处理 api-key 以及 允许的用户列表
 my_api_key = config.get("openai_api_key", "") # 在这里输入你的 API 密钥
-my_api_key = os.environ.get("my_api_key", my_api_key)
 
 ## 多账户机制
 multi_api_key = config.get("multi_api_key", False) # 是否开启多账户机制
@@ -81,16 +80,9 @@ api_host = os.environ.get("api_host", config.get("api_host", ""))
 if api_host:
     shared.state.set_api_host(api_host)
 
-if dockerflag:
-    if my_api_key == "empty":
-        logging.error("Please give a api key!")
-        sys.exit(1)
-    # auth
-    username = os.environ.get("USERNAME")
-    password = os.environ.get("PASSWORD")
-    if not (isinstance(username, type(None)) or isinstance(password, type(None))):
-        auth_list.append((os.environ.get("USERNAME"), os.environ.get("PASSWORD")))
-        authflag = True
+if not my_api_key and not shared.state.multi_api_key:
+    logging.error("Please give a api key!")
+    sys.exit(1)
 
 @contextmanager
 def retrieve_openai_api(api_key = None):

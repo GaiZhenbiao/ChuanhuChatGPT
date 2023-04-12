@@ -11,6 +11,5 @@ COPY --from=builder /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
 COPY . /app
 WORKDIR /app
-ENV my_api_key empty
 ENV dockerrun yes
 CMD ["python3", "-u", "ChuanhuChatbot.py", "2>&1", "|", "tee", "/var/log/application.log"]
