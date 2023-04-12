@@ -25,6 +25,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     user_name = gr.State("")
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     user_question = gr.State("")
+    user_api_key = gr.State(my_api_key)
     current_model = gr.State(create_new_model)
 
     topic = gr.State("未命名对话历史记录")
@@ -71,7 +72,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     keyTxt = gr.Textbox(
                         show_label=True,
                         placeholder=f"OpenAI API-key...",
-                        value=hide_middle_chars(my_api_key),
+                        value=hide_middle_chars(user_api_key.value),
                         type="password",
                         visible=not HIDE_MY_KEY,
                         label="API-Key",
@@ -359,11 +360,11 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     two_column.change(update_doc_config, [two_column], None)
 
     # LLM Models
-    keyTxt.change(set_key, [current_model, keyTxt], [status_display]).then(**get_usage_args)
+    keyTxt.change(set_key, [current_model, keyTxt], [user_api_key, status_display]).then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
     single_turn_checkbox.change(set_single_turn, [current_model, single_turn_checkbox], None)
-    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [current_model, status_display, lora_select_dropdown], show_progress=True)
-    lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, keyTxt, temperature_slider, top_p_slider, systemPromptTxt], [current_model, status_display], show_progress=True)
+    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt], [current_model, status_display, lora_select_dropdown], show_progress=True)
+    lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt], [current_model, status_display], show_progress=True)
 
     # Template
     systemPromptTxt.change(set_system_prompt, [current_model, systemPromptTxt], None)
