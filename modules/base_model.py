@@ -164,52 +164,35 @@ class BaseLLMModel:
         status_text = self.token_message()
         return chatbot, status_text
 
-    def predict(
-        self,
-        inputs,
-        chatbot,
-        stream=False,
-        use_websearch=False,
-        files=None,
-        reply_language="中文",
-        should_check_token_count=True,
-    ):  # repetition_penalty, top_k
-        from llama_index.indices.vector_store.base_query import GPTVectorStoreIndexQuery
-        from llama_index.indices.query.schema import QueryBundle
-        from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-        from langchain.chat_models import ChatOpenAI
-        from llama_index import (
-            GPTSimpleVectorIndex,
-            ServiceContext,
-            LangchainEmbedding,
-            OpenAIEmbedding,
-        )
-
-        logging.info(
-            "输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL
-        )
-        if should_check_token_count:
-            yield chatbot + [(inputs, "")], "开始生成回答……"
-        if reply_language == "跟随问题语言（不稳定）":
-            reply_language = "the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch."
+    def prepare_inputs(self, inputs, use_websearch, files, reply_language):
         old_inputs = None
         display_reference = []
         limited_context = False
         if files:
+            from llama_index.indices.vector_store.base_query import GPTVectorStoreIndexQuery
+            from llama_index.indices.query.schema import QueryBundle
+            from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+            from langchain.chat_models import ChatOpenAI
+            from llama_index import (
+                GPTSimpleVectorIndex,
+                ServiceContext,
+                LangchainEmbedding,
+                OpenAIEmbedding,
+            )
             limited_context = True
             old_inputs = inputs
             msg = "加载索引中……（这可能需要几分钟）"
             logging.info(msg)
-            yield chatbot + [(inputs, "")], msg
+            # yield chatbot + [(inputs, "")], msg
             index = construct_index(self.api_key, file_src=files)
             assert index is not None, "索引构建失败"
-            msg = "索引构建完成，获取回答中……"
+            msg = "索引获取成功，生成回答中……"
+            logging.info(msg)
             if local_embedding or self.model_type != ModelType.OpenAI:
                 embed_model = LangchainEmbedding(HuggingFaceEmbeddings())
             else:
                 embed_model = OpenAIEmbedding()
-            logging.info(msg)
-            yield chatbot + [(inputs, "")], msg
+            # yield chatbot + [(inputs, "")], msg
             with retrieve_proxy():
                 prompt_helper = PromptHelper(
                     max_input_size=4096,
@@ -263,6 +246,29 @@ class BaseLLMModel:
             )
         else:
             display_reference = ""
+        return limited_context, old_inputs, display_reference, inputs
+
+    def predict(
+        self,
+        inputs,
+        chatbot,
+        stream=False,
+        use_websearch=False,
+        files=None,
+        reply_language="中文",
+        should_check_token_count=True,
+    ):  # repetition_penalty, top_k
+
+
+        logging.info(
+            "输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL
+        )
+        if should_check_token_count:
+            yield chatbot + [(inputs, "")], "开始生成回答……"
+        if reply_language == "跟随问题语言（不稳定）":
+            reply_language = "the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch."
+
+        limited_context, old_inputs, display_reference, inputs = self.prepare_inputs(inputs=inputs, use_websearch=use_websearch, files=files, reply_language=reply_language)
 
         if (
             self.need_api_key and
