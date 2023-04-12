@@ -297,7 +297,7 @@ def get_geoip():
         logging.warning(f"无法获取IP地址信息。\n{data}")
         if data["reason"] == "RateLimited":
             return (
-                f"获取IP地理位置失败，因为达到了检测IP的速率限制。聊天功能可能仍然可用。"
+                f"您的IP区域：未知。"
             )
         else:
             return f"获取IP地理位置失败。原因：{data['reason']}。你仍然可以使用聊天功能。"
