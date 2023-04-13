@@ -14,3 +14,4 @@ PyPDF2
 pdfplumber
 pandas
 commentjson
+openpyxl
