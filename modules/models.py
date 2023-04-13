@@ -467,10 +467,9 @@ class XMBot_Client(BaseLLMModel):
                     "data_type": "imgbase64",
                     "data": self.image_bytes
                 }
-                # response = requests.post(self.url, json=data)
-                # response = json.loads(response.text)
-                # logging.info(f"图片回复: {response['data']}")
-                logging.info("发送了图片")
+                response = requests.post(self.url, json=data)
+                response = json.loads(response.text)
+                logging.info(f"图片回复: {response['data']}")
         return None, chatbot, None
 
     def get_answer_at_once(self):
