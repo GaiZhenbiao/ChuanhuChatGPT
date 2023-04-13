@@ -22,16 +22,16 @@ HISTORY_DIR = "history"
 TEMPLATES_DIR = "templates"
 
 # 错误信息
-STANDARD_ERROR_MSG = "☹️发生了错误："  # 错误信息的标准前缀
-GENERAL_ERROR_MSG = "获取对话时发生错误，请查看后台日志"
-ERROR_RETRIEVE_MSG = "请检查网络连接，或者API-Key是否有效。"
-CONNECTION_TIMEOUT_MSG = "连接超时，无法获取对话。"  # 连接超时
-READ_TIMEOUT_MSG = "读取超时，无法获取对话。"  # 读取超时
-PROXY_ERROR_MSG = "代理错误，无法获取对话。"  # 代理错误
-SSL_ERROR_PROMPT = "SSL错误，无法获取对话。"  # SSL 错误
-NO_APIKEY_MSG = "API key为空，请检查是否输入正确。"  # API key 长度不足 51 位
-NO_INPUT_MSG = "请输入对话内容。"  # 未输入对话内容
-BILLING_NOT_APPLICABLE_MSG = "账单信息不适用" # 本地运行的模型返回的账单信息
+STANDARD_ERROR_MSG = i18n("☹️发生了错误：")  # 错误信息的标准前缀
+GENERAL_ERROR_MSG = i18n("获取对话时发生错误，请查看后台日志")
+ERROR_RETRIEVE_MSG = i18n("请检查网络连接，或者API-Key是否有效。")
+CONNECTION_TIMEOUT_MSG = i18n("连接超时，无法获取对话。")  # 连接超时
+READ_TIMEOUT_MSG = i18n("读取超时，无法获取对话。")  # 读取超时
+PROXY_ERROR_MSG = i18n("代理错误，无法获取对话。")  # 代理错误
+SSL_ERROR_PROMPT = i18n("SSL错误，无法获取对话。")  # SSL 错误
+NO_APIKEY_MSG = i18n("API key为空，请检查是否输入正确。")  # API key 长度不足 51 位
+NO_INPUT_MSG = i18n("请输入对话内容。")  # 未输入对话内容
+BILLING_NOT_APPLICABLE_MSG = i18n("账单信息不适用") # 本地运行的模型返回的账单信息
 
 TIMEOUT_STREAMING = 60  # 流式对话时的超时时间
 TIMEOUT_ALL = 200  # 非流式对话时的超时时间

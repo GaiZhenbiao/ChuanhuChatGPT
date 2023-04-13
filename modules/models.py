@@ -497,7 +497,7 @@ def get_model(
     top_p=None,
     system_prompt=None,
 ) -> BaseLLMModel:
-    msg = f"模型设置为了： {model_name}"
+    msg = i18n("模型设置为了：") + f" {model_name}"
     model_type = ModelType.get_type(model_name)
     lora_selector_visibility = False
     lora_choices = []
