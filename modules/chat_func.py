@@ -39,41 +39,59 @@ TEMPLATES_DIR = "templates"
 def get_response(
     openai_api_key, system_prompt, history, temperature, top_p, stream, selected_model
 ):
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {openai_api_key}",
-    }
-
-    history = [construct_system(system_prompt), *history]
-
-    payload = {
-        "model": selected_model,
-        "messages": history,  # [{"role": "user", "content": f"{inputs}"}],
-        "temperature": temperature,  # 1.0,
-        "top_p": top_p,  # 1.0,
-        "n": 1,
-        "stream": stream,
-        "presence_penalty": 0,
-        "frequency_penalty": 0,
-    }
-    if stream:
-        timeout = timeout_streaming
-    else:
-        timeout = timeout_all
-
-
-    # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
-    if shared.state.completion_url != COMPLETION_URL:
-        logging.info(f"使用自定义API URL: {shared.state.completion_url}")
-
-    with retrieve_proxy():
+    if selected_model == "ChatGLM-6B":
+        headers = {
+            "Content-Type": "application/json"
+        }
+        history = [construct_system(system_prompt), *history][:-1]
+        prompt = history[-1]['content']
+        history = [x['content'] for x in history[:-1]]
+        history = [[history[0]]] + [history[1: 3]]
+        payload = {
+            "prompt": prompt,
+            "history": history
+        }
         response = requests.post(
-            shared.state.completion_url,
+            shared.state.glm_completion_url,
             headers=headers,
-            json=payload,
-            stream=True,
-            timeout=timeout,
+            json=payload
         )
+    else:
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {openai_api_key}",
+        }
+
+        history = [construct_system(system_prompt), *history]
+
+        payload = {
+            "model": selected_model,
+            "messages": history,  # [{"role": "user", "content": f"{inputs}"}],
+            "temperature": temperature,  # 1.0,
+            "top_p": top_p,  # 1.0,
+            "n": 1,
+            "stream": stream,
+            "presence_penalty": 0,
+            "frequency_penalty": 0,
+        }
+        if stream:
+            timeout = timeout_streaming
+        else:
+            timeout = timeout_all
+
+
+        # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
+        if shared.state.completion_url != COMPLETION_URL:
+            logging.info(f"使用自定义API URL: {shared.state.completion_url}")
+
+        with retrieve_proxy():
+            response = requests.post(
+                shared.state.completion_url,
+                headers=headers,
+                json=payload,
+                stream=True,
+                timeout=timeout,
+            )
 
     return response
 
@@ -236,15 +254,20 @@ def predict_all(
     if fake_input is not None:
         history[-2] = construct_user(fake_input)
     try:
-        content = response["choices"][0]["message"]["content"]
+        if selected_model == "ChatGLM-6B":
+            content = response["response"]
+            total_token_count = 4096
+        else:
+            content = response["choices"][0]["message"]["content"]
+            total_token_count = response["usage"]["total_tokens"]
         history[-1] = construct_assistant(content)
         chatbot[-1] = (chatbot[-1][0], content+display_append)
-        total_token_count = response["usage"]["total_tokens"]
+
         if fake_input is not None:
             all_token_counts[-1] += count_token(construct_assistant(content))
         else:
             all_token_counts[-1] = total_token_count - sum(all_token_counts)
-        status_text = construct_token_message(total_token_count)
+        status_text = construct_token_message([total_token_count])
         return chatbot, history, status_text, all_token_counts
     except KeyError:
         status_text = standard_error_msg + str(response)

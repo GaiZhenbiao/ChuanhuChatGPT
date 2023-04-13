@@ -11,6 +11,9 @@ USAGE_API_URL="https://api.openai.com/dashboard/billing/usage"
 HISTORY_DIR = Path("history")
 TEMPLATES_DIR = "templates"
 
+# ChatGLM 设置
+GLM_COMPLETION_URL = "http://10.101.120.14:8000/"
+
 # 错误信息
 standard_error_msg = "☹️发生了错误："  # 错误信息的标准前缀
 error_retrieve_prompt = "请检查网络连接，或者API-Key是否有效。"  # 获取对话时发生错误
@@ -48,6 +51,7 @@ MODELS = [
     "gpt-4-0314",
     "gpt-4-32k",
     "gpt-4-32k-0314",
+    "ChatGLM-6B"
 ]  # 可选的模型
 
 MODEL_SOFT_TOKEN_LIMIT = {
@@ -74,6 +78,10 @@ MODEL_SOFT_TOKEN_LIMIT = {
     "gpt-4-32k-0314": {
         "streaming": 31000,
         "all": 31000
+    },
+    "ChatGLM-6B": {
+        "streaming": 3500,
+        "all": 3500
     }
 }
 

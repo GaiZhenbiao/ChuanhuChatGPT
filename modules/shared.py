@@ -1,4 +1,4 @@
-from modules.presets import COMPLETION_URL, BALANCE_API_URL, USAGE_API_URL, API_HOST
+from modules.presets import COMPLETION_URL, BALANCE_API_URL, USAGE_API_URL, API_HOST, GLM_COMPLETION_URL
 import os
 import queue
 
@@ -8,6 +8,7 @@ class State:
     completion_url = COMPLETION_URL
     balance_api_url = BALANCE_API_URL
     usage_api_url = USAGE_API_URL
+    glm_completion_url = GLM_COMPLETION_URL
 
     def interrupt(self):
         self.interrupted = True
