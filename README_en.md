@@ -22,22 +22,21 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        Real-time replies / Unlimited conversations / Saving conversations <br />
-        Preset prompts / Chat with files / Web search <br />
+        Real-time replies / Unlimited conversations / Save history / Preset prompts / Chat with files / Web search <br />
         LaTeX rendering / Table rendering / Code highlighting <br />
-        Automatic dark mode / Adaptive web interface / WeChat-like experience <br />
-        Multiple parameters tuning / Multiple API-Key support / Multiple user display <br />
-        Compatible with GPT-4 / Local deployment support for LLMs
+        Auto dark mode / Adaptive web interface / WeChat-like theme <br />
+        Multi-parameters tuning / Multi-API-Key support / Multi-user support <br />
+        Compatible with GPT-4 / Local deployment for LLMs
       </p>
       <a href="https://www.youtube.com/watch?v=MtxS4XZWbJE"><strong>Video Tutorial</strong></a>
         ·
-      <a href="https://www.youtube.com/watch?v=77nw7iimYDE"><strong>2.0 Introduction Video</strong></a>
+      <a href="https://www.youtube.com/watch?v=77nw7iimYDE"><strong>2.0 Introduction</strong></a>
         ·
       <a href="https://www.youtube.com/watch?v=x-O1jjBqgu4"><strong>3.0 Introduction & Tutorial</strong></a>
 	||
       <a href="https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT"><strong>Online trial</strong></a>
       	·
-      <a href="https://huggingface.co/login?next=%2Fspaces%2FJohnSmith9982%2FChuanhuChatGPT%3Fduplicate%3Dtrue"><strong>One-Click Deployment</strong></a>
+      <a href="https://huggingface.co/login?next=%2Fspaces%2FJohnSmith9982%2FChuanhuChatGPT%3Fduplicate%3Dtrue"><strong>One-Click deployment</strong></a>
     </p>
     <p align="center">
       <img alt="Animation Demo" src="https://user-images.githubusercontent.com/51039745/226255695-6b17ff1f-ea8d-464f-b69b-a7b6b68fffe8.gif" />
@@ -48,9 +47,9 @@
 ## Usage Tips
 - To better control the ChatGPT, use System Prompt.
 - To use a Prompt Template, select the Prompt Template Collection file first, and then choose certain prompt from the drop-down menu.
-- To make the chatbot try again if the response is unsatisfactory, use `🔄 Regenerate` button.
+- To try again if the response is unsatisfactory, use `🔄 Regenerate` button.
 - To start a new line in the input box, press <kbd>Shift</kbd> + <kbd>Enter</kbd> keys.
-- To switch between input history, press <kbd>↑</kbd> and <kbd>↓</kbd> key in the input box.
+- To quickly switch between input history, press <kbd>↑</kbd> and <kbd>↓</kbd> key in the input box.
 - To deploy the program onto a server, change the last line of the program to `demo.launch(server_name="0.0.0.0", server_port=<your port number>)`.
 - To get a public shared link, change the last line of the program to `demo.launch(share=True)`. Please be noted that the program must be running in order to be accessed via a public link.
 - To use it in Hugging Face Spaces: It is recommended to **Duplicate Space** and run the program in your own Space for a faster and more secure experience.
@@ -78,7 +77,7 @@ A browser window will open and you will be able to chat with ChatGPT.
 
 ## Troubleshooting
 
-When you encounter problems, before searching for information, you should try manually pulling the latest changes of this project first, then try again. The steps are as follows:
+When you encounter problems, you should try manually pulling the latest changes of this project first. The steps are as follows:
 
 1. Download the latest code archive by clicking on `Download ZIP` on the webpage, or
    ```shell
@@ -93,11 +92,11 @@ When you encounter problems, before searching for information, you should try ma
    pip install gradio --upgrade --force-reinstall
    ```
 
-In general, following these steps can solve the problem.
+Generally, you can solve most problems by following these steps.
 
 If the problem still exists, please refer to this page: [Frequently Asked Questions (FAQ)](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题)
 
-This page lists almost all the possible questions you may ask, including how to configure proxies and what steps to follow when encountering issues. Please read it carefully.
+This page lists almost all the possible problems and solutions. Please read it carefully.
 
 ## More Information
 
