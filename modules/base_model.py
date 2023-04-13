@@ -21,9 +21,7 @@ from .llama_func import *
 from .utils import *
 from . import shared
 from .config import retrieve_proxy
-from .webui_locale import I18nAuto
 
-i18n = I18nAuto()  # internationalization
 
 class ModelType(Enum):
     Unknown = -1

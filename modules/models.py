@@ -24,9 +24,7 @@ from . import shared
 from .config import retrieve_proxy
 from modules import config
 from .base_model import BaseLLMModel, ModelType
-from .webui_locale import I18nAuto
 
-i18n = I18nAuto()  # internationalization
 
 class OpenAIClient(BaseLLMModel):
     def __init__(
