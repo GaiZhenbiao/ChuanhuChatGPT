@@ -4,9 +4,18 @@
 }
 
 #app_title {
+    font-weight: var(--prose-header-text-weight);
+    font-size: var(--text-xxl);
+    line-height: 1.3;
+    text-align: left;
     margin-top: 6px; 
     white-space: nowrap;
 }
+#description {
+    text-align: center;
+    margin:16px 0
+}
+
 /* 覆盖gradio的页脚信息QAQ */
 footer {
     display: none !important;
