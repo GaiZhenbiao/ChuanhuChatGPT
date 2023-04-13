@@ -1,6 +1,6 @@
 import os
 import locale
-import json
+import commentjson as json
 
 class I18nAuto:
     def __init__(self):
