@@ -12,6 +12,7 @@ from modules.presets import *
 from modules.overwrites import *
 from modules.models import get_model
 
+gr.Chatbot._postprocess_chat_messages = postprocess_chat_messages
 gr.Chatbot.postprocess = postprocess
 PromptHelper.compact_text_chunks = compact_text_chunks
 
@@ -320,6 +321,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     submitBtn.click(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
     submitBtn.click(**get_usage_args)
+
+    index_files.change(handle_file_upload, [current_model, index_files, chatbot], [index_files, chatbot, status_display])
 
     emptyBtn.click(
         reset,
