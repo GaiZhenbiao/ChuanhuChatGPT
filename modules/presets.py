@@ -4,6 +4,10 @@ from pathlib import Path
 
 import gradio as gr
 
+from .webui_locale import I18nAuto
+
+i18n = I18nAuto()  # internationalization
+
 CHATGLM_MODEL = None
 CHATGLM_TOKENIZER = None
 LLAMA_MODEL = None
@@ -40,20 +44,14 @@ CONCURRENT_COUNT = 100 # 允许同时使用的用户数量
 SIM_K = 5
 INDEX_QUERY_TEMPRATURE = 1.0
 
-CHUANHU_TITLE = """<h1 align="left">川虎Chat 🚀</h1>"""
-CHUANHU_DESCRIPTION = """\
-<div align="center" style="margin:16px 0">
-
-由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)开发
-
-访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本
-
-</div>
-"""
+CHUANHU_TITLE = i18n("""<h1 align="left">川虎Chat 🚀</h1>""")
+CHUANHU_DESCRIPTION = i18n("""<div align="center" style="margin:16px 0">
+由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)开发<br>
+访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本</div>""")
 
 FOOTER = """<div class="versions">{versions}</div>"""
 
-APPEARANCE_SWITCHER = """
+APPEARANCE_SWITCHER = i18n("""
 <div style="display: flex; justify-content: space-between;">
 <span style="margin-top: 4px !important;">切换亮暗色主题</span>
 <span><label class="apSwitch" for="checkbox">
@@ -61,7 +59,7 @@ APPEARANCE_SWITCHER = """
     <div class="apSlider"></div>
 </label></span>
 </div>
-"""
+""")
 
 SUMMARIZE_PROMPT = "你是谁？我们刚才聊了什么？"  # 总结对话时的 prompt
 

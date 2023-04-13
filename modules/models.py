@@ -24,7 +24,9 @@ from . import shared
 from .config import retrieve_proxy
 from modules import config
 from .base_model import BaseLLMModel, ModelType
+from .webui_locale import I18nAuto
 
+i18n = I18nAuto()  # internationalization
 
 class OpenAIClient(BaseLLMModel):
     def __init__(
@@ -82,9 +84,9 @@ class OpenAIClient(BaseLLMModel):
                 usage_data = self._get_billing_data(usage_url)
             except Exception as e:
                 logging.error(f"获取API使用情况失败:" + str(e))
-                return f"**获取API使用情况失败**"
+                return i18n("**获取API使用情况失败**")
             rounded_usage = "{:.5f}".format(usage_data["total_usage"] / 100)
-            return f"**本月使用金额** \u3000 ${rounded_usage}"
+            return i18n("**本月使用金额** ") + f"\u3000 ${rounded_usage}"
         except requests.exceptions.ConnectTimeout:
             status_text = (
                 STANDARD_ERROR_MSG + CONNECTION_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
@@ -94,7 +96,7 @@ class OpenAIClient(BaseLLMModel):
             status_text = STANDARD_ERROR_MSG + READ_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
             return status_text
         except Exception as e:
-            logging.error(f"获取API使用情况失败:" + str(e))
+            logging.error(i18n("获取API使用情况失败:") + str(e))
             return STANDARD_ERROR_MSG + ERROR_RETRIEVE_MSG
 
     def set_token_upper_limit(self, new_upper_limit):
@@ -103,7 +105,7 @@ class OpenAIClient(BaseLLMModel):
     def set_key(self, new_access_key):
         self.api_key = new_access_key.strip()
         self._refresh_header()
-        msg = f"API密钥更改为了{hide_middle_chars(self.api_key)}"
+        msg = i18n("API密钥更改为了") + f"{hide_middle_chars(self.api_key)}"
         logging.info(msg)
         return msg
 
@@ -194,7 +196,7 @@ class OpenAIClient(BaseLLMModel):
                 try:
                     chunk = json.loads(chunk[6:])
                 except json.JSONDecodeError:
-                    print(f"JSON解析错误,收到的内容: {chunk}")
+                    print(i18n("JSON解析错误,收到的内容: ") + f"{chunk}")
                     error_msg += chunk
                     continue
                 if chunk_length > 6 and "delta" in chunk["choices"][0]:
