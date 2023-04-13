@@ -10,7 +10,7 @@
   </a>
 
   <p align="center">
-    <h3>Provides lightweight and user-friendly web interface for various LLMs including ChatGPT/ChatGLM/LLaMA</h3>
+    <h3>Lightweight and User-friendly Web-UI for LLMs including ChatGPT/ChatGLM/LLaMA</h3>
     <p align="center">
       <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
         <img alt="Tests Passing" src="https://img.shields.io/github/license/GaiZhenbiao/ChuanhuChatGPT" />
@@ -23,19 +23,19 @@
       </a>
       <p>
         Real-time replies / Unlimited conversations / Saving conversations <br />
-        Preset prompts / Answering based on files or web search <br />
+        Preset prompts / Chat with files / Web search <br />
         LaTeX rendering / Table rendering / Code highlighting <br />
-        Automatic dark mode switching / Adaptive web interface / WeChat-like experience <br />
-        Multiple parameters tuning / Multiple API-Key usage support / Multiple user display <br />
+        Automatic dark mode / Adaptive web interface / WeChat-like experience <br />
+        Multiple parameters tuning / Multiple API-Key support / Multiple user display <br />
         Compatible with GPT-4 / Local deployment support for LLMs
       </p>
       <a href="https://www.youtube.com/watch?v=MtxS4XZWbJE"><strong>Video Tutorial</strong></a>
         ·
-      <a href="https://www.youtube.com/watch?v=77nw7iimYDE"><strong>Video Tutorial 2.0</strong></a>
+      <a href="https://www.youtube.com/watch?v=77nw7iimYDE"><strong>2.0 Introduction Video</strong></a>
         ·
-      <a href="https://www.youtube.com/watch?v=x-O1jjBqgu4"><strong>Video Tutorial 3.0</strong></a>
+      <a href="https://www.youtube.com/watch?v=x-O1jjBqgu4"><strong>3.0 Introduction & Tutorial</strong></a>
 	||
-      <a href="https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT"><strong>Online Experience</strong></a>
+      <a href="https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT"><strong>Online trial</strong></a>
       	·
       <a href="https://huggingface.co/login?next=%2Fspaces%2FJohnSmith9982%2FChuanhuChatGPT%3Fduplicate%3Dtrue"><strong>One-Click Deployment</strong></a>
     </p>
@@ -46,7 +46,7 @@
 </div>
 
 ## Usage Tips
-- To set the behavior and the role of the chatbot effectively, use System Prompt.
+- To better control the ChatGPT, use System Prompt.
 - To use a Prompt Template, select the Prompt Template Collection file first, and then choose certain prompt from the drop-down menu.
 - To make the chatbot try again if the response is unsatisfactory, use `🔄 Regenerate` button.
 - To start a new line in the input box, press <kbd>Shift</kbd> + <kbd>Enter</kbd> keys.
