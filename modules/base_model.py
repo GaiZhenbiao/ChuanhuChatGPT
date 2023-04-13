@@ -8,6 +8,7 @@ import os
 import sys
 import requests
 import urllib3
+import traceback
 
 from tqdm import tqdm
 import colorama
@@ -28,6 +29,7 @@ class ModelType(Enum):
     OpenAI = 0
     ChatGLM = 1
     LLaMA = 2
+    XMBot = 3
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -39,6 +41,8 @@ class ModelType(Enum):
             model_type = ModelType.ChatGLM
         elif "llama" in model_name_lower or "alpaca" in model_name_lower:
             model_type = ModelType.LLaMA
+        elif "xmbot" in model_name_lower:
+            model_type = ModelType.XMBot
         else:
             model_type = ModelType.Unknown
         return model_type
@@ -164,10 +168,19 @@ class BaseLLMModel:
         status_text = self.token_message()
         return chatbot, status_text
 
-    def prepare_inputs(self, inputs, use_websearch, files, reply_language):
-        old_inputs = None
+    def handle_file_upload(self, files, chatbot):
+        """if the model accepts multi modal input, implement this function"""
+        status = gr.Markdown.update()
+        if files:
+            construct_index(self.api_key, file_src=files)
+            status = "索引构建完成"
+        return gr.Files.update(), chatbot, status
+
+    def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):
+        fake_inputs = None
         display_append = []
         limited_context = False
+        fake_inputs = real_inputs
         if files:
             from llama_index.indices.vector_store.base_query import GPTVectorStoreIndexQuery
             from llama_index.indices.query.schema import QueryBundle
@@ -180,12 +193,11 @@ class BaseLLMModel:
                 OpenAIEmbedding,
             )
             limited_context = True
-            old_inputs = inputs
-            msg = "加载索引中……（这可能需要几分钟）"
+            msg = "加载索引中……"
             logging.info(msg)
             # yield chatbot + [(inputs, "")], msg
             index = construct_index(self.api_key, file_src=files)
-            assert index is not None, "索引构建失败"
+            assert index is not None, "获取索引失败"
             msg = "索引获取成功，生成回答中……"
             logging.info(msg)
             if local_embedding or self.model_type != ModelType.OpenAI:
@@ -212,22 +224,21 @@ class BaseLLMModel:
                     vector_store=index._vector_store,
                     docstore=index._docstore,
                 )
-                query_bundle = QueryBundle(inputs)
+                query_bundle = QueryBundle(real_inputs)
                 nodes = query_object.retrieve(query_bundle)
             reference_results = [n.node.text for n in nodes]
             reference_results = add_source_numbers(reference_results, use_source=False)
             display_append = add_details(reference_results)
             display_append = "\n\n" + "".join(display_append)
-            inputs = (
+            real_inputs = (
                 replace_today(PROMPT_TEMPLATE)
-                .replace("{query_str}", inputs)
+                .replace("{query_str}", real_inputs)
                 .replace("{context_str}", "\n\n".join(reference_results))
                 .replace("{reply_language}", reply_language)
             )
         elif use_websearch:
             limited_context = True
-            search_results = ddg(inputs, max_results=5)
-            old_inputs = inputs
+            search_results = ddg(real_inputs, max_results=5)
             reference_results = []
             for idx, result in enumerate(search_results):
                 logging.debug(f"搜索结果{idx + 1}：{result}")
@@ -238,15 +249,15 @@ class BaseLLMModel:
                 )
             reference_results = add_source_numbers(reference_results)
             display_append = "\n\n" + "".join(display_append)
-            inputs = (
+            real_inputs = (
                 replace_today(WEBSEARCH_PTOMPT_TEMPLATE)
-                .replace("{query}", inputs)
+                .replace("{query}", real_inputs)
                 .replace("{web_results}", "\n\n".join(reference_results))
                 .replace("{reply_language}", reply_language)
             )
         else:
             display_append = ""
-        return limited_context, old_inputs, display_append, inputs
+        return limited_context, fake_inputs, display_append, real_inputs, chatbot
 
     def predict(
         self,
@@ -259,16 +270,17 @@ class BaseLLMModel:
         should_check_token_count=True,
     ):  # repetition_penalty, top_k
 
-
+        status_text = "开始生成回答……"
         logging.info(
             "输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL
         )
         if should_check_token_count:
-            yield chatbot + [(inputs, "")], "开始生成回答……"
+            yield chatbot + [(inputs, "")], status_text
         if reply_language == "跟随问题语言（不稳定）":
             reply_language = "the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch."
 
-        limited_context, old_inputs, display_append, inputs = self.prepare_inputs(inputs=inputs, use_websearch=use_websearch, files=files, reply_language=reply_language)
+        limited_context, fake_inputs, display_append, inputs, chatbot = self.prepare_inputs(real_inputs=inputs, use_websearch=use_websearch, files=files, reply_language=reply_language, chatbot=chatbot)
+        yield chatbot + [(fake_inputs, "")], status_text
 
         if (
             self.need_api_key and
@@ -303,7 +315,7 @@ class BaseLLMModel:
                 iter = self.stream_next_chatbot(
                     inputs,
                     chatbot,
-                    fake_input=old_inputs,
+                    fake_input=fake_inputs,
                     display_append=display_append,
                 )
                 for chatbot, status_text in iter:
@@ -313,11 +325,12 @@ class BaseLLMModel:
                 chatbot, status_text = self.next_chatbot_at_once(
                     inputs,
                     chatbot,
-                    fake_input=old_inputs,
+                    fake_input=fake_inputs,
                     display_append=display_append,
                 )
                 yield chatbot, status_text
         except Exception as e:
+            traceback.print_exc()
             status_text = STANDARD_ERROR_MSG + str(e)
             yield chatbot, status_text
 
@@ -360,13 +373,16 @@ class BaseLLMModel:
         reply_language="中文",
     ):
         logging.debug("重试中……")
-        if len(self.history) == 0:
+        if len(self.history) > 0:
+            inputs = self.history[-2]["content"]
+            del self.history[-2:]
+            self.all_token_counts.pop()
+        elif len(chatbot) > 0:
+            inputs = chatbot[-1][0]
+        else:
             yield chatbot, f"{STANDARD_ERROR_MSG}上下文是空的"
             return
 
-        inputs = self.history[-2]["content"]
-        del self.history[-2:]
-        self.all_token_counts.pop()
         iter = self.predict(
             inputs,
             chatbot,

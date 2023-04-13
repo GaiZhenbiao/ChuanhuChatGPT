@@ -16,6 +16,7 @@ from duckduckgo_search import ddg
 import asyncio
 import aiohttp
 from enum import Enum
+import uuid
 
 from .presets import *
 from .llama_func import *
@@ -75,7 +76,8 @@ class OpenAIClient(BaseLLMModel):
     def billing_info(self):
         try:
             curr_time = datetime.datetime.now()
-            last_day_of_month = get_last_day_of_month(curr_time).strftime("%Y-%m-%d")
+            last_day_of_month = get_last_day_of_month(
+                curr_time).strftime("%Y-%m-%d")
             first_day_of_month = curr_time.replace(day=1).strftime("%Y-%m-%d")
             usage_url = f"{shared.state.usage_api_url}?start_date={first_day_of_month}&end_date={last_day_of_month}"
             try:
@@ -112,7 +114,8 @@ class OpenAIClient(BaseLLMModel):
         openai_api_key = self.api_key
         system_prompt = self.system_prompt
         history = self.history
-        logging.debug(colorama.Fore.YELLOW + f"{history}" + colorama.Fore.RESET)
+        logging.debug(colorama.Fore.YELLOW +
+                      f"{history}" + colorama.Fore.RESET)
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {openai_api_key}",
@@ -217,7 +220,7 @@ class ChatGLM_Client(BaseLLMModel):
         global CHATGLM_TOKENIZER, CHATGLM_MODEL
         if CHATGLM_TOKENIZER is None or CHATGLM_MODEL is None:
             system_name = platform.system()
-            model_path=None
+            model_path = None
             if os.path.exists("models"):
                 model_dirs = os.listdir("models")
                 if model_name in model_dirs:
@@ -257,16 +260,19 @@ class ChatGLM_Client(BaseLLMModel):
     def _get_glm_style_input(self):
         history = [x["content"] for x in self.history]
         query = history.pop()
-        logging.debug(colorama.Fore.YELLOW + f"{history}" + colorama.Fore.RESET)
+        logging.debug(colorama.Fore.YELLOW +
+                      f"{history}" + colorama.Fore.RESET)
         assert (
             len(history) % 2 == 0
         ), f"History should be even length. current history is: {history}"
-        history = [[history[i], history[i + 1]] for i in range(0, len(history), 2)]
+        history = [[history[i], history[i + 1]]
+                   for i in range(0, len(history), 2)]
         return history, query
 
     def get_answer_at_once(self):
         history, query = self._get_glm_style_input()
-        response, _ = CHATGLM_MODEL.chat(CHATGLM_TOKENIZER, query, history=history)
+        response, _ = CHATGLM_MODEL.chat(
+            CHATGLM_TOKENIZER, query, history=history)
         return response, len(response)
 
     def get_answer_stream_iter(self):
@@ -315,8 +321,10 @@ class LLaMA_Client(BaseLLMModel):
                 # raise Exception(f"models目录下没有这个模型: {model_name}")
             if lora_path is not None:
                 lora_path = f"lora/{lora_path}"
-            model_args = ModelArguments(model_name_or_path=model_source, lora_model_path=lora_path, model_type=None, config_overrides=None, config_name=None, tokenizer_name=None, cache_dir=None, use_fast_tokenizer=True, model_revision='main', use_auth_token=False, torch_dtype=None, use_lora=False, lora_r=8, lora_alpha=32, lora_dropout=0.1, use_ram_optimized_load=True)
-            pipeline_args = InferencerArguments(local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
+            model_args = ModelArguments(model_name_or_path=model_source, lora_model_path=lora_path, model_type=None, config_overrides=None, config_name=None, tokenizer_name=None, cache_dir=None,
+                                        use_fast_tokenizer=True, model_revision='main', use_auth_token=False, torch_dtype=None, use_lora=False, lora_r=8, lora_alpha=32, lora_dropout=0.1, use_ram_optimized_load=True)
+            pipeline_args = InferencerArguments(
+                local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
 
             with open(pipeline_args.deepspeed, "r") as f:
                 ds_config = json.load(f)
@@ -340,7 +348,6 @@ class LLaMA_Client(BaseLLMModel):
         #     "You are a helpful assistant who follows the given instructions"
         #     " unconditionally."
         # )
-
 
     def _get_llama_style_input(self):
         history = []
@@ -379,7 +386,8 @@ class LLaMA_Client(BaseLLMModel):
         step = 1
         for _ in range(0, self.max_generation_token, step):
             input_dataset = self.dataset.from_dict(
-                {"type": "text_only", "instances": [{"text": context + partial_text}]}
+                {"type": "text_only", "instances": [
+                    {"text": context + partial_text}]}
             )
             output_dataset = LLAMA_INFERENCER.inference(
                 model=LLAMA_MODEL,
@@ -392,6 +400,93 @@ class LLaMA_Client(BaseLLMModel):
                 break
             partial_text += response
             yield partial_text
+
+
+class XMBot_Client(BaseLLMModel):
+    def __init__(self, api_key):
+        super().__init__(model_name="xmbot")
+        self.api_key = api_key
+        self.session_id = None
+        self.reset()
+        self.image_bytes = None
+        self.image_path = None
+        self.xm_history = []
+        self.url = "https://xmbot.net/web"
+
+    def reset(self):
+        self.session_id = str(uuid.uuid4())
+        return [], "已重置"
+
+    def try_read_image(self, filepath):
+        import base64
+
+        def is_image_file(filepath):
+            # 判断文件是否为图片
+            valid_image_extensions = [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff"]
+            file_extension = os.path.splitext(filepath)[1].lower()
+            return file_extension in valid_image_extensions
+
+        def read_image_as_bytes(filepath):
+            # 读取图片文件并返回比特流
+            with open(filepath, "rb") as f:
+                image_bytes = f.read()
+            return image_bytes
+
+        if is_image_file(filepath):
+            logging.info(f"读取图片文件: {filepath}")
+            image_bytes = read_image_as_bytes(filepath)
+            base64_encoded_image = base64.b64encode(image_bytes).decode()
+            self.image_bytes = base64_encoded_image
+            self.image_path = filepath
+        else:
+            self.image_bytes = None
+            self.image_path = None
+
+    def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):
+        fake_inputs = real_inputs
+        display_append = ""
+        limited_context = False
+        return limited_context, fake_inputs, display_append, real_inputs, chatbot
+
+    def handle_file_upload(self, files, chatbot):
+        """if the model accepts multi modal input, implement this function"""
+        if files:
+            for file in files:
+                if file.name:
+                    logging.info(f"尝试读取图像: {file.name}")
+                    self.try_read_image(file.name)
+            if self.image_path is not None:
+                chatbot = chatbot + [((self.image_path,), None)]
+            if self.image_bytes is not None:
+                logging.info("使用图片作为输入")
+                conv_id = str(uuid.uuid4())
+                data = {
+                    "user_id": self.api_key,
+                    "session_id": self.session_id,
+                    "uuid": conv_id,
+                    "data_type": "imgbase64",
+                    "data": self.image_bytes
+                }
+                response = requests.post(self.url, json=data)
+                response = json.loads(response.text)
+                logging.info(f"图片回复: {response['data']}")
+        return None, chatbot, None
+
+    def get_answer_at_once(self):
+        question = self.history[-1]["content"]
+        conv_id = str(uuid.uuid4())
+        data = {
+            "user_id": self.api_key,
+            "session_id": self.session_id,
+            "uuid": conv_id,
+            "data_type": "text",
+            "data": question
+        }
+        response = requests.post(self.url, json=data)
+        response = json.loads(response.text)
+        return response["data"], len(response["data"])
+
+
 
 
 def get_model(
@@ -429,7 +524,8 @@ def get_model(
             logging.info(msg)
             lora_selector_visibility = True
             if os.path.isdir("lora"):
-                lora_choices = get_file_names("lora", plain=True, filetypes=[""])
+                lora_choices = get_file_names(
+                    "lora", plain=True, filetypes=[""])
             lora_choices = ["No LoRA"] + lora_choices
         elif model_type == ModelType.LLaMA and lora_model_path != "":
             logging.info(f"正在加载LLaMA模型: {model_name} + {lora_model_path}")
@@ -440,6 +536,8 @@ def get_model(
             else:
                 msg += f" + {lora_model_path}"
             model = LLaMA_Client(model_name, lora_model_path)
+        elif model_type == ModelType.XMBot:
+            model = XMBot_Client(api_key=access_key)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)

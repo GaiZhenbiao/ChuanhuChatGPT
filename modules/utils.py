@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     class DataframeData(TypedDict):
         headers: List[str]
         data: List[List[str | int | bool]]
-        
+
 def predict(current_model, *args):
     iter = current_model.predict(*args)
     for i in iter:
@@ -109,6 +109,9 @@ def set_user_identifier(current_model, *args):
 
 def set_single_turn(current_model, *args):
     current_model.set_single_turn(*args)
+
+def handle_file_upload(current_model, *args):
+    return current_model.handle_file_upload(*args)
 
 
 def count_token(message):
@@ -197,10 +200,13 @@ def convert_asis(userinput):
 
 
 def detect_converted_mark(userinput):
-    if userinput.endswith(ALREADY_CONVERTED_MARK):
+    try:
+        if userinput.endswith(ALREADY_CONVERTED_MARK):
+            return True
+        else:
+            return False
+    except:
         return True
-    else:
-        return False
 
 
 def detect_language(code):

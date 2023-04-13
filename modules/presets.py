@@ -31,7 +31,7 @@ PROXY_ERROR_MSG = "代理错误，无法获取对话。"  # 代理错误
 SSL_ERROR_PROMPT = "SSL错误，无法获取对话。"  # SSL 错误
 NO_APIKEY_MSG = "API key为空，请检查是否输入正确。"  # API key 长度不足 51 位
 NO_INPUT_MSG = "请输入对话内容。"  # 未输入对话内容
-BILLING_NOT_APPLICABLE_MSG = "模型本地运行中" # 本地运行的模型返回的账单信息
+BILLING_NOT_APPLICABLE_MSG = "账单信息不适用" # 本地运行的模型返回的账单信息
 
 TIMEOUT_STREAMING = 60  # 流式对话时的超时时间
 TIMEOUT_ALL = 200  # 非流式对话时的超时时间
@@ -60,13 +60,17 @@ APPEARANCE_SWITCHER = """
 
 SUMMARIZE_PROMPT = "你是谁？我们刚才聊了什么？"  # 总结对话时的 prompt
 
-MODELS = [
+ONLINE_MODELS = [
     "gpt-3.5-turbo",
     "gpt-3.5-turbo-0301",
     "gpt-4",
     "gpt-4-0314",
     "gpt-4-32k",
     "gpt-4-32k-0314",
+    "xmbot",
+]
+
+LOCAL_MODELS = [
     "chatglm-6b",
     "chatglm-6b-int4",
     "chatglm-6b-int4-qe",
@@ -77,8 +81,15 @@ MODELS = [
     "llama-13b-hf-int4",
     "llama-30b-hf",
     "llama-30b-hf-int4",
-    "llama-65b-hf",
-]  # 可选的模型
+    "llama-65b-hf"
+]
+
+if os.environ.get('HIDE_LOCAL_MODELS', 'false') == 'true':
+    MODELS = ONLINE_MODELS
+else:
+    MODELS = ONLINE_MODELS + LOCAL_MODELS
+
+DEFAULT_MODEL = 0
 
 os.makedirs("models", exist_ok=True)
 os.makedirs("lora", exist_ok=True)
@@ -87,8 +98,6 @@ for dir_name in os.listdir("models"):
     if os.path.isdir(os.path.join("models", dir_name)):
         if dir_name not in MODELS:
             MODELS.append(dir_name)
-
-DEFAULT_MODEL = 0  # 默认的模型在MODELS中的序号，从0开始数
 
 MODEL_TOKEN_LIMIT = {
     "gpt-3.5-turbo": 4096,

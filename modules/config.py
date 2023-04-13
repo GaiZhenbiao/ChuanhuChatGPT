@@ -6,6 +6,7 @@ import sys
 import commentjson as json
 
 from . import shared
+from . import presets
 
 
 __all__ = [
@@ -156,5 +157,12 @@ if server_port is None:
         server_port = 7860
 
 assert server_port is None or type(server_port) == int, "要求port设置为int类型"
+
+# 设置默认model
+default_model = config.get("default_model", "")
+try:
+    presets.DEFAULT_MODEL = presets.MODELS.index(default_model)
+except ValueError:
+    pass
 
 share = config.get("share", False)
