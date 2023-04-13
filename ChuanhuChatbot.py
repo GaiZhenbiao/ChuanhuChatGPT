@@ -166,7 +166,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                     downloadFile = gr.File(interactive=True)
 
                 with gr.Tab(label=i18n("高级")):
-                    gr.Markdown("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置")
+                    gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置"))
                     gr.HTML(APPEARANCE_SWITCHER, elem_classes="insert_block")
                     with gr.Accordion(i18n("参数"), open=False):
                         temperature_slider = gr.Slider(
@@ -438,7 +438,7 @@ logging.info(
     + colorama.Style.RESET_ALL
 )
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
-demo.title = i18n("川虎ChatGPT 🚀")
+demo.title = i18n("川虎Chat 🚀")
 
 if __name__ == "__main__":
     reload_javascript()
