@@ -1,9 +1,7 @@
 # -*- coding:utf-8 -*-
 import os
 from pathlib import Path
-
 import gradio as gr
-
 from .webui_locale import I18nAuto
 
 i18n = I18nAuto()  # internationalization
