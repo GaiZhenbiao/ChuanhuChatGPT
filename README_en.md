@@ -1,3 +1,8 @@
+<div align="right">
+  <!-- Language: -->
+  <a title="Chinese" href="README.md">简体中文</a> | English
+</div>
+
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
 <div align="center">
   <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT">
