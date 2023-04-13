@@ -10,8 +10,7 @@
   </a>
 
   <p align="center">
-    <h3>Provides a lightweight and easy-to-use web interface for multiple LLMs such as ChatGPT/ChatGLM/LLaMA
-</h3>
+    <h3>Provides lightweight and user-friendly web interface for various LLMs including ChatGPT/ChatGLM/LLaMA</h3>
     <p align="center">
       <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
         <img alt="Tests Passing" src="https://img.shields.io/github/license/GaiZhenbiao/ChuanhuChatGPT" />
@@ -23,17 +22,22 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        Real-time replies / Unlimited conversations / Saved conversations / Preset prompts / Online searching / Answering based on files <br />
-        Render LaTeX / Render tables / Code highlighting / Automatic light/dark mode switching / Adaptive interface / “Clean & Simplicity” experience <br />
-        Customaizable api-Host / Adjustable multiple parameters / Balanced load distribution  for multiple API Key / multiple user display / Compatible with GPT-4 / Supports local deployment of LLMs
+        Real-time replies / Unlimited conversations / Saving conversations <br />
+        Preset prompts / Answering based on files or web search <br />
+        LaTeX rendering / Table rendering / Code highlighting <br />
+        Automatic dark mode switching / Adaptive web interface / WeChat-like experience <br />
+        Multiple parameters tuning / Multiple API-Key usage support / Multiple user display <br />
+        Compatible with GPT-4 / Local deployment support for LLMs
       </p>
-      <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>Video tutorials</strong></a>
+      <a href="https://www.youtube.com/watch?v=MtxS4XZWbJE"><strong>Video Tutorial</strong></a>
         ·
-      <a href="https://www.bilibili.com/video/BV1184y1w7aP"><strong>Video tutorials 2.0</strong></a>
+      <a href="https://www.youtube.com/watch?v=77nw7iimYDE"><strong>Video Tutorial 2.0</strong></a>
+        ·
+      <a href="https://www.youtube.com/watch?v=x-O1jjBqgu4"><strong>Video Tutorial 3.0</strong></a>
 	||
-      <a href="https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT"><strong>Online experience</strong></a>
+      <a href="https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT"><strong>Online Experience</strong></a>
       	·
-      <a href="https://huggingface.co/login?next=%2Fspaces%2FJohnSmith9982%2FChuanhuChatGPT%3Fduplicate%3Dtrue"><strong>One-click deployment</strong></a>
+      <a href="https://huggingface.co/login?next=%2Fspaces%2FJohnSmith9982%2FChuanhuChatGPT%3Fduplicate%3Dtrue"><strong>One-Click Deployment</strong></a>
     </p>
     <p align="center">
       <img alt="Animation Demo" src="https://user-images.githubusercontent.com/51039745/226255695-6b17ff1f-ea8d-464f-b69b-a7b6b68fffe8.gif" />
@@ -41,57 +45,69 @@
   </p>
 </div>
 
-## Table of Contents
-|[Usage tips](#使用技巧)|[Installation](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程)|[Frequently  asked questions](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题)| [Buy the author a coke 🥤](#捐款) |
-|  ----  | ----  | ----  | --- |
-
-## Tips for Usage
-- Using System Prompt can effectively set the premise conditions.
-- When using the Prompt template function, select the Prompt template collection file, and then choose the desired prompt from the drop-down menu.
-- If the answer is unsatisfactory, you can use the `Regenerate` button to try again.
-- The input box supports line breaks, press `Shift + Enter` to use.
-- You can use the up and down arrows in the input box to switch between input history.
-- Deploying to a server: Change the last line of the program to `demo.launch(server_name="0.0.0.0", server_port=<your port number>)`.
-- To get a public link: Change the last line of the program to `demo.launch(share=True)`. Note that the program must be running before accessing the public link.
-- Using on Hugging Face: It is recommended to **copy the Space** in the upper right corner before use, so that the app may respond faster.
+## Usage Tips
+- To set the behavior and the role of the chatbot effectively, use System Prompt.
+- To use a Prompt Template, select the Prompt Template Collection file first, and then choose certain prompt from the drop-down menu.
+- To make the chatbot try again if the response is unsatisfactory, use `🔄 Regenerate` button.
+- To start a new line in the input box, press <kbd>Shift</kbd> + <kbd>Enter</kbd> keys.
+- To switch between input history, press <kbd>↑</kbd> and <kbd>↓</kbd> key in the input box.
+- To deploy the program onto a server, change the last line of the program to `demo.launch(server_name="0.0.0.0", server_port=<your port number>)`.
+- To get a public shared link, change the last line of the program to `demo.launch(share=True)`. Please be noted that the program must be running in order to be accessed via a public link.
+- To use it in Hugging Face Spaces: It is recommended to **Duplicate Space** and run the program in your own Space for a faster and more secure experience.
 
 
-## Installation and Usage Instructions
+## Installation
 
-Please check the [wiki page](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程).
+```shell
+git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git
+cd ChuanhuChatGPT
+pip install -r requirements.txt
+```
+
+Then make a copy of `config_example.json`, rename it to `config.json`, and then fill in your API-Key and other settings in the file.
+
+```shell
+python ChuanhuChatbot.py
+```
+
+A browser window will open and you will be able to chat with ChatGPT.
+
+> **Note**
+> 
+> Please check our [wiki page](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) for detailed instructions.
 
 ## Troubleshooting
 
-Before looking up relevant information for various problems, you can try manually pulling the latest changes for this project and updating Gradio, then try again. The steps are as follows:
+When you encounter problems, before searching for information, you should try manually pulling the latest changes of this project first, then try again. The steps are as follows:
 
-1. Click on Download ZIP on the webpage to download the latest code, or
+1. Download the latest code archive by clicking on `Download ZIP` on the webpage, or
    ```shell
    git pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f
    ```
 2. Try installing the dependencies again (as this project may have introduced new dependencies)
    ```
    pip install -r requirements.txt
-   pip install -r requirements_advanced.txt
    ```
-3. Update gradio
+3. Update Gradio
    ```
    pip install gradio --upgrade --force-reinstall
    ```
 
-Usually, this can solve the problem.
+In general, following these steps can solve the problem.
 
 If the problem still exists, please refer to this page: [Frequently Asked Questions (FAQ)](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题)
 
-This page lists almost all the various issues you may encounter, including how to configure proxies and the steps you should take when encountering issues. Please be sure to read it carefully.
+This page lists almost all the possible questions you may ask, including how to configure proxies and what steps to follow when encountering issues. Please read it carefully.
 
-## More information
+## More Information
 
-If you need more information, please see our [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki)：
+More information could be found in our [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki):
 
-- [Want to make a contribution?](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
-- [Project update status?](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
-- [Secondary development license?](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
-- [How to cite the project?](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
+- [How to make a contribution](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
+- [How to cite the project](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
+- [Project changelog](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
+- [Project license](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
+
 
 ## Starchart
 
@@ -103,8 +119,8 @@ If you need more information, please see our [wiki](https://github.com/GaiZhenbi
   <img src="https://contrib.rocks/image?repo=GaiZhenbiao/ChuanhuChatGPT" />
 </a>
 
-## Donation
+## Sponsor
 
-🐯 If you find this software helpful, please feel free to buy the author a coke or a cup of coffee~
+🐯 If you find this project helpful, feel free to buy me a coke or a cup of coffee~
 
 <img width="250" alt="image" src="https://user-images.githubusercontent.com/51039745/226920291-e8ec0b0a-400f-4c20-ac13-dafac0c3aeeb.JPG">
