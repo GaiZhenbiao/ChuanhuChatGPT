@@ -1,4 +1,4 @@
-gradio
+gradio==3.25.0
 mdtex2html
 pypinyin
 tiktoken
