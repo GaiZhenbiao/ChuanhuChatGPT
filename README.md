@@ -9,7 +9,7 @@
     <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
   </a>
 
-  <p align="center">
+<p align="center">
     <h3>为ChatGPT/ChatGLM/LLaMA等多种LLM提供了一个轻快好用的Web图形界面</h3>
     <p align="center">
       <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
@@ -22,7 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        实时回复 / 无限对话 / 保存对话 / 预设Prompt集 / 联网搜索 / 根据文件回答 <br />
+        流式传输 / 无限对话 / 保存对话 / 预设Prompt集 / 联网搜索 / 根据文件回答 <br />
         渲染LaTeX / 渲染表格 / 代码高亮 / 自动亮暗色切换 / 自适应界面 / “小而美”的体验 <br />
         自定义api-Host / 多参数可调 / 多API Key均衡负载 / 多用户显示 / 适配GPT-4 / 支持本地部署LLM
       </p>
@@ -41,21 +41,21 @@
 </div>
 
 ## 目录
-|[使用技巧](#使用技巧)|[安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程)|[常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题)| [给作者买可乐🥤](#捐款) |
-|  ----  | ----  | ----  | --- |
+
+| [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) |
+| ------------------ | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------- |
 
 ## 使用技巧
 
 - 使用System Prompt可以很有效地设定前提条件。
 - 使用Prompt模板功能时，选择Prompt模板集合文件，然后从下拉菜单中选择想要的prompt。
-- 如果回答不满意，可以使用`重新生成`按钮再试一次
-- 对于长对话，可以使用`优化Tokens`按钮减少Tokens占用。
-- 输入框支持换行，按`shift enter`即可。
+- 如果回答不满意，可以使用 `重新生成`按钮再试一次
+- 对于长对话，可以使用 `优化Tokens`按钮减少Tokens占用。
+- 输入框支持换行，按 `shift enter`即可。
 - 可以在输入框按上下箭头在输入历史之间切换
-- 部署到服务器：将程序最后一句改成`demo.launch(server_name="0.0.0.0", server_port=<你的端口号>)`。
-- 获取公共链接：将程序最后一句改成`demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问。
+- 部署到服务器：将程序最后一句改成 `demo.launch(server_name="0.0.0.0", server_port=<你的端口号>)`。
+- 获取公共链接：将程序最后一句改成 `demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问。
 - 在Hugging Face上使用：建议在右上角 **复制Space** 再使用，这样App反应可能会快一点。
-
 
 ## 安装方式、使用方式
 

@@ -9,7 +9,7 @@
     <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
   </a>
 
-  <p align="center">
+<p align="center">
     <h3>Lightweight and User-friendly Web-UI for LLMs including ChatGPT/ChatGLM/LLaMA</h3>
     <p align="center">
       <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
@@ -22,7 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        Real-time replies / Unlimited conversations / Save history / Preset prompts / Chat with files / Web search <br />
+        Streaming / Unlimited conversations / Save history / Preset prompts / Chat with files / Web search <br />
         LaTeX rendering / Table rendering / Code highlighting <br />
         Auto dark mode / Adaptive web interface / WeChat-like theme <br />
         Multi-parameters tuning / Multi-API-Key support / Multi-user support <br />
@@ -45,11 +45,12 @@
 </div>
 
 ## Usage Tips
+
 - To better control the ChatGPT, use System Prompt.
 - To use a Prompt Template, select the Prompt Template Collection file first, and then choose certain prompt from the drop-down menu.
 - To try again if the response is unsatisfactory, use `🔄 Regenerate` button.
-- To start a new line in the input box, press <kbd>Shift</kbd> + <kbd>Enter</kbd> keys.
-- To quickly switch between input history, press <kbd>↑</kbd> and <kbd>↓</kbd> key in the input box.
+- To start a new line in the input box, press `<kbd>`Shift`</kbd>` + `<kbd>`Enter`</kbd>` keys.
+- To quickly switch between input history, press `<kbd>`↑`</kbd>` and `<kbd>`↓`</kbd>` key in the input box.
 - To deploy the program onto a server, change the last line of the program to `demo.launch(server_name="0.0.0.0", server_port=<your port number>)`.
 - To get a public shared link, change the last line of the program to `demo.launch(share=True)`. Please be noted that the program must be running in order to be accessed via a public link.
 - To use it in Hugging Face Spaces: It is recommended to **Duplicate Space** and run the program in your own Space for a faster and more secure experience.
@@ -71,7 +72,7 @@ python ChuanhuChatbot.py
 A browser window will open and you will be able to chat with ChatGPT.
 
 > **Note**
-> 
+>
 > Please check our [wiki page](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) for detailed instructions.
 
 ## Troubleshooting
