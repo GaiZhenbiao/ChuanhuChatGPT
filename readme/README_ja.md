@@ -1,6 +1,6 @@
 <div align="right">
   <!-- Language: -->
-  <a title="Chinese" href="README.md">简体中文</a> | <a title="English" href="README_en.md">English</a> | 日本語
+  <a title="Chinese" href="../README.md">简体中文</a> | <a title="English" href="README_en.md">English</a> | 日本語
 </div>
 
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
@@ -9,7 +9,7 @@
     <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
   </a>
 
-  <p align="center">
+<p align="center">
     <h3>ChatGPT/ChatGLM/LLaMAなどのLLMのための軽量でユーザーフレンドリーなWeb-UI</h3>
     <p align="center">
       <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
@@ -45,10 +45,11 @@
 </div>
 
 ## 使う上でのTips
+
 - ChatGPTをより適切に制御するために、システムプロンプトを使用できます。
 - プロンプトテンプレートを使用するには、プロンプトテンプレートコレクションを選択し、ドロップダウンメニューから特定のプロンプトを選択。回答が不十分な場合は、`🔄再生成`ボタンを使って再試行します。
-- 入力ボックスで改行するには、<kbd>Shift</kbd> + <kbd>Enter</kbd>キーを押してください。
-- 入力履歴を素早く切り替えるには、入力ボックスで<kbd>↑</kbd>と<kbd>↓</kbd>キーを押す。
+- 入力ボックスで改行するには、`<kbd>`Shift `</kbd>` + `<kbd>`Enter `</kbd>`キーを押してください。
+- 入力履歴を素早く切り替えるには、入力ボックスで `<kbd>`↑`</kbd>`と `<kbd>`↓`</kbd>`キーを押す。
 - プログラムをサーバにデプロイするには、プログラムの最終行を `demo.launch(server_name="0.0.0.0", server_port=<your port number>)`に変更します。
 - 共有リンクを取得するには、プログラムの最後の行を `demo.launch(share=True)` に変更してください。なお、公開リンクでアクセスするためには、プログラムが実行されている必要があることに注意してください。
 - Hugging Face Spacesで使用する場合： より速く、より安全に利用するために、**Duplicate Space**を使用し、自分のスペースでプログラムを実行することをお勧めします。
@@ -61,7 +62,7 @@ cd ChuanhuChatGPT
 pip install -r requirements.txt
 ```
 
-次に`config_example.json`をコピーして`config.json`にリネームし、そのファイルにAPI-Keyなどの設定を記入する。
+次に `config_example.json`をコピーして `config.json`にリネームし、そのファイルにAPI-Keyなどの設定を記入する。
 
 ```shell
 python ChuanhuChatbot.py
@@ -70,9 +71,8 @@ python ChuanhuChatbot.py
 ブラウザのウィンドウが開き、ChatGPTとチャットできるようになります。
 
 > **Note**
-> 
+>
 > 詳しい手順は[wikiページ](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程)をご確認ください。
-
 
 ## トラブルシューティング
 
@@ -120,5 +120,7 @@ python ChuanhuChatbot.py
 ## Sponsor
 
 🐯 この企画が役に立ったら、遠慮なくコーラかコーヒーでもおごってください〜。
+
+<a href="https://www.buymeacoffee.com/ChuanhuChat" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=ChuanhuChat&button_colour=1aae59&font_colour=ffffff&font_family=Poppins&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy Me A Coffee" width="250"></a>
 
 <img width="250" alt="image" src="https://user-images.githubusercontent.com/51039745/226920291-e8ec0b0a-400f-4c20-ac13-dafac0c3aeeb.JPG">
