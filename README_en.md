@@ -54,7 +54,6 @@
 - To get a public shared link, change the last line of the program to `demo.launch(share=True)`. Please be noted that the program must be running in order to be accessed via a public link.
 - To use it in Hugging Face Spaces: It is recommended to **Duplicate Space** and run the program in your own Space for a faster and more secure experience.
 
-
 ## Installation
 
 ```shell
@@ -102,11 +101,11 @@ This page lists almost all the possible problems and solutions. Please read it c
 
 More information could be found in our [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki):
 
+- [How to contribute a translation](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/Localization)
 - [How to make a contribution](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
 - [How to cite the project](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
 - [Project changelog](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
 - [Project license](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
-
 
 ## Starchart
 
