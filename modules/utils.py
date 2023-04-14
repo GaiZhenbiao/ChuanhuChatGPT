@@ -379,16 +379,16 @@ def get_geoip():
         logging.warning(f"无法获取IP地址信息。\n{data}")
         if data["reason"] == "RateLimited":
             return (
-                f"您的IP区域：未知。"
+                i18n("您的IP区域：未知。")
             )
         else:
-            return f"获取IP地理位置失败。原因：{data['reason']}。你仍然可以使用聊天功能。"
+            return i18n("获取IP地理位置失败。原因：") + f"{data['reason']}" + i18n("。你仍然可以使用聊天功能。")
     else:
         country = data["country_name"]
         if country == "China":
             text = "**您的IP区域：中国。请立即检查代理设置，在不受支持的地区使用API可能导致账号被封禁。**"
         else:
-            text = f"您的IP区域：{country}。"
+            text = i18n("您的IP区域：") + f"{country}。"
         logging.info(text)
         return text
 

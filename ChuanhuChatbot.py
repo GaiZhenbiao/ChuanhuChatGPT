@@ -12,6 +12,7 @@ from modules.presets import *
 from modules.overwrites import *
 from modules.models import get_model
 
+
 gr.Chatbot._postprocess_chat_messages = postprocess_chat_messages
 gr.Chatbot.postprocess = postprocess
 PromptHelper.compact_text_chunks = compact_text_chunks
@@ -29,7 +30,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     user_api_key = gr.State(my_api_key)
     current_model = gr.State(create_new_model)
 
-    topic = gr.State("未命名对话历史记录")
+    topic = gr.State(i18n("未命名对话历史记录"))
 
     with gr.Row():
         gr.HTML(CHUANHU_TITLE, elem_id="app_title")
@@ -54,22 +55,22 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                 with gr.Column(min_width=225, scale=12):
                     user_input = gr.Textbox(
                         elem_id="user_input_tb",
-                        show_label=False, placeholder="在这里输入"
+                        show_label=False, placeholder=i18n("在这里输入")
                     ).style(container=False)
                 with gr.Column(min_width=42, scale=1):
                     submitBtn = gr.Button(value="", variant="primary", elem_id="submit_btn")
                     cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel_btn")
             with gr.Row():
                 emptyBtn = gr.Button(
-                    "🧹 新的对话",
+                    i18n("🧹 新的对话"),
                 )
-                retryBtn = gr.Button("🔄 重新生成")
-                delFirstBtn = gr.Button("🗑️ 删除最旧对话")
-                delLastBtn = gr.Button("🗑️ 删除最新对话")
+                retryBtn = gr.Button(i18n("🔄 重新生成"))
+                delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
+                delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"))
 
         with gr.Column():
             with gr.Column(min_width=50, scale=1):
-                with gr.Tab(label="模型"):
+                with gr.Tab(label=i18n("模型")):
                     keyTxt = gr.Textbox(
                         show_label=True,
                         placeholder=f"OpenAI API-key...",
@@ -79,95 +80,95 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         label="API-Key",
                     )
                     if multi_api_key:
-                        usageTxt = gr.Markdown("多账号模式已开启，无需输入key，可直接开始对话", elem_id="usage_display", elem_classes="insert_block")
+                        usageTxt = gr.Markdown(i18n("多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage_display", elem_classes="insert_block")
                     else:
-                        usageTxt = gr.Markdown("**发送消息** 或 **提交key** 以显示额度", elem_id="usage_display", elem_classes="insert_block")
+                        usageTxt = gr.Markdown(i18n("**发送消息** 或 **提交key** 以显示额度"), elem_id="usage_display", elem_classes="insert_block")
                     model_select_dropdown = gr.Dropdown(
-                        label="选择模型", choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
+                        label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
                     )
                     lora_select_dropdown = gr.Dropdown(
-                        label="选择LoRA模型", choices=[], multiselect=False, interactive=True, visible=False
+                        label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
                     )
                     with gr.Row():
                         use_streaming_checkbox = gr.Checkbox(
-                            label="实时传输回答", value=True, visible=ENABLE_STREAMING_OPTION
+                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION
                         )
-                        single_turn_checkbox = gr.Checkbox(label="单轮对话", value=False)
-                        use_websearch_checkbox = gr.Checkbox(label="使用在线搜索", value=False)
+                        single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False)
+                        use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False)
                     language_select_dropdown = gr.Dropdown(
-                        label="选择回复语言（针对搜索&索引功能）",
+                        label=i18n("选择回复语言（针对搜索&索引功能）"),
                         choices=REPLY_LANGUAGES,
                         multiselect=False,
                         value=REPLY_LANGUAGES[0],
                     )
-                    index_files = gr.Files(label="上传索引文件", type="file")
-                    two_column = gr.Checkbox(label="双栏pdf", value=advance_docs["pdf"].get("two_column", False))
+                    index_files = gr.Files(label=i18n("上传索引文件"), type="file")
+                    two_column = gr.Checkbox(label=i18n("双栏pdf"), value=advance_docs["pdf"].get("two_column", False))
                     # TODO: 公式ocr
-                    # formula_ocr = gr.Checkbox(label="识别公式", value=advance_docs["pdf"].get("formula_ocr", False))
+                    # formula_ocr = gr.Checkbox(label=i18n("识别公式"), value=advance_docs["pdf"].get("formula_ocr", False))
 
                 with gr.Tab(label="Prompt"):
                     systemPromptTxt = gr.Textbox(
                         show_label=True,
-                        placeholder=f"在这里输入System Prompt...",
+                        placeholder=i18n("在这里输入System Prompt..."),
                         label="System prompt",
                         value=INITIAL_SYSTEM_PROMPT,
                         lines=10,
                     ).style(container=False)
-                    with gr.Accordion(label="加载Prompt模板", open=True):
+                    with gr.Accordion(label=i18n("加载Prompt模板"), open=True):
                         with gr.Column():
                             with gr.Row():
                                 with gr.Column(scale=6):
                                     templateFileSelectDropdown = gr.Dropdown(
-                                        label="选择Prompt模板集合文件",
+                                        label=i18n("选择Prompt模板集合文件"),
                                         choices=get_template_names(plain=True),
                                         multiselect=False,
                                         value=get_template_names(plain=True)[0],
                                     ).style(container=False)
                                 with gr.Column(scale=1):
-                                    templateRefreshBtn = gr.Button("🔄 刷新")
+                                    templateRefreshBtn = gr.Button(i18n("🔄 刷新"))
                             with gr.Row():
                                 with gr.Column():
                                     templateSelectDropdown = gr.Dropdown(
-                                        label="从Prompt模板中加载",
+                                        label=i18n("从Prompt模板中加载"),
                                         choices=load_template(
                                             get_template_names(plain=True)[0], mode=1
                                         ),
                                         multiselect=False,
                                     ).style(container=False)
 
-                with gr.Tab(label="保存/加载"):
-                    with gr.Accordion(label="保存/加载对话历史记录", open=True):
+                with gr.Tab(label=i18n("保存/加载")):
+                    with gr.Accordion(label=i18n("保存/加载对话历史记录"), open=True):
                         with gr.Column():
                             with gr.Row():
                                 with gr.Column(scale=6):
                                     historyFileSelectDropdown = gr.Dropdown(
-                                        label="从列表中加载对话",
+                                        label=i18n("从列表中加载对话"),
                                         choices=get_history_names(plain=True),
                                         multiselect=False,
                                         value=get_history_names(plain=True)[0],
                                     )
                                 with gr.Column(scale=1):
-                                    historyRefreshBtn = gr.Button("🔄 刷新")
+                                    historyRefreshBtn = gr.Button(i18n("🔄 刷新"))
                             with gr.Row():
                                 with gr.Column(scale=6):
                                     saveFileName = gr.Textbox(
                                         show_label=True,
-                                        placeholder=f"设置文件名: 默认为.json，可选为.md",
-                                        label="设置保存文件名",
-                                        value="对话历史记录",
+                                        placeholder=i18n("设置文件名: 默认为.json，可选为.md"),
+                                        label=i18n("设置保存文件名"),
+                                        value=i18n("对话历史记录"),
                                     ).style(container=True)
                                 with gr.Column(scale=1):
-                                    saveHistoryBtn = gr.Button("💾 保存对话")
-                                    exportMarkdownBtn = gr.Button("📝 导出为Markdown")
-                                    gr.Markdown("默认保存于history文件夹")
+                                    saveHistoryBtn = gr.Button(i18n("💾 保存对话"))
+                                    exportMarkdownBtn = gr.Button(i18n("📝 导出为Markdown"))
+                                    gr.Markdown(i18n("默认保存于history文件夹"))
                             with gr.Row():
                                 with gr.Column():
                                     downloadFile = gr.File(interactive=True)
 
-                with gr.Tab(label="高级"):
-                    gr.Markdown("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置")
+                with gr.Tab(label=i18n("高级")):
+                    gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置"))
                     gr.HTML(APPEARANCE_SWITCHER, elem_classes="insert_block")
-                    with gr.Accordion("参数", open=False):
+                    with gr.Accordion(i18n("参数"), open=False):
                         temperature_slider = gr.Slider(
                             minimum=-0,
                             maximum=2.0,
@@ -194,7 +195,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
                         stop_sequence_txt = gr.Textbox(
                             show_label=True,
-                            placeholder=f"在这里输入停止符，用英文逗号隔开...",
+                            placeholder=i18n("在这里输入停止符，用英文逗号隔开..."),
                             label="stop",
                             value="",
                             lines=1,
@@ -240,33 +241,33 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
                         user_identifier_txt = gr.Textbox(
                             show_label=True,
-                            placeholder=f"用于定位滥用行为",
-                            label="用户名",
+                            placeholder=i18n("用于定位滥用行为"),
+                            label=i18n("用户名"),
                             value=user_name.value,
                             lines=1,
                         )
 
-                    with gr.Accordion("网络设置", open=False):
+                    with gr.Accordion(i18n("网络设置"), open=False):
                         # 优先展示自定义的api_host
                         apihostTxt = gr.Textbox(
                             show_label=True,
-                            placeholder=f"在这里输入API-Host...",
+                            placeholder=i18n("在这里输入API-Host..."),
                             label="API-Host",
                             value=config.api_host or shared.API_HOST,
                             lines=1,
                         )
-                        changeAPIURLBtn = gr.Button("🔄 切换API地址")
+                        changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
                         proxyTxt = gr.Textbox(
                             show_label=True,
-                            placeholder=f"在这里输入代理地址...",
-                            label="代理地址（示例：http://127.0.0.1:10809）",
+                            placeholder=i18n("在这里输入代理地址..."),
+                            label=i18n("代理地址（示例：http://127.0.0.1:10809）"),
                             value="",
                             lines=2,
                         )
-                        changeProxyBtn = gr.Button("🔄 设置代理地址")
-                        default_btn = gr.Button("🔙 恢复默认设置")
+                        changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
+                        default_btn = gr.Button(i18n("🔙 恢复默认设置"))
 
-    gr.Markdown(CHUANHU_DESCRIPTION)
+    gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(FOOTER.format(versions=versions_html()), elem_id="footer")
     chatgpt_predict_args = dict(
         fn=predict,
@@ -437,7 +438,7 @@ logging.info(
     + colorama.Style.RESET_ALL
 )
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
-demo.title = "川虎ChatGPT 🚀"
+demo.title = i18n("川虎Chat 🚀")
 
 if __name__ == "__main__":
     reload_javascript()

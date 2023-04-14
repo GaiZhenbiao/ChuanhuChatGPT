@@ -124,7 +124,7 @@ class BaseLLMModel:
         def get_return_value():
             return chatbot, status_text
 
-        status_text = "开始实时传输回答……"
+        status_text = i18n("开始实时传输回答……")
         if fake_input:
             chatbot.append((fake_input, ""))
         else:
@@ -505,7 +505,7 @@ class BaseLLMModel:
         token_sum = 0
         for i in range(len(token_lst)):
             token_sum += sum(token_lst[: i + 1])
-        return f"Token 计数: {sum(token_lst)}，本次对话累计消耗了 {token_sum} tokens"
+        return i18n("Token 计数: ") + f"{sum(token_lst)}" + i18n("，本次对话累计消耗了 ") + f"{token_sum} tokens"
 
     def save_chat_history(self, filename, chatbot, user_name):
         if filename == "":
