@@ -451,11 +451,11 @@ Error code: {result.returncode}""")
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=os.environ if custom_env is None else custom_env)
     if result.returncode != 0:
         message = f"""{errdesc or 'Error running command'}.
-Command: {command}
-Error code: {result.returncode}
-stdout: {result.stdout.decode(encoding="utf8", errors="ignore") if len(result.stdout)>0 else '<empty>'}
-stderr: {result.stderr.decode(encoding="utf8", errors="ignore") if len(result.stderr)>0 else '<empty>'}
-"""
+            Command: {command}
+            Error code: {result.returncode}
+            stdout: {result.stdout.decode(encoding="utf8", errors="ignore") if len(result.stdout)>0 else '<empty>'}
+            stderr: {result.stderr.decode(encoding="utf8", errors="ignore") if len(result.stderr)>0 else '<empty>'}
+            """
         raise RuntimeError(message)
     return result.stdout.decode(encoding="utf8", errors="ignore")
 
@@ -472,12 +472,12 @@ def versions_html():
     else:
         commit_info = "unknown \U0001F615"
     return f"""
-Python: <span title="{sys.version}">{python_version}</span>
- • 
-Gradio: {gr.__version__}
- • 
-Commit: {commit_info}
-"""
+        Python: <span title="{sys.version}">{python_version}</span>
+         • 
+        Gradio: {gr.__version__}
+         • 
+        Commit: {commit_info}
+        """
 
 def add_source_numbers(lst, source_name = "Source", use_source = True):
     if use_source:

@@ -245,10 +245,11 @@ class BaseLLMModel:
                 domain_name = urllib3.util.parse_url(result["href"]).host
                 reference_results.append([result["body"], result["href"]])
                 display_append.append(
-                    f"{idx+1}. [{domain_name}]({result['href']})\n"
+                    # f"{idx+1}. [{domain_name}]({result['href']})\n"
+                    f"<li><a href=\"{result['href']}\" target=\"_blank\">{domain_name}</a></li>\n"
                 )
             reference_results = add_source_numbers(reference_results)
-            display_append = "\n\n" + "".join(display_append)
+            display_append = "<ol>\n\n" + "".join(display_append) + "</ol>"
             real_inputs = (
                 replace_today(WEBSEARCH_PTOMPT_TEMPLATE)
                 .replace("{query}", real_inputs)
