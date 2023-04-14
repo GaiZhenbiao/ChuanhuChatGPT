@@ -235,25 +235,21 @@ class ChatGLM_Client(BaseLLMModel):
             quantified = False
             if "int4" in model_name:
                 quantified = True
-            if quantified:
-                model = AutoModel.from_pretrained(
+            model = AutoModel.from_pretrained(
                     model_source, trust_remote_code=True
-                ).half()
-            else:
-                model = AutoModel.from_pretrained(
-                    model_source, trust_remote_code=True
-                ).half()
+                )
             if torch.cuda.is_available():
                 # run on CUDA
                 logging.info("CUDA is available, using CUDA")
-                model = model.cuda()
+                model = model.half().cuda()
             # mps加速还存在一些问题，暂时不使用
             elif system_name == "Darwin" and model_path is not None and not quantified:
                 logging.info("Running on macOS, using MPS")
                 # running on macOS and model already downloaded
-                model = model.to("mps")
+                model = model.half().to("mps")
             else:
                 logging.info("GPU is not available, using CPU")
+                model = model.float()
             model = model.eval()
             CHATGLM_MODEL = model
 
@@ -483,8 +479,11 @@ class XMBot_Client(BaseLLMModel):
             "data": question
         }
         response = requests.post(self.url, json=data)
-        response = json.loads(response.text)
-        return response["data"], len(response["data"])
+        try:
+            response = json.loads(response.text)
+            return response["data"], len(response["data"])
+        except Exception as e:
+            return response.text, len(response.text)
 
 
 

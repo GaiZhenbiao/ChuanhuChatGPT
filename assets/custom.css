@@ -8,7 +8,7 @@
     font-size: var(--text-xxl);
     line-height: 1.3;
     text-align: left;
-    margin-top: 6px; 
+    margin-top: 6px;
     white-space: nowrap;
 }
 #description {
@@ -17,9 +17,9 @@
 }
 
 /* 覆盖gradio的页脚信息QAQ */
-footer {
+/* footer {
     display: none !important;
-}
+} */
 #footer {
     text-align: center;
 }
@@ -35,7 +35,7 @@ footer {
     position: absolute;
     max-height: 30px;
 }
-/* user_info */ 
+/* user_info */
 #user_info {
     white-space: nowrap;
     position: absolute; left: 8em; top: .2em;
@@ -132,7 +132,7 @@ footer {
     border-radius: 12px;
 }
 .apSwitch input {
-    display: none !important;    
+    display: none !important;
 }
 .apSlider {
     background-color: var(--block-label-background-fill);
@@ -146,7 +146,7 @@ footer {
     font-size: 18px;
     border-radius: 12px;
 }
-.apSlider::before {    
+.apSlider::before {
     bottom: -1.5px;
     left: 1px;
     position: absolute;
