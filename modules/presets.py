@@ -75,12 +75,8 @@ LOCAL_MODELS = [
     "chatglm-6b-int4",
     "chatglm-6b-int4-qe",
     "llama-7b-hf",
-    "llama-7b-hf-int4",
-    "llama-7b-hf-int8",
     "llama-13b-hf",
-    "llama-13b-hf-int4",
     "llama-30b-hf",
-    "llama-30b-hf-int4",
     "llama-65b-hf"
 ]
 
