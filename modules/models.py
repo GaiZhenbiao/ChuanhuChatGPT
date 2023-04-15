@@ -102,13 +102,6 @@ class OpenAIClient(BaseLLMModel):
     def set_token_upper_limit(self, new_upper_limit):
         pass
 
-    def set_key(self, new_access_key):
-        self.api_key = new_access_key.strip()
-        self._refresh_header()
-        msg = i18n("API密钥更改为了") + f"{hide_middle_chars(self.api_key)}"
-        logging.info(msg)
-        return msg
-
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
     def _get_response(self, stream=False):
         openai_api_key = self.api_key

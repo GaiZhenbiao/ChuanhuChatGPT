@@ -464,7 +464,7 @@ class BaseLLMModel:
 
     def set_key(self, new_access_key):
         self.api_key = new_access_key.strip()
-        msg = f"API密钥更改为了{hide_middle_chars(self.api_key)}"
+        msg = i18n("API密钥更改为了") + hide_middle_chars(self.api_key)
         logging.info(msg)
         return new_access_key, msg
 
