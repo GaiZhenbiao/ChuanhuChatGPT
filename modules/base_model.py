@@ -466,7 +466,7 @@ class BaseLLMModel:
         self.api_key = new_access_key.strip()
         msg = i18n("API密钥更改为了") + hide_middle_chars(self.api_key)
         logging.info(msg)
-        return new_access_key, msg
+        return self.api_key, msg
 
     def set_single_turn(self, new_single_turn):
         self.single_turn = new_single_turn
