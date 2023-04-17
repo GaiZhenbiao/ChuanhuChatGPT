@@ -331,7 +331,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         outputs=[chatbot, status_display],
         show_progress=True,
     )
-    emptyBtn.click(**reset_textbox_args)
 
     retryBtn.click(**start_outputing_args).then(
         retry,
