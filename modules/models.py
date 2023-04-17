@@ -9,6 +9,9 @@ import sys
 import requests
 import urllib3
 import platform
+import base64
+from io import BytesIO
+from PIL import Image
 
 from tqdm import tqdm
 import colorama
@@ -328,15 +331,6 @@ class LLaMA_Client(BaseLLMModel):
                 data_args=data_args,
                 pipeline_args=pipeline_args,
             )
-        # Chats
-        # model_name = model_args.model_name_or_path
-        # if model_args.lora_model_path is not None:
-        #     model_name += f" + {model_args.lora_model_path}"
-
-        # context = (
-        #     "You are a helpful assistant who follows the given instructions"
-        #     " unconditionally."
-        # )
 
     def _get_llama_style_input(self):
         history = []
@@ -406,26 +400,45 @@ class XMBot_Client(BaseLLMModel):
         self.session_id = str(uuid.uuid4())
         return [], "已重置"
 
-    def try_read_image(self, filepath):
-        import base64
+    def image_to_base64(self, image_path):
+        # 打开并加载图片
+        img = Image.open(image_path)
 
+        # 获取图片的宽度和高度
+        width, height = img.size
+
+        # 计算压缩比例，以确保最长边小于4096像素
+        max_dimension = 2048
+        scale_ratio = min(max_dimension / width, max_dimension / height)
+
+        if scale_ratio < 1:
+            # 按压缩比例调整图片大小
+            new_width = int(width * scale_ratio)
+            new_height = int(height * scale_ratio)
+            img = img.resize((new_width, new_height), Image.ANTIALIAS)
+
+        # 将图片转换为jpg格式的二进制数据
+        buffer = BytesIO()
+        if img.mode == "RGBA":
+            img = img.convert("RGB")
+        img.save(buffer, format='JPEG')
+        binary_image = buffer.getvalue()
+
+        # 对二进制数据进行Base64编码
+        base64_image = base64.b64encode(binary_image).decode('utf-8')
+
+        return base64_image
+
+    def try_read_image(self, filepath):
         def is_image_file(filepath):
             # 判断文件是否为图片
             valid_image_extensions = [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff"]
             file_extension = os.path.splitext(filepath)[1].lower()
             return file_extension in valid_image_extensions
 
-        def read_image_as_bytes(filepath):
-            # 读取图片文件并返回比特流
-            with open(filepath, "rb") as f:
-                image_bytes = f.read()
-            return image_bytes
-
         if is_image_file(filepath):
             logging.info(f"读取图片文件: {filepath}")
-            image_bytes = read_image_as_bytes(filepath)
-            base64_encoded_image = base64.b64encode(image_bytes).decode()
-            self.image_bytes = base64_encoded_image
+            self.image_bytes = self.image_to_base64(filepath)
             self.image_path = filepath
         else:
             self.image_bytes = None
@@ -529,6 +542,8 @@ def get_model(
                 msg += f" + {lora_model_path}"
             model = LLaMA_Client(model_name, lora_model_path)
         elif model_type == ModelType.XMBot:
+            if os.environ.get("XMBOT_API_KEY") != "":
+                access_key = os.environ.get("XMBOT_API_KEY")
             model = XMBot_Client(api_key=access_key)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
