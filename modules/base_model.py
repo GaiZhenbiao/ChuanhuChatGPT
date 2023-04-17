@@ -201,7 +201,7 @@ class BaseLLMModel:
             msg = "索引获取成功，生成回答中……"
             logging.info(msg)
             if local_embedding or self.model_type != ModelType.OpenAI:
-                embed_model = LangchainEmbedding(HuggingFaceEmbeddings())
+                embed_model = LangchainEmbedding(HuggingFaceEmbeddings(model_name = "sentence-transformers/distiluse-base-multilingual-cased-v2"))
             else:
                 embed_model = OpenAIEmbedding()
             # yield chatbot + [(inputs, "")], msg

@@ -134,7 +134,7 @@ def construct_index(
         try:
             documents = get_documents(file_src)
             if local_embedding:
-                embed_model = LangchainEmbedding(HuggingFaceEmbeddings())
+                embed_model = LangchainEmbedding(HuggingFaceEmbeddings(model_name = "sentence-transformers/distiluse-base-multilingual-cased-v2"))
             else:
                 embed_model = OpenAIEmbedding()
             logging.info("构建索引中……")
