@@ -59,23 +59,9 @@ APPEARANCE_SWITCHER = """
 SUMMARIZE_PROMPT = "你是谁？我们刚才聊了什么？"  # 总结对话时的 prompt
 
 MODELS = [
-    "gpt-3.5-turbo",
-    "gpt-3.5-turbo-0301",
-    "gpt-4",
-    "gpt-4-0314",
-    "gpt-4-32k",
-    "gpt-4-32k-0314",
     "chatglm-6b",
-    "chatglm-6b-int4",
-    "chatglm-6b-int4-qe",
-    "llama-7b-hf",
-    "llama-7b-hf-int4",
-    "llama-7b-hf-int8",
-    "llama-13b-hf",
-    "llama-13b-hf-int4",
-    "llama-30b-hf",
-    "llama-30b-hf-int4",
-    "llama-65b-hf",
+    "chatglm-130b",
+    "llama-7b-hf"
 ]  # 可选的模型
 
 os.makedirs("models", exist_ok=True)
@@ -94,7 +80,8 @@ MODEL_TOKEN_LIMIT = {
     "gpt-4": 8192,
     "gpt-4-0314": 8192,
     "gpt-4-32k": 32768,
-    "gpt-4-32k-0314": 32768
+    "gpt-4-32k-0314": 32768,
+    "chatglm-130b": 4096
 }
 
 TOKEN_OFFSET = 1000 # 模型的token上限减去这个值，得到软上限。到达软上限之后，自动尝试减少token占用。

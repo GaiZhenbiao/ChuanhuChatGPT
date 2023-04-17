@@ -28,6 +28,7 @@ class ModelType(Enum):
     OpenAI = 0
     ChatGLM = 1
     LLaMA = 2
+    ZhiPu = 3
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -35,7 +36,9 @@ class ModelType(Enum):
         model_name_lower = model_name.lower()
         if "gpt" in model_name_lower:
             model_type = ModelType.OpenAI
-        elif "chatglm" in model_name_lower:
+        elif "chatglm-130b" in model_name_lower:
+            model_type = ModelType.ZhiPu
+        elif "chatglm-6b" in model_name_lower:
             model_type = ModelType.ChatGLM
         elif "llama" in model_name_lower or "alpaca" in model_name_lower:
             model_type = ModelType.LLaMA
