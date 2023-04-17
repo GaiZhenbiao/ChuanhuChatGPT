@@ -36,6 +36,8 @@ SIM_K = 5
 INDEX_QUERY_TEMPRATURE = 1.0
 
 CHUANHU_TITLE = """<h1 align="left">ChatEDU 🚀</h1>"""
+BACK_LINK = """其他链接： <a href="http://10.101.120.11:8000" target="_blank">个性化学习Demo</a>  &nbsp;&nbsp;&nbsp;
+ <a href="http://10.109.68.1:7866" target="_blank"> 图像生成Demo </>"""
 CHUANHU_DESCRIPTION = """\
 <div align="center" style="margin:16px 0">
 此App使用 `gpt-3.5-turbo` 大语言模型
