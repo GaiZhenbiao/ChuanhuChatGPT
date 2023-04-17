@@ -9,7 +9,7 @@ import sys
 import requests
 import urllib3
 import platform
-
+import pprint
 from tqdm import tqdm
 import colorama
 from duckduckgo_search import ddg
@@ -24,6 +24,8 @@ from . import shared
 from .config import retrieve_proxy
 from modules import config
 from .base_model import BaseLLMModel, ModelType
+from torch import cuda
+cuda.set_device(1)
 
 
 class OpenAIClient(BaseLLMModel):
@@ -209,11 +211,133 @@ class OpenAIClient(BaseLLMModel):
             raise Exception(error_msg)
 
 
+class ZhiPuClient(BaseLLMModel):
+    def __init__(
+        self,
+        model_name,
+        temperature=0.1,
+        top_p=0.9,
+    ) -> None:
+        super().__init__(
+            model_name=model_name,
+            temperature=temperature,
+            top_p=top_p
+        )
+        self.api_key = config.config['chatglm_api_key']
+        self.public_key = config.config['chatglm_public_key']
+        self.need_api_key = True
+
+    def _get_response(self, stream=False):
+        from wudao.api_request import executeEngine, executeSSE, getToken
+
+        # 创建API连接
+        zhipu_api_key = self.api_key
+        zhipu_public_key = self.public_key
+        ability_type = "chatGLM"
+        engine_type = "chatGLM"
+        token_result = getToken(zhipu_api_key, zhipu_public_key)
+        token = token_result["data"]
+
+        history = self.history
+        logging.debug(colorama.Fore.YELLOW + f"{history}" + colorama.Fore.RESET)
+
+        history = [*history]
+        prompt = history[-1]['content']
+        history = [x['content'] for x in history[:-1]]
+
+        payload = {
+            "prompt": prompt,
+            "history": history,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+        }
+
+        if stream:
+            response = executeSSE(ability_type, engine_type, token, payload)
+            if response._event_source.status_code == 200:
+                return response
+            else:
+                raise ValueError(f"调用api错误，错误信息为{response['msg']}")
+        else:
+            response = executeEngine(ability_type, engine_type, token, payload)
+            if response['code'] == 200:
+                return response
+            else:
+                raise ValueError(f"调用api错误，错误信息为{response['msg']}")
+
+    def get_answer_at_once(self):
+        response = self._get_response()
+        content = response["data"]["outputText"]
+        total_token_count = response["data"]["totalTokenNum"]
+        return content, total_token_count
+
+    def get_answer_stream_iter(self):
+        response = self._get_response(stream=True)
+        if response is not None:
+            iter = self._decode_chat_response(response)
+            for i in iter:
+                yield i
+        else:
+            yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
+
+    def _decode_chat_response(self, response):
+        error_msg = ""
+        for event in response.events():
+            if event.data:
+                event.data = self.punctuation_converse_auto(event.data)
+                if (event.event == "finish" or event.event == "interrupted"):
+                    break
+                try:
+                    yield event.data
+                except Exception as e:
+                    # logging.error(f"Error: {e}")
+                    continue
+        if error_msg:
+            raise Exception(error_msg)
+
+    @staticmethod
+    def punctuation_converse_auto(msg):
+        punkts = [
+            [",", "，"],
+            ["!", "！"],
+            [":", "："],
+            [";", "；"],
+            ["\?", "？"],
+        ]
+        for item in punkts:
+            msg = re.sub(r"([\u4e00-\u9fff])%s" % item[0], r"\1%s" % item[1], msg)
+            msg = re.sub(r"%s([\u4e00-\u9fff])" % item[0], r"%s\1" % item[1], msg)
+        return msg
+
+    @staticmethod
+    def prepare_print_diff(nextStr: Callable[[any], str], printError: Callable[[], None]):
+        previous = ""
+
+        def print_diff(input):
+            nonlocal previous
+            str = nextStr(input)
+            if (not str.startswith(previous)):
+                last_line_index = str.rfind("\n") + 1
+                if (previous.startswith(str[0: last_line_index])):
+                    print("\r%s" % str[last_line_index:], end="", flush=True)
+                else:
+                    print()
+                    print(1, "[[previous][%s]]" % previous)
+                    printError(input)
+            else:
+                print(str[len(previous):], end="", flush=True)
+            previous = str
+
+        return print_diff
+
+
 class ChatGLM_Client(BaseLLMModel):
     def __init__(self, model_name) -> None:
         super().__init__(model_name=model_name)
         from transformers import AutoTokenizer, AutoModel
         import torch
+        from torch import cuda
+        cuda.set_device(1)
 
         system_name = platform.system()
         model_path = None
@@ -457,6 +581,13 @@ class ModelManager:
                     temperature=temperature,
                     top_p=top_p,
                 )
+            elif model_type == ModelType.ZhiPu:
+                logging.info(f"正在加载ZhiPu模型: {model_name}")
+                model = ZhiPuClient(
+                    model_name=model_name,
+                    temperature=temperature,
+                    top_p=top_p,
+                )
             elif model_type == ModelType.ChatGLM:
                 logging.info(f"正在加载ChatGLM模型: {model_name}")
                 model = ChatGLM_Client(model_name)
@@ -570,6 +701,9 @@ class ModelManager:
 if __name__ == "__main__":
     with open("config.json", "r") as f:
         openai_api_key = cjson.load(f)["openai_api_key"]
+        js = cjson.load(f)
+        chatglm_api_key = cjson.load(f)["chatglm_api_key"]
+        chatglm_public_key = cjson.load(f)["chatglm_public_key"]
     # set logging level to debug
     logging.basicConfig(level=logging.DEBUG)
     # client = ModelManager(model_name="gpt-3.5-turbo", access_key=openai_api_key)
