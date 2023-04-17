@@ -57,7 +57,6 @@ APPEARANCE_SWITCHER = """
 SUMMARIZE_PROMPT = "你是谁？我们刚才聊了什么？"  # 总结对话时的 prompt
 
 MODELS = [
-    "gpt-3.5-turbo",
     "chatglm-6b",
     "chatglm-130b",
     "llama-7b-hf"
