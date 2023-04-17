@@ -253,12 +253,11 @@ class ZhiPuClient(BaseLLMModel):
         }
 
         if stream:
-            client = executeSSE(ability_type, engine_type, token, payload)
-            event = client.events()
-            print_diff = self.prepare_print_diff(lambda e: e.data, lambda e: pprint.pprint(e.__dict__))
-            for event in client.events():
-                pass
-
+            response = executeSSE(ability_type, engine_type, token, payload)
+            if response._event_source.status_code == 200:
+                return response
+            else:
+                raise ValueError(f"调用api错误，错误信息为{response['msg']}")
         else:
             response = executeEngine(ability_type, engine_type, token, payload)
             if response['code'] == 200:
@@ -276,33 +275,23 @@ class ZhiPuClient(BaseLLMModel):
         response = self._get_response(stream=True)
         if response is not None:
             iter = self._decode_chat_response(response)
-            partial_text = ""
             for i in iter:
-                partial_text += i
-                yield partial_text
+                yield i
         else:
             yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
 
     def _decode_chat_response(self, response):
         error_msg = ""
-        for chunk in response.iter_lines():
-            if chunk:
-                chunk = chunk.decode()
-                chunk_length = len(chunk)
+        for event in response.events():
+            if event.data:
+                event.data = self.punctuation_converse_auto(event.data)
+                if (event.event == "finish" or event.event == "interrupted"):
+                    break
                 try:
-                    chunk = json.loads(chunk[6:])
-                except json.JSONDecodeError:
-                    print(f"JSON解析错误,收到的内容: {chunk}")
-                    error_msg += chunk
+                    yield event.data
+                except Exception as e:
+                    # logging.error(f"Error: {e}")
                     continue
-                if chunk_length > 6 and "delta" in chunk["choices"][0]:
-                    if chunk["choices"][0]["finish_reason"] == "stop":
-                        break
-                    try:
-                        yield chunk["choices"][0]["delta"]["content"]
-                    except Exception as e:
-                        # logging.error(f"Error: {e}")
-                        continue
         if error_msg:
             raise Exception(error_msg)
 
