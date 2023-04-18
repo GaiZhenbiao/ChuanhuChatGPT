@@ -67,8 +67,8 @@ if os.environ.get("dockerrun") == "yes":
 my_api_key = config.get("openai_api_key", "")
 my_api_key = os.environ.get("my_api_key", my_api_key)
 
-xmbot_api_key = config.get("xmbot_api_key", "")
-os.environ["XMBOT_API_KEY"] = xmbot_api_key
+xmchat_api_key = config.get("xmchat_api_key", "")
+os.environ["XMCHAT_API_KEY"] = xmchat_api_key
 
 ## 多账户机制
 multi_api_key = config.get("multi_api_key", False) # 是否开启多账户机制

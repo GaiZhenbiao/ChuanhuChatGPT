@@ -385,9 +385,9 @@ class LLaMA_Client(BaseLLMModel):
             yield partial_text
 
 
-class XMBot_Client(BaseLLMModel):
+class XMChat(BaseLLMModel):
     def __init__(self, api_key):
-        super().__init__(model_name="xmbot")
+        super().__init__(model_name="xmchat")
         self.api_key = api_key
         self.session_id = None
         self.reset()
@@ -541,10 +541,10 @@ def get_model(
             else:
                 msg += f" + {lora_model_path}"
             model = LLaMA_Client(model_name, lora_model_path)
-        elif model_type == ModelType.XMBot:
-            if os.environ.get("XMBOT_API_KEY") != "":
-                access_key = os.environ.get("XMBOT_API_KEY")
-            model = XMBot_Client(api_key=access_key)
+        elif model_type == ModelType.XMChat:
+            if os.environ.get("XMCHAT_API_KEY") != "":
+                access_key = os.environ.get("XMCHAT_API_KEY")
+            model = XMChat(api_key=access_key)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)
