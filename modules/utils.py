@@ -113,6 +113,12 @@ def set_single_turn(current_model, *args):
 def handle_file_upload(current_model, *args):
     return current_model.handle_file_upload(*args)
 
+def like(current_model, *args):
+    return current_model.like(*args)
+
+def dislike(current_model, *args):
+    return current_model.dislike(*args)
+
 
 def count_token(message):
     encoding = tiktoken.get_encoding("cl100k_base")
@@ -532,5 +538,11 @@ def get_model_source(model_name, alternative_source):
     if model_name == "gpt2-medium":
         return "https://huggingface.co/gpt2-medium"
 
-def refresh_ui_elements_on_load(current_model):
-    return current_model.billing_info()
+def refresh_ui_elements_on_load(current_model, selected_model_name):
+    return current_model.billing_info(), toggle_like_btn_visibility(selected_model_name)
+
+def toggle_like_btn_visibility(selected_model_name):
+    if selected_model_name == "xmchat":
+        return gr.update(visible=True)
+    else:
+        return gr.update(visible=False)

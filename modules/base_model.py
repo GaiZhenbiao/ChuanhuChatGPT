@@ -549,3 +549,13 @@ class BaseLLMModel:
         except FileNotFoundError:
             logging.warning(f"{user_name} 没有找到对话历史文件，不执行任何操作")
             return filename, self.system_prompt, chatbot
+
+    def like(self):
+        """like the last response, implement if needed
+        """
+        return gr.update()
+
+    def dislike(self):
+        """dislike the last response, implement if needed
+        """
+        return gr.update()
