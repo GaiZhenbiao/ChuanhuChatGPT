@@ -539,7 +539,7 @@ def get_model_source(model_name, alternative_source):
         return "https://huggingface.co/gpt2-medium"
 
 def refresh_ui_elements_on_load(current_model, selected_model_name):
-    return current_model.billing_info(), toggle_like_btn_visibility(selected_model_name)
+    return toggle_like_btn_visibility(selected_model_name)
 
 def toggle_like_btn_visibility(selected_model_name):
     if selected_model_name == "xmchat":

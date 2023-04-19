@@ -209,6 +209,11 @@ class OpenAIClient(BaseLLMModel):
         if error_msg:
             raise Exception(error_msg)
 
+    def set_key(self, new_access_key):
+        ret = super().set_key(new_access_key)
+        self._refresh_header()
+        return ret
+
 
 class ChatGLM_Client(BaseLLMModel):
     def __init__(self, model_name) -> None:

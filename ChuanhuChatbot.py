@@ -274,7 +274,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(FOOTER.format(versions=versions_html()), elem_id="footer")
-    demo.load(refresh_ui_elements_on_load, [current_model, model_select_dropdown], [usageTxt, like_dislike_area], show_progress=False)
+    demo.load(refresh_ui_elements_on_load, [current_model, model_select_dropdown], [like_dislike_area], show_progress=False)
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[
