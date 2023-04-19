@@ -461,6 +461,8 @@ class XMChat(BaseLLMModel):
                 chatbot = chatbot + [((self.image_path,), None)]
             if self.image_bytes is not None:
                 logging.info("使用图片作为输入")
+                # XMChat的一轮对话中实际上只能处理一张图片
+                self.reset()
                 conv_id = str(uuid.uuid4())
                 data = {
                     "user_id": self.api_key,
