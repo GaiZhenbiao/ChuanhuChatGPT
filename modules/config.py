@@ -33,7 +33,7 @@ else:
     config = {}
 
 lang_config = config.get("language", "auto")
-language = os.environ.get("default_ui_lang", lang_config)
+language = os.environ.get("LANGUAGE", lang_config)
 
 if os.path.exists("api_key.txt"):
     logging.info("检测到api_key.txt文件，正在进行迁移...")
@@ -66,7 +66,7 @@ if os.environ.get("dockerrun") == "yes":
 
 ## 处理 api-key 以及 允许的用户列表
 my_api_key = config.get("openai_api_key", "")
-my_api_key = os.environ.get("my_api_key", my_api_key)
+my_api_key = os.environ.get("OPENAI_API_KEY", my_api_key)
 
 xmchat_api_key = config.get("xmchat_api_key", "")
 os.environ["XMCHAT_API_KEY"] = xmchat_api_key
