@@ -10,7 +10,7 @@ class I18nAuto:
         else:
             config = {}
         lang_config = config.get("language", "auto")
-        language = os.environ.get("default_ui_lang", lang_config)
+        language = os.environ.get("LANGUAGE", lang_config)
         if language == "auto":
             language = locale.getdefaultlocale()[0] # get the language code of the system (ex. zh_CN)
         self.language_map = {}
