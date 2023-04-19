@@ -2,8 +2,8 @@
     // 你的OpenAI API Key，一般必填，
     // 若缺省填为 "openai_api_key": "" 则必须再在图形界面中填入API Key
     "openai_api_key": "",
-    // 你的xmbot API Key，与OpenAI API Key不同
-    "xmbot_api_key": "",
+    // 你的xmchat API Key，与OpenAI API Key不同
+    "xmchat_api_key": "",
     "language": "auto",
     // 如果使用代理，请取消注释下面的两行，并替换代理URL
     // "https_proxy": "http://127.0.0.1:1079",

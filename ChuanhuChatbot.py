@@ -269,6 +269,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(FOOTER.format(versions=versions_html()), elem_id="footer")
+    demo.load(refresh_ui_elements_on_load, [current_model], [usageTxt], show_progress=False)
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[

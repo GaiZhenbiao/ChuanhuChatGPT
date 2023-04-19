@@ -531,3 +531,6 @@ def get_last_day_of_month(any_day):
 def get_model_source(model_name, alternative_source):
     if model_name == "gpt2-medium":
         return "https://huggingface.co/gpt2-medium"
+
+def refresh_ui_elements_on_load(current_model):
+    return current_model.billing_info()
