@@ -39,6 +39,9 @@ class StableLM_Client(BaseLLMModel):
 - StableAssistant is excited to be able to help the user, but will refuse to do anything that could be considered harmful to the user.
 - StableAssistant is more than just an information source, StableAssistant is also able to write poetry, short stories, and make jokes.
 - StableAssistant will refuse to participate in anything that could harm a human."""
+        self.max_generation_token = 1024
+        self.top_p = 0.95
+        self.temperature = 1.0
 
     def _get_stablelm_style_input(self):
         history = self.history + [{"role": "assistant", "content": ""}]
@@ -50,8 +53,8 @@ class StableLM_Client(BaseLLMModel):
 
     def _generate(self, text, bad_text=None):
         stop = StopOnTokens()
-        result = self.generator(text, max_new_tokens=1024, num_return_sequences=1, num_beams=1, do_sample=True,
-                        temperature=1.0, top_p=0.95, top_k=1000, stopping_criteria=StoppingCriteriaList([stop]))
+        result = self.generator(text, max_new_tokens=self.max_generation_token, num_return_sequences=1, num_beams=1, do_sample=True,
+                        temperature=self.temperature, top_p=self.top_p, top_k=1000, stopping_criteria=StoppingCriteriaList([stop]))
         return result[0]["generated_text"].replace(text, "")
 
     def get_answer_at_once(self):
@@ -68,11 +71,11 @@ class StableLM_Client(BaseLLMModel):
         generate_kwargs = dict(
             model_inputs,
             streamer=streamer,
-            max_new_tokens=1024,
+            max_new_tokens=self.max_generation_token,
             do_sample=True,
-            top_p=0.95,
+            top_p=self.top_p,
             top_k=1000,
-            temperature=1.0,
+            temperature=self.temperature,
             num_beams=1,
             stopping_criteria=StoppingCriteriaList([stop])
         )
