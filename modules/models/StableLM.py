@@ -4,7 +4,7 @@ import time
 import numpy as np
 from torch.nn import functional as F
 import os
-from base_model import BaseLLMModel
+from .base_model import BaseLLMModel
 
 class StopOnTokens(StoppingCriteria):
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:

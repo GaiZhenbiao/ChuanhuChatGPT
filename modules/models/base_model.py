@@ -44,7 +44,7 @@ class ModelType(Enum):
             model_type = ModelType.LLaMA
         elif "xmchat" in model_name_lower:
             model_type = ModelType.XMChat
-        elif "StableLM" in model_name_lower:
+        elif "stablelm" in model_name_lower:
             model_type = ModelType.StableLM
         else:
             model_type = ModelType.Unknown
