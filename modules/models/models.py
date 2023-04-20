@@ -460,7 +460,7 @@ class XMChat(BaseLLMModel):
             "uuid": self.last_conv_id,
             "appraise": "good"
         }
-        response = requests.post(self.url, json=data)
+        requests.post(self.url, json=data)
         return "👍点赞成功，，感谢反馈～"
 
     def dislike(self):
@@ -470,7 +470,7 @@ class XMChat(BaseLLMModel):
             "uuid": self.last_conv_id,
             "appraise": "bad"
         }
-        response = requests.post(self.url, json=data)
+        requests.post(self.url, json=data)
         return "👎点踩成功，感谢反馈～"
 
     def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):
