@@ -10,7 +10,7 @@ from modules.config import *
 from modules.utils import *
 from modules.presets import *
 from modules.overwrites import *
-from modules.models import get_model
+from modules.models.models import get_model
 
 
 gr.Chatbot._postprocess_chat_messages = postprocess_chat_messages
