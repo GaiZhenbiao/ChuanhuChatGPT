@@ -1,10 +1,14 @@
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline, StoppingCriteria, StoppingCriteriaList
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline, StoppingCriteria, StoppingCriteriaList, TextIteratorStreamer
 import time
 import numpy as np
 from torch.nn import functional as F
 import os
 from .base_model import BaseLLMModel
+from threading import Thread
+
+STABLELM_MODEL = None
+STABLELM_TOKENIZER = None
 
 class StopOnTokens(StoppingCriteria):
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
@@ -17,11 +21,18 @@ class StopOnTokens(StoppingCriteria):
 class StableLM_Client(BaseLLMModel):
     def __init__(self, model_name) -> None:
         super().__init__(model_name=model_name)
+        global STABLELM_MODEL, STABLELM_TOKENIZER
         print(f"Starting to load StableLM to memory")
-        self.model = AutoModelForCausalLM.from_pretrained(
-            "stabilityai/stablelm-tuned-alpha-7b", torch_dtype=torch.float16).cuda()
-        self.tokenizer = AutoTokenizer.from_pretrained("stabilityai/stablelm-tuned-alpha-7b")
-        self.generator = pipeline('text-generation', model=self.model, tokenizer=self.tokenizer, device=0)
+        if model_name == "StableLM":
+            model_name = "stabilityai/stablelm-tuned-alpha-7b"
+        else:
+            model_name = f"models/{model_name}"
+        if STABLELM_MODEL is None:
+            STABLELM_MODEL = AutoModelForCausalLM.from_pretrained(
+                model_name, torch_dtype=torch.float16).cuda()
+        if STABLELM_TOKENIZER is None:
+            STABLELM_TOKENIZER = AutoTokenizer.from_pretrained(model_name)
+        self.generator = pipeline('text-generation', model=STABLELM_MODEL, tokenizer=STABLELM_TOKENIZER, device=0)
         print(f"Sucessfully loaded StableLM to the memory")
         self.system_prompt = """StableAssistant
 - StableAssistant is A helpful and harmless Open Source AI Language Model developed by Stability and CarperAI.
@@ -29,67 +40,46 @@ class StableLM_Client(BaseLLMModel):
 - StableAssistant is more than just an information source, StableAssistant is also able to write poetry, short stories, and make jokes.
 - StableAssistant will refuse to participate in anything that could harm a human."""
 
-    def user(self, user_message, history):
-        history = history + [[user_message, ""]]
-        return "", history, history
-
-
-    def bot(self, history, curr_system_message):
-        messages = f"<|SYSTEM|># {self.system_prompt}" + \
-            "".join(["".join(["<|USER|>"+item[0], "<|ASSISTANT|>"+item[1]])
-                    for item in history])
-        output = self.generate(messages)
-        history[-1][1] = output
-        time.sleep(1)
-        return history, history
-
     def _get_stablelm_style_input(self):
+        history = self.history + [{"role": "assistant", "content": ""}]
+        print(history)
         messages = self.system_prompt + \
-            "".join(["".join(["<|USER|>"+self.history[i]["content"], "<|ASSISTANT|>"+self.history[i + 1]["content"]])
-                    for i in range(0, len(self.history), 2)])
+            "".join(["".join(["<|USER|>"+history[i]["content"], "<|ASSISTANT|>"+history[i + 1]["content"]])
+                    for i in range(0, len(history), 2)])
         return messages
 
-    def generate(self, text, bad_text=None):
+    def _generate(self, text, bad_text=None):
         stop = StopOnTokens()
         result = self.generator(text, max_new_tokens=1024, num_return_sequences=1, num_beams=1, do_sample=True,
                         temperature=1.0, top_p=0.95, top_k=1000, stopping_criteria=StoppingCriteriaList([stop]))
         return result[0]["generated_text"].replace(text, "")
 
-    def contrastive_generate(self, text, bad_text):
-        with torch.no_grad():
-            tokens = self.tokenizer(text, return_tensors="pt")[
-                'input_ids'].cuda()[:, :4096-1024]
-            bad_tokens = self.tokenizer(bad_text, return_tensors="pt")[
-                'input_ids'].cuda()[:, :4096-1024]
-            history = None
-            bad_history = None
-            curr_output = list()
-            for i in range(1024):
-                out = self.model(tokens, past_key_values=history, use_cache=True)
-                logits = out.logits
-                history = out.past_key_values
-                bad_out = self.model(bad_tokens, past_key_values=bad_history,
-                            use_cache=True)
-                bad_logits = bad_out.logits
-                bad_history = bad_out.past_key_values
-                probs = F.softmax(logits.float(), dim=-1)[0][-1].cpu()
-                bad_probs = F.softmax(bad_logits.float(), dim=-1)[0][-1].cpu()
-                logits = torch.log(probs)
-                bad_logits = torch.log(bad_probs)
-                logits[probs > 0.1] = logits[probs > 0.1] - bad_logits[probs > 0.1]
-                probs = F.softmax(logits)
-                out = int(torch.multinomial(probs, 1))
-                if out in [50278, 50279, 50277, 1, 0]:
-                    break
-                else:
-                    curr_output.append(out)
-                out = np.array([out])
-                tokens = torch.from_numpy(np.array([out])).to(
-                    tokens.device)
-                bad_tokens = torch.from_numpy(np.array([out])).to(
-                    tokens.device)
-            return self.tokenizer.decode(curr_output)
-
     def get_answer_at_once(self):
         messages = self._get_stablelm_style_input()
-        return self.generate(messages)
+        return self._generate(messages), len(messages)
+
+    def get_answer_stream_iter(self):
+        stop = StopOnTokens()
+        messages = self._get_stablelm_style_input()
+
+        #model_inputs = tok([messages], return_tensors="pt")['input_ids'].cuda()[:, :4096-1024]
+        model_inputs = STABLELM_TOKENIZER([messages], return_tensors="pt").to("cuda")
+        streamer = TextIteratorStreamer(STABLELM_TOKENIZER, timeout=10., skip_prompt=True, skip_special_tokens=True)
+        generate_kwargs = dict(
+            model_inputs,
+            streamer=streamer,
+            max_new_tokens=1024,
+            do_sample=True,
+            top_p=0.95,
+            top_k=1000,
+            temperature=1.0,
+            num_beams=1,
+            stopping_criteria=StoppingCriteriaList([stop])
+        )
+        t = Thread(target=STABLELM_MODEL.generate, kwargs=generate_kwargs)
+        t.start()
+
+        partial_text = ""
+        for new_text in streamer:
+            partial_text += new_text
+            yield partial_text
