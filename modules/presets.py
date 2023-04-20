@@ -77,7 +77,8 @@ LOCAL_MODELS = [
     "llama-7b-hf",
     "llama-13b-hf",
     "llama-30b-hf",
-    "llama-65b-hf"
+    "llama-65b-hf",
+    "StableLM"
 ]
 
 if os.environ.get('HIDE_LOCAL_MODELS', 'false') == 'true':

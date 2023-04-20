@@ -577,6 +577,9 @@ def get_model(
             if os.environ.get("XMCHAT_API_KEY") != "":
                 access_key = os.environ.get("XMCHAT_API_KEY")
             model = XMChat(api_key=access_key)
+        elif model_type == ModelType.StableLM:
+            from StableLM import StableLM_Client
+            model = StableLM_Client(model_name)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)
