@@ -140,7 +140,7 @@ dmypy.json
 api_key.txt
 config.json
 auth.json
-models/
+.models/
 lora/
 .idea
 templates/*
