@@ -1,0 +1,11 @@
+version: '3'
+services:
+  chuanhuchatgpt:
+    build: . 
+    restart: always
+    container_name: chuanhuchatgpt
+    ports:
+      - '7860:7860'
+    volumes:
+      - '~/ChuanhuChatGPT/history:/app/history'
+      - '~/ChuanhuChatGPT/config.json:/app/config.json'
