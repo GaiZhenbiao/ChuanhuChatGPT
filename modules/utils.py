@@ -13,6 +13,9 @@ import html
 import sys
 import subprocess
 
+from uuid import uuid4
+import shutil
+
 import gradio as gr
 from pypinyin import lazy_pinyin
 import tiktoken
@@ -112,6 +115,15 @@ def set_single_turn(current_model, *args):
 
 def handle_file_upload(current_model, *args):
     return current_model.handle_file_upload(*args)
+
+def handle_chat_history_upload(current_model, tmp_file, chatbot, username):
+    if tmp_file is None:
+        return
+    history_name = os.path.basename(tmp_file.name)
+    if os.path.exists(os.path.join(HISTORY_DIR, username, history_name)):
+        basename, extension = os.path.splitext(history_name)
+        history_name = basename + '-' + str(uuid4())[0:8] + extension
+    shutil.copyfile(tmp_file.name, os.path.join(HISTORY_DIR, username, history_name))
 
 def like(current_model, *args):
     return current_model.like(*args)
