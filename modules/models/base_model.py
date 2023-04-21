@@ -552,7 +552,7 @@ class BaseLLMModel:
             logging.debug(f"{user_name} 加载对话历史完毕")
             self.history = json_s["history"]
             return filename, json_s["system"], json_s["chatbot"]
-        except FileNotFoundError:
+        except (FileNotFoundError,IsADirectoryError):
             logging.warning(f"{user_name} 没有找到对话历史文件，不执行任何操作")
             return filename, self.system_prompt, chatbot
 
