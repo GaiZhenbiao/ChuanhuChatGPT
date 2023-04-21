@@ -25,7 +25,7 @@ class MOSS_Client(BaseLLMModel):
         logger.setLevel("ERROR")
         warnings.filterwarnings("ignore")
         if MOSS_MODEL is None:
-            model_path = "/home/guest/llm_models/moss/moss-moon-003-sft"
+            model_path = "models/moss-moon-003-sft"
             if not os.path.exists(model_path):
                 model_path = snapshot_download("fnlp/moss-moon-003-sft")
 
