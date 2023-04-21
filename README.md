@@ -10,7 +10,7 @@
   </a>
 
 <p align="center">
-    <h3>为ChatGPT/ChatGLM/LLaMA等多种LLM提供了一个轻快好用的Web图形界面</h3>
+    <h3>为ChatGPT/ChatGLM/LLaMA/StableLM/MOSS等多种LLM提供了一个轻快好用的Web图形界面</h3>
     <p align="center">
       <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
         <img alt="Tests Passing" src="https://img.shields.io/github/license/GaiZhenbiao/ChuanhuChatGPT" />
