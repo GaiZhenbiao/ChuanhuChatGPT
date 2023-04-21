@@ -90,7 +90,8 @@ class MOSS_Client(BaseLLMModel):
                 eos_token_id=106068,
                 pad_token_id=MOSS_TOKENIZER.pad_token_id)
             response = MOSS_TOKENIZER.decode(outputs[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)
-        return response
+        response = response.lstrip("<|MOSS|>: ")
+        return response, len(response)
 
 
 if __name__ == "__main__":
