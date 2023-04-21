@@ -168,7 +168,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                     gr.Markdown(i18n("默认保存于history文件夹"))
                             with gr.Row():
                                 with gr.Column():
-                                    downloadFile = gr.File(interactive=True)
+                                    chat_history_files = gr.File(label=i18n("上传历史对话"), type="file")
+                            with gr.Row():
+                                with gr.Column():
+                                    downloadFile = gr.File(interactive=False, label=i18n("文件下载"))
 
                 with gr.Tab(label=i18n("高级")):
                     gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置"))
@@ -330,7 +333,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     submitBtn.click(**get_usage_args)
 
     index_files.change(handle_file_upload, [current_model, index_files, chatbot], [index_files, chatbot, status_display])
-
+    chat_history_files.change(handle_chat_history_upload, [current_model, chat_history_files, chatbot, user_name])
+    
     emptyBtn.click(
         reset,
         inputs=[current_model],
