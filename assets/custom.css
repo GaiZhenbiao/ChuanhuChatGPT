@@ -3,8 +3,8 @@
     --chatbot-color-dark: #121111;
 }
 
-p { margin-bottom: 10px !important;}
-p:last-child { margin-bottom: 0 !important; }
+.message p { margin-bottom: 0.6rem !important;}
+.message p:last-child { margin-bottom: 0 !important; }
 
 #app_title {
     font-weight: var(--prose-header-text-weight);
@@ -16,7 +16,7 @@ p:last-child { margin-bottom: 0 !important; }
 }
 #description {
     text-align: center;
-    margin:16px 0
+    margin: 16px 0;
 }
 
 /* 覆盖gradio的页脚信息QAQ */
@@ -247,6 +247,11 @@ ol:not(.options), ul:not(.options) {
     width: auto !important;
     border-bottom-right-radius: 0 !important;
 }
+
+.message-wrap>div img{
+    border-radius: 10px !important;
+}
+
 /* 表格 */
 table {
     margin: 1em 0;
@@ -280,7 +285,7 @@ pre code {
     background-color: hsla(0, 0%, 0%, 80%)!important;
     border-radius: 10px;
     padding: 1.4em 1.2em 0em 1.4em;
-    margin: 1.2em 2em 1.2em 0.5em;
+    margin: 0.6em 2em 1.2em 0.5em;
     color: #FFF;
     box-shadow: 6px 6px 16px hsla(0, 0%, 0%, 0.2);
 }

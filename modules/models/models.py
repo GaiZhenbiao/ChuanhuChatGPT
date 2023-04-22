@@ -461,7 +461,7 @@ class XMChat(BaseLLMModel):
             "appraise": "good"
         }
         requests.post(self.url, json=data)
-        return "👍点赞成功，，感谢反馈～"
+        return "👍点赞成功，感谢反馈～"
 
     def dislike(self):
         if self.last_conv_id is None:
