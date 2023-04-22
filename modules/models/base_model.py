@@ -123,7 +123,7 @@ class BaseLLMModel:
 
     def count_token(self, user_input):
         """get token count from input, implement if needed"""
-        logging.warning("token count not implemented, using default")
+        # logging.warning("token count not implemented, using default")
         return len(user_input)
 
     def stream_next_chatbot(self, inputs, chatbot, fake_input=None, display_append=""):
