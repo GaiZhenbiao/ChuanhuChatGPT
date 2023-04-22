@@ -71,6 +71,13 @@ my_api_key = os.environ.get("OPENAI_API_KEY", my_api_key)
 xmchat_api_key = config.get("xmchat_api_key", "")
 os.environ["XMCHAT_API_KEY"] = xmchat_api_key
 
+render_latex = config.get("render_latex", False)
+
+if render_latex:
+    os.environ["RENDER_LATEX"] = "yes"
+else:
+    os.environ["RENDER_LATEX"] = "no"
+
 ## 多账户机制
 multi_api_key = config.get("multi_api_key", False) # 是否开启多账户机制
 if multi_api_key:

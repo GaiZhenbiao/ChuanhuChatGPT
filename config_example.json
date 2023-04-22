@@ -8,6 +8,8 @@
     // 如果使用代理，请取消注释下面的两行，并替换代理URL
     // "https_proxy": "http://127.0.0.1:1079",
     // "http_proxy": "http://127.0.0.1:1079",
+    // 是否渲染LaTex
+    "render_latex": false,
     "users": [], // 用户列表，[[用户名1, 密码1], [用户名2, 密码2], ...]
     "local_embedding": false, //是否在本地编制索引
     "default_model": "gpt-3.5-turbo", // 默认模型

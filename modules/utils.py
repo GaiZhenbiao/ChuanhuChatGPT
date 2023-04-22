@@ -183,7 +183,7 @@ def convert_mdtext(md_text):
     for non_code, code in zip(non_code_parts, code_blocks + [""]):
         if non_code.strip():
             non_code = normalize_markdown(non_code)
-            if inline_code_pattern.search(non_code):
+            if inline_code_pattern.search(non_code) or os.environ["RENDER_LATEX"]=="no":
                 result.append(markdown(non_code, extensions=["tables"]))
             else:
                 result.append(mdtex2html.convert(non_code, extensions=["tables"]))
