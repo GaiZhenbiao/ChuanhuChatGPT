@@ -3,6 +3,9 @@
     --chatbot-color-dark: #121111;
 }
 
+p { margin-bottom: 10px !important;}
+p:last-child { margin-bottom: 0 !important; }
+
 #app_title {
     font-weight: var(--prose-header-text-weight);
     font-size: var(--text-xxl);
