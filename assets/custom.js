@@ -14,6 +14,9 @@ var userInfoDiv = null;
 var appTitleDiv = null;
 var chatbot = null;
 var apSwitch = null;
+var messageBotDivs = null;
+var renderLatex = null;
+var shouldRenderLatex = false;
 
 var ga = document.getElementsByTagName("gradio-app");
 var targetNode = ga[0];
@@ -22,13 +25,14 @@ var isInIframe = (window.self !== window.top);
 // gradio 页面加载好了么??? 我能动你的元素了么??
 function gradioLoaded(mutations) {
     for (var i = 0; i < mutations.length; i++) {
-        if (mutations[i].addedNodes.length) {  
+        if (mutations[i].addedNodes.length) {
             gradioContainer = document.querySelector(".gradio-container");
             user_input_tb = document.getElementById('user_input_tb');
             userInfoDiv = document.getElementById("user_info");
             appTitleDiv = document.getElementById("app_title");
             chatbot = document.querySelector('#chuanhu_chatbot');
             apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
+            renderLatex = document.querySelector("#render_latex_checkbox > label > input");
 
             if (gradioContainer && apSwitch) {  // gradioCainter 加载出来了没?
                 adjustDarkMode();
@@ -40,7 +44,11 @@ function gradioLoaded(mutations) {
                 setTimeout(showOrHideUserInfo(), 2000);
             }
             if (chatbot) {  // chatbot 加载出来了没?
-                setChatbotHeight()
+                setChatbotHeight();
+            }
+            if (renderLatex) {  // renderLatex 加载出来了没?
+                shouldRenderLatex = renderLatex.checked;
+                updateMathJax();
             }
         }
     }
@@ -140,12 +148,12 @@ function showOrHideUserInfo() {
     appTitleDiv.ontouchend = function () {
         setTimeout(function () {
             toggleUserInfoVisibility(true);
-        }, 3000); 
+        }, 3000);
     };
     userInfoDiv.ontouchend = function () {
         setTimeout(function () {
             toggleUserInfoVisibility(true);
-        }, 3000); 
+        }, 3000);
     };
     sendBtn.ontouchend = function () {
         setTimeout(function () {
@@ -208,6 +216,97 @@ function setChatbotHeight() {
         }
     }
 }
+
+var rendertime = 0; // for debugging
+var mathjaxUpdated = false;
+
+function renderMathJax() {
+    messageBotDivs = document.querySelectorAll('.message.bot');
+    for (var i = 0; i < messageBotDivs.length; i++) {
+        var mathJaxSpan = messageBotDivs[i].querySelector('.MathJax_Preview');
+        if (!mathJaxSpan && shouldRenderLatex && !mathjaxUpdated) {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, messageBotDivs[i]]);
+            rendertime +=1; // for debugging
+            console.log("renderingMathJax", i)
+        }
+    }
+    mathjaxUpdated = true;
+    console.log("MathJaxTriedToRender!!!")
+}
+
+function removeMathjax() {
+    // var jax = MathJax.Hub.getAllJax();
+    // for (var i = 0; i < jax.length; i++) {
+    //     // MathJax.typesetClear(jax[i]);
+    //     jax[i].Text(newmath)
+    //     jax[i].Reprocess()
+    // }
+    // 我真的不会了啊啊啊，mathjax并没有提供转换为原先文本的办法。
+    mathjaxUpdated = true;
+    console.log("MathJax removed!");
+}
+
+function updateMathJax() {
+    renderLatex.addEventListener("change", function() {
+        shouldRenderLatex = renderLatex.checked;
+        console.log(shouldRenderLatex)
+        if (!mathjaxUpdated) {
+            if (shouldRenderLatex) {
+                renderMathJax();
+            } else {
+                console.log("取消渲染！")
+                removeMathjax();
+            }
+        } else {
+            if (!shouldRenderLatex) {
+                mathjaxUpdated = false; // reset
+            }
+        }
+    });
+    if (shouldRenderLatex && !mathjaxUpdated) {
+        renderMathJax();
+    }
+    mathjaxUpdated = false;
+}
+
+let timeoutId;
+let isThrottled = false;
+// 监听所有元素中message的变化，用来查找需要渲染的mathjax
+var mObserver = new MutationObserver(function (mutationsList, observer) {
+    if (shouldRenderLatex) {
+        for (var mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                for (var node of mutation.addedNodes) {
+                    if (node.nodeType === 1 && node.classList.contains('message') && node.classList.contains('bot')) {
+                        // console.log("added");
+                        renderMathJax();
+                        mathjaxUpdated = false;
+                    }
+                }
+                for (var node of mutation.removedNodes) {
+                    if (node.nodeType === 1 && node.classList.contains('message') && node.classList.contains('bot')) {
+                        // console.log("removed");
+                        renderMathJax();
+                        mathjaxUpdated = false;
+                    }
+                }
+            } else if (mutation.type === 'attributes') {
+                if (mutation.target.nodeType === 1 && mutation.target.classList.contains('message') && mutation.target.classList.contains('bot')) {
+                    if (isThrottled) break; // 为了防止重复不断疯狂渲染，加上等待_(:з」∠)_
+                    isThrottled = true; 
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => {
+                        isThrottled = false;
+                        // console.log("changed");
+                        renderMathJax();
+                        mathjaxUpdated = false;
+                    }, 500);
+                }
+            }
+        }
+    }
+});
+mObserver.observe(targetNode, { attributes: true, childList: true, subtree: true });
 
 // 监视页面内部 DOM 变动
 var observer = new MutationObserver(function (mutations) {
