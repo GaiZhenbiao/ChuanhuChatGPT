@@ -570,6 +570,7 @@ class BaseLLMModel:
 
     def auto_load(self):
         if self.user_identifier == "":
+            self.reset()
             return self.system_prompt, gr.update()
         history_file_path = get_history_filepath(self.user_identifier)
         filename, system_prompt, chatbot = self.load_chat_history(history_file_path, self.user_identifier)
