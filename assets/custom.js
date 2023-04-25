@@ -13,10 +13,12 @@ var user_input_tb = null;
 var userInfoDiv = null;
 var appTitleDiv = null;
 var chatbot = null;
+var chatbotWrap = null;
 var apSwitch = null;
 var messageBotDivs = null;
 var renderLatex = null;
 var shouldRenderLatex = false;
+var historyLoaded = false;
 
 var ga = document.getElementsByTagName("gradio-app");
 var targetNode = ga[0];
@@ -31,6 +33,7 @@ function gradioLoaded(mutations) {
             userInfoDiv = document.getElementById("user_info");
             appTitleDiv = document.getElementById("app_title");
             chatbot = document.querySelector('#chuanhu_chatbot');
+            chatbotWrap = document.querySelector('#chuanhu_chatbot > .wrap');
             apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
             renderLatex = document.querySelector("#render_latex_checkbox > label > input");
 
@@ -45,6 +48,11 @@ function gradioLoaded(mutations) {
             }
             if (chatbot) {  // chatbot 加载出来了没?
                 setChatbotHeight();
+            }
+            if (chatbotWrap) {
+                if (!historyLoaded){
+                    loadHistoryHtml();
+                }
             }
             if (renderLatex) {  // renderLatex 加载出来了没?
                 shouldRenderLatex = renderLatex.checked;
@@ -273,40 +281,78 @@ let timeoutId;
 let isThrottled = false;
 // 监听所有元素中message的变化，用来查找需要渲染的mathjax
 var mObserver = new MutationObserver(function (mutationsList, observer) {
-    if (shouldRenderLatex) {
-        for (var mutation of mutationsList) {
-            if (mutation.type === 'childList') {
-                for (var node of mutation.addedNodes) {
-                    if (node.nodeType === 1 && node.classList.contains('message') && node.classList.contains('bot')) {
-                        // console.log("added");
+    for (var mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            for (var node of mutation.addedNodes) {
+                if (node.nodeType === 1 && node.classList.contains('message') && node.classList.contains('bot')) {
+                    if (shouldRenderLatex) {
                         renderMathJax();
                         mathjaxUpdated = false;
                     }
+                    saveHistoryHtml();
                 }
-                for (var node of mutation.removedNodes) {
-                    if (node.nodeType === 1 && node.classList.contains('message') && node.classList.contains('bot')) {
-                        // console.log("removed");
+            }
+            for (var node of mutation.removedNodes) {
+                if (node.nodeType === 1 && node.classList.contains('message') && node.classList.contains('bot')) {
+                    if (shouldRenderLatex) {
                         renderMathJax();
                         mathjaxUpdated = false;
                     }
+                    saveHistoryHtml();
                 }
-            } else if (mutation.type === 'attributes') {
-                if (mutation.target.nodeType === 1 && mutation.target.classList.contains('message') && mutation.target.classList.contains('bot')) {
-                    if (isThrottled) break; // 为了防止重复不断疯狂渲染，加上等待_(:з」∠)_
-                    isThrottled = true; 
-                    clearTimeout(timeoutId);
-                    timeoutId = setTimeout(() => {
-                        isThrottled = false;
+            }
+        } else if (mutation.type === 'attributes') {
+            if (mutation.target.nodeType === 1 && mutation.target.classList.contains('message') && mutation.target.classList.contains('bot')) {
+                if (isThrottled) break; // 为了防止重复不断疯狂渲染，加上等待_(:з」∠)_
+                isThrottled = true;
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    isThrottled = false;
+                    if (shouldRenderLatex) {
                         // console.log("changed");
                         renderMathJax();
                         mathjaxUpdated = false;
-                    }, 500);
-                }
+                    }
+                    saveHistoryHtml();
+                }, 500);
             }
         }
     }
 });
 mObserver.observe(targetNode, { attributes: true, childList: true, subtree: true });
+
+var loadhistorytime = 0; // for debugging
+function saveHistoryHtml() {
+    var historyHtml = document.querySelector('#chuanhu_chatbot > .wrap');
+    // innerHTML;
+    localStorage.setItem('chatHistory', historyHtml.innerHTML);
+    console.log("history saved")
+    historyLoaded = false;
+}
+
+var fakeHistory;
+function loadHistoryHtml() {
+    var historyHtml = localStorage.getItem('chatHistory');
+    if (!historyLoaded) {
+        fakeHistory = document.querySelector('.history-message');
+        if (!fakeHistory) {
+            fakeHistory = document.createElement('div');
+            fakeHistory.classList.add('history-message');
+            fakeHistory.innerHTML = historyHtml;
+            chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
+            // chatbotWrap.appendChild(fakeHistory);
+        } else {
+            chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
+            // chatbotWrap.appendChild(fakeHistory);
+        }
+        historyLoaded = true;
+        // localStorage.removeItem("chatHistory");
+        console.log("History Loaded");
+        loadhistorytime += 1; // for debugging
+    } else {
+        historyLoaded = false;
+    }
+}
 
 // 监视页面内部 DOM 变动
 var observer = new MutationObserver(function (mutations) {
@@ -317,6 +363,7 @@ observer.observe(targetNode, { childList: true, subtree: true });
 // 监视页面变化
 window.addEventListener("DOMContentLoaded", function () {
     isInIframe = (window.self !== window.top);
+    historyLoaded = false
 });
 window.addEventListener('resize', setChatbotHeight);
 window.addEventListener('scroll', setChatbotHeight);

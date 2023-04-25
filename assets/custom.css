@@ -252,6 +252,43 @@ ol:not(.options), ul:not(.options) {
     border-radius: 10px !important;
 }
 
+/* history message */
+.wrap>.history-message {
+    padding: 10px !important;
+}
+.history-message {
+    /* padding: 0 !important; */
+    opacity: 80%;
+    display: flex;
+    flex-direction: column;
+}
+.history-message>.history-message {
+    padding: 0 !important;
+}
+.history-message>.message-wrap {
+    padding: 0 !important;
+    margin-bottom: 16px;
+}
+.history-message>.message {
+    margin-bottom: 16px;
+}
+.wrap>.history-message::after {
+    content: "";
+    display: block;
+    height: 2px;
+    background-color: var(--body-text-color-subdued);
+    margin-bottom: 10px;
+    margin-top: -10px;
+    clear: both;
+}
+.wrap>.history-message>:last-child::after {
+    content: "仅供查看";
+    display: block;
+    text-align: center;
+    color: var(--body-text-color-subdued);
+    font-size: 0.8em;
+}
+
 /* 表格 */
 table {
     margin: 1em 0;
