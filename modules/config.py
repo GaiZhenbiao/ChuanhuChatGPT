@@ -18,6 +18,7 @@ __all__ = [
     "log_level",
     "advance_docs",
     "update_doc_config",
+    "render_latex",
     "multi_api_key",
     "server_name",
     "server_port",

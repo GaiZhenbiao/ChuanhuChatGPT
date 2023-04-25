@@ -186,7 +186,8 @@ def convert_mdtext(md_text):
             if inline_code_pattern.search(non_code) or os.environ["RENDER_LATEX"]=="no":
                 result.append(markdown(non_code, extensions=["tables"]))
             else:
-                result.append(mdtex2html.convert(non_code, extensions=["tables"]))
+                result.append(markdown(non_code, extensions=["tables"])) # 无论如何都不在后端渲染公式
+                # result.append(mdtex2html.convert(non_code, extensions=["tables"]))
         if code.strip():
             # _, code = detect_language(code)  # 暂时去除代码高亮功能，因为在大段代码的情况下会出现问题
             # code = code.replace("\n\n", "\n") # 暂时去除代码中的空行，因为在大段代码的情况下会出现问题
