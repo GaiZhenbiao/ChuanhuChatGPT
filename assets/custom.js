@@ -227,11 +227,11 @@ function renderMathJax() {
         if (!mathJaxSpan && shouldRenderLatex && !mathjaxUpdated) {
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, messageBotDivs[i]]);
             rendertime +=1; // for debugging
-            console.log("renderingMathJax", i)
+            // console.log("renderingMathJax", i)
         }
     }
     mathjaxUpdated = true;
-    console.log("MathJaxTriedToRender!!!")
+    console.log("MathJax Rendered")
 }
 
 function removeMathjax() {
@@ -243,18 +243,18 @@ function removeMathjax() {
     // }
     // 我真的不会了啊啊啊，mathjax并没有提供转换为原先文本的办法。
     mathjaxUpdated = true;
-    console.log("MathJax removed!");
+    // console.log("MathJax removed!");
 }
 
 function updateMathJax() {
     renderLatex.addEventListener("change", function() {
         shouldRenderLatex = renderLatex.checked;
-        console.log(shouldRenderLatex)
+        // console.log(shouldRenderLatex)
         if (!mathjaxUpdated) {
             if (shouldRenderLatex) {
                 renderMathJax();
             } else {
-                console.log("取消渲染！")
+                console.log("MathJax Disabled")
                 removeMathjax();
             }
         } else {
