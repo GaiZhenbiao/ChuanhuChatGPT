@@ -15,6 +15,7 @@ var appTitleDiv = null;
 var chatbot = null;
 var chatbotWrap = null;
 var apSwitch = null;
+var empty_botton = null;
 var messageBotDivs = null;
 var renderLatex = null;
 var shouldRenderLatex = false;
@@ -36,6 +37,7 @@ function gradioLoaded(mutations) {
             chatbotWrap = document.querySelector('#chuanhu_chatbot > .wrap');
             apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
             renderLatex = document.querySelector("#render_latex_checkbox > label > input");
+            empty_botton = document.getElementById("empty_btn")
 
             if (gradioContainer && apSwitch) {  // gradioCainter 加载出来了没?
                 adjustDarkMode();
@@ -57,6 +59,9 @@ function gradioLoaded(mutations) {
             if (renderLatex) {  // renderLatex 加载出来了没?
                 shouldRenderLatex = renderLatex.checked;
                 updateMathJax();
+            }
+            if (empty_botton) {
+                emptyHistory();
             }
         }
     }
@@ -352,6 +357,17 @@ function loadHistoryHtml() {
     } else {
         historyLoaded = false;
     }
+}
+
+function emptyHistory (){
+    empty_botton.addEventListener("click", function () {
+        localStorage.removeItem("chatHistory");
+        historyMessages = chatbotWrap.querySelector('.history-message');
+        if (historyMessages) {
+            chatbotWrap.removeChild(historyMessages);
+            console.log("History Cleared");
+        }
+    });
 }
 
 // 监视页面内部 DOM 变动

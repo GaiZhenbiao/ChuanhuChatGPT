@@ -62,7 +62,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                     cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel_btn")
             with gr.Row():
                 emptyBtn = gr.Button(
-                    i18n("🧹 新的对话"),
+                    i18n("🧹 新的对话"), elem_id="empty_btn"
                 )
                 retryBtn = gr.Button(i18n("🔄 重新生成"))
                 delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
