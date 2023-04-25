@@ -38,15 +38,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     with gr.Row(elem_id="float_display"):
         user_info = gr.Markdown(value="getting user info...", elem_id="user_info")
 
-        # https://github.com/gradio-app/gradio/pull/3296
-        def create_greeting(request: gr.Request):
-            if hasattr(request, "username") and request.username: # is not None or is not ""
-                logging.info(f"Get User Name: {request.username}")
-                return gr.Markdown.update(value=f"User: {request.username}"), request.username
-            else:
-                return gr.Markdown.update(value=f"User: default", visible=False), ""
-        demo.load(create_greeting, inputs=None, outputs=[user_info, user_name])
-
     with gr.Row().style(equal_height=True):
         with gr.Column(scale=5):
             with gr.Row():
@@ -277,7 +268,15 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(FOOTER.format(versions=versions_html()), elem_id="footer")
-    demo.load(refresh_ui_elements_on_load, [current_model, model_select_dropdown], [like_dislike_area], show_progress=False)
+    # https://github.com/gradio-app/gradio/pull/3296
+    def create_greeting(request: gr.Request):
+        if hasattr(request, "username") and request.username: # is not None or is not ""
+            logging.info(f"Get User Name: {request.username}")
+            return gr.Markdown.update(value=f"User: {request.username}"), request.username
+        else:
+            return gr.Markdown.update(value=f"User: default", visible=False), ""
+    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name])
+    demo.load(refresh_ui_elements_on_load, [current_model, model_select_dropdown, user_name], [like_dislike_area, systemPromptTxt, chatbot], show_progress=False)
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[
@@ -318,7 +317,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     load_history_from_file_args = dict(
         fn=load_chat_history,
-        inputs=[current_model, historyFileSelectDropdown, chatbot, user_name],
+        inputs=[current_model, historyFileSelectDropdown, user_name],
         outputs=[saveFileName, systemPromptTxt, chatbot]
     )
 
@@ -389,9 +388,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     keyTxt.change(set_key, [current_model, keyTxt], [user_api_key, status_display]).then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
     single_turn_checkbox.change(set_single_turn, [current_model, single_turn_checkbox], None)
-    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt], [current_model, status_display, lora_select_dropdown], show_progress=True)
+    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name], [current_model, status_display, lora_select_dropdown], show_progress=True)
     model_select_dropdown.change(toggle_like_btn_visibility, [model_select_dropdown], [like_dislike_area], show_progress=False)
-    lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt], [current_model, status_display], show_progress=True)
+    lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name], [current_model, status_display], show_progress=True)
 
     # Template
     systemPromptTxt.change(set_system_prompt, [current_model, systemPromptTxt], None)

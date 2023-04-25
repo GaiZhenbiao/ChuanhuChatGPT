@@ -243,8 +243,11 @@ def save_file(filename, system, history, chatbot, user_name):
     os.makedirs(os.path.join(HISTORY_DIR, user_name), exist_ok=True)
     if filename.endswith(".json"):
         json_s = {"system": system, "history": history, "chatbot": chatbot}
-        print(json_s)
-        with open(os.path.join(HISTORY_DIR, user_name, filename), "w") as f:
+        if "/" in filename or "\\" in filename:
+            history_file_path = filename
+        else:
+            history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
+        with open(history_file_path, "w") as f:
             json.dump(json_s, f)
     elif filename.endswith(".md"):
         md_s = f"system: \n- {system} \n"
@@ -535,11 +538,36 @@ def get_model_source(model_name, alternative_source):
     if model_name == "gpt2-medium":
         return "https://huggingface.co/gpt2-medium"
 
-def refresh_ui_elements_on_load(current_model, selected_model_name):
-    return toggle_like_btn_visibility(selected_model_name)
+def refresh_ui_elements_on_load(current_model, selected_model_name, user_name):
+    current_model.set_user_identifier(user_name)
+    return toggle_like_btn_visibility(selected_model_name), *current_model.auto_load()
 
 def toggle_like_btn_visibility(selected_model_name):
     if selected_model_name == "xmchat":
         return gr.update(visible=True)
     else:
         return gr.update(visible=False)
+
+def new_auto_history_filename():
+    now = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    return f'{now}.json'
+
+def get_history_filepath(username):
+    dirname = os.path.join(HISTORY_DIR, username)
+    pattern = re.compile(r'\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}')
+    latest_time = None
+    latest_file = None
+    for filename in os.listdir(dirname):
+        if os.path.isfile(os.path.join(dirname, filename)):
+            match = pattern.search(filename)
+            if match and match.group(0) == filename[:19]:
+                time_str = filename[:19]
+                filetime = datetime.datetime.strptime(time_str, '%Y-%m-%d_%H-%M-%S')
+                if not latest_time or filetime > latest_time:
+                    latest_time = filetime
+                    latest_file = filename
+    if not latest_file:
+        latest_file = new_auto_history_filename()
+
+    latest_file = os.path.join(dirname, latest_file)
+    return latest_file
