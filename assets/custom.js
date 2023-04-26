@@ -18,6 +18,11 @@ var apSwitch = null;
 var empty_botton = null;
 var messageBotDivs = null;
 var renderLatex = null;
+var loginUserForm = null;
+var logginUser = null;
+
+var userLogged = false;
+var usernameGotten = false;
 var shouldRenderLatex = false;
 var historyLoaded = false;
 
@@ -29,6 +34,7 @@ var isInIframe = (window.self !== window.top);
 function gradioLoaded(mutations) {
     for (var i = 0; i < mutations.length; i++) {
         if (mutations[i].addedNodes.length) {
+            loginUserForm = document.querySelector(".gradio-container > .main > .wrap > .panel > .form")
             gradioContainer = document.querySelector(".gradio-container");
             user_input_tb = document.getElementById('user_input_tb');
             userInfoDiv = document.getElementById("user_info");
@@ -39,6 +45,11 @@ function gradioLoaded(mutations) {
             renderLatex = document.querySelector("#render_latex_checkbox > label > input");
             empty_botton = document.getElementById("empty_btn")
 
+            if (loginUserForm) {
+                localStorage.setItem("userLogged", true);
+                userLogged = true;
+            }
+
             if (gradioContainer && apSwitch) {  // gradioCainter 加载出来了没?
                 adjustDarkMode();
             }
@@ -46,13 +57,16 @@ function gradioLoaded(mutations) {
                 selectHistory();
             }
             if (userInfoDiv && appTitleDiv) {  // userInfoDiv 和 appTitleDiv 加载出来了没?
+                if (!usernameGotten) {
+                    getUserInfo();
+                }
                 setTimeout(showOrHideUserInfo(), 2000);
             }
             if (chatbot) {  // chatbot 加载出来了没?
                 setChatbotHeight();
             }
             if (chatbotWrap) {
-                if (!historyLoaded){
+                if (!historyLoaded) {
                     loadHistoryHtml();
                 }
             }
@@ -112,6 +126,33 @@ function selectHistory() {
                 }
             }
         });
+    }
+}
+
+var username = null;
+function getUserInfo() {
+    if (usernameGotten) {
+        return;
+    }
+    if (userLogged) {
+        username = userInfoDiv.innerText;
+        if (username) {
+            if (username === "getting user info…\n") {
+                setTimeout(getUserInfo, 500);
+                return;
+            } else if (username === " ") {
+                localStorage.removeItem("username");
+                localStorage.removeItem("userLogged")
+                userLogged = false;
+                usernameGotten = true;
+                return;
+            } else {
+                username = username.match(/User:\s*(.*)/)[1] || username;
+                localStorage.setItem("username", username);
+                usernameGotten = true;
+                clearHistoryHtml();
+            }
+        }
     }
 }
 
@@ -329,44 +370,44 @@ mObserver.observe(targetNode, { attributes: true, childList: true, subtree: true
 var loadhistorytime = 0; // for debugging
 function saveHistoryHtml() {
     var historyHtml = document.querySelector('#chuanhu_chatbot > .wrap');
-    // innerHTML;
     localStorage.setItem('chatHistory', historyHtml.innerHTML);
-    console.log("history saved")
+    console.log("History Saved")
     historyLoaded = false;
 }
-
-var fakeHistory;
 function loadHistoryHtml() {
     var historyHtml = localStorage.getItem('chatHistory');
+    if (!historyHtml) {
+        historyLoaded = true;
+        return; // no history, do nothing
+    }
+    userLogged = localStorage.getItem('userLogged');
+    if (userLogged){
+        historyLoaded = true;
+        return; // logged in, do nothing
+    }
     if (!historyLoaded) {
-        fakeHistory = document.querySelector('.history-message');
-        if (!fakeHistory) {
-            fakeHistory = document.createElement('div');
+            var fakeHistory = document.createElement('div');
             fakeHistory.classList.add('history-message');
             fakeHistory.innerHTML = historyHtml;
             chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
-            // chatbotWrap.appendChild(fakeHistory);
-        } else {
-            chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
-            // chatbotWrap.appendChild(fakeHistory);
-        }
         historyLoaded = true;
-        // localStorage.removeItem("chatHistory");
         console.log("History Loaded");
         loadhistorytime += 1; // for debugging
     } else {
         historyLoaded = false;
     }
 }
-
-function emptyHistory (){
+function clearHistoryHtml() {
+    localStorage.removeItem("chatHistory");
+    historyMessages = chatbotWrap.querySelector('.history-message');
+    if (historyMessages) {
+        chatbotWrap.removeChild(historyMessages);
+        console.log("History Cleared");
+    }
+}
+function emptyHistory() {
     empty_botton.addEventListener("click", function () {
-        localStorage.removeItem("chatHistory");
-        historyMessages = chatbotWrap.querySelector('.history-message');
-        if (historyMessages) {
-            chatbotWrap.removeChild(historyMessages);
-            console.log("History Cleared");
-        }
+        clearHistoryHtml();
     });
 }
 
@@ -379,7 +420,7 @@ observer.observe(targetNode, { childList: true, subtree: true });
 // 监视页面变化
 window.addEventListener("DOMContentLoaded", function () {
     isInIframe = (window.self !== window.top);
-    historyLoaded = false
+    historyLoaded = false;
 });
 window.addEventListener('resize', setChatbotHeight);
 window.addEventListener('scroll', setChatbotHeight);
