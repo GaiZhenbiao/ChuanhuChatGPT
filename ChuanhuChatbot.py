@@ -426,7 +426,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     )
     historyRefreshBtn.click(get_history_names, [gr.State(False), user_name], [historyFileSelectDropdown])
     historyFileSelectDropdown.change(**load_history_from_file_args)
-    downloadFile.change(**load_history_from_file_args)
+    downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [saveFileName, systemPromptTxt, chatbot])
 
     # Advanced
     max_context_length_slider.change(set_token_upper_limit, [current_model, max_context_length_slider], None)

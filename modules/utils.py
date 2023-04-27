@@ -77,6 +77,10 @@ def export_markdown(current_model, *args):
 def load_chat_history(current_model, *args):
     return current_model.load_chat_history(*args)
 
+def upload_chat_history(current_model, file_src, username):
+    filename = file_src.name
+    return current_model.load_chat_history(filename, username)
+
 def set_token_upper_limit(current_model, *args):
     return current_model.set_token_upper_limit(*args)
 
