@@ -134,10 +134,11 @@ function getUserInfo() {
     if (usernameGotten) {
         return;
     }
+    userLogged = localStorage.getItem('userLogged');
     if (userLogged) {
         username = userInfoDiv.innerText;
         if (username) {
-            if (username === "getting user info…\n") {
+            if (username.includes("getting user info…")) {
                 setTimeout(getUserInfo, 500);
                 return;
             } else if (username === " ") {
