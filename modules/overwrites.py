@@ -76,15 +76,15 @@ def postprocess_chat_messages(
         else:
             raise ValueError(f"Invalid message for Chatbot component: {chat_message}")
 
-with open("./assets/custom.js", "r", encoding="utf-8") as f, open("./assets/Kelpy-Codos.js", "r", encoding="utf-8") as f2, open("./assets/load-mathjax.js", "r", encoding="utf-8") as f3:
+with open("./assets/custom.js", "r", encoding="utf-8") as f, open("./assets/Kelpy-Codos.js", "r", encoding="utf-8") as f2, open("./assets/external-scripts.js", "r", encoding="utf-8") as f3:
     customJS = f.read()
     kelpyCodos = f2.read()
-    loadMathjax = f3.read()
+    externalScripts = f3.read()
 
 
 def reload_javascript():
     print("Reloading javascript...")
-    js = f'<script>{customJS}</script><script>{kelpyCodos}</script><script async>{loadMathjax}</script>'
+    js = f'<script>{customJS}</script><script>{kelpyCodos}</script><script async>{externalScripts}</script>'
     def template_response(*args, **kwargs):
         res = GradioTemplateResponseOriginal(*args, **kwargs)
         res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))
