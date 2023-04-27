@@ -272,11 +272,13 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     def create_greeting(request: gr.Request):
         if hasattr(request, "username") and request.username: # is not None or is not ""
             logging.info(f"Get User Name: {request.username}")
-            return gr.Markdown.update(value=f"User: {request.username}"), request.username
+            user_info, user_name = gr.Markdown.update(value=f"User: {request.username}"), request.username
         else:
-            return gr.Markdown.update(value=f"", visible=False), ""
-    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name])
-    demo.load(refresh_ui_elements_on_load, [current_model, model_select_dropdown, user_name], [like_dislike_area, systemPromptTxt, chatbot], show_progress=False)
+            user_info, user_name = gr.Markdown.update(value=f"", visible=False), ""
+        current_model = get_model(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key)[0]
+        current_model.set_user_identifier(user_name)
+        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), *current_model.auto_load()
+    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot])
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[
