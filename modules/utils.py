@@ -77,9 +77,8 @@ def export_markdown(current_model, *args):
 def load_chat_history(current_model, *args):
     return current_model.load_chat_history(*args)
 
-def upload_chat_history(current_model, file_src, username):
-    filename = file_src.name
-    return current_model.load_chat_history(filename, username)
+def upload_chat_history(current_model, *args):
+    return current_model.load_chat_history(*args)
 
 def set_token_upper_limit(current_model, *args):
     return current_model.set_token_upper_limit(*args)
@@ -287,7 +286,10 @@ def get_file_names(dir, plain=False, filetypes=[".json"]):
 
 def get_history_names(plain=False, user_name=""):
     logging.debug(f"从用户 {user_name} 中获取历史记录文件名列表")
-    return get_file_names(os.path.join(HISTORY_DIR, user_name), plain)
+    if user_name == "":
+        return ""
+    else:
+        return get_file_names(os.path.join(HISTORY_DIR, user_name), plain)
 
 
 def load_template(filename, mode=0):

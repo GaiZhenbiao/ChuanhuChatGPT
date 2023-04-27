@@ -143,8 +143,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                     historyFileSelectDropdown = gr.Dropdown(
                                         label=i18n("从列表中加载对话"),
                                         choices=get_history_names(plain=True),
-                                        multiselect=False,
-                                        value=get_history_names(plain=True)[0],
+                                        multiselect=False
                                     )
                                 with gr.Column(scale=1):
                                     historyRefreshBtn = gr.Button(i18n("🔄 刷新"))

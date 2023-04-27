@@ -539,7 +539,7 @@ class BaseLLMModel:
     def load_chat_history(self, filename, user_name):
         logging.debug(f"{user_name} 加载对话历史中……")
         logging.info(f"filename: {filename}")
-        if type(filename) != str:
+        if type(filename) != str and filename is not None:
             filename = filename.name
         try:
             if "/" not in filename:
@@ -566,8 +566,8 @@ class BaseLLMModel:
             return os.path.basename(filename), json_s["system"], json_s["chatbot"]
         except:
             # 没有对话历史或者对话历史解析失败
-            logging.info(f"没有找到对话历史记录 {history_file_path}")
-            return os.path.basename(filename), self.system_prompt, gr.update()
+            logging.info(f"没有找到对话历史记录 {filename}")
+            return gr.update(), self.system_prompt, gr.update()
 
     def auto_load(self):
         if self.user_identifier == "":
