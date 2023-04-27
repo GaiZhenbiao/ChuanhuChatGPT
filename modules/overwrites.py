@@ -76,7 +76,9 @@ def postprocess_chat_messages(
         else:
             raise ValueError(f"Invalid message for Chatbot component: {chat_message}")
 
-with open("./assets/custom.js", "r", encoding="utf-8") as f, open("./assets/Kelpy-Codos.js", "r", encoding="utf-8") as f2, open("./assets/external-scripts.js", "r", encoding="utf-8") as f3:
+with open("./assets/custom.js", "r", encoding="utf-8") as f, \
+    open("./assets/Kelpy-Codos.js", "r", encoding="utf-8") as f2, \
+    open("./assets/external-scripts.js", "r", encoding="utf-8") as f3:
     customJS = f.read()
     kelpyCodos = f2.read()
     externalScripts = f3.read()
