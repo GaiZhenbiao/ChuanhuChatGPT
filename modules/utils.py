@@ -25,7 +25,7 @@ import pandas as pd
 
 from modules.presets import *
 from . import shared
-from modules.config import retrieve_proxy
+from modules.config import retrieve_proxy, hide_history_when_not_logged_in
 
 if TYPE_CHECKING:
     from typing import TypedDict
@@ -286,7 +286,7 @@ def get_file_names(dir, plain=False, filetypes=[".json"]):
 
 def get_history_names(plain=False, user_name=""):
     logging.debug(f"从用户 {user_name} 中获取历史记录文件名列表")
-    if user_name == "":
+    if user_name == "" and hide_history_when_not_logged_in:
         return ""
     else:
         return get_file_names(os.path.join(HISTORY_DIR, user_name), plain)

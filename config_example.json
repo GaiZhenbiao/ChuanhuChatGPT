@@ -12,6 +12,7 @@
     "render_latex": false,
     "users": [], // 用户列表，[[用户名1, 密码1], [用户名2, 密码2], ...]
     "local_embedding": false, //是否在本地编制索引
+    "hide_history_when_not_logged_in": false, //未登录情况下是否不展示对话历史
     "default_model": "gpt-3.5-turbo", // 默认模型
     "advance_docs": {
         "pdf": {

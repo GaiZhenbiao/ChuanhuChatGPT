@@ -23,6 +23,7 @@ __all__ = [
     "server_name",
     "server_port",
     "share",
+    "hide_history_when_not_logged_in"
 ]
 
 # 添加一个统一的config文件，避免文件过多造成的疑惑（优先级最低）
@@ -35,6 +36,8 @@ else:
 
 lang_config = config.get("language", "auto")
 language = os.environ.get("LANGUAGE", lang_config)
+
+hide_history_when_not_logged_in = config.get("hide_history_when_not_logged_in", False)
 
 if os.path.exists("api_key.txt"):
     logging.info("检测到api_key.txt文件，正在进行迁移...")
