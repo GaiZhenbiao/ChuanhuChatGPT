@@ -484,7 +484,7 @@ class BaseLLMModel:
         self.history = []
         self.all_token_counts = []
         self.interrupted = False
-        pathlib.Path(os.path.join(HISTORY_DIR, self.user_identifier, new_auto_history_filename())).touch()
+        pathlib.Path(os.path.join(HISTORY_DIR, self.user_identifier, new_auto_history_filename(os.path.join(HISTORY_DIR, self.user_identifier)))).touch()
         return [], self.token_message([0])
 
     def delete_first_conversation(self):

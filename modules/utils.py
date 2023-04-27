@@ -554,12 +554,16 @@ def toggle_like_btn_visibility(selected_model_name):
     else:
         return gr.update(visible=False)
 
-def new_auto_history_filename():
+def new_auto_history_filename(dirname):
+    latest_file = get_latest_filepath(dirname)
+    if latest_file:
+        with open(os.path.join(dirname, latest_file), 'r') as f:
+            if len(f.read()) == 0:
+                return latest_file
     now = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     return f'{now}.json'
 
-def get_history_filepath(username):
-    dirname = os.path.join(HISTORY_DIR, username)
+def get_latest_filepath(dirname):
     pattern = re.compile(r'\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}')
     latest_time = None
     latest_file = None
@@ -572,8 +576,13 @@ def get_history_filepath(username):
                 if not latest_time or filetime > latest_time:
                     latest_time = filetime
                     latest_file = filename
+    return latest_file
+
+def get_history_filepath(username):
+    dirname = os.path.join(HISTORY_DIR, username)
+    latest_file = get_latest_filepath(dirname)
     if not latest_file:
-        latest_file = new_auto_history_filename()
+        latest_file = new_auto_history_filename(dirname)
 
     latest_file = os.path.join(dirname, latest_file)
     return latest_file
