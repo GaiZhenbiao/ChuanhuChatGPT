@@ -1,4 +1,4 @@
-gradio==3.25.0
+gradio==3.28.0
 mdtex2html
 pypinyin
 tiktoken
@@ -7,7 +7,7 @@ tqdm
 colorama
 duckduckgo_search
 Pygments
-llama_index==0.5.13
+llama_index==0.5.25
 langchain
 markdown
 PyPDF2

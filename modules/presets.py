@@ -164,7 +164,7 @@ ALREADY_CONVERTED_MARK = "<!-- ALREADY CONVERTED BY PARSER. -->"
 
 small_and_beautiful_theme = gr.themes.Soft(
         primary_hue=gr.themes.Color(
-            c50="#02C160",
+            c50="rgba(2, 193, 96, 0.1)",
             c100="rgba(2, 193, 96, 0.2)",
             c200="#02C160",
             c300="rgba(2, 193, 96, 0.32)",

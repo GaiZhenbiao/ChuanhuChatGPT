@@ -230,6 +230,7 @@ class BaseLLMModel:
                     similarity_top_k=5,
                     vector_store=index._vector_store,
                     docstore=index._docstore,
+                    response_synthesizer=None
                 )
                 query_bundle = QueryBundle(real_inputs)
                 nodes = query_object.retrieve(query_bundle)
