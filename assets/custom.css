@@ -251,53 +251,34 @@ ol:not(.options), ul:not(.options) {
     display: none;
 }
 
-.copy-bot-btn {
+
+.chuanhu-btn {
     border-radius: 5px;
     /* background-color: #E6E6E6 !important; */
     color: rgba(120, 120, 120, 0.64) !important;
     padding: 4px !important;
     position: absolute;
     right: -22px;
+    cursor: pointer !important;
+    transition: color .2s ease, background-color .2s ease;
+}
+.chuanhu-btn:hover {
+    background-color: rgba(167, 167, 167, 0.25) !important;
+    color: unset !important;
+}
+.chuanhu-btn:active {
+    background-color: rgba(167, 167, 167, 0.5) !important;
+}
+.chuanhu-btn:focus {
+    outline: none;
+}
+.copy-bot-btn {
     bottom: 0;
-    cursor: pointer !important;
-    transition: color .2s ease, background-color .2s ease;
 }
-.copy-bot-btn:hover {
-    background-color: rgba(167, 167, 167, 0.25) !important;
-    color: unset !important;
-}
-.copy-bot-btn:active {
-    background-color: rgba(167, 167, 167, 0.5) !important;
-}
-.copy-bot-btn:focus {
-    outline: none;
-}
-
-.toggle-btn {
-    border-radius: 5px;
-    color: rgba(120, 120, 120, 0.64) !important;
-    padding: 4px !important;
-    position: absolute;
-    right: -22px;
+.toggle-md-btn {
     bottom: 18px;
-    cursor: pointer !important;
-    transition: color .2s ease, background-color .2s ease;
 }
-
-.toggle-btn:hover {
-    background-color: rgba(167, 167, 167, 0.25) !important;
-    color: unset !important;
-}
-
-.toggle-btn:active {
-    background-color: rgba(167, 167, 167, 0.5) !important;
-}
-
-.toggle-btn:focus {
-    outline: none;
-}
-
-.raw-message {
+/* .raw-message {
     display: none;
     top: -18px;
     left: 0;
@@ -306,9 +287,9 @@ ol:not(.options), ul:not(.options) {
     padding: 8px;
     border-radius: 5px;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
-  }
+  } */
 
-.raw-message:before {
+/* .raw-message:before {
 content: "Source Text";
 display: block;
 font-size: 12px;
@@ -317,7 +298,7 @@ left: 8px;
 padding: 2px 5px;
 border-radius: 3px;
 opacity: 0.8;
-}
+} */
 
 .message-wrap>div img{
     border-radius: 10px !important;

@@ -276,13 +276,13 @@ const copyIcon   = '<span><svg stroke="currentColor" fill="none" stroke-width="2
 const copiedIcon = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg></span>';
 const toggleIcon = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle></svg></span>';
 
-function addCopyBotButton(botElement) {
+function addChuanhuButton(botElement) {
     var copyButton = null;
     var toggleButton = null;
     var rawMessage = null;
     rawMessage = botElement.querySelector('.raw-message');
     copyButton = botElement.querySelector('button.copy-bot-btn');
-    toggleButton = botElement.querySelector('button.toggle-btn');
+    toggleButton = botElement.querySelector('button.toggle-md-btn');
     if (!rawMessage) return;
     if (copyButton) {
         copyButton.remove();
@@ -292,6 +292,7 @@ function addCopyBotButton(botElement) {
     }
     rawMessage.style.display = "none";
     var copyButton = document.createElement('button');
+    copyButton.classList.add('chuanhu-btn');
     copyButton.classList.add('copy-bot-btn');
     copyButton.setAttribute('aria-label', 'Copy');
     copyButton.innerHTML = copyIcon;
@@ -311,7 +312,8 @@ function addCopyBotButton(botElement) {
 
     // Toggle button
     var toggleButton = document.createElement('button');
-    toggleButton.classList.add('toggle-btn');
+    toggleButton.classList.add('chuanhu-btn');
+    toggleButton.classList.add('toggle-md-btn');
     toggleButton.setAttribute('aria-label', 'Toggle');
     toggleButton.innerHTML = toggleIcon;
     toggleButton.addEventListener('click', () => {
@@ -408,7 +410,7 @@ var mObserver = new MutationObserver(function (mutationsList) {
                         renderMathJax();
                         mathjaxUpdated = false;
                     }
-                    document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot').forEach(addCopyBotButton);
+                    document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot').forEach(addChuanhuButton);
                     saveHistoryHtml();
                 }, 500);
             }
@@ -438,7 +440,7 @@ function loadHistoryHtml() {
     if (!historyLoaded) {
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = historyHtml;
-        var buttons = tempDiv.querySelectorAll('button.copy-bot-btn');
+        var buttons = tempDiv.querySelectorAll('button.chuanhu-btn');
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].parentNode.removeChild(buttons[i]);
         }
