@@ -277,13 +277,18 @@ function addChuanhuButton(botElement) {
     var mdMessage = null;
     rawMessage = botElement.querySelector('.raw-message');
     mdMessage = botElement.querySelector('.md-message');
+    if (!rawMessage) {
+        var buttons = botElement.querySelectorAll('button.chuanhu-btn');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].parentNode.removeChild(buttons[i]);
+        }
+        return;
+    }
     var renderMarkdown = true;
     var copyButton = null;
     var toggleButton = null;
     copyButton = botElement.querySelector('button.copy-bot-btn');
     toggleButton = botElement.querySelector('button.toggle-md-btn');
-    
-    if (!rawMessage) return;
     if (copyButton) copyButton.remove();
     if (toggleButton) toggleButton.remove();
 
@@ -297,13 +302,15 @@ function addChuanhuButton(botElement) {
         const textToCopy = rawMessage.innerText;
         navigator.clipboard
             .writeText(textToCopy)
+            .then(() => {
+                copyButton.innerHTML = copiedIcon;
+                setTimeout(() => {
+                    copyButton.innerHTML = copyIcon;
+                }, 1500);
+            })
             .catch(() => {
                 console.error("copy failed");
             });
-        copyButton.innerHTML = copiedIcon;
-        setTimeout(() => {
-            copyButton.innerHTML = copyIcon;
-        }, 1500);
     });
     botElement.appendChild(copyButton);
 
