@@ -274,33 +274,51 @@ function setChatbotHeight() {
 
 const copyIcon   = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>';
 const copiedIcon = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg></span>';
+const toggleIcon = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle></svg></span>';
+
 function addCopyBotButton(botElement) {
     var copyButton = null;
+    var toggleButton = null;
     var rawMessage = null;
     rawMessage = botElement.querySelector('.raw-message');
     copyButton = botElement.querySelector('button.copy-bot-btn');
+    toggleButton = botElement.querySelector('button.toggle-btn');
     if (!rawMessage) return;
     if (copyButton) {
         copyButton.remove();
     }
-    var button = document.createElement('button');
-    button.classList.add('copy-bot-btn');
-    button.setAttribute('aria-label', 'Copy');
-    button.innerHTML = copyIcon;
-    button.addEventListener('click', () => {
+    if (toggleButton) {
+        toggleButton.remove();
+    }
+    rawMessage.style.display = "none";
+    var copyButton = document.createElement('button');
+    copyButton.classList.add('copy-bot-btn');
+    copyButton.setAttribute('aria-label', 'Copy');
+    copyButton.innerHTML = copyIcon;
+    copyButton.addEventListener('click', () => {
         const textToCopy = rawMessage.innerText;
         navigator.clipboard
             .writeText(textToCopy)
             .catch(() => {
                 console.error("copy failed");
             });
-        button.innerHTML = copiedIcon;
+        copyButton.innerHTML = copiedIcon;
         setTimeout(() => {
-            button.innerHTML = copyIcon;
+            copyButton.innerHTML = copyIcon;
         }, 1500);
     });
-    botElement.appendChild(button);
-};
+    botElement.appendChild(copyButton);
+
+    // Toggle button
+    var toggleButton = document.createElement('button');
+    toggleButton.classList.add('toggle-btn');
+    toggleButton.setAttribute('aria-label', 'Toggle');
+    toggleButton.innerHTML = toggleIcon;
+    toggleButton.addEventListener('click', () => {
+        rawMessage.style.display === "none" ? rawMessage.style.display = "block" : rawMessage.style.display = "none";
+    });
+    botElement.insertBefore(toggleButton, copyButton);
+}
 
 var rendertime = 0; // for debugging
 var mathjaxUpdated = false;
