@@ -580,6 +580,8 @@ def get_latest_filepath(dirname):
 
 def get_history_filepath(username):
     dirname = os.path.join(HISTORY_DIR, username)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
     latest_file = get_latest_filepath(dirname)
     if not latest_file:
         latest_file = new_auto_history_filename(dirname)
