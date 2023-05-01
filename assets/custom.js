@@ -277,20 +277,21 @@ const copiedIcon = '<span><svg stroke="currentColor" fill="none" stroke-width="2
 const toggleIcon = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle></svg></span>';
 
 function addChuanhuButton(botElement) {
+    var rawMessage = null;
+    var mdMessage = null;
+    rawMessage = botElement.querySelector('.raw-message');
+    mdMessage = botElement.querySelector('.md-message');
+    var renderMarkdown = true;
     var copyButton = null;
     var toggleButton = null;
-    var rawMessage = null;
-    rawMessage = botElement.querySelector('.raw-message');
     copyButton = botElement.querySelector('button.copy-bot-btn');
     toggleButton = botElement.querySelector('button.toggle-md-btn');
+    
     if (!rawMessage) return;
-    if (copyButton) {
-        copyButton.remove();
-    }
-    if (toggleButton) {
-        toggleButton.remove();
-    }
-    rawMessage.style.display = "none";
+    if (copyButton) copyButton.remove();
+    if (toggleButton) toggleButton.remove();
+    
+    // Copy bot button
     var copyButton = document.createElement('button');
     copyButton.classList.add('chuanhu-btn');
     copyButton.classList.add('copy-bot-btn');
@@ -317,9 +318,24 @@ function addChuanhuButton(botElement) {
     toggleButton.setAttribute('aria-label', 'Toggle');
     toggleButton.innerHTML = toggleIcon;
     toggleButton.addEventListener('click', () => {
-        rawMessage.style.display === "none" ? rawMessage.style.display = "block" : rawMessage.style.display = "none";
+        console.log('toggle')
+        renderMarkdown = mdMessage.classList.contains('hideM');
+        renderMarkdown ? renderMarkdownText(botElement) : removeMarkdownText(botElement);
     });
     botElement.insertBefore(toggleButton, copyButton);
+}
+
+function renderMarkdownText(message) {
+    var mdDiv = message.querySelector('.md-message');
+    if (mdDiv) mdDiv.classList.remove('hideM');
+    var rawDiv = message.querySelector('.raw-message');
+    if (rawDiv) rawDiv.classList.add('hideM');
+}
+function removeMarkdownText(message) {
+    var rawDiv = message.querySelector('.raw-message');
+    if (rawDiv) rawDiv.classList.remove('hideM');
+    var mdDiv = message.querySelector('.md-message');
+    if (mdDiv) mdDiv.classList.add('hideM');
 }
 
 var rendertime = 0; // for debugging

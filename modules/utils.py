@@ -183,7 +183,7 @@ def convert_mdtext(md_text):
     non_code_parts = code_block_pattern.split(md_text)[::2]
 
     result = []
-    raw = f'<span class="raw-message">{html.escape(md_text)}</span>'
+    raw = f'<div class="raw-message hideM">{html.escape(md_text)}</span>'
     for non_code, code in zip(non_code_parts, code_blocks + [""]):
         if non_code.strip():
             non_code = normalize_markdown(non_code)
@@ -195,9 +195,10 @@ def convert_mdtext(md_text):
             code = markdown_to_html_with_syntax_highlight(code)
             result.append(code)
     result = "".join(result)
-    result += raw
-    result += ALREADY_CONVERTED_MARK
-    return result
+    output = f'<div class="md-message">{result}</div>'
+    output += raw
+    output += ALREADY_CONVERTED_MARK
+    return output
 
 
 def convert_asis(userinput):

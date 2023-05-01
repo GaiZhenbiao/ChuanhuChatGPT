@@ -229,7 +229,7 @@ ol:not(.options), ul:not(.options) {
     }
 }
 /* 对话气泡 */
-[class *= "message"] {
+.message {
     border-radius: var(--radius-xl) !important;
     border: none;
     padding: var(--spacing-xl) !important;
@@ -247,7 +247,17 @@ ol:not(.options), ul:not(.options) {
     width: auto !important;
     border-bottom-right-radius: 0 !important;
 }
-.raw-message {
+
+.message .md-message {
+    display: block;
+    padding: 0 !important;
+}
+.message .raw-message {
+    display: block;
+    padding: 0 !important;
+    white-space: pre-wrap;
+}
+.raw-message.hideM, .md-message.hideM {
     display: none;
 }
 
