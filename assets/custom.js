@@ -272,6 +272,36 @@ function setChatbotHeight() {
     }
 }
 
+const copyIcon   = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>';
+const copiedIcon = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg></span>';
+function addCopyBotButton(botElement) {
+    var copyButton = null;
+    var rawMessage = null;
+    rawMessage = botElement.querySelector('.raw-message');
+    copyButton = botElement.querySelector('button.copy-bot-btn');
+    if (!rawMessage) return;
+    if (copyButton) {
+        copyButton.remove();
+    }
+    var button = document.createElement('button');
+    button.classList.add('copy-bot-btn');
+    button.setAttribute('aria-label', 'Copy');
+    button.innerHTML = copyIcon;
+    button.addEventListener('click', () => {
+        const textToCopy = rawMessage.innerText;
+        navigator.clipboard
+            .writeText(textToCopy)
+            .catch(() => {
+                console.error("copy failed");
+            });
+        button.innerHTML = copiedIcon;
+        setTimeout(() => {
+            button.innerHTML = copyIcon;
+        }, 1500);
+    });
+    botElement.appendChild(button);
+};
+
 var rendertime = 0; // for debugging
 var mathjaxUpdated = false;
 
@@ -326,12 +356,13 @@ function updateMathJax() {
 
 let timeoutId;
 let isThrottled = false;
-// 监听所有元素中message的变化，用来查找需要渲染的mathjax
-var mObserver = new MutationObserver(function (mutationsList, observer) {
-    for (var mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-            for (var node of mutation.addedNodes) {
-                if (node.nodeType === 1 && node.classList.contains('message') && node.classList.contains('bot')) {
+var mmutation
+// 监听所有元素中 bot message 的变化，用来查找需要渲染的mathjax, 并为 bot 消息添加复制按钮。
+var mObserver = new MutationObserver(function (mutationsList) {
+    for (mmutation of mutationsList) {
+        if (mmutation.type === 'childList') {
+            for (var node of mmutation.addedNodes) {
+                if (node.nodeType === 1 && node.classList.contains('message') && node.getAttribute('data-testid') === 'bot') {
                     if (shouldRenderLatex) {
                         renderMathJax();
                         mathjaxUpdated = false;
@@ -339,8 +370,8 @@ var mObserver = new MutationObserver(function (mutationsList, observer) {
                     saveHistoryHtml();
                 }
             }
-            for (var node of mutation.removedNodes) {
-                if (node.nodeType === 1 && node.classList.contains('message') && node.classList.contains('bot')) {
+            for (var node of mmutation.removedNodes) {
+                if (node.nodeType === 1 && node.classList.contains('message') && node.getAttribute('data-testid') === 'bot') {
                     if (shouldRenderLatex) {
                         renderMathJax();
                         mathjaxUpdated = false;
@@ -348,25 +379,25 @@ var mObserver = new MutationObserver(function (mutationsList, observer) {
                     saveHistoryHtml();
                 }
             }
-        } else if (mutation.type === 'attributes') {
-            if (mutation.target.nodeType === 1 && mutation.target.classList.contains('message') && mutation.target.classList.contains('bot')) {
+        } else if (mmutation.type === 'attributes') {
+            if (mmutation.target.nodeType === 1 && mmutation.target.classList.contains('message') && mmutation.target.getAttribute('data-testid') === 'bot') {
                 if (isThrottled) break; // 为了防止重复不断疯狂渲染，加上等待_(:з」∠)_
                 isThrottled = true;
                 clearTimeout(timeoutId);
                 timeoutId = setTimeout(() => {
                     isThrottled = false;
                     if (shouldRenderLatex) {
-                        // console.log("changed");
                         renderMathJax();
                         mathjaxUpdated = false;
                     }
+                    document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot').forEach(addCopyBotButton);
                     saveHistoryHtml();
                 }, 500);
             }
         }
     }
 });
-mObserver.observe(targetNode, { attributes: true, childList: true, subtree: true });
+mObserver.observe(document.documentElement, { attributes: true, childList: true, subtree: true });
 
 var loadhistorytime = 0; // for debugging
 function saveHistoryHtml() {
@@ -387,10 +418,20 @@ function loadHistoryHtml() {
         return; // logged in, do nothing
     }
     if (!historyLoaded) {
-            var fakeHistory = document.createElement('div');
-            fakeHistory.classList.add('history-message');
-            fakeHistory.innerHTML = historyHtml;
-            chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = historyHtml;
+        var buttons = tempDiv.querySelectorAll('button.copy-bot-btn');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].parentNode.removeChild(buttons[i]);
+        }
+        var fakeHistory = document.createElement('div');
+        fakeHistory.classList.add('history-message');
+        fakeHistory.innerHTML = tempDiv.innerHTML;
+        chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
+        // var fakeHistory = document.createElement('div');
+        // fakeHistory.classList.add('history-message');
+        // fakeHistory.innerHTML = historyHtml;
+        // chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
         historyLoaded = true;
         console.log("History Loaded");
         loadhistorytime += 1; // for debugging

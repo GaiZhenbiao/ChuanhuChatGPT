@@ -3,9 +3,9 @@
 // @namespace    https://github.com/Keldos-Li/Kelpy-Codos
 // @version      1.0.5
 // @author       Keldos; https://keldos.me/
-// @description  Add copy button to PRE tags before CODE tag, for Chuanhu ChatGPT especially. 
-//               Based on Chuanhu ChatGPT version: ac04408 (2023-3-22)
-// @license      GPL-3.0
+// @description  Add copy button to PRE tags before CODE tag, for Chuanhu Chat especially. 
+//               Based on Chuanhu Chat version: ac04408 (2023-3-22)
+// @license      Apache-2.0
 // @grant        none
 // ==/UserScript==
 

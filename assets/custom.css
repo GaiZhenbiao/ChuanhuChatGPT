@@ -4,7 +4,7 @@
 }
 
 .message p { margin-bottom: 0.6rem !important;}
-.message p:last-child { margin-bottom: 0 !important; }
+.message p:last-of-type { margin-bottom: 0 !important; }
 
 #app_title {
     font-weight: var(--prose-header-text-weight);
@@ -246,6 +246,31 @@ ol:not(.options), ul:not(.options) {
     max-width: 85%;
     width: auto !important;
     border-bottom-right-radius: 0 !important;
+}
+.raw-message {
+    display: none;
+}
+
+.copy-bot-btn {
+    border-radius: 5px;
+    /* background-color: #E6E6E6 !important; */
+    color: rgba(120, 120, 120, 0.64) !important;
+    padding: 4px !important;
+    position: absolute;
+    right: -22px;
+    bottom: 0;
+    cursor: pointer !important;
+    transition: color .2s ease, background-color .2s ease;
+}
+.copy-bot-btn:hover {
+    background-color: rgba(167, 167, 167, 0.25) !important;
+    color: unset !important;
+}
+.copy-bot-btn:active {
+    background-color: rgba(167, 167, 167, 0.5) !important;
+}
+.copy-bot-btn:focus {
+    outline: none;
 }
 
 .message-wrap>div img{
