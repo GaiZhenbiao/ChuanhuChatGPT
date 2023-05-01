@@ -287,7 +287,12 @@ ol:not(.options), ul:not(.options) {
 .toggle-md-btn {
     top: 0;
 }
-
+.copy-code-btn {
+    position: relative;
+    float: right;
+    font-size: 1em;
+    cursor: pointer;
+}
 
 .message-wrap>div img{
     border-radius: 10px !important;
