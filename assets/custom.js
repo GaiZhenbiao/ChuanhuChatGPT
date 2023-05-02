@@ -69,6 +69,7 @@ function gradioLoaded(mutations) {
                 if (!historyLoaded) {
                     loadHistoryHtml();
                 }
+                setChatbotScroll();
             }
             if (renderLatex) {  // renderLatex 加载出来了没?
                 shouldRenderLatex = renderLatex.checked;
@@ -270,6 +271,10 @@ function setChatbotHeight() {
             wrap.style.maxHeight = `calc(var(--vh, 1vh) * 100 - ${statusDisplayHeight + 160}px - var(--line-sm) * 1rem - 2 * var(--block-label-margin))`;
         }
     }
+}
+function setChatbotScroll() {
+    var scrollHeight = chatbotWrap.scrollHeight;
+    chatbotWrap.scrollTo(0,scrollHeight)
 }
 
 function addChuanhuButton(botElement) {
