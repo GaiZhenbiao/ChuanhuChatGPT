@@ -6,6 +6,7 @@ from typing import List, Tuple
 import mdtex2html
 from gradio_client import utils as client_utils
 
+from modules.config import add_waifu
 from modules.presets import *
 from modules.llama_func import *
 
@@ -85,11 +86,12 @@ with open("./assets/custom.js", "r", encoding="utf-8") as f, \
 def reload_javascript():
     print("Reloading javascript...")
     js = f'<script>{customJS}</script><script async>{externalScripts}</script>'
-    js += """
-		<script src="file=assets/waifu/jquery.min.js"></script><!-- waifu-tips.js 依赖 JQuery 库 -->
-		<script src="file=assets/waifu/jquery-ui.min.js"></script><!-- 实现拖动效果，需引入 JQuery UI -->
-		<script src="file=assets/waifu/autoload.js"></script><!-- 使用 aotuload.js 引入看板娘 -->
-    """
+    if add_waifu:
+        js += """
+            <script src="file=assets/waifu/jquery.min.js"></script> <!-- waifu-tips.js 依赖 JQuery 库 -->
+            <script src="file=assets/waifu/jquery-ui.min.js"></script> <!-- 实现拖动效果，需引入 JQuery UI -->
+            <script src="file=assets/waifu/autoload.js"></script> <!-- 使用 aotuload.js 引入看板娘 -->
+        """
     def template_response(*args, **kwargs):
         res = GradioTemplateResponseOriginal(*args, **kwargs)
         res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))

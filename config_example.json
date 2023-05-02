@@ -25,6 +25,7 @@
     },
     // 是否多个API Key轮换使用
     "multi_api_key": false,
+    "add_waifu": true,
     "api_key_list": [
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx1",
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",

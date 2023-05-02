@@ -24,6 +24,7 @@ __all__ = [
     "server_name",
     "server_port",
     "share",
+    "add_waifu",
     "hide_history_when_not_logged_in"
 ]
 
@@ -35,6 +36,7 @@ if os.path.exists("config.json"):
 else:
     config = {}
 
+add_waifu = config.get("add_waifu", True)
 lang_config = config.get("language", "auto")
 language = os.environ.get("LANGUAGE", lang_config)
 
