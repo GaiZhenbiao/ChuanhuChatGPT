@@ -537,6 +537,20 @@ class BaseLLMModel:
             filename += ".md"
         return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
 
+    def export_html(self, filename, chatbot, user_name):
+        if filename == "":
+            return
+        if not filename.endswith(".html"):
+            filename += ".html"
+        return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+
+    def export_markdown(self, filename, chatbot, user_name):
+        if filename == "":
+            return
+        if not filename.endswith(".md"):
+            filename += ".md"
+        return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+
     def load_chat_history(self, filename, user_name):
         logging.debug(f"{user_name} 加载对话历史中……")
         logging.info(f"filename: {filename}")

@@ -74,6 +74,9 @@ def save_chat_history(current_model, *args):
 def export_markdown(current_model, *args):
     return current_model.export_markdown(*args)
 
+def export_html(current_model, *args):
+    return current_model.export_html(*args)
+
 def load_chat_history(current_model, *args):
     return current_model.load_chat_history(*args)
 
@@ -244,6 +247,30 @@ def construct_assistant(text):
     return construct_text("assistant", text)
 
 
+def write_html_str(chatbot, history):
+    import os
+    import time
+    write_str = ""
+    with open('./assets/custom.css', 'r', encoding="utf8") as f:
+        advanced_css = f.read()
+    write_str += (f'<head><title>对话历史</title><style>{advanced_css}</style></head>')
+    for i, contents in enumerate(chatbot):
+        for j, content in enumerate(contents):
+            try:    # 这个bug没找到触发条件，暂时先这样顶一下
+                if type(content) != str: content = str(content)
+            except:
+                continue
+            write_str += (content)
+            if j == 0:
+                write_str += ('<hr style="border-top: dotted 3px #ccc;">')
+        write_str += ('<hr color="red"> \n\n')
+    write_str += ('<hr color="blue"> \n\n raw chat context:\n')
+    write_str += ('<code>')
+    for h in history:
+        write_str += ("\n>>>" + h['content'])
+    write_str += ('</code>')
+    return write_str
+
 def save_file(filename, system, history, chatbot, user_name):
     logging.debug(f"{user_name} 保存对话历史中……")
     os.makedirs(os.path.join(HISTORY_DIR, user_name), exist_ok=True)
@@ -255,6 +282,10 @@ def save_file(filename, system, history, chatbot, user_name):
             history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
         with open(history_file_path, "w") as f:
             json.dump(json_s, f)
+    elif filename.endswith(".html"):
+        md_s = write_html_str(chatbot, history)
+        with open(os.path.join(HISTORY_DIR, user_name, filename), "w", encoding="utf8") as f:
+            f.write(md_s)
     elif filename.endswith(".md"):
         md_s = f"system: \n- {system} \n"
         for data in history:

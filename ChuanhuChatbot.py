@@ -152,13 +152,14 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                 with gr.Column(scale=6):
                                     saveFileName = gr.Textbox(
                                         show_label=True,
-                                        placeholder=i18n("设置文件名: 默认为.json，可选为.md"),
+                                        placeholder=i18n("设置文件名: 默认为.json，可选为.md，.html"),
                                         label=i18n("设置保存文件名"),
                                         value=i18n("对话历史记录"),
                                     ).style(container=True)
                                 with gr.Column(scale=1):
                                     saveHistoryBtn = gr.Button(i18n("💾 保存对话"))
                                     exportMarkdownBtn = gr.Button(i18n("📝 导出为Markdown"))
+                                    exportHTMLBtn = gr.Button(i18n("📝 导出为HTML"))
                                     gr.Markdown(i18n("默认保存于history文件夹"))
                             with gr.Row():
                                 with gr.Column():
@@ -420,6 +421,12 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     saveHistoryBtn.click(get_history_names, [gr.State(False), user_name], [historyFileSelectDropdown])
     exportMarkdownBtn.click(
         export_markdown,
+        [current_model, saveFileName, chatbot, user_name],
+        downloadFile,
+        show_progress=True,
+    )
+    exportHTMLBtn.click(
+        export_html,
         [current_model, saveFileName, chatbot, user_name],
         downloadFile,
         show_progress=True,
