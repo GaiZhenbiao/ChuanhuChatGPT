@@ -252,8 +252,10 @@ def write_html_str(chatbot, history):
     import time
     write_str = ""
     with open('./assets/custom.css', 'r', encoding="utf8") as f:
-        advanced_css = f.read()
-    write_str += (f'<head><title>对话历史</title><style>{advanced_css}</style></head>')
+        customCSS = f.read()
+    write_str += f"""
+        <!DOCTYPE html><head><meta charset="utf-8"><title>对话历史</title><style>{customCSS}</style></head>
+        """
     for i, contents in enumerate(chatbot):
         for j, content in enumerate(contents):
             try:    # 这个bug没找到触发条件，暂时先这样顶一下
