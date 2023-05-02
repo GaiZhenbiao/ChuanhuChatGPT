@@ -1,10 +1,13 @@
 :root {
-    --chatbot-color-light: #F3F3F3;
-    --chatbot-color-dark: #121111;
+    --chatbot-color-light: #000000;
+    --chatbot-color-dark: #FFFFFF;
+    --chatbot-background-color-light: #F3F3F3;
+    --chatbot-background-color-dark: #121111;
+    --message-user-background-color-light: #95EC69;
+    --message-user-background-color-dark: #26B561;
+    --message-bot-background-color-light: #FFFFFF;
+    --message-bot-background-color-dark: #2C2C2C;
 }
-
-.message p { margin-bottom: 0.6rem !important;}
-.message p:last-of-type { margin-bottom: 0 !important; }
 
 #app_title {
     font-weight: var(--prose-header-text-weight);
@@ -182,25 +185,25 @@ ol:not(.options), ul:not(.options) {
 
 /* 亮色（默认） */
 #chuanhu_chatbot {
-    background-color: var(--chatbot-color-light) !important;
-    color: #000000 !important;
+    background-color: var(--chatbot-background-color-light) !important;
+    color: var(--chatbot-color-light) !important;
 }
 [data-testid = "bot"] {
-    background-color: #FFFFFF !important;
+    background-color: var(--message-bot-background-color-light) !important;
 }
 [data-testid = "user"] {
-    background-color: #95EC69 !important;
+    background-color: var(--message-user-background-color-light) !important;
 }
 /* 暗色 */
 .dark #chuanhu_chatbot {
-    background-color: var(--chatbot-color-dark) !important;
-    color: #FFFFFF !important;
+    background-color: var(--chatbot-background-color-dark) !important;
+    color: var(--chatbot-color-dark) !important;
 }
 .dark [data-testid = "bot"] {
-    background-color: #2C2C2C !important;
+    background-color: var(--message-bot-background-color-dark) !important;
 }
 .dark [data-testid = "user"] {
-    background-color: #26B561 !important;
+    background-color: var(--message-user-background-color-dark) !important;
 }
 
 /* 屏幕宽度大于等于500px的设备 */
@@ -248,6 +251,9 @@ ol:not(.options), ul:not(.options) {
     border-bottom-right-radius: 0 !important;
 }
 
+.message p { margin-bottom: 0.6rem !important;}
+.message p:last-of-type { margin-bottom: 0 !important; }
+
 .message .md-message {
     display: block;
     padding: 0 !important;
@@ -261,6 +267,7 @@ ol:not(.options), ul:not(.options) {
     display: none;
 }
 
+/* custom buttons */
 .chuanhu-btn {
     border-radius: 5px;
     /* background-color: #E6E6E6 !important; */
