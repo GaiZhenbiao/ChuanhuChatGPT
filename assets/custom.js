@@ -284,7 +284,6 @@ function addChuanhuButton(botElement) {
         }
         return;
     }
-    var renderMarkdown = true;
     var copyButton = null;
     var toggleButton = null;
     copyButton = botElement.querySelector('button.copy-bot-btn');
@@ -319,15 +318,16 @@ function addChuanhuButton(botElement) {
     toggleButton.classList.add('chuanhu-btn');
     toggleButton.classList.add('toggle-md-btn');
     toggleButton.setAttribute('aria-label', 'Toggle');
-    toggleButton.innerHTML = mdIcon;
+    var renderMarkdown = mdMessage.classList.contains('hideM');
+    toggleButton.innerHTML = renderMarkdown ? mdIcon : rawIcon;
     toggleButton.addEventListener('click', () => {
         renderMarkdown = mdMessage.classList.contains('hideM');
         if (renderMarkdown){
             renderMarkdownText(botElement);
-            toggleButton.innerHTML=mdIcon;
+            toggleButton.innerHTML=rawIcon;
         } else {
             removeMarkdownText(botElement);
-            toggleButton.innerHTML=rawIcon;
+            toggleButton.innerHTML=mdIcon;
         }
     });
     botElement.insertBefore(toggleButton, copyButton);
