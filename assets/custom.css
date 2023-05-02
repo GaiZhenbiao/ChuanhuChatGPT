@@ -111,7 +111,7 @@ footer {
 }
 .progress-bar {
     background-color: var(--input-background-fill);;
-    margin: 0 1em;
+    margin: .5em 0 !important;
     height: 20px;
     border-radius: 10px;
     overflow: hidden;

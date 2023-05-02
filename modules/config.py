@@ -19,6 +19,7 @@ __all__ = [
     "advance_docs",
     "update_doc_config",
     "render_latex",
+    "usage_limit",
     "multi_api_key",
     "server_name",
     "server_port",
@@ -81,6 +82,8 @@ if render_latex:
     os.environ["RENDER_LATEX"] = "yes"
 else:
     os.environ["RENDER_LATEX"] = "no"
+
+usage_limit = os.environ.get("USAGE_LIMIT", config.get("usage_limit", 120))
 
 ## 多账户机制
 multi_api_key = config.get("multi_api_key", False) # 是否开启多账户机制

@@ -25,7 +25,7 @@ from ..presets import *
 from ..llama_func import *
 from ..utils import *
 from .. import shared
-from ..config import retrieve_proxy
+from ..config import retrieve_proxy, usage_limit
 from modules import config
 from .base_model import BaseLLMModel, ModelType
 
@@ -90,8 +90,19 @@ class OpenAIClient(BaseLLMModel):
             except Exception as e:
                 logging.error(f"获取API使用情况失败:" + str(e))
                 return i18n("**获取API使用情况失败**")
-            rounded_usage = "{:.5f}".format(usage_data["total_usage"] / 100)
-            return i18n("**本月使用金额** ") + f"\u3000 ${rounded_usage}"
+            # rounded_usage = "{:.5f}".format(usage_data["total_usage"] / 100)
+            rounded_usage = round(usage_data["total_usage"] / 100, 5)
+            usage_percent = round(usage_data["total_usage"] / usage_limit, 2)
+            # return i18n("**本月使用金额** ") + f"\u3000 ${rounded_usage}"
+            return """\
+                <b>""" + i18n("本月使用金额") + f"""</b>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {usage_percent}%;">
+                        <span class="progress-text">{usage_percent}%</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;"><span>${rounded_usage}</span><span>${usage_limit}</span></div>
+                """
         except requests.exceptions.ConnectTimeout:
             status_text = (
                 STANDARD_ERROR_MSG + CONNECTION_TIMEOUT_MSG + ERROR_RETRIEVE_MSG

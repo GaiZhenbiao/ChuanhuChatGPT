@@ -50,6 +50,7 @@
     "，本次对话累计消耗了 ": "，Total cost for this dialogue is ",
     "**获取API使用情况失败**": "**Failed to get API usage**",
     "**本月使用金额** ": "**Monthly usage** ",
+    "本月使用金额": "Monthly usage",
     "获取API使用情况失败:": "Failed to get API usage:",
     "API密钥更改为了": "The API key is changed to",
     "JSON解析错误,收到的内容: ": "JSON parsing error, received content: ",

@@ -2,6 +2,7 @@
     // 你的OpenAI API Key，一般必填，
     // 若缺省填为 "openai_api_key": "" 则必须再在图形界面中填入API Key
     "openai_api_key": "",
+    "usage_limit": 120, // API Key的当月限额，单位：美元
     // 你的xmchat API Key，与OpenAI API Key不同
     "xmchat_api_key": "",
     "language": "auto",
