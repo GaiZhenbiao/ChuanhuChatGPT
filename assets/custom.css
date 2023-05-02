@@ -19,13 +19,15 @@
 }
 #description {
     text-align: center;
-    margin: 16px 0;
+    margin: 32px 0 4px 0;
 }
 
-/* 覆盖gradio的页脚信息QAQ */
-/* footer {
-    display: none !important;
-} */
+/* gradio的页脚信息 */
+footer {
+    /* display: none !important; */
+    margin-top: .2em !important;
+    font-size: 85%;
+}
 #footer {
     text-align: center;
 }
@@ -34,7 +36,7 @@
 }
 #footer .versions{
     font-size: 85%;
-    opacity: 0.85;
+    opacity: 0.60;
 }
 
 #float_display {
@@ -76,7 +78,8 @@
 }
 #status_display p {
     font-size: .85em;
-    font-family: monospace;
+    font-family: ui-monospace, "SF Mono", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "Microsoft Yahei UI", "Microsoft Yahei", monospace;
+    /* Windows下中文的monospace会fallback为新宋体，实在太丑，这里折中使用微软雅黑 */
     color: var(--body-text-color-subdued);
 }
 
