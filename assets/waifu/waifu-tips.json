@@ -17,12 +17,12 @@
             "default": ["嗨~ 快来逗我玩吧！"]
         },
         "referrer_message": {
-            "localhost": ["欢迎阅读<span style=\"color:#0099cc;\">『", "』</span>", " - "],
+            "localhost": ["欢迎使用<span style=\"color:#0099cc;\">『ChatGPT", "』</span>", " - "],
             "baidu": ["Hello! 来自 百度搜索 的朋友<br>你是搜索 <span style=\"color:#0099cc;\">", "</span> 找到的我吗？"],
             "so": ["Hello! 来自 360搜索 的朋友<br>你是搜索 <span style=\"color:#0099cc;\">", "</span> 找到的我吗？"],
-            "google": ["Hello! 来自 谷歌搜索 的朋友<br>欢迎阅读<span style=\"color:#0099cc;\">『", "』</span>", " - "],
+            "google": ["Hello! 来自 谷歌搜索 的朋友<br>欢迎使用<span style=\"color:#0099cc;\">『ChatGPT", "』</span>", " - "],
             "default": ["Hello! 来自 <span style=\"color:#0099cc;\">", "</span> 的朋友"],
-            "none": ["欢迎阅读<span style=\"color:#0099cc;\">『", "』</span>", " - "]
+            "none": ["欢迎使用<span style=\"color:#0099cc;\">『ChatGPT", "』</span>", " - "]
         },
         "referrer_hostname": {
             "example.com": ["示例网站"],
