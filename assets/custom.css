@@ -292,10 +292,12 @@ ol:not(.options), ul:not(.options) {
     outline: none;
 }
 .copy-bot-btn {
-    top: 18px;
+    /* top: 18px; */
+    bottom: 0;
 }
 .toggle-md-btn {
-    top: 0;
+    /* top: 0; */
+    bottom: 20px;
 }
 .copy-code-btn {
     position: relative;
