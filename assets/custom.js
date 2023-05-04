@@ -29,6 +29,15 @@ var historyLoaded = false;
 var ga = document.getElementsByTagName("gradio-app");
 var targetNode = ga[0];
 var isInIframe = (window.self !== window.top);
+var language = navigator.language.slice(0,2);
+
+var forView_i18n = {
+    'zh': "仅供查看",
+    'en': "For viewing only",
+    'ja': "閲覧専用",
+    'fr': "Pour consultation seulement",
+    'es': "Solo para visualización",
+};
 
 // gradio 页面加载好了么??? 我能动你的元素了么??
 function gradioLoaded(mutations) {
@@ -79,6 +88,17 @@ function gradioLoaded(mutations) {
                 emptyHistory();
             }
         }
+    }
+}
+
+function webLocale() {
+    console.log("webLocale", language);
+    if (forView_i18n.hasOwnProperty(language)) {
+        var forView = forView_i18n[language];
+        var forViewStyle = document.createElement('style');
+        forViewStyle.innerHTML = '.wrap>.history-message>:last-child::after { content: "' + forView + '"!important; }';
+        document.head.appendChild(forViewStyle);
+        console.log("added forViewStyle", forView);
     }
 }
 
@@ -516,6 +536,7 @@ function loadHistoryHtml() {
         var fakeHistory = document.createElement('div');
         fakeHistory.classList.add('history-message');
         fakeHistory.innerHTML = tempDiv.innerHTML;
+        webLocale();
         chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
         // var fakeHistory = document.createElement('div');
         // fakeHistory.classList.add('history-message');
