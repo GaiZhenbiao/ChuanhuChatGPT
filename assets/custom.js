@@ -390,7 +390,7 @@ var rendertime = 0; // for debugging
 var mathjaxUpdated = false;
 
 function renderMathJax() {
-    messageBotDivs = document.querySelectorAll('.message.bot');
+    messageBotDivs = document.querySelectorAll('.message.bot .md-message');
     for (var i = 0; i < messageBotDivs.length; i++) {
         var mathJaxSpan = messageBotDivs[i].querySelector('.MathJax_Preview');
         if (!mathJaxSpan && shouldRenderLatex && !mathjaxUpdated) {
