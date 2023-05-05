@@ -296,6 +296,25 @@ function setChatbotScroll() {
     var scrollHeight = chatbotWrap.scrollHeight;
     chatbotWrap.scrollTo(0,scrollHeight)
 }
+var rangeInputs = null;
+var numberInputs = null;
+function setSlider() {
+    rangeInputs = document.querySelectorAll('input[type="range"]');
+    numberInputs = document.querySelectorAll('input[type="number"]')
+    setSliderRange();
+    rangeInputs.forEach(rangeInput => {
+        rangeInput.addEventListener('input', setSliderRange);
+    });
+    numberInputs.forEach(numberInput => {
+        numberInput.addEventListener('input', setSliderRange);
+    })
+}
+function setSliderRange() {
+    var range = document.querySelectorAll('input[type="range"]');
+    range.forEach(range => {
+        range.style.backgroundSize = (range.value - range.min) / (range.max - range.min) * 100 + '% 100%';
+    });
+}
 
 function addChuanhuButton(botElement) {
     var rawMessage = null;
@@ -474,6 +493,9 @@ var mObserver = new MutationObserver(function (mutationsList) {
                     saveHistoryHtml();
                     document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot').forEach(addChuanhuButton);
                     document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot pre').forEach(addCopyCodeButton);
+                }
+                if (node.tagName === 'INPUT' && node.getAttribute('type') === 'range') {
+                    setSlider();
                 }
             }
             for (var node of mmutation.removedNodes) {
