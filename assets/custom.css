@@ -144,7 +144,7 @@ footer {
     display: none !important;
 }
 .apSlider {
-    background-color: var(--block-label-background-fill);
+    background-color: var(--neutral-200);
     bottom: 0;
     cursor: pointer;
     left: 0;
@@ -163,7 +163,7 @@ footer {
     content: "🌞";
 }
 input:checked + .apSlider {
-    background-color: var(--block-label-background-fill);
+    background-color: var(--primary-600);
 }
 input:checked + .apSlider::before {
     transform: translateX(23px);
