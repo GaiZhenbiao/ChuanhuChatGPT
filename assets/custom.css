@@ -144,7 +144,7 @@ footer {
     display: none !important;
 }
 .apSlider {
-    background-color: var(--block-label-background-fill);
+    background-color: var(--neutral-200);
     bottom: 0;
     cursor: pointer;
     left: 0;
@@ -163,11 +163,45 @@ footer {
     content: "🌞";
 }
 input:checked + .apSlider {
-    background-color: var(--block-label-background-fill);
+    background-color: var(--primary-600);
 }
 input:checked + .apSlider::before {
     transform: translateX(23px);
     content:"🌚";
+}
+
+/* Override Slider Styles (for webkit browsers like Safari and Chrome)
+ * 好希望这份提案能早日实现 https://github.com/w3c/csswg-drafts/issues/4410
+ * 进度滑块在各个平台还是太不统一了
+ */
+input[type="range"] {
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--input-background-fill);
+    border-radius: 5px;
+    background-image: linear-gradient(var(--primary-500),var(--primary-500));
+    background-size: 0% 100%;
+    background-repeat: no-repeat;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: solid 0.5px #ddd;
+    background-color: white;
+    cursor: ew-resize;
+    box-shadow: var(--input-shadow);
+    transition: background-color .1s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: var(--neutral-50);
+}
+input[type=range]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
 }
 
 #submit_btn, #cancel_btn {

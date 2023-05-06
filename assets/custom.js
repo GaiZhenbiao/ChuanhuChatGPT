@@ -29,6 +29,15 @@ var historyLoaded = false;
 var ga = document.getElementsByTagName("gradio-app");
 var targetNode = ga[0];
 var isInIframe = (window.self !== window.top);
+var language = navigator.language.slice(0,2);
+
+var forView_i18n = {
+    'zh': "仅供查看",
+    'en': "For viewing only",
+    'ja': "閲覧専用",
+    'fr': "Pour consultation seulement",
+    'es': "Solo para visualización",
+};
 
 // gradio 页面加载好了么??? 我能动你的元素了么??
 function gradioLoaded(mutations) {
@@ -79,6 +88,17 @@ function gradioLoaded(mutations) {
                 emptyHistory();
             }
         }
+    }
+}
+
+function webLocale() {
+    console.log("webLocale", language);
+    if (forView_i18n.hasOwnProperty(language)) {
+        var forView = forView_i18n[language];
+        var forViewStyle = document.createElement('style');
+        forViewStyle.innerHTML = '.wrap>.history-message>:last-child::after { content: "' + forView + '"!important; }';
+        document.head.appendChild(forViewStyle);
+        console.log("added forViewStyle", forView);
     }
 }
 
@@ -276,6 +296,25 @@ function setChatbotScroll() {
     var scrollHeight = chatbotWrap.scrollHeight;
     chatbotWrap.scrollTo(0,scrollHeight)
 }
+var rangeInputs = null;
+var numberInputs = null;
+function setSlider() {
+    rangeInputs = document.querySelectorAll('input[type="range"]');
+    numberInputs = document.querySelectorAll('input[type="number"]')
+    setSliderRange();
+    rangeInputs.forEach(rangeInput => {
+        rangeInput.addEventListener('input', setSliderRange);
+    });
+    numberInputs.forEach(numberInput => {
+        numberInput.addEventListener('input', setSliderRange);
+    })
+}
+function setSliderRange() {
+    var range = document.querySelectorAll('input[type="range"]');
+    range.forEach(range => {
+        range.style.backgroundSize = (range.value - range.min) / (range.max - range.min) * 100 + '% 100%';
+    });
+}
 
 function addChuanhuButton(botElement) {
     var rawMessage = null;
@@ -455,6 +494,9 @@ var mObserver = new MutationObserver(function (mutationsList) {
                     document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot').forEach(addChuanhuButton);
                     document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot pre').forEach(addCopyCodeButton);
                 }
+                if (node.tagName === 'INPUT' && node.getAttribute('type') === 'range') {
+                    setSlider();
+                }
             }
             for (var node of mmutation.removedNodes) {
                 if (node.nodeType === 1 && node.classList.contains('message') && node.getAttribute('data-testid') === 'bot') {
@@ -516,6 +558,7 @@ function loadHistoryHtml() {
         var fakeHistory = document.createElement('div');
         fakeHistory.classList.add('history-message');
         fakeHistory.innerHTML = tempDiv.innerHTML;
+        webLocale();
         chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
         // var fakeHistory = document.createElement('div');
         // fakeHistory.classList.add('history-message');
