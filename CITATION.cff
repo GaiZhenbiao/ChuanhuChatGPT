@@ -13,8 +13,8 @@ authors:
     orcid: https://orcid.org/0009-0005-0357-272X
 repository-code: 'https://github.com/GaiZhenbiao/ChuanhuChatGPT'
 url: 'https://github.com/GaiZhenbiao/ChuanhuChatGPT'
-abstract: Provided a light and easy to use interface for ChatGPT API
+abstract: This software provides a light and easy to use interface for ChatGPT API and any LLM.
 license: GPL-3.0
-commit: bd0034c37e5af6a90bd9c2f7dd073f6cd27c61af
-version: '20230405'
-date-released: '2023-04-05'
+commit: 61c97966dac16c992045f5362698c70cc178254f
+version: '20230507'
+date-released: '2023-05-07'
