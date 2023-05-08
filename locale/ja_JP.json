@@ -65,7 +65,7 @@
     "API key为空，请检查是否输入正确。": "APIキーが入力されていません。正しく入力されているか確認してください。",
     "请输入对话内容。": "会話内容を入力してください。",
     "账单信息不适用": "課金情報は対象外です",
-    "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "開発：Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) と [明昭MZhao](https://space.bilibili.com/24807452)\n\n最新コードは川虎Chatのサイトへ [GitHubプロジェクト](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
+    "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "開発：Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) と [明昭MZhao](https://space.bilibili.com/24807452) と [Keldos](https://github.com/Keldos-Li)\n\n最新コードは川虎Chatのサイトへ [GitHubプロジェクト](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
     "切换亮暗色主题": "テーマの明暗切替",
     "您的IP区域：未知。": "あなたのIPアドレス地域：不明",
     "获取IP地理位置失败。原因：": "IPアドレス地域の取得に失敗しました。理由：",

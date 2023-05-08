@@ -65,7 +65,7 @@
     "API key为空，请检查是否输入正确。": "API key is empty, check whether it is entered correctly.",
     "请输入对话内容。": "Enter the content of the conversation.",
     "账单信息不适用": "Billing information is not applicable",
-    "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) 和 [明昭MZhao](https://space.bilibili.com/24807452)开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "developor: Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) and [明昭MZhao](https://space.bilibili.com/24807452)\n\nDownload latest code from [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
+    "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "Developed by Bilibili [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) and [Keldos](https://github.com/Keldos-Li)\n\nDownload latest code from [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
     "切换亮暗色主题": "Switch light/dark theme",
     "您的IP区域：未知。": "Your IP region: Unknown.",
     "获取IP地理位置失败。原因：": "Failed to get IP location. Reason: ",
