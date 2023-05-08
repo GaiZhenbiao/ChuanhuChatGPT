@@ -51,11 +51,11 @@
 - To try again if the response is unsatisfactory, use `🔄 Regenerate` button.
 - To start a new line in the input box, press <kbd>Shift</kbd> + <kbd>Enter</kbd> keys.
 - To quickly switch between input history, press <kbd>↑</kbd> and <kbd>↓</kbd> key in the input box.
-- To deploy the program onto a server, change the last line of the program to `demo.launch(server_name="0.0.0.0", server_port=<your port number>)`.
-- To get a public shared link, change the last line of the program to `demo.launch(share=True)`. Please be noted that the program must be running in order to be accessed via a public link.
+- To deploy the program onto a server, set `"server_name": "0.0.0.0", "server_port" <your port number>,` in `config.json`.
+- To get a public shared link, set `"share": true,` in `config.json`. Please be noted that the program must be running in order to be accessed via a public link.
 - To use it in Hugging Face Spaces: It is recommended to **Duplicate Space** and run the program in your own Space for a faster and more secure experience.
 
-## Installation
+## Quickstart
 
 ```shell
 git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git

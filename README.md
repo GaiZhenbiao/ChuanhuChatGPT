@@ -50,16 +50,31 @@
 - 使用System Prompt可以很有效地设定前提条件。
 - 使用Prompt模板功能时，选择Prompt模板集合文件，然后从下拉菜单中选择想要的prompt。
 - 如果回答不满意，可以使用 `重新生成`按钮再试一次
-- 对于长对话，可以使用 `优化Tokens`按钮减少Tokens占用。
 - 输入框支持换行，按 `shift enter`即可。
 - 可以在输入框按上下箭头在输入历史之间切换
-- 部署到服务器：将程序最后一句改成 `demo.launch(server_name="0.0.0.0", server_port=<你的端口号>)`。
-- 获取公共链接：将程序最后一句改成 `demo.launch(share=True)`。注意程序必须在运行，才能通过公共链接访问。
+- 部署到服务器：在 `config.json` 中设置 `"server_name": "0.0.0.0", "server_port": <你的端口号>,`。
+- 获取公共链接：在 `config.json` 中设置 `"share": true,`。注意程序必须在运行，才能通过公共链接访问。
 - 在Hugging Face上使用：建议在右上角 **复制Space** 再使用，这样App反应可能会快一点。
 
-## 安装方式、使用方式
+## 快速上手
 
-请查看[本项目的wiki页面](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程)。
+```shell
+git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git
+cd ChuanhuChatGPT
+pip install -r requirements.txt
+```
+
+在项目文件夹中复制一份 `config_example.json`，并将其重命名为 `config.json`，在其中填入 `API-Key` 等设置。
+
+```shell
+python ChuanhuChatbot.py
+```
+
+一个浏览器窗口将会自动打开，此时您将可以使用 **川虎Chat** 与ChatGPT或其他模型进行对话。
+
+> **Note**
+>
+> 具体详尽的安装教程和使用教程请查看[本项目的wiki页面](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程)。
 
 ## 疑难杂症解决
 
