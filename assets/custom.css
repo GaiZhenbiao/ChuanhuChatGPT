@@ -262,11 +262,14 @@ ol:not(.options), ul:not(.options) {
         max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     }
     [data-testid = "bot"] {
-        max-width: 98% !important;
+        max-width: 95% !important;
     }
     #app_title h1{
         letter-spacing: -1px; font-size: 22px;
     }
+}
+#chuanhu_chatbot .wrap {
+    overflow-x: hidden;
 }
 /* 对话气泡 */
 .message {
