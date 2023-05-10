@@ -10,15 +10,13 @@ from datetime import datetime
 import pytz
 import requests
 
+from modules.presets import NO_APIKEY_MSG
 from modules.models.base_model import BaseLLMModel
-
-
-def set_yuan_account(user, phone):
-    os.environ['YUAN_ACCOUNT'] = user + '||' + phone
 
 
 class Example:
     """ store some examples(input, output pairs and formats) for few-shots to prime the model."""
+
     def __init__(self, inp, out):
         self.input = inp
         self.output = out
@@ -43,26 +41,27 @@ class Example:
             "id": self.get_id(),
         }
 
+
 class Yuan:
     """The main class for a user to interface with the Inspur Yuan API.
     A user can set account info and add examples of the API request.
     """
 
-    def __init__(self, 
-                engine='base_10B',
-                temperature=0.9,
-                max_tokens=100,
-                input_prefix='',
-                input_suffix='\n',
-                output_prefix='答:',
-                output_suffix='\n\n',
-                append_output_prefix_to_query=False,
-                topK=1,
-                topP=0.9,
-                frequencyPenalty=1.2,
-                responsePenalty=1.2,
-                noRepeatNgramSize=2):
-        
+    def __init__(self,
+                 engine='base_10B',
+                 temperature=0.9,
+                 max_tokens=100,
+                 input_prefix='',
+                 input_suffix='\n',
+                 output_prefix='答:',
+                 output_suffix='\n\n',
+                 append_output_prefix_to_query=False,
+                 topK=1,
+                 topP=0.9,
+                 frequencyPenalty=1.2,
+                 responsePenalty=1.2,
+                 noRepeatNgramSize=2):
+
         self.examples = {}
         self.engine = engine
         self.temperature = temperature
@@ -78,9 +77,13 @@ class Yuan:
         self.output_suffix = output_suffix
         self.append_output_prefix_to_query = append_output_prefix_to_query
         self.stop = (output_suffix + input_prefix).strip()
+        self.api = None
 
         # if self.engine not in ['base_10B','translate','dialog']:
         #     raise Exception('engine must be one of [\'base_10B\',\'translate\',\'dialog\'] ')
+    def set_account(self, api_key):
+        account = api_key.split('||')
+        self.api = YuanAPI(user=account[0], phone=account[1])
 
     def add_example(self, ex):
         """Add an example to the object.
@@ -132,29 +135,30 @@ class Yuan:
         return self.input_prefix + ex.get_input(
         ) + self.input_suffix + self.output_prefix + ex.get_output(
         ) + self.output_suffix
-    
-    def response(self, 
-                query,
-                engine='base_10B',
-                max_tokens=20,
-                temperature=0.9,
-                topP=0.1,
-                topK=1,
-                frequencyPenalty=1.0,
-                responsePenalty=1.0,
-                noRepeatNgramSize=0):
+
+    def response(self,
+                 query,
+                 engine='base_10B',
+                 max_tokens=20,
+                 temperature=0.9,
+                 topP=0.1,
+                 topK=1,
+                 frequencyPenalty=1.0,
+                 responsePenalty=1.0,
+                 noRepeatNgramSize=0):
         """Obtains the original result returned by the API."""
 
+        if self.api is None:
+            return NO_APIKEY_MSG
         try:
             # requestId = submit_request(query,temperature,topP,topK,max_tokens, engine)
-            requestId = submit_request(query, temperature, topP, topK, max_tokens, engine, frequencyPenalty,
+            requestId = self.api.submit_request(query, temperature, topP, topK, max_tokens, engine, frequencyPenalty,
                                        responsePenalty, noRepeatNgramSize)
-            response_text = reply_request(requestId)
+            response_text = self.api.reply_request(requestId)
         except Exception as e:
             raise e
-        
-        return response_text
 
+        return response_text
 
     def del_special_chars(self, msg):
         special_chars = ['<unk>', '<eod>', '#', '▃', '▁', '▂', '　']
@@ -162,20 +166,19 @@ class Yuan:
             msg = msg.replace(char, '')
         return msg
 
-
     def submit_API(self, prompt, trun=[]):
         """Submit prompt to yuan API interface and obtain an pure text reply.
         :prompt: Question or any content a user may input.
         :return: pure text response."""
         query = self.craft_query(prompt)
-        res = self.response(query,engine=self.engine,
+        res = self.response(query, engine=self.engine,
                             max_tokens=self.max_tokens,
                             temperature=self.temperature,
                             topP=self.topP,
                             topK=self.topK,
-                            frequencyPenalty = self.frequencyPenalty,
-                            responsePenalty = self.responsePenalty,
-                            noRepeatNgramSize = self.noRepeatNgramSize)
+                            frequencyPenalty=self.frequencyPenalty,
+                            responsePenalty=self.responsePenalty,
+                            noRepeatNgramSize=self.noRepeatNgramSize)
         if 'resData' in res and res['resData'] != None:
             txt = res['resData']
         else:
@@ -192,9 +195,9 @@ class Yuan:
         if isinstance(trun, str):
             trun = [trun]
         try:
-            if trun != None and isinstance(trun, list) and  trun != []:
+            if trun != None and isinstance(trun, list) and trun != []:
                 for tr in trun:
-                    if tr in txt and tr!="":
+                    if tr in txt and tr != "":
                         txt = txt[:txt.index(tr)]
                     else:
                         continue
@@ -203,71 +206,76 @@ class Yuan:
         return txt
 
 
+class YuanAPI:
+    ACCOUNT = ''
+    PHONE = ''
 
-ACCOUNT = ''
-PHONE = ''
+    SUBMIT_URL = "http://api.airyuan.cn:32102/v1/interface/api/infer/getRequestId?"
+    REPLY_URL = "http://api.airyuan.cn:32102/v1/interface/api/result?"
 
-SUBMIT_URL = "http://api.airyuan.cn:32102/v1/interface/api/infer/getRequestId?"
-REPLY_URL = "http://api.airyuan.cn:32102/v1/interface/api/result?"
+    def __init__(self, user, phone):
+        self.ACCOUNT = user
+        self.PHONE = phone
 
+    @staticmethod
+    def code_md5(str):
+        code = str.encode("utf-8")
+        m = hashlib.md5()
+        m.update(code)
+        result = m.hexdigest()
+        return result
 
-def code_md5(str):
-    code=str.encode("utf-8")
-    m = hashlib.md5()
-    m.update(code)
-    result= m.hexdigest()
-    return result
+    @staticmethod
+    def rest_get(url, header, timeout, show_error=False):
+        '''Call rest get method'''
+        try:
+            response = requests.get(url, headers=header, timeout=timeout, verify=False)
+            return response
+        except Exception as exception:
+            if show_error:
+                print(exception)
+            return None
 
-def rest_get(url, header,timeout, show_error=False):
-    '''Call rest get method'''
-    try:
-        response = requests.get(url, headers=header,timeout=timeout, verify=False)
-        return response
-    except Exception as exception:
-        if show_error:
-            print(exception)
-        return None
+    def header_generation(self):
+        """Generate header for API request."""
+        t = datetime.now(pytz.timezone("Asia/Shanghai")).strftime("%Y-%m-%d")
+        token = self.code_md5(self.ACCOUNT + self.PHONE + t)
+        headers = {'token': token}
+        return headers
 
-def header_generation():
-    """Generate header for API request."""
-    t = datetime.now(pytz.timezone("Asia/Shanghai")).strftime("%Y-%m-%d")
-    global ACCOUNT, PHONE
-    ACCOUNT, PHONE = os.environ.get('YUAN_ACCOUNT').split('||')
-    token=code_md5(ACCOUNT+PHONE+t)
-    headers = {'token': token}
-    return headers
-
-def submit_request(query,temperature,topP,topK,max_tokens,engine, frequencyPenalty,responsePenalty,noRepeatNgramSize):
-    """Submit query to the backend server and get requestID."""
-    headers=header_generation()
-    # url=SUBMIT_URL + "account={0}&data={1}&temperature={2}&topP={3}&topK={4}&tokensToGenerate={5}&type={6}".format(ACCOUNT,query,temperature,topP,topK,max_tokens,"api")
-    # url=SUBMIT_URL + "engine={0}&account={1}&data={2}&temperature={3}&topP={4}&topK={5}&tokensToGenerate={6}" \
-    #                  "&type={7}".format(engine,ACCOUNT,query,temperature,topP,topK, max_tokens,"api")
-    url=SUBMIT_URL + "engine={0}&account={1}&data={2}&temperature={3}&topP={4}&topK={5}&tokensToGenerate={6}" \
-                     "&type={7}&frequencyPenalty={8}&responsePenalty={9}&noRepeatNgramSize={10}".\
-        format(engine,ACCOUNT,query,temperature,topP,topK, max_tokens,"api", frequencyPenalty,responsePenalty,noRepeatNgramSize)
-    response=rest_get(url,headers,30)
-    response_text = json.loads(response.text)
-    if  response_text["flag"]:
-        requestId = response_text["resData"]
-        return requestId
-    else:
-        raise  RuntimeWarning(response_text)
-
-def reply_request(requestId,cycle_count=5):
-    """Check reply API to get the inference response."""
-    url = REPLY_URL + "account={0}&requestId={1}".format(ACCOUNT, requestId)
-    headers=header_generation()
-    response_text= {"flag":True, "resData":None}
-    for i in range(cycle_count):
-        response = rest_get(url, headers, 30, show_error=True)
+    def submit_request(self, query, temperature, topP, topK, max_tokens, engine, frequencyPenalty, responsePenalty,
+                       noRepeatNgramSize):
+        """Submit query to the backend server and get requestID."""
+        headers = self.header_generation()
+        # url=SUBMIT_URL + "account={0}&data={1}&temperature={2}&topP={3}&topK={4}&tokensToGenerate={5}&type={6}".format(ACCOUNT,query,temperature,topP,topK,max_tokens,"api")
+        # url=SUBMIT_URL + "engine={0}&account={1}&data={2}&temperature={3}&topP={4}&topK={5}&tokensToGenerate={6}" \
+        #                  "&type={7}".format(engine,ACCOUNT,query,temperature,topP,topK, max_tokens,"api")
+        url = self.SUBMIT_URL + "engine={0}&account={1}&data={2}&temperature={3}&topP={4}&topK={5}&tokensToGenerate={6}" \
+                                "&type={7}&frequencyPenalty={8}&responsePenalty={9}&noRepeatNgramSize={10}". \
+            format(engine, self.ACCOUNT, query, temperature, topP, topK, max_tokens, "api", frequencyPenalty,
+                   responsePenalty, noRepeatNgramSize)
+        response = self.rest_get(url, headers, 30)
         response_text = json.loads(response.text)
-        if response_text["resData"] != None:
-            return response_text
-        if response_text["flag"] == False and i ==cycle_count-1:
-            raise  RuntimeWarning(response_text)
-        time.sleep(3)
-    return response_text
+        if response_text["flag"]:
+            requestId = response_text["resData"]
+            return requestId
+        else:
+            raise RuntimeWarning(response_text)
+
+    def reply_request(self, requestId, cycle_count=5):
+        """Check reply API to get the inference response."""
+        url = self.REPLY_URL + "account={0}&requestId={1}".format(self.ACCOUNT, requestId)
+        headers = self.header_generation()
+        response_text = {"flag": True, "resData": None}
+        for i in range(cycle_count):
+            response = self.rest_get(url, headers, 30, show_error=True)
+            response_text = json.loads(response.text)
+            if response_text["resData"] is not None:
+                return response_text
+            if response_text["flag"] is False and i == cycle_count - 1:
+                raise RuntimeWarning(response_text)
+            time.sleep(3)
+        return response_text
 
 
 class Yuan_Client(BaseLLMModel):
@@ -288,11 +296,8 @@ class Yuan_Client(BaseLLMModel):
             self.output_prefix = value
 
     def get_answer_at_once(self):
-        account = self.api_key.split('||')
-        set_yuan_account(user=account[0], phone=account[1])
-
         # yuan temperature is (0,1] and base model temperature is [0,2], and yuan 0.9 == base 1 so need to convert
-        temperature = self.temperature if self.temperature <= 1 else 0.9 + (self.temperature-1)/10
+        temperature = self.temperature if self.temperature <= 1 else 0.9 + (self.temperature - 1) / 10
         topP = self.top_p
         topK = self.n_choices
         # max_tokens should be in [1,200]
@@ -328,6 +333,9 @@ class Yuan_Client(BaseLLMModel):
                     output_prefix=self.output_prefix,
                     output_suffix="".join(stop),
                     )
+        if not self.api_key:
+            return NO_APIKEY_MSG, 0
+        yuan.set_account(self.api_key)
 
         for in_line, out_line in examples:
             yuan.add_example(Example(inp=in_line, out=out_line))
