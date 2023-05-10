@@ -277,20 +277,60 @@ class Yuan_Client(BaseLLMModel):
         self.history = []
         self.api_key = api_key
 
+        self.input_prefix = ""
+        self.output_prefix = ""
+
+    def set_text_prefix(self, option, value):
+        if option == 'input_prefix':
+            self.input_prefix = value
+        elif option == 'output_prefix':
+            self.output_prefix = value
+
     def get_answer_at_once(self):
         account = self.api_key.split('||')
         set_yuan_account(user=account[0], phone=account[1])
+
+        # yuan temperature is (0,1] and base model temperature is [0,2], and yuan 0.9 == base 1 so need to convert
+        temperature = self.temperature if self.temperature <= 1 else 0.9 + (self.temperature-1)/10
+        topP = self.top_p
+        topK = self.n_choices
+        # max_tokens should be in [1,200]
+        max_tokens = self.max_generation_token if self.max_generation_token is not None else 50
+        if max_tokens > 200:
+            max_tokens = 200
+        stop = self.stop_sequence if self.stop_sequence is not None else []
+        examples = []
+        system_prompt = self.system_prompt
+        if system_prompt is not None:
+            lines = system_prompt.splitlines()
+            # TODO: support prefixes in system prompt or settings
+            """
+            if lines[0].startswith('-'):
+                prefixes = lines.pop()[1:].split('|')
+                self.input_prefix = prefixes[0]
+                if len(prefixes) > 1:
+                    self.output_prefix = prefixes[1]
+                if len(prefixes) > 2:
+                    stop = prefixes[2].split(',')
+            """
+            for i in range(0, len(lines), 2):
+                in_line = lines[i]
+                out_line = lines[i + 1] if i + 1 < len(lines) else ""
+                examples.append((in_line, out_line))
         yuan = Yuan(engine=self.model_name.replace('yuanai-1.0-', ''),
-                    max_tokens=200,
-                    input_prefix="",
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    topK=topK,
+                    topP=topP,
+                    input_prefix=self.input_prefix,
                     input_suffix="",
-                    output_prefix="",
-                    output_suffix="",
-                    append_output_prefix_to_query=False,
-                    topK=5,
-                    temperature=1,
-                    topP=0.8,
-                    frequencyPenalty=1.2)
+                    output_prefix=self.output_prefix,
+                    output_suffix="".join(stop),
+                    )
+
+        for in_line, out_line in examples:
+            yuan.add_example(Example(inp=in_line, out=out_line))
+
         prompt = self.history[-1]["content"]
-        answer = yuan.submit_API(prompt)
+        answer = yuan.submit_API(prompt, trun=stop)
         return answer, len(answer)
