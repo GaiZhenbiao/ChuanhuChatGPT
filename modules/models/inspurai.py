@@ -272,10 +272,11 @@ def reply_request(requestId,cycle_count=5):
 
 class Yuan_Client(BaseLLMModel):
 
-    def __init__(self, model_name, api_key, user_name=""):
+    def __init__(self, model_name, api_key, user_name="", system_prompt=None):
         super().__init__(model_name=model_name, user=user_name)
         self.history = []
         self.api_key = api_key
+        self.system_prompt = system_prompt
 
         self.input_prefix = ""
         self.output_prefix = ""
