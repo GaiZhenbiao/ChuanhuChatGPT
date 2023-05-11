@@ -68,6 +68,10 @@ ONLINE_MODELS = [
     "gpt-4-32k",
     "gpt-4-32k-0314",
     "xmchat",
+    "yuanai-1.0-base_10B",
+    "yuanai-1.0-translate",
+    "yuanai-1.0-dialog",
+    "yuanai-1.0-rhythm_poems",
 ]
 
 LOCAL_MODELS = [

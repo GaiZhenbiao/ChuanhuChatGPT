@@ -599,6 +599,9 @@ def get_model(
         elif model_type == ModelType.MOSS:
             from .MOSS import MOSS_Client
             model = MOSS_Client(model_name, user_name=user_name)
+        elif model_type == ModelType.YuanAI:
+            from .inspurai import Yuan_Client
+            model = Yuan_Client(model_name, api_key=access_key, user_name=user_name, system_prompt=system_prompt)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)
