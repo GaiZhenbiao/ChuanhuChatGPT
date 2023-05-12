@@ -1,4 +1,5 @@
 gradio==3.28.0
+gradio_client==0.1.4
 mdtex2html
 pypinyin
 tiktoken
@@ -9,7 +10,6 @@ duckduckgo_search
 Pygments
 llama_index==0.5.25
 langchain<0.0.150
-gradio_client<0.1.1
 markdown
 PyPDF2
 pdfplumber
