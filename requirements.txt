@@ -8,7 +8,8 @@ colorama
 duckduckgo_search
 Pygments
 llama_index==0.5.25
-langchain
+langchain<0.0.150
+gradio_client<0.1.1
 markdown
 PyPDF2
 pdfplumber
