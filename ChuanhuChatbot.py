@@ -90,6 +90,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         use_streaming_checkbox = gr.Checkbox(
                             label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION
                         )
+                        autogpt_mode = gr.Checkbox(label=i18n("AutoGPT 模式"), value=True)
                         single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False)
                         use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False)
                         render_latex_checkbox = gr.Checkbox(
@@ -268,7 +269,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
 
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(FOOTER.format(versions=versions_html()), elem_id="footer")
-    
+
     # https://github.com/gradio-app/gradio/pull/3296
     def create_greeting(request: gr.Request):
         if hasattr(request, "username") and request.username: # is not None or is not ""
