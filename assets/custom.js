@@ -17,7 +17,7 @@ var chatbotWrap = null;
 var apSwitch = null;
 var empty_botton = null;
 var messageBotDivs = null;
-var renderLatex = null;
+// var renderLatex = null;
 var loginUserForm = null;
 var logginUser = null;
 
@@ -51,7 +51,7 @@ function gradioLoaded(mutations) {
             chatbot = document.querySelector('#chuanhu_chatbot');
             chatbotWrap = document.querySelector('#chuanhu_chatbot > .wrap');
             apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
-            renderLatex = document.querySelector("#render_latex_checkbox > label > input");
+            // renderLatex = document.querySelector("#render_latex_checkbox > label > input");
             empty_botton = document.getElementById("empty_btn")
 
             if (loginUserForm) {
@@ -80,10 +80,10 @@ function gradioLoaded(mutations) {
                 }
                 setChatbotScroll();
             }
-            if (renderLatex) {  // renderLatex 加载出来了没?
-                shouldRenderLatex = renderLatex.checked;
-                updateMathJax();
-            }
+            // if (renderLatex) {  // renderLatex 加载出来了没?
+            //     shouldRenderLatex = renderLatex.checked;
+            //     updateMathJax();
+            // }
             if (empty_botton) {
                 emptyHistory();
             }
@@ -98,7 +98,7 @@ function webLocale() {
         var forViewStyle = document.createElement('style');
         forViewStyle.innerHTML = '.wrap>.history-message>:last-child::after { content: "' + forView + '"!important; }';
         document.head.appendChild(forViewStyle);
-        console.log("added forViewStyle", forView);
+        // console.log("added forViewStyle", forView);
     }
 }
 
@@ -439,7 +439,7 @@ function renderMathJax() {
         }
     }
     mathjaxUpdated = true;
-    console.log("MathJax Rendered")
+    // console.log("MathJax Rendered")
 }
 
 function removeMathjax() {
@@ -455,22 +455,21 @@ function removeMathjax() {
 }
 
 function updateMathJax() {
-    renderLatex.addEventListener("change", function() {
-        shouldRenderLatex = renderLatex.checked;
-        // console.log(shouldRenderLatex)
-        if (!mathjaxUpdated) {
-            if (shouldRenderLatex) {
-                renderMathJax();
-            } else {
-                console.log("MathJax Disabled")
-                removeMathjax();
-            }
-        } else {
-            if (!shouldRenderLatex) {
-                mathjaxUpdated = false; // reset
-            }
-        }
-    });
+    // renderLatex.addEventListener("change", function() {
+    //     shouldRenderLatex = renderLatex.checked;
+    //     if (!mathjaxUpdated) {
+    //         if (shouldRenderLatex) {
+    //             renderMathJax();
+    //         } else {
+    //             console.log("MathJax Disabled")
+    //             removeMathjax();
+    //         }
+    //     } else {
+    //         if (!shouldRenderLatex) {
+    //             mathjaxUpdated = false; // reset
+    //         }
+    //     }
+    // });
     if (shouldRenderLatex && !mathjaxUpdated) {
         renderMathJax();
     }
@@ -534,7 +533,7 @@ var loadhistorytime = 0; // for debugging
 function saveHistoryHtml() {
     var historyHtml = document.querySelector('#chuanhu_chatbot > .wrap');
     localStorage.setItem('chatHistory', historyHtml.innerHTML);
-    console.log("History Saved")
+    // console.log("History Saved")
     historyLoaded = false;
 }
 function loadHistoryHtml() {
@@ -595,6 +594,7 @@ observer.observe(targetNode, { childList: true, subtree: true });
 window.addEventListener("DOMContentLoaded", function () {
     isInIframe = (window.self !== window.top);
     historyLoaded = false;
+    shouldRenderLatex = !!document.querySelector('script[src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"]');
 });
 window.addEventListener('resize', setChatbotHeight);
 window.addEventListener('scroll', setChatbotHeight);

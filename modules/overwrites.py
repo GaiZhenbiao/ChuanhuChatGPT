@@ -8,7 +8,7 @@ from gradio_client import utils as client_utils
 
 from modules.presets import *
 from modules.llama_func import *
-
+from modules.config import render_latex
 
 def compact_text_chunks(self, prompt: Prompt, text_chunks: List[str]) -> List[str]:
     logging.debug("Compacting text chunks...🚀🚀🚀")
@@ -85,6 +85,11 @@ with open("./assets/custom.js", "r", encoding="utf-8") as f, \
 def reload_javascript():
     print("Reloading javascript...")
     js = f'<script>{customJS}</script><script async>{externalScripts}</script>'
+    if render_latex:
+        js += """\
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+            <script type="text/x-mathjax-config">MathJax.Hub.Config({skipStartupTypeset: false, tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']],displayMath: [['$$','$$'], ['\\[','\\]']]}});</script>
+        """
     def template_response(*args, **kwargs):
         res = GradioTemplateResponseOriginal(*args, **kwargs)
         res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))
