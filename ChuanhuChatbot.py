@@ -87,9 +87,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
                     )
                     with gr.Row():
-                        use_streaming_checkbox = gr.Checkbox(
-                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION
-                        )
                         autogpt_mode = gr.Checkbox(label=i18n("AutoGPT 模式"), value=True)
                         single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False)
                         use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False)
@@ -166,6 +163,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                 with gr.Tab(label=i18n("高级")):
                     gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置"))
                     gr.HTML(APPEARANCE_SWITCHER, elem_classes="insert_block")
+                    use_streaming_checkbox = gr.Checkbox(
+                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION
+                        )
                     with gr.Accordion(i18n("参数"), open=False):
                         temperature_slider = gr.Slider(
                             minimum=-0,
