@@ -277,6 +277,7 @@ class BaseLLMModel:
         chatbot,
         stream=False,
         use_websearch=False,
+        autogpt_mode=False,
         files=None,
         reply_language="中文",
         should_check_token_count=True,
@@ -383,6 +384,7 @@ class BaseLLMModel:
         chatbot,
         stream=False,
         use_websearch=False,
+        autogpt_mode=False,
         files=None,
         reply_language="中文",
     ):
@@ -402,6 +404,7 @@ class BaseLLMModel:
             chatbot,
             stream=stream,
             use_websearch=use_websearch,
+            autogpt_mode=autogpt_mode,
             files=files,
             reply_language=reply_language,
         )

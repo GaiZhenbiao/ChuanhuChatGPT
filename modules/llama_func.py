@@ -107,7 +107,7 @@ def construct_index(
 ):
     from langchain.chat_models import ChatOpenAI
     from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-    from llama_index import GPTSimpleVectorIndex, ServiceContext, LangchainEmbedding, OpenAIEmbedding
+    from llama_index import GPTVectorStoreIndex, ServiceContext, LangchainEmbedding, OpenAIEmbedding
 
     if api_key:
         os.environ["OPENAI_API_KEY"] = api_key
@@ -129,7 +129,7 @@ def construct_index(
     index_name = get_index_name(file_src)
     if os.path.exists(f"./index/{index_name}.json"):
         logging.info("找到了缓存的索引文件，加载中……")
-        return GPTSimpleVectorIndex.load_from_disk(f"./index/{index_name}.json")
+        return GPTVectorStoreIndex.load_from_disk(f"./index/{index_name}.json")
     else:
         try:
             documents = get_documents(file_src)
@@ -144,12 +144,12 @@ def construct_index(
                     chunk_size_limit=chunk_size_limit,
                     embed_model=embed_model,
                 )
-                index = GPTSimpleVectorIndex.from_documents(
+                index = GPTVectorStoreIndex.from_documents(
                     documents, service_context=service_context
                 )
             logging.debug("索引构建完成！")
             os.makedirs("./index", exist_ok=True)
-            index.save_to_disk(f"./index/{index_name}.json")
+            index.storage_context.persist(f"./index/{index_name}")
             logging.debug("索引已保存至本地!")
             return index
 
