@@ -333,7 +333,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     submitBtn.click(**transfer_input_args).then(**chatgpt_predict_args, api_name="predict").then(**end_outputing_args)
     submitBtn.click(**get_usage_args)
 
-    index_files.change(handle_file_upload, [current_model, index_files, chatbot], [index_files, chatbot, status_display])
+    index_files.change(handle_file_upload, [current_model, index_files, chatbot, language_select_dropdown], [index_files, chatbot, status_display])
 
     emptyBtn.click(
         reset,
