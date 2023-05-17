@@ -7,7 +7,7 @@ import mdtex2html
 from gradio_client import utils as client_utils
 
 from modules.presets import *
-from modules.llama_func import *
+from modules.index_func import *
 from modules.config import render_latex
 
 def compact_text_chunks(self, prompt: Prompt, text_chunks: List[str]) -> List[str]:
