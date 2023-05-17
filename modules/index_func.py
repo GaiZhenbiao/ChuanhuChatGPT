@@ -1,14 +1,6 @@
 import os
 import logging
 
-from llama_index import download_loader
-from llama_index import (
-    Document,
-    LLMPredictor,
-    PromptHelper,
-    QuestionAnswerPrompt,
-    RefinePrompt,
-)
 import colorama
 import PyPDF2
 from tqdm import tqdm
@@ -40,6 +32,10 @@ def block_split(text):
 
 
 def get_documents(file_src):
+    from langchain.schema import Document
+    from langchain.text_splitter import TokenTextSplitter
+    text_splitter = TokenTextSplitter(chunk_size=500, chunk_overlap=30)
+
     documents = []
     logging.debug("Loading documents...")
     logging.debug(f"file_src: {file_src}")
@@ -63,34 +59,39 @@ def get_documents(file_src):
                         pdfReader = PyPDF2.PdfReader(pdfFileObj)
                         for page in tqdm(pdfReader.pages):
                             pdftext += page.extract_text()
-                text_raw = pdftext
+                texts = Document(page_content=pdftext, metadata={"source": filepath})
             elif file_type == ".docx":
                 logging.debug("Loading Word...")
-                DocxReader = download_loader("DocxReader")
-                loader = DocxReader()
-                text_raw = loader.load_data(file=filepath)[0].text
+                from langchain.document_loaders import UnstructuredWordDocumentLoader
+                loader = UnstructuredWordDocumentLoader(filepath)
+                texts = loader.load()
+            elif file_type == ".pptx":
+                logging.debug("Loading PowerPoint...")
+                from langchain.document_loaders import UnstructuredPowerPointLoader
+                loader = UnstructuredPowerPointLoader(filepath)
+                texts = loader.load()
             elif file_type == ".epub":
                 logging.debug("Loading EPUB...")
-                EpubReader = download_loader("EpubReader")
-                loader = EpubReader()
-                text_raw = loader.load_data(file=filepath)[0].text
+                from langchain.document_loaders import UnstructuredEPubLoader
+                loader = UnstructuredEPubLoader(filepath)
+                texts = loader.load()
             elif file_type == ".xlsx":
                 logging.debug("Loading Excel...")
                 text_list = excel_to_string(filepath)
                 for elem in text_list:
-                    documents.append(Document(elem))
+                    documents.append(Document(page_content=elem, metadata={"source": filepath}))
                 continue
             else:
                 logging.debug("Loading text file...")
-                with open(filepath, "r", encoding="utf-8") as f:
-                    text_raw = f.read()
+                from langchain.document_loaders import TextLoader
+                loader = TextLoader(filepath, "utf8")
+                texts = loader.load()
         except Exception as e:
             logging.error(f"Error loading file: {filename}")
             pass
-        text = add_space(text_raw)
-        # text = block_split(text)
-        # documents += text
-        documents += [Document(text)]
+
+        texts = text_splitter.split_documents(texts)
+        documents.extend(texts)
     logging.debug("Documents loaded.")
     return documents
 
@@ -106,8 +107,7 @@ def construct_index(
     separator=" ",
 ):
     from langchain.chat_models import ChatOpenAI
-    from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-    from llama_index import GPTVectorStoreIndex, ServiceContext, LangchainEmbedding, OpenAIEmbedding
+    from langchain.vectorstores import FAISS
 
     if api_key:
         os.environ["OPENAI_API_KEY"] = api_key
@@ -118,38 +118,26 @@ def construct_index(
     embedding_limit = None if embedding_limit == 0 else embedding_limit
     separator = " " if separator == "" else separator
 
-    prompt_helper = PromptHelper(
-        max_input_size=max_input_size,
-        num_output=num_outputs,
-        max_chunk_overlap=max_chunk_overlap,
-        embedding_limit=embedding_limit,
-        chunk_size_limit=600,
-        separator=separator,
-    )
     index_name = get_index_name(file_src)
-    if os.path.exists(f"./index/{index_name}.json"):
+    index_path = f"./index/{index_name}"
+    if local_embedding:
+        from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+        embeddings = HuggingFaceEmbeddings(model_name = "sentence-transformers/distiluse-base-multilingual-cased-v2")
+    else:
+        from langchain.embeddings import OpenAIEmbeddings
+        embeddings = OpenAIEmbeddings()
+    if os.path.exists(index_path):
         logging.info("找到了缓存的索引文件，加载中……")
-        return GPTVectorStoreIndex.load_from_disk(f"./index/{index_name}.json")
+        return FAISS.load_local(index_path, embeddings)
     else:
         try:
             documents = get_documents(file_src)
-            if local_embedding:
-                embed_model = LangchainEmbedding(HuggingFaceEmbeddings(model_name = "sentence-transformers/distiluse-base-multilingual-cased-v2"))
-            else:
-                embed_model = OpenAIEmbedding()
             logging.info("构建索引中……")
             with retrieve_proxy():
-                service_context = ServiceContext.from_defaults(
-                    prompt_helper=prompt_helper,
-                    chunk_size_limit=chunk_size_limit,
-                    embed_model=embed_model,
-                )
-                index = GPTVectorStoreIndex.from_documents(
-                    documents, service_context=service_context
-                )
+                index = FAISS.from_documents(documents, embeddings)
             logging.debug("索引构建完成！")
             os.makedirs("./index", exist_ok=True)
-            index.storage_context.persist(f"./index/{index_name}")
+            index.save_local(index_path)
             logging.debug("索引已保存至本地!")
             return index
 
@@ -157,10 +145,3 @@ def construct_index(
             logging.error("索引构建失败！", e)
             print(e)
             return None
-
-
-def add_space(text):
-    punctuations = {"，": "， ", "。": "。 ", "？": "？ ", "！": "！ ", "：": "： ", "；": "； "}
-    for cn_punc, en_punc in punctuations.items():
-        text = text.replace(cn_punc, en_punc)
-    return text

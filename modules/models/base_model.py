@@ -19,7 +19,7 @@ import aiohttp
 from enum import Enum
 
 from ..presets import *
-from ..llama_func import *
+from ..index_func import *
 from ..utils import *
 from .. import shared
 from ..config import retrieve_proxy
@@ -192,53 +192,20 @@ class BaseLLMModel:
         limited_context = False
         fake_inputs = real_inputs
         if files:
-            from llama_index.indices.vector_store.base_query import GPTVectorStoreIndexQuery
-            from llama_index.indices.query.schema import QueryBundle
             from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-            from langchain.chat_models import ChatOpenAI
-            from llama_index import (
-                GPTSimpleVectorIndex,
-                ServiceContext,
-                LangchainEmbedding,
-                OpenAIEmbedding,
-            )
+            from langchain.vectorstores.base import VectorStoreRetriever
             limited_context = True
             msg = "加载索引中……"
             logging.info(msg)
-            # yield chatbot + [(inputs, "")], msg
             index = construct_index(self.api_key, file_src=files)
             assert index is not None, "获取索引失败"
             msg = "索引获取成功，生成回答中……"
             logging.info(msg)
-            if local_embedding or self.model_type != ModelType.OpenAI:
-                embed_model = LangchainEmbedding(HuggingFaceEmbeddings(model_name = "sentence-transformers/distiluse-base-multilingual-cased-v2"))
-            else:
-                embed_model = OpenAIEmbedding()
-            # yield chatbot + [(inputs, "")], msg
             with retrieve_proxy():
-                prompt_helper = PromptHelper(
-                    max_input_size=4096,
-                    num_output=5,
-                    max_chunk_overlap=20,
-                    chunk_size_limit=600,
-                )
-                from llama_index import ServiceContext
-
-                service_context = ServiceContext.from_defaults(
-                    prompt_helper=prompt_helper, embed_model=embed_model
-                )
-                query_object = GPTVectorStoreIndexQuery(
-                    index.index_struct,
-                    service_context=service_context,
-                    similarity_top_k=5,
-                    vector_store=index._vector_store,
-                    docstore=index._docstore,
-                    response_synthesizer=None
-                )
-                query_bundle = QueryBundle(real_inputs)
-                nodes = query_object.retrieve(query_bundle)
-            reference_results = [n.node.text for n in nodes]
-            reference_results = add_source_numbers(reference_results, use_source=False)
+                retriever = VectorStoreRetriever(vectorstore=index, search_type="similarity_score_threshold",search_kwargs={"k":6, "score_threshold": 0.5})
+                relevant_documents = retriever.get_relevant_documents(real_inputs)
+            reference_results = [[d.page_content.strip("�"), os.path.basename(d.metadata["source"])] for d in relevant_documents]
+            reference_results = add_source_numbers(reference_results)
             display_append = add_details(reference_results)
             display_append = "\n\n" + "".join(display_append)
             real_inputs = (

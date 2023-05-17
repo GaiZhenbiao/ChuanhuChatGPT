@@ -22,7 +22,7 @@ from enum import Enum
 import uuid
 
 from ..presets import *
-from ..llama_func import *
+from ..index_func import *
 from ..utils import *
 from .. import shared
 from ..config import retrieve_proxy, usage_limit

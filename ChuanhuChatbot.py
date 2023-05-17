@@ -15,7 +15,6 @@ from modules.models.models import get_model
 
 gr.Chatbot._postprocess_chat_messages = postprocess_chat_messages
 gr.Chatbot.postprocess = postprocess
-PromptHelper.compact_text_chunks = compact_text_chunks
 
 with open("assets/custom.css", "r", encoding="utf-8") as f:
     customCSS = f.read()
