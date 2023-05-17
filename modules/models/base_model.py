@@ -178,12 +178,27 @@ class BaseLLMModel:
         status_text = self.token_message()
         return chatbot, status_text
 
-    def handle_file_upload(self, files, chatbot):
+    def handle_file_upload(self, files, chatbot, language):
         """if the model accepts multi modal input, implement this function"""
         status = gr.Markdown.update()
         if files:
-            construct_index(self.api_key, file_src=files)
-            status = "索引构建完成"
+            index = construct_index(self.api_key, file_src=files)
+            status = i18n("索引构建完成")
+            # Summarize the document
+            logging.info(i18n("生成内容总结中……"))
+            os.environ["OPENAI_API_KEY"] = self.api_key
+            from langchain.chains.summarize import load_summarize_chain
+            from langchain.prompts import PromptTemplate
+            from langchain.chat_models import ChatOpenAI
+            from langchain.callbacks import StdOutCallbackHandler
+            prompt_template = "Write a concise summary of the following:\n\n{text}\n\nCONCISE SUMMARY IN " + language + ":"
+            PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
+            handler = StdOutCallbackHandler()
+            llm = ChatOpenAI(callbacks=[handler])
+            chain = load_summarize_chain(llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
+            summary = chain({"input_documents": list(index.docstore.__dict__["_dict"].values())}, return_only_outputs=True)["output_text"]
+            print(i18n("总结") + f": {summary}")
+            chatbot.append([i18n("总结"), summary])
         return gr.Files.update(), chatbot, status
 
     def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):

@@ -494,7 +494,7 @@ class XMChat(BaseLLMModel):
         limited_context = False
         return limited_context, fake_inputs, display_append, real_inputs, chatbot
 
-    def handle_file_upload(self, files, chatbot):
+    def handle_file_upload(self, files, chatbot, language):
         """if the model accepts multi modal input, implement this function"""
         if files:
             for file in files:

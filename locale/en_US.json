@@ -70,5 +70,7 @@
     "您的IP区域：未知。": "Your IP region: Unknown.",
     "获取IP地理位置失败。原因：": "Failed to get IP location. Reason: ",
     "。你仍然可以使用聊天功能。": ". You can still use the chat function.",
-    "您的IP区域：": "Your IP region: "
+    "您的IP区域：": "Your IP region: ",
+    "总结": "Summarize",
+    "生成内容总结中……": "Generating content summary..."
 }
