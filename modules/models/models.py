@@ -20,6 +20,7 @@ import asyncio
 import aiohttp
 from enum import Enum
 import uuid
+import openai
 
 from ..presets import *
 from ..llama_func import *
@@ -79,6 +80,8 @@ class OpenAIClient(BaseLLMModel):
         return input_token_count
 
     def billing_info(self):
+        if openai.api_type == 'azure':
+            return
         try:
             curr_time = datetime.datetime.now()
             last_day_of_month = get_last_day_of_month(
@@ -145,6 +148,9 @@ class OpenAIClient(BaseLLMModel):
             "presence_penalty": self.presence_penalty,
             "frequency_penalty": self.frequency_penalty,
         }
+        
+        if openai.api_type == "azure":
+            payload["engine"] = AZURE_ENGINE.get(self.model_name)
 
         if self.max_generation_token is not None:
             payload["max_tokens"] = self.max_generation_token
@@ -164,18 +170,25 @@ class OpenAIClient(BaseLLMModel):
         if shared.state.completion_url != COMPLETION_URL:
             logging.info(f"使用自定义API URL: {shared.state.completion_url}")
 
-        with retrieve_proxy():
-            try:
-                response = requests.post(
-                    shared.state.completion_url,
-                    headers=headers,
-                    json=payload,
-                    stream=stream,
-                    timeout=timeout,
-                )
-            except:
-                return None
-        return response
+        if openai.api_type == "azure":
+            return openai.ChatCompletion.create(timeout=timeout, **payload)
+        else:
+            # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
+            if shared.state.completion_url != COMPLETION_URL:
+                logging.info(f"使用自定义API URL: {shared.state.completion_url}")
+
+            with retrieve_proxy():
+                try:
+                    response = requests.post(
+                        shared.state.completion_url,
+                        headers=headers,
+                        json=payload,
+                        stream=stream,
+                        timeout=timeout,
+                    )
+                except:
+                    return None
+            return response
 
     def _refresh_header(self):
         self.headers = {
@@ -200,18 +213,25 @@ class OpenAIClient(BaseLLMModel):
             )
 
     def _decode_chat_response(self, response):
+        iter = response if openai.api_type == "azure" else response.iter_lines()
+
         error_msg = ""
-        for chunk in response.iter_lines():
+        for chunk in iter:
             if chunk:
-                chunk = chunk.decode()
-                chunk_length = len(chunk)
-                try:
-                    chunk = json.loads(chunk[6:])
-                except json.JSONDecodeError:
-                    print(i18n("JSON解析错误,收到的内容: ") + f"{chunk}")
-                    error_msg += chunk
-                    continue
-                if chunk_length > 6 and "delta" in chunk["choices"][0]:
+                if openai.api_type != 'azure':
+                    chunk = chunk.decode()
+                    chunk_length = len(chunk)
+                    try:
+                        if chunk_length > 6:
+                            chunk = json.loads(chunk[6:])
+                        else:
+                            raise Exception()
+                    except json.JSONDecodeError:
+                        print(i18n("JSON解析错误,收到的内容: ") + f"{chunk}")
+                        error_msg += chunk
+                        continue
+
+                if "delta" in chunk["choices"][0]:
                     if chunk["choices"][0]["finish_reason"] == "stop":
                         break
                     try:
@@ -219,6 +239,7 @@ class OpenAIClient(BaseLLMModel):
                     except Exception as e:
                         # logging.error(f"Error: {e}")
                         continue
+
         if error_msg:
             raise Exception(error_msg)
 
