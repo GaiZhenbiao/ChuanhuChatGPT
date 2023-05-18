@@ -34,6 +34,7 @@ class ModelType(Enum):
     StableLM = 4
     MOSS = 5
     YuanAI = 6
+    ChuanhuAgent = 7
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -53,6 +54,8 @@ class ModelType(Enum):
             model_type = ModelType.MOSS
         elif "yuanai" in model_name_lower:
             model_type = ModelType.YuanAI
+        elif "川虎助理" in model_name_lower:
+            model_type = ModelType.ChuanhuAgent
         else:
             model_type = ModelType.Unknown
         return model_type
@@ -259,7 +262,6 @@ class BaseLLMModel:
         chatbot,
         stream=False,
         use_websearch=False,
-        autogpt_mode=False,
         files=None,
         reply_language="中文",
         should_check_token_count=True,
@@ -366,7 +368,6 @@ class BaseLLMModel:
         chatbot,
         stream=False,
         use_websearch=False,
-        autogpt_mode=False,
         files=None,
         reply_language="中文",
     ):
@@ -386,7 +387,6 @@ class BaseLLMModel:
             chatbot,
             stream=stream,
             use_websearch=use_websearch,
-            autogpt_mode=autogpt_mode,
             files=files,
             reply_language=reply_language,
         )

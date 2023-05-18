@@ -86,7 +86,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
                     )
                     with gr.Row():
-                        autogpt_mode = gr.Checkbox(label=i18n("AutoGPT 模式"), value=False)
                         single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False)
                         use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False)
                         # render_latex_checkbox = gr.Checkbox(label=i18n("渲染LaTeX公式"), value=render_latex, interactive=True, elem_id="render_latex_checkbox")
@@ -287,7 +286,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             chatbot,
             use_streaming_checkbox,
             use_websearch_checkbox,
-            autogpt_mode,
             index_files,
             language_select_dropdown,
         ],
@@ -350,7 +348,6 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             chatbot,
             use_streaming_checkbox,
             use_websearch_checkbox,
-            autogpt_mode,
             index_files,
             language_select_dropdown,
         ],
