@@ -22,3 +22,5 @@ google-search-results
 arxiv
 wikipedia
 google.generativeai
+openai
+unstructured
