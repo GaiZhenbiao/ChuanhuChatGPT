@@ -1,8 +1,6 @@
 from langchain.chains.summarize import load_summarize_chain
-from langchain import OpenAI, PromptTemplate, LLMChain
+from langchain import PromptTemplate, LLMChain
 from langchain.chat_models import ChatOpenAI
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.chains.mapreduce import MapReduceChain
 from langchain.prompts import PromptTemplate
 from langchain.text_splitter import TokenTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
@@ -14,14 +12,23 @@ from langchain.agents import AgentType
 from langchain.docstore.document import Document
 from langchain.tools import BaseTool, StructuredTool, Tool, tool
 from langchain.callbacks.stdout import StdOutCallbackHandler
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.callbacks.manager import BaseCallbackManager
+
+from typing import Any, Dict, List, Optional, Union
+
+from langchain.callbacks.base import BaseCallbackHandler
+from langchain.input import print_text
+from langchain.schema import AgentAction, AgentFinish, LLMResult
 
 from pydantic import BaseModel, Field
 
 import requests
 from bs4 import BeautifulSoup
+from threading import Thread, Condition
+from collections import deque
 
-from .base_model import BaseLLMModel
+from .base_model import BaseLLMModel, CallbackToIterator, ChuanhuCallbackHandler
 from ..config import default_chuanhu_assistant_model
 from ..presets import SUMMARIZE_PROMPT
 import logging
@@ -40,8 +47,9 @@ class ChuanhuAgent_Client(BaseLLMModel):
         self.text_splitter = TokenTextSplitter(chunk_size=500, chunk_overlap=30)
         self.api_key = openai_api_key
         self.llm = ChatOpenAI(openai_api_key=openai_api_key, temperature=0, model_name=default_chuanhu_assistant_model)
+        self.cheap_llm = ChatOpenAI(openai_api_key=openai_api_key, temperature=0, model_name="gpt-3.5-turbo")
         PROMPT = PromptTemplate(template=SUMMARIZE_PROMPT, input_variables=["text"])
-        self.summarize_chain = load_summarize_chain(self.llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
+        self.summarize_chain = load_summarize_chain(self.cheap_llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
         if "Pro" in self.model_name:
             self.tools = load_tools(["google-search-results-json", "llm-math", "arxiv", "wikipedia", "wolfram-alpha"], llm=self.llm)
         else:
@@ -96,13 +104,28 @@ class ChuanhuAgent_Client(BaseLLMModel):
         # create vectorstore
         db = FAISS.from_documents(texts, embeddings)
         retriever = db.as_retriever()
-        qa = RetrievalQA.from_chain_type(llm=self.llm, chain_type="stuff", retriever=retriever)
+        qa = RetrievalQA.from_chain_type(llm=self.cheap_llm, chain_type="stuff", retriever=retriever)
         return qa.run(f"{question} Reply in 中文")
 
     def get_answer_at_once(self):
         question = self.history[-1]["content"]
-        manager = BaseCallbackManager(handlers=[StdOutCallbackHandler()])
         # llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
-        agent = initialize_agent(self.tools, self.llm, agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True, callback_manager=manager)
+        agent = initialize_agent(self.tools, self.llm, agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
         reply = agent.run(input=f"{question} Reply in 简体中文")
         return reply, -1
+
+    def get_answer_stream_iter(self):
+        question = self.history[-1]["content"]
+        it = CallbackToIterator()
+        manager = BaseCallbackManager(handlers=[ChuanhuCallbackHandler(it.callback)])
+        def thread_func():
+            agent = initialize_agent(self.tools, self.llm, agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True, callback_manager=manager)
+            reply = agent.run(input=f"{question} Reply in 简体中文")
+            it.callback(reply)
+            it.finish()
+        t = Thread(target=thread_func)
+        t.start()
+        partial_text = ""
+        for value in it:
+            partial_text += value
+            yield partial_text

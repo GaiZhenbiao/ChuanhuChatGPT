@@ -18,11 +18,84 @@ import asyncio
 import aiohttp
 from enum import Enum
 
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.callbacks.manager import BaseCallbackManager
+
+from typing import Any, Dict, List, Optional, Union
+
+from langchain.callbacks.base import BaseCallbackHandler
+from langchain.input import print_text
+from langchain.schema import AgentAction, AgentFinish, LLMResult
+from threading import Thread, Condition
+from collections import deque
+
 from ..presets import *
 from ..index_func import *
 from ..utils import *
 from .. import shared
 from ..config import retrieve_proxy
+
+class CallbackToIterator:
+    def __init__(self):
+        self.queue = deque()
+        self.cond = Condition()
+        self.finished = False
+
+    def callback(self, result):
+        with self.cond:
+            self.queue.append(result)
+            self.cond.notify()  # Wake up the generator.
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        with self.cond:
+            while not self.queue and not self.finished:  # Wait for a value to be added to the queue.
+                self.cond.wait()
+            if not self.queue:
+                raise StopIteration()
+            return self.queue.popleft()
+
+    def finish(self):
+        with self.cond:
+            self.finished = True
+            self.cond.notify()  # Wake up the generator if it's waiting.
+
+class ChuanhuCallbackHandler(BaseCallbackHandler):
+
+    def __init__(self, callback) -> None:
+        """Initialize callback handler."""
+        self.callback = callback
+
+    def on_agent_action(
+        self, action: AgentAction, color: Optional[str] = None, **kwargs: Any
+    ) -> Any:
+        self.callback(action.log)
+
+    def on_tool_end(
+        self,
+        output: str,
+        color: Optional[str] = None,
+        observation_prefix: Optional[str] = None,
+        llm_prefix: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
+        """If not the final action, print out observation."""
+        if observation_prefix is not None:
+            self.callback(f"\n\n{observation_prefix}")
+        self.callback(output)
+        if llm_prefix is not None:
+            self.callback(f"\n\n{llm_prefix}")
+
+    def on_agent_finish(
+        self, finish: AgentFinish, color: Optional[str] = None, **kwargs: Any
+    ) -> None:
+        self.callback(f"{finish.log}\n\n")
+
+    def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
+        """Run on new LLM token. Only available when streaming is enabled."""
+        self.callback(token)
 
 
 class ModelType(Enum):
