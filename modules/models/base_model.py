@@ -274,7 +274,7 @@ class BaseLLMModel:
             chain = load_summarize_chain(llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
             summary = chain({"input_documents": list(index.docstore.__dict__["_dict"].values())}, return_only_outputs=True)["output_text"]
             print(i18n("总结") + f": {summary}")
-            chatbot.append([i18n("总结"), summary])
+            chatbot.append([i18n("上传了")+len(files)+"个文件", summary])
         return gr.Files.update(), chatbot, status
 
     def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):

@@ -15,7 +15,7 @@ pdfplumber
 pandas
 commentjson
 openpyxl
-pandocs
+pandoc
 wolframalpha
 faiss-cpu
 google-search-results
