@@ -24,7 +24,8 @@ __all__ = [
     "server_name",
     "server_port",
     "share",
-    "hide_history_when_not_logged_in"
+    "hide_history_when_not_logged_in",
+    "default_chuanhu_assistant_model"
 ]
 
 # 添加一个统一的config文件，避免文件过多造成的疑惑（优先级最低）
@@ -101,6 +102,12 @@ authflag = len(auth_list) > 0  # 是否开启认证的状态值，改为判断au
 api_host = os.environ.get("api_host", config.get("api_host", ""))
 if api_host:
     shared.state.set_api_host(api_host)
+
+default_chuanhu_assistant_model = config.get("default_chuanhu_assistant_model", "gpt-4")
+os.environ["GOOGLE_CSE_ID"] = config.get("GOOGLE_CSE_ID", "")
+os.environ["GOOGLE_API_KEY"] = config.get("GOOGLE_API_KEY", "")
+os.environ["WOLFRAM_ALPHA_APPID"] = config.get("WOLFRAM_ALPHA_APPID", "")
+os.environ["SERPAPI_API_KEY"] = config.get("SERPAPI_API_KEY", "")
 
 @contextmanager
 def retrieve_openai_api(api_key = None):
