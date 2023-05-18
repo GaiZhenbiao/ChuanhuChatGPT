@@ -3,6 +3,20 @@ import os
 from pathlib import Path
 import gradio as gr
 from .webui_locale import I18nAuto
+import openai
+
+# azure openai setting
+openai.api_type = "azure"
+openai.api_version = "2023-03-15-preview"
+openai.api_base = "https:/***.openai.azure.com/"
+openai.api_key ="***"
+
+# 替换为azure openai的部署名称
+AZURE_ENGINE = {
+    "gpt-3.5-turbo": "test001",
+    "gpt-4": "gpt-4",
+}
+
 
 i18n = I18nAuto()  # internationalization
 
