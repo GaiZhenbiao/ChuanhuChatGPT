@@ -269,8 +269,7 @@ class BaseLLMModel:
             from langchain.callbacks import StdOutCallbackHandler
             prompt_template = "Write a concise summary of the following:\n\n{text}\n\nCONCISE SUMMARY IN " + language + ":"
             PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
-            handler = StdOutCallbackHandler()
-            llm = ChatOpenAI(callbacks=[handler])
+            llm = ChatOpenAI()
             chain = load_summarize_chain(llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
             summary = chain({"input_documents": list(index.docstore.__dict__["_dict"].values())}, return_only_outputs=True)["output_text"]
             print(i18n("总结") + f": {summary}")
