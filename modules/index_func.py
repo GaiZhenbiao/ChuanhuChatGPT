@@ -23,14 +23,6 @@ def get_index_name(file_src):
     return md5_hash.hexdigest()
 
 
-def block_split(text):
-    blocks = []
-    while len(text) > 0:
-        blocks.append(Document(text[:1000]))
-        text = text[1000:]
-    return blocks
-
-
 def get_documents(file_src):
     from langchain.schema import Document
     from langchain.text_splitter import TokenTextSplitter
