@@ -103,7 +103,7 @@ api_host = os.environ.get("api_host", config.get("api_host", ""))
 if api_host:
     shared.state.set_api_host(api_host)
 
-default_chuanhu_assistant_model = config.get("default_chuanhu_assistant_model", "gpt-4")
+default_chuanhu_assistant_model = config.get("default_chuanhu_assistant_model", "gpt-3.5-turbo")
 os.environ["GOOGLE_CSE_ID"] = config.get("GOOGLE_CSE_ID", "")
 os.environ["GOOGLE_API_KEY"] = config.get("GOOGLE_API_KEY", "")
 os.environ["WOLFRAM_ALPHA_APPID"] = config.get("WOLFRAM_ALPHA_APPID", "")
