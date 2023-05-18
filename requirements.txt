@@ -16,3 +16,8 @@ pandas
 commentjson
 openpyxl
 pandocs
+wolframalpha
+faiss-cpu
+google-search-results
+arxiv
+wikipedia
