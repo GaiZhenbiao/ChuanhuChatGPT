@@ -15,4 +15,12 @@ pdfplumber
 pandas
 commentjson
 openpyxl
-pandocs
+pandoc
+wolframalpha
+faiss-cpu
+google-search-results
+arxiv
+wikipedia
+google.generativeai
+openai
+unstructured

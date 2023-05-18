@@ -606,6 +606,9 @@ def get_model(
         elif model_type == ModelType.ChuanhuAgent:
             from .ChuanhuAgent import ChuanhuAgent_Client
             model = ChuanhuAgent_Client(model_name, access_key, user_name=user_name)
+        elif model_type == ModelType.PaLM:
+            from .PaLM import PaLM_Client
+            model = PaLM_Client(model_name, user_name=user_name)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)

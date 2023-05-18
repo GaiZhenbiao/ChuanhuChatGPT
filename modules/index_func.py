@@ -42,7 +42,7 @@ def get_documents(file_src):
     for file in file_src:
         filepath = file.name
         filename = os.path.basename(filepath)
-        file_type = os.path.splitext(filepath)[1]
+        file_type = os.path.splitext(filename)[1]
         logging.info(f"loading file: {filename}")
         try:
             if file_type == ".pdf":
@@ -87,8 +87,9 @@ def get_documents(file_src):
                 loader = TextLoader(filepath, "utf8")
                 texts = loader.load()
         except Exception as e:
+            import traceback
             logging.error(f"Error loading file: {filename}")
-            pass
+            traceback.print_exc()
 
         texts = text_splitter.split_documents(texts)
         documents.extend(texts)
@@ -142,6 +143,7 @@ def construct_index(
             return index
 
         except Exception as e:
+            import traceback
             logging.error("索引构建失败！", e)
-            print(e)
+            traceback.print_exc()
             return None
