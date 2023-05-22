@@ -30,7 +30,12 @@ from collections import deque
 
 from .base_model import BaseLLMModel, CallbackToIterator, ChuanhuCallbackHandler
 from ..config import default_chuanhu_assistant_model
-from ..presets import SUMMARIZE_PROMPT
+from ..presets import SUMMARIZE_PROMPT, i18n
+from ..index_func import construct_index
+
+from langchain.callbacks import get_openai_callback
+import os
+import gradio as gr
 import logging
 
 class WebBrowsingInput(BaseModel):
@@ -50,6 +55,8 @@ class ChuanhuAgent_Client(BaseLLMModel):
         self.cheap_llm = ChatOpenAI(openai_api_key=openai_api_key, temperature=0, model_name="gpt-3.5-turbo")
         PROMPT = PromptTemplate(template=SUMMARIZE_PROMPT, input_variables=["text"])
         self.summarize_chain = load_summarize_chain(self.cheap_llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
+        self.index_summary = None
+        self.index = None
         if "Pro" in self.model_name:
             self.tools = load_tools(["google-search-results-json", "llm-math", "arxiv", "wikipedia", "wolfram-alpha"], llm=self.llm)
         else:
@@ -72,6 +79,39 @@ class ChuanhuAgent_Client(BaseLLMModel):
                 args_schema=WebAskingInput
             )
         )
+
+    def handle_file_upload(self, files, chatbot, language):
+        """if the model accepts multi modal input, implement this function"""
+        status = gr.Markdown.update()
+        if files:
+            index = construct_index(self.api_key, file_src=files)
+            assert index is not None, "获取索引失败"
+            self.index = index
+            status = i18n("索引构建完成")
+            # Summarize the document
+            logging.info(i18n("生成内容总结中……"))
+            with get_openai_callback() as cb:
+                os.environ["OPENAI_API_KEY"] = self.api_key
+                from langchain.chains.summarize import load_summarize_chain
+                from langchain.prompts import PromptTemplate
+                from langchain.chat_models import ChatOpenAI
+                prompt_template = "Write a concise summary of the following:\n\n{text}\n\nCONCISE SUMMARY IN " + language + ":"
+                PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
+                llm = ChatOpenAI()
+                chain = load_summarize_chain(llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
+                summary = chain({"input_documents": list(index.docstore.__dict__["_dict"].values())}, return_only_outputs=True)["output_text"]
+                logging.info(f"Summary: {summary}")
+                self.index_summary = summary
+            logging.info(cb)
+        return gr.Files.update(), chatbot, status
+
+    def query_index(self, query):
+        if self.index is not None:
+            retriever = self.index.as_retriever()
+            qa = RetrievalQA.from_chain_type(llm=self.llm, chain_type="stuff", retriever=retriever)
+            return qa.run(query)
+        else:
+            "Error during query."
 
     def summary(self, text):
         texts = Document(page_content=text)
@@ -119,6 +159,16 @@ class ChuanhuAgent_Client(BaseLLMModel):
         it = CallbackToIterator()
         manager = BaseCallbackManager(handlers=[ChuanhuCallbackHandler(it.callback)])
         def thread_func():
+            tools = self.tools
+            if self.index is not None:
+                    tools.append(
+                        Tool.from_function(
+                        func=self.query_index,
+                        name="Query Knowledge Base",
+                        description=f"useful when you need to know about: {self.index_summary}",
+                        args_schema=WebBrowsingInput
+                    )
+                )
             agent = initialize_agent(self.tools, self.llm, agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True, callback_manager=manager)
             reply = agent.run(input=f"{question} Reply in 简体中文")
             it.callback(reply)
