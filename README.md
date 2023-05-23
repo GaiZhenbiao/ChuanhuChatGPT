@@ -42,8 +42,22 @@
 
 ## 目录
 
-| [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) |
-| ------------------ | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------- |
+| [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) |
+| ----- | ----- | ----- | ----- | ----- |
+
+
+## 支持模型
+**通过API调用的语言模型**：
+- [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
+- [Inspur Yuan 1.0](https://air.inspur.com/home)
+- [MiniMax](https://api.minimax.chat/)
+- [XMChat](https://github.com/MILVLG/xmchat)
+
+**本地部署语言模型**：
+- [ChatGLM](https://github.com/THUDM/ChatGLM-6B)
+- [LLaMA](https://github.com/facebookresearch/llama)
+- [StableLM](https://github.com/Stability-AI/StableLM)
+- [MOSS](https://github.com/OpenLMLab/MOSS)
 
 ## 使用技巧
 
@@ -64,7 +78,7 @@ cd ChuanhuChatGPT
 pip install -r requirements.txt
 ```
 
-在项目文件夹中复制一份 `config_example.json`，并将其重命名为 `config.json`，在其中填入 `API-Key` 等设置。
+然后，在项目文件夹中复制一份 `config_example.json`，并将其重命名为 `config.json`，在其中填入 `API-Key` 等设置。
 
 ```shell
 python ChuanhuChatbot.py
@@ -78,7 +92,7 @@ python ChuanhuChatbot.py
 
 ## 疑难杂症解决
 
-在遇到各种问题查阅相关信息前，您可以先尝试手动拉取本项目的最新更改并更新 gradio，然后重试。步骤为：
+在遇到各种问题查阅相关信息前，您可以先尝试手动拉取本项目的最新更改并更新依赖库，然后重试。步骤为：
 
 1. 点击网页上的 `Download ZIP` 下载最新代码，或
    ```shell
@@ -87,10 +101,6 @@ python ChuanhuChatbot.py
 2. 尝试再次安装依赖（可能本项目引入了新的依赖）
    ```
    pip install -r requirements.txt
-   ```
-3. 更新gradio
-   ```
-   pip install gradio --upgrade --force-reinstall
    ```
 
 很多时候，这样就可以解决问题。
