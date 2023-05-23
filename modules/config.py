@@ -78,6 +78,8 @@ os.environ["XMCHAT_API_KEY"] = xmchat_api_key
 
 minimax_api_key = config.get("minimax_api_key", "")
 os.environ["MINIMAX_API_KEY"] = minimax_api_key
+minimax_group_id = config.get("minimax_group_id", "")
+os.environ["MINIMAX_GROUP_ID"] = minimax_group_id
 
 render_latex = config.get("render_latex", True)
 
