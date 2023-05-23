@@ -5,6 +5,9 @@
     "usage_limit": 120, // API Key的当月限额，单位：美元
     // 你的xmchat API Key，与OpenAI API Key不同
     "xmchat_api_key": "",
+    // MiniMax的APIKey（见账户管理页面 https://api.minimax.chat/basic-information）和Group ID，用于MiniMax对话模型
+    "minimax_api_key": "",
+    "minimax_group_id": "",
     "language": "auto",
     // 如果使用代理，请取消注释下面的两行，并替换代理URL
     // "https_proxy": "http://127.0.0.1:1079",
