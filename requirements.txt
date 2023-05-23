@@ -24,3 +24,4 @@ wikipedia
 google.generativeai
 openai
 unstructured
+google-api-python-client
