@@ -225,8 +225,10 @@ class BaseLLMModel:
 
         stream_iter = self.get_answer_stream_iter()
 
+        if display_append:
+            display_append = "<hr>" +display_append
         for partial_text in stream_iter:
-            chatbot[-1] = (chatbot[-1][0], partial_text + "<hr>" +display_append)
+            chatbot[-1] = (chatbot[-1][0], partial_text + display_append)
             self.all_token_counts[-1] += 1
             status_text = self.token_message()
             yield get_return_value()
