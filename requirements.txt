@@ -8,7 +8,7 @@ tqdm
 colorama
 googlesearch-python
 Pygments
-langchain==0.0.180
+langchain==0.0.173
 markdown
 PyPDF2
 pdfplumber
