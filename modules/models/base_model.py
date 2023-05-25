@@ -13,7 +13,7 @@ import pathlib
 
 from tqdm import tqdm
 import colorama
-from duckduckgo_search import ddg
+from googlesearch import search
 import asyncio
 import aiohttp
 from enum import Enum
@@ -264,19 +264,19 @@ class BaseLLMModel:
             index = construct_index(self.api_key, file_src=files)
             status = i18n("索引构建完成")
             # Summarize the document
-            logging.info(i18n("生成内容总结中……"))
-            os.environ["OPENAI_API_KEY"] = self.api_key
-            from langchain.chains.summarize import load_summarize_chain
-            from langchain.prompts import PromptTemplate
-            from langchain.chat_models import ChatOpenAI
-            from langchain.callbacks import StdOutCallbackHandler
-            prompt_template = "Write a concise summary of the following:\n\n{text}\n\nCONCISE SUMMARY IN " + language + ":"
-            PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
-            llm = ChatOpenAI()
-            chain = load_summarize_chain(llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
-            summary = chain({"input_documents": list(index.docstore.__dict__["_dict"].values())}, return_only_outputs=True)["output_text"]
-            print(i18n("总结") + f": {summary}")
-            chatbot.append([i18n("上传了")+len(files)+"个文件", summary])
+            # logging.info(i18n("生成内容总结中……"))
+            # os.environ["OPENAI_API_KEY"] = self.api_key
+            # from langchain.chains.summarize import load_summarize_chain
+            # from langchain.prompts import PromptTemplate
+            # from langchain.chat_models import ChatOpenAI
+            # from langchain.callbacks import StdOutCallbackHandler
+            # prompt_template = "Write a concise summary of the following:\n\n{text}\n\nCONCISE SUMMARY IN " + language + ":"
+            # PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
+            # llm = ChatOpenAI()
+            # chain = load_summarize_chain(llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
+            # summary = chain({"input_documents": list(index.docstore.__dict__["_dict"].values())}, return_only_outputs=True)["output_text"]
+            # print(i18n("总结") + f": {summary}")
+            # chatbot.append([i18n("上传了")+str(len(files))+"个文件", summary])
         return gr.Files.update(), chatbot, status
 
     def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):
@@ -309,15 +309,15 @@ class BaseLLMModel:
             )
         elif use_websearch:
             limited_context = True
-            search_results = ddg(real_inputs, max_results=5)
+            search_results = [i for i in search(real_inputs, advanced=True)]
             reference_results = []
             for idx, result in enumerate(search_results):
                 logging.debug(f"搜索结果{idx + 1}：{result}")
-                domain_name = urllib3.util.parse_url(result["href"]).host
-                reference_results.append([result["body"], result["href"]])
+                domain_name = urllib3.util.parse_url(result.url).host
+                reference_results.append([result.description, result.url])
                 display_append.append(
                     # f"{idx+1}. [{domain_name}]({result['href']})\n"
-                    f"<li><a href=\"{result['href']}\" target=\"_blank\">{domain_name}</a></li>\n"
+                    f"<li><a href=\"{result.url}\" target=\"_blank\">{domain_name}</a></li>\n"
                 )
             reference_results = add_source_numbers(reference_results)
             display_append = "<ol>\n\n" + "".join(display_append) + "</ol>"
