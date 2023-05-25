@@ -102,6 +102,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
                 summary = chain({"input_documents": list(index.docstore.__dict__["_dict"].values())}, return_only_outputs=True)["output_text"]
                 logging.info(f"Summary: {summary}")
                 self.index_summary = summary
+                chatbot.append((f"Uploaded {len(files)} files", summary))
             logging.info(cb)
         return gr.Files.update(), chatbot, status
 
