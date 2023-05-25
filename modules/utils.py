@@ -116,6 +116,9 @@ def set_single_turn(current_model, *args):
 def handle_file_upload(current_model, *args):
     return current_model.handle_file_upload(*args)
 
+def handle_summarize_index(current_model, *args):
+    return current_model.summarize_index(*args)
+
 def like(current_model, *args):
     return current_model.like(*args)
 
