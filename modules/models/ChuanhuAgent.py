@@ -171,7 +171,10 @@ class ChuanhuAgent_Client(BaseLLMModel):
                     )
                 )
             agent = initialize_agent(self.tools, self.llm, agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True, callback_manager=manager)
-            reply = agent.run(input=f"{question} Reply in 简体中文")
+            try:
+                reply = agent.run(input=f"{question} Reply in 简体中文")
+            except Exception as e:
+                reply = str(e)
             it.callback(reply)
             it.finish()
         t = Thread(target=thread_func)
