@@ -44,6 +44,19 @@
   </p>
 </div>
 
+## Supported LLM Models
+**LLM models via API**:
+- [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
+- [Inspur Yuan 1.0](https://air.inspur.com/home)
+- [MiniMax](https://api.minimax.chat/)
+- [XMChat](https://github.com/MILVLG/xmchat)
+
+**LLM models via local deployment**:
+- [ChatGLM](https://github.com/THUDM/ChatGLM-6B)
+- [LLaMA](https://github.com/facebookresearch/llama)
+- [StableLM](https://github.com/Stability-AI/StableLM)
+- [MOSS](https://github.com/OpenLMLab/MOSS)
+
 ## Usage Tips
 
 - To better control the ChatGPT, use System Prompt.
@@ -86,10 +99,6 @@ When you encounter problems, you should try manually pulling the latest changes 
 2. Try installing the dependencies again (as this project may have introduced new dependencies)
    ```
    pip install -r requirements.txt
-   ```
-3. Update Gradio
-   ```
-   pip install gradio --upgrade --force-reinstall
    ```
 
 Generally, you can solve most problems by following these steps.

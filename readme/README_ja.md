@@ -44,6 +44,19 @@
   </p>
 </div>
 
+## サポートされている大規模言語モデル
+**APIを通じてアクセス可能な大規模言語モデル**：
+- [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
+- [Inspur Yuan 1.0](https://air.inspur.com/home)
+- [MiniMax](https://api.minimax.chat/)
+- [XMChat](https://github.com/MILVLG/xmchat)
+
+**ローカルに展開された大規模言語モデル**：
+- [ChatGLM](https://github.com/THUDM/ChatGLM-6B)
+- [LLaMA](https://github.com/facebookresearch/llama)
+- [StableLM](https://github.com/Stability-AI/StableLM)
+- [MOSS](https://github.com/OpenLMLab/MOSS)
+
 ## 使う上でのTips
 
 - ChatGPTをより適切に制御するために、システムプロンプトを使用できます。
@@ -85,10 +98,6 @@ python ChuanhuChatbot.py
 2. 新しい依存関係が導入されている可能性があるため、依存関係を再度インストールしてみてください。
    ```
    pip install -r requirements.txt
-   ```
-3. Gradioを更新
-   ```
-   pip install gradio --upgrade --force-reinstall
    ```
 
 一般的に、以下の手順でほとんどの問題を解決することができます。

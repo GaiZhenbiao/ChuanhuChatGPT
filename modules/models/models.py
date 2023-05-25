@@ -603,6 +603,11 @@ def get_model(
         elif model_type == ModelType.YuanAI:
             from .inspurai import Yuan_Client
             model = Yuan_Client(model_name, api_key=access_key, user_name=user_name, system_prompt=system_prompt)
+        elif model_type == ModelType.Minimax:
+            from .minimax import MiniMax_Client
+            if os.environ.get("MINIMAX_API_KEY") != "":
+                access_key = os.environ.get("MINIMAX_API_KEY")
+            model = MiniMax_Client(model_name, api_key=access_key, user_name=user_name, system_prompt=system_prompt)
         elif model_type == ModelType.ChuanhuAgent:
             from .ChuanhuAgent import ChuanhuAgent_Client
             model = ChuanhuAgent_Client(model_name, access_key, user_name=user_name)
