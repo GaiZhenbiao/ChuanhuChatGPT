@@ -62,6 +62,19 @@ class CallbackToIterator:
             self.finished = True
             self.cond.notify()  # Wake up the generator if it's waiting.
 
+def get_action_description(text):
+    match = re.search('```(.*?)```', text, re.S)
+    json_text = match.group(1)
+    # 把json转化为python字典
+    json_dict = json.loads(json_text)
+    # 提取'action'和'action_input'的值
+    action_name = json_dict['action']
+    action_input = json_dict['action_input']
+    if action_name != "Final Answer":
+        return f'<p style="font-size: smaller; color: gray;">{action_name}: {action_input}</p>'
+    else:
+        return ""
+
 class ChuanhuCallbackHandler(BaseCallbackHandler):
 
     def __init__(self, callback) -> None:
@@ -71,7 +84,7 @@ class ChuanhuCallbackHandler(BaseCallbackHandler):
     def on_agent_action(
         self, action: AgentAction, color: Optional[str] = None, **kwargs: Any
     ) -> Any:
-        self.callback(action.log)
+        self.callback(get_action_description(action.log))
 
     def on_tool_end(
         self,
@@ -82,16 +95,22 @@ class ChuanhuCallbackHandler(BaseCallbackHandler):
         **kwargs: Any,
     ) -> None:
         """If not the final action, print out observation."""
+        # if observation_prefix is not None:
+        #     self.callback(f"\n\n{observation_prefix}")
+        # self.callback(output)
+        # if llm_prefix is not None:
+        #     self.callback(f"\n\n{llm_prefix}")
         if observation_prefix is not None:
-            self.callback(f"\n\n{observation_prefix}")
+            logging.info(observation_prefix)
         self.callback(output)
         if llm_prefix is not None:
-            self.callback(f"\n\n{llm_prefix}")
+            logging.info(llm_prefix)
 
     def on_agent_finish(
         self, finish: AgentFinish, color: Optional[str] = None, **kwargs: Any
     ) -> None:
-        self.callback(f"{finish.log}\n\n")
+        # self.callback(f"{finish.log}\n\n")
+        logging.info(finish.log)
 
     def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
         """Run on new LLM token. Only available when streaming is enabled."""
