@@ -15,11 +15,15 @@ class State:
     def recover(self):
         self.interrupted = False
 
-    def set_api_host(self, api_host):
-        self.completion_url = f"https://{api_host}/v1/chat/completions"
-        self.balance_api_url = f"https://{api_host}/dashboard/billing/credit_grants"
-        self.usage_api_url = f"https://{api_host}/dashboard/billing/usage"
-        os.environ["OPENAI_API_BASE"] = f"https://{api_host}/v1"
+    def set_api_host(self, api_host: str):
+        if not api_host.startswith("http"):
+            api_host = f"https://{api_host}"
+        if api_host.endswith("/v1"):
+            api_host = api_host[:-3]
+        self.completion_url = f"{api_host}/v1/chat/completions"
+        self.balance_api_url = f"{api_host}/dashboard/billing/credit_grants"
+        self.usage_api_url = f"{api_host}/dashboard/billing/usage"
+        os.environ["OPENAI_API_BASE"] = f"{api_host}/v1"
 
     def reset_api_host(self):
         self.completion_url = COMPLETION_URL
@@ -31,7 +35,7 @@ class State:
     def reset_all(self):
         self.interrupted = False
         self.completion_url = COMPLETION_URL
-    
+
     def set_api_key_queue(self, api_key_list):
         self.multi_api_key = True
         self.api_key_queue = queue.Queue()
@@ -50,6 +54,8 @@ class State:
             return ret
 
         return wrapped
-        
+
 
 state = State()
+if (host:=os.environ.get("OPENAI_API_BASE", None)) is not None:
+    state.set_api_host(host)
