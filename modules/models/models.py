@@ -15,7 +15,6 @@ from PIL import Image
 
 from tqdm import tqdm
 import colorama
-from duckduckgo_search import ddg
 import asyncio
 import aiohttp
 from enum import Enum
