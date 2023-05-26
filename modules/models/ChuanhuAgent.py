@@ -174,6 +174,8 @@ class ChuanhuAgent_Client(BaseLLMModel):
             try:
                 reply = agent.run(input=f"{question} Reply in 简体中文")
             except Exception as e:
+                import traceback
+                traceback.print_exc()
                 reply = str(e)
             it.callback(reply)
             it.finish()
