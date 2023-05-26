@@ -136,6 +136,6 @@ def construct_index(
 
         except Exception as e:
             import traceback
-            logging.error("索引构建失败！", e)
+            logging.error("索引构建失败！%s", e)
             traceback.print_exc()
             return None
