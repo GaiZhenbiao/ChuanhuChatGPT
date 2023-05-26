@@ -93,7 +93,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         )
 
     def google_search_simple(self, query):
-        results = [{"title": i.title, "url": i.url, "description": i.description} for i in search(query, advanced=True)]
+        results = [{"title": i.title, "link": i.url, "snippet": i.description} for i in search(query, advanced=True)]
         return str(results)
 
     def handle_file_upload(self, files, chatbot, language):
