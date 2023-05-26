@@ -14,6 +14,7 @@ from langchain.tools import BaseTool, StructuredTool, Tool, tool
 from langchain.callbacks.stdout import StdOutCallbackHandler
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.callbacks.manager import BaseCallbackManager
+from googlesearch import search
 
 from typing import Any, Dict, List, Optional, Union
 
@@ -38,6 +39,9 @@ import os
 import gradio as gr
 import logging
 
+class GoogleSearchInput(BaseModel):
+    keywords: str = Field(description="keywords to search")
+
 class WebBrowsingInput(BaseModel):
     url: str = Field(description="URL of a webpage")
 
@@ -61,6 +65,14 @@ class ChuanhuAgent_Client(BaseLLMModel):
             self.tools = load_tools(["google-search-results-json", "llm-math", "arxiv", "wikipedia", "wolfram-alpha"], llm=self.llm)
         else:
             self.tools = load_tools(["ddg-search", "llm-math", "arxiv", "wikipedia"], llm=self.llm)
+            self.tools.append(
+                Tool.from_function(
+                    func=self.google_search_simple,
+                    name="Google Search JSON",
+                    description="useful when you need to search the web.",
+                    args_schema=GoogleSearchInput
+                )
+            )
 
         self.tools.append(
             Tool.from_function(
@@ -79,6 +91,10 @@ class ChuanhuAgent_Client(BaseLLMModel):
                 args_schema=WebAskingInput
             )
         )
+
+    def google_search_simple(self, query):
+        results = [{"title": i.title, "url": i.url, "description": i.description} for i in search(query, advanced=True)]
+        return str(results)
 
     def handle_file_upload(self, files, chatbot, language):
         """if the model accepts multi modal input, implement this function"""
