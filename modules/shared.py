@@ -57,5 +57,3 @@ class State:
 
 
 state = State()
-if (host:=os.environ.get("OPENAI_API_BASE", None)) is not None:
-    state.set_api_host(host)

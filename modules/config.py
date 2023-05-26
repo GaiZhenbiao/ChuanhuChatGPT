@@ -104,8 +104,8 @@ auth_list = config.get("users", []) # 实际上是使用者的列表
 authflag = len(auth_list) > 0  # 是否开启认证的状态值，改为判断auth_list长度
 
 # 处理自定义的api_host，优先读环境变量的配置，如果存在则自动装配
-api_host = os.environ.get("api_host", config.get("api_host", ""))
-if api_host:
+api_host = os.environ.get("OPENAI_API_BASE", config.get("openai_api_base", None))
+if api_host is not None:
     shared.state.set_api_host(api_host)
 
 default_chuanhu_assistant_model = config.get("default_chuanhu_assistant_model", "gpt-3.5-turbo")

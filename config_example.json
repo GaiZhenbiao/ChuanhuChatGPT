@@ -10,6 +10,8 @@
     "minimax_api_key": "",
     "minimax_group_id": "",
     "language": "auto",
+    // 支持自定义OpenAI API Base
+    // "openai_api_base": "https://api.openai.com",
     // 如果使用代理，请取消注释下面的两行，并替换代理URL
     // "https_proxy": "http://127.0.0.1:1079",
     // "http_proxy": "http://127.0.0.1:1079",
