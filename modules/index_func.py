@@ -83,7 +83,7 @@ def get_documents(file_src):
             logging.error(f"Error loading file: {filename}")
             traceback.print_exc()
 
-        texts = text_splitter.split_documents(texts)
+        texts = text_splitter.split_documents([texts])
         documents.extend(texts)
     logging.debug("Documents loaded.")
     return documents
