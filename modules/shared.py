@@ -1,6 +1,7 @@
 from modules.presets import COMPLETION_URL, BALANCE_API_URL, USAGE_API_URL, API_HOST
 import os
 import queue
+import openai
 
 class State:
     interrupted = False
@@ -16,6 +17,7 @@ class State:
         self.interrupted = False
 
     def set_api_host(self, api_host: str):
+        api_host = api_host.rstrip("/")
         if not api_host.startswith("http"):
             api_host = f"https://{api_host}"
         if api_host.endswith("/v1"):
@@ -23,13 +25,13 @@ class State:
         self.completion_url = f"{api_host}/v1/chat/completions"
         self.balance_api_url = f"{api_host}/dashboard/billing/credit_grants"
         self.usage_api_url = f"{api_host}/dashboard/billing/usage"
-        os.environ["OPENAI_API_BASE"] = f"{api_host}/v1"
+        os.environ["OPENAI_API_BASE"] = api_host
 
     def reset_api_host(self):
         self.completion_url = COMPLETION_URL
         self.balance_api_url = BALANCE_API_URL
         self.usage_api_url = USAGE_API_URL
-        os.environ["OPENAI_API_BASE"] = f"https://{API_HOST}/v1"
+        os.environ["OPENAI_API_BASE"] = f"https://{API_HOST}"
         return API_HOST
 
     def reset_all(self):

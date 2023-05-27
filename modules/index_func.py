@@ -118,7 +118,7 @@ def construct_index(
         embeddings = HuggingFaceEmbeddings(model_name = "sentence-transformers/distiluse-base-multilingual-cased-v2")
     else:
         from langchain.embeddings import OpenAIEmbeddings
-        embeddings = OpenAIEmbeddings()
+        embeddings = OpenAIEmbeddings(openai_api_base=os.environ.get("OPENAI_API_BASE", None), openai_api_key=os.environ.get("OPENAI_EMBEDDING_API_KEY", api_key))
     if os.path.exists(index_path):
         logging.info("找到了缓存的索引文件，加载中……")
         return FAISS.load_local(index_path, embeddings)

@@ -156,7 +156,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         texts = Document(page_content=text)
         texts = self.text_splitter.split_documents([texts])
         # use embedding
-        embeddings = OpenAIEmbeddings(openai_api_key=self.api_key)
+        embeddings = OpenAIEmbeddings(openai_api_key=self.api_key, openai_api_base=os.environ.get("OPENAI_API_BASE", None))
 
         # create vectorstore
         db = FAISS.from_documents(texts, embeddings)
