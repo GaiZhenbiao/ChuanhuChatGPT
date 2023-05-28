@@ -146,6 +146,8 @@ class ChuanhuAgent_Client(BaseLLMModel):
 
     def summary_url(self, url):
         text = self.fetch_url_content(url)
+        if text == "":
+            return "URL unavailable."
         text_summary = self.summary(text)
         url_content = "webpage content summary:\n" + text_summary
 
@@ -153,6 +155,8 @@ class ChuanhuAgent_Client(BaseLLMModel):
 
     def ask_url(self, url, question):
         text = self.fetch_url_content(url)
+        if text == "":
+            return "URL unavailable."
         texts = Document(page_content=text)
         texts = self.text_splitter.split_documents([texts])
         # use embedding
