@@ -55,8 +55,8 @@ class ChuanhuAgent_Client(BaseLLMModel):
         super().__init__(model_name=model_name, user=user_name)
         self.text_splitter = TokenTextSplitter(chunk_size=500, chunk_overlap=30)
         self.api_key = openai_api_key
-        self.llm = ChatOpenAI(openai_api_key=openai_api_key, temperature=0, model_name=default_chuanhu_assistant_model)
-        self.cheap_llm = ChatOpenAI(openai_api_key=openai_api_key, temperature=0, model_name="gpt-3.5-turbo")
+        self.llm = ChatOpenAI(openai_api_key=openai_api_key, temperature=0, model_name=default_chuanhu_assistant_model, openai_api_base=os.environ.get("OPENAI_API_BASE", None))
+        self.cheap_llm = ChatOpenAI(openai_api_key=openai_api_key, temperature=0, model_name="gpt-3.5-turbo", openai_api_base=os.environ.get("OPENAI_API_BASE", None))
         PROMPT = PromptTemplate(template=SUMMARIZE_PROMPT, input_variables=["text"])
         self.summarize_chain = load_summarize_chain(self.cheap_llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
         self.index_summary = None
