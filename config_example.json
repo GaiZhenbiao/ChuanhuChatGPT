@@ -16,7 +16,6 @@
     // "https_proxy": "http://127.0.0.1:1079",
     // "http_proxy": "http://127.0.0.1:1079",
     // 是否默认渲染LaTeX
-    "render_latex": true,
     "users": [], // 用户列表，[[用户名1, 密码1], [用户名2, 密码2], ...]
     "local_embedding": false, //是否在本地编制索引
     "hide_history_when_not_logged_in": false, //未登录情况下是否不展示对话历史
