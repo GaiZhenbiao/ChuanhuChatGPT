@@ -377,41 +377,6 @@ function addChuanhuButton(botElement) {
     botElement.insertBefore(toggleButton, copyButton);
 }
 
-function addCopyCodeButton(pre) {
-    var code = null;
-    var firstChild = null;
-    code = pre.querySelector('code');
-    if (!code) return;
-    firstChild = code.querySelector('div');
-    if (!firstChild) return;
-    var oldCopyButton = null;
-    oldCopyButton = code.querySelector('button.copy-code-btn');
-    // if (oldCopyButton) oldCopyButton.remove();
-    if (oldCopyButton) return; // 没太有用，新生成的对话中始终会被pre覆盖，导致按钮消失，这段代码不启用……
-    var codeButton = document.createElement('button');
-    codeButton.classList.add('copy-code-btn');
-    codeButton.textContent = '\uD83D\uDCCE';
-
-    code.insertBefore(codeButton, firstChild);
-    codeButton.addEventListener('click', function () {
-        var range = document.createRange();
-        range.selectNodeContents(code);
-        range.setStartBefore(firstChild);
-        navigator.clipboard
-            .writeText(range.toString())
-            .then(() => {
-                codeButton.textContent = '\u2714';
-                setTimeout(function () {
-                    codeButton.textContent = '\uD83D\uDCCE';
-                }, 2000);
-            })
-            .catch(e => {
-                console.error(e);
-                codeButton.textContent = '\u2716';
-            });
-    });
-}
-
 function renderMarkdownText(message) {
     var mdDiv = message.querySelector('.md-message');
     if (mdDiv) mdDiv.classList.remove('hideM');
@@ -491,7 +456,6 @@ var mObserver = new MutationObserver(function (mutationsList) {
                     }
                     saveHistoryHtml();
                     document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot').forEach(addChuanhuButton);
-                    document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot pre').forEach(addCopyCodeButton);
                 }
                 if (node.tagName === 'INPUT' && node.getAttribute('type') === 'range') {
                     setSlider();
@@ -505,12 +469,10 @@ var mObserver = new MutationObserver(function (mutationsList) {
                     }
                     saveHistoryHtml();
                     document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot').forEach(addChuanhuButton);
-                    document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot pre').forEach(addCopyCodeButton);
                 }
             }
         } else if (mmutation.type === 'attributes') {
             if (mmutation.target.nodeType === 1 && mmutation.target.classList.contains('message') && mmutation.target.getAttribute('data-testid') === 'bot') {
-                document.querySelectorAll('#chuanhu_chatbot>.wrap>.message-wrap .message.bot pre').forEach(addCopyCodeButton); // 目前写的是有点问题的，会导致加button次数过多，但是bot对话内容生成时又是不断覆盖pre的……
                 if (isThrottled) break; // 为了防止重复不断疯狂渲染，加上等待_(:з」∠)_
                 isThrottled = true;
                 clearTimeout(timeoutId);
