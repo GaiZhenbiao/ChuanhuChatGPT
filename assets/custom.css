@@ -405,28 +405,37 @@ thead th {
     padding: .5em .2em;
 }
 /* 行内代码 */
-code {
+.message :not(pre) code {
     display: inline;
     white-space: break-spaces;
+    font-family: var(--font-mono);
     border-radius: 6px;
     margin: 0 2px 0 2px;
     padding: .2em .4em .1em .4em;
     background-color: rgba(175,184,193,0.2);
 }
 /* 代码块 */
-pre code {
-    display: block;
-    overflow: auto;
-    white-space: pre;
-    /* padding: 1.4em 1.2em 0em 1.4em; */
-    /* margin: 0.6em 2em 1em 0.2em; */
-    color: #FFF;
+.message pre,
+.message pre[class^=language-] {
+    color: #fff;
+    margin: .8em 1em 1em 0em !important;
+    padding: var(--spacing-xl) 1.2em !important;
+    border-radius: var(--radius-lg) !important;
 }
-.message pre {
-    padding: 0 !important;
-}
-
-.gradio-container-3-32-0 code[class*=language-], .gradio-container-3-32-0 pre[class*=language-] {
+.message pre code,
+.message pre code[class^=language-] {
     text-shadow: none;
-    background-color: var(--neutral-950) !important;
+    font-family: var(--font-mono);
+}
+/* 覆盖 gradio 丑陋的复制按钮样式 */
+pre button[title="copy"] {
+    border-radius: 5px;
+    transition: background-color .2s ease;
+}
+pre button[title="copy"]:hover {
+    background-color: #333232;
+}
+pre button .check {
+    color: #fff !important;
+    background: var(--neutral-950) !important;
 }

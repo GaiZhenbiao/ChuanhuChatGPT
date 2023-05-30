@@ -238,4 +238,6 @@ small_and_beautiful_theme = gr.themes.Soft(
         block_title_background_fill_dark="*primary_900",
         block_label_background_fill_dark="*primary_900",
         input_background_fill="#F6F6F6",
+        chatbot_code_background_color="*neutral_950",
+        chatbot_code_background_color_dark="*neutral_950",
     )
