@@ -4,6 +4,8 @@ import logging
 from typing import List, Tuple
 import mdtex2html
 from gradio_client import utils as client_utils
+from gradio import utils
+import inspect
 
 from modules.presets import *
 from modules.index_func import *
@@ -40,14 +42,18 @@ def postprocess(
         return processed_messages
 
 def postprocess_chat_messages(
-        self, chat_message: str | Tuple | List | None, message_type: str
-    ) -> str | Dict | None:
+        self, chat_message: str | tuple | list | None, role: str = "user"
+    ) -> str | dict | None:
         if chat_message is None:
             return None
         elif isinstance(chat_message, (tuple, list)):
-            filepath = chat_message[0]
+            file_uri = chat_message[0]
+            if utils.validate_url(file_uri):
+                filepath = file_uri
+            else:
+                filepath = self.make_temp_copy_if_needed(file_uri)
+
             mime_type = client_utils.get_mimetype(filepath)
-            filepath = self.make_temp_copy_if_needed(filepath)
             return {
                 "name": filepath,
                 "mime_type": mime_type,
@@ -56,12 +62,7 @@ def postprocess_chat_messages(
                 "is_file": True,
             }
         elif isinstance(chat_message, str):
-            if message_type == "bot":
-                if not detect_converted_mark(chat_message):
-                    chat_message = convert_mdtext(chat_message)
-            elif message_type == "user":
-                if not detect_converted_mark(chat_message):
-                    chat_message = convert_asis(chat_message)
+            chat_message = inspect.cleandoc(chat_message)
             return chat_message
         else:
             raise ValueError(f"Invalid message for Chatbot component: {chat_message}")
