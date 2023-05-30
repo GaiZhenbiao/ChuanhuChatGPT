@@ -245,11 +245,11 @@ function showOrHideUserInfo() {
 
 function toggleDarkMode(isEnabled) {
     if (isEnabled) {
-        gradioContainer.classList.add("dark");
-        document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
+        document.body.classList.add("dark");
+        // document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
     } else {
-        gradioContainer.classList.remove("dark");
-        document.body.style.backgroundColor = "";
+        document.body.classList.remove("dark");
+        // document.body.style.backgroundColor = "";
     }
 }
 function adjustDarkMode() {
