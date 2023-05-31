@@ -416,14 +416,16 @@ thead th {
 }
 /* 代码块 */
 .message pre,
-.message pre[class^=language-] {
+.message pre[class*=language-] {
     color: #fff;
+    overflow: auto;
     margin: .8em 1em 1em 0em !important;
     padding: var(--spacing-xl) 1.2em !important;
     border-radius: var(--radius-lg) !important;
 }
 .message pre code,
-.message pre code[class^=language-] {
+.message pre code[class*=language-] {
+    color: #fff;
     text-shadow: none;
     font-family: var(--font-mono);
 }
@@ -438,4 +440,13 @@ pre button[title="copy"]:hover {
 pre button .check {
     color: #fff !important;
     background: var(--neutral-950) !important;
+}
+
+/* 覆盖prism.css */
+.language-css .token.string,
+.style .token.string,
+.token.entity,
+.token.operator,
+.token.url {
+    background: none !important;
 }
