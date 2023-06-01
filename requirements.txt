@@ -1,4 +1,4 @@
-gradio==3.28.0
+gradio==3.30.0
 gradio_client==0.1.4
 mdtex2html
 pypinyin
