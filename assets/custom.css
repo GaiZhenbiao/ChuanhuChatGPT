@@ -418,7 +418,8 @@ thead th {
 .message pre,
 .message pre[class*=language-] {
     color: #fff;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     margin: .8em 1em 1em 0em !important;
     padding: var(--spacing-xl) 1.2em !important;
     border-radius: var(--radius-lg) !important;
@@ -426,6 +427,8 @@ thead th {
 .message pre code,
 .message pre code[class*=language-] {
     color: #fff;
+    padding: 0;
+    background-color: unset;
     text-shadow: none;
     font-family: var(--font-mono);
 }

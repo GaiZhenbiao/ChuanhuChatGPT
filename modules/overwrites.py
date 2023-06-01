@@ -41,7 +41,7 @@ def postprocess(
         return processed_messages
 
 def postprocess_chat_messages(
-        self, chat_message: str | tuple | list | None, role: str = "user"
+        self, chat_message: str | tuple | list | None, role: str
     ) -> str | dict | None:
         if chat_message is None:
             return None
@@ -63,7 +63,11 @@ def postprocess_chat_messages(
         elif isinstance(chat_message, str):
             # chat_message = inspect.cleandoc(chat_message)
             # escape html spaces
-            chat_message = chat_message.replace(" ", "&nbsp;")
+            # chat_message = chat_message.replace(" ", "&nbsp;")
+            if role == "bot":
+                chat_message = convert_before_marked(chat_message)
+            # elif role == "user":
+                # chat_message = convert_asis(chat_message)
             return chat_message
         else:
             raise ValueError(f"Invalid message for Chatbot component: {chat_message}")

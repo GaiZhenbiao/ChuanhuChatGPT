@@ -203,6 +203,11 @@ def convert_mdtext(md_text):
     output += ALREADY_CONVERTED_MARK
     return output
 
+def convert_before_marked(chat_message):
+    return (
+        f'<div class="raw-message hideM">{chat_message}</div><div class="md-message">{chat_message}</div>{ALREADY_CONVERTED_MARK}'
+    )
+
 
 def convert_asis(userinput):
     return (
