@@ -410,7 +410,7 @@ thead th {
     white-space: break-spaces;
     font-family: var(--font-mono);
     border-radius: 6px;
-    margin: 0 2px 0 2px;
+    /* margin: 0 2px 0 2px; */
     padding: .2em .4em .1em .4em;
     background-color: rgba(175,184,193,0.2);
 }
@@ -428,6 +428,7 @@ thead th {
 .message pre code[class*=language-] {
     color: #fff;
     padding: 0;
+    margin: 0;
     background-color: unset;
     text-shadow: none;
     font-family: var(--font-mono);
