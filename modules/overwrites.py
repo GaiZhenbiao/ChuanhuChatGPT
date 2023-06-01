@@ -61,7 +61,9 @@ def postprocess_chat_messages(
                 "is_file": True,
             }
         elif isinstance(chat_message, str):
-            chat_message = inspect.cleandoc(chat_message)
+            # chat_message = inspect.cleandoc(chat_message)
+            # escape html spaces
+            chat_message = chat_message.replace(" ", "&nbsp;")
             return chat_message
         else:
             raise ValueError(f"Invalid message for Chatbot component: {chat_message}")
