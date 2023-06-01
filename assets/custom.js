@@ -239,10 +239,10 @@ function showOrHideUserInfo() {
 function toggleDarkMode(isEnabled) {
     if (isEnabled) {
         document.body.classList.add("dark");
-        // document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
+        document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
     } else {
         document.body.classList.remove("dark");
-        // document.body.style.backgroundColor = "";
+        document.body.style.backgroundColor = "";
     }
 }
 function adjustDarkMode() {

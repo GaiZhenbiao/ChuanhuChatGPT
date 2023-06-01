@@ -66,8 +66,8 @@ def postprocess_chat_messages(
             # chat_message = chat_message.replace(" ", "&nbsp;")
             if role == "bot":
                 chat_message = convert_before_marked(chat_message)
-            # elif role == "user":
-                # chat_message = convert_asis(chat_message)
+            elif role == "user":
+                chat_message = escape_markdown(chat_message)
             return chat_message
         else:
             raise ValueError(f"Invalid message for Chatbot component: {chat_message}")

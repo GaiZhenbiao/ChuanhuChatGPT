@@ -291,16 +291,23 @@ ol:not(.options), ul:not(.options) {
     border-bottom-right-radius: 0 !important;
 }
 
-.message p {
+.message.user {
+    white-space: pre-wrap;
+}
+
+.message .md-message p {
     margin-top: 0.6em !important;
     margin-bottom: 0.6em !important;
 }
-.message p:first-child { margin-top: 0 !important; }
-.message p:last-of-type { margin-bottom: 0 !important; }
+.message .md-message p:first-child { margin-top: 0 !important; }
+.message .md-message p:last-of-type { margin-bottom: 0 !important; }
 
 .message .md-message {
     display: block;
     padding: 0 !important;
+}
+.message .raw-message p {
+    margin:0 !important;
 }
 .message .raw-message {
     display: block;
@@ -410,7 +417,7 @@ thead th {
     white-space: break-spaces;
     font-family: var(--font-mono);
     border-radius: 6px;
-    /* margin: 0 2px 0 2px; */
+    margin: 0 2px 0 2px;
     padding: .2em .4em .1em .4em;
     background-color: rgba(175,184,193,0.2);
 }

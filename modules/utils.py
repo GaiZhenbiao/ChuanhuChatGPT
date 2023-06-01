@@ -133,7 +133,7 @@ def count_token(message):
     return length
 
 
-def markdown_to_html_with_syntax_highlight(md_str):
+def markdown_to_html_with_syntax_highlight(md_str): # deprecated
     def replacer(match):
         lang = match.group(1) or "text"
         code = match.group(2)
@@ -155,7 +155,7 @@ def markdown_to_html_with_syntax_highlight(md_str):
     return html_str
 
 
-def normalize_markdown(md_text: str) -> str:
+def normalize_markdown(md_text: str) -> str: # deprecated
     lines = md_text.split("\n")
     normalized_lines = []
     inside_list = False
@@ -179,7 +179,7 @@ def normalize_markdown(md_text: str) -> str:
     return "\n".join(normalized_lines)
 
 
-def convert_mdtext(md_text):
+def convert_mdtext(md_text): # deprecated
     code_block_pattern = re.compile(r"```(.*?)(?:```|$)", re.DOTALL)
     inline_code_pattern = re.compile(r"`(.*?)`", re.DOTALL)
     code_blocks = code_block_pattern.findall(md_text)
@@ -204,19 +204,51 @@ def convert_mdtext(md_text):
     return output
 
 def convert_before_marked(chat_message):
-    return (
-        f'<div class="raw-message hideM">{chat_message}</div><div class="md-message">{chat_message}</div>{ALREADY_CONVERTED_MARK}'
-    )
+    """
+    注意不能给输出加缩进, 否则会被marked解析成代码块
+    """
+    if '<div class="md-message">' or '<div class="md-message">' in chat_message:
+        return chat_message
+    else:
+        return (f"""\
+<div class="raw-message hideM">{escape_markdown(chat_message)}</div>
+<div class="md-message">{chat_message}</div>
+""")
+
+def escape_markdown(text):
+    """
+    Escape Markdown special characters to HTML-safe equivalents.
+    """
+    escape_chars = {
+        '_': '&#95;',
+        '*': '&#42;',
+        '[': '&#91;',
+        ']': '&#93;',
+        '(': '&#40;',
+        ')': '&#41;',
+        '{': '&#123;',
+        '}': '&#125;',
+        '#': '&#35;',
+        '+': '&#43;',
+        '-': '&#45;',
+        '.': '&#46;',
+        '!': '&#33;',
+        '`': '&#96;',
+        '>': '&#62;',
+        '<': '&#60;',
+        '|': '&#124;'
+    }
+    return ''.join(escape_chars.get(c, c) for c in text)
 
 
-def convert_asis(userinput):
+def convert_asis(userinput): # deprecated
     return (
         f'<p style="white-space:pre-wrap;">{html.escape(userinput)}</p>'
         + ALREADY_CONVERTED_MARK
     )
 
 
-def detect_converted_mark(userinput):
+def detect_converted_mark(userinput): # deprecated
     try:
         if userinput.endswith(ALREADY_CONVERTED_MARK):
             return True
@@ -226,7 +258,7 @@ def detect_converted_mark(userinput):
         return True
 
 
-def detect_language(code):
+def detect_language(code): # deprecated
     if code.startswith("\n"):
         first_line = ""
     else:
