@@ -109,10 +109,9 @@ if api_host is not None:
     shared.state.set_api_host(api_host)
 
 default_chuanhu_assistant_model = config.get("default_chuanhu_assistant_model", "gpt-3.5-turbo")
-os.environ["GOOGLE_CSE_ID"] = config.get("GOOGLE_CSE_ID", "")
-os.environ["GOOGLE_API_KEY"] = config.get("GOOGLE_API_KEY", "")
-os.environ["WOLFRAM_ALPHA_APPID"] = config.get("WOLFRAM_ALPHA_APPID", "")
-os.environ["SERPAPI_API_KEY"] = config.get("SERPAPI_API_KEY", "")
+for x in ["GOOGLE_CSE_ID", "GOOGLE_API_KEY", "WOLFRAM_ALPHA_APPID", "SERPAPI_API_KEY"]:
+    if config.get(x, None) is not None:
+        os.environ[x] = config[x]
 
 @contextmanager
 def retrieve_openai_api(api_key = None):
