@@ -215,9 +215,9 @@ hr.append-display {
     font-size: 0.8em;
     max-width: 100%;
     margin: 0;
-    display: inline-flex;
+    display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
     /* background-color: #dddddd88; */
     border-radius: 1.5rem;
@@ -228,16 +228,18 @@ hr.append-display {
     background-color: #aaaaaa50;
     border-radius: 1rem;
     padding: 0.5em;
+    text-align: center;
     text-overflow: ellipsis;
-    overflow: hidden;
+    /* overflow: hidden; */
     white-space: nowrap;
-    margin: 0.1rem;
+    margin: 0.2rem 0.1rem;
     text-decoration: none !important;
+    flex: 1;
     transition: flex 0.5s;
 }
 .source-a a:hover {
     background-color: #aaaaaa20;
-    flex: none;
+    flex: 2;
 }
 
 #submit_btn, #cancel_btn {
