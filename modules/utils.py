@@ -207,13 +207,24 @@ def convert_before_marked(chat_message):
     """
     注意不能给输出加缩进, 否则会被marked解析成代码块
     """
-    if '<div class="md-message">' or '<div class="md-message">' in chat_message:
+    if '<div class="md-message">' in chat_message:
         return chat_message
     else:
-        return (f"""\
-<div class="raw-message hideM">{escape_markdown(chat_message)}</div>
-<div class="md-message">{chat_message}</div>
-""")
+        code_block_pattern = re.compile(r"```(.*?)(?:```|$)", re.DOTALL)
+        code_blocks = code_block_pattern.findall(chat_message)
+        non_code_parts = code_block_pattern.split(chat_message)[::2]
+        result = []
+
+        raw = f'<div class="raw-message hideM">{escape_markdown(chat_message)}</div>'
+        for non_code, code in zip(non_code_parts, code_blocks + [""]):
+            if non_code.strip():
+                result.append(non_code)
+            if code.strip():
+                code = f"\n```{code}\n```"
+                result.append(code)
+        result = "".join(result)
+        md = f'<div class="md-message">{result}\n</div>'
+        return raw + md
 
 def escape_markdown(text):
     """

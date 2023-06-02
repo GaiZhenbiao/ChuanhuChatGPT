@@ -291,7 +291,7 @@ ol:not(.options), ul:not(.options) {
     border-bottom-right-radius: 0 !important;
 }
 
-.message.user {
+.message.user p {
     white-space: pre-wrap;
 }
 
