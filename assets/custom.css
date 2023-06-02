@@ -294,6 +294,10 @@ ol:not(.options), ul:not(.options) {
 .message.user p {
     white-space: pre-wrap;
 }
+.message .user-message {
+    display: block;
+    padding: 0 !important;
+}
 
 .message .md-message p {
     margin-top: 0.6em !important;

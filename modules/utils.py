@@ -203,7 +203,7 @@ def convert_mdtext(md_text): # deprecated
     output += ALREADY_CONVERTED_MARK
     return output
 
-def convert_before_marked(chat_message):
+def convert_bot_before_marked(chat_message):
     """
     注意不能给输出加缩进, 否则会被marked解析成代码块
     """
@@ -225,6 +225,12 @@ def convert_before_marked(chat_message):
         result = "".join(result)
         md = f'<div class="md-message">{result}\n</div>'
         return raw + md
+
+def convert_user_before_marked(chat_message):
+    if '<div class="user-message">' in chat_message:
+        return chat_message
+    else:
+        return f'<div class="user-message">{escape_markdown(chat_message)}</div>'
 
 def escape_markdown(text):
     """
