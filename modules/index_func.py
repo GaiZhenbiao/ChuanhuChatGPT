@@ -70,6 +70,7 @@ def get_documents(file_src):
             elif file_type == ".xlsx":
                 logging.debug("Loading Excel...")
                 text_list = excel_to_string(filepath)
+                texts = []
                 for elem in text_list:
                     texts.append(Document(page_content=elem, metadata={"source": filepath}))
             else:
