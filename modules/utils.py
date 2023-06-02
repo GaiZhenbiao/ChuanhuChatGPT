@@ -231,6 +231,7 @@ def escape_markdown(text):
     Escape Markdown special characters to HTML-safe equivalents.
     """
     escape_chars = {
+        ' ': '&nbsp;',
         '_': '&#95;',
         '*': '&#42;',
         '[': '&#91;',

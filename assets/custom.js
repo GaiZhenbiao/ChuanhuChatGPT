@@ -443,8 +443,12 @@ function loadHistoryHtml() {
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = historyHtml;
         var buttons = tempDiv.querySelectorAll('button.chuanhu-btn');
+        var gradioCopyButtons = tempDiv.querySelectorAll('button.copy_code_button');
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].parentNode.removeChild(buttons[i]);
+        }
+        for (var i = 0; i < gradioCopyButtons.length; i++) {
+            gradioCopyButtons[i].parentNode.removeChild(gradioCopyButtons[i]);
         }
         var fakeHistory = document.createElement('div');
         fakeHistory.classList.add('history-message');
