@@ -51,7 +51,7 @@ def get_documents(file_src):
                         pdfReader = PyPDF2.PdfReader(pdfFileObj)
                         for page in tqdm(pdfReader.pages):
                             pdftext += page.extract_text()
-                texts = Document(page_content=pdftext, metadata={"source": filepath})
+                texts = [Document(page_content=pdftext, metadata={"source": filepath})]
             elif file_type == ".docx":
                 logging.debug("Loading Word...")
                 from langchain.document_loaders import UnstructuredWordDocumentLoader
@@ -71,8 +71,7 @@ def get_documents(file_src):
                 logging.debug("Loading Excel...")
                 text_list = excel_to_string(filepath)
                 for elem in text_list:
-                    documents.append(Document(page_content=elem, metadata={"source": filepath}))
-                continue
+                    texts.append(Document(page_content=elem, metadata={"source": filepath}))
             else:
                 logging.debug("Loading text file...")
                 from langchain.document_loaders import TextLoader
@@ -83,10 +82,7 @@ def get_documents(file_src):
             logging.error(f"Error loading file: {filename}")
             traceback.print_exc()
 
-        try:
-            texts = text_splitter.split_documents(texts)
-        except AttributeError:
-            texts = text_splitter.split_documents([texts])
+        texts = text_splitter.split_documents(texts)
         documents.extend(texts)
     logging.debug("Documents loaded.")
     return documents
