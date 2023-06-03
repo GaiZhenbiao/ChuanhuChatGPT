@@ -16,7 +16,6 @@ import subprocess
 import gradio as gr
 from pypinyin import lazy_pinyin
 import tiktoken
-import mdtex2html
 from markdown import markdown
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name

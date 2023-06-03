@@ -2,7 +2,6 @@ from __future__ import annotations
 import logging
 
 from typing import List, Tuple
-import mdtex2html
 from gradio_client import utils as client_utils
 from gradio import utils
 import inspect
