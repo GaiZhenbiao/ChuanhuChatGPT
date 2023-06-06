@@ -551,6 +551,13 @@ def versions_html():
         <a style="text-decoration:none;color:inherit" href="https://github.com/GaiZhenbiao/ChuanhuChatGPT">ChuanhuChat</a>: {commit_info}
         """
 
+def get_html(filename):
+    path = os.path.join(shared.chuanhu_path, "assets", "html", filename)
+    if os.path.exists(path):
+        with open(path, encoding="utf8") as file:
+            return file.read()
+    return ""
+
 def add_source_numbers(lst, source_name = "Source", use_source = True):
     if use_source:
         return [f'[{idx+1}]\t "{item[0]}"\n{source_name}: {item[1]}' for idx, item in enumerate(lst)]

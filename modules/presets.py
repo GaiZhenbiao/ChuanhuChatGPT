@@ -46,17 +46,6 @@ CHUANHU_TITLE = i18n("川虎Chat 🚀")
 
 CHUANHU_DESCRIPTION = i18n("由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本")
 
-FOOTER = """<div class="versions">{versions}</div>"""
-
-APPEARANCE_SWITCHER = """
-<div style="display: flex; justify-content: space-between;">
-<span style="margin-top: 4px !important;">"""+ i18n("切换亮暗色主题")  + """</span>
-<span><label class="apSwitch" for="checkbox">
-    <input type="checkbox" id="checkbox">
-    <div class="apSlider"></div>
-</label></span>
-</div>
-"""
 
 ONLINE_MODELS = [
     "gpt-3.5-turbo",
