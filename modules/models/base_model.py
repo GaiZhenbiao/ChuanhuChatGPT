@@ -13,7 +13,8 @@ import pathlib
 
 from tqdm import tqdm
 import colorama
-from googlesearch import search
+from duckduckgo_search import DDGS
+from itertools import islice
 import asyncio
 import aiohttp
 from enum import Enum
@@ -335,16 +336,19 @@ class BaseLLMModel:
                 .replace("{reply_language}", reply_language)
             )
         elif use_websearch:
-            limited_context = True
-            search_results = [i for i in search(real_inputs, advanced=True)]
+            search_results = []
+            with DDGS() as ddgs:
+                ddgs_gen = ddgs.text(real_inputs, backend="lite")
+                for r in islice(ddgs_gen, 10):
+                    search_results.append(r)
             reference_results = []
             for idx, result in enumerate(search_results):
                 logging.debug(f"搜索结果{idx + 1}：{result}")
-                domain_name = urllib3.util.parse_url(result.url).host
-                reference_results.append([result.description, result.url])
+                domain_name = urllib3.util.parse_url(result['href']).host
+                reference_results.append([result['body'], result['href']])
                 display_append.append(
                     # f"{idx+1}. [{domain_name}]({result['href']})\n"
-                    f"<li><a href=\"{result.url}\" target=\"_blank\">{domain_name}</a></li>\n"
+                    f"<li><a href=\"{result['href']}\" target=\"_blank\">{result['title']}</a></li>\n"
                 )
             reference_results = add_source_numbers(reference_results)
             display_append = "<ol>\n\n" + "".join(display_append) + "</ol>"

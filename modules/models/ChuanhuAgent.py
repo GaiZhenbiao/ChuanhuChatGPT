@@ -14,7 +14,8 @@ from langchain.tools import BaseTool, StructuredTool, Tool, tool
 from langchain.callbacks.stdout import StdOutCallbackHandler
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.callbacks.manager import BaseCallbackManager
-from googlesearch import search
+from duckduckgo_search import DDGS
+from itertools import islice
 
 from typing import Any, Dict, List, Optional, Union
 
@@ -93,7 +94,15 @@ class ChuanhuAgent_Client(BaseLLMModel):
         )
 
     def google_search_simple(self, query):
-        results = [{"title": i.title, "link": i.url, "snippet": i.description} for i in search(query, advanced=True)]
+        results = []
+        with DDGS() as ddgs:
+            ddgs_gen = ddgs.text("notes from a dead house", backend="lite")
+            for r in islice(ddgs_gen, 10):
+                results.append({
+                    "title": r["title"],
+                    "link": r["href"],
+                    "snippet": r["body"]
+                })
         return str(results)
 
     def handle_file_upload(self, files, chatbot, language):
