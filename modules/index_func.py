@@ -16,7 +16,7 @@ def get_index_name(file_src):
 
     md5_hash = hashlib.md5()
     for file_path in file_paths:
-        with open(file_path, "rb") as f:
+        with open(file_path, "rb", encoding="utf-8") as f:
             while chunk := f.read(8192):
                 md5_hash.update(chunk)
 
@@ -47,7 +47,7 @@ def get_documents(file_src):
                     pdftext = parse_pdf(filepath, two_column).text
                 except:
                     pdftext = ""
-                    with open(filepath, "rb") as pdfFileObj:
+                    with open(filepath, "rb", encoding="utf-8") as pdfFileObj:
                         pdfReader = PyPDF2.PdfReader(pdfFileObj)
                         for page in tqdm(pdfReader.pages):
                             pdftext += page.extract_text()

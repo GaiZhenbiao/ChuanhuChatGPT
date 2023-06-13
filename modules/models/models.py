@@ -338,7 +338,7 @@ class LLaMA_Client(BaseLLMModel):
             pipeline_args = InferencerArguments(
                 local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
 
-            with open(pipeline_args.deepspeed, "r") as f:
+            with open(pipeline_args.deepspeed, "r", encoding="utf-8") as f:
                 ds_config = json.load(f)
             LLAMA_MODEL = AutoModel.get_model(
                 model_args,
@@ -623,7 +623,7 @@ def get_model(
 
 
 if __name__ == "__main__":
-    with open("config.json", "r") as f:
+    with open("config.json", "r", encoding="utf-8") as f:
         openai_api_key = cjson.load(f)["openai_api_key"]
     # set logging level to debug
     logging.basicConfig(level=logging.DEBUG)

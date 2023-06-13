@@ -43,11 +43,11 @@ hide_history_when_not_logged_in = config.get("hide_history_when_not_logged_in", 
 
 if os.path.exists("api_key.txt"):
     logging.info("检测到api_key.txt文件，正在进行迁移...")
-    with open("api_key.txt", "r") as f:
+    with open("api_key.txt", "r", encoding="utf-8") as f:
         config["openai_api_key"] = f.read().strip()
     os.rename("api_key.txt", "api_key(deprecated).txt")
     with open("config.json", "w", encoding='utf-8') as f:
-        json.dump(config, f, indent=4)
+        json.dump(config, f, indent=4, ensure_ascii=False)
 
 if os.path.exists("auth.json"):
     logging.info("检测到auth.json文件，正在进行迁移...")
@@ -63,7 +63,7 @@ if os.path.exists("auth.json"):
     config["users"] = auth_list
     os.rename("auth.json", "auth(deprecated).json")
     with open("config.json", "w", encoding='utf-8') as f:
-        json.dump(config, f, indent=4)
+        json.dump(config, f, indent=4, ensure_ascii=False)
 
 ## 处理docker if we are running in Docker
 dockerflag = config.get("dockerflag", False)

@@ -641,7 +641,7 @@ class BaseLLMModel:
                 history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
             else:
                 history_file_path = filename
-            with open(history_file_path, "r") as f:
+            with open(history_file_path, "r", encoding="utf-8") as f:
                 json_s = json.load(f)
             try:
                 if type(json_s["history"][0]) == str:

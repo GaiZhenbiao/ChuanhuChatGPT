@@ -256,8 +256,8 @@ def save_file(filename, system, history, chatbot, user_name):
             history_file_path = filename
         else:
             history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
-        with open(history_file_path, "w") as f:
-            json.dump(json_s, f)
+        with open(history_file_path, "w", encoding='utf-8') as f:
+            json.dump(json_s, f, ensure_ascii=False)
     elif filename.endswith(".md"):
         md_s = f"system: \n- {system} \n"
         for data in history:
@@ -563,7 +563,7 @@ def toggle_like_btn_visibility(selected_model_name):
 def new_auto_history_filename(dirname):
     latest_file = get_latest_filepath(dirname)
     if latest_file:
-        with open(os.path.join(dirname, latest_file), 'r') as f:
+        with open(os.path.join(dirname, latest_file), 'r', encoding="utf-8") as f:
             if len(f.read()) == 0:
                 return latest_file
     now = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
