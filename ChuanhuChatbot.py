@@ -12,6 +12,7 @@ from modules.presets import *
 from modules.overwrites import *
 from modules.models.models import get_model
 
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 gr.Chatbot._postprocess_chat_messages = postprocess_chat_messages
 gr.Chatbot.postprocess = postprocess
