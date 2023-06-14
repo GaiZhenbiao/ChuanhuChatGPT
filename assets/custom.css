@@ -230,7 +230,8 @@ hr.append-display {
     padding: 0.5em;
     text-align: center;
     text-overflow: ellipsis;
-    /* overflow: hidden; */
+    overflow: hidden;
+    min-width: 20%;
     white-space: nowrap;
     margin: 0.2rem 0.1rem;
     text-decoration: none !important;
