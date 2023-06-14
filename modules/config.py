@@ -18,7 +18,6 @@ __all__ = [
     "log_level",
     "advance_docs",
     "update_doc_config",
-    "render_latex",
     "usage_limit",
     "multi_api_key",
     "server_name",
@@ -82,12 +81,6 @@ os.environ["MINIMAX_API_KEY"] = minimax_api_key
 minimax_group_id = config.get("minimax_group_id", "")
 os.environ["MINIMAX_GROUP_ID"] = minimax_group_id
 
-render_latex = config.get("render_latex", True)
-
-if render_latex:
-    os.environ["RENDER_LATEX"] = "yes"
-else:
-    os.environ["RENDER_LATEX"] = "no"
 
 usage_limit = os.environ.get("USAGE_LIMIT", config.get("usage_limit", 120))
 

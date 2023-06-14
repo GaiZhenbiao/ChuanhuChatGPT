@@ -2,12 +2,12 @@ from __future__ import annotations
 import logging
 
 from typing import List, Tuple
-import mdtex2html
 from gradio_client import utils as client_utils
+from gradio import utils
+import inspect
 
 from modules.presets import *
 from modules.index_func import *
-from modules.config import render_latex
 
 
 def postprocess(
@@ -40,14 +40,18 @@ def postprocess(
         return processed_messages
 
 def postprocess_chat_messages(
-        self, chat_message: str | Tuple | List | None, message_type: str
-    ) -> str | Dict | None:
+        self, chat_message: str | tuple | list | None, role: str
+    ) -> str | dict | None:
         if chat_message is None:
             return None
         elif isinstance(chat_message, (tuple, list)):
-            filepath = chat_message[0]
+            file_uri = chat_message[0]
+            if utils.validate_url(file_uri):
+                filepath = file_uri
+            else:
+                filepath = self.make_temp_copy_if_needed(file_uri)
+
             mime_type = client_utils.get_mimetype(filepath)
-            filepath = self.make_temp_copy_if_needed(filepath)
             return {
                 "name": filepath,
                 "mime_type": mime_type,
@@ -56,12 +60,13 @@ def postprocess_chat_messages(
                 "is_file": True,
             }
         elif isinstance(chat_message, str):
-            if message_type == "bot":
-                if not detect_converted_mark(chat_message):
-                    chat_message = convert_mdtext(chat_message)
-            elif message_type == "user":
-                if not detect_converted_mark(chat_message):
-                    chat_message = convert_asis(chat_message)
+            # chat_message = inspect.cleandoc(chat_message)
+            # escape html spaces
+            # chat_message = chat_message.replace(" ", "&nbsp;")
+            if role == "bot":
+                chat_message = convert_bot_before_marked(chat_message)
+            elif role == "user":
+                chat_message = convert_user_before_marked(chat_message)
             return chat_message
         else:
             raise ValueError(f"Invalid message for Chatbot component: {chat_message}")
@@ -75,11 +80,8 @@ with open("./assets/custom.js", "r", encoding="utf-8") as f, \
 def reload_javascript():
     print("Reloading javascript...")
     js = f'<script>{customJS}</script><script async>{externalScripts}</script>'
-    if render_latex:
-        js += """\
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
-            <script type="text/x-mathjax-config">MathJax.Hub.Config({skipStartupTypeset: false, tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']],displayMath: [['$$','$$'], ['\\[','\\]']]}});</script>
-        """
+    # if render_latex:
+    #     js += """\"""
     def template_response(*args, **kwargs):
         res = GradioTemplateResponseOriginal(*args, **kwargs)
         res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))

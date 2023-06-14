@@ -1,6 +1,5 @@
-gradio==3.30.0
-gradio_client==0.2.4
-mdtex2html
+gradio==3.33.1
+gradio_client==0.2.5
 pypinyin
 tiktoken
 socksio
