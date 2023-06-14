@@ -375,7 +375,7 @@ class BaseLLMModel:
 
         status_text = "开始生成回答……"
         logging.info(
-            "输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL
+             "用户" + f"{self.user_identifier}" + "的输入为：" + colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL
         )
         if should_check_token_count:
             yield chatbot + [(inputs, "")], status_text
