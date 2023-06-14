@@ -297,6 +297,7 @@ ol:not(.options), ul:not(.options) {
 .message .user-message {
     display: block;
     padding: 0 !important;
+    white-space: pre-wrap;
 }
 
 .message .md-message p {
