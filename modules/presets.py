@@ -60,11 +60,15 @@ APPEARANCE_SWITCHER = """
 
 ONLINE_MODELS = [
     "gpt-3.5-turbo",
+    "gpt-3.5-turbo-16k",
     "gpt-3.5-turbo-0301",
+    "gpt-3.5-turbo-0613",
     "gpt-4",
     "gpt-4-0314",
+    "gpt-4-0613",
     "gpt-4-32k",
     "gpt-4-32k-0314",
+    "gpt-4-32k-0613",
     "川虎助理",
     "川虎助理 Pro",
     "xmchat",
@@ -105,11 +109,15 @@ for dir_name in os.listdir("models"):
 
 MODEL_TOKEN_LIMIT = {
     "gpt-3.5-turbo": 4096,
+    "gpt-3.5-turbo-16k": 16384,
     "gpt-3.5-turbo-0301": 4096,
+    "gpt-3.5-turbo-0613": 4096,
     "gpt-4": 8192,
     "gpt-4-0314": 8192,
+    "gpt-4-0613": 8192,
     "gpt-4-32k": 32768,
-    "gpt-4-32k-0314": 32768
+    "gpt-4-32k-0314": 32768,
+    "gpt-4-32k-0613": 32768
 }
 
 TOKEN_OFFSET = 1000 # 模型的token上限减去这个值，得到软上限。到达软上限之后，自动尝试减少token占用。
