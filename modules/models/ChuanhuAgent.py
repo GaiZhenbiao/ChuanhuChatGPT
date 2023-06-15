@@ -63,7 +63,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         self.index_summary = None
         self.index = None
         if "Pro" in self.model_name:
-            self.tools = load_tools(["google-search-results-json", "llm-math", "arxiv", "wikipedia", "wolfram-alpha"], llm=self.llm)
+            self.tools = load_tools(["serpapi", "google-search-results-json", "llm-math", "arxiv", "wikipedia", "wolfram-alpha"], llm=self.llm)
         else:
             self.tools = load_tools(["ddg-search", "llm-math", "arxiv", "wikipedia"], llm=self.llm)
             self.tools.append(
