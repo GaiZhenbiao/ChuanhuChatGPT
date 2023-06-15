@@ -481,6 +481,7 @@ class BaseLLMModel:
         if len(self.history) > 0:
             inputs = self.history[-2]["content"]
             del self.history[-2:]
+        if len(self.all_token_counts) > 0:
             self.all_token_counts.pop()
         elif len(chatbot) > 0:
             inputs = chatbot[-1][0]
