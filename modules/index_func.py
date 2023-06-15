@@ -16,7 +16,7 @@ def get_index_name(file_src):
 
     md5_hash = hashlib.md5()
     for file_path in file_paths:
-        with open(file_path, "rb", encoding="utf-8") as f:
+        with open(file_path, "rb") as f:
             while chunk := f.read(8192):
                 md5_hash.update(chunk)
 
