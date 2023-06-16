@@ -6,8 +6,9 @@
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
 <div align="center">
   <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT">
-    <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
+    <img src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/9ad14e80-f6bd-4f4d-99d6-c6a1b4efcc59" alt="Logo" height="156">
   </a>
+
 
 <p align="center">
     <h3>为ChatGPT等多种LLM提供了一个轻快好用的Web图形界面和众多附加功能</h3>
