@@ -47,7 +47,7 @@ def get_documents(file_src):
                     pdftext = parse_pdf(filepath, two_column).text
                 except:
                     pdftext = ""
-                    with open(filepath, "rb", encoding="utf-8") as pdfFileObj:
+                    with open(filepath, "rb") as pdfFileObj:
                         pdfReader = PyPDF2.PdfReader(pdfFileObj)
                         for page in tqdm(pdfReader.pages):
                             pdftext += page.extract_text()
