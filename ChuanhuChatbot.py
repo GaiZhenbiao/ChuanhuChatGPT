@@ -434,12 +434,13 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     )
     historyRefreshBtn.click(**refresh_history_args)
     historyDeleteBtn.click(delete_chat_history, [current_model, historyFileSelectDropdown, user_name], [status_display, historyFileSelectDropdown], _js='''function showConfirmationDialog(a, b, c) {
-  var result = confirm("你真的要删除吗？");
-  if (result) {
-    return [a, b, c];
-  } else {
-    return [a, "CANCELED", c];
+  if (b != "") {
+    var result = confirm("你真的要删除 " + b + " 吗？");
+    if (result) {
+        return [a, b, c];
+    }
   }
+  return [a, "CANCELED", c];
 }''')
     historyFileSelectDropdown.change(**load_history_from_file_args)
     downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [saveFileName, systemPromptTxt, chatbot])
