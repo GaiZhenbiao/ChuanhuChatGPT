@@ -141,8 +141,11 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                         choices=get_history_names(plain=True),
                                         multiselect=False
                                     )
-                                with gr.Column(scale=1):
-                                    historyRefreshBtn = gr.Button(i18n("🔄 刷新"))
+                                with gr.Row():
+                                    with gr.Column(min_width=42, scale=1):
+                                        historyRefreshBtn = gr.Button(i18n("🔄 刷新"))
+                                    with gr.Column(min_width=42, scale=1):
+                                        historyDeleteBtn = gr.Button(i18n("🗑️ 删除"))
                             with gr.Row():
                                 with gr.Column(scale=6):
                                     saveFileName = gr.Textbox(
@@ -426,6 +429,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         show_progress=True,
     )
     historyRefreshBtn.click(get_history_names, [gr.State(False), user_name], [historyFileSelectDropdown])
+    historyDeleteBtn.click(delete_chat_history, [current_model, historyFileSelectDropdown, user_name], [status_display, historyFileSelectDropdown])
     historyFileSelectDropdown.change(**load_history_from_file_args)
     downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [saveFileName, systemPromptTxt, chatbot])
 

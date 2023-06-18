@@ -47,6 +47,9 @@ def set_key(current_model, *args):
 def load_chat_history(current_model, *args):
     return current_model.load_chat_history(*args)
 
+def delete_chat_history(current_model, *args):
+    return current_model.delete_chat_history(*args)
+
 def interrupt(current_model, *args):
     return current_model.interrupt(*args)
 

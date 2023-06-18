@@ -665,6 +665,22 @@ class BaseLLMModel:
             logging.info(f"没有找到对话历史记录 {filename}")
             return gr.update(), self.system_prompt, gr.update()
 
+    def delete_chat_history(self, filename, user_name):
+        if filename == "":
+            return i18n("你没有选择任何对话历史"), gr.update()
+        if not filename.endswith(".json"):
+            filename += ".json"
+        if "/" not in filename:
+            history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
+        else:
+            history_file_path = filename
+        try:
+            os.remove(history_file_path)
+            return i18n("删除对话历史成功"), get_history_names(False, user_name)
+        except:
+            logging.info(f"删除对话历史失败 {history_file_path}")
+            return i18n("对话历史")+filename+i18n("已经被删除啦"), gr.update()
+
     def auto_load(self):
         if self.user_identifier == "":
             self.reset()
