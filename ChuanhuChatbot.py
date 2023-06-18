@@ -326,6 +326,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         outputs=[saveFileName, systemPromptTxt, chatbot]
     )
 
+    refresh_history_args = dict(
+        fn=get_history_names, inputs=[gr.State(False), user_name], outputs=[historyFileSelectDropdown]
+    )
+
 
     # Chatbot
     cancelBtn.click(interrupt, [current_model], [])
@@ -428,8 +432,15 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         downloadFile,
         show_progress=True,
     )
-    historyRefreshBtn.click(get_history_names, [gr.State(False), user_name], [historyFileSelectDropdown])
-    historyDeleteBtn.click(delete_chat_history, [current_model, historyFileSelectDropdown, user_name], [status_display, historyFileSelectDropdown])
+    historyRefreshBtn.click(**refresh_history_args)
+    historyDeleteBtn.click(delete_chat_history, [current_model, historyFileSelectDropdown, user_name], [status_display, historyFileSelectDropdown], _js='''function showConfirmationDialog(a, b, c) {
+  var result = confirm("你真的要删除吗？");
+  if (result) {
+    return [a, b, c];
+  } else {
+    return [a, "CANCELED", c];
+  }
+}''')
     historyFileSelectDropdown.change(**load_history_from_file_args)
     downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [saveFileName, systemPromptTxt, chatbot])
 

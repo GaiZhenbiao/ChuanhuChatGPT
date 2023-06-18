@@ -666,6 +666,8 @@ class BaseLLMModel:
             return gr.update(), self.system_prompt, gr.update()
 
     def delete_chat_history(self, filename, user_name):
+        if filename == "CANCELED":
+            return gr.update(), gr.update()
         if filename == "":
             return i18n("你没有选择任何对话历史"), gr.update()
         if not filename.endswith(".json"):
