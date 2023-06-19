@@ -16,7 +16,7 @@ commentjson
 openpyxl
 pandoc
 wolframalpha
-faiss-cpu
+faiss-cpu==1.7.4
 duckduckgo-search
 arxiv
 wikipedia
