@@ -435,7 +435,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     historyRefreshBtn.click(**refresh_history_args)
     historyDeleteBtn.click(delete_chat_history, [current_model, historyFileSelectDropdown, user_name], [status_display, historyFileSelectDropdown, chatbot], _js='''function showConfirmationDialog(a, b, c) {
   if (b != "") {
-    var result = confirm("你真的要删除 " + b + " 吗？");
+    var result = confirm(deleteConfirm_msg_pref + b + deleteConfirm_msg_suff);
     if (result) {
         return [a, b, c];
     }

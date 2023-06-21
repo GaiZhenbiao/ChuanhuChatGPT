@@ -37,6 +37,19 @@ var forView_i18n = {
     'es': "Solo para visualización",
 };
 
+var deleteConfirm_i18n_pref = {
+    'zh': "你真的要删除 ",
+    'en': "Are you sure you want to delete ",
+    'ja': "本当に ",
+};
+var deleteConfirm_i18n_suff = {
+    'zh': " 吗？",
+    'en': " ?",
+    'ja': " を削除してもよろしいですか？",
+};
+var deleteConfirm_msg_pref = "Are you sure you want to delete ";
+var deleteConfirm_msg_suff = " ?";
+
 // gradio 页面加载好了么??? 我能动你的元素了么??
 function gradioLoaded(mutations) {
     for (var i = 0; i < mutations.length; i++) {
@@ -85,13 +98,16 @@ function gradioLoaded(mutations) {
 }
 
 function webLocale() {
-    console.log("webLocale", language);
+    // console.log("webLocale", language);
     if (forView_i18n.hasOwnProperty(language)) {
         var forView = forView_i18n[language];
         var forViewStyle = document.createElement('style');
         forViewStyle.innerHTML = '.wrap>.history-message>:last-child::after { content: "' + forView + '"!important; }';
         document.head.appendChild(forViewStyle);
-        // console.log("added forViewStyle", forView);
+    }
+    if (deleteConfirm_i18n_pref.hasOwnProperty(language)) {
+        deleteConfirm_msg_pref = deleteConfirm_i18n_pref[language];
+        deleteConfirm_msg_suff = deleteConfirm_i18n_suff[language];
     }
 }
 
