@@ -256,7 +256,8 @@ def escape_markdown(text):
         '`': '&#96;',
         '>': '&#62;',
         '<': '&#60;',
-        '|': '&#124;'
+        '|': '&#124;',
+        ':': '&#58;',
     }
     return ''.join(escape_chars.get(c, c) for c in text)
 
