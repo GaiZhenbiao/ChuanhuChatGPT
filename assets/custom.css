@@ -46,10 +46,11 @@ footer {
 #toast-update {
     position: absolute;
     display: flex;
-    top: -20px;
+    top: -500px;
     width: 100%;
     justify-content: center;
     z-index: var(--layer-top);
+    transition: top 0.5s ease-in-out;
 }
 #check-chuanhu-update {
     position: absolute;
@@ -68,7 +69,7 @@ footer {
     overflow: hidden;
     pointer-events: auto;
 }
-.version-info-title {
+#version-info-title {
     font-size: 1.2em;
     font-weight: bold;
     text-align: start;
@@ -82,6 +83,9 @@ footer {
     overflow: auto;
     padding: 0 8px;
 }
+#release-note-wrap.hideK {
+    display: none;
+}
 .btn-update-group {
     display: flex;
     justify-content: space-between;
@@ -89,6 +93,9 @@ footer {
     max-width: 72%;
     width: 100%;
     padding-top: 10px;
+}
+.btn-update-group.hideK {
+    display: none;
 }
 /* user_info */
 #user_info {

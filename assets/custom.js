@@ -18,10 +18,12 @@ var apSwitch = null;
 var messageBotDivs = null;
 var loginUserForm = null;
 var logginUser = null;
+var updateToast = null;
 
 var userLogged = false;
 var usernameGotten = false;
 var historyLoaded = false;
+var updateInfoGotten = false;
 
 var ga = document.getElementsByTagName("gradio-app");
 var targetNode = ga[0];
@@ -61,6 +63,7 @@ function gradioLoaded(mutations) {
             chatbot = document.querySelector('#chuanhu_chatbot');
             chatbotWrap = document.querySelector('#chuanhu_chatbot > .wrap');
             apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
+            updateToast = document.querySelector("#toast-update");
 
             if (loginUserForm) {
                 localStorage.setItem("userLogged", true);
@@ -85,9 +88,13 @@ function gradioLoaded(mutations) {
             if (chatbotWrap) {
                 if (!historyLoaded) {
                     loadHistoryHtml();
-                    updateLatestVersion();
                 }
                 setChatbotScroll();
+            }
+            if (updateToast) {
+                if (!updateInfoGotten) {
+                    updateLatestVersion();
+                }
             }
         }
     }
@@ -498,22 +505,70 @@ function clearHistoryHtml() {
 }
 
 async function getLatestRelease() {
-    const response = await fetch('https://api.github.com/repos/gaizhenbiao/chuanhuchatgpt/releases/latest');
-    const data = await response.json();
-    return data;
+    try {
+        const response = await fetch('https://api.github.com/repos/gaizhenbiao/chuanhuchatgpt/releases/latest');
+        if (!response.ok) {
+            console.log(`Error: ${response.status} - ${response.statusText}`);
+            updateInfoGotten = true;
+            return null;
+          }
+        const data = await response.json();
+        updateInfoGotten = true;
+        return data;
+    } catch (error) {
+        console.log(`Error: ${error}`);
+        updateInfoGotten = true;
+        return null;
+    }
 }
 async function updateLatestVersion() {
+    const currentVersionElement = document.getElementById('current-version');
     const latestVersionElement = document.getElementById('latest-version-title');
     const releaseNoteElement = document.getElementById('release-note-content');
+    const currentVersion = currentVersionElement.textContent;
+    // const currentVersion = '20230619'; // for debugging
+    updateInfoGotten = true; //无论成功与否都只执行一次，否则容易api超限...
     try {
         const data = await getLatestRelease();
-        const latestVersion = data.tag_name;
-        latestVersionElement.textContent = latestVersion;
         const releaseNote = data.body;
-        releaseNoteElement.innerHTML = marked.parse(releaseNote);
+        if (releaseNote) {
+            releaseNoteElement.innerHTML = marked.parse(releaseNote);
+        }
+        const latestVersion = data.tag_name;
+        if (latestVersion) {
+            latestVersionElement.textContent = latestVersion;
+            if (currentVersion !== latestVersion) {
+                if (!isInIframe) {openUpdateToast();}      
+            } else {
+                noUpdate();
+            }
+        }
     } catch (error) {
         console.error(error);
     }
+}
+function getUpdate() {
+    window.open('https://github.com/gaizhenbiao/chuanhuchatgpt/releases/latest', '_blank');
+    closeUpdateToast();
+}
+function cancelUpdate() {
+    closeUpdateToast();
+}
+function openUpdateToast() {
+    updateToast.style.setProperty('top', '-20px');
+}
+function closeUpdateToast() {
+    updateToast.style.setProperty('top', '-500px');
+}
+function noUpdate() {
+    const versionInfoElement = document.getElementById('version-info-title');
+    const releaseNoteWrap = document.getElementById('release-note-wrap');
+    const gotoUpdateBtn = document.getElementById('goto-update-btn');
+    const closeUpdateBtn = document.getElementById('close-update-btn');
+    versionInfoElement.textContent = 'You are using the latest version!';
+    releaseNoteWrap.style.setProperty('display', 'none');
+    gotoUpdateBtn.classList.add('hideK');
+    closeUpdateBtn.classList.remove('hideK');
 }
 
 // 监视页面内部 DOM 变动

@@ -1,20 +1,24 @@
 <div id="toast-update">
     <div id="check-chuanhu-update">
-        <!-- <p style="font-size: 1em;">
-            当前版本: <span id="currentVersion">{current_version}</span>
-        </p> -->
-        <p class="version-info-title">
+        <p style="display:none">
+            <span id="current-version">{current_version}</span>
+        </p>
+        <p id="version-info-title">
             Latest Version: <a href="https://github.com/gaizhenbiao/chuanhuchatgpt/releases/latest" target="_blank"
                 id="latest-version-title" style="text-decoration: none;">getting latest version...</a>
         </p>
         <div id="release-note-wrap">
             <div class="release-note-content" id="release-note-content">
-                Release Note...
+                Getting Release Note...
             </div>
         </div>
-        <div class="btn-update-group">
+        <div id="goto-update-btn" class="btn-update-group">
             <button class="btn-update lg secondary svelte-1ipelgc" id="cancel-button" onclick="cancelUpdate()">Cancel</button>
             <button class="btn-update lg primary svelte-1ipelgc" id="update-button" onclick="getUpdate()">Update</button>
+        </div>
+        <div id="close-update-btn" class="btn-update-group hideK">
+            <button class="btn-update lg secondary svelte-1ipelgc" id="update-button" onclick="getUpdate()">What's new</button>
+            <button class="btn-update lg primary svelte-1ipelgc" id="cancel-button" onclick="cancelUpdate()">OK</button>
         </div>
     </div>
 </div>
