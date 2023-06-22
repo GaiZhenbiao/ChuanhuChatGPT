@@ -29,6 +29,7 @@ var ga = document.getElementsByTagName("gradio-app");
 var targetNode = ga[0];
 var isInIframe = (window.self !== window.top);
 var language = navigator.language.slice(0,2);
+var currentTime = new Date().getTime();
 
 var forView_i18n = {
     'zh': "仅供查看",
@@ -92,7 +93,8 @@ function gradioLoaded(mutations) {
                 setChatbotScroll();
             }
             if (updateToast) {
-                if (!updateInfoGotten) {
+                const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
+                if (currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000 && !updateInfoGotten) {
                     updateLatestVersion();
                 }
             }
@@ -504,6 +506,7 @@ function clearHistoryHtml() {
     }
 }
 
+var showingUpdateInfo = false;
 async function getLatestRelease() {
     try {
         const response = await fetch('https://api.github.com/repos/gaizhenbiao/chuanhuchatgpt/releases/latest');
@@ -542,6 +545,8 @@ async function updateLatestVersion() {
             } else {
                 noUpdate();
             }
+            currentTime = new Date().getTime();
+            localStorage.setItem('lastCheckTime', currentTime);
         }
     } catch (error) {
         console.error(error);
@@ -555,10 +560,19 @@ function cancelUpdate() {
     closeUpdateToast();
 }
 function openUpdateToast() {
-    updateToast.style.setProperty('top', '-20px');
+    setUpdateWindowHeight();
+    showingUpdateInfo = true;
+    // 是的，这个逻辑是弹出窗口也算检测过更新一次。
+    currentTime = new Date().getTime();
+    localStorage.setItem('lastCheckTime', currentTime);
 }
 function closeUpdateToast() {
     updateToast.style.setProperty('top', '-500px');
+    showingUpdateInfo = false;
+}
+function manualCheckUpdate() {
+    openUpdateToast();
+    updateLatestVersion();
 }
 function noUpdate() {
     const versionInfoElement = document.getElementById('version-info-title');
@@ -570,7 +584,14 @@ function noUpdate() {
     gotoUpdateBtn.classList.add('hideK');
     closeUpdateBtn.classList.remove('hideK');
 }
-
+function setUpdateWindowHeight() {
+    if (!showingUpdateInfo) {return;}
+    const scrollPosition = window.scrollY;
+    // const originalTop = updateToast.style.getPropertyValue('top');
+    const resultTop = scrollPosition - 20 + 'px';
+    updateToast.style.setProperty('top', resultTop);
+}
+    
 // 监视页面内部 DOM 变动
 var observer = new MutationObserver(function (mutations) {
     gradioLoaded(mutations);
@@ -583,7 +604,7 @@ window.addEventListener("DOMContentLoaded", function () {
     historyLoaded = false;
 });
 window.addEventListener('resize', setChatbotHeight);
-window.addEventListener('scroll', setChatbotHeight);
+window.addEventListener('scroll', function(){setChatbotHeight();setUpdateWindowHeight();});
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", adjustDarkMode);
 
 // button svg code

@@ -50,7 +50,7 @@ footer {
     width: 100%;
     justify-content: center;
     z-index: var(--layer-top);
-    transition: top 0.5s ease-in-out;
+    transition: top 0.3s ease-out;
 }
 #check-chuanhu-update {
     position: absolute;

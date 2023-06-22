@@ -577,6 +577,8 @@ def versions_html():
         Gradio: {gr.__version__}
          • 
         <a style="text-decoration:none;color:inherit" href="https://github.com/GaiZhenbiao/ChuanhuChatGPT">ChuanhuChat</a>: {repo_version}
+         • 
+        <span onclick="manualCheckUpdate()">Check for update...</span>
         """
 
 def get_html(filename):
