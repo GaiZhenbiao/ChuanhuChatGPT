@@ -204,6 +204,45 @@ input[type=range]::-webkit-slider-runnable-track {
     background: transparent;
 }
 
+hr.append-display {
+    margin: 8px 0;
+    border: none;
+    height: 1px;
+    border-top-width: 0;
+    background-image: linear-gradient(to right, rgba(50,50,50, 0.1), rgba(150, 150, 150, 0.8), rgba(50,50,50, 0.1));
+}
+.source-a {
+    font-size: 0.8em;
+    max-width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    /* background-color: #dddddd88; */
+    border-radius: 1.5rem;
+    padding: 0.2em;
+}
+.source-a a {
+    display: inline-block;
+    background-color: #aaaaaa50;
+    border-radius: 1rem;
+    padding: 0.5em;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    min-width: 20%;
+    white-space: nowrap;
+    margin: 0.2rem 0.1rem;
+    text-decoration: none !important;
+    flex: 1;
+    transition: flex 0.5s;
+}
+.source-a a:hover {
+    background-color: #aaaaaa20;
+    flex: 2;
+}
+
 #submit_btn, #cancel_btn {
     height: 42px !important;
 }
