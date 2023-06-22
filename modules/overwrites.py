@@ -80,8 +80,7 @@ with open("./assets/custom.js", "r", encoding="utf-8") as f, \
 def reload_javascript():
     print("Reloading javascript...")
     js = f'<script>{customJS}</script><script async>{externalScripts}</script>'
-    # if render_latex:
-    #     js += """\"""
+    js += '<script async src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>'
     def template_response(*args, **kwargs):
         res = GradioTemplateResponseOriginal(*args, **kwargs)
         res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))

@@ -43,6 +43,53 @@ footer {
     position: absolute;
     max-height: 30px;
 }
+#toast-update {
+    position: absolute;
+    display: flex;
+    top: -20px;
+    width: 100%;
+    justify-content: center;
+    z-index: var(--layer-top);
+}
+#check-chuanhu-update {
+    position: absolute;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: var(--size-6) var(--size-4);
+    box-shadow: var(--shadow-drop-lg);
+    border: 1px solid var(--block-label-border-color);
+    border-radius: var(--container-radius);
+    background: var(--background-fill-primary);
+    padding: var(--size-4) var(--size-6);
+    min-width: 400px;
+    max-width: 480px;
+    overflow: hidden;
+    pointer-events: auto;
+}
+.version-info-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: start;
+    width: 100%;
+}
+#release-note-wrap {
+    width: 100%;
+    max-width: 400px;
+    height: 120px;
+    border: solid 1px var(--border-color-primary);
+    overflow: auto;
+    padding: 0 8px;
+}
+.btn-update-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 72%;
+    width: 100%;
+    padding-top: 10px;
+}
 /* user_info */
 #user_info {
     white-space: nowrap;

@@ -85,6 +85,7 @@ function gradioLoaded(mutations) {
             if (chatbotWrap) {
                 if (!historyLoaded) {
                     loadHistoryHtml();
+                    updateLatestVersion();
                 }
                 setChatbotScroll();
             }
@@ -493,6 +494,25 @@ function clearHistoryHtml() {
     if (historyMessages) {
         chatbotWrap.removeChild(historyMessages);
         console.log("History Cleared");
+    }
+}
+
+async function getLatestRelease() {
+    const response = await fetch('https://api.github.com/repos/gaizhenbiao/chuanhuchatgpt/releases/latest');
+    const data = await response.json();
+    return data;
+}
+async function updateLatestVersion() {
+    const latestVersionElement = document.getElementById('latest-version-title');
+    const releaseNoteElement = document.getElementById('release-note-content');
+    try {
+        const data = await getLatestRelease();
+        const latestVersion = data.tag_name;
+        latestVersionElement.textContent = latestVersion;
+        const releaseNote = data.body;
+        releaseNoteElement.innerHTML = marked.parse(releaseNote);
+    } catch (error) {
+        console.error(error);
     }
 }
 
