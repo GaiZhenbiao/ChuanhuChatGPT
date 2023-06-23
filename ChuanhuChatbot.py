@@ -267,6 +267,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
                         changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
                         default_btn = gr.Button(i18n("🔙 恢复默认设置"))
+                    checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."))
 
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
@@ -466,6 +467,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         [status_display],
         show_progress=True,
     )
+    checkUpdateBtn.click(fn=None, _js='()=>{manualCheckUpdate();}')
 
 logging.info(
     colorama.Back.GREEN

@@ -562,9 +562,6 @@ function cancelUpdate() {
 function openUpdateToast() {
     setUpdateWindowHeight();
     showingUpdateInfo = true;
-    // 是的，这个逻辑是弹出窗口也算检测过更新一次。
-    currentTime = new Date().getTime();
-    localStorage.setItem('lastCheckTime', currentTime);
 }
 function closeUpdateToast() {
     updateToast.style.setProperty('top', '-500px');
@@ -573,6 +570,8 @@ function closeUpdateToast() {
 function manualCheckUpdate() {
     openUpdateToast();
     updateLatestVersion();
+    currentTime = new Date().getTime();
+    localStorage.setItem('lastCheckTime', currentTime);
 }
 function noUpdate() {
     const versionInfoElement = document.getElementById('version-info-title');
