@@ -15,7 +15,6 @@ var appTitleDiv = null;
 var chatbot = null;
 var chatbotWrap = null;
 var apSwitch = null;
-var empty_botton = null;
 var messageBotDivs = null;
 var loginUserForm = null;
 var logginUser = null;
@@ -62,7 +61,6 @@ function gradioLoaded(mutations) {
             chatbot = document.querySelector('#chuanhu_chatbot');
             chatbotWrap = document.querySelector('#chuanhu_chatbot > .wrap');
             apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
-            empty_botton = document.getElementById("empty_btn")
 
             if (loginUserForm) {
                 localStorage.setItem("userLogged", true);
@@ -90,9 +88,6 @@ function gradioLoaded(mutations) {
                 }
                 setChatbotScroll();
             }
-            if (empty_botton) {
-                emptyHistory();
-            }
         }
     }
 }
@@ -109,6 +104,16 @@ function webLocale() {
         deleteConfirm_msg_pref = deleteConfirm_i18n_pref[language];
         deleteConfirm_msg_suff = deleteConfirm_i18n_suff[language];
     }
+}
+
+function showConfirmationDialog(a, file, c) {
+    if (file != "") {
+        var result = confirm(deleteConfirm_msg_pref + file + deleteConfirm_msg_suff);
+        if (result) {
+            return [a, file, c];
+        }
+    }
+    return [a, "CANCELED", c];
 }
 
 function selectHistory() {
@@ -489,11 +494,6 @@ function clearHistoryHtml() {
         chatbotWrap.removeChild(historyMessages);
         console.log("History Cleared");
     }
-}
-function emptyHistory() {
-    empty_botton.addEventListener("click", function () {
-        clearHistoryHtml();
-    });
 }
 
 // 监视页面内部 DOM 变动
