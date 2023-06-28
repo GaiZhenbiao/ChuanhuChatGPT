@@ -23,6 +23,7 @@ __all__ = [
     "server_name",
     "server_port",
     "share",
+    "check_update",
     "hide_history_when_not_logged_in",
     "default_chuanhu_assistant_model"
 ]
@@ -39,6 +40,7 @@ lang_config = config.get("language", "auto")
 language = os.environ.get("LANGUAGE", lang_config)
 
 hide_history_when_not_logged_in = config.get("hide_history_when_not_logged_in", False)
+check_update = config.get("check_update", True)
 
 if os.path.exists("api_key.txt"):
     logging.info("检测到api_key.txt文件，正在进行迁移...")

@@ -24,6 +24,7 @@ var userLogged = false;
 var usernameGotten = false;
 var historyLoaded = false;
 var updateInfoGotten = false;
+var isLatestVersion = localStorage.getItem('isLatestVersion') || false;
 
 var ga = document.getElementsByTagName("gradio-app");
 var targetNode = ga[0];
@@ -94,7 +95,8 @@ function gradioLoaded(mutations) {
             }
             if (updateToast) {
                 const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
-                if (currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000 && !updateInfoGotten) {
+                const longTimeNoCheck = currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000;
+                if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten ) {
                     updateLatestVersion();
                 }
             }
@@ -544,6 +546,7 @@ async function updateLatestVersion() {
         if (latestVersionTime) {
             if (localVersionTime < latestVersionTime) {
                 latestVersionElement.textContent = latestVersion;
+                console.log(`New version ${latestVersion} found!`);
                 if (!isInIframe) {openUpdateToast();}      
             } else {
                 noUpdate();
@@ -577,6 +580,8 @@ function manualCheckUpdate() {
     localStorage.setItem('lastCheckTime', currentTime);
 }
 function noUpdate() {
+    localStorage.setItem('isLatestVersion', 'true');
+    isLatestVersion = true;
     const versionInfoElement = document.getElementById('version-info-title');
     const releaseNoteWrap = document.getElementById('release-note-wrap');
     const gotoUpdateBtn = document.getElementById('goto-update-btn');
