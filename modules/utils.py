@@ -5,6 +5,7 @@ import logging
 import json
 import os
 import datetime
+from datetime import timezone 
 import hashlib
 import csv
 import requests
@@ -578,6 +579,15 @@ def versions_html():
          • 
         <a style="text-decoration:none;color:inherit" href="https://github.com/GaiZhenbiao/ChuanhuChatGPT">ChuanhuChat</a>: {repo_version}
         """
+
+def version_time():
+    git = os.environ.get('GIT', "git")
+    try:
+        commit_time = run(f"{git} log -1 --format=%cd --date=iso-strict").strip()
+        commit_time = datetime.datetime.fromisoformat(commit_time).replace(tzinfo=timezone.utc).astimezone().strftime('%Y-%m-%dT%H:%M:%SZ')
+    except Exception:
+        commit_time = "unknown"
+    return commit_time
 
 def get_html(filename):
     path = os.path.join(shared.chuanhu_path, "assets", "html", filename)

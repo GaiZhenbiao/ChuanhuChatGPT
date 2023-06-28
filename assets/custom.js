@@ -529,6 +529,8 @@ async function updateLatestVersion() {
     const latestVersionElement = document.getElementById('latest-version-title');
     const releaseNoteElement = document.getElementById('release-note-content');
     const currentVersion = currentVersionElement.textContent;
+    const versionTime = document.getElementById('version-time').innerText;
+    const localVersionTime = versionTime !== "unknown" ? (new Date(versionTime)).getTime() : 0;
     // const currentVersion = '20230619'; // for debugging
     updateInfoGotten = true; //无论成功与否都只执行一次，否则容易api超限...
     try {
@@ -538,9 +540,10 @@ async function updateLatestVersion() {
             releaseNoteElement.innerHTML = marked.parse(releaseNote);
         }
         const latestVersion = data.tag_name;
-        if (latestVersion) {
-            latestVersionElement.textContent = latestVersion;
-            if (currentVersion !== latestVersion) {
+        const latestVersionTime = (new Date(data.published_at)).getTime();
+        if (latestVersionTime) {
+            if (localVersionTime < latestVersionTime) {
+                latestVersionElement.textContent = latestVersion;
                 if (!isInIframe) {openUpdateToast();}      
             } else {
                 noUpdate();
@@ -560,8 +563,8 @@ function cancelUpdate() {
     closeUpdateToast();
 }
 function openUpdateToast() {
-    setUpdateWindowHeight();
     showingUpdateInfo = true;
+    setUpdateWindowHeight();
 }
 function closeUpdateToast() {
     updateToast.style.setProperty('top', '-500px');

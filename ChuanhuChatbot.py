@@ -38,7 +38,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
         status_display = gr.Markdown(get_geoip(), elem_id="status_display")
     with gr.Row(elem_id="float_display"):
         user_info = gr.Markdown(value="getting user info...", elem_id="user_info")
-        update_info = gr.HTML(get_html("update.html").format(current_version=repo_html()))
+        update_info = gr.HTML(get_html("update.html").format(current_version=repo_html(),version_time=version_time()))
 
     with gr.Row().style(equal_height=True):
         with gr.Column(scale=5):
