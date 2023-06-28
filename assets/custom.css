@@ -88,9 +88,8 @@ footer {
 }
 .btn-update-group {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
-    max-width: 72%;
     width: 100%;
     padding-top: 10px;
 }

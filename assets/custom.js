@@ -53,6 +53,12 @@ var deleteConfirm_i18n_suff = {
 var deleteConfirm_msg_pref = "Are you sure you want to delete ";
 var deleteConfirm_msg_suff = " ?";
 
+var usingLatest_i18n = {
+    'zh': "您使用的就是最新版！",
+    'en': "You are using the latest version!",
+    'ja': "最新バージョンを使用しています！",
+};
+
 // gradio 页面加载好了么??? 我能动你的元素了么??
 function gradioLoaded(mutations) {
     for (var i = 0; i < mutations.length; i++) {
@@ -586,7 +592,8 @@ function noUpdate() {
     const releaseNoteWrap = document.getElementById('release-note-wrap');
     const gotoUpdateBtn = document.getElementById('goto-update-btn');
     const closeUpdateBtn = document.getElementById('close-update-btn');
-    versionInfoElement.textContent = 'You are using the latest version!';
+
+    versionInfoElement.textContent = usingLatest_i18n.hasOwnProperty(language) ? usingLatest_i18n[language] : usingLatest_i18n['en'];
     releaseNoteWrap.style.setProperty('display', 'none');
     gotoUpdateBtn.classList.add('hideK');
     closeUpdateBtn.classList.remove('hideK');
