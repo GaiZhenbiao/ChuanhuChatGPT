@@ -583,8 +583,7 @@ def versions_html():
 def version_time():
     git = os.environ.get('GIT', "git")
     try:
-        commit_time = run(f"{git} log -1 --format=%cd --date=iso-strict").strip()
-        commit_time = datetime.datetime.fromisoformat(commit_time).replace(tzinfo=timezone.utc).astimezone().strftime('%Y-%m-%dT%H:%M:%SZ')
+        commit_time = run(f"TZ=UTC {git} log -1 --format=%cd --date='format-local:%Y-%m-%dT%H:%M:%SZ'").strip()
     except Exception:
         commit_time = "unknown"
     return commit_time

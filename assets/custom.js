@@ -539,7 +539,6 @@ async function updateLatestVersion() {
     const currentVersion = currentVersionElement.textContent;
     const versionTime = document.getElementById('version-time').innerText;
     const localVersionTime = versionTime !== "unknown" ? (new Date(versionTime)).getTime() : 0;
-    // const currentVersion = '20230619'; // for debugging
     updateInfoGotten = true; //无论成功与否都只执行一次，否则容易api超限...
     try {
         const data = await getLatestRelease();
@@ -548,7 +547,7 @@ async function updateLatestVersion() {
             releaseNoteElement.innerHTML = marked.parse(releaseNote);
         }
         const latestVersion = data.tag_name;
-        const latestVersionTime = (new Date(data.published_at)).getTime();
+        const latestVersionTime = (new Date(data.created_at)).getTime();
         if (latestVersionTime) {
             if (localVersionTime < latestVersionTime) {
                 latestVersionElement.textContent = latestVersion;
