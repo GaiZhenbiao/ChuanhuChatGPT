@@ -373,19 +373,38 @@ function addChuanhuButton(botElement) {
     copyButton.classList.add('copy-bot-btn');
     copyButton.setAttribute('aria-label', 'Copy');
     copyButton.innerHTML = copyIcon;
-    copyButton.addEventListener('click', () => {
+    copyButton.addEventListener('click', async () => {
         const textToCopy = rawMessage.innerText;
-        navigator.clipboard
-            .writeText(textToCopy)
-            .then(() => {
+
+        try {
+            if ("clipboard" in navigator) {
+                await navigator.clipboard.writeText(textToCopy);
                 copyButton.innerHTML = copiedIcon;
                 setTimeout(() => {
                     copyButton.innerHTML = copyIcon;
                 }, 1500);
-            })
-            .catch(() => {
-                console.error("copy failed");
-            });
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+
+                document.body.appendChild(textArea);
+                textArea.select();
+
+                try {
+                    document.execCommand('copy');
+                    copyButton.innerHTML = copiedIcon;
+                    setTimeout(() => {
+                        copyButton.innerHTML = copyIcon;
+                    }, 1500);
+                } catch (error) {
+                    console.error("Copy failed: ", error);
+                }
+
+                document.body.removeChild(textArea);
+            }
+        } catch (error) {
+            console.error("Copy failed: ", error);
+        }
     });
     botElement.appendChild(copyButton);
 
