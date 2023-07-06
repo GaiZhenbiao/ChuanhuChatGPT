@@ -19,6 +19,7 @@ var messageBotDivs = null;
 var loginUserForm = null;
 var logginUser = null;
 var updateToast = null;
+var sendBtn = null;
 
 var userLogged = false;
 var usernameGotten = false;
@@ -72,6 +73,7 @@ function gradioLoaded(mutations) {
             chatbotWrap = document.querySelector('#chuanhu_chatbot > .wrap');
             apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
             updateToast = document.querySelector("#toast-update");
+            sendBtn = document.getElementById("submit_btn");
 
             if (loginUserForm) {
                 localStorage.setItem("userLogged", true);
@@ -102,7 +104,7 @@ function gradioLoaded(mutations) {
             if (updateToast) {
                 const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
                 const longTimeNoCheck = currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000;
-                if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten ) {
+                if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten) {
                     updateLatestVersion();
                 }
             }
@@ -138,6 +140,15 @@ function selectHistory() {
     user_input_ta = user_input_tb.querySelector("textarea");
     if (user_input_ta) {
         observer.disconnect(); // 停止监听
+        sendBtn.disabled = true
+        // 在 textarea 上监听 input 事件
+        user_input_ta.addEventListener('input', () => {
+            if (user_input_ta.value.trim() === '') {
+              sendBtn.disabled = true;
+            } else {
+              sendBtn.disabled = false;
+            }
+          });
         // 在 textarea 上监听 keydown 事件
         user_input_ta.addEventListener("keydown", function (event) {
             var value = user_input_ta.value.trim();
@@ -220,8 +231,6 @@ function toggleUserInfoVisibility(shouldHide) {
     }
 }
 function showOrHideUserInfo() {
-    var sendBtn = document.getElementById("submit_btn");
-
     // Bind mouse/touch events to show/hide user info
     appTitleDiv.addEventListener("mouseenter", function () {
         toggleUserInfoVisibility(false);
