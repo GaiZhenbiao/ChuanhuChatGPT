@@ -97,20 +97,20 @@ footer {
     display: none;
 }
 /* user_info */
-#user_info {
+#user_info.block {
     white-space: nowrap;
-    position: absolute; left: 8em; top: .2em;
+    position: absolute; left: 8em; top: .8em;
     z-index: var(--layer-2);
     box-shadow: var(--block-shadow);
-    border: none; border-radius: var(--block-label-radius);
+    border: none!important; border-radius: var(--block-label-radius);
     background: var(--color-accent);
     padding: var(--block-label-padding);
     font-size: var(--block-label-text-size); line-height: var(--line-sm);
-    width: auto; min-height: 30px!important;
+    width: auto; max-height: 30px!important;
     opacity: 1;
     transition: opacity 0.3s ease-in-out;
 }
-#user_info .wrap {
+#user_info.block .wrap {
     opacity: 0;
 }
 #user_info p {
@@ -341,7 +341,7 @@ ol:not(.options), ul:not(.options) {
     #chuanhu_chatbot {
         height: calc(100vh - 200px);
     }
-    #chuanhu_chatbot .wrap {
+    #chuanhu_chatbot>.wrapper>.wrap {
         max-height: calc(100vh - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     }
 }
@@ -350,7 +350,7 @@ ol:not(.options), ul:not(.options) {
     #chuanhu_chatbot {
         height: calc(100vh - 140px);
     }
-    #chuanhu_chatbot .wrap {
+    #chuanhu_chatbot>.wrapper>.wrap {
         max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     }
     [data-testid = "bot"] {
@@ -360,7 +360,7 @@ ol:not(.options), ul:not(.options) {
         letter-spacing: -1px; font-size: 22px;
     }
 }
-#chuanhu_chatbot .wrap {
+#chuanhu_chatbot>.wrapper>.wrap {
     overflow-x: hidden;
 }
 /* 对话气泡 */
@@ -456,7 +456,7 @@ ol:not(.options), ul:not(.options) {
 }
 
 /* history message */
-.wrap>.history-message {
+.wrapper>.wrap>.history-message {
     padding: 10px !important;
 }
 .history-message {
@@ -475,7 +475,7 @@ ol:not(.options), ul:not(.options) {
 .history-message>.message {
     margin-bottom: 16px;
 }
-.wrap>.history-message::after {
+.wrapper>.wrap>.history-message::after {
     content: "";
     display: block;
     height: 2px;
@@ -484,7 +484,7 @@ ol:not(.options), ul:not(.options) {
     margin-top: -10px;
     clear: both;
 }
-.wrap>.history-message>:last-child::after {
+.wrapper>.wrap>.history-message>:last-child::after {
     content: "仅供查看";
     display: block;
     text-align: center;
