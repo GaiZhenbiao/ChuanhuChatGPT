@@ -20,6 +20,7 @@ var loginUserForm = null;
 var logginUser = null;
 var updateToast = null;
 var sendBtn = null;
+var cancelBtn = null;
 var sliders = null;
 
 var userLogged = false;
@@ -75,6 +76,7 @@ function gradioLoaded(mutations) {
             apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
             updateToast = document.querySelector("#toast-update");
             sendBtn = document.getElementById("submit_btn");
+            cancelBtn = document.getElementById("cancel_btn");
             sliders = document.querySelectorAll('input[type="range"]');
 
             if (loginUserForm) {
@@ -113,6 +115,9 @@ function gradioLoaded(mutations) {
                 if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten) {
                     updateLatestVersion();
                 }
+            }
+            if (cancelBtn) {
+                submitObserver.observe(cancelBtn, { attributes: true, characterData: true});
             }
         }
     }
@@ -453,7 +458,7 @@ function removeMarkdownText(message) {
 let timeoutId;
 let isThrottled = false;
 var mmutation
-// 监听所有gradio元素的变化，为 bot 消息添加复制按钮。
+// 监听chatWrap元素的变化，为 bot 消息添加复制按钮。
 var mObserver = new MutationObserver(function (mutationsList) {
     for (mmutation of mutationsList) {
         if (mmutation.type === 'childList') {
@@ -471,7 +476,7 @@ var mObserver = new MutationObserver(function (mutationsList) {
                     document.querySelectorAll('#chuanhu_chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
                 }
             }
-        } else if (mmutation.type === 'attributes' || mmutation.type === 'characterData') {
+        } else if (mmutation.type === 'attributes') {
             if (isThrottled) break; // 为了防止重复不断疯狂渲染，加上等待_(:з」∠)_
             isThrottled = true;
             clearTimeout(timeoutId);
@@ -485,6 +490,11 @@ var mObserver = new MutationObserver(function (mutationsList) {
     }
 });
 // mObserver.observe(targetNode, { attributes: true, childList: true, subtree: true, characterData: true});
+
+var submitObserver = new MutationObserver(function (mutationsList) {
+    document.querySelectorAll('#chuanhu_chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
+    saveHistoryHtml();
+});
 
 var loadhistorytime = 0; // for debugging
 function saveHistoryHtml() {
