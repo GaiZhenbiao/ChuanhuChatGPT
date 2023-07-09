@@ -28,6 +28,7 @@
     "WOLFRAM_ALPHA_APPID": "", //Wolfram Alpha API Key，用于川虎助理Pro模式，获取方式请看 https://products.wolframalpha.com/api/
     "SERPAPI_API_KEY": "", //SerpAPI API Key，用于川虎助理Pro模式，获取方式请看 https://serpapi.com/
 
+    "latex_option": "default", // latex 公式显示方式，可选"default", "strict", "all"或者"disabled"
     "advance_docs": {
         "pdf": {
             // 是否认为PDF是双栏的

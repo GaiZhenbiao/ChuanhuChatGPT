@@ -24,6 +24,7 @@ __all__ = [
     "server_port",
     "share",
     "check_update",
+    "latex_delimiters_set",
     "hide_history_when_not_logged_in",
     "default_chuanhu_assistant_model"
 ]
@@ -158,6 +159,42 @@ def retrieve_proxy(proxy=None):
         # return old proxy
         os.environ["HTTP_PROXY"], os.environ["HTTPS_PROXY"] = old_var
 
+## 处理latex options
+user_latex_option = config.get("latex_option", "default")
+if user_latex_option == "default":
+    latex_delimiters_set = [
+        {"left": "$$", "right": "$$", "display": True},
+        {"left": "$", "right": "$", "display": False},
+        {"left": "\\(", "right": "\\)", "display": False},
+        {"left": "\\[", "right": "\\]", "display": True},
+    ]
+elif user_latex_option == "strict":
+    latex_delimiters_set = [
+        {"left": "$$", "right": "$$", "display": True},
+        {"left": "\\(", "right": "\\)", "display": False},
+        {"left": "\\[", "right": "\\]", "display": True},
+    ]
+elif user_latex_option == "all":
+    latex_delimiters_set = [
+        {"left": "$$", "right": "$$", "display": True},
+        {"left": "$", "right": "$", "display": False},
+        {"left": "\\(", "right": "\\)", "display": False},
+        {"left": "\\[", "right": "\\]", "display": True},
+        {"left": "\\begin{equation}", "right": "\\end{equation}", "display": True},
+        {"left": "\\begin{align}", "right": "\\end{align}", "display": True},
+        {"left": "\\begin{alignat}", "right": "\\end{alignat}", "display": True},
+        {"left": "\\begin{gather}", "right": "\\end{gather}", "display": True},
+        {"left": "\\begin{CD}", "right": "\\end{CD}", "display": True},
+    ]
+elif user_latex_option == "disabled":
+    latex_delimiters_set = []
+else:
+    latex_delimiters_set = [
+        {"left": "$$", "right": "$$", "display": True},
+        {"left": "$", "right": "$", "display": False},
+        {"left": "\\(", "right": "\\)", "display": False},
+        {"left": "\\[", "right": "\\]", "display": True},
+    ]
 
 ## 处理advance docs
 advance_docs = defaultdict(lambda: defaultdict(dict))
