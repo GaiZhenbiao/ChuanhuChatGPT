@@ -21,6 +21,9 @@
     "check_update": true, //是否启用检查更新
     "default_model": "gpt-3.5-turbo", // 默认模型
 
+    //在每条消息后显示附加消息，如“此回答由 AI 生成，可能存在不准确之处。”。留空则不显示。
+    "message_append": "",
+
     //川虎助理设置
     "default_chuanhu_assistant_model": "gpt-4", //川虎助理使用的模型，可选gpt-3.5-turbo或者gpt-4
     "GOOGLE_CSE_ID": "", //谷歌搜索引擎ID，用于川虎助理Pro模式，获取方式请看 https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search

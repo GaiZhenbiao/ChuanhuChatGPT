@@ -13,6 +13,7 @@ __all__ = [
     "my_api_key",
     "authflag",
     "auth_list",
+    "message_append",
     "dockerflag",
     "retrieve_proxy",
     "log_level",
@@ -86,6 +87,7 @@ os.environ["MINIMAX_GROUP_ID"] = minimax_group_id
 
 
 usage_limit = os.environ.get("USAGE_LIMIT", config.get("usage_limit", 120))
+message_append = os.environ.get("MESSAGE_APPEND", config.get("message_append", ""))
 
 ## 多账户机制
 multi_api_key = config.get("multi_api_key", False) # 是否开启多账户机制
@@ -160,7 +162,7 @@ def retrieve_proxy(proxy=None):
         os.environ["HTTP_PROXY"], os.environ["HTTPS_PROXY"] = old_var
 
 ## 处理latex options
-user_latex_option = config.get("latex_option", "default")
+user_latex_option = os.environ.get("LATEX_OPTION", config.get("latex_option", "default"))
 if user_latex_option == "default":
     latex_delimiters_set = [
         {"left": "$$", "right": "$$", "display": True},
