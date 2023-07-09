@@ -295,6 +295,11 @@ hr.append-display {
     background-color: #aaaaaa20;
     flex: 2;
 }
+.message-append {
+    margin-top: 0.6em;
+    font-size: 0.7em;
+    color: var(--body-text-color-subdued);
+}
 
 #submit_btn, #cancel_btn {
     height: 42px !important;

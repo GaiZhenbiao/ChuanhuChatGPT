@@ -230,6 +230,8 @@ def convert_bot_before_marked(chat_message):
                 result.append(code)
         result = "".join(result)
         md = f'<div class="md-message">{result}\n</div>'
+        if MESSAGE_APPEND.strip() != "":
+            md += f'\n\n<div class="message-append no-in-raw">{MESSAGE_APPEND}</div>'
         return raw + md
 
 def convert_user_before_marked(chat_message):

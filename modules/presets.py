@@ -46,6 +46,7 @@ CHUANHU_TITLE = i18n("川虎Chat 🚀")
 
 CHUANHU_DESCRIPTION = i18n("由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本")
 
+MESSAGE_APPEND = ""
 
 ONLINE_MODELS = [
     "gpt-3.5-turbo",
