@@ -39,6 +39,7 @@ var forView_i18n = {
     'zh': "仅供查看",
     'en': "For viewing only",
     'ja': "閲覧専用",
+    'ko': "읽기 전용",
     'fr': "Pour consultation seulement",
     'es': "Solo para visualización",
 };
@@ -47,11 +48,13 @@ var deleteConfirm_i18n_pref = {
     'zh': "你真的要删除 ",
     'en': "Are you sure you want to delete ",
     'ja': "本当に ",
+    'ko': "정말로 ",
 };
 var deleteConfirm_i18n_suff = {
     'zh': " 吗？",
     'en': " ?",
     'ja': " を削除してもよろしいですか？",
+    'ko': " 을(를) 삭제하시겠습니까?",
 };
 var deleteConfirm_msg_pref = "Are you sure you want to delete ";
 var deleteConfirm_msg_suff = " ?";
@@ -60,6 +63,7 @@ var usingLatest_i18n = {
     'zh': "您使用的就是最新版！",
     'en': "You are using the latest version!",
     'ja': "最新バージョンを使用しています！",
+    'ko': "최신 버전을 사용하고 있습니다!",
 };
 
 // gradio 页面加载好了么??? 我能动你的元素了么??
