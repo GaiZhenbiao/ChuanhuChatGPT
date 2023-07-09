@@ -47,16 +47,17 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
             ok_btn=i18n("好"),
             ), visible=check_update)
 
-    with gr.Row().style(equal_height=True):
+    with gr.Row(equal_height=True):
         with gr.Column(scale=5):
             with gr.Row():
-                chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu_chatbot", latex_delimiters=latex_delimiters_set).style(height="100%")
+                chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu_chatbot", latex_delimiters=latex_delimiters_set, height=700)
             with gr.Row():
                 with gr.Column(min_width=225, scale=12):
                     user_input = gr.Textbox(
                         elem_id="user_input_tb",
-                        show_label=False, placeholder=i18n("在这里输入")
-                    ).style(container=False)
+                        show_label=False, placeholder=i18n("在这里输入"),
+                        container=False
+                    )
                 with gr.Column(min_width=42, scale=1):
                     submitBtn = gr.Button(value="", variant="primary", elem_id="submit_btn")
                     cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel_btn")
@@ -116,7 +117,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         label="System prompt",
                         value=INITIAL_SYSTEM_PROMPT,
                         lines=10,
-                    ).style(container=False)
+                        container=False,
+                    )
                     with gr.Accordion(label=i18n("加载Prompt模板"), open=True):
                         with gr.Column():
                             with gr.Row():
@@ -126,7 +128,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                         choices=get_template_names(plain=True),
                                         multiselect=False,
                                         value=get_template_names(plain=True)[0],
-                                    ).style(container=False)
+                                        container=False,
+                                    )
                                 with gr.Column(scale=1):
                                     templateRefreshBtn = gr.Button(i18n("🔄 刷新"))
                             with gr.Row():
@@ -137,7 +140,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                             get_template_names(plain=True)[0], mode=1
                                         ),
                                         multiselect=False,
-                                    ).style(container=False)
+                                        container=False,
+                                    )
 
                 with gr.Tab(label=i18n("保存/加载")):
                     with gr.Accordion(label=i18n("保存/加载对话历史记录"), open=True):
@@ -161,7 +165,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                         placeholder=i18n("设置文件名: 默认为.json，可选为.md"),
                                         label=i18n("设置保存文件名"),
                                         value=i18n("对话历史记录"),
-                                    ).style(container=True)
+                                        container=False,
+                                    )
                                 with gr.Column(scale=1):
                                     saveHistoryBtn = gr.Button(i18n("💾 保存对话"))
                                     exportMarkdownBtn = gr.Button(i18n("📝 导出为Markdown"))
