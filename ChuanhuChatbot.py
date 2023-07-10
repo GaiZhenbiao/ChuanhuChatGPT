@@ -176,11 +176,15 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                     downloadFile = gr.File(interactive=True)
 
                 with gr.Tab(label=i18n("高级")):
-                    gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置"))
+                    
                     gr.HTML(get_html("appearance_switcher.html").format(label=i18n("切换亮暗色主题")), elem_classes="insert_block")
                     use_streaming_checkbox = gr.Checkbox(
-                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION
+                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_id="streaming_checkbox"
                         )
+                    checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
+                    gr.Markdown("---")
+                    gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"), elem_id="advanced_warning")
+
                     with gr.Accordion(i18n("参数"), open=False):
                         temperature_slider = gr.Slider(
                             minimum=-0,
@@ -208,7 +212,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
                         stop_sequence_txt = gr.Textbox(
                             show_label=True,
-                            placeholder=i18n("在这里输入停止符，用英文逗号隔开..."),
+                            placeholder=i18n("停止符，用英文逗号隔开..."),
                             label="stop",
                             value="",
                             lines=1,
@@ -268,6 +272,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             label="API-Host",
                             value=config.api_host or shared.API_HOST,
                             lines=1,
+                            container=False,
                         )
                         changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
                         proxyTxt = gr.Textbox(
@@ -276,10 +281,11 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             label=i18n("代理地址（示例：http://127.0.0.1:10809）"),
                             value="",
                             lines=2,
+                            container=False,
                         )
                         changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
-                        default_btn = gr.Button(i18n("🔙 恢复默认设置"))
-                    checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
+                        default_btn = gr.Button(i18n("🔙 恢复默认网络设置"))
+                    
 
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
