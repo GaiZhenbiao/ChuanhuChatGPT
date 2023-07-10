@@ -121,6 +121,7 @@ REPLY_LANGUAGES = [
     "Español",
     "Français",
     "Deutsch",
+    "한국어",
     "跟随问题语言（不稳定）"
 ]
 
