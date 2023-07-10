@@ -64,7 +64,7 @@ footer {
     border-radius: var(--container-radius);
     background: var(--background-fill-primary);
     padding: var(--size-4) var(--size-6);
-    min-width: 400px;
+    min-width: 360px;
     max-width: 480px;
     overflow: hidden;
     pointer-events: auto;
