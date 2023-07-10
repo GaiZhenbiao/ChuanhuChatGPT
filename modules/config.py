@@ -128,10 +128,10 @@ logging.basicConfig(
 )
 
 ## 处理代理：
-http_proxy = config.get("http_proxy", "")
-https_proxy = config.get("https_proxy", "")
-http_proxy = os.environ.get("HTTP_PROXY", http_proxy)
-https_proxy = os.environ.get("HTTPS_PROXY", https_proxy)
+http_proxy = os.environ.get("HTTP_PROXY", "")
+https_proxy = os.environ.get("HTTPS_PROXY", "")
+http_proxy = config.get("http_proxy", http_proxy)
+https_proxy = config.get("https_proxy", https_proxy)
 
 # 重置系统变量，在不需要设置的时候不设置环境变量，以免引起全局代理报错
 os.environ["HTTP_PROXY"] = ""
