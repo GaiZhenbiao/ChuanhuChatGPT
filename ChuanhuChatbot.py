@@ -209,7 +209,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
                         stop_sequence_txt = gr.Textbox(
                             show_label=True,
-                            placeholder=i18n("在这里输入停止符，用英文逗号隔开..."),
+                            placeholder=i18n("停止符，用英文逗号隔开..."),
                             label="stop",
                             value="",
                             lines=1,
@@ -269,6 +269,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             label="API-Host",
                             value=config.api_host or shared.API_HOST,
                             lines=1,
+                            container=False,
                         )
                         changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
                         proxyTxt = gr.Textbox(
@@ -277,6 +278,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             label=i18n("代理地址（示例：http://127.0.0.1:10809）"),
                             value="",
                             lines=2,
+                            container=False,
                         )
                         changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
                         default_btn = gr.Button(i18n("🔙 恢复默认设置"))

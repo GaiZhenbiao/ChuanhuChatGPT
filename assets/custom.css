@@ -37,6 +37,14 @@ div.form {
     background: none !important;
 }
 
+/* 高级页面 */
+#advanced_warning {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+}
+
 /* gradio的页脚信息 */
 footer {
     /* display: none !important; */
@@ -200,6 +208,7 @@ footer {
     line-height: 20px;
 }
 
+/* 亮暗色模式 */
 .apSwitch {
     top: 2px;
     display: inline-block;
