@@ -116,8 +116,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         placeholder=i18n("在这里输入System Prompt..."),
                         label="System prompt",
                         value=INITIAL_SYSTEM_PROMPT,
-                        lines=10,
-                        container=False,
+                        lines=10
                     )
                     with gr.Accordion(label=i18n("加载Prompt模板"), open=True):
                         with gr.Column():
@@ -151,7 +150,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                     historyFileSelectDropdown = gr.Dropdown(
                                         label=i18n("从列表中加载对话"),
                                         choices=get_history_names(plain=True),
-                                        multiselect=False
+                                        multiselect=False,
+                                        container=False,
                                     )
                                 with gr.Row():
                                     with gr.Column(min_width=42, scale=1):
