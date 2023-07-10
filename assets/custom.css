@@ -9,13 +9,6 @@
     --message-bot-background-color-dark: #2C2C2C;
     --switch-checkbox-color-light: #e5e7eb;
     --switch-checkbox-color-dark: #515151;
-
-    @media (prefers-color-scheme: light) {
-        --switch-checkbox-color: var(--switch-checkbox-color-light);
-    }
-    @media (prefers-color-scheme: dark) {
-        --switch-checkbox-color: var(--switch-checkbox-color-dark);
-    }
 }
 
 
@@ -221,7 +214,7 @@ footer {
     display: none !important;
 }
 .apSlider {
-    background-color: var(--neutral-400);
+    background-color: var(--neutral-200);
     bottom: 0;
     cursor: pointer;
     left: 0;
@@ -260,22 +253,19 @@ input:checked + .apSlider::before {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
-    display: none;
 }
 
 .switch_checkbox input[type="checkbox"] {
     display: inline-block !important;
     position: relative !important;
     border: none !important;
-    appearance: none !important;
-    background: #fff;
     outline: none;
     width: 48px !important;
     height: 24px !important;
     border-radius: 12px !important;
     box-shadow: none !important;
     background-image: none !important;
-    background-color: var(--switch-checkbox-color) !important;
+    background-color: var(--switch-checkbox-color-light) !important;
     transition: .2s ease background-color;
 }
 .dark .switch_checkbox input[type="checkbox"] {
