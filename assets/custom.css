@@ -7,7 +7,17 @@
     --message-user-background-color-dark: #26B561;
     --message-bot-background-color-light: #FFFFFF;
     --message-bot-background-color-dark: #2C2C2C;
+    --switch-checkbox-color-light: #e5e7eb;
+    --switch-checkbox-color-dark: #515151;
+
+    @media (prefers-color-scheme: light) {
+        --switch-checkbox-color: var(--switch-checkbox-color-light);
+    }
+    @media (prefers-color-scheme: dark) {
+        --switch-checkbox-color: var(--switch-checkbox-color-dark);
+    }
 }
+
 
 #app_title {
     font-weight: var(--prose-header-text-weight);
@@ -147,7 +157,7 @@ footer {
 .insert_block {
     position: relative;
     margin: 0;
-    padding: .5em 1em;
+    padding: 8px 12px;
     box-shadow: var(--block-shadow);
     border-width: var(--block-border-width);
     border-color: var(--block-border-color);
@@ -221,6 +231,61 @@ input:checked + .apSlider {
 input:checked + .apSlider::before {
     transform: translateX(23px);
     content:"🌚";
+}
+
+.switch_checkbox label {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+.switch_checkbox input[type="checkbox"] + span {
+    margin-left: 0 !important;
+}
+
+.switch_checkbox input[type="checkbox"] {
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    display: none;
+}
+
+.switch_checkbox input[type="checkbox"] {
+    display: inline-block !important;
+    position: relative !important;
+    border: none !important;
+    appearance: none !important;
+    background: #fff;
+    outline: none;
+    width: 48px !important;
+    height: 24px !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    background-image: none !important;
+    background-color: var(--switch-checkbox-color) !important;
+    transition: .2s ease background-color;
+}
+.dark .switch_checkbox input[type="checkbox"] {
+    background-color: var(--switch-checkbox-color-dark) !important;
+}
+.switch_checkbox input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    transform: scale(0.85);
+    border-radius: 12px !important;
+    transition: .4s ease all;
+    box-shadow: var(--input-shadow);
+}
+.switch_checkbox input:checked[type="checkbox"] {
+    background-color: var(--primary-600) !important;
+}
+.switch_checkbox input:checked[type="checkbox"]::before {
+    background-color: #fff;
+    left: 24px;
 }
 
 /* Override Slider Styles (for webkit browsers like Safari and Chrome)
