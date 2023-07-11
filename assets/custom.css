@@ -201,14 +201,42 @@ footer {
     line-height: 20px;
 }
 
-/* 亮暗色模式 */
-.apSwitch {
+/* 亮暗色模式切换 */
+#apSwitch input[type="checkbox"] {
+    margin: 0 !important;
+}
+#apSwitch label.apSwitch {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--body-text-color);
+    font-weight: var(--checkbox-label-text-weight);
+    font-size: var(--checkbox-label-text-size);
+    line-height: var(--line-md);
+    margin: 2px 0 !important;
+}
+input[type="checkbox"]#apSwitch_checkbox::before {
+    background: none !important;
+    content: '🌞';
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 22px;
+    top: -4.4px;
+    left: -1px;
+}
+input:checked[type="checkbox"]#apSwitch_checkbox::before {
+    content: '🌚';
+    left: 16px;
+}
+
+/* .apSwitch {
     top: 2px;
     display: inline-block;
-    height: 24px;
+    height: 22px;
     position: relative;
-    width: 48px;
-    border-radius: 12px;
+    width: 40px;
+    border-radius: 11px;
+    box-shadow: inset 0 0 1px 0 rgba(0,0,0,0.05), inset 0 0 2px 0 rgba(0,0,0,0.08) !important;
 }
 .apSwitch input {
     display: none !important;
@@ -222,12 +250,11 @@ footer {
     right: 0;
     top: 0;
     transition: .4s;
-    font-size: 18px;
-    border-radius: 12px;
+    font-size: 22px;
+    border-radius: 11px;
 }
 .apSlider::before {
-    bottom: -1.5px;
-    left: 1px;
+    transform: scale(0.9);
     position: absolute;
     transition: .4s;
     content: "🌞";
@@ -236,9 +263,9 @@ input:checked + .apSlider {
     background-color: var(--primary-600);
 }
 input:checked + .apSlider::before {
-    transform: translateX(23px);
+    transform: translateX(18px);
     content:"🌚";
-}
+} */
 
 .switch_checkbox label {
     flex-direction: row-reverse;
@@ -260,10 +287,11 @@ input:checked + .apSlider::before {
     position: relative !important;
     border: none !important;
     outline: none;
-    width: 48px !important;
-    height: 24px !important;
-    border-radius: 12px !important;
-    box-shadow: none !important;
+    width: 40px !important;
+    height: 22px !important;
+    border-radius: 11px !important;
+    background-image: none !important;
+    box-shadow: inset 0 0 1px 0 rgba(0,0,0,0.05), inset 0 0 2px 0 rgba(0,0,0,0.08) !important;
     background-image: none !important;
     background-color: var(--switch-checkbox-color-light) !important;
     transition: .2s ease background-color;
@@ -274,13 +302,15 @@ input:checked + .apSlider::before {
 .switch_checkbox input[type="checkbox"]::before {
     content: "";
     position: absolute;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     top: 0;
     left: 0;
-    background-color: #fff;
-    transform: scale(0.85);
-    border-radius: 12px !important;
+    background: #FFFFFF;
+    border: 0.5px solid rgba(0,0,0,0.02);
+    box-shadow: 0 0 0 0 rgba(0,0,0,0.15), 0 1px 0 0 rgba(0,0,0,0.05);
+    transform: scale(0.9);
+    border-radius: 11px !important;
     transition: .4s ease all;
     box-shadow: var(--input-shadow);
 }
@@ -289,7 +319,7 @@ input:checked + .apSlider::before {
 }
 .switch_checkbox input:checked[type="checkbox"]::before {
     background-color: #fff;
-    left: 24px;
+    left: 18px;
 }
 
 /* Override Slider Styles (for webkit browsers like Safari and Chrome)
