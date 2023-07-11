@@ -181,7 +181,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch_checkbox"
                         )
                     checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
-                    gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️\n\n如果无法使用请恢复默认设置"))
+                    gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"), elem_id="advanced_warning")
                     with gr.Accordion(i18n("参数"), open=False):
                         temperature_slider = gr.Slider(
                             minimum=-0,
