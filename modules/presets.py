@@ -72,7 +72,9 @@ ONLINE_MODELS = [
 LOCAL_MODELS = [
     "chatglm-6b",
     "chatglm-6b-int4",
-    "chatglm-6b-int4-qe",
+    "chatglm-6b-int4-ge",
+    "chatglm2-6b",
+    "chatglm2-6b-int4",
     "StableLM",
     "MOSS",
     "llama-7b-hf",

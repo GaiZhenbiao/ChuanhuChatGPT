@@ -611,7 +611,8 @@ def get_model(
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)
     except Exception as e:
-        logging.error(e)
+        import traceback
+        traceback.print_exc()
         msg = f"{STANDARD_ERROR_MSG}: {e}"
     if dont_change_lora_selector:
         return model, msg, chatbot
