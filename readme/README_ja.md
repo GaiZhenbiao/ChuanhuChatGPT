@@ -6,7 +6,7 @@
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
 <div align="center">
   <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT">
-    <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
+    <img src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/aca3a7ec-4f1d-4667-890c-a6f47bf08f63" alt="Logo" height="156">
   </a>
 
 <p align="center">
@@ -45,13 +45,16 @@
 </div>
 
 ## サポートされている大規模言語モデル
+
 **APIを通じてアクセス可能な大規模言語モデル**：
+
 - [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
 - [Inspur Yuan 1.0](https://air.inspur.com/home)
 - [MiniMax](https://api.minimax.chat/)
 - [XMChat](https://github.com/MILVLG/xmchat)
 
 **ローカルに展開された大規模言語モデル**：
+
 - [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B))
 - [LLaMA](https://github.com/facebookresearch/llama)
 - [StableLM](https://github.com/Stability-AI/StableLM)
@@ -61,8 +64,8 @@
 
 - ChatGPTをより適切に制御するために、システムプロンプトを使用できます。
 - プロンプトテンプレートを使用するには、プロンプトテンプレートコレクションを選択し、ドロップダウンメニューから特定のプロンプトを選択。回答が不十分な場合は、`🔄再生成`ボタンを使って再試行します。
-- 入力ボックスで改行するには、<kbd>Shift</kbd> + <kbd>Enter</kbd>キーを押してください。
-- 入力履歴を素早く切り替えるには、入力ボックスで <kbd>↑</kbd>と<kbd>↓</kbd>キーを押す。
+- 入力ボックスで改行するには、`<kbd>`Shift`</kbd>` + `<kbd>`Enter`</kbd>`キーを押してください。
+- 入力履歴を素早く切り替えるには、入力ボックスで `<kbd>`↑`</kbd>`と`<kbd>`↓`</kbd>`キーを押す。
 - プログラムをサーバーに展開するには、`config.json` 内の `"server_name": "0.0.0.0", "server_port": <ポート番号>`を設定してください。
 - 共有リンクを取得するには、 `config.json` 内の `"share": true` を設定してください。なお、公開リンクでアクセスするためには、プログラムが実行されている必要があることに注意してください。
 - Hugging Face Spacesで使用する場合： より速く、より安全に利用するために、**Duplicate Space**を使用し、自分のスペースでプログラムを実行することをお勧めします。
