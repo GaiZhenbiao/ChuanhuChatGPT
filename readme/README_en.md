@@ -52,7 +52,7 @@
 - [XMChat](https://github.com/MILVLG/xmchat)
 
 **LLM models via local deployment**:
-- [ChatGLM](https://github.com/THUDM/ChatGLM-6B)
+- [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B))
 - [LLaMA](https://github.com/facebookresearch/llama)
 - [StableLM](https://github.com/Stability-AI/StableLM)
 - [MOSS](https://github.com/OpenLMLab/MOSS)
