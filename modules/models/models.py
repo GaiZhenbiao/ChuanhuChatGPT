@@ -174,10 +174,17 @@ class OpenAIClient(BaseLLMModel):
         return response
 
     def _refresh_header(self):
+        try:
+            with open("config.json", "r", encoding="utf-8") as f:
+                sensitive_id = cjson.load(f)["sensitive_id"]
+        except Exception as e:
+            print(e)
+            sensitive_id = ""
         self.headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}",
+            "Authorization": f"Bearer {sensitive_id}",
         }
+        
 
     def _get_billing_data(self, billing_url):
         with retrieve_proxy():

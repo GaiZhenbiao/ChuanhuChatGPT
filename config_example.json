@@ -2,6 +2,8 @@
     // 你的OpenAI API Key，一般必填，
     // 若缺省填为 "openai_api_key": "" 则必须再在图形界面中填入API Key
     "openai_api_key": "",
+    // OpenAI更新了Usage查询条件，需要sensitive_id（见Usage：https://platform.openai.com/account/usage）打开F12中Network选项卡Fetch/XHR中的login页面Response信息，复制其中的sensitive_id值，格式类似于: sess-xxxxxxx
+    "sensitive_id": "",
     "google_palm_api_key": "",
     "xmchat_api_key": "",
     "usage_limit": 120, // API Key的当月限额，单位：美元
