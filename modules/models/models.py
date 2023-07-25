@@ -24,7 +24,7 @@ from ..presets import *
 from ..index_func import *
 from ..utils import *
 from .. import shared
-from ..config import retrieve_proxy, usage_limit
+from ..config import retrieve_proxy, usage_limit, sensitive_id
 from modules import config
 from .base_model import BaseLLMModel, ModelType
 
@@ -87,7 +87,11 @@ class OpenAIClient(BaseLLMModel):
             try:
                 usage_data = self._get_billing_data(usage_url)
             except Exception as e:
-                logging.error(f"获取API使用情况失败:" + str(e))
+                logging.error(f"获取API使用情况失败: " + str(e))
+                if "Invalid authorization header" in str(e):
+                    return i18n("**获取API使用情况失败**，需在填写`config.json`中正确填写sensitive_id")
+                elif "Incorrect API key provided: sess" in str(e):
+                    return i18n("**获取API使用情况失败**，sensitive_id错误或已过期")
                 return i18n("**获取API使用情况失败**")
             # rounded_usage = "{:.5f}".format(usage_data["total_usage"] / 100)
             rounded_usage = round(usage_data["total_usage"] / 100, 5)
@@ -176,8 +180,9 @@ class OpenAIClient(BaseLLMModel):
     def _refresh_header(self):
         self.headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}",
+            "Authorization": f"Bearer {sensitive_id}",
         }
+        
 
     def _get_billing_data(self, billing_url):
         with retrieve_proxy():

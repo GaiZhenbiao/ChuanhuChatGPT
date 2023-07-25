@@ -1,42 +1,40 @@
 {
-    // 你的OpenAI API Key，一般必填，
-    // 若缺省填为 "openai_api_key": "" 则必须再在图形界面中填入API Key
-    "openai_api_key": "",
-    "google_palm_api_key": "",
-    "xmchat_api_key": "",
-    "usage_limit": 120, // API Key的当月限额，单位：美元
-    // 你的xmchat API Key，与OpenAI API Key不同
-    // MiniMax的APIKey（见账户管理页面 https://api.minimax.chat/basic-information）和Group ID，用于MiniMax对话模型
-    "minimax_api_key": "",
-    "minimax_group_id": "",
-    "language": "auto",
-    // 支持自定义OpenAI API Base
-    // "openai_api_base": "https://api.openai.com",
-    // 如果使用代理，请取消注释下面的两行，并替换代理URL
-    // "https_proxy": "http://127.0.0.1:1079",
-    // "http_proxy": "http://127.0.0.1:1079",
+    // 各配置具体说明，见 [https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#配置-configjson]
+
+    //== API 配置 ==
+    "openai_api_key": "", // 你的 OpenAI API Key，一般必填，若空缺则需在图形界面中填入API Key
+    "sensitive_id": "", // 你 OpenAI 账户的 Sensitive ID，用于查询 API 用量
+    "usage_limit": 120, // 该 OpenAI API Key 的当月限额，单位：美元
+    "google_palm_api_key": "", // 你的 Google PaLM API Key，用于 Google PaLM 对话模型
+    "xmchat_api_key": "", // 你的 xmchat API Key，用于 XMChat 对话模型
+    "minimax_api_key": "", // 你的 MiniMax API Key，用于 MiniMax 对话模型
+    "minimax_group_id": "", // 你的 MiniMax Group ID，用于 MiniMax 对话模型
+
+    //== 基础配置 ==
+    "language": "auto", // 界面语言，可选"auto", "zh-CN", "en-US", "ja-JP", "ko-KR"
     "users": [], // 用户列表，[[用户名1, 密码1], [用户名2, 密码2], ...]
     "local_embedding": false, //是否在本地编制索引
     "hide_history_when_not_logged_in": false, //未登录情况下是否不展示对话历史
     "check_update": true, //是否启用检查更新
     "default_model": "gpt-3.5-turbo", // 默认模型
 
-    //川虎助理设置
-    "default_chuanhu_assistant_model": "gpt-4", //川虎助理使用的模型，可选gpt-3.5-turbo或者gpt-4
+    //== 川虎助理设置 ==
+    "default_chuanhu_assistant_model": "gpt-4", //川虎助理使用的模型，可选gpt-3.5-turbo或者gpt-4等
     "GOOGLE_CSE_ID": "", //谷歌搜索引擎ID，用于川虎助理Pro模式，获取方式请看 https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search
     "GOOGLE_API_KEY": "", //谷歌API Key，用于川虎助理Pro模式
     "WOLFRAM_ALPHA_APPID": "", //Wolfram Alpha API Key，用于川虎助理Pro模式，获取方式请看 https://products.wolframalpha.com/api/
     "SERPAPI_API_KEY": "", //SerpAPI API Key，用于川虎助理Pro模式，获取方式请看 https://serpapi.com/
 
-    "latex_option": "default", // latex 公式显示方式，可选"default", "strict", "all"或者"disabled"
+    //== 文档处理与显示 ==
+    "latex_option": "default", // LaTeX 公式渲染策略，可选"default", "strict", "all"或者"disabled"
     "advance_docs": {
         "pdf": {
-            // 是否认为PDF是双栏的
-            "two_column": false,
-            // 是否使用OCR识别PDF中的公式
-            "formula_ocr": true
+            "two_column": false, // 是否认为PDF是双栏的
+            "formula_ocr": true // 是否使用OCR识别PDF中的公式
         }
     },
+
+    //== 高级配置 ==
     // 是否多个API Key轮换使用
     "multi_api_key": false,
     "api_key_list": [
@@ -44,7 +42,12 @@
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx3"
     ],
-    // 如果使用自定义端口、自定义ip，请取消注释并替换对应内容
+    // 自定义OpenAI API Base
+    // "openai_api_base": "https://api.openai.com",
+    // 自定义使用代理（请替换代理URL）
+    // "https_proxy": "http://127.0.0.1:1079",
+    // "http_proxy": "http://127.0.0.1:1079",
+    // 自定义端口、自定义ip（请替换对应内容）
     // "server_name": "0.0.0.0",
     // "server_port": 7860,
     // 如果要share到gradio，设置为true

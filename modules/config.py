@@ -11,6 +11,7 @@ from . import presets
 
 __all__ = [
     "my_api_key",
+    "sensitive_id",
     "authflag",
     "auth_list",
     "dockerflag",
@@ -36,6 +37,9 @@ if os.path.exists("config.json"):
         config = json.load(f)
 else:
     config = {}
+
+sensitive_id = config.get("sensitive_id", "")
+sensitive_id = os.environ.get("SENSITIVE_ID", sensitive_id)
 
 lang_config = config.get("language", "auto")
 language = os.environ.get("LANGUAGE", lang_config)
