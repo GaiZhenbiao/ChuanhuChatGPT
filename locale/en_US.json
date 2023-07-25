@@ -77,5 +77,6 @@
     "。你仍然可以使用聊天功能。": ". You can still use the chat function.",
     "您的IP区域：": "Your IP region: ",
     "总结": "Summarize",
-    "生成内容总结中……": "Generating content summary..."
+    "生成内容总结中……": "Generating content summary...",
+    "由于下面的原因，Google 拒绝返回 PaLM 的回答：\n\n": "Due to the following reasons, Google refuses to provide an answer to PaLM: \n\n"
 }

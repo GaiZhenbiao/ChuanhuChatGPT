@@ -607,6 +607,10 @@ def get_model(
         elif model_type == ModelType.ChuanhuAgent:
             from .ChuanhuAgent import ChuanhuAgent_Client
             model = ChuanhuAgent_Client(model_name, access_key, user_name=user_name)
+        elif model_type == ModelType.GooglePaLM:
+            from .Google_PaLM import Google_PaLM_Client
+            access_key = os.environ.get("GOOGLE_PALM_API_KEY")
+            model = Google_PaLM_Client(model_name, access_key, user_name=user_name)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)
@@ -614,10 +618,11 @@ def get_model(
         import traceback
         traceback.print_exc()
         msg = f"{STANDARD_ERROR_MSG}: {e}"
+    presudo_key = hide_middle_chars(access_key)
     if dont_change_lora_selector:
-        return model, msg, chatbot
+        return model, msg, chatbot, gr.update(), access_key, presudo_key
     else:
-        return model, msg, chatbot, gr.Dropdown.update(choices=lora_choices, visible=lora_selector_visibility)
+        return model, msg, chatbot, gr.Dropdown.update(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key
 
 
 if __name__ == "__main__":

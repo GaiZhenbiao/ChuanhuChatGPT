@@ -129,6 +129,7 @@ class ModelType(Enum):
     YuanAI = 6
     Minimax = 7
     ChuanhuAgent = 8
+    GooglePaLM = 9
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -152,6 +153,8 @@ class ModelType(Enum):
             model_type = ModelType.Minimax
         elif "川虎助理" in model_name_lower:
             model_type = ModelType.ChuanhuAgent
+        elif "palm" in model_name_lower:
+            model_type = ModelType.GooglePaLM
         else:
             model_type = ModelType.Unknown
         return model_type
@@ -569,10 +572,13 @@ class BaseLLMModel:
         self.system_prompt = new_system_prompt
 
     def set_key(self, new_access_key):
-        self.api_key = new_access_key.strip()
-        msg = i18n("API密钥更改为了") + hide_middle_chars(self.api_key)
-        logging.info(msg)
-        return self.api_key, msg
+        if "*" not in new_access_key:
+            self.api_key = new_access_key.strip()
+            msg = i18n("API密钥更改为了") + hide_middle_chars(self.api_key)
+            logging.info(msg)
+            return self.api_key, msg
+        else:
+            return gr.update(), gr.update()
 
     def set_single_turn(self, new_single_turn):
         self.single_turn = new_single_turn

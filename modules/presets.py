@@ -60,6 +60,7 @@ ONLINE_MODELS = [
     "gpt-4-32k-0613",
     "川虎助理",
     "川虎助理 Pro",
+    "GooglePaLM",
     "xmchat",
     "yuanai-1.0-base_10B",
     "yuanai-1.0-translate",

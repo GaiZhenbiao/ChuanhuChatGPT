@@ -76,6 +76,10 @@ if os.environ.get("dockerrun") == "yes":
 my_api_key = config.get("openai_api_key", "")
 my_api_key = os.environ.get("OPENAI_API_KEY", my_api_key)
 
+google_palm_api_key = config.get("google_palm_api_key", "")
+google_palm_api_key = os.environ.get("GOOGLE_PALM_API_KEY", google_palm_api_key)
+os.environ["GOOGLE_PALM_API_KEY"] = google_palm_api_key
+
 xmchat_api_key = config.get("xmchat_api_key", "")
 os.environ["XMCHAT_API_KEY"] = xmchat_api_key
 
