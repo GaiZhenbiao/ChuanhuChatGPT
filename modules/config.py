@@ -39,6 +39,7 @@ else:
     config = {}
 
 sensitive_id = config.get("sensitive_id", "")
+sensitive_id = os.environ.get("SENSITIVE_ID", sensitive_id)
 
 lang_config = config.get("language", "auto")
 language = os.environ.get("LANGUAGE", lang_config)
