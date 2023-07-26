@@ -51,7 +51,8 @@ def get_documents(file_src):
                         pdfReader = PyPDF2.PdfReader(pdfFileObj)
                         for page in tqdm(pdfReader.pages):
                             pdftext += page.extract_text()
-                texts = [Document(page_content=pdftext, metadata={"source": filepath})]
+                texts = [Document(page_content=pdftext,
+                                  metadata={"source": filepath})]
             elif file_type == ".docx":
                 logging.debug("Loading Word...")
                 from langchain.document_loaders import UnstructuredWordDocumentLoader
@@ -72,7 +73,8 @@ def get_documents(file_src):
                 text_list = excel_to_string(filepath)
                 texts = []
                 for elem in text_list:
-                    texts.append(Document(page_content=elem, metadata={"source": filepath}))
+                    texts.append(Document(page_content=elem,
+                                 metadata={"source": filepath}))
             else:
                 logging.debug("Loading text file...")
                 from langchain.document_loaders import TextLoader
@@ -115,10 +117,16 @@ def construct_index(
     index_path = f"./index/{index_name}"
     if local_embedding:
         from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-        embeddings = HuggingFaceEmbeddings(model_name = "sentence-transformers/distiluse-base-multilingual-cased-v2")
+        embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/distiluse-base-multilingual-cased-v2")
     else:
         from langchain.embeddings import OpenAIEmbeddings
-        embeddings = OpenAIEmbeddings(openai_api_base=os.environ.get("OPENAI_API_BASE", None), openai_api_key=os.environ.get("OPENAI_EMBEDDING_API_KEY", api_key))
+        if os.environ.get("OPENAI_API_TYPE", "openai") == "openai":
+            embeddings = OpenAIEmbeddings(openai_api_base=os.environ.get(
+                "OPENAI_API_BASE", None), openai_api_key=os.environ.get("OPENAI_EMBEDDING_API_KEY", api_key))
+        else:
+            embeddings = OpenAIEmbeddings(deployment=os.environ["AZURE_EMBEDDING_DEPLOYMENT_NAME"], openai_api_key=os.environ["AZURE_OPENAI_API_KEY"],
+                                          model=os.environ["AZURE_EMBEDDING_MODEL_NAME"], openai_api_base=os.environ["AZURE_OPENAI_API_BASE_URL"], openai_api_type="azure")
     if os.path.exists(index_path):
         logging.info("找到了缓存的索引文件，加载中……")
         return FAISS.load_local(index_path, embeddings)

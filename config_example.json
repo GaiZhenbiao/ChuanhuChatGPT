@@ -9,10 +9,13 @@
     "minimax_group_id": "", // 你的 MiniMax Group ID，用于 MiniMax 对话模型
 
     //== Azure ==
+    "openai_api_type": "openai", // 可选项：azure, openai
     "azure_openai_api_key": "", // 你的 Azure OpenAI API Key，用于 Azure OpenAI 对话模型
-    "azure_api_base_url": "", // 你的 Azure Base URL
+    "azure_openai_api_base_url": "", // 你的 Azure Base URL
     "azure_openai_api_version": "2023-05-15", // 你的 Azure OpenAI API 版本
-    "azure_deployment_name": "", // 你的 Azure DEPLOYMENT NAME
+    "azure_deployment_name": "", // 你的 Azure OpenAI Chat 模型 Deployment 名称
+    "azure_embedding_deployment_name": "", // 你的 Azure OpenAI Embedding 模型 Deployment 名称
+    "azure_embedding_model_name": "text-embedding-ada-002", // 你的 Azure OpenAI Embedding 模型名称
 
     //== 基础配置 ==
     "language": "auto", // 界面语言，可选"auto", "zh-CN", "en-US", "ja-JP", "ko-KR"

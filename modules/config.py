@@ -39,11 +39,13 @@ if os.path.exists("config.json"):
 else:
     config = {}
 
+
 def load_config_to_environ(key_list):
     global config
     for key in key_list:
         if key in config:
             os.environ[key.upper()] = os.environ.get(key.upper(), config[key])
+
 
 sensitive_id = config.get("sensitive_id", "")
 sensitive_id = os.environ.get("SENSITIVE_ID", sensitive_id)
@@ -51,7 +53,8 @@ sensitive_id = os.environ.get("SENSITIVE_ID", sensitive_id)
 lang_config = config.get("language", "auto")
 language = os.environ.get("LANGUAGE", lang_config)
 
-hide_history_when_not_logged_in = config.get("hide_history_when_not_logged_in", False)
+hide_history_when_not_logged_in = config.get(
+    "hide_history_when_not_logged_in", False)
 check_update = config.get("check_update", True)
 show_api_billing = config.get("show_api_billing", False)
 show_api_billing = bool(os.environ.get("SHOW_API_BILLING", show_api_billing))
@@ -68,31 +71,32 @@ if os.path.exists("auth.json"):
     logging.info("检测到auth.json文件，正在进行迁移...")
     auth_list = []
     with open("auth.json", "r", encoding='utf-8') as f:
-            auth = json.load(f)
-            for _ in auth:
-                if auth[_]["username"] and auth[_]["password"]:
-                    auth_list.append((auth[_]["username"], auth[_]["password"]))
-                else:
-                    logging.error("请检查auth.json文件中的用户名和密码！")
-                    sys.exit(1)
+        auth = json.load(f)
+        for _ in auth:
+            if auth[_]["username"] and auth[_]["password"]:
+                auth_list.append((auth[_]["username"], auth[_]["password"]))
+            else:
+                logging.error("请检查auth.json文件中的用户名和密码！")
+                sys.exit(1)
     config["users"] = auth_list
     os.rename("auth.json", "auth(deprecated).json")
     with open("config.json", "w", encoding='utf-8') as f:
         json.dump(config, f, indent=4, ensure_ascii=False)
 
-## 处理docker if we are running in Docker
+# 处理docker if we are running in Docker
 dockerflag = config.get("dockerflag", False)
 if os.environ.get("dockerrun") == "yes":
     dockerflag = True
 
-## 处理 api-key 以及 允许的用户列表
+# 处理 api-key 以及 允许的用户列表
 my_api_key = config.get("openai_api_key", "")
 my_api_key = os.environ.get("OPENAI_API_KEY", my_api_key)
 os.environ["OPENAI_API_KEY"] = my_api_key
 os.environ["OPENAI_EMBEDDING_API_KEY"] = my_api_key
 
 google_palm_api_key = config.get("google_palm_api_key", "")
-google_palm_api_key = os.environ.get("GOOGLE_PALM_API_KEY", google_palm_api_key)
+google_palm_api_key = os.environ.get(
+    "GOOGLE_PALM_API_KEY", google_palm_api_key)
 os.environ["GOOGLE_PALM_API_KEY"] = google_palm_api_key
 
 xmchat_api_key = config.get("xmchat_api_key", "")
@@ -103,13 +107,14 @@ os.environ["MINIMAX_API_KEY"] = minimax_api_key
 minimax_group_id = config.get("minimax_group_id", "")
 os.environ["MINIMAX_GROUP_ID"] = minimax_group_id
 
-load_config_to_environ(["azure_openai_api_key", "azure_api_base_url", "azure_openai_api_version", "azure_deployment_name"])
+load_config_to_environ(["openai_api_type", "azure_openai_api_key", "azure_openai_api_base_url",
+                       "azure_openai_api_version", "azure_deployment_name", "azure_embedding_deployment_name", "azure_embedding_model_name"])
 
 
 usage_limit = os.environ.get("USAGE_LIMIT", config.get("usage_limit", 120))
 
-## 多账户机制
-multi_api_key = config.get("multi_api_key", False) # 是否开启多账户机制
+# 多账户机制
+multi_api_key = config.get("multi_api_key", False)  # 是否开启多账户机制
 if multi_api_key:
     api_key_list = config.get("api_key_list", [])
     if len(api_key_list) == 0:
@@ -117,23 +122,26 @@ if multi_api_key:
         sys.exit(1)
     shared.state.set_api_key_queue(api_key_list)
 
-auth_list = config.get("users", []) # 实际上是使用者的列表
+auth_list = config.get("users", [])  # 实际上是使用者的列表
 authflag = len(auth_list) > 0  # 是否开启认证的状态值，改为判断auth_list长度
 
 # 处理自定义的api_host，优先读环境变量的配置，如果存在则自动装配
-api_host = os.environ.get("OPENAI_API_BASE", config.get("openai_api_base", None))
+api_host = os.environ.get(
+    "OPENAI_API_BASE", config.get("openai_api_base", None))
 if api_host is not None:
     shared.state.set_api_host(api_host)
     os.environ["OPENAI_API_BASE"] = f"{api_host}/v1"
     logging.info(f"OpenAI API Base set to: {os.environ['OPENAI_API_BASE']}")
 
-default_chuanhu_assistant_model = config.get("default_chuanhu_assistant_model", "gpt-3.5-turbo")
+default_chuanhu_assistant_model = config.get(
+    "default_chuanhu_assistant_model", "gpt-3.5-turbo")
 for x in ["GOOGLE_CSE_ID", "GOOGLE_API_KEY", "WOLFRAM_ALPHA_APPID", "SERPAPI_API_KEY"]:
     if config.get(x, None) is not None:
         os.environ[x] = config[x]
 
+
 @contextmanager
-def retrieve_openai_api(api_key = None):
+def retrieve_openai_api(api_key=None):
     old_api_key = os.environ.get("OPENAI_API_KEY", "")
     if api_key is None:
         os.environ["OPENAI_API_KEY"] = my_api_key
@@ -143,14 +151,15 @@ def retrieve_openai_api(api_key = None):
         yield api_key
     os.environ["OPENAI_API_KEY"] = old_api_key
 
-## 处理log
+
+# 处理log
 log_level = config.get("log_level", "INFO")
 logging.basicConfig(
     level=log_level,
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
 )
 
-## 处理代理：
+# 处理代理：
 http_proxy = os.environ.get("HTTP_PROXY", "")
 https_proxy = os.environ.get("HTTPS_PROXY", "")
 http_proxy = config.get("http_proxy", http_proxy)
@@ -160,7 +169,8 @@ https_proxy = config.get("https_proxy", https_proxy)
 os.environ["HTTP_PROXY"] = ""
 os.environ["HTTPS_PROXY"] = ""
 
-local_embedding = config.get("local_embedding", False) # 是否使用本地embedding
+local_embedding = config.get("local_embedding", False)  # 是否使用本地embedding
+
 
 @contextmanager
 def retrieve_proxy(proxy=None):
@@ -177,12 +187,13 @@ def retrieve_proxy(proxy=None):
         old_var = os.environ["HTTP_PROXY"], os.environ["HTTPS_PROXY"]
         os.environ["HTTP_PROXY"] = http_proxy
         os.environ["HTTPS_PROXY"] = https_proxy
-        yield http_proxy, https_proxy # return new proxy
+        yield http_proxy, https_proxy  # return new proxy
 
         # return old proxy
         os.environ["HTTP_PROXY"], os.environ["HTTPS_PROXY"] = old_var
 
-## 处理latex options
+
+# 处理latex options
 user_latex_option = config.get("latex_option", "default")
 if user_latex_option == "default":
     latex_delimiters_set = [
@@ -219,16 +230,19 @@ else:
         {"left": "\\[", "right": "\\]", "display": True},
     ]
 
-## 处理advance docs
+# 处理advance docs
 advance_docs = defaultdict(lambda: defaultdict(dict))
 advance_docs.update(config.get("advance_docs", {}))
+
+
 def update_doc_config(two_column_pdf):
     global advance_docs
     advance_docs["pdf"]["two_column"] = two_column_pdf
 
     logging.info(f"更新后的文件参数为：{advance_docs}")
 
-## 处理gradio.launch参数
+
+# 处理gradio.launch参数
 server_name = config.get("server_name", None)
 server_port = config.get("server_port", None)
 if server_name is None:
