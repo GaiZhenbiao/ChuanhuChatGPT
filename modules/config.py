@@ -39,6 +39,12 @@ if os.path.exists("config.json"):
 else:
     config = {}
 
+def load_config_to_environ(key_list):
+    global config
+    for key in key_list:
+        if key in config:
+            os.environ[key.upper()] = os.environ.get(key.upper(), config[key])
+
 sensitive_id = config.get("sensitive_id", "")
 sensitive_id = os.environ.get("SENSITIVE_ID", sensitive_id)
 
@@ -96,6 +102,8 @@ minimax_api_key = config.get("minimax_api_key", "")
 os.environ["MINIMAX_API_KEY"] = minimax_api_key
 minimax_group_id = config.get("minimax_group_id", "")
 os.environ["MINIMAX_GROUP_ID"] = minimax_group_id
+
+load_config_to_environ(["azure_openai_api_key", "azure_api_base_url", "azure_openai_api_version", "azure_deployment_name"])
 
 
 usage_limit = os.environ.get("USAGE_LIMIT", config.get("usage_limit", 120))

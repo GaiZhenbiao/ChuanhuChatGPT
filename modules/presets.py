@@ -62,6 +62,7 @@ ONLINE_MODELS = [
     "川虎助理 Pro",
     "GooglePaLM",
     "xmchat",
+    "Azure OpenAI",
     "yuanai-1.0-base_10B",
     "yuanai-1.0-translate",
     "yuanai-1.0-dialog",

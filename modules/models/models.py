@@ -616,6 +616,9 @@ def get_model(
             from .Google_PaLM import Google_PaLM_Client
             access_key = os.environ.get("GOOGLE_PALM_API_KEY")
             model = Google_PaLM_Client(model_name, access_key, user_name=user_name)
+        elif model_type == ModelType.LangchainChat:
+            from .azure import Azure_OpenAI_Client
+            model = Azure_OpenAI_Client(model_name, user_name=user_name)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)
