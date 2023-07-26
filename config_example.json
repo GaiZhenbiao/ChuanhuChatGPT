@@ -3,7 +3,6 @@
 
     //== API 配置 ==
     "openai_api_key": "", // 你的 OpenAI API Key，一般必填，若空缺则需在图形界面中填入API Key
-    "sensitive_id": "", // 你 OpenAI 账户的 Sensitive ID，用于查询 API 用量
     "usage_limit": 120, // 该 OpenAI API Key 的当月限额，单位：美元
     "google_palm_api_key": "", // 你的 Google PaLM API Key，用于 Google PaLM 对话模型
     "xmchat_api_key": "", // 你的 xmchat API Key，用于 XMChat 对话模型
@@ -17,6 +16,10 @@
     "hide_history_when_not_logged_in": false, //未登录情况下是否不展示对话历史
     "check_update": true, //是否启用检查更新
     "default_model": "gpt-3.5-turbo", // 默认模型
+
+    //== API 用量 ==
+    "show_api_billing": false, //是否显示OpenAI API用量（启用需要填写sensitive_id）
+    "sensitive_id": "", // 你 OpenAI 账户的 Sensitive ID，用于查询 API 用量
 
     //== 川虎助理设置 ==
     "default_chuanhu_assistant_model": "gpt-4", //川虎助理使用的模型，可选gpt-3.5-turbo或者gpt-4等
