@@ -82,6 +82,8 @@ if os.environ.get("dockerrun") == "yes":
 ## 处理 api-key 以及 允许的用户列表
 my_api_key = config.get("openai_api_key", "")
 my_api_key = os.environ.get("OPENAI_API_KEY", my_api_key)
+os.environ["OPENAI_API_KEY"] = my_api_key
+os.environ["OPENAI_EMBEDDING_API_KEY"] = my_api_key
 
 google_palm_api_key = config.get("google_palm_api_key", "")
 google_palm_api_key = os.environ.get("GOOGLE_PALM_API_KEY", google_palm_api_key)
@@ -114,6 +116,8 @@ authflag = len(auth_list) > 0  # 是否开启认证的状态值，改为判断au
 api_host = os.environ.get("OPENAI_API_BASE", config.get("openai_api_base", None))
 if api_host is not None:
     shared.state.set_api_host(api_host)
+    os.environ["OPENAI_API_BASE"] = f"{api_host}/v1"
+    logging.info(f"OpenAI API Base set to: {os.environ['OPENAI_API_BASE']}")
 
 default_chuanhu_assistant_model = config.get("default_chuanhu_assistant_model", "gpt-3.5-turbo")
 for x in ["GOOGLE_CSE_ID", "GOOGLE_API_KEY", "WOLFRAM_ALPHA_APPID", "SERPAPI_API_KEY"]:
