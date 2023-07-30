@@ -29,6 +29,7 @@
     "show_api_billing": false, //是否显示OpenAI API用量（启用需要填写sensitive_id）
     "sensitive_id": "", // 你 OpenAI 账户的 Sensitive ID，用于查询 API 用量
     "usage_limit": 120, // 该 OpenAI API Key 的当月限额，单位：美元，用于计算百分比和显示上限
+    "legacy_api_usage": false, // 是否使用旧版 API 用量查询接口（OpenAI现已关闭该接口，但是如果你在使用第三方 API，第三方可能仍然支持此接口）
 
     //== 川虎助理设置 ==
     "default_chuanhu_assistant_model": "gpt-4", //川虎助理使用的模型，可选gpt-3.5-turbo或者gpt-4等
