@@ -585,7 +585,7 @@ async function updateLatestVersion() {
         const data = await getLatestRelease();
         const releaseNote = data.body;
         if (releaseNote) {
-            releaseNoteElement.innerHTML = marked.parse(releaseNote);
+            releaseNoteElement.innerHTML = marked.parse(releaseNote, {mangle: false, headerIds: false});
         }
         const latestVersion = data.tag_name;
         const latestVersionTime = (new Date(data.created_at)).getTime();
@@ -664,12 +664,12 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", adj
 // console suprise
 var styleTitle1 = `
 font-size: 16px;
-font-family: ui-monospace,monospace;
-color: rgb(244,167,89);
+font-family: ui-monospace, monospace;
+color: #06AE56;
 `
 var styleDesc1 = `
 font-size: 12px;
-font-family: ui-monospace,monospace;
+font-family: ui-monospace, monospace;
 `
 function makeML(str) {
     let l = new String(str)
