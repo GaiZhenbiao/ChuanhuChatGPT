@@ -35,6 +35,7 @@ var isInIframe = (window.self !== window.top);
 var language = navigator.language.slice(0,2);
 var currentTime = new Date().getTime();
 
+// i18n
 var forView_i18n = {
     'zh': "仅供查看",
     'en': "For viewing only",
@@ -42,6 +43,7 @@ var forView_i18n = {
     'ko': "읽기 전용",
     'fr': "Pour consultation seulement",
     'es': "Solo para visualización",
+    'sv': "Endast för visning",
 };
 
 var deleteConfirm_i18n_pref = {
@@ -49,12 +51,14 @@ var deleteConfirm_i18n_pref = {
     'en': "Are you sure you want to delete ",
     'ja': "本当に ",
     'ko': "정말로 ",
+    'sv': "Är du säker på att du vill ta bort "
 };
 var deleteConfirm_i18n_suff = {
     'zh': " 吗？",
     'en': " ?",
     'ja': " を削除してもよろしいですか？",
     'ko': " 을(를) 삭제하시겠습니까?",
+    'sv': " ?"
 };
 var deleteConfirm_msg_pref = "Are you sure you want to delete ";
 var deleteConfirm_msg_suff = " ?";
@@ -64,6 +68,7 @@ var usingLatest_i18n = {
     'en': "You are using the latest version!",
     'ja': "最新バージョンを使用しています！",
     'ko': "최신 버전을 사용하고 있습니다!",
+    'sv': "Du använder den senaste versionen!"
 };
 
 // gradio 页面加载好了么??? 我能动你的元素了么??
