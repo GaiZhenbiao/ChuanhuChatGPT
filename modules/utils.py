@@ -590,6 +590,16 @@ def version_time():
         commit_time = "unknown"
     return commit_time
 
+def update_chuanhu():
+    git = os.environ.get('GIT', "git")
+    try:
+        run(f"{git} fetch --all && {git} stash && {git} pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f && {git} stash pop")
+        logging.info("更新成功，重启中……")
+        return gr.Markdown.update(value="更新成功，重启中……")
+    except Exception:
+        logging.info("更新失败")
+        return gr.Markdown.update(value="更新失败")
+
 def get_html(filename):
     path = os.path.join(shared.chuanhu_path, "assets", "html", filename)
     if os.path.exists(path):

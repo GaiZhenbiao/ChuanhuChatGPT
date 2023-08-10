@@ -22,6 +22,7 @@ var updateToast = null;
 var sendBtn = null;
 var cancelBtn = null;
 var sliders = null;
+var updateChuanhuBtn = null;
 
 var userLogged = false;
 var usernameGotten = false;
@@ -87,6 +88,7 @@ function gradioLoaded(mutations) {
             sendBtn = document.getElementById("submit_btn");
             cancelBtn = document.getElementById("cancel_btn");
             sliders = document.querySelectorAll('input[type="range"]');
+            updateChuanhuBtn = document.getElementById("update_chuanhu_btn");
 
             if (loginUserForm) {
                 localStorage.setItem("userLogged", true);
