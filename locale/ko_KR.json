@@ -50,6 +50,8 @@
     "更新": "업데이트",
     "详情": "상세",
     "好": "예",
+    "更新成功，请重启本程序": "업데이트 성공, 이 프로그램을 재시작 해주세요",
+    "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)": "업데이트 실패, [수동 업데이트](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)를 시도하십시오",
     "川虎Chat 🚀": "Chuanhu Chat 🚀",
     "开始实时传输回答……": "실시간 응답 출력 시작...",
     "Token 计数: ": "토큰 수: ",

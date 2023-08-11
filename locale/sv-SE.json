@@ -49,6 +49,8 @@
     "更新": "Uppdatera",  
     "详情": "Detaljer",  
     "好": "OK",  
+    "更新成功，请重启本程序": "Uppdaterat framgångsrikt, starta om programmet",
+    "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)": "Uppdateringen misslyckades, prova att [uppdatera manuellt](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)",
     "川虎Chat 🚀": "Chuanhu Chat 🚀",  
     "开始实时传输回答……": "Börjar strömma utdata...",  
     "Token 计数: ": "Tokenräkning: ",  
