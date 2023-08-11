@@ -594,11 +594,13 @@ def update_chuanhu():
     git = os.environ.get('GIT', "git")
     try:
         run(f"{git} fetch --all && {git} stash && {git} pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f && {git} stash pop")
-        logging.info("更新成功，重启中……")
-        return gr.Markdown.update(value="更新成功，重启中……")
+        logging.info("Successfully updated")
+        status = '<span id="update-status" class="hideK">success</span>'
+        return gr.Markdown.update(value=i18n("更新成功，请重启本程序")+status)
     except Exception:
-        logging.info("更新失败")
-        return gr.Markdown.update(value="更新失败")
+        logging.info("Failed to update")
+        status = '<span id="update-status" class="hideK">failure</span>'
+        return gr.Markdown.update(value=i18n("更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)")+status)
 
 def get_html(filename):
     path = os.path.join(shared.chuanhu_path, "assets", "html", filename)

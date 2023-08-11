@@ -112,6 +112,9 @@ footer {
 .btn-update-group.hideK {
     display: none;
 }
+span.hideK {
+    display: none;
+}
 /* user_info */
 #user_info.block {
     white-space: nowrap;
