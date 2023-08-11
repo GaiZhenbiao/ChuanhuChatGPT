@@ -549,6 +549,8 @@ var statusObserver = new MutationObserver(function (mutationsList) {
                     updatingInfoElement.innerText = getUpdateStatus();
                 }
                 updateStatus.parentNode.removeChild(updateStatus);
+                enableUpdateBtns();
+                updateSpinner.stop();
             }
         }
     }
@@ -666,10 +668,14 @@ function getUpdateInfo() {
     window.open('https://github.com/gaizhenbiao/chuanhuchatgpt/releases/latest', '_blank');
     closeUpdateToast();
 }
+var updateSpinner = null;
 function bgUpdateChuanhu() {
     updateChuanhuBtn.click();
     updatingInfoElement.innerText = updatingMsg_i18n.hasOwnProperty(language) ? updatingMsg_i18n[language] : updatingMsg_i18n['en'];
+    var updatingSpinner = document.getElementById('updating-spinner');
+    updateSpinner = new Spin.Spinner({color:'#06AE56',top:'45%',lines:9}).spin(updatingSpinner);
     updatingInfoElement.classList.remove('hideK');
+    disableUpdateBtns();
     const releaseNoteWrap = document.getElementById('release-note-wrap');
     releaseNoteWrap.style.setProperty('display', 'none');
     statusObserver.observe(statusDisplay, { childList: true, subtree: true, characterData: true});
@@ -717,6 +723,19 @@ function getUpdateStatus() {
     } else {
         return "unknown";
     }
+}
+
+function disableUpdateBtns() {
+    const updatesButtons = document.querySelectorAll('.btn-update');
+    updatesButtons.forEach( function (btn) {
+        btn.disabled = true;
+    });
+}
+function enableUpdateBtns() {
+    const updatesButtons = document.querySelectorAll('.btn-update');
+    updatesButtons.forEach( function (btn) {
+        btn.disabled = false;
+    });
 }
 
 function setUpdateWindowHeight() {

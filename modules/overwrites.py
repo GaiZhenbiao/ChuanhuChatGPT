@@ -81,6 +81,7 @@ def reload_javascript():
     print("Reloading javascript...")
     js = f'<script>{customJS}</script><script async>{externalScripts}</script>'
     js += '<script async src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>'
+    js += '<script async type="module" src="http://spin.js.org/spin.umd.js"></script><link type="text/css" href="https://spin.js.org/spin.css" rel="stylesheet" />'
     def template_response(*args, **kwargs):
         res = GradioTemplateResponseOriginal(*args, **kwargs)
         res.body = res.body.replace(b'</html>', f'{js}</html>'.encode("utf8"))
