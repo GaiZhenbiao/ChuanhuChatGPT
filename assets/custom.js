@@ -533,6 +533,9 @@ var statusObserver = new MutationObserver(function (mutationsList) {
             if (statusDisplay.innerHTML.includes('<span id="update-status"')) {
                 if (getUpdateStatus() === "success") {
                     releaseNoteElement.innerHTML = updateSuccess_i18n.hasOwnProperty(language) ? updateSuccess_i18n[language] : updateSuccess_i18n['en'];
+                    noUpdateHtml();
+                    localStorage.setItem('isLatestVersion', 'true');
+                    isLatestVersion = true;
                 } else if (getUpdateStatus() === "failure") {
                     releaseNoteElement.innerHTML = updateFailure_i18n.hasOwnProperty(language) ? updateFailure_i18n[language] : updateFailure_i18n['en'];
                 } else {
@@ -679,13 +682,15 @@ function manualCheckUpdate() {
 function noUpdate() {
     localStorage.setItem('isLatestVersion', 'true');
     isLatestVersion = true;
-    const versionInfoElement = document.getElementById('version-info-title');
     const releaseNoteWrap = document.getElementById('release-note-wrap');
+    releaseNoteWrap.style.setProperty('display', 'none');
+    noUpdateHtml();
+}
+function noUpdateHtml() {
+    const versionInfoElement = document.getElementById('version-info-title');
     const gotoUpdateBtn = document.getElementById('goto-update-btn');
     const closeUpdateBtn = document.getElementById('close-update-btn');
-
     versionInfoElement.textContent = usingLatest_i18n.hasOwnProperty(language) ? usingLatest_i18n[language] : usingLatest_i18n['en'];
-    releaseNoteWrap.style.setProperty('display', 'none');
     gotoUpdateBtn.classList.add('hideK');
     closeUpdateBtn.classList.remove('hideK');
 }

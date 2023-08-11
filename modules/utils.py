@@ -592,8 +592,9 @@ def version_time():
 
 def update_chuanhu():
     git = os.environ.get('GIT', "git")
+    pip = os.environ.get('PIP', "pip")
     try:
-        run(f"{git} fetch --all && {git} stash && {git} pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f && {git} stash pop")
+        run(f"{git} fetch --all && {git} stash && {git} pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f && {git} stash pop && {pip} install -r requirements.txt")
         logging.info("Successfully updated")
         status = '<span id="update-status" class="hideK">success</span>'
         return gr.Markdown.update(value=i18n("更新成功，请重启本程序")+status)
