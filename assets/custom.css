@@ -115,6 +115,15 @@ footer {
 span.hideK {
     display: none;
 }
+#updating-info.hideK {
+    display: none;
+}
+#updating-info {
+    margin: 12px 0px 20px;
+    text-align: start;
+    width: 100%;
+}
+
 /* user_info */
 #user_info.block {
     white-space: nowrap;

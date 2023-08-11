@@ -73,6 +73,13 @@ const usingLatest_i18n = {
     'sv': "Du använder den senaste versionen!"
 };
 
+const updatingMsg_i18n = {
+    'zh': "正在尝试更新...",
+    'en': "Trying to update...",
+    'ja': "更新を試みています...",
+    'ko': "업데이트를 시도 중...",
+    'sv': "Försöker uppdatera..."
+}
 const updateSuccess_i18n = {
     'zh': "更新成功，请重启本程序。",
     'en': "Updated successfully, please restart this program.",
@@ -532,15 +539,16 @@ var statusObserver = new MutationObserver(function (mutationsList) {
         if (mutation.type === 'attributes' || mutation.type === 'childList') {
             if (statusDisplay.innerHTML.includes('<span id="update-status"')) {
                 if (getUpdateStatus() === "success") {
-                    releaseNoteElement.innerHTML = updateSuccess_i18n.hasOwnProperty(language) ? updateSuccess_i18n[language] : updateSuccess_i18n['en'];
+                    updatingInfoElement.innerText = updateSuccess_i18n.hasOwnProperty(language) ? updateSuccess_i18n[language] : updateSuccess_i18n['en'];
                     noUpdateHtml();
                     localStorage.setItem('isLatestVersion', 'true');
                     isLatestVersion = true;
                 } else if (getUpdateStatus() === "failure") {
-                    releaseNoteElement.innerHTML = updateFailure_i18n.hasOwnProperty(language) ? updateFailure_i18n[language] : updateFailure_i18n['en'];
-                } else {
-                    releaseNoteElement.innerHTML = getUpdateStatus();
+                    updatingInfoElement.innerText = updateFailure_i18n.hasOwnProperty(language) ? updateFailure_i18n[language] : updateFailure_i18n['en'];
+                } else if (getUpdateStatus() != "") {
+                    updatingInfoElement.innerText = getUpdateStatus();
                 }
+                updateStatus.parentNode.removeChild(updateStatus);
             }
         }
     }
@@ -621,10 +629,12 @@ async function getLatestRelease() {
 }
 
 var releaseNoteElement = document.getElementById('release-note-content');
+var updatingInfoElement = document.getElementById('updating-info');
 async function updateLatestVersion() {
     const currentVersionElement = document.getElementById('current-version');
     const latestVersionElement = document.getElementById('latest-version-title');
     releaseNoteElement = document.getElementById('release-note-content');
+    updatingInfoElement = document.getElementById('updating-info');
     const currentVersion = currentVersionElement.textContent;
     const versionTime = document.getElementById('version-time').innerText;
     const localVersionTime = versionTime !== "unknown" ? (new Date(versionTime)).getTime() : 0;
@@ -658,8 +668,10 @@ function getUpdateInfo() {
 }
 function bgUpdateChuanhu() {
     updateChuanhuBtn.click();
-    releaseNoteElement = document.getElementById('release-note-content');
-    releaseNoteElement.innerHTML = '<p>正在尝试更新...</p>';
+    updatingInfoElement.innerText = updatingMsg_i18n.hasOwnProperty(language) ? updatingMsg_i18n[language] : updatingMsg_i18n['en'];
+    updatingInfoElement.classList.remove('hideK');
+    const releaseNoteWrap = document.getElementById('release-note-wrap');
+    releaseNoteWrap.style.setProperty('display', 'none');
     statusObserver.observe(statusDisplay, { childList: true, subtree: true, characterData: true});
 }
 function cancelUpdate() {
@@ -672,6 +684,9 @@ function openUpdateToast() {
 function closeUpdateToast() {
     updateToast.style.setProperty('top', '-500px');
     showingUpdateInfo = false;
+    if (updatingInfoElement.classList.contains('hideK') === false) {
+        updatingInfoElement.classList.add('hideK');
+    }
 }
 function manualCheckUpdate() {
     openUpdateToast();
@@ -682,24 +697,25 @@ function manualCheckUpdate() {
 function noUpdate() {
     localStorage.setItem('isLatestVersion', 'true');
     isLatestVersion = true;
-    const releaseNoteWrap = document.getElementById('release-note-wrap');
-    releaseNoteWrap.style.setProperty('display', 'none');
     noUpdateHtml();
 }
 function noUpdateHtml() {
     const versionInfoElement = document.getElementById('version-info-title');
     const gotoUpdateBtn = document.getElementById('goto-update-btn');
     const closeUpdateBtn = document.getElementById('close-update-btn');
+    const releaseNoteWrap = document.getElementById('release-note-wrap');
+    releaseNoteWrap.style.setProperty('display', 'none');
     versionInfoElement.textContent = usingLatest_i18n.hasOwnProperty(language) ? usingLatest_i18n[language] : usingLatest_i18n['en'];
     gotoUpdateBtn.classList.add('hideK');
     closeUpdateBtn.classList.remove('hideK');
 }
+var updateStatus = null;
 function getUpdateStatus() {
-    const updateStatus = statusDisplay.querySelector("#update-status")
+    updateStatus = statusDisplay.querySelector("#update-status");
     if (updateStatus) {
-        return updateStatus.innerText
+        return updateStatus.innerText;
     } else {
-        return "unknown"
+        return "unknown";
     }
 }
 
