@@ -405,10 +405,9 @@ function setSliderRange() {
 }
 
 function addChuanhuButton(botElement) {
-    var rawMessage = null;
-    var mdMessage = null;
-    rawMessage = botElement.querySelector('.raw-message');
-    mdMessage = botElement.querySelector('.md-message');
+    var rawMessage = botElement.querySelector('.raw-message');
+    var mdMessage = botElement.querySelector('.md-message');
+    var gradioCopyMsgBtn = botElement.querySelector('div.icon-button>button[title="copy"]'); // 获取 gradio 的 copy button，它可以读取真正的原始 message
     if (!rawMessage) {
         var buttons = botElement.querySelectorAll('button.chuanhu-btn');
         for (var i = 0; i < buttons.length; i++) {
@@ -429,11 +428,24 @@ function addChuanhuButton(botElement) {
     copyButton.classList.add('copy-bot-btn');
     copyButton.setAttribute('aria-label', 'Copy');
     copyButton.innerHTML = copyIcon;
+
     copyButton.addEventListener('click', async () => {
         const textToCopy = rawMessage.innerText;
         try {
             if ("clipboard" in navigator) {
-                await navigator.clipboard.writeText(textToCopy);
+                gradioCopyMsgBtn.click();
+                try {
+                    // try to copy from gradio's clipboard, which is really raw message
+                    const gradio_clipboard_content = await navigator.clipboard.readText();
+                    const regex = /<!-- SOO IN MESSAGE --><div class="really-raw hideM">([\s\S]*?)\n<\/div><!-- EOO IN MESSAGE -->/;
+                    const real_raw_message = gradio_clipboard_content.match(regex)[1];
+                    await navigator.clipboard.writeText(real_raw_message)
+                    // console.log("Copied from gradio's clipboard");
+                } catch (error) {
+                    await navigator.clipboard.writeText(textToCopy);
+                    // console.log("Copied from rawtext clipboard");
+                }
+                // await navigator.clipboard.writeText(textToCopy);
                 copyButton.innerHTML = copiedIcon;
                 setTimeout(() => {
                     copyButton.innerHTML = copyIcon;

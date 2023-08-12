@@ -221,6 +221,7 @@ def convert_bot_before_marked(chat_message):
         hr_pattern = r'\n\n<hr class="append-display no-in-raw" />(.*?)'
         hr_match = re.search(hr_pattern, chat_message, re.DOTALL)
         clip_hr = chat_message[:hr_match.start()] if hr_match else chat_message
+
         raw = f'<div class="raw-message hideM">{escape_markdown(clip_hr)}</div>'
         for non_code, code in zip(non_code_parts, code_blocks + [""]):
             if non_code.strip():
@@ -230,7 +231,8 @@ def convert_bot_before_marked(chat_message):
                 result.append(code)
         result = "".join(result)
         md = f'<div class="md-message">{result}\n</div>'
-        return raw + md
+        really_raw = f'{START_OF_OUTPUT_MARK}<div class="really-raw hideM">{clip_hr}\n</div>{END_OF_OUTPUT_MARK}'
+        return raw + md + really_raw
 
 def convert_user_before_marked(chat_message):
     if '<div class="user-message">' in chat_message:
