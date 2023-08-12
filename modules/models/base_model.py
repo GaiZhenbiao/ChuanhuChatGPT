@@ -265,6 +265,7 @@ class BaseLLMModel:
 
         if display_append:
             display_append = '\n\n<hr class="append-display no-in-raw" />' + display_append
+        partial_text = ""
         for partial_text in stream_iter:
             chatbot[-1] = (chatbot[-1][0], partial_text + display_append)
             self.all_token_counts[-1] += 1
