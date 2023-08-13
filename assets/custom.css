@@ -538,6 +538,18 @@ ol:not(.options), ul:not(.options) {
     display: none;
 }
 
+/* 川虎助理 */
+.agent-prefix {
+    font-size: smaller; 
+    opacity: 0.6;
+    padding: 6px 0 4px;
+}
+.agent-prefix::before {
+    content: '🐯';
+    filter: grayscale();
+    padding: 0 4px;
+}
+
 /* custom buttons */
 .chuanhu-btn {
     border-radius: 5px;

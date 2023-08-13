@@ -206,6 +206,28 @@ def convert_mdtext(md_text): # deprecated
     output += ALREADY_CONVERTED_MARK
     return output
 
+
+def clip_rawtext(chat_message, need_escape=True):
+    # first, clip hr line
+    hr_pattern = r'\n\n<hr class="append-display no-in-raw" />(.*?)'
+    hr_match = re.search(hr_pattern, chat_message, re.DOTALL)
+    message_clipped = chat_message[:hr_match.start()] if hr_match else chat_message
+    # second, avoid agent-prefix being escaped
+    agent_prefix_pattern = r'<!-- S O PREFIX --><p class="agent-prefix">(.*?)<\/p><!-- E O PREFIX -->'
+    agent_matches = re.findall(agent_prefix_pattern, message_clipped)
+    final_message = ""
+    if agent_matches:
+        agent_parts = re.split(agent_prefix_pattern, message_clipped)
+        for i, part in enumerate(agent_parts):
+            if i % 2 == 0:
+                final_message += escape_markdown(part) if need_escape else part
+            else:
+                final_message += f'<!-- S O PREFIX --><p class="agent-prefix">{part}</p><!-- E O PREFIX -->'
+    else:
+        final_message = escape_markdown(message_clipped) if need_escape else message_clipped
+    return final_message
+
+
 def convert_bot_before_marked(chat_message):
     """
     注意不能给输出加缩进, 否则会被marked解析成代码块
@@ -213,16 +235,13 @@ def convert_bot_before_marked(chat_message):
     if '<div class="md-message">' in chat_message:
         return chat_message
     else:
+        raw = f'<div class="raw-message hideM">{clip_rawtext(chat_message)}</div>'
+        really_raw = f'{START_OF_OUTPUT_MARK}<div class="really-raw hideM">{clip_rawtext(chat_message, need_escape=False)}\n</div>{END_OF_OUTPUT_MARK}'
+
         code_block_pattern = re.compile(r"```(.*?)(?:```|$)", re.DOTALL)
         code_blocks = code_block_pattern.findall(chat_message)
         non_code_parts = code_block_pattern.split(chat_message)[::2]
-        result = []
-
-        hr_pattern = r'\n\n<hr class="append-display no-in-raw" />(.*?)'
-        hr_match = re.search(hr_pattern, chat_message, re.DOTALL)
-        clip_hr = chat_message[:hr_match.start()] if hr_match else chat_message
-
-        raw = f'<div class="raw-message hideM">{escape_markdown(clip_hr)}</div>'
+        result = []  
         for non_code, code in zip(non_code_parts, code_blocks + [""]):
             if non_code.strip():
                 result.append(non_code)
@@ -231,7 +250,6 @@ def convert_bot_before_marked(chat_message):
                 result.append(code)
         result = "".join(result)
         md = f'<div class="md-message">{result}\n</div>'
-        really_raw = f'{START_OF_OUTPUT_MARK}<div class="really-raw hideM">{clip_hr}\n</div>{END_OF_OUTPUT_MARK}'
         return raw + md + really_raw
 
 def convert_user_before_marked(chat_message):

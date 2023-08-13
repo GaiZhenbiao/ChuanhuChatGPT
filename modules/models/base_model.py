@@ -77,7 +77,7 @@ def get_action_description(text):
     action_name = json_dict['action']
     action_input = json_dict['action_input']
     if action_name != "Final Answer":
-        return f'<p style="font-size: smaller; color: gray;">{action_name}: {action_input}</p>'
+        return f'<!-- S O PREFIX --><p class="agent-prefix">{action_name}: {action_input}</p><!-- E O PREFIX -->'
     else:
         return ""
 

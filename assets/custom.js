@@ -439,7 +439,8 @@ function addChuanhuButton(botElement) {
                     const gradio_clipboard_content = await navigator.clipboard.readText();
                     const regex = /<!-- SOO IN MESSAGE --><div class="really-raw hideM">([\s\S]*?)\n<\/div><!-- EOO IN MESSAGE -->/;
                     const real_raw_message = gradio_clipboard_content.match(regex)[1];
-                    await navigator.clipboard.writeText(real_raw_message)
+                    const after_agent_prefix = str.replace(/<!-- S O PREFIX --><p class="agent-prefix">(.+?)<\/p><!-- E O PREFIX -->/g, '$1\n');
+                    await navigator.clipboard.writeText(after_agent_prefix)
                     // console.log("Copied from gradio's clipboard");
                 } catch (error) {
                     await navigator.clipboard.writeText(textToCopy);
