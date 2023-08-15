@@ -407,7 +407,7 @@ function setSliderRange() {
 function addChuanhuButton(botElement) {
     var rawMessage = botElement.querySelector('.raw-message');
     var mdMessage = botElement.querySelector('.md-message');
-    var gradioCopyMsgBtn = botElement.querySelector('div.icon-button>button[title="copy"]'); // 获取 gradio 的 copy button，它可以读取真正的原始 message
+    // var gradioCopyMsgBtn = botElement.querySelector('div.icon-button>button[title="copy"]'); // 获取 gradio 的 copy button，它可以读取真正的原始 message
     if (!rawMessage) {
         var buttons = botElement.querySelectorAll('button.chuanhu-btn');
         for (var i = 0; i < buttons.length; i++) {
@@ -433,20 +433,7 @@ function addChuanhuButton(botElement) {
         const textToCopy = rawMessage.innerText;
         try {
             if ("clipboard" in navigator) {
-                gradioCopyMsgBtn.click();
-                try {
-                    // try to copy from gradio's clipboard, which is really raw message
-                    const gradio_clipboard_content = await navigator.clipboard.readText();
-                    const regex = /<!-- SOO IN MESSAGE --><div class="really-raw hideM">([\s\S]*?)\n<\/div><!-- EOO IN MESSAGE -->/;
-                    const real_raw_message = gradio_clipboard_content.match(regex)[1];
-                    const after_agent_prefix = str.replace(/<!-- S O PREFIX --><p class="agent-prefix">(.+?)<\/p><!-- E O PREFIX -->/g, '$1\n');
-                    await navigator.clipboard.writeText(after_agent_prefix)
-                    // console.log("Copied from gradio's clipboard");
-                } catch (error) {
-                    await navigator.clipboard.writeText(textToCopy);
-                    // console.log("Copied from rawtext clipboard");
-                }
-                // await navigator.clipboard.writeText(textToCopy);
+                await navigator.clipboard.writeText(textToCopy);
                 copyButton.innerHTML = copiedIcon;
                 setTimeout(() => {
                     copyButton.innerHTML = copyIcon;
@@ -501,7 +488,11 @@ function renderMarkdownText(message) {
 }
 function removeMarkdownText(message) {
     var rawDiv = message.querySelector('.raw-message');
-    if (rawDiv) rawDiv.classList.remove('hideM');
+    if (rawDiv) {
+        rawPre = rawDiv.querySelector('pre');
+        if (rawPre) rawDiv.innerHTML = rawPre.innerHTML;
+        rawDiv.classList.remove('hideM');
+    }
     var mdDiv = message.querySelector('.md-message');
     if (mdDiv) mdDiv.classList.add('hideM');
 }

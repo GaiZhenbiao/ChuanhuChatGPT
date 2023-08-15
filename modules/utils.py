@@ -235,8 +235,8 @@ def convert_bot_before_marked(chat_message):
     if '<div class="md-message">' in chat_message:
         return chat_message
     else:
-        raw = f'<div class="raw-message hideM">{clip_rawtext(chat_message)}</div>'
-        really_raw = f'{START_OF_OUTPUT_MARK}<div class="really-raw hideM">{clip_rawtext(chat_message, need_escape=False)}\n</div>{END_OF_OUTPUT_MARK}'
+        raw = f'<div class="raw-message hideM"><pre>{clip_rawtext(chat_message)}</pre></div>'
+        # really_raw = f'{START_OF_OUTPUT_MARK}<div class="really-raw hideM">{clip_rawtext(chat_message, need_escape=False)}\n</div>{END_OF_OUTPUT_MARK}'
 
         code_block_pattern = re.compile(r"```(.*?)(?:```|$)", re.DOTALL)
         code_blocks = code_block_pattern.findall(chat_message)
@@ -250,7 +250,7 @@ def convert_bot_before_marked(chat_message):
                 result.append(code)
         result = "".join(result)
         md = f'<div class="md-message">{result}\n</div>'
-        return raw + md + really_raw
+        return raw + md
 
 def convert_user_before_marked(chat_message):
     if '<div class="user-message">' in chat_message:
@@ -283,6 +283,7 @@ def escape_markdown(text):
         '|': '&#124;',
         '$': '&#36;',
         ':': '&#58;',
+        '\n': '<br>',
     }
     text = text.replace('    ', '&nbsp;&nbsp;&nbsp;&nbsp;')
     return ''.join(escape_chars.get(c, c) for c in text)
