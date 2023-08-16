@@ -5,7 +5,6 @@ const MAX_HISTORY_LENGTH = 32;
 
 var key_down_history = [];
 var currentIndex = -1;
-var user_input_ta;
 
 var gradioContainer = null;
 var user_input_ta = null;
@@ -28,72 +27,82 @@ var statusDisplay = null;
 
 var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
-
+var initialized = false;
 
 // gradio 页面加载好了么??? 我能动你的元素了么??
 function gradioLoaded(mutations) {
     for (var i = 0; i < mutations.length; i++) {
         if (mutations[i].addedNodes.length) {
-            loginUserForm = document.querySelector(".gradio-container > .main > .wrap > .panel > .form")
-            gradioContainer = document.querySelector(".gradio-container");
-            user_input_tb = document.getElementById('user-input-tb');
-            userInfoDiv = document.getElementById("user-info");
-            appTitleDiv = document.getElementById("app-title");
-            chatbot = document.querySelector('#chuanhu-chatbot');
-            chatbotWrap = document.querySelector('#chuanhu-chatbot > .wrapper > .wrap');
-            apSwitch = document.querySelector('.apSwitch input[type="checkbox"]');
-            updateToast = document.querySelector("#toast-update");
-            sendBtn = document.getElementById("submit-btn");
-            cancelBtn = document.getElementById("cancel-btn");
-            sliders = document.querySelectorAll('input[type="range"]');
-            updateChuanhuBtn = document.getElementById("update-chuanhu-btn");
-            statusDisplay = document.querySelector('#status-display');
-
-            if (loginUserForm) {
-                localStorage.setItem("userLogged", true);
-                userLogged = true;
+            if (initialized) {
+                observer.disconnect(); // 停止监听
+                return;
             }
-
-            if (gradioContainer && apSwitch) {  // gradioCainter 加载出来了没?
-                adjustDarkMode();
-            }
-            if (user_input_tb) {  // user_input_tb 加载出来了没?
-                selectHistory();
-            }
-            if (userInfoDiv && appTitleDiv) {  // userInfoDiv 和 appTitleDiv 加载出来了没?
-                if (!usernameGotten) {
-                    getUserInfo();
-                }
-                setTimeout(showOrHideUserInfo(), 2000);
-            }
-            if (chatbot) {  // chatbot 加载出来了没?
-                setChatbotHeight();
-            }
-            if (chatbotWrap) {
-                if (!historyLoaded) {
-                    loadHistoryHtml();
-                }
-                setChatbotScroll();
-                mObserver.observe(chatbotWrap, { attributes: true, childList: true, subtree: true, characterData: true});
-            }
-            if (statusDisplay) {
-                // statusObserver.observe(statusDisplay, { childList: true, subtree: true, characterData: true});
-            }
-            if (sliders) {
-                setSlider();
-            }
-            if (updateToast) {
-                const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
-                const longTimeNoCheck = currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000;
-                if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten) {
-                    updateLatestVersion();
-                }
-            }
-            if (cancelBtn) {
-                submitObserver.observe(cancelBtn, { attributes: true, characterData: true});
-            }
+            initialize();
         }
     }
+}
+
+function initialize() {
+    var needInit = {gradioContainer, apSwitch, user_input_tb, userInfoDiv, appTitleDiv, chatbot, chatbotWrap, statusDisplay, sliders, updateChuanhuBtn};
+    initialized = true;
+
+    loginUserForm = gradioApp().querySelector(".gradio-container > .main > .wrap > .panel > .form")
+    gradioContainer = gradioApp().querySelector(".gradio-container");
+    user_input_tb = gradioApp().getElementById('user-input-tb');
+    userInfoDiv = gradioApp().getElementById("user-info");
+    appTitleDiv = gradioApp().getElementById("app-title");
+    chatbot = gradioApp().querySelector('#chuanhu-chatbot');
+    chatbotWrap = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .wrap');
+    apSwitch = gradioApp().querySelector('.apSwitch input[type="checkbox"]');
+    updateToast = gradioApp().querySelector("#toast-update");
+    sendBtn = gradioApp().getElementById("submit-btn");
+    cancelBtn = gradioApp().getElementById("cancel-btn");
+    sliders = gradioApp().querySelectorAll('input[type="range"]');
+    updateChuanhuBtn = gradioApp().getElementById("update-chuanhu-btn");
+    statusDisplay = gradioApp().querySelector('#status-display');
+
+    if (loginUserForm) {
+        localStorage.setItem("userLogged", true);
+        userLogged = true;
+    }
+
+    for (let elem in needInit) {
+        if (needInit[elem] == null) {
+            initialized = false;
+            return;
+        }
+    }
+
+    if (initialized) {
+        adjustDarkMode();
+        selectHistory();
+        setTimeout(showOrHideUserInfo(), 2000);
+        setChatbotHeight();
+        setChatbotScroll();
+        setSlider();
+        if (!historyLoaded) loadHistoryHtml();
+        if (!usernameGotten) getUserInfo();
+        mObserver.observe(chatbotWrap, { attributes: true, childList: true, subtree: true, characterData: true });
+        submitObserver.observe(cancelBtn, { attributes: true, characterData: true });
+
+        const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
+        const longTimeNoCheck = currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000;
+        if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten) {
+            updateLatestVersion();
+        }
+    }
+}
+
+function gradioApp() {
+    const elems = document.getElementsByTagName('gradio-app');
+    const elem = elems.length == 0 ? document : elems[0];
+
+    if (elem !== document) {
+        elem.getElementById = function(id) {
+            return document.getElementById(id);
+        };
+    }
+    return elem.shadowRoot ? elem.shadowRoot : elem;
 }
 
 function showConfirmationDialog(a, file, c) {
@@ -109,7 +118,6 @@ function showConfirmationDialog(a, file, c) {
 function selectHistory() {
     user_input_ta = user_input_tb.querySelector("textarea");
     if (user_input_ta) {
-        observer.disconnect(); // 停止监听
         disableSendBtn();
         // 在 textarea 上监听 keydown 事件
         user_input_ta.addEventListener("keydown", function (event) {
@@ -212,6 +220,40 @@ function setChatbotScroll() {
     chatbotWrap.scrollTo(0,scrollHeight)
 }
 
+
+let timeoutId;
+let isThrottled = false;
+// 监听chatWrap元素的变化，为 bot 消息添加复制按钮。
+var mObserver = new MutationObserver(function (mutationsList) {
+    for (const mmutation of mutationsList) {
+        if (mmutation.type === 'childList') {
+            for (var node of mmutation.addedNodes) {
+                if (node.nodeType === 1 && node.classList.contains('message')) {
+                    saveHistoryHtml();
+                    disableSendBtn();
+                    document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
+                }
+            }
+            for (var node of mmutation.removedNodes) {
+                if (node.nodeType === 1 && node.classList.contains('message')) {
+                    saveHistoryHtml();
+                    disableSendBtn();
+                    document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
+                }
+            }
+        } else if (mmutation.type === 'attributes') {
+            if (isThrottled) break; // 为了防止重复不断疯狂渲染，加上等待_(:з」∠)_
+            isThrottled = true;
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                isThrottled = false;
+                document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
+                saveHistoryHtml();
+                disableSendBtn();
+            }, 1500);
+        }
+    }
+});
 
 var submitObserver = new MutationObserver(function (mutationsList) {
     document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
