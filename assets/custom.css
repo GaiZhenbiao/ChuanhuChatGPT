@@ -158,6 +158,10 @@ span.hideK {
     transition: opacity 1s ease-in-out;
 }
 
+div.no-container {
+    padding: 10px 0 0 0 !important;
+}
+
 /* status_display */
 #status_display {
     display: flex;

@@ -167,7 +167,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                         placeholder=i18n("设置文件名: 默认为.json，可选为.md"),
                                         label=i18n("设置保存文件名"),
                                         value=i18n("对话历史记录"),
-                                        container=False,
+                                        elem_classes="no-container"
+                                        # container=False,
                                     )
                                 with gr.Column(scale=1):
                                     saveHistoryBtn = gr.Button(i18n("💾 保存对话"))
@@ -287,8 +288,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             value=config.api_host or shared.API_HOST,
                             lines=1,
                             interactive=False,
-                            container=False,
-                            elem_classes="view_only_textbox",
+                            # container=False,
+                            elem_classes="view_only_textbox no-container",
                         )
                         # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
 
