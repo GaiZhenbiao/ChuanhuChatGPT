@@ -95,36 +95,3 @@ function addChuanhuButton(botElement) {
 }
 
 
-let timeoutId;
-let isThrottled = false;
-// 监听chatWrap元素的变化，为 bot 消息添加复制按钮。
-var mObserver = new MutationObserver(function (mutationsList) {
-    for (const mmutation of mutationsList) {
-        if (mmutation.type === 'childList') {
-            for (var node of mmutation.addedNodes) {
-                if (node.nodeType === 1 && node.classList.contains('message')) {
-                    saveHistoryHtml();
-                    disableSendBtn();
-                    document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
-                }
-            }
-            for (var node of mmutation.removedNodes) {
-                if (node.nodeType === 1 && node.classList.contains('message')) {
-                    saveHistoryHtml();
-                    disableSendBtn();
-                    document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
-                }
-            }
-        } else if (mmutation.type === 'attributes') {
-            if (isThrottled) break; // 为了防止重复不断疯狂渲染，加上等待_(:з」∠)_
-            isThrottled = true;
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                isThrottled = false;
-                document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
-                saveHistoryHtml();
-                disableSendBtn();
-            }, 1500);
-        }
-    }
-});
