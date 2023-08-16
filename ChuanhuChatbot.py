@@ -12,6 +12,7 @@ from modules.config import *
 from modules.utils import *
 from modules.presets import *
 from modules.overwrites import *
+from modules.webui import *
 from modules.models.models import get_model
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -19,13 +20,13 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 gr.Chatbot._postprocess_chat_messages = postprocess_chat_messages
 gr.Chatbot.postprocess = postprocess
 
-with open("assets/custom.css", "r", encoding="utf-8") as f:
-    customCSS = f.read()
+# with open("web_assets/css/ChuanhuChat.css", "r", encoding="utf-8") as f:
+#     ChuanhuChatCSS = f.read()
 
 def create_new_model():
     return get_model(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key)[0]
 
-with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
+with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     user_name = gr.State("")
     promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
     user_question = gr.State("")
@@ -36,10 +37,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     topic = gr.State(i18n("未命名对话历史记录"))
 
     with gr.Row():
-        gr.HTML(CHUANHU_TITLE, elem_id="app_title")
-        status_display = gr.Markdown(get_geoip(), elem_id="status_display")
-    with gr.Row(elem_id="float_display"):
-        user_info = gr.Markdown(value="getting user info...", elem_id="user_info")
+        gr.HTML(CHUANHU_TITLE, elem_id="app-title")
+        status_display = gr.Markdown(get_geoip(), elem_id="status-display")
+    with gr.Row(elem_id="float-display"):
+        user_info = gr.Markdown(value="getting user info...", elem_id="user-info")
         update_info = gr.HTML(get_html("update.html").format(
             current_version=repo_html(),
             version_time=version_time(),
@@ -52,20 +53,20 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     with gr.Row(equal_height=True):
         with gr.Column(scale=5):
             with gr.Row():
-                chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu_chatbot", latex_delimiters=latex_delimiters_set, height=700)
+                chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu-chatbot", latex_delimiters=latex_delimiters_set, height=700)
             with gr.Row():
                 with gr.Column(min_width=225, scale=12):
                     user_input = gr.Textbox(
-                        elem_id="user_input_tb",
+                        elem_id="user-input-tb",
                         show_label=False, placeholder=i18n("在这里输入"),
                         container=False
                     )
                 with gr.Column(min_width=42, scale=1):
-                    submitBtn = gr.Button(value="", variant="primary", elem_id="submit_btn")
-                    cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel_btn")
+                    submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
+                    cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
             with gr.Row():
                 emptyBtn = gr.Button(
-                    i18n("🧹 新的对话"), elem_id="empty_btn"
+                    i18n("🧹 新的对话"), elem_id="empty-btn"
                 )
                 retryBtn = gr.Button(i18n("🔄 重新生成"))
                 delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
@@ -88,9 +89,9 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         label="API-Key",
                     )
                     if multi_api_key:
-                        usageTxt = gr.Markdown(i18n("多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage_display", elem_classes="insert_block", visible=show_api_billing)
+                        usageTxt = gr.Markdown(i18n("多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
                     else:
-                        usageTxt = gr.Markdown(i18n("**发送消息** 或 **提交key** 以显示额度"), elem_id="usage_display", elem_classes="insert_block", visible=show_api_billing)
+                        usageTxt = gr.Markdown(i18n("**发送消息** 或 **提交key** 以显示额度"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
                     model_select_dropdown = gr.Dropdown(
                         label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
                     )
@@ -98,8 +99,8 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
                     )
                     with gr.Row():
-                        single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch_checkbox")
-                        use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False, elem_classes="switch_checkbox")
+                        single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch-checkbox")
+                        use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False, elem_classes="switch-checkbox")
                     language_select_dropdown = gr.Dropdown(
                         label=i18n("选择回复语言（针对搜索&索引功能）"),
                         choices=REPLY_LANGUAGES,
@@ -179,12 +180,12 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                                     downloadFile = gr.File(interactive=True)
 
                 with gr.Tab(label=i18n("高级")):
-                    gr.HTML(get_html("appearance_switcher.html").format(label=i18n("切换亮暗色主题")), elem_classes="insert_block")
+                    gr.HTML(get_html("appearance_switcher.html").format(label=i18n("切换亮暗色主题")), elem_classes="insert-block")
                     use_streaming_checkbox = gr.Checkbox(
-                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch_checkbox"
+                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
                         )
                     checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
-                    gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"), elem_id="advanced_warning")
+                    gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"), elem_id="advanced-warning")
                     with gr.Accordion(i18n("参数"), open=False):
                         temperature_slider = gr.Slider(
                             minimum=-0,
@@ -265,7 +266,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                         )
 
                     with gr.Accordion(i18n("网络参数"), open=False):
-                        gr.Markdown(i18n("---\n⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置"), elem_id="netsetting_warning")
+                        gr.Markdown(i18n("---\n⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置"), elem_id="netsetting-warning")
                         default_btn = gr.Button(i18n("🔙 恢复默认网络设置"))
                         # 网络代理
                         proxyTxt = gr.Textbox(
@@ -276,7 +277,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             lines=1,
                             interactive=False,
                             container=False,
-                            elem_classes="view_only_textbox",
+                            elem_classes="view-only-textbox",
                         )
                         # changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
 
@@ -289,11 +290,10 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             lines=1,
                             interactive=False,
                             # container=False,
-                            elem_classes="view_only_textbox no-container",
+                            elem_classes="view-only-textbox no-container",
                         )
                         # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
-
-                        updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible_btn", elem_id="update_chuanhu_btn")
+                        updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
 
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
@@ -519,6 +519,6 @@ if __name__ == "__main__":
         server_port=server_port,
         share=share,
         auth=auth_from_conf if authflag else None,
-        favicon_path="./assets/favicon.ico",
+        favicon_path="./web_assets/favicon.ico",
         inbrowser=not dockerflag, # 禁止在docker下开启inbrowser
     )

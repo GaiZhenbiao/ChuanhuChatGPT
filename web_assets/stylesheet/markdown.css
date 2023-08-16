@@ -1,0 +1,61 @@
+
+.message-wrap>div img{
+    border-radius: 10px !important;
+}
+
+/* 表格 */
+.message table {
+    margin: 1em 0;
+    border-collapse: collapse;
+    empty-cells: show;
+}
+.message td, .message th {
+    border: 1.2px solid var(--border-color-primary) !important;
+    padding: 0.2em;
+}
+.message thead {
+    background-color: rgba(175,184,193,0.2);
+}
+.message thead th {
+    padding: .5em .2em;
+}
+
+/* 行内代码 */
+.message :not(pre) code {
+    display: inline;
+    white-space: break-spaces;
+    font-family: var(--font-mono);
+    border-radius: 6px;
+    margin: 0 2px 0 2px;
+    padding: .2em .4em .1em .4em;
+    background-color: rgba(175,184,193,0.2);
+}
+/* 代码块 */
+.message pre,
+.message pre[class*=language-] {
+    color: #fff;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: .8em 1em 1em 0em !important;
+    padding: var(--spacing-xl) 1.2em !important;
+    border-radius: var(--radius-lg) !important;
+}
+.message pre code,
+.message pre code[class*=language-] {
+    color: #fff;
+    padding: 0;
+    margin: 0;
+    background-color: unset;
+    text-shadow: none;
+    font-family: var(--font-mono);
+}
+
+
+/* 覆盖prism.css */
+.language-css .token.string,
+.style .token.string,
+.token.entity,
+.token.operator,
+.token.url {
+    background: none !important;
+}

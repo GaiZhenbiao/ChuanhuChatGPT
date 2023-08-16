@@ -624,12 +624,6 @@ def update_chuanhu():
         status = '<span id="update-status" class="hideK">failure</span>'
         return gr.Markdown.update(value=i18n("更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)")+status)
 
-def get_html(filename):
-    path = os.path.join(shared.chuanhu_path, "assets", "html", filename)
-    if os.path.exists(path):
-        with open(path, encoding="utf8") as file:
-            return file.read()
-    return ""
 
 def add_source_numbers(lst, source_name = "Source", use_source = True):
     if use_source:
