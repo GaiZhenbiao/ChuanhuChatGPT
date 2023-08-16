@@ -249,7 +249,7 @@ def convert_bot_before_marked(chat_message):
                 code = f"\n```{code}\n```"
                 result.append(code)
         result = "".join(result)
-        md = f'<div class="md-message">{result}\n</div>'
+        md = f'<div class="md-message">\n\n{result}\n</div>'
         return raw + md
 
 def convert_user_before_marked(chat_message):
