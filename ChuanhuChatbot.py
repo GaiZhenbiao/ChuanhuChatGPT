@@ -107,7 +107,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         multiselect=False,
                         value=REPLY_LANGUAGES[0],
                     )
-                    index_files = gr.Files(label=i18n("上传"), type="file")
+                    index_files = gr.Files(label=i18n("上传"), type="file", elem_id="upload-index-file")
                     two_column = gr.Checkbox(label=i18n("双栏pdf"), value=advance_docs["pdf"].get("two_column", False))
                     summarize_btn = gr.Button(i18n("总结"))
                     # TODO: 公式ocr
@@ -376,7 +376,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         inputs=[current_model],
         outputs=[chatbot, status_display],
         show_progress=True,
-        _js='()=>{clearHistoryHtml();}',
+        _js='clearHistoryHtml',
     )
 
     retryBtn.click(**start_outputing_args).then(
@@ -493,7 +493,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     #     [status_display],
     #     show_progress=True,
     # )
-    checkUpdateBtn.click(fn=None, _js='()=>{manualCheckUpdate();}')
+    checkUpdateBtn.click(fn=None, _js='manualCheckUpdate')
 
     # Invisible elements
     updateChuanhuBtn.click(
