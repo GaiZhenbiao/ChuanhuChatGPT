@@ -37,11 +37,10 @@
     "停止符，用英文逗号隔开...": "Skriv in stopptecken här, separerade med kommatecken...",  
     "用于定位滥用行为": "Används för att lokalisera missbruk",  
     "用户名": "Användarnamn",  
-    "网络设置": "Nätverksinställningar",  
     "在这里输入API-Host...": "Skriv in API-Host här...",  
     "🔄 切换API地址": "🔄 Byt API-adress",  
-    "在这里输入代理地址...": "Skriv in proxyadress här...",  
-    "代理地址（示例：http://127.0.0.1:10809）": "Proxyadress (exempel: http://127.0.0.1:10809)",  
+    "未设置代理...": "Inte inställd proxy...",  
+    "代理地址": "Proxyadress",  
     "🔄 设置代理地址": "🔄 Ställ in Proxyadress",  
     "🔙 恢复网络默认设置": "🔙 Återställ Nätverksinställningar",  
     "🔄 检查更新...": "🔄 Sök efter uppdateringar...",  
@@ -82,5 +81,7 @@
     "您的IP区域：": "Din IP-region: ",  
     "总结": "Sammanfatta",  
     "生成内容总结中……": "Genererar innehållssammanfattning...",  
-    "由于下面的原因，Google 拒绝返回 PaLM 的回答：\n\n": "På grund av följande skäl vägrar Google att ge ett svar till PaLM: \n\n"  
+    "由于下面的原因，Google 拒绝返回 PaLM 的回答：\n\n": "På grund av följande skäl vägrar Google att ge ett svar till PaLM: \n\n",
+    "---\n⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置": "---\n⚠️ För att säkerställa säkerheten för API-nyckeln, vänligen ändra nätverksinställningarna i konfigurationsfilen `config.json`.",
+    "网络参数": "nätverksparametrar"
 }  

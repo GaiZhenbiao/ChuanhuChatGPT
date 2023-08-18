@@ -38,6 +38,14 @@ div.form {
     align-content: center;
 }
 
+#netsetting_warning hr {
+    margin-bottom: 1em
+}
+
+.view_only_textbox textarea {
+    -webkit-text-fill-color: #b2b2b2 !important
+}
+
 /* gradio的页脚信息 */
 footer {
     /* display: none !important; */

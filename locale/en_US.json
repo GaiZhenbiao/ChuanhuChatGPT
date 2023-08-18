@@ -37,13 +37,12 @@
     "停止符，用英文逗号隔开...": "Type in stop token here, separated by comma...",
     "用于定位滥用行为": "Used to locate abuse",
     "用户名": "Username",
-    "网络设置": "Network Settings",
     "在这里输入API-Host...": "Type in API-Host here...",
     "🔄 切换API地址": "🔄 Switch API Address",
-    "在这里输入代理地址...": "Type in proxy address here...",
-    "代理地址（示例：http://127.0.0.1:10809）": "Proxy address (example: http://127.0.0.1:10809)",
+    "未设置代理...": "No proxy...",
+    "代理地址": "Proxy address",
     "🔄 设置代理地址": "🔄 Set Proxy Address",
-    "🔙 恢复网络默认设置": "🔙 Reset Network Settings",
+    "🔙 恢复默认网络设置": "🔙 Reset Network Settings",
     "🔄 检查更新...": "🔄 Check for Update...",
     "取消": "Cancel",
     "更新": "Update",
@@ -82,5 +81,7 @@
     "您的IP区域：": "Your IP region: ",
     "总结": "Summarize",
     "生成内容总结中……": "Generating content summary...",
-    "由于下面的原因，Google 拒绝返回 PaLM 的回答：\n\n": "Due to the following reasons, Google refuses to provide an answer to PaLM: \n\n"
+    "由于下面的原因，Google 拒绝返回 PaLM 的回答：\n\n": "Due to the following reasons, Google refuses to provide an answer to PaLM: \n\n",
+    "---\n⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置": "---\n⚠️ To ensure the security of API-Key, please modify the network settings in the configuration file `config.json`.",
+    "网络参数": "Network parameter"
 }

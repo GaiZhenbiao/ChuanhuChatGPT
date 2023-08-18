@@ -261,27 +261,35 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             lines=1,
                         )
 
-                    with gr.Accordion(i18n("网络设置"), open=False):
+                    with gr.Accordion(i18n("网络参数"), open=False):
+                        gr.Markdown(i18n("---\n⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置"), elem_id="netsetting_warning")
+                        default_btn = gr.Button(i18n("🔙 恢复默认网络设置"))
+                        # 网络代理
+                        proxyTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=i18n("未设置代理..."),
+                            label=i18n("代理地址"),
+                            value=config.http_proxy,
+                            lines=1,
+                            interactive=False,
+                            container=False,
+                            elem_classes="view_only_textbox",
+                        )
+                        # changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
+
                         # 优先展示自定义的api_host
                         apihostTxt = gr.Textbox(
                             show_label=True,
-                            placeholder=i18n("在这里输入API-Host..."),
-                            label="API-Host",
+                            placeholder="api.openai.com",
+                            label="OpenAI-API-Host",
                             value=config.api_host or shared.API_HOST,
                             lines=1,
+                            interactive=False,
                             container=False,
+                            elem_classes="view_only_textbox",
                         )
-                        changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
-                        proxyTxt = gr.Textbox(
-                            show_label=True,
-                            placeholder=i18n("在这里输入代理地址..."),
-                            label=i18n("代理地址（示例：http://127.0.0.1:10809）"),
-                            value="",
-                            lines=2,
-                            container=False,
-                        )
-                        changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
-                        default_btn = gr.Button(i18n("🔙 恢复默认设置"))
+                        # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
+                        
                         updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible_btn", elem_id="update_chuanhu_btn")
 
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
@@ -470,18 +478,18 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
     default_btn.click(
         reset_default, [], [apihostTxt, proxyTxt, status_display], show_progress=True
     )
-    changeAPIURLBtn.click(
-        change_api_host,
-        [apihostTxt],
-        [status_display],
-        show_progress=True,
-    )
-    changeProxyBtn.click(
-        change_proxy,
-        [proxyTxt],
-        [status_display],
-        show_progress=True,
-    )
+    # changeAPIURLBtn.click(
+    #     change_api_host,
+    #     [apihostTxt],
+    #     [status_display],
+    #     show_progress=True,
+    # )
+    # changeProxyBtn.click(
+    #     change_proxy,
+    #     [proxyTxt],
+    #     [status_display],
+    #     show_progress=True,
+    # )
     checkUpdateBtn.click(fn=None, _js='()=>{manualCheckUpdate();}')
 
     # Invisible elements
