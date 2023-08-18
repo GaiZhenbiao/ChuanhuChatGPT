@@ -465,7 +465,7 @@ class BaseLLMModel:
                 yield chatbot, status_text
         except Exception as e:
             traceback.print_exc()
-            status_text = STANDARD_ERROR_MSG + str(e)
+            status_text = STANDARD_ERROR_MSG + beautify_err_msg(str(e))
             yield chatbot, status_text
 
         if len(self.history) > 1 and self.history[-1]["content"] != inputs:
