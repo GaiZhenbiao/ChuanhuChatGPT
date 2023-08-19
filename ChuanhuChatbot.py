@@ -1,7 +1,9 @@
 # -*- coding:utf-8 -*-
-import os
 import logging
-import sys
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
+)
 
 import gradio as gr
 
@@ -289,7 +291,7 @@ with gr.Blocks(css=customCSS, theme=small_and_beautiful_theme) as demo:
                             elem_classes="view_only_textbox",
                         )
                         # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
-                        
+
                         updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible_btn", elem_id="update_chuanhu_btn")
 
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
