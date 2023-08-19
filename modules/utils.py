@@ -539,88 +539,16 @@ def transfer_input(inputs):
     )
 
 
-
-def run(command, desc=None, errdesc=None, custom_env=None, live=False):
-    if desc is not None:
-        print(desc)
-    if live:
-        result = subprocess.run(command, shell=True, env=os.environ if custom_env is None else custom_env)
-        if result.returncode != 0:
-            raise RuntimeError(f"""{errdesc or 'Error running command'}.
-                Command: {command}
-                Error code: {result.returncode}""")
-
-        return ""
-    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=os.environ if custom_env is None else custom_env)
-    if result.returncode != 0:
-        message = f"""{errdesc or 'Error running command'}.
-            Command: {command}
-            Error code: {result.returncode}
-            stdout: {result.stdout.decode(encoding="utf8", errors="ignore") if len(result.stdout)>0 else '<empty>'}
-            stderr: {result.stderr.decode(encoding="utf8", errors="ignore") if len(result.stderr)>0 else '<empty>'}
-            """
-        raise RuntimeError(message)
-    return result.stdout.decode(encoding="utf8", errors="ignore")
-
-def commit_html():
-    git = os.environ.get('GIT', "git")
-    try:
-        commit_hash = run(f"{git} rev-parse HEAD").strip()
-    except Exception:
-        commit_hash = "<none>"
-    if commit_hash != "<none>":
-        short_commit = commit_hash[0:7]
-        commit_info = f'<a style="text-decoration:none;color:inherit" href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/commit/{short_commit}">{short_commit}</a>'
-    else:
-        commit_info = "unknown \U0001F615"
-    return commit_info
-
-def tag_html():
-    git = os.environ.get('GIT', "git")
-    try:
-        tag = run(f"{git} describe --tags --exact-match").strip()
-    except Exception:
-        tag = "<none>"
-    if tag != "<none>":
-        tag_info = f'<a style="text-decoration:none;color:inherit" href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/releases/tag/{tag}">{tag}</a>'
-    else:
-        tag_info = "unknown \U0001F615"
-    return tag_info
-
-def repo_html():
-    commit_version = commit_html()
-    tag_version = tag_html()
-    return tag_version if tag_version != "unknown \U0001F615" else commit_version
-
-def versions_html():
-    python_version = ".".join([str(x) for x in sys.version_info[0:3]])
-    repo_version = repo_html()
-    return f"""
-        Python: <span title="{sys.version}">{python_version}</span>
-         • 
-        Gradio: {gr.__version__}
-         • 
-        <a style="text-decoration:none;color:inherit" href="https://github.com/GaiZhenbiao/ChuanhuChatGPT">ChuanhuChat</a>: {repo_version}
-        """
-
-def version_time():
-    git = os.environ.get('GIT', "git")
-    try:
-        commit_time = run(f"TZ=UTC {git} log -1 --format=%cd --date='format-local:%Y-%m-%dT%H:%M:%SZ'").strip()
-    except Exception:
-        commit_time = "unknown"
-    return commit_time
-
 def update_chuanhu():
-    git = os.environ.get('GIT', "git")
-    pip = os.environ.get('PIP', "pip")
-    try:
-        run(f"{git} fetch --all && ({git} pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f || ({git} stash && {git} pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f && {git} stash pop)) && {pip} install -r requirements.txt")
-        logging.info("Successfully updated")
+    from .repo import background_update
+
+    print("Trying to update...")
+    update_status = background_update()
+    if update_status == "success":
+        print("Successfully updated, restart needed")
         status = '<span id="update-status" class="hideK">success</span>'
         return gr.Markdown.update(value=i18n("更新成功，请重启本程序")+status)
-    except Exception:
-        logging.info("Failed to update")
+    else:
         status = '<span id="update-status" class="hideK">failure</span>'
         return gr.Markdown.update(value=i18n("更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)")+status)
 
