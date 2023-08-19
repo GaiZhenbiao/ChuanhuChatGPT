@@ -15,8 +15,7 @@ var statusObserver = new MutationObserver(function (mutationsList) {
                     enableUpdateBtns();
                 } else if (getUpdateStatus() === "failure") {
                     updatingInfoElement.innerHTML = i18n(updateFailure_i18n);
-                    document.querySelector('#update-button.btn-update').disabled = true;
-                    document.querySelector('#cancel-button.btn-update').disabled = false;
+                    disableUpdateBtn_enableCancelBtn();
                 } else if (getUpdateStatus() != "") {
                     updatingInfoElement.innerText = getUpdateStatus();
                     enableUpdateBtns();
@@ -53,8 +52,9 @@ async function updateLatestVersion() {
     const currentVersionElement = document.getElementById('current-version');
     const reVersion = /<a[^>]*>([^<]*)<\/a>/g;
     const versionMatch = reVersion.exec(currentVersionElement.innerHTML);
-    const currentVersion = versionMatch ? versionMatch[1] : null;
+    const currentVersion = (versionMatch && versionMatch[1].length == 8) ? versionMatch[1] : null;
     const latestVersionElement = document.getElementById('latest-version-title');
+    const versionInfoElement = document.getElementById('version-info-title');
     releaseNoteElement = document.getElementById('release-note-content');
     updatingInfoElement = document.getElementById('updating-info');
     
@@ -79,15 +79,21 @@ async function updateLatestVersion() {
         } else { //如果当前版本号获取失败，使用时间比较
             const latestVersionTime = (new Date(data.created_at)).getTime();
             if (latestVersionTime) {
+                const latestVersionInfo = `<a href="https://github.com/gaizhenbiao/chuanhuchatgpt/releases/latest" target="_blank" id="latest-version-title" style="text-decoration: none;">${latestVersion}</a>`
+                const manualUpdateInfo = `<a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blanks" style="text-decoration: none;">manual update</a>`
                 if (localVersionTime == 0) {
-                    latestVersionElement.textContent = "Local version check failed. But latest revision is " + latestVersion;
+                    const infoMessage = `Local version check failed. \nBut latest revision is ${latestVersionInfo}. \n\nWhen Update needed, \n- If you are using Docker, try to update package. \n- If you didn't use git, try ${manualUpdateInfo}.`
+                    versionInfoElement.innerHTML = marked.parse(infoMessage, {mangle: false, headerIds: false});
                     console.log(`New version ${latestVersion} found!`);
+                    disableUpdateBtn_enableCancelBtn();
                 } else if (localVersionTime < latestVersionTime) {
-                    latestVersionElement.textContent = "Local version check failed, it seems to be a local rivision. But latest revision is " + latestVersion;
+                    const infoMessage = `Local version check failed, it seems to be a local rivision. \n\nBut latest revision is ${latestVersionInfo}. Try ${manualUpdateInfo}.`
+                    versionInfoElement.innerHTML = marked.parse(infoMessage, {mangle: false, headerIds: false});
                     console.log(`New version ${latestVersion} found!`);
+                    disableUpdateBtn_enableCancelBtn();
                     // if (!isInIframe) openUpdateToast();
                 } else {
-                    noUpdate("Local version check failed, it seems to be a local rivision. But your revision is newer than the latest release.");
+                    noUpdate("Local version check failed, it seems to be a local rivision. <br>But your revision is newer than the latest release.");
                 }
             }
         }
@@ -154,7 +160,7 @@ function noUpdateHtml(message="") {
     if (message === "") {
         versionInfoElement.textContent = i18n(usingLatest_i18n)
     } else {
-        versionInfoElement.textContent = message;
+        versionInfoElement.innerHTML = message;
     }
     gotoUpdateBtn.classList.add('hideK');
     closeUpdateBtn.classList.remove('hideK');
@@ -181,6 +187,10 @@ function enableUpdateBtns() {
     updatesButtons.forEach( function (btn) {
         btn.disabled = false;
     });
+}
+function disableUpdateBtn_enableCancelBtn() {
+    document.querySelector('#update-button.btn-update').disabled = true;
+    document.querySelector('#cancel-button.btn-update').disabled = false;
 }
 
 function setUpdateWindowHeight() {
