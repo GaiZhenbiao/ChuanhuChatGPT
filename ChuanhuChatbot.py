@@ -517,7 +517,7 @@ if __name__ == "__main__":
         server_name=server_name,
         server_port=server_port,
         share=share,
-        auth=auth_list if authflag else None,
+        auth=auth_from_conf if authflag else None,
         favicon_path="./assets/favicon.ico",
         inbrowser=not dockerflag, # 禁止在docker下开启inbrowser
     )

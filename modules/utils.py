@@ -2,7 +2,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple, Type
 import logging
-import json
+import commentjson as json
 import os
 import datetime
 from datetime import timezone
@@ -715,3 +715,15 @@ def beautify_err_msg(err_msg):
     if "Resource not found" in err_msg:
         return i18n("请查看 config_example.json，配置 Azure OpenAI")
     return err_msg
+
+def auth_from_conf(username, password):
+    try:
+        with open("config.json", encoding="utf-8") as f:
+            conf = json.load(f)
+        usernames, passwords = [i[0] for i in conf["users"]], [i[1] for i in conf["users"]]
+        if username in usernames:
+            if passwords[usernames.index(username)] == password:
+                return True
+        return False
+    except:
+        return False
