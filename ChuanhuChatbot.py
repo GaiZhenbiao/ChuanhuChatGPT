@@ -277,8 +277,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             value=config.http_proxy,
                             lines=1,
                             interactive=False,
-                            container=False,
-                            elem_classes="view-only-textbox",
+                            # container=False,
+                            elem_classes="view-only-textbox no-container",
                         )
                         # changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
 
@@ -286,7 +286,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         apihostTxt = gr.Textbox(
                             show_label=True,
                             placeholder="api.openai.com",
-                            label="OpenAI-API-Host",
+                            label="OpenAI API-Host",
                             value=config.api_host or shared.API_HOST,
                             lines=1,
                             interactive=False,

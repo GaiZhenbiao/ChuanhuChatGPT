@@ -37,11 +37,12 @@
 }
 
 #netsetting-warning hr {
-    margin-bottom: 1em
+    margin-bottom: 1em;
 }
 
 .view-only-textbox textarea {
-    -webkit-text-fill-color: #b2b2b2 !important
+    -webkit-text-fill-color: darkgray !important;
+    cursor: not-allowed !important;
 }
 
 #footer {
