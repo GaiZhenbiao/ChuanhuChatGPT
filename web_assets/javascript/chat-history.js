@@ -13,7 +13,9 @@ function saveHistoryHtml() {
 
 function loadHistoryHtml() {
     var historyHtml = localStorage.getItem('chatHistory');
-    if (!historyHtml) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = historyHtml;
+    if (!historyHtml || tempDiv.innerText.trim() === "") {
         historyLoaded = true;
         return; // no history, do nothing
     }
@@ -23,8 +25,6 @@ function loadHistoryHtml() {
         return; // logged in, do nothing
     }
     if (!historyLoaded) {
-        var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = historyHtml;
         var buttons = tempDiv.querySelectorAll('button.chuanhu-btn');
         var gradioCopyButtons = tempDiv.querySelectorAll('button.copy_code_button');
         for (var i = 0; i < buttons.length; i++) {
