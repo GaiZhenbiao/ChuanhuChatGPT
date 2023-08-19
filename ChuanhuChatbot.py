@@ -13,6 +13,7 @@ from modules.utils import *
 from modules.presets import *
 from modules.overwrites import *
 from modules.webui import *
+from modules.repo import *
 from modules.models.models import get_model
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -42,7 +43,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     with gr.Row(elem_id="float-display"):
         user_info = gr.Markdown(value="getting user info...", elem_id="user-info")
         update_info = gr.HTML(get_html("update.html").format(
-            current_version=repo_html(),
+            current_version=repo_tag_html(),
             version_time=version_time(),
             cancel_btn=i18n("取消"),
             update_btn=i18n("更新"),

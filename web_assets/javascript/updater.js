@@ -51,10 +51,13 @@ var releaseNoteElement = document.getElementById('release-note-content');
 var updatingInfoElement = document.getElementById('updating-info');
 async function updateLatestVersion() {
     const currentVersionElement = document.getElementById('current-version');
+    const reVersion = /<a[^>]*>([^<]*)<\/a>/g;
+    const versionMatch = reVersion.exec(currentVersionElement.innerHTML);
+    const currentVersion = versionMatch ? versionMatch[1] : null;
     const latestVersionElement = document.getElementById('latest-version-title');
     releaseNoteElement = document.getElementById('release-note-content');
     updatingInfoElement = document.getElementById('updating-info');
-    const currentVersion = currentVersionElement.textContent;
+    
     const versionTime = document.getElementById('version-time').innerText;
     const localVersionTime = versionTime !== "unknown" ? (new Date(versionTime)).getTime() : 0;
     updateInfoGotten = true; //无论成功与否都只执行一次，否则容易api超限...
@@ -65,18 +68,31 @@ async function updateLatestVersion() {
             releaseNoteElement.innerHTML = marked.parse(releaseNote, {mangle: false, headerIds: false});
         }
         const latestVersion = data.tag_name;
-        const latestVersionTime = (new Date(data.created_at)).getTime();
-        if (latestVersionTime) {
-            if (localVersionTime < latestVersionTime) {
+        if (currentVersion) {
+            if (latestVersion <= currentVersion) {
+                noUpdate();
+            } else {
                 latestVersionElement.textContent = latestVersion;
                 console.log(`New version ${latestVersion} found!`);
-                if (!isInIframe) {openUpdateToast();}      
-            } else {
-                noUpdate();
+                if (!isInIframe) openUpdateToast();
             }
-            currentTime = new Date().getTime();
-            localStorage.setItem('lastCheckTime', currentTime);
+        } else { //如果当前版本号获取失败，使用时间比较
+            const latestVersionTime = (new Date(data.created_at)).getTime();
+            if (latestVersionTime) {
+                if (localVersionTime == 0) {
+                    latestVersionElement.textContent = "Local version check failed. But latest revision is " + latestVersion;
+                    console.log(`New version ${latestVersion} found!`);
+                } else if (localVersionTime < latestVersionTime) {
+                    latestVersionElement.textContent = "Local version check failed, it seems to be a local rivision. But latest revision is " + latestVersion;
+                    console.log(`New version ${latestVersion} found!`);
+                    // if (!isInIframe) openUpdateToast();
+                } else {
+                    noUpdate("Local version check failed, it seems to be a local rivision. But your revision is newer than the latest release.");
+                }
+            }
         }
+        currentTime = new Date().getTime();
+        localStorage.setItem('lastCheckTime', currentTime);
     } catch (error) {
         console.error(error);
     }
@@ -124,18 +140,22 @@ function manualCheckUpdate() {
     currentTime = new Date().getTime();
     localStorage.setItem('lastCheckTime', currentTime);
 }
-function noUpdate() {
+function noUpdate(message="") {
     localStorage.setItem('isLatestVersion', 'true');
     isLatestVersion = true;
-    noUpdateHtml();
+    noUpdateHtml(message);
 }
-function noUpdateHtml() {
+function noUpdateHtml(message="") {
     const versionInfoElement = document.getElementById('version-info-title');
     const gotoUpdateBtn = document.getElementById('goto-update-btn');
     const closeUpdateBtn = document.getElementById('close-update-btn');
     const releaseNoteWrap = document.getElementById('release-note-wrap');
     releaseNoteWrap.style.setProperty('display', 'none');
-    versionInfoElement.textContent = i18n(usingLatest_i18n)
+    if (message === "") {
+        versionInfoElement.textContent = i18n(usingLatest_i18n)
+    } else {
+        versionInfoElement.textContent = message;
+    }
     gotoUpdateBtn.classList.add('hideK');
     closeUpdateBtn.classList.remove('hideK');
 }
