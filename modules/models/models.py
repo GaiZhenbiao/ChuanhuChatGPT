@@ -208,7 +208,7 @@ class OpenAIClient(BaseLLMModel):
                 chunk_length = len(chunk)
                 try:
                     chunk = json.loads(chunk[6:])
-                except json.JSONDecodeError:
+                except:
                     print(i18n("JSON解析错误,收到的内容: ") + f"{chunk}")
                     error_msg += chunk
                     continue
