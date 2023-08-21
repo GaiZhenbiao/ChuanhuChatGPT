@@ -542,10 +542,10 @@ def transfer_input(inputs):
 def update_chuanhu():
     from .repo import background_update
 
-    print("Trying to update...")
+    print("[Updater] Trying to update...")
     update_status = background_update()
     if update_status == "success":
-        print("Successfully updated, restart needed")
+        logging.info("Successfully updated, restart needed")
         status = '<span id="update-status" class="hideK">success</span>'
         return gr.Markdown.update(value=i18n("更新成功，请重启本程序")+status)
     else:

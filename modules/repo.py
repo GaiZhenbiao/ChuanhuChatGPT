@@ -51,14 +51,14 @@ def run(command, desc=None, errdesc=None, custom_env=None, live: bool = default_
     return (result.stdout or "")
 
 
-def run_pip(command, desc=None, live=default_command_live):
+def run_pip(command, desc=None, pref=None, live=default_command_live):
     # if args.skip_install:
     #     return
 
     index_url_line = f' --index-url {index_url}' if index_url != '' else ''
     return run(
         f'"{python}" -m pip {command} --prefer-binary{index_url_line}', 
-        desc=f"Installing {desc}...", 
+        desc=f"{pref} Installing {desc}...", 
         errdesc=f"Couldn't install {desc}", 
         live=live
     )
@@ -158,6 +158,12 @@ def get_tag_commit_hash(tag):
         commit_hash = "<none>"
     return commit_hash
 
+def repo_need_stash():
+    try:
+        return subprocess.check_output([git, "diff-index", "--quiet", "HEAD", "--"], shell=False, encoding='utf8').strip() != ""
+    except Exception:
+        return True
+
 def background_update():
     # {git} fetch --all && ({git} pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f || ({git} stash && {git} pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f && {git} stash pop)) && {pip} install -r requirements.txt")
     try:
@@ -165,47 +171,65 @@ def background_update():
         latest_release_tag = latest_release["tag"]
         latest_release_hash = get_tag_commit_hash(latest_release_tag)
         need_pip = latest_release["need_pip"]
+        need_stash = repo_need_stash()
 
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         current_branch = get_current_branch()
-        updater_branch = f'tmp_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}'
+        updater_branch = f'tmp_{timestamp}'
+        backup_branch = f'backup_{timestamp}'
         track_repo = "https://github.com/GaiZhenbiao/ChuanhuChatGPT.git"
         try:
             try:
-                run(f"{git} fetch {track_repo}", desc="Fetching from github...", live=False)
+                run(f"{git} fetch {track_repo}", desc="[Updater] Fetching from github...", live=False)
             except Exception:
-                logging.error(f"Update failed in fetching")
+                logging.error(f"Update failed in fetching, check your network connection")
                 return "failed"
             
-            run(f'{git} stash save -a "updater-tmp"')
-
+            run(f'{git} stash push --include-untracked -m "updater-{timestamp}"', 
+                desc=f'[Updater] Restoring you local changes on stash updater-{timestamp}', live=False) if need_stash else None
+            
+            run(f"{git} checkout -b {backup_branch}", live=False)
             run(f"{git} checkout -b {updater_branch}", live=False)
             run(f"{git} reset --hard FETCH_HEAD", live=False)
-            run(f"{git} reset --hard {latest_release_hash}", desc=f'Checking out {latest_release_tag}...')
+            run(f"{git} reset --hard {latest_release_hash}", desc=f'[Updater] Checking out {latest_release_tag}...', live=False)
             run(f"{git} checkout {current_branch}", live=False)
             
             try:
-                run(f"{git} merge {updater_branch} -q", desc="Trying to apply latest update...")
+                run(f"{git} merge --no-edit {updater_branch} -q", desc=f"[Updater] Trying to apply latest update on version {latest_release_tag}...")
             except Exception:
                 logging.error(f"Update failed in merging")
                 try:
-                    run(f"{git} merge --abort", desc="Canceling update...")
-                    run(f"{git} reset --hard {current_branch}", live=False)
-                    run(f"{git} stash pop", live=False)
+                    run(f"{git} merge --abort", desc="[Updater] Conflict detected, canceling update...")
+                    run(f"{git} reset --hard {backup_branch}", live=False)
                     run(f"{git} branch -D -f {updater_branch}", live=False)
+                    run(f"{git} branch -D -f {backup_branch}", live=False)
+                    run(f"{git} stash pop", live=False) if need_stash else None
                     logging.error(f"Update failed, but your file was safely reset to the state before the update.")
                     return "failed"
                 except Exception as e:
-                    logging.error(f"!!!Update failed in resetting, try to reset your files manually.")
+                    logging.error(f"!!!Update failed in resetting, try to reset your files manually. {e}")
                     return "failed"
-                
-            run(f"{git} stash pop", live=False)
+
+            if need_stash:
+                try:
+                    run(f"{git} stash apply", desc="[Updater] Trying to restore your local modifications...", live=False)
+                except Exception:
+                    run(f"{git} reset --hard {backup_branch}", desc="[Updater] Conflict detected, canceling update...", live=False)
+                    run(f"{git} branch -D -f {updater_branch}", live=False)
+                    run(f"{git} branch -D -f {backup_branch}", live=False)
+                    run(f"{git} stash pop", live=False)
+                    logging.error(f"Update failed in applying your local changes, but your file was safely reset to the state before the update.")
+                    return "failed"
+                run(f"{git} stash drop", live=False)
+
             run(f"{git} branch -D -f {updater_branch}", live=False)
+            run(f"{git} branch -D -f {backup_branch}", live=False)
         except Exception as e:
             logging.error(f"Update failed: {e}")
             return "failed"
         if need_pip:
             try: 
-                run_pip(f"install -r requirements.txt", "requirements") 
+                run_pip(f"install -r requirements.txt", pref="[Updater]", desc="requirements", live=False) 
             except Exception:
                 logging.error(f"Update failed in pip install")
                 return "failed"
