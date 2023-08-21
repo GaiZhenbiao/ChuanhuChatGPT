@@ -12,6 +12,7 @@ var user_input_tb = null;
 var userInfoDiv = null;
 var appTitleDiv = null;
 var chatbot = null;
+var chatbotIndicator = null;
 var chatbotWrap = null;
 var apSwitch = null;
 var messageBotDivs = null;
@@ -43,7 +44,7 @@ function gradioLoaded(mutations) {
 }
 
 function initialize() {
-    var needInit = {gradioContainer, apSwitch, user_input_tb, userInfoDiv, appTitleDiv, chatbot, chatbotWrap, statusDisplay, sliders, updateChuanhuBtn};
+    var needInit = {gradioContainer, apSwitch, user_input_tb, userInfoDiv, appTitleDiv, chatbot, chatbotIndicator, chatbotWrap, statusDisplay, sliders, updateChuanhuBtn};
     initialized = true;
 
     loginUserForm = gradioApp().querySelector(".gradio-container > .main > .wrap > .panel > .form")
@@ -52,6 +53,7 @@ function initialize() {
     userInfoDiv = gradioApp().getElementById("user-info");
     appTitleDiv = gradioApp().getElementById("app-title");
     chatbot = gradioApp().querySelector('#chuanhu-chatbot');
+    chatbotIndicator = gradioApp().querySelector('#chuanhu-chatbot>div.wrap');
     chatbotWrap = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .wrap');
     apSwitch = gradioApp().querySelector('.apSwitch input[type="checkbox"]');
     updateToast = gradioApp().querySelector("#toast-update");
@@ -82,8 +84,7 @@ function initialize() {
         setSlider();
         if (!historyLoaded) loadHistoryHtml();
         if (!usernameGotten) getUserInfo();
-        mObserver.observe(chatbotWrap, { attributes: true, childList: true, subtree: true, characterData: true });
-        submitObserver.observe(cancelBtn, { attributes: true, characterData: true });
+        chatbotObserver.observe(chatbotIndicator, { attributes: true });
 
         const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
         const longTimeNoCheck = currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000;
@@ -221,43 +222,21 @@ function setChatbotScroll() {
 }
 
 
-let timeoutId;
-let isThrottled = false;
-// 监听chatWrap元素的变化，为 bot 消息添加复制按钮。
-var mObserver = new MutationObserver(function (mutationsList) {
-    for (const mmutation of mutationsList) {
-        if (mmutation.type === 'childList') {
-            for (var node of mmutation.addedNodes) {
-                if (node.nodeType === 1 && node.classList.contains('message')) {
-                    saveHistoryHtml();
-                    disableSendBtn();
-                    document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
-                }
-            }
-            for (var node of mmutation.removedNodes) {
-                if (node.nodeType === 1 && node.classList.contains('message')) {
-                    saveHistoryHtml();
-                    disableSendBtn();
-                    document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
-                }
-            }
-        } else if (mmutation.type === 'attributes') {
-            if (isThrottled) break; // 为了防止重复不断疯狂渲染，加上等待_(:з」∠)_
-            isThrottled = true;
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                isThrottled = false;
-                document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
-                saveHistoryHtml();
-                disableSendBtn();
-            }, 1500);
-        }
+function chatbotContentChanged(attempt = 1) {
+    for (var i = 0; i < attempt; i++) {
+        setTimeout(() => {
+            saveHistoryHtml();
+            disableSendBtn();
+            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
+        }, i === 0 ? 0 : 500);
     }
-});
+    // 理论上是不需要多次尝试执行的，可惜gradio的bug导致message可能没有渲染完毕，所以尝试500ms后再次执行
+}
 
-var submitObserver = new MutationObserver(function (mutationsList) {
-    document.querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
-    saveHistoryHtml();
+var chatbotObserver = new MutationObserver(() => {
+    if (chatbotIndicator.classList.contains('hide')) {
+        chatbotContentChanged(2);
+    }
 });
 
 // 监视页面内部 DOM 变动

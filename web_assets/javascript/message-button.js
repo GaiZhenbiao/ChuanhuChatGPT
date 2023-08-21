@@ -4,20 +4,15 @@
 function addChuanhuButton(botElement) {
     var rawMessage = botElement.querySelector('.raw-message');
     var mdMessage = botElement.querySelector('.md-message');
-    // var gradioCopyMsgBtn = botElement.querySelector('div.icon-button>button[title="copy"]'); // 获取 gradio 的 copy button，它可以读取真正的原始 message
-    if (!rawMessage) {
+    
+    if (!rawMessage) { // 如果没有 raw message，说明是早期历史记录，去除按钮
         var buttons = botElement.querySelectorAll('button.chuanhu-btn');
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].parentNode.removeChild(buttons[i]);
         }
         return;
     }
-    var oldCopyButton = null;
-    var oldToggleButton = null;
-    oldCopyButton = botElement.querySelector('button.copy-bot-btn');
-    oldToggleButton = botElement.querySelector('button.toggle-md-btn');
-    if (oldCopyButton) oldCopyButton.remove();
-    if (oldToggleButton) oldToggleButton.remove();
+    botElement.querySelectorAll('button.copy-bot-btn, button.toggle-md-btn').forEach(btn => btn.remove()); // 就算原先有了，也必须重新添加，而不是跳过
 
     // Copy bot button
     var copyButton = document.createElement('button');
@@ -66,13 +61,14 @@ function addChuanhuButton(botElement) {
     toggleButton.innerHTML = renderMarkdown ? mdIcon : rawIcon;
     toggleButton.addEventListener('click', () => {
         renderMarkdown = mdMessage.classList.contains('hideM');
-        if (renderMarkdown){
+        if (renderMarkdown) {
             renderMarkdownText(botElement);
             toggleButton.innerHTML=rawIcon;
         } else {
             removeMarkdownText(botElement);
             toggleButton.innerHTML=mdIcon;
         }
+        chatbotContentChanged(1); // to set md or raw in read-only history html
     });
     botElement.insertBefore(toggleButton, copyButton);
 
@@ -85,8 +81,7 @@ function addChuanhuButton(botElement) {
     function removeMarkdownText(message) {
         var rawDiv = message.querySelector('.raw-message');
         if (rawDiv) {
-            rawPre = rawDiv.querySelector('pre');
-            if (rawPre) rawDiv.innerHTML = rawPre.innerHTML;
+            rawDiv.innerHTML = rawDiv.querySelector('pre')?.innerHTML || rawDiv.innerHTML;
             rawDiv.classList.remove('hideM');
         }
         var mdDiv = message.querySelector('.md-message');
