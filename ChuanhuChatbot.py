@@ -36,12 +36,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     current_model = gr.State(create_new_model)
 
     topic = gr.State(i18n("未命名对话历史记录"))
-
+    
     with gr.Row():
         gr.HTML(CHUANHU_TITLE, elem_id="app-title")
         status_display = gr.Markdown(get_geoip(), elem_id="status-display")
     with gr.Row(elem_id="float-display"):
         user_info = gr.Markdown(value="getting user info...", elem_id="user-info")
+        config_info = gr.HTML(get_html("config_info.html").format(bot_avatar=config.bot_avatar, user_avatar=config.user_avatar), visible=False, elem_id="config-info")
         update_info = gr.HTML(get_html("update.html").format(
             current_version=repo_tag_html(),
             version_time=version_time(),
@@ -296,6 +297,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
                         updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
 
+    
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
 

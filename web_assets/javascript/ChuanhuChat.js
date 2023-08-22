@@ -24,7 +24,8 @@ var cancelBtn = null;
 var sliders = null;
 var updateChuanhuBtn = null;
 var statusDisplay = null;
-
+var botAvatar = null;
+var userAvatar = null;
 
 var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
@@ -82,6 +83,7 @@ function initialize() {
         setChatbotHeight();
         setChatbotScroll();
         setSlider();
+        setAvatar();
         if (!historyLoaded) loadHistoryHtml();
         if (!usernameGotten) getUserInfo();
         chatbotObserver.observe(chatbotIndicator, { attributes: true });
@@ -221,19 +223,46 @@ function setChatbotScroll() {
     chatbotWrap.scrollTo(0,scrollHeight)
 }
 
+var botAvatarUrl = "";
+var userAvatarUrl = "";
+function setAvatar() {
+    botAvatar = gradioApp().getElementById("config-bot-avatar-url").innerText;
+    userAvatar = gradioApp().getElementById("config-user-avatar-url").innerText;
+
+    if (botAvatar == "none") {
+        botAvatarUrl = "";
+    } else if (isImgUrl(botAvatar)) {
+        botAvatarUrl = botAvatar;
+    } else {
+        // botAvatarUrl = "https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/aca3a7ec-4f1d-4667-890c-a6f47bf08f63";
+        // botAvatarUrl = "/file=web_assets/chlogo.png"
+        botAvatarUrl = "NEED TO ADD DEFAULT AVATAR URL";
+    }
+
+    if (userAvatar == "none") {
+        userAvatarUrl = "";
+    } else if (isImgUrl(userAvatar)) {
+        userAvatarUrl = userAvatar;
+    } else {
+        userAvatarUrl = "NEED TO ADD DEFAULT AVATAR URL";
+    }
+}
+
 
 function chatbotContentChanged(attempt = 1) {
     for (var i = 0; i < attempt; i++) {
         setTimeout(() => {
             saveHistoryHtml();
             disableSendBtn();
-            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
+            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.user').forEach((userElement) => {addAvatars(userElement, 'user')});
+            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach((botElement) => {addAvatars(botElement, 'bot'); addChuanhuButton(botElement)});
         }, i === 0 ? 0 : 500);
     }
     // 理论上是不需要多次尝试执行的，可惜gradio的bug导致message可能没有渲染完毕，所以尝试500ms后再次执行
 }
 
 var chatbotObserver = new MutationObserver(() => {
+    chatbotContentChanged(1);
     if (chatbotIndicator.classList.contains('hide')) {
         chatbotContentChanged(2);
     }

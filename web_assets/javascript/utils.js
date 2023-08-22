@@ -21,6 +21,22 @@ function transEventListeners(target, source, events) {
 }
 
 
+function isImgUrl(url) {
+    const imageExtensions = /\.(jpg|jpeg|png|gif|bmp|webp)$/i;
+    if (url.startsWith('data:image/')) {
+        return true;
+    }
+    if (url.match(imageExtensions)) {
+        return true;
+    }
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return true;
+    }
+
+    return false;
+}
+
+
 /* NOTE: These reload functions are not used in the current version of the code.
  *       From stable-diffusion-webui
  */

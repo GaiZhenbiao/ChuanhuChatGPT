@@ -84,13 +84,13 @@ hr.append-display {
     min-width: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl));
 }
 [data-testid = "bot"] {
-    max-width: 85%;
-    border-bottom-left-radius: 0 !important;
+    max-width: calc(85% - 38px);
+    border-top-left-radius: 0 !important;
 }
 [data-testid = "user"] {
-    max-width: 85%;
+    max-width: calc(85% - 38px);
     width: auto !important;
-    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
 }
 
 /* 屏幕宽度大于等于500px的设备 */
@@ -112,7 +112,10 @@ hr.append-display {
         max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     }
     [data-testid = "bot"] {
-        max-width: 95% !important;
+        max-width: calc(98% - 20px) !important;
+    }
+    .chatbot-avatar {
+        display: none;
     }
     #app-title h1{
         letter-spacing: -1px; font-size: 22px;
@@ -201,7 +204,7 @@ hr.append-display {
 
 /* history message */
 .wrapper>.wrap>.history-message {
-    padding: 10px !important;
+    padding-bottom: 10px !important;
 }
 .history-message {
     /* padding: 0 !important; */
@@ -240,3 +243,36 @@ hr.append-display {
     transition: height 0.3s ease;
     note: find it better without transition animation...;
 } */
+
+
+.message-row {
+    flex-direction: row;
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+.bot-message-row {
+    justify-content: flex-start;
+}
+.user-message-row {
+    justify-content: flex-end;
+}
+.chatbot-avatar {
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    background-size: cover;
+    border-radius: 5px !important;
+}
+.chatbot-avatar.bot-avatar {
+    margin-left: 5px;
+}
+.chatbot-avatar.user-avatar {
+    margin-right: 10px;
+}
+.chatbot-avatar img {
+    border-radius: 5px !important;
+    object-fit: fill;
+    max-width: 100%;
+    max-height: 100%;
+}
