@@ -4,6 +4,7 @@ function addAvatars(messageElement, role='user'||'bot') {
         return;
     }
     if (role === 'bot' && botAvatarUrl === "" || role === 'user' && userAvatarUrl === "") {
+        messageElement.classList.add('avatar-added');
         return;
     }
 
@@ -37,4 +38,11 @@ function addAvatars(messageElement, role='user'||'bot') {
         messageRow.appendChild(messageElement);
         messageRow.appendChild(avatarDiv);
     }
+}
+
+function clearMessageRows() {
+    const messageRows = chatbotWrap.querySelectorAll('.message-row');
+    messageRows.forEach((messageRow) => {
+        messageRow.parentNode.removeChild(messageRow);
+    });
 }

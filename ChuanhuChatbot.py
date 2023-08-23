@@ -379,7 +379,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         inputs=[current_model],
         outputs=[chatbot, status_display],
         show_progress=True,
-        _js='clearHistoryHtml',
+        _js='clearChatbot',
     )
 
     retryBtn.click(**start_outputing_args).then(
