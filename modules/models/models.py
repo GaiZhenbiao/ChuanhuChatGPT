@@ -163,7 +163,7 @@ class OpenAIClient(BaseLLMModel):
 
         # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
         if shared.state.completion_url != COMPLETION_URL:
-            logging.info(f"使用自定义API URL: {shared.state.completion_url}")
+            logging.debug(f"使用自定义API URL: {shared.state.completion_url}")
 
         with retrieve_proxy():
             try:
