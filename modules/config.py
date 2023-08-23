@@ -261,3 +261,7 @@ except ValueError:
     pass
 
 share = config.get("share", False)
+
+# avatar
+bot_avatar = config.get("bot_avatar", "default")
+user_avatar = config.get("user_avatar", "default")

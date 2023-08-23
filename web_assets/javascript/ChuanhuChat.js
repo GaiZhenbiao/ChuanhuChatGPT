@@ -25,7 +25,6 @@ var sliders = null;
 var updateChuanhuBtn = null;
 var statusDisplay = null;
 
-
 var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
 var initialized = false;
@@ -82,6 +81,7 @@ function initialize() {
         setChatbotHeight();
         setChatbotScroll();
         setSlider();
+        setAvatar();
         if (!historyLoaded) loadHistoryHtml();
         if (!usernameGotten) getUserInfo();
         chatbotObserver.observe(chatbotIndicator, { attributes: true });
@@ -221,19 +221,49 @@ function setChatbotScroll() {
     chatbotWrap.scrollTo(0,scrollHeight)
 }
 
+var botAvatarUrl = "";
+var userAvatarUrl = "";
+function setAvatar() {
+    var botAvatar = gradioApp().getElementById("config-bot-avatar-url").innerText;
+    var userAvatar = gradioApp().getElementById("config-user-avatar-url").innerText;
+
+    if (botAvatar == "none") {
+        botAvatarUrl = "";
+    } else if (isImgUrl(botAvatar)) {
+        botAvatarUrl = botAvatar;
+    } else {
+        // botAvatarUrl = "https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/aca3a7ec-4f1d-4667-890c-a6f47bf08f63";
+        botAvatarUrl = "/file=web_assets/chatbot.png"
+    }
+
+    if (userAvatar == "none") {
+        userAvatarUrl = "";
+    } else if (isImgUrl(userAvatar)) {
+        userAvatarUrl = userAvatar;
+    } else {
+        userAvatarUrl = "data:image/svg+xml,%3Csvg width='32px' height='32px' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Crect fill-opacity='0.5' fill='%23bbbbbb' x='0' y='0' width='32' height='32'%3E%3C/rect%3E%3Cg transform='translate(5, 4)' fill='%23999999' fill-opacity='0.8' fill-rule='nonzero'%3E%3Cpath d='M2.29372246,24 L19.7187739,24 C20.4277609,24 20.985212,23.8373915 21.3911272,23.5121746 C21.7970424,23.1869576 22,22.7418004 22,22.1767029 C22,21.3161536 21.7458721,20.4130827 21.2376163,19.4674902 C20.7293605,18.5218977 19.9956681,17.6371184 19.036539,16.8131524 C18.07741,15.9891863 16.9210688,15.3177115 15.5675154,14.798728 C14.2139621,14.2797445 12.6914569,14.0202527 11,14.0202527 C9.30854307,14.0202527 7.78603793,14.2797445 6.43248458,14.798728 C5.07893122,15.3177115 3.92259002,15.9891863 2.96346097,16.8131524 C2.00433193,17.6371184 1.27063951,18.5218977 0.762383704,19.4674902 C0.254127901,20.4130827 0,21.3161536 0,22.1767029 C0,22.7418004 0.202957595,23.1869576 0.608872784,23.5121746 C1.01478797,23.8373915 1.57640453,24 2.29372246,24 Z M11.0124963,11.6521659 C11.9498645,11.6521659 12.8155943,11.3906214 13.6096856,10.8675324 C14.403777,10.3444433 15.042131,9.63605539 15.5247478,8.74236856 C16.0073646,7.84868174 16.248673,6.84722464 16.248673,5.73799727 C16.248673,4.65135034 16.0071492,3.67452644 15.5241015,2.80752559 C15.0410538,1.94052474 14.4024842,1.25585359 13.6083929,0.753512156 C12.8143016,0.251170719 11.9490027,0 11.0124963,0 C10.0759899,0 9.20860836,0.255422879 8.41035158,0.766268638 C7.6120948,1.2771144 6.97352528,1.96622098 6.49464303,2.8335884 C6.01576078,3.70095582 5.77631966,4.67803631 5.77631966,5.76482987 C5.77631966,6.86452653 6.01554533,7.85912886 6.49399667,8.74863683 C6.97244801,9.63814481 7.60871935,10.3444433 8.40281069,10.8675324 C9.19690203,11.3906214 10.0667972,11.6521659 11.0124963,11.6521659 Z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E";
+    }
+}
+
+function clearChatbot() {
+    clearHistoryHtml();
+    clearMessageRows();
+}
 
 function chatbotContentChanged(attempt = 1) {
     for (var i = 0; i < attempt; i++) {
         setTimeout(() => {
             saveHistoryHtml();
             disableSendBtn();
-            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
+            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.user').forEach((userElement) => {addAvatars(userElement, 'user')});
+            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach((botElement) => {addAvatars(botElement, 'bot'); addChuanhuButton(botElement)});
         }, i === 0 ? 0 : 500);
     }
     // 理论上是不需要多次尝试执行的，可惜gradio的bug导致message可能没有渲染完毕，所以尝试500ms后再次执行
 }
 
 var chatbotObserver = new MutationObserver(() => {
+    chatbotContentChanged(1);
     if (chatbotIndicator.classList.contains('hide')) {
         chatbotContentChanged(2);
     }
