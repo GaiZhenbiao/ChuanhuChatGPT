@@ -66,12 +66,16 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
                     cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
             with gr.Row():
-                emptyBtn = gr.Button(
-                    i18n("🧹 新的对话"), elem_id="empty-btn"
-                )
-                retryBtn = gr.Button(i18n("🔄 重新生成"))
-                delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
-                delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"))
+                with gr.Column(min_width=120, scale=1):
+                    emptyBtn = gr.Button(
+                        i18n("🧹 新的对话"), elem_id="empty-btn"
+                    )
+                with gr.Column(min_width=120, scale=1):
+                    retryBtn = gr.Button(i18n("🔄 重新生成"))
+                with gr.Column(min_width=120, scale=1):
+                    delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
+                with gr.Column(min_width=120, scale=1):
+                    delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"))
                 with gr.Row(visible=False) as like_dislike_area:
                     with gr.Column(min_width=20, scale=1):
                         likeBtn = gr.Button(i18n("👍"))
