@@ -44,7 +44,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         status_display = gr.Markdown(get_geoip(), elem_id="status-display")
     with gr.Row(elem_id="float-display"):
         user_info = gr.Markdown(value="getting user info...", elem_id="user-info")
-        config_info = gr.HTML(get_html("config_info.html").format(bot_avatar=config.bot_avatar, user_avatar=config.user_avatar), visible=False, elem_id="config-info")
+        config_info = gr.HTML(get_html("config_info.html").format(), visible=False, elem_id="config-info")
         update_info = gr.HTML(get_html("update.html").format(
             current_version=repo_tag_html(),
             version_time=version_time(),
@@ -57,7 +57,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     with gr.Row(equal_height=True):
         with gr.Column(scale=5):
             with gr.Row():
-                chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu-chatbot", latex_delimiters=latex_delimiters_set, height=700)
+                chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu-chatbot", latex_delimiters=latex_delimiters_set, height=700, avatar_images=[config.user_avatar, config.bot_avatar])
             with gr.Row():
                 with gr.Column(min_width=225, scale=12):
                     user_input = gr.Textbox(

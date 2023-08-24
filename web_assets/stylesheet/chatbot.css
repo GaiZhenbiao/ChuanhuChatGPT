@@ -84,13 +84,16 @@ hr.append-display {
     min-width: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl));
 }
 [data-testid = "bot"] {
-    max-width: calc(85% - 38px);
-    border-top-left-radius: 0 !important;
+    max-width: calc(85% - 40px);
+    border-bottom-left-radius: 0 !important;
 }
 [data-testid = "user"] {
-    max-width: calc(85% - 38px);
+    max-width: calc(85% - 40px);
     width: auto !important;
-    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+.message-row.user-row {
+    justify-content: flex-end;
 }
 
 /* 屏幕宽度大于等于500px的设备 */
@@ -245,7 +248,7 @@ hr.append-display {
 } */
 
 
-.message-row {
+/* .message-row {
     flex-direction: row;
     display: flex;
     gap: 8px;
@@ -275,4 +278,4 @@ hr.append-display {
     object-fit: cover;
     width: 100%;
     height: 100%;
-}
+} */

@@ -278,3 +278,11 @@ share = config.get("share", False)
 # avatar
 bot_avatar = config.get("bot_avatar", "default")
 user_avatar = config.get("user_avatar", "default")
+if bot_avatar == "" or bot_avatar == "none" or bot_avatar is None:
+    bot_avatar = None
+elif bot_avatar == "default":
+    bot_avatar = "/web_assets/chatbot.png"
+if user_avatar == "" or user_avatar == "none" or user_avatar is None:
+    user_avatar = None
+elif user_avatar == "default":
+    user_avatar = "NEED TO ADD"
