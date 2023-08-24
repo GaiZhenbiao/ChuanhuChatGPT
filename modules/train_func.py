@@ -6,20 +6,31 @@ import openai
 import gradio as gr
 import ujson as json
 import commentjson
+import openpyxl
 
 import modules.presets as presets
 from modules.utils import get_file_hash, count_token
 from modules.presets import i18n
 
 def excel_to_jsonl(filepath, preview=False):
+    # 打开Excel文件
+    workbook = openpyxl.load_workbook(filepath)
+
+    # 获取第一个工作表
+    sheet = workbook.active
+
+    # 获取所有行数据
+    data = []
+    for row in sheet.iter_rows(values_only=True):
+        data.append(row)
+
+    # 构建字典列表
+    headers = data[0]
     jsonl = []
-    with open(filepath, "rb") as f:
-        import pandas as pd
-        df = pd.read_excel(f)
-        for row in df.iterrows():
-            jsonl.append(row[1].to_dict())
-            if preview:
-                break
+    for row in data[1:]:
+        row_data = dict(zip(headers, row))
+        if any(row_data.values()):
+            jsonl.append(row_data)
     formatted_jsonl = []
     for i in jsonl:
             if "提问" in i and "答案" in i:
