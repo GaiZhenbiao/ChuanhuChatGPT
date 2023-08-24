@@ -247,35 +247,12 @@ hr.append-display {
     note: find it better without transition animation...;
 } */
 
-
-/* .message-row {
-    flex-direction: row;
-    display: flex;
-    gap: 8px;
-    width: 100%;
+img.avatar-image {
+    border-radius: 5px !important;
 }
-.bot-message-row {
-    justify-content: flex-start;
-}
-.user-message-row {
-    justify-content: flex-end;
-}
-.chatbot-avatar {
-    width: 32px;
-    height: 32px;
+.avatar-container {
+    width: 32px !important;
+    height: 32px !important;
     background-color: transparent;
     background-size: cover;
-    border-radius: 5px !important;
 }
-.chatbot-avatar.bot-avatar {
-    margin-left: 5px;
-}
-.chatbot-avatar.user-avatar {
-    margin-right: 10px;
-}
-.chatbot-avatar img {
-    border-radius: 5px !important;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-} */

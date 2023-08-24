@@ -25,6 +25,12 @@ function loadHistoryHtml() {
         return; // logged in, do nothing
     }
     if (!historyLoaded) {
+        // preprocess, gradio buttons in history lost their event listeners
+        var gradioCopyButtons = tempDiv.querySelectorAll('button.copy_code_button');
+        for (var i = 0; i < gradioCopyButtons.length; i++) {
+            gradioCopyButtons[i].parentNode.removeChild(gradioCopyButtons[i]);
+        }
+
         var fakeHistory = document.createElement('div');
         fakeHistory.classList.add('history-message');
         fakeHistory.innerHTML = tempDiv.innerHTML;

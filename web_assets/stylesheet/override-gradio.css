@@ -15,14 +15,15 @@ footer {
 }
 
 /* 覆盖 gradio 丑陋的复制按钮样式 */
-.message pre button[title="copy"] {
-    border-radius: 5px;
+.message .code_wrap button[title="copy"] {
+    border-radius: 5px !important;
     transition: background-color .2s ease;
+    color: white;
 }
-.message pre button[title="copy"]:hover {
+.message .code_wrap button[title="copy"]:hover {
     background-color: #333232;
 }
-.message pre button .check {
+.message .code_wrap button .check {
     color: #fff !important;
     background: var(--neutral-950) !important;
 }
