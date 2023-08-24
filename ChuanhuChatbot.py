@@ -184,6 +184,18 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 with gr.Column():
                                     downloadFile = gr.File(interactive=True)
 
+                with gr.Tab(label=i18n("训练")):
+                    with gr.Column(variant="panel"):
+                        dataset_preview_json = gr.JSON(label=i18n("数据集预览"), readonly=True)
+                        upload_dataset_btn = gr.UploadButton(label = i18n("上传数据集"), file_types=[".xlsx", ".jsonl"])
+                    with gr.Column(variant="panel"):
+                        openai_train_epoch_slider = gr.Slider(label=i18n("训练轮数"), minimum=1, maximum=100, value=3, step=1, interactive=True)
+                        openai_start_train_btn = gr.Button(i18n("开始训练"))
+                    with gr.Column(variant="panel"):
+                        openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("未开始训练"))
+                        openai_status_refresh_btn = gr.Button(i18n("刷新状态"))
+                        add_to_models_btn = gr.Button(i18n("添加到模型列表"), interactive=False)
+
                 with gr.Tab(label=i18n("高级")):
                     gr.HTML(get_html("appearance_switcher.html").format(label=i18n("切换亮暗色主题")), elem_classes="insert-block")
                     use_streaming_checkbox = gr.Checkbox(
