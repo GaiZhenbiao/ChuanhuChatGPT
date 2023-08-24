@@ -16,7 +16,7 @@ from modules.overwrites import *
 from modules.webui import *
 from modules.repo import *
 from modules.models.models import get_model
-from modules.train_func import handle_dataset_selection, handle_dataset_clear, upload_to_openai, start_training, get_training_status, add_to_models
+from modules.train_func import handle_dataset_selection, handle_dataset_clear, upload_to_openai, start_training, get_training_status, add_to_models, cancel_all_jobs
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
@@ -201,6 +201,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     with gr.Column(variant="panel"):
                         openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("未开始训练"))
                         openai_status_refresh_btn = gr.Button(i18n("刷新状态"))
+                        openai_cancel_all_jobs_btn = gr.Button(i18n("取消所有任务"))
                         add_to_models_btn = gr.Button(i18n("添加训练好的模型到模型列表"), interactive=False)
 
                 with gr.Tab(label=i18n("高级")):
@@ -498,6 +499,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     openai_start_train_btn.click(start_training, [openai_ft_file_id, openai_ft_suffix, openai_train_epoch_slider], [openai_train_status])
     openai_status_refresh_btn.click(get_training_status, [], [openai_train_status, add_to_models_btn])
     add_to_models_btn.click(add_to_models, [], [model_select_dropdown, status_display], show_progress=True)
+    openai_cancel_all_jobs_btn.click(cancel_all_jobs, [], [openai_train_status], show_progress=True)
 
     # Advanced
     max_context_length_slider.change(set_token_upper_limit, [current_model, max_context_length_slider], None)

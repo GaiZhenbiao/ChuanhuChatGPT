@@ -111,6 +111,13 @@ def handle_dataset_clear():
 
 def add_to_models():
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    succeeded_jobs = [job for job in openai.FineTuningJob.list(limit=10)["data"] if job["status"] == "succeeded"]
+    succeeded_jobs = [job for job in openai.FineTuningJob.list()["data"] if job["status"] == "succeeded"]
     presets.MODELS.extend([job["fine_tuned_model"] for job in succeeded_jobs])
     return gr.update(choices=presets.MODELS), f"成功添加了 {len(succeeded_jobs)} 个模型。"
+
+def cancel_all_jobs():
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    jobs = [job for job in openai.FineTuningJob.list()["data"] if job["status"] not in ["cancelled", "succeeded"]]
+    for job in jobs:
+        openai.FineTuningJob.cancel(job["id"])
+    return f"成功取消了 {len(jobs)} 个训练任务。"
