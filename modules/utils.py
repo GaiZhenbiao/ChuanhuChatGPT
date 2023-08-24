@@ -126,9 +126,10 @@ def dislike(current_model, *args):
     return current_model.dislike(*args)
 
 
-def count_token(message):
+def count_token(input_str):
     encoding = tiktoken.get_encoding("cl100k_base")
-    input_str = f"role: {message['role']}, content: {message['content']}"
+    if type(input_str) == dict:
+        input_str = f"role: {input_str['role']}, content: {input_str['content']}"
     length = len(encoding.encode(input_str))
     return length
 

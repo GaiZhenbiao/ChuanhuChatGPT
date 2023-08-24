@@ -8,7 +8,7 @@ import ujson as json
 import commentjson
 
 import modules.presets as presets
-from modules.utils import get_file_hash
+from modules.utils import get_file_hash, count_token
 from modules.presets import i18n
 
 def excel_to_jsonl(filepath, preview=False):
@@ -20,7 +20,27 @@ def excel_to_jsonl(filepath, preview=False):
             jsonl.append(row[1].to_dict())
             if preview:
                 break
-    return jsonl
+    formatted_jsonl = []
+    for i in jsonl:
+            if "提问" in i and "答案" in i:
+                if "系统" in i :
+                    formatted_jsonl.append({
+                        "messages":[
+                            {"role": "system", "content": i["系统"]},
+                            {"role": "user", "content": i["提问"]},
+                            {"role": "assistant", "content": i["答案"]}
+                        ]
+                    })
+                else:
+                    formatted_jsonl.append({
+                        "messages":[
+                            {"role": "user", "content": i["提问"]},
+                            {"role": "assistant", "content": i["答案"]}
+                        ]
+                    })
+            else:
+                logging.warning(f"跳过一行数据，因为没有找到提问和答案: {i}")
+    return formatted_jsonl
 
 def jsonl_save_to_disk(jsonl, filepath):
     file_hash = get_file_hash(file_paths = [filepath])
@@ -30,15 +50,27 @@ def jsonl_save_to_disk(jsonl, filepath):
         f.write("\n".join([json.dumps(i, ensure_ascii=False) for i in jsonl]))
     return save_path
 
+def estimate_cost(ds):
+    dialogues = []
+    for l in ds:
+        for m in l["messages"]:
+            dialogues.append(m["content"])
+    dialogues = "\n".join(dialogues)
+    tokens = count_token(dialogues)
+    return f"Token 数约为 {tokens}，预估每轮（epoch）费用约为 {tokens / 1000 * 0.008} 美元。"
+
+
 def handle_dataset_selection(file_src):
     logging.info(f"Loading dataset {file_src.name}...")
     preview = ""
     if file_src.name.endswith(".jsonl"):
         with open(file_src.name, "r") as f:
-            preview = f.readline()
+            ds = [json.loads(l) for l in f.readlines()]
     else:
-        preview = excel_to_jsonl(file_src.name)[0]
-    return preview, gr.update(interactive=True), "预估数据集 token 数量: 这个功能还没实现"
+        ds = excel_to_jsonl(file_src.name)
+    preview = ds[0]
+
+    return preview, gr.update(interactive=True), estimate_cost(ds)
 
 def upload_to_openai(file_src):
     openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -47,27 +79,6 @@ def upload_to_openai(file_src):
     logging.info(f"Uploading dataset {dspath}...")
     if dspath.endswith(".xlsx"):
         jsonl = excel_to_jsonl(dspath)
-        tmp_jsonl = []
-        for i in jsonl:
-            if "提问" in i and "答案" in i:
-                if "系统" in i :
-                    tmp_jsonl.append({
-                        "messages":[
-                            {"role": "system", "content": i["系统"]},
-                            {"role": "user", "content": i["提问"]},
-                            {"role": "assistant", "content": i["答案"]}
-                        ]
-                    })
-                else:
-                    tmp_jsonl.append({
-                        "messages":[
-                            {"role": "user", "content": i["提问"]},
-                            {"role": "assistant", "content": i["答案"]}
-                        ]
-                    })
-            else:
-                logging.warning(f"跳过一行数据，因为没有找到提问和答案: {i}")
-        jsonl = tmp_jsonl
         dspath = jsonl_save_to_disk(jsonl, dspath)
     try:
         uploaded = openai.File.create(
