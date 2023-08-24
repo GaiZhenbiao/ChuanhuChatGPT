@@ -5,14 +5,11 @@ import logging
 import commentjson as json
 import os
 import datetime
-from datetime import timezone
-import hashlib
 import csv
 import requests
 import re
 import html
-import sys
-import subprocess
+import hashlib
 
 import gradio as gr
 from pypinyin import lazy_pinyin
@@ -241,7 +238,7 @@ def convert_bot_before_marked(chat_message):
         code_block_pattern = re.compile(r"```(.*?)(?:```|$)", re.DOTALL)
         code_blocks = code_block_pattern.findall(chat_message)
         non_code_parts = code_block_pattern.split(chat_message)[::2]
-        result = []  
+        result = []
         for non_code, code in zip(non_code_parts, code_blocks + [""]):
             if non_code.strip():
                 result.append(non_code)
@@ -670,3 +667,16 @@ def auth_from_conf(username, password):
         return False
     except:
         return False
+
+def get_file_hash(file_src=None, file_paths=None):
+    if file_src:
+        file_paths = [x.name for x in file_src]
+    file_paths.sort(key=lambda x: os.path.basename(x))
+
+    md5_hash = hashlib.md5()
+    for file_path in file_paths:
+        with open(file_path, "rb") as f:
+            while chunk := f.read(8192):
+                md5_hash.update(chunk)
+
+    return md5_hash.hexdigest()

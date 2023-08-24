@@ -21,7 +21,8 @@ duckduckgo-search
 arxiv
 wikipedia
 google.generativeai
-openai
+openai>=0.27.9
 unstructured
 google-api-python-client
 tabulate
+ujson

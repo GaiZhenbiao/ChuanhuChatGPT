@@ -1,26 +1,13 @@
 import os
 import logging
 
-import colorama
+import hashlib
 import PyPDF2
 from tqdm import tqdm
 
 from modules.presets import *
 from modules.utils import *
 from modules.config import local_embedding
-
-
-def get_index_name(file_src):
-    file_paths = [x.name for x in file_src]
-    file_paths.sort(key=lambda x: os.path.basename(x))
-
-    md5_hash = hashlib.md5()
-    for file_path in file_paths:
-        with open(file_path, "rb") as f:
-            while chunk := f.read(8192):
-                md5_hash.update(chunk)
-
-    return md5_hash.hexdigest()
 
 
 def get_documents(file_src):
@@ -113,7 +100,7 @@ def construct_index(
     embedding_limit = None if embedding_limit == 0 else embedding_limit
     separator = " " if separator == "" else separator
 
-    index_name = get_index_name(file_src)
+    index_name = get_file_hash(file_src)
     index_path = f"./index/{index_name}"
     if local_embedding:
         from langchain.embeddings.huggingface import HuggingFaceEmbeddings
