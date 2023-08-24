@@ -38,7 +38,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     current_model = gr.State(create_new_model)
 
     topic = gr.State(i18n("未命名对话历史记录"))
-    
+
     with gr.Row():
         gr.HTML(CHUANHU_TITLE, elem_id="app-title")
         status_display = gr.Markdown(get_geoip(), elem_id="status-display")
@@ -188,7 +188,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                     downloadFile = gr.File(interactive=True)
 
                 with gr.Tab(label=i18n("微调")):
-                    openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("未开始训练"))
+                    openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("在这里[查看使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B#%E5%BE%AE%E8%B0%83-gpt-35)"))
 
                     with gr.Tab(label=i18n("准备数据集")):
                         dataset_preview_json = gr.JSON(label=i18n("数据集预览"), readonly=True)
@@ -322,7 +322,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
                         updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
 
-    
+
     gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
 
