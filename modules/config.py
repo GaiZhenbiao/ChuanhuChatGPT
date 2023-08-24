@@ -96,6 +96,10 @@ else:
     sensitive_id = config.get("sensitive_id", "")
     sensitive_id = os.environ.get("SENSITIVE_ID", sensitive_id)
 
+# 模型配置
+if "extra_models" in  config:
+    presets.MODELS.extend(config["extra_models"])
+    logging.info(f"已添加额外的模型：{config['extra_models']}")
 
 google_palm_api_key = config.get("google_palm_api_key", "")
 google_palm_api_key = os.environ.get(

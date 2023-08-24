@@ -15,8 +15,8 @@ from modules.presets import *
 from modules.overwrites import *
 from modules.webui import *
 from modules.repo import *
+from modules.train_func import *
 from modules.models.models import get_model
-from modules.train_func import handle_dataset_selection, handle_dataset_clear, upload_to_openai, start_training, get_training_status, add_to_models, cancel_all_jobs
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 

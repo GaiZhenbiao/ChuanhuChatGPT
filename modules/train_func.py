@@ -5,6 +5,7 @@ import traceback
 import openai
 import gradio as gr
 import ujson as json
+import commentjson
 
 import modules.presets as presets
 from modules.utils import get_file_hash
@@ -112,7 +113,18 @@ def handle_dataset_clear():
 def add_to_models():
     openai.api_key = os.getenv("OPENAI_API_KEY")
     succeeded_jobs = [job for job in openai.FineTuningJob.list()["data"] if job["status"] == "succeeded"]
-    presets.MODELS.extend([job["fine_tuned_model"] for job in succeeded_jobs])
+    extra_models = [job["fine_tuned_model"] for job in succeeded_jobs]
+    presets.MODELS.extend(extra_models)
+
+    with open('config.json', 'r') as f:
+        data = commentjson.load(f)
+    if 'extra_models' in data:
+        data['extra_models'].extend(extra_models)
+    else:
+        data['extra_models'] = extra_models
+    with open('config.json', 'w') as f:
+        commentjson.dump(data, f, indent=4)
+
     return gr.update(choices=presets.MODELS), f"成功添加了 {len(succeeded_jobs)} 个模型。"
 
 def cancel_all_jobs():
