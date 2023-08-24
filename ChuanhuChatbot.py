@@ -36,7 +36,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     assert type(my_api_key)==str
     user_api_key = gr.State(my_api_key)
     current_model = gr.State(create_new_model)
-    openai_ft_file_id = gr.State("")
 
     topic = gr.State(i18n("未命名对话历史记录"))
 
@@ -188,16 +187,18 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                     downloadFile = gr.File(interactive=True)
 
                 with gr.Tab(label=i18n("训练")):
-                    with gr.Column(variant="panel"):
+                    with gr.Column():
                         dataset_preview_json = gr.JSON(label=i18n("数据集预览"), readonly=True)
                         dataset_selection = gr.Files(label = i18n("选择数据集"), file_types=[".xlsx", ".jsonl"], file_count="single")
                         upload_to_openai_btn = gr.Button(i18n("上传到OpenAI"), interactive=False)
 
-                    with gr.Column(variant="panel"):
+                    with gr.Column():
+                        openai_ft_file_id = gr.Textbox(label=i18n("文件ID"), value="", lines=1, placeholder=i18n("上传到 OpenAI 后自动填充"))
                         openai_ft_suffix = gr.Textbox(label=i18n("模型名称后缀"), value="", lines=1, placeholder=i18n("可选，用于区分不同的模型"))
                         openai_train_epoch_slider = gr.Slider(label=i18n("训练轮数"), minimum=1, maximum=100, value=3, step=1, interactive=True)
                         openai_start_train_btn = gr.Button(i18n("开始训练"))
-                    with gr.Column(variant="panel"):
+
+                    with gr.Column():
                         openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("未开始训练"))
                         openai_status_refresh_btn = gr.Button(i18n("刷新状态"))
                         openai_cancel_all_jobs_btn = gr.Button(i18n("取消所有任务"))
