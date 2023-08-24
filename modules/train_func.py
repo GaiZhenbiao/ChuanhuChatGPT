@@ -114,12 +114,16 @@ def add_to_models():
     openai.api_key = os.getenv("OPENAI_API_KEY")
     succeeded_jobs = [job for job in openai.FineTuningJob.list()["data"] if job["status"] == "succeeded"]
     extra_models = [job["fine_tuned_model"] for job in succeeded_jobs]
-    presets.MODELS.extend(extra_models)
+    for i in extra_models:
+        if i not in presets.MODELS:
+            presets.MODELS.append(extra_models)
 
     with open('config.json', 'r') as f:
         data = commentjson.load(f)
     if 'extra_models' in data:
-        data['extra_models'].extend(extra_models)
+        for i in extra_models:
+            if i not in data['extra_models']:
+                data['extra_models'].append(i)
     else:
         data['extra_models'] = extra_models
     with open('config.json', 'w') as f:
