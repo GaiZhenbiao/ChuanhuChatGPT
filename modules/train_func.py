@@ -74,7 +74,7 @@ def upload_to_openai(file_src):
             file=open(dspath, "rb"),
             purpose='fine-tune'
             )
-        return uploaded.id, f"上传成功，文件ID: {uploaded.id}"
+        return uploaded.id, f"上传成功"
     except Exception as e:
         traceback.print_exc()
         return "", f"上传失败，原因：{ e }"

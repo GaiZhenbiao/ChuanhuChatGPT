@@ -186,7 +186,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 with gr.Column():
                                     downloadFile = gr.File(interactive=True)
 
-                with gr.Tab(label=i18n("训练")):
+                with gr.Tab(label=i18n("微调")):
+                    openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("未开始训练"))
+
                     with gr.Tab(label=i18n("准备数据集")):
                         dataset_preview_json = gr.JSON(label=i18n("数据集预览"), readonly=True)
                         dataset_selection = gr.Files(label = i18n("选择数据集"), file_types=[".xlsx", ".jsonl"], file_count="single")
@@ -195,11 +197,10 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     with gr.Tab(label=i18n("训练")):
                         openai_ft_file_id = gr.Textbox(label=i18n("文件ID"), value="", lines=1, placeholder=i18n("上传到 OpenAI 后自动填充"))
                         openai_ft_suffix = gr.Textbox(label=i18n("模型名称后缀"), value="", lines=1, placeholder=i18n("可选，用于区分不同的模型"))
-                        openai_train_epoch_slider = gr.Slider(label=i18n("训练轮数"), minimum=1, maximum=100, value=3, step=1, interactive=True)
+                        openai_train_epoch_slider = gr.Slider(label=i18n("训练轮数（Epochs）"), minimum=1, maximum=100, value=3, step=1, interactive=True)
                         openai_start_train_btn = gr.Button(i18n("开始训练"), variant="primary", interactive=False)
 
                     with gr.Tab(label=i18n("状态")):
-                        openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("未开始训练"))
                         openai_status_refresh_btn = gr.Button(i18n("刷新状态"))
                         openai_cancel_all_jobs_btn = gr.Button(i18n("取消所有任务"))
                         add_to_models_btn = gr.Button(i18n("添加训练好的模型到模型列表"), interactive=False)
@@ -492,13 +493,15 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [saveFileName, systemPromptTxt, chatbot])
 
     # Train
-    dataset_selection.upload(handle_dataset_selection, dataset_selection, [dataset_preview_json, upload_to_openai_btn, status_display])
+    dataset_selection.upload(handle_dataset_selection, dataset_selection, [dataset_preview_json, upload_to_openai_btn, openai_train_status])
     dataset_selection.clear(handle_dataset_clear, [], [dataset_preview_json, upload_to_openai_btn])
-    upload_to_openai_btn.click(upload_to_openai, [dataset_selection], [openai_ft_file_id, status_display], show_progress=True)
+    upload_to_openai_btn.click(upload_to_openai, [dataset_selection], [openai_ft_file_id, openai_train_status], show_progress=True)
+
     openai_ft_file_id.change(lambda x: gr.update(interactive=True) if len(x) > 0 else gr.update(interactive=False), [openai_ft_file_id], [openai_start_train_btn])
     openai_start_train_btn.click(start_training, [openai_ft_file_id, openai_ft_suffix, openai_train_epoch_slider], [openai_train_status])
+
     openai_status_refresh_btn.click(get_training_status, [], [openai_train_status, add_to_models_btn])
-    add_to_models_btn.click(add_to_models, [], [model_select_dropdown, status_display], show_progress=True)
+    add_to_models_btn.click(add_to_models, [], [model_select_dropdown, openai_train_status], show_progress=True)
     openai_cancel_all_jobs_btn.click(cancel_all_jobs, [], [openai_train_status], show_progress=True)
 
     # Advanced
