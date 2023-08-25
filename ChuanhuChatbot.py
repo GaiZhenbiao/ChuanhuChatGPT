@@ -68,7 +68,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                 with gr.Column(min_width=42, scale=1):
                     submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
                     cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
-            with gr.Row():
+            with gr.Row(elem_id="chatbot-buttons"):
                 with gr.Column(min_width=120, scale=1):
                     emptyBtn = gr.Button(
                         i18n("🧹 新的对话"), elem_id="empty-btn"
