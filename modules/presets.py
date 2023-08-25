@@ -69,6 +69,7 @@ ONLINE_MODELS = [
     "yuanai-1.0-rhythm_poems",
     "minimax-abab4-chat",
     "minimax-abab5-chat",
+    "midjourney"
 ]
 
 LOCAL_MODELS = [

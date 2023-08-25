@@ -145,3 +145,4 @@ lora/
 .idea
 templates/*
 files/
+tmp/

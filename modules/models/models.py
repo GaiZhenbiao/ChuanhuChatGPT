@@ -621,6 +621,10 @@ def get_model(
         elif model_type == ModelType.LangchainChat:
             from .azure import Azure_OpenAI_Client
             model = Azure_OpenAI_Client(model_name, user_name=user_name)
+        elif model_type == ModelType.Midjourney:
+            from .midjourney import Midjourney_Client
+            mj_proxy_api_secret = os.getenv("MIDJOURNEY_PROXY_API_SECRET")
+            model = Midjourney_Client(model_name, mj_proxy_api_secret, user_name=user_name)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)

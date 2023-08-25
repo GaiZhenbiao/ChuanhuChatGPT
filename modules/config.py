@@ -114,6 +114,15 @@ os.environ["MINIMAX_API_KEY"] = minimax_api_key
 minimax_group_id = config.get("minimax_group_id", "")
 os.environ["MINIMAX_GROUP_ID"] = minimax_group_id
 
+midjourney_proxy_api_base = config.get("midjourney_proxy_api_base", "")
+os.environ["MIDJOURNEY_PROXY_API_BASE"] = midjourney_proxy_api_base
+midjourney_proxy_api_secret = config.get("midjourney_proxy_api_secret", "")
+os.environ["MIDJOURNEY_PROXY_API_SECRET"] = midjourney_proxy_api_secret
+midjourney_discord_proxy_url = config.get("midjourney_discord_proxy_url", "")
+os.environ["MIDJOURNEY_DISCORD_PROXY_URL"] = midjourney_discord_proxy_url
+midjourney_temp_folder = config.get("midjourney_temp_folder", "")
+os.environ["MIDJOURNEY_TEMP_FOLDER"] = midjourney_temp_folder
+
 load_config_to_environ(["openai_api_type", "azure_openai_api_key", "azure_openai_api_base_url",
                        "azure_openai_api_version", "azure_deployment_name", "azure_embedding_deployment_name", "azure_embedding_model_name"])
 
