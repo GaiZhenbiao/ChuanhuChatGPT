@@ -253,7 +253,7 @@ function clearChatbot() {
 function chatbotContentChanged(attempt = 1) {
     for (var i = 0; i < attempt; i++) {
         setTimeout(() => {
-            clearMessageRows();
+            // clearMessageRows();
             saveHistoryHtml();
             disableSendBtn();
             gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.user').forEach((userElement) => {addAvatars(userElement, 'user')});
@@ -264,6 +264,7 @@ function chatbotContentChanged(attempt = 1) {
 }
 
 var chatbotObserver = new MutationObserver(() => {
+    clearMessageRows();
     chatbotContentChanged(1);
     if (chatbotIndicator.classList.contains('hide')) {
         chatbotContentChanged(2);
