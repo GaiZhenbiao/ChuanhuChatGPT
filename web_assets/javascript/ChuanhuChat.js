@@ -253,6 +253,7 @@ function clearChatbot() {
 function chatbotContentChanged(attempt = 1) {
     for (var i = 0; i < attempt; i++) {
         setTimeout(() => {
+            clearMessageRows();
             saveHistoryHtml();
             disableSendBtn();
             gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.user').forEach((userElement) => {addAvatars(userElement, 'user')});
