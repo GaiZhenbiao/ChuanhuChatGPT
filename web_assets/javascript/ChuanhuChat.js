@@ -25,6 +25,11 @@ var sliders = null;
 var updateChuanhuBtn = null;
 var statusDisplay = null;
 
+var historySelector = null;
+var chuanhuPopup = null;
+var settingBox = null;
+var trainingBox = null;
+
 var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
 var initialized = false;
@@ -62,6 +67,12 @@ function initialize() {
     updateChuanhuBtn = gradioApp().getElementById("update-chuanhu-btn");
     statusDisplay = gradioApp().querySelector('#status-display');
 
+    historySelector = gradioApp().querySelector('#history-select-dropdown');
+    chuanhuPopup = gradioApp().querySelector('#chuanhu-popup');
+    settingBox = gradioApp().querySelector('#chuanhu-setting');
+    trainingBox = gradioApp().querySelector('#chuanhu-training');
+
+
     if (loginUserForm) {
         localStorage.setItem("userLogged", true);
         userLogged = true;
@@ -91,6 +102,10 @@ function initialize() {
         if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten) {
             updateLatestVersion();
         }
+
+        // setHistroyPanel();
+        settingBox.classList.add('hideBox');
+        trainingBox.classList.add('hideBox');
     }
 }
 
@@ -192,6 +207,13 @@ function adjustDarkMode() {
     apSwitch.addEventListener("change", (e) => {
         toggleDarkMode(e.target.checked);
     });
+}
+
+function setChatAreaWidth() {
+    const screenWidth = window.innerWidth;
+    const menuWidth = gradioApp().querySelector('.menu').offsetWidth;
+    const chatAreaWidth = chatArea.offsetWidth
+
 }
 
 function setChatbotHeight() {
