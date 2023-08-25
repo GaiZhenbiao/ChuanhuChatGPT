@@ -166,7 +166,7 @@ class ModelType(Enum):
             model_type = ModelType.ChuanhuAgent
         elif "palm" in model_name_lower:
             model_type = ModelType.GooglePaLM
-        elif "azure" or "api" in model_name_lower:
+        elif "azure" in model_name_lower or "api" in model_name_lower:
             model_type = ModelType.LangchainChat
         else:
             model_type = ModelType.Unknown
