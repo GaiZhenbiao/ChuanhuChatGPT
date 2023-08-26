@@ -127,19 +127,27 @@
     display: none;
     z-index: 2147483689;
     position: fixed;
+    top: 20px;
+    left: 20px;
+/*     
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 800px;
-    height: 80%;
-    overflow: auto !important;
-    overflow-x: hidden !important;
+ */
+    width: 680px;
+    height: 400px;
+/* overflow: hidden!important; */
+/* overflow-x: hidden !important; */
+    padding: 0;
 }
 
 #chuanhu-popup.showBox {
     display: block;
 }
 
+#chuanhu-popup > .gradio-box {
+    padding: 0;
+}
 .hideBox {
     display: none;
 }
@@ -161,6 +169,64 @@
     overflow: auto;
     box-shadow: var(--shadow-drop-lg);
 }
-#chuanhu-popup ul.options {
 
+#chuanhu-popup > .gradio-box > .gradio-row:first-of-type {
+    padding: 24px !important;
+    border-bottom: 1.8px solid var(--border-color-primary);
+}
+#chuanhu-popup > .gradio-box > .gradio-row > .close-box-btn {
+    max-width: 28px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#chuanhu-popup > .gradio-box > .gradio-tabs {
+    display: block;
+    height: 324px;
+    /* margin: 16px 24px; */
+}
+
+#chuanhu-popup > .gradio-box > .gradio-tabs > div.tabitem {
+    border: none;
+    border-radius: 0;
+    overflow: auto;
+    height: 100%;
+    padding: 16px 24px;
+}
+#chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav {
+    float: left;
+    display: block;
+    border: none;
+    padding: 16px;
+    width: 180px;
+    height: 100%;
+    overflow: auto;
+    background: var(--background-fill-secondary);
+    border-bottom-left-radius: var(--block-radius);
+    border-right: 1px solid var(--border-color-primary);
+}
+#chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button {
+    display: block;
+    border: none;
+    border-radius: 6px;
+    text-align: left;
+    white-space: initial;
+    width: 100%;
+    /* height: 32px; */
+    padding: 7px 12px;
+}
+#chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button.selected {
+    background-color: var(--button-primary-background-fill);
+    /* font-weight: bold; */
+    color: var(--button-primary-text-color);
+}
+/* #chuanhu-popup ul.options {
+    transform: translate(-50%, -50%);
+} */
+
+
+#history-select-wrap {
+    height: 400px;
+    overflow: auto;
+    overflow-x: hidden;
 }

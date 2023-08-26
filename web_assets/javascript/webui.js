@@ -16,11 +16,15 @@ function showMask() {
     mask.classList.add('chuanhu-mask');
     document.body.appendChild(mask);
     mask.addEventListener('click', () => {
-        chuanhuPopup.classList.remove('showBox');
-        trainingBox.classList.add('hideBox');
-        settingBox.classList.add('hideBox');
-        mask.remove();
+        closeBox();
     });
+}
+
+function closeBox() {
+    chuanhuPopup.classList.remove('showBox');
+    trainingBox.classList.add('hideBox');
+    settingBox.classList.add('hideBox');
+    document.querySelector('.chuanhu-mask')?.remove();
 }
 
 function menuClick() {

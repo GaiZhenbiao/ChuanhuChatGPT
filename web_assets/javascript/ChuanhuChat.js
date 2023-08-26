@@ -48,7 +48,7 @@ function gradioLoaded(mutations) {
 }
 
 function initialize() {
-    var needInit = {gradioContainer, apSwitch, user_input_tb, userInfoDiv, appTitleDiv, chatbot, chatbotIndicator, chatbotWrap, statusDisplay, sliders, updateChuanhuBtn};
+    var needInit = {gradioContainer, apSwitch, user_input_tb, userInfoDiv, appTitleDiv, chatbot, chatbotIndicator, chatbotWrap, statusDisplay, sliders, updateChuanhuBtn, chuanhuPopup};
     initialized = true;
 
     loginUserForm = gradioApp().querySelector(".gradio-container > .main > .wrap > .panel > .form")
@@ -91,6 +91,7 @@ function initialize() {
         setTimeout(showOrHideUserInfo(), 2000);
         setChatbotHeight();
         setChatbotScroll();
+        setPopupBoxPosition();
         setSlider();
         setAvatar();
         if (!historyLoaded) loadHistoryHtml();
@@ -216,6 +217,16 @@ function setChatAreaWidth() {
 
 }
 
+function setPopupBoxPosition() {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    
+    const popupBoxWidth = 680;
+    const popupBoxHeight = 400;
+    chuanhuPopup.style.left = `${(screenWidth - popupBoxWidth) / 2}px`;
+    chuanhuPopup.style.top = `${(screenHeight - popupBoxHeight) / 2}px`;
+}
+
 function setChatbotHeight() {
     const screenWidth = window.innerWidth;
     const statusDisplay = document.querySelector('#status-display');
@@ -303,8 +314,8 @@ window.addEventListener("DOMContentLoaded", function () {
     isInIframe = (window.self !== window.top);
     historyLoaded = false;
 });
-window.addEventListener('resize', setChatbotHeight);
-window.addEventListener('scroll', function(){setChatbotHeight(); setUpdateWindowHeight();});
+window.addEventListener('resize', ()=>{setChatbotHeight();setPopupBoxPosition()});
+window.addEventListener('scroll', ()=>{setChatbotHeight(); setUpdateWindowHeight();setPopupBoxPosition();});
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", adjustDarkMode);
 
 // console suprise
