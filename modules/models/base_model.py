@@ -141,6 +141,7 @@ class ModelType(Enum):
     ChuanhuAgent = 8
     GooglePaLM = 9
     LangchainChat = 10
+    Midjourney = 11
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -166,6 +167,8 @@ class ModelType(Enum):
             model_type = ModelType.ChuanhuAgent
         elif "palm" in model_name_lower:
             model_type = ModelType.GooglePaLM
+        elif "midjourney" in model_name_lower:
+            model_type = ModelType.Midjourney
         elif "azure" in model_name_lower or "api" in model_name_lower:
             model_type = ModelType.LangchainChat
         else:
