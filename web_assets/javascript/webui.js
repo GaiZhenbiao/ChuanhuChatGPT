@@ -25,6 +25,65 @@ function showMask() {
     });
 }
 
+
+function showSideMask() {
+    const oldSideMask = gradioApp().querySelector('.chuanhu-side-mask');
+    if (oldSideMask) {
+        showOrHideSideMask(oldSideMask);
+        return;
+    }
+    
+    function showOrHideSideMask(sideMask) {
+        const windowWidth = window.innerWidth;
+        if (document.querySelector('.showSide')) {
+
+            if (windowWidth < 1024) {
+                if (gradioApp().querySelector('#menu-area').classList.contains('showSide') && gradioApp().querySelector('#toolbox-area').classList.contains('showSide')) {
+                    gradioApp().querySelector('#toolbox-area').classList.remove('showSide');
+                    // if both menu and toolbox are open, close toolbox...
+                }
+            }
+            // console.log("test in showSide")
+            if (windowWidth <= 768) {
+                document.body.classList.add('popup-open');
+                // sideMask.style.opacity = '0';
+                if (document.querySelector('.chuanhu-side-mask')) {
+                    sideMask.style.display = 'block';
+                    setTimeout(() => {sideMask.style.opacity = '0.5'; }, 200);
+                } else {
+                    sideMask.style.opacity = '0.5';
+                }
+                // sideMask.style.display = 'block';
+                // // sideMask.style.opacity = '0.5';
+                // setTimeout(() => {sideMask.style.opacity = '0.5'; }, 100);
+
+                // sideMask.style.display = 'block';
+            } else {
+                // sideMask.style.display = 'none';
+                document.body.classList.remove('popup-open');
+                sideMask.style.opacity = '0';
+                // sideMask.style.display = 'none';
+                // note: 动画卡，气死我了
+                setTimeout(() => {sideMask.style.display = 'none'; }, 100);
+            }
+        }
+    }
+
+    const sideMask = document.createElement('div');
+    sideMask.classList.add('chuanhu-side-mask');
+    window.addEventListener('resize', () => {
+        showOrHideSideMask(sideMask);
+    });
+
+    gradioApp().appendChild(sideMask);
+    showOrHideSideMask(sideMask);
+    
+
+    sideMask.addEventListener('click', () => {
+        closeSide();
+    });
+}
+
 function closeBox() {
     chuanhuPopup.classList.remove('showBox');
     popupWrapper.classList.remove('showBox');
@@ -34,17 +93,38 @@ function closeBox() {
     document.body.classList.remove('popup-open');
 }
 
+function closeSide() {
+    
+    document.querySelector('.chuanhu-side-mask').style.opacity = '0';
+    setTimeout(() => {document.querySelector('.chuanhu-side-mask').remove();}, 300);
+    document.body.classList.remove('popup-open');
+
+    gradioApp().querySelector('#menu-area').classList.remove('showSide');
+    gradioApp().querySelector('#toolbox-area').classList.remove('showSide');
+
+}
+
 function menuClick() {
     var menu = gradioApp().querySelector('#menu-area');
     // var menuBtn = gradioApp().querySelector('.menu-btn');
-    if (menu.classList.contains('hideSide')) {
-        menu.classList.remove('hideSide');
-        // menuBtn.classList.add('active');
+    if (menu.classList.contains('showSide')) {
+        menu.classList.remove('showSide');
+        closeSide();
     } else {
-        menu.classList.add('hideSide');
-        // menuBtn.classList.remove('active');
+        menu.classList.add('showSide');
+        showSideMask();
     }
-    setChatAreaWidth();
+}
+
+function toolboxClick() {
+    var toolbox = gradioApp().querySelector('#toolbox-area');
+    if (toolbox.classList.contains('showSide')) {
+        toolbox.classList.remove('showSide');
+        closeSide();
+    } else {
+        toolbox.classList.add('showSide');
+        showSideMask();
+    }
 }
 
 function setHistroyPanel() {

@@ -95,39 +95,38 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             with gr.Row(elem_id="chuanhu-func-nav"):
                 gr.HTML(get_html("func_nav.html"))
 
-        with gr.Column(scale=5, elem_id="chatbot-area"):
-            with gr.Row():
-                chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu-chatbot", latex_delimiters=latex_delimiters_set, height=700)
-            with gr.Row():
-                with gr.Column(min_width=225, scale=12):
-                    user_input = gr.Textbox(
-                        elem_id="user-input-tb",
-                        show_label=False, placeholder=i18n("在这里输入"),
-                        container=False
-                    )
-                with gr.Column(min_width=42, scale=1):
-                    submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
-                    cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
-            with gr.Row(elem_id="chatbot-buttons"):
-                with gr.Column(min_width=120, scale=1):
-                    emptyBtn = gr.Button(
-                        i18n("🧹 新的对话"), elem_id="empty-btn"
-                    )
-                with gr.Column(min_width=120, scale=1):
-                    retryBtn = gr.Button(i18n("🔄 重新生成"))
-                with gr.Column(min_width=120, scale=1):
-                    delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
-                with gr.Column(min_width=120, scale=1):
-                    delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"))
-                with gr.Row(visible=False) as like_dislike_area:
-                    with gr.Column(min_width=20, scale=1):
-                        likeBtn = gr.Button(i18n("👍"))
-                    with gr.Column(min_width=20, scale=1):
-                        dislikeBtn = gr.Button(i18n("👎"))
+        with gr.Column(elem_id="chuanhu-area", scale=5):
+            with gr.Column(scale=5, elem_id="chatbot-area"):
+                with gr.Row():
+                    chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu-chatbot", latex_delimiters=latex_delimiters_set, height=700)
+                with gr.Row():
+                    with gr.Column(min_width=225, scale=12):
+                        user_input = gr.Textbox(
+                            elem_id="user-input-tb",
+                            show_label=False, placeholder=i18n("在这里输入"),
+                            container=False
+                        )
+                    with gr.Column(min_width=42, scale=1):
+                        submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
+                        cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
+                with gr.Row(elem_id="chatbot-buttons"):
+                    with gr.Column(min_width=120, scale=1):
+                        emptyBtn = gr.Button(
+                            i18n("🧹 新的对话"), elem_id="empty-btn"
+                        )
+                    with gr.Column(min_width=120, scale=1):
+                        retryBtn = gr.Button(i18n("🔄 重新生成"))
+                    with gr.Column(min_width=120, scale=1):
+                        delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
+                    with gr.Column(min_width=120, scale=1):
+                        delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"))
+                    with gr.Row(visible=False) as like_dislike_area:
+                        with gr.Column(min_width=20, scale=1):
+                            likeBtn = gr.Button(i18n("👍"))
+                        with gr.Column(min_width=20, scale=1):
+                            dislikeBtn = gr.Button(i18n("👎"))
 
-        with gr.Column(elem_id="toolbox-area"):
-            with gr.Column(min_width=50, scale=1):
-
+            with gr.Column(elem_id="toolbox-area", min_width=50, scale=1):
                 with gr.Accordion(label="Prompt", open=True):
                     systemPromptTxt = gr.Textbox(
                         show_label=True,
@@ -320,6 +319,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 elem_classes="view-only-textbox no-container",
                             )
 
+                    with gr.Tab(label=i18n("关于")):
+                        gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
+
             with gr.Box(elem_id="chuanhu-training"):
                 with gr.Row():
                     gr.Markdown("## Training")
@@ -345,7 +347,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             add_to_models_btn = gr.Button(i18n("添加训练好的模型到模型列表"), interactive=False)
 
 
-    gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
     gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
 
     # https://github.com/gradio-app/gradio/pull/3296
