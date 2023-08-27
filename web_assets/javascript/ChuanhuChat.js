@@ -94,6 +94,7 @@ function initialize() {
         setChatbotHeight();
         setChatbotScroll();
         setPopupBoxPosition();
+        setChatAreaWidth();
         setSlider();
         setAvatar();
         if (!historyLoaded) loadHistoryHtml();
@@ -212,11 +213,26 @@ function adjustDarkMode() {
     });
 }
 
+
 function setChatAreaWidth() {
     const screenWidth = window.innerWidth;
-    const menuWidth = gradioApp().querySelector('.menu').offsetWidth;
-    const chatAreaWidth = chatArea.offsetWidth
-
+    const menuArea = gradioApp().querySelector('#menu-area');
+    const chatbotArea = gradioApp().querySelector('#chatbot-area');
+    // const menuWidth = menuArea.offsetWidth;
+    const chatbotAreaWidth = chatbotArea.offsetWidth;
+    return;
+    if (menuArea.classList.contains('hideSide')) {
+    //     // chatbotArea.style.width = `${chatbotAreaWidth}px`;
+    //     chatbotArea.style.flexBasis = '75%'
+    // } else {
+    //     chatbotArea.style.flexBasis = `50%`;
+        // if (screenWidth > 499) {
+        //     // chatbotArea.style.width = `${screenWidth - menuWidth}px`;
+        //     chatbotArea.style.width = `800px`;
+        // } else {
+        //     // chatbotArea.style.width = `${chatbotAreaWidth}px`;
+        // }
+    }
 }
 
 function setPopupBoxPosition() {
@@ -317,7 +333,7 @@ window.addEventListener("DOMContentLoaded", function () {
     isInIframe = (window.self !== window.top);
     historyLoaded = false;
 });
-window.addEventListener('resize', ()=>{setChatbotHeight();setPopupBoxPosition()});
+window.addEventListener('resize', ()=>{setChatbotHeight();setPopupBoxPosition();});
 window.addEventListener('scroll', ()=>{setChatbotHeight(); setUpdateWindowHeight();setPopupBoxPosition();});
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", adjustDarkMode);
 

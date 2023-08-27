@@ -159,19 +159,39 @@ body.popup-open {
 .hideBox {
     display: none;
 }
+
 .hideSide {
     width: 0 !important;
+    /* flex-basis: 0 !important; */
     display: none !important;
 }
 
 #chatbot-area {
-    transition: width 0.3s ease-in-out;
+    transition: flex-basis 0.5s ease;
 }
-.chuanhu-history-panel ul.options {
+#chatbot-area, #menu-area, #toolbox-area {
+    /* flex: none;
+    flex-grow: unset !important;
+    width: auto;
+    min-width: unset !important;
+    transition: flex-basis 0.5s ease; */
+}
+#chatbot-area {
+
+}
+#menu-area {
+
+}
+#toolbox-area {
+
+}
+
+
+/* .chuanhu-history-panel ul.options {
     position: relative;
     box-shadow: unset;
     overflow: hidden;
-}
+} */
 .chuanhu-history-panel {
     height: 500px;
     overflow: auto;

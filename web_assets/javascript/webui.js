@@ -2,6 +2,7 @@ function openSettingBox() {
     chuanhuPopup.classList.add('showBox');
     popupWrapper.classList.add('showBox');
     settingBox.classList.remove('hideBox');
+    trainingBox.classList.add('hideBox');
     showMask();
 
 }
@@ -10,6 +11,7 @@ function openTrainingBox() {
     chuanhuPopup.classList.add('showBox');
     popupWrapper.classList.add('showBox');
     trainingBox.classList.remove('hideBox');
+    settingBox.classList.add('hideBox');
     showMask();
 }
 
@@ -42,6 +44,7 @@ function menuClick() {
         menu.classList.add('hideSide');
         // menuBtn.classList.remove('active');
     }
+    setChatAreaWidth();
 }
 
 function setHistroyPanel() {
