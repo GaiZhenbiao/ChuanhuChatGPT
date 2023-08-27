@@ -1,5 +1,6 @@
 function openSettingBox() {
     chuanhuPopup.classList.add('showBox');
+    popupWrapper.classList.add('showBox');
     settingBox.classList.remove('hideBox');
     showMask();
 
@@ -7,6 +8,7 @@ function openSettingBox() {
 
 function openTrainingBox() {
     chuanhuPopup.classList.add('showBox');
+    popupWrapper.classList.add('showBox');
     trainingBox.classList.remove('hideBox');
     showMask();
 }
@@ -14,7 +16,8 @@ function openTrainingBox() {
 function showMask() {
     const mask = document.createElement('div');
     mask.classList.add('chuanhu-mask');
-    document.body.appendChild(mask);
+    popupWrapper.appendChild(mask);
+    document.body.classList.add('popup-open');
     mask.addEventListener('click', () => {
         closeBox();
     });
@@ -22,9 +25,11 @@ function showMask() {
 
 function closeBox() {
     chuanhuPopup.classList.remove('showBox');
+    popupWrapper.classList.remove('showBox');
     trainingBox.classList.add('hideBox');
     settingBox.classList.add('hideBox');
     document.querySelector('.chuanhu-mask')?.remove();
+    document.body.classList.remove('popup-open');
 }
 
 function menuClick() {

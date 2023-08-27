@@ -29,6 +29,7 @@ var historySelector = null;
 var chuanhuPopup = null;
 var settingBox = null;
 var trainingBox = null;
+var popupWrapper = null;
 
 var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
@@ -71,6 +72,7 @@ function initialize() {
     chuanhuPopup = gradioApp().querySelector('#chuanhu-popup');
     settingBox = gradioApp().querySelector('#chuanhu-setting');
     trainingBox = gradioApp().querySelector('#chuanhu-training');
+    popupWrapper = gradioApp().querySelector('#popup-wrapper');
 
 
     if (loginUserForm) {
@@ -220,11 +222,12 @@ function setChatAreaWidth() {
 function setPopupBoxPosition() {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    
-    const popupBoxWidth = 680;
-    const popupBoxHeight = 400;
-    chuanhuPopup.style.left = `${(screenWidth - popupBoxWidth) / 2}px`;
-    chuanhuPopup.style.top = `${(screenHeight - popupBoxHeight) / 2}px`;
+    popupWrapper.style.height = `${screenHeight}px`;
+    popupWrapper.style.width = `${screenWidth}px`;
+    // const popupBoxWidth = 680;
+    // const popupBoxHeight = 400;
+    // chuanhuPopup.style.left = `${(screenWidth - popupBoxWidth) / 2}px`;
+    // chuanhuPopup.style.top = `${(screenHeight - popupBoxHeight) / 2}px`;
 }
 
 function setChatbotHeight() {
