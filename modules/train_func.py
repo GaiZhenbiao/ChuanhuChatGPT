@@ -138,7 +138,7 @@ def add_to_models():
     extra_models = [job["fine_tuned_model"] for job in succeeded_jobs]
     for i in extra_models:
         if i not in presets.MODELS:
-            presets.MODELS.append(extra_models)
+            presets.MODELS.append(i)
 
     with open('config.json', 'r') as f:
         data = commentjson.load(f)
