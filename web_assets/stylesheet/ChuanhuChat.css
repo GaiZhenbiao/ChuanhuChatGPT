@@ -11,6 +11,7 @@
     --switch-checkbox-color-dark: #515151;
 
     --menu-width: 300px;
+    --menu-background-fill: white;
     --toolbox-width: 280px;
 }
 
@@ -120,6 +121,7 @@ body.popup-open {
     white-space: nowrap;
 }
 
+/* masks */
 .chuanhu-mask, .chuanhu-side-mask {
     background-color: gray;
     transition: opacity 0.3s ease;
@@ -134,9 +136,16 @@ body.popup-open {
 .chuanhu-mask {
     opacity: 0.5;
 }
+
 .chuanhu-side-mask {
     opacity: 0;
 }
+.chuanhu-top-mask {
+    opacity: 0;
+    z-index: 10001;
+}
+
+
 #popup-wrapper {
     display: none;
     position: fixed;
@@ -169,13 +178,38 @@ body.popup-open {
 }
 
 
+#chuanhu-header {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    left: 0;
+    right: 0;
+    /* padding: 6px 64px; */
+    background: var(--background-fill-primary);
+
+    @media screen and (max-width: 639px) {
+        padding: 6px 24px;
+    }
+    @media screen and (min-width: 640px) {
+        padding: 6px 48px;
+    }
+    /* @media screen and (min-width: 1024px) {
+        padding: 6px 96px;
+    } */
+}
+#chuanhu-header.under-box {
+    z-index: 995 !important;
+}
 
 #chuanhu-body {
     flex-wrap: nowrap;
     gap: 0;
     overflow: hidden;
     display: inline-flex;
+    /* margin-top: 54px; */
     /* height: calc(100vh - 72px); */
+    position: absolute;
+    top: 48px;
 }
 
 /* default invisible */
@@ -190,6 +224,10 @@ body.popup-open {
     flex-shrink: 0;
     overflow: hidden;
     flex-wrap: nowrap;
+}
+#menu-area {
+    border-radius: 0;
+    background: var(--menu-background-fill);
 }
 #menu-area > div {
     width: var(--menu-width);
@@ -224,7 +262,7 @@ body.popup-open {
 
 @media screen and (max-width: 767px) {
     #menu-area {
-        position: absolute;
+        position: fixed;
         transition: left 0.3s ease, visibility 0.1s ease;
         left: calc(0px - var(--menu-width));
         z-index: 9999;
@@ -232,17 +270,28 @@ body.popup-open {
     }
     #menu-area.showSide {
         left: 0;
-        margin-left: -16px;
+        /* margin-left: -16px; */
     }
+
     #toolbox-area {
-        position: absolute;
-        transition: right 0.3s ease, visibility 0.1s ease;
-        right: calc(0px - var(--toolbox-width));
-        z-index: 9999;
+        position: fixed;
+        width: 100vw;
+        transition: top 0.3s ease, visibility 0.1s ease;
+        /* right: calc(0px - var(--toolbox-width)); */
+        z-index: 10008;
         overflow: unset;
+        top: 100vh;
+        margin: 0;
+    }
+    #toolbox-area > div {
+        width: 100vw;
+        height: calc( 90vh - 48px );
     }
     #toolbox-area.showSide {
+        width: 100vw;
         right: 0;
+        top: calc( 10vh + 48px );
+        margin: 0;
     }
     /* #menu-area.showSide, #toolbox-area.showSide {
         z-index: 9999;

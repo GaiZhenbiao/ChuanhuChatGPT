@@ -120,9 +120,11 @@ function toolboxClick() {
     var toolbox = gradioApp().querySelector('#toolbox-area');
     if (toolbox.classList.contains('showSide')) {
         toolbox.classList.remove('showSide');
+        chuanhuHeader.classList.remove('under-box');
         closeSide();
     } else {
         toolbox.classList.add('showSide');
+        chuanhuHeader.classList.add('under-box');
         showSideMask();
     }
 }

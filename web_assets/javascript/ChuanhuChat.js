@@ -30,6 +30,7 @@ var chuanhuPopup = null;
 var settingBox = null;
 var trainingBox = null;
 var popupWrapper = null;
+var chuanhuHeader = null;
 
 var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
@@ -73,6 +74,7 @@ function initialize() {
     settingBox = gradioApp().querySelector('#chuanhu-setting');
     trainingBox = gradioApp().querySelector('#chuanhu-training');
     popupWrapper = gradioApp().querySelector('#popup-wrapper');
+    chuanhuHeader = gradioApp().querySelector('#chuanhu-header');
 
 
     if (loginUserForm) {
