@@ -31,10 +31,14 @@ var settingBox = null;
 var trainingBox = null;
 var popupWrapper = null;
 var chuanhuHeader = null;
+var menu = null;
+var toolbox = null;
 
 var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
 var initialized = false;
+
+let windowWidth = window.innerWidth; // 初始窗口宽度
 
 // gradio 页面加载好了么??? 我能动你的元素了么??
 function gradioLoaded(mutations) {
@@ -75,7 +79,8 @@ function initialize() {
     trainingBox = gradioApp().querySelector('#chuanhu-training');
     popupWrapper = gradioApp().querySelector('#popup-wrapper');
     chuanhuHeader = gradioApp().querySelector('#chuanhu-header');
-
+    menu = gradioApp().querySelector('#menu-area');
+    toolbox = gradioApp().querySelector('#toolbox-area');
 
     if (loginUserForm) {
         localStorage.setItem("userLogged", true);
@@ -335,7 +340,11 @@ window.addEventListener("DOMContentLoaded", function () {
     isInIframe = (window.self !== window.top);
     historyLoaded = false;
 });
-window.addEventListener('resize', ()=>{setChatbotHeight();setPopupBoxPosition();});
+window.addEventListener('resize', ()=>{
+    setChatbotHeight();
+    setPopupBoxPosition();
+    windowWidth = window.innerWidth;
+});
 window.addEventListener('scroll', ()=>{setChatbotHeight(); setUpdateWindowHeight();setPopupBoxPosition();});
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", adjustDarkMode);
 
