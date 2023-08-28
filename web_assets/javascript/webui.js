@@ -50,9 +50,13 @@ function showSideMask() {
                 // sideMask.style.opacity = '0';
                 if (document.querySelector('.chuanhu-side-mask')) {
                     sideMask.style.display = 'block';
-                    setTimeout(() => {sideMask.style.opacity = '0.5'; }, 200);
+                    // setTimeout(() => {sideMask.style.opacity = '0.5'; }, 200);
+                    setTimeout(() => {sideMask.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';}, 200);
+                    sideMask.classList.add('mask-blur');
                 } else {
-                    sideMask.style.opacity = '0.5';
+                    // sideMask.style.opacity = '0.5';
+                    sideMask.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+                    sideMask.classList.add('mask-blur');
                 }
                 // sideMask.style.display = 'block';
                 // // sideMask.style.opacity = '0.5';
@@ -62,7 +66,8 @@ function showSideMask() {
             } else {
                 // sideMask.style.display = 'none';
                 document.body.classList.remove('popup-open');
-                sideMask.style.opacity = '0';
+                // sideMask.style.opacity = '0';
+                sideMask.style.backgroundColor = 'rgba(0, 0, 0, 0)';
                 // sideMask.style.display = 'none';
                 // note: 动画卡，气死我了
                 setTimeout(() => {sideMask.style.display = 'none'; }, 100);
@@ -84,6 +89,14 @@ function showSideMask() {
         closeSide(menu);
         closeSide(toolbox);
     });
+}
+
+function closeBtnClick(obj) {
+    if (obj == "box") {
+        closeBox();
+    } else if (obj == "toolbox") {
+        closeSide(toolbox);
+    }
 }
 
 function closeBox() {

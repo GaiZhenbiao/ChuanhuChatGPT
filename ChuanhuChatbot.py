@@ -127,38 +127,49 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             dislikeBtn = gr.Button(i18n("👎"))
 
             with gr.Column(elem_id="toolbox-area", min_width=50, scale=1):
-                with gr.Accordion(label="Prompt", open=True):
-                    systemPromptTxt = gr.Textbox(
-                        show_label=True,
-                        placeholder=i18n("在这里输入System Prompt..."),
-                        label="System prompt",
-                        value=INITIAL_SYSTEM_PROMPT,
-                        lines=10
-                    )
-                    with gr.Accordion(label=i18n("加载Prompt模板"), open=True):
-                        with gr.Column():
-                            with gr.Row():
-                                with gr.Column(scale=6):
-                                    templateFileSelectDropdown = gr.Dropdown(
-                                        label=i18n("选择Prompt模板集合文件"),
-                                        choices=get_template_names(plain=True),
-                                        multiselect=False,
-                                        value=get_template_names(plain=True)[0],
-                                        container=False,
-                                    )
-                                with gr.Column(scale=1):
-                                    templateRefreshBtn = gr.Button(i18n("🔄 刷新"))
-                            with gr.Row():
+                with gr.Box(elem_id="chuanhu-toolbox"):
+                    with gr.Row():
+                        gr.Markdown("## 🛠️ Toolbox")
+                        gr.HTML(get_html("close_btn.html").format(obj="toolbox"), elem_classes="close-btn")
+                    with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
+                        with gr.Tab(label=i18n("Prompt")):
+                        # with gr.Accordion(label="Prompt", open=True):
+                            systemPromptTxt = gr.Textbox(
+                                show_label=True,
+                                placeholder=i18n("在这里输入System Prompt..."),
+                                label="System prompt",
+                                value=INITIAL_SYSTEM_PROMPT,
+                                lines=10
+                            )
+                            with gr.Accordion(label=i18n("加载Prompt模板"), open=True):
                                 with gr.Column():
-                                    templateSelectDropdown = gr.Dropdown(
-                                        label=i18n("从Prompt模板中加载"),
-                                        choices=load_template(
-                                            get_template_names(plain=True)[0], mode=1
-                                        ),
-                                        multiselect=False,
-                                        container=False,
-                                    )
-
+                                    with gr.Row():
+                                        with gr.Column(scale=6):
+                                            templateFileSelectDropdown = gr.Dropdown(
+                                                label=i18n("选择Prompt模板集合文件"),
+                                                choices=get_template_names(plain=True),
+                                                multiselect=False,
+                                                value=get_template_names(plain=True)[0],
+                                                container=False,
+                                            )
+                                        with gr.Column(scale=1):
+                                            templateRefreshBtn = gr.Button(i18n("🔄 刷新"))
+                                    with gr.Row():
+                                        with gr.Column():
+                                            templateSelectDropdown = gr.Dropdown(
+                                                label=i18n("从Prompt模板中加载"),
+                                                choices=load_template(
+                                                    get_template_names(plain=True)[0], mode=1
+                                                ),
+                                                multiselect=False,
+                                                container=False,
+                                            )
+                        with gr.Tab(label=i18n("Parameters")):
+                            gr.Markdown("will be here soon...")
+                        with gr.Tab(label=i18n("Extensions")):
+                            gr.Markdown("no, not yet...")  
+                        with gr.Tab(label=i18n("不知道还有啥tab")):
+                            gr.Markdown("I am Keldos. Hello, world!")
 
                         # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
                         updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
@@ -169,7 +180,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             with gr.Box(elem_id="chuanhu-setting"):
                 with gr.Row():
                     gr.Markdown("## Settings")
-                    gr.HTML(get_html("close_box_btn.html"),elem_classes="close-box-btn")
+                    gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-setting-tabs"):
                     with gr.Tab(label=i18n("模型")):
                         keyTxt = gr.Textbox(
@@ -325,7 +336,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             with gr.Box(elem_id="chuanhu-training"):
                 with gr.Row():
                     gr.Markdown("## Training")
-                    gr.HTML(get_html("close_box_btn.html"),elem_classes="close-box-btn")
+                    gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-training-tabs"):
                     with gr.Tab(label=i18n("OpenAI 微调")):
                         openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("在这里[查看使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B#%E5%BE%AE%E8%B0%83-gpt-35)"))
