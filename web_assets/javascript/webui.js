@@ -40,6 +40,7 @@ function showSideMask() {
             if (windowWidth < 1024) {
                 if (gradioApp().querySelector('#menu-area').classList.contains('showSide') && gradioApp().querySelector('#toolbox-area').classList.contains('showSide')) {
                     gradioApp().querySelector('#toolbox-area').classList.remove('showSide');
+                    chuanhuHeader.classList.remove('under-box');
                     // if both menu and toolbox are open, close toolbox...
                 }
             }
@@ -102,6 +103,8 @@ function closeSide() {
     gradioApp().querySelector('#menu-area').classList.remove('showSide');
     gradioApp().querySelector('#toolbox-area').classList.remove('showSide');
 
+    chuanhuHeader.classList.remove('under-box');
+
 }
 
 function menuClick() {
@@ -118,11 +121,15 @@ function menuClick() {
 
 function toolboxClick() {
     var toolbox = gradioApp().querySelector('#toolbox-area');
+    var menu = gradioApp().querySelector('#menu-area');
     if (toolbox.classList.contains('showSide')) {
         toolbox.classList.remove('showSide');
         chuanhuHeader.classList.remove('under-box');
         closeSide();
     } else {
+        if (menu.classList.contains('showSide')) {
+            menu.classList.remove('showSide');
+        }
         toolbox.classList.add('showSide');
         chuanhuHeader.classList.add('under-box');
         showSideMask();
