@@ -309,6 +309,9 @@ body.popup-open {
     box-shadow: var(--shadow-drop-lg);
 }
 
+#chuanhu-popup > .gradio-box {
+    height: 100%;
+}
 #chuanhu-popup > .gradio-box > .gradio-row:first-of-type {
     padding: 24px !important;
     border-bottom: 1.8px solid var(--border-color-primary);
@@ -319,9 +322,10 @@ body.popup-open {
     justify-content: flex-end;
 }
 
+
 #chuanhu-popup > .gradio-box > .gradio-tabs {
     display: block;
-    height: 324px;
+    height: 322px;
     /* margin: 16px 24px; */
 }
 
@@ -359,6 +363,103 @@ body.popup-open {
     /* font-weight: bold; */
     color: var(--button-primary-text-color);
 }
+
+@media screen and (max-width: 499px) {
+    
+    #popup-wrapper.showBox {
+        place-items: end;
+    }
+    #chuanhu-popup {
+        width: 100vw;
+        height: calc( 90vh - 48px );
+        border-radius: inherit inherit 0 0;
+    }
+    #chuanhu-popup > .gradio-box > .gradio-row:first-of-type {
+        padding: 24px 24px 0 !important;
+        border-bottom: 0;
+    }
+    #chuanhu-popup > .gradio-box > .gradio-tabs {
+        height: calc( 90vh - 48px - 52px );
+        width: 100vw;
+        overflow: hidden;
+    }
+    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tabitem {
+        height: calc( 90vh - 48px - 104px );
+    }
+    /* 下面是弃用方案：横条按钮tab */
+    /* 
+    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav {
+        display: flex;
+        margin: 0;
+        padding: 12px 16px 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        border-radius: 8px;
+        gap: 12px;
+        width: 100%;
+        height: auto;
+        background: none;
+    }
+    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button {
+        display: inline-block;
+        border-style: none;
+        border-radius: 6px;
+        white-space: nowrap;
+        width: auto;
+        padding: 7px 32px;
+        text-align: center;
+        background: var(--background-fill-secondary);
+    }
+    */
+    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav {
+        display: flex;
+        margin: 0;
+        padding: 10px 16px 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        border-radius: 0;
+        gap: 12px;
+        width: 100%;
+        height: auto;
+        background: none;
+        border-bottom: 1px solid var(--border-color-primary);
+        align-items: baseline;
+    }
+    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button {
+        display: inline-block;
+        position: relative;
+        padding: 7px 6px;
+        border: none;
+        white-space: nowrap;
+        width: auto;
+        text-align: center;
+        background: none;
+        transition: font-size 0.3s ease-in-out;
+    }
+    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button.selected {
+        background-color: unset !important;
+        font-weight: bold;
+        font-size: large;
+        color: var(--body-text-color);
+    }
+    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button.selected::after {
+        content: "";
+        background-color: var(--primary-600);
+        height: 4px;
+        width: 32%;
+        border-radius: 4px;
+        position: absolute;
+        left: 50%;
+        bottom: 1px;
+        transform: translateX(-50%);
+    }
+}
+
+
 /* #chuanhu-popup ul.options {
     transform: translate(-50%, -50%);
 } */
