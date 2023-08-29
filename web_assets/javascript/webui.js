@@ -187,3 +187,12 @@ function setHistroyPanel() {
 //     let file = historySelectorInput.value;
 //     return [a,file,c]
 // }
+
+// function testTrain() {
+    
+//     trainBody.classList.toggle('hide-body');
+//     trainingBox.classList.remove('hideBox');
+
+//     var chuanhuBody = document.querySelector('#chuanhu-body');
+//     chuanhuBody.classList.toggle('hide-body');
+// }

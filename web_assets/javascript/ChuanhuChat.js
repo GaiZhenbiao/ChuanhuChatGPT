@@ -33,6 +33,7 @@ var popupWrapper = null;
 var chuanhuHeader = null;
 var menu = null;
 var toolbox = null;
+// var trainBody = null;
 
 var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
@@ -81,6 +82,7 @@ function initialize() {
     chuanhuHeader = gradioApp().querySelector('#chuanhu-header');
     menu = gradioApp().querySelector('#menu-area');
     toolbox = gradioApp().querySelector('#toolbox-area');
+    // trainBody = gradioApp().querySelector('#train-body');
 
     if (loginUserForm) {
         localStorage.setItem("userLogged", true);
@@ -117,6 +119,7 @@ function initialize() {
         // setHistroyPanel();
         settingBox.classList.add('hideBox');
         trainingBox.classList.add('hideBox');
+        // trainBody.classList.add('hide-body');
     }
 }
 

@@ -553,3 +553,31 @@ body.popup-open {
     overflow: auto;
     overflow-x: hidden;
 }
+
+/* .main-body {
+    flex-wrap: nowrap;
+    gap: 0;
+    overflow: hidden;
+    display: inline-flex;
+    /* margin-top: 54px; */
+    /* height: calc(100vh - 72px); */
+    /* position: absolute;
+    top: 48px;
+} */
+/* 
+.hide-body {
+    display: none;
+    top: -100vh;
+    
+}
+#train-body {
+    transition: top 0.3s ease-in-out, display 0.3s ease;
+}
+
+#chuanhu-body.hide-body {
+    display: none;
+    top: calc(100vh + 48px);
+}
+#chuanhu-body {
+    transition: top 0.3s ease-in-out, display 0.3s ease;
+}  */
