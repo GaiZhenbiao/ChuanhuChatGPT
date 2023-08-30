@@ -84,13 +84,16 @@ hr.append-display {
     min-width: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl));
 }
 [data-testid = "bot"] {
-    max-width: calc(85% - 38px);
-    border-top-left-radius: 0 !important;
+    max-width: calc(85% - 40px);
+    border-bottom-left-radius: 0 !important;
 }
 [data-testid = "user"] {
-    max-width: calc(85% - 38px);
+    max-width: calc(85% - 40px);
     width: auto !important;
-    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+.message-row.user-row {
+    justify-content: flex-end;
 }
 
 /* 屏幕宽度大于等于500px的设备 */
@@ -200,6 +203,10 @@ hr.append-display {
 .message div.icon-button > button[title="copy"] {
     display: none;
 }
+/* disable share button and other buttons in hugging face spaces */
+#chuanhu-chatbot > .wrapper > .icon-button {
+    display: none !important;
+}
 
 
 /* history message */
@@ -244,35 +251,12 @@ hr.append-display {
     note: find it better without transition animation...;
 } */
 
-
-.message-row {
-    flex-direction: row;
-    display: flex;
-    gap: 8px;
-    width: 100%;
+img.avatar-image {
+    border-radius: 5px !important;
 }
-.bot-message-row {
-    justify-content: flex-start;
-}
-.user-message-row {
-    justify-content: flex-end;
-}
-.chatbot-avatar {
-    width: 32px;
-    height: 32px;
+.avatar-container {
+    width: 32px !important;
+    height: 32px !important;
     background-color: transparent;
     background-size: cover;
-    border-radius: 5px !important;
-}
-.chatbot-avatar.bot-avatar {
-    margin-left: 5px;
-}
-.chatbot-avatar.user-avatar {
-    margin-right: 10px;
-}
-.chatbot-avatar img {
-    border-radius: 5px !important;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
 }

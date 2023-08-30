@@ -7,6 +7,11 @@
     "xmchat_api_key": "", // 你的 xmchat API Key，用于 XMChat 对话模型
     "minimax_api_key": "", // 你的 MiniMax API Key，用于 MiniMax 对话模型
     "minimax_group_id": "", // 你的 MiniMax Group ID，用于 MiniMax 对话模型
+    "midjourney_proxy_api_base": "https://xxx/mj", // 你的 https://github.com/novicezk/midjourney-proxy 代理地址
+    "midjourney_proxy_api_secret": "", // 你的 MidJourney Proxy API Secret，用于鉴权访问 api，可选
+    "midjourney_discord_proxy_url": "", // 你的 MidJourney Discord Proxy URL，用于对生成对图进行反代，可选
+    "midjourney_temp_folder": "./tmp", // 你的 MidJourney 临时文件夹，用于存放生成的图片，填空则关闭自动下载切图（直接显示MJ的四宫格图）
+
 
     //== Azure ==
     "openai_api_type": "openai", // 可选项：azure, openai
@@ -24,8 +29,8 @@
     "hide_history_when_not_logged_in": false, //未登录情况下是否不展示对话历史
     "check_update": true, //是否启用检查更新
     "default_model": "gpt-3.5-turbo", // 默认模型
-    "bot_avatar": "default", // 机器人头像，可填写图片链接、Data URL (base64)，或者"none"（不显示头像）
-    "user_avatar": "default", // 用户头像，可填写图片链接、Data URL (base64)，或者"none"（不显示头像）
+    "bot_avatar": "default", // 机器人头像，可填写本地或网络图片链接，或者"none"（不显示头像）
+    "user_avatar": "default", // 用户头像，可填写本地或网络图片链接，或者"none"（不显示头像）
 
     //== API 用量 ==
     "show_api_billing": false, //是否显示OpenAI API用量（启用需要填写sensitive_id）

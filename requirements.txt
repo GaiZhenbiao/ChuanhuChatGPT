@@ -1,5 +1,5 @@
-gradio==3.40.0
-gradio_client==0.4.0
+gradio==3.41.2
+gradio_client==0.5.0
 pypinyin
 tiktoken
 socksio
@@ -7,7 +7,7 @@ tqdm
 colorama
 googlesearch-python
 Pygments
-langchain==0.0.173
+langchain==0.0.276
 markdown
 PyPDF2
 pdfplumber
