@@ -203,6 +203,10 @@ hr.append-display {
 .message div.icon-button > button[title="copy"] {
     display: none;
 }
+/* disable share button and other buttons in hugging face spaces */
+#chuanhu-chatbot > .wrapper > .icon-button {
+    display: none !important;
+}
 
 
 /* history message */
