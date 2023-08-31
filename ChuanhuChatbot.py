@@ -97,8 +97,25 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
         with gr.Column(elem_id="chuanhu-area", scale=5):
             with gr.Column(elem_id="chatbot-area"):
+                with gr.Row(elem_id="chatbot-header"):
+                    model_select_dropdown = gr.Dropdown(
+                            label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True,
+                            show_label=False, container=False, elem_id="model-select-dropdown"
+                        )
+                    lora_select_dropdown = gr.Dropdown(
+                        label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
+                    )
+                    gr.HTML(get_html("chatbot_header_btn.html"),elem_id="chatbot-header-btn-bar")
                 with gr.Row():
-                    chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu-chatbot", latex_delimiters=latex_delimiters_set, height=700, avatar_images=[config.user_avatar, config.bot_avatar], show_share_button=False, )
+                    chatbot = gr.Chatbot(
+                        label="Chuanhu Chat", 
+                        elem_id="chuanhu-chatbot", 
+                        latex_delimiters=latex_delimiters_set, 
+                        height=700, 
+                        show_label=False,
+                        avatar_images=[config.user_avatar, config.bot_avatar], 
+                        show_share_button=False
+                    )
                 with gr.Row():
                     with gr.Column(min_width=225, scale=12):
                         user_input = gr.Textbox(
@@ -195,12 +212,12 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             usageTxt = gr.Markdown(i18n("多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
                         else:
                             usageTxt = gr.Markdown(i18n("**发送消息** 或 **提交key** 以显示额度"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
-                        model_select_dropdown = gr.Dropdown(
-                            label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
-                        )
-                        lora_select_dropdown = gr.Dropdown(
-                            label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
-                        )
+                        # model_select_dropdown = gr.Dropdown(
+                        #     label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
+                        # )
+                        # lora_select_dropdown = gr.Dropdown(
+                        #     label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
+                        # )
                         with gr.Row():
                             single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch-checkbox")
                             use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False, elem_classes="switch-checkbox")

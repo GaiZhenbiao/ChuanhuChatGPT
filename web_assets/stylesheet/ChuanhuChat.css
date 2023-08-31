@@ -231,7 +231,7 @@ body.popup-open {
     justify-content: center;
     overflow: hidden;
     flex-direction: row;
-    padding-inline: 24px;
+    /* padding-inline: 24px; */
     /* margin: 16px; */
     /* border-radius: 24px; */
     background: var(--chatbot-background-color-light);
@@ -240,7 +240,31 @@ body.popup-open {
     background: var(--chatbot-background-color-dark);
 }
 #chatbot-area {
-    max-width: 1024px;
+    /* max-width: 1024px; */
+    /* gap: 0; */
+}
+#chatbot-header {
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color-primary);
+    height: 60px;
+    position: absolute;
+    top: 0;
+    z-index: 50;
+    /* background: var(--header); */
+    /* !!!!!!!!!!!!!!!!!!!!!!!!这里颜色还要再写!!!!!!!!!!!!!!!!!!!!!! */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+#model-select-dropdown {
+    max-width: 0;
+    background: none;
+}
+#model-select-dropdown > label > .wrap {
+    background: none;
+}
+#chatbot-header-btn-bar {
+    justify-content: flex-end;
+    display: flex;
 }
 /* default invisible */
 #menu-area, #toolbox-area {
