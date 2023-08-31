@@ -92,6 +92,9 @@ hr.append-display {
     width: auto !important;
     border-bottom-right-radius: 0 !important;
 }
+.message-row {
+    align-self: unset !important;
+}
 .message-row.user-row {
     justify-content: flex-end;
 }
@@ -115,7 +118,10 @@ hr.append-display {
         max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     }
     [data-testid = "bot"] {
-        max-width: calc(98% - 20px) !important;
+        max-width: calc(100% - 84px) !important;
+    }
+    [data-testid = "user"] {
+        max-width: calc(100% - 84px) !important;
     }
     .chatbot-avatar {
         display: none;
