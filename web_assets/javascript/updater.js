@@ -86,12 +86,16 @@ async function updateLatestVersion() {
                     versionInfoElement.innerHTML = marked.parse(infoMessage, {mangle: false, headerIds: false});
                     console.log(`New version ${latestVersion} found!`);
                     disableUpdateBtn_enableCancelBtn();
+                    localStorage.setItem('isLatestVersion', 'false');
+                    isLatestVersion = false;
                 } else if (localVersionTime < latestVersionTime) {
                     const infoMessage = `Local version check failed, it seems to be a local rivision. \n\nBut latest revision is ${latestVersionInfo}. Try ${manualUpdateInfo}.`
                     versionInfoElement.innerHTML = marked.parse(infoMessage, {mangle: false, headerIds: false});
                     console.log(`New version ${latestVersion} found!`);
                     disableUpdateBtn_enableCancelBtn();
                     // if (!isInIframe) openUpdateToast();
+                    localStorage.setItem('isLatestVersion', 'false');
+                    isLatestVersion = false;
                 } else {
                     noUpdate("Local version check failed, it seems to be a local rivision. <br>But your revision is newer than the latest release.");
                 }
