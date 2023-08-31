@@ -65,7 +65,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 historyFileSelectDropdown = gr.Radio(
                                     label=i18n("从列表中加载对话"),
                                     choices=get_history_names(plain=True),
-                                    multiselect=False,
+                                    # multiselect=False,
                                     container=False,
                                     elem_id="history-select-dropdown"
                                 )
@@ -98,7 +98,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         with gr.Column(elem_id="chuanhu-area", scale=5):
             with gr.Column(elem_id="chatbot-area"):
                 with gr.Row():
-                    chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu-chatbot", latex_delimiters=latex_delimiters_set, height=700, avatar_images=[config.user_avatar, config.bot_avatar])
+                    chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu-chatbot", latex_delimiters=latex_delimiters_set, height=700, avatar_images=[config.user_avatar, config.bot_avatar], show_share_button=False, )
                 with gr.Row():
                     with gr.Column(min_width=225, scale=12):
                         user_input = gr.Textbox(

@@ -220,24 +220,28 @@ body.popup-open {
     /* margin-top: 54px; */
     /* height: calc(100vh - 72px); */
     position: absolute;
-    top: 48px;
+    top: 65px;
+    height: calc(100vh - 65px);
 }
 
 #chuanhu-area {
     flex: unset;
     width: 100%;
     flex-wrap: nowrap;
-    /* gap: 0; */
     justify-content: center;
     overflow: hidden;
     flex-direction: row;
-    padding-bottom: 6px;
-    margin: 0 16px;
+    padding-inline: 24px;
+    /* margin: 16px; */
+    /* border-radius: 24px; */
+    background: var(--chatbot-background-color-light);
+}
+.dark #chuanhu-area {
+    background: var(--chatbot-background-color-dark);
 }
 #chatbot-area {
     max-width: 1024px;
 }
-
 /* default invisible */
 #menu-area, #toolbox-area {
     height: 0;
@@ -261,20 +265,17 @@ body.popup-open {
 #menu-area.showSide {
     width: var(--menu-width);
     max-width: var(--menu-width);
-    height: 100%;
+    height: calc(100vh - 65px);
     visibility: visible;
     /* margin-right: 16px; */
 }
 
-#toolbox-area {
-
-}
 #toolbox-area > div {
     width: var(--toolbox-width);
 }
 #toolbox-area.showSide {
     width: var(--toolbox-width);
-    height: 100%;
+    height: calc(100vh - 65px);
     visibility: visible;
     /* margin-left: 16px; */
 }
@@ -336,6 +337,7 @@ body.popup-open {
     padding: 24px !important;
     border-bottom: 1.8px solid var(--border-color-primary);
 }
+#toolbox-area > .gradio-box > .gradio-row:first-of-type * ,
 #chuanhu-popup > .gradio-box > .gradio-row:first-of-type * {
     margin: 0;
 }
@@ -506,14 +508,14 @@ body.popup-open {
         display: none;
     }
     #toolbox-area > .gradio-box > .gradio-tabs{
-        height: auto;
+        height: 100%;
         width: var(--toolbox-width);
         overflow: hidden;
     }
     #toolbox-area > .gradio-box > .gradio-tabs > div.tabitem {
-        height: calc( 90vh - 48px - 46px - 45px );
-        overflow-x: auto;
-        border: none;
+        height: calc(100% - 40px);
+        overflow-y: auto;
+        border-style: none;
     }
     #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav {
         display: flex;
@@ -553,14 +555,26 @@ body.popup-open {
 
 #toolbox-area > .gradio-box {
     padding: 0;
+    height: 100%;
 }
 /* #chuanhu-popup ul.options {
     transform: translate(-50%, -50%);
 } */
 
+#chuanhu-history {
+    height: calc(100vh - 65px - 65px);
+    overflow-y: auto;
+}
+#chuanhu-func-nav {
+    position: absolute;
+    bottom: 0;
+    /* background: black; */
+    height: 64px;
+    overflow: hidden;
+}
 
 #history-select-wrap {
-    height: 300px;
+    height: 600px;
     overflow: auto;
     overflow-x: hidden;
 }

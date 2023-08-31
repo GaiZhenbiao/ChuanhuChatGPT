@@ -52,6 +52,7 @@ function closeSide(sideArea) {
     } else if (sideArea == menu) {
         menuOpening = false;
     }
+    adjustMask();
 }
 
 function openSide(sideArea) {

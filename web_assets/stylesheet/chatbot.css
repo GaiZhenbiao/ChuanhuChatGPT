@@ -50,6 +50,11 @@ hr.append-display {
     padding: 0 4px;
 }
 
+/* 阻止generating时的border */
+#chuanhu-chatbot > .wrap {
+    border: none !important;
+}
+
 /* 亮色（默认） */
 #chuanhu-chatbot {
     background-color: var(--chatbot-background-color-light) !important;
