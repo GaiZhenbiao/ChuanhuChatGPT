@@ -1,4 +1,4 @@
-from langchain.chat_models import AzureChatOpenAI
+from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
 import os
 
 from .base_model import Base_Chat_Langchain_Client
@@ -14,4 +14,5 @@ class Azure_OpenAI_Client(Base_Chat_Langchain_Client):
             deployment_name=os.environ["AZURE_DEPLOYMENT_NAME"],
             openai_api_key=os.environ["AZURE_OPENAI_API_KEY"],
             openai_api_type="azure",
+            streaming=True
         )
