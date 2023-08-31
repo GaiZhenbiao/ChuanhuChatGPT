@@ -102,13 +102,14 @@ var menuOpening = false;
 var toolboxOpening = false;
 var shouldAutoClose = true;
 var wantOpenMenu = windowWidth > 768;
-var wantOpenToolbox = false;
+var wantOpenToolbox = windowWidth >= 1024;
 
 function adjustSide() {
     if (windowWidth >= 1024) {
         shouldAutoClose = true;
         if (wantOpenMenu) {
             openSide(menu);
+            if (wantOpenToolbox) openSide(toolbox);
         } else if (wantOpenToolbox) {
             openSide(toolbox);
         } else {
