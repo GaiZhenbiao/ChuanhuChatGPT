@@ -255,20 +255,37 @@ body.popup-open {
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
 }
-#model-select-dropdown {
-    max-width: 0;
+#chatbot-header .gradio-dropdown {
+    max-width: 14em;
     background: none;
 }
-#model-select-dropdown > label > .wrap {
+#chatbot-header .gradio-dropdown > label {
+    display: flex;
+}
+#chatbot-header .gradio-dropdown > label > span[data-testid="block-info"] {
+    height: unset;
+    overflow: visible;
+    top: 0;
+    align-self: center;
+    background: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: auto;
+}
+#chatbot-header .gradio-dropdown > label > .wrap {
     background: none;
 }
+#model-select-dropdown > label > span[data-testid="block-info"]  {
+    display: none;
+}
+
 #chatbot-header-btn-bar {
     justify-content: flex-end;
     display: flex;
 }
 /* default invisible */
 #menu-area, #toolbox-area {
-    height: 0;
     width: 0;
     transition: width 0.3s ease;
     visibility: hidden;
