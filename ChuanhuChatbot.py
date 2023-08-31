@@ -96,7 +96,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                 gr.HTML(get_html("func_nav.html"))
 
         with gr.Column(elem_id="chuanhu-area", scale=5):
-            with gr.Column(scale=5, elem_id="chatbot-area"):
+            with gr.Column(elem_id="chatbot-area"):
                 with gr.Row():
                     chatbot = gr.Chatbot(label="Chuanhu Chat", elem_id="chuanhu-chatbot", latex_delimiters=latex_delimiters_set, height=700, avatar_images=[config.user_avatar, config.bot_avatar])
                 with gr.Row():
@@ -126,54 +126,54 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         with gr.Column(min_width=20, scale=1):
                             dislikeBtn = gr.Button(i18n("👎"))
 
-            with gr.Column(elem_id="toolbox-area", min_width=50, scale=1):
-                with gr.Box(elem_id="chuanhu-toolbox"):
-                    with gr.Row():
-                        gr.Markdown("## 🛠️ Toolbox")
-                        gr.HTML(get_html("close_btn.html").format(obj="toolbox"), elem_classes="close-btn")
-                    with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
-                        with gr.Tab(label=i18n("Prompt")):
-                        # with gr.Accordion(label="Prompt", open=True):
-                            systemPromptTxt = gr.Textbox(
-                                show_label=True,
-                                placeholder=i18n("在这里输入System Prompt..."),
-                                label="System prompt",
-                                value=INITIAL_SYSTEM_PROMPT,
-                                lines=10
-                            )
-                            with gr.Accordion(label=i18n("加载Prompt模板"), open=True):
-                                with gr.Column():
-                                    with gr.Row():
-                                        with gr.Column(scale=6):
-                                            templateFileSelectDropdown = gr.Dropdown(
-                                                label=i18n("选择Prompt模板集合文件"),
-                                                choices=get_template_names(plain=True),
-                                                multiselect=False,
-                                                value=get_template_names(plain=True)[0],
-                                                container=False,
-                                            )
-                                        with gr.Column(scale=1):
-                                            templateRefreshBtn = gr.Button(i18n("🔄 刷新"))
-                                    with gr.Row():
-                                        with gr.Column():
-                                            templateSelectDropdown = gr.Dropdown(
-                                                label=i18n("从Prompt模板中加载"),
-                                                choices=load_template(
-                                                    get_template_names(plain=True)[0], mode=1
-                                                ),
-                                                multiselect=False,
-                                                container=False,
-                                            )
-                        with gr.Tab(label=i18n("Parameters")):
-                            gr.Markdown("will be here soon...")
-                        with gr.Tab(label=i18n("Extensions")):
-                            gr.Markdown("no, not yet...")  
-                        with gr.Tab(label=i18n("不知道还有啥tab")):
-                            gr.Markdown("I am Keldos. Hello, world!")
+        with gr.Column(elem_id="toolbox-area", scale=1):
+            with gr.Box(elem_id="chuanhu-toolbox"): # For CSS setting, there is an extra box. Don't remove it.
+                with gr.Row():
+                    gr.Markdown("## 🛠️ Toolbox")
+                    gr.HTML(get_html("close_btn.html").format(obj="toolbox"), elem_classes="close-btn")
+                with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
+                    with gr.Tab(label=i18n("Prompt")):
+                    # with gr.Accordion(label="Prompt", open=True):
+                        systemPromptTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=i18n("在这里输入System Prompt..."),
+                            label="System prompt",
+                            value=INITIAL_SYSTEM_PROMPT,
+                            lines=10
+                        )
+                        with gr.Accordion(label=i18n("加载Prompt模板"), open=True):
+                            with gr.Column():
+                                with gr.Row():
+                                    with gr.Column(scale=6):
+                                        templateFileSelectDropdown = gr.Dropdown(
+                                            label=i18n("选择Prompt模板集合文件"),
+                                            choices=get_template_names(plain=True),
+                                            multiselect=False,
+                                            value=get_template_names(plain=True)[0],
+                                            container=False,
+                                        )
+                                    with gr.Column(scale=1):
+                                        templateRefreshBtn = gr.Button(i18n("🔄 刷新"))
+                                with gr.Row():
+                                    with gr.Column():
+                                        templateSelectDropdown = gr.Dropdown(
+                                            label=i18n("从Prompt模板中加载"),
+                                            choices=load_template(
+                                                get_template_names(plain=True)[0], mode=1
+                                            ),
+                                            multiselect=False,
+                                            container=False,
+                                        )
+                    with gr.Tab(label=i18n("Parameters")):
+                        gr.Markdown("will be here soon...")
+                    with gr.Tab(label=i18n("Extensions")):
+                        gr.Markdown("no, not yet...")  
+                    with gr.Tab(label=i18n("不知道还有啥tab")):
+                        gr.Markdown("I am Keldos. Hello, world!")
 
-                        # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
-                        updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
-                        historySelectBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="history-select-btn")
+                    # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
+                    updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
+                    historySelectBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="history-select-btn")
 
     with gr.Row(elem_id="popup-wrapper"):
         with gr.Box(elem_id="chuanhu-popup"):

@@ -112,6 +112,9 @@ function initialize() {
     settingBox.classList.add('hideBox');
     trainingBox.classList.add('hideBox');
     // trainBody.classList.add('hide-body');
+
+    adjustSide();
+
     return true;
 }
 
@@ -322,6 +325,7 @@ window.addEventListener("DOMContentLoaded", function () {
 window.addEventListener('resize', ()=>{
     setChatbotHeight();
     setPopupBoxPosition();
+    adjustSide();
     windowWidth = window.innerWidth;
 });
 window.addEventListener('scroll', ()=>{setChatbotHeight(); setUpdateWindowHeight();setPopupBoxPosition();});

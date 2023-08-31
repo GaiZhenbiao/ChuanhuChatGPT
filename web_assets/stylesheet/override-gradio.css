@@ -1,3 +1,8 @@
+.gradio-container {
+    max-width: unset !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 
 /* 解决container=False时的错误填充 */
 div.form {
@@ -12,6 +17,10 @@ footer {
     /* display: none !important; */
     margin-top: .2em !important;
     font-size: 85%;
+}
+
+.api-docs-wrap {
+    margin-top: 64px;
 }
 
 /* 覆盖 gradio 丑陋的复制按钮样式 */

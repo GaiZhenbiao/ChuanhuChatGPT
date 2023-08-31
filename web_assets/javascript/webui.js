@@ -25,77 +25,12 @@ function showMask() {
     });
 }
 
-
-function showSideMask() {
-    const oldSideMask = gradioApp().querySelector('.chuanhu-side-mask');
-    if (oldSideMask) {
-        showOrHideSideMask(oldSideMask);
-        return;
-    }
-
-
-    function showOrHideSideMask(sideMask) {
-        if (document.querySelector('.showSide')) {
-
-            if (windowWidth < 1024) {
-                if (menu.classList.contains('showSide') && toolbox.classList.contains('showSide')) {
-                    toolbox.classList.remove('showSide');
-                    chuanhuHeader.classList.remove('under-box');
-                    // if both menu and toolbox are open, close toolbox...
-                }
-            }
-            // console.log("test in showSide")
-            if (windowWidth <= 768) {
-                document.body.classList.add('popup-open');
-                // sideMask.style.opacity = '0';
-                if (document.querySelector('.chuanhu-side-mask')) {
-                    sideMask.style.display = 'block';
-                    // setTimeout(() => {sideMask.style.opacity = '0.5'; }, 200);
-                    setTimeout(() => {sideMask.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';}, 200);
-                    sideMask.classList.add('mask-blur');
-                } else {
-                    // sideMask.style.opacity = '0.5';
-                    sideMask.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-                    sideMask.classList.add('mask-blur');
-                }
-                // sideMask.style.display = 'block';
-                // // sideMask.style.opacity = '0.5';
-                // setTimeout(() => {sideMask.style.opacity = '0.5'; }, 100);
-
-                // sideMask.style.display = 'block';
-            } else {
-                // sideMask.style.display = 'none';
-                document.body.classList.remove('popup-open');
-                // sideMask.style.opacity = '0';
-                sideMask.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-                // sideMask.style.display = 'none';
-                // note: 动画卡，气死我了
-                setTimeout(() => {sideMask.style.display = 'none'; }, 100);
-            }
-        }
-    }
-
-    const sideMask = document.createElement('div');
-    sideMask.classList.add('chuanhu-side-mask');
-    window.addEventListener('resize', () => {
-        showOrHideSideMask(sideMask);
-    });
-
-    gradioApp().appendChild(sideMask);
-    showOrHideSideMask(sideMask);
-    
-
-    sideMask.addEventListener('click', () => {
-        closeSide(menu);
-        closeSide(toolbox);
-    });
-}
-
 function closeBtnClick(obj) {
     if (obj == "box") {
         closeBox();
     } else if (obj == "toolbox") {
         closeSide(toolbox);
+        wantOpenToolbox = false;
     }
 }
 
@@ -109,43 +44,139 @@ function closeBox() {
 }
 
 function closeSide(sideArea) {
-    
-    document.querySelector('.chuanhu-side-mask').style.opacity = '0';
-    setTimeout(() => {document.querySelector('.chuanhu-side-mask').remove();}, 300);
     document.body.classList.remove('popup-open');
-
     sideArea.classList.remove('showSide');
+    if (sideArea == toolbox) {
+        chuanhuHeader.classList.remove('under-box');
+        toolboxOpening = false;
+    } else if (sideArea == menu) {
+        menuOpening = false;
+    }
+}
 
-    chuanhuHeader.classList.remove('under-box');
-
+function openSide(sideArea) {
+    sideArea.classList.add('showSide');
+    if (sideArea == toolbox) {
+        chuanhuHeader.classList.add('under-box');
+        toolboxOpening = true;
+    } else if (sideArea == menu) {
+        menuOpening = true;
+    }
+    // document.body.classList.add('popup-open');
 }
 
 function menuClick() {
-    // var menuBtn = gradioApp().querySelector('.menu-btn');
-    if (menu.classList.contains('showSide')) {
-        menu.classList.remove('showSide');
+    shouldAutoClose = false;
+    if (menuOpening) {
         closeSide(menu);
+        wantOpenMenu = false;
     } else {
-        menu.classList.add('showSide');
-        showSideMask();
+        if (windowWidth < 1024 && toolboxOpening) {
+            closeSide(toolbox);
+            wantOpenToolbox = false;
+        }
+        openSide(menu);
+        wantOpenMenu = true;
     }
+    adjustSide();
 }
 
 function toolboxClick() {
-    if (toolbox.classList.contains('showSide')) {
-        toolbox.classList.remove('showSide');
-        chuanhuHeader.classList.remove('under-box');
+    shouldAutoClose = false;
+    if (toolboxOpening) {
         closeSide(toolbox);
+        wantOpenToolbox = false;
     } else {
-        if (menu.classList.contains('showSide') && windowWidth < 1024) {
-            menu.classList.remove('showSide');
+        if (windowWidth < 1024 && menuOpening) {
+            closeSide(menu);
+            wantOpenMenu = false;
         }
-        toolbox.classList.add('showSide');
-        chuanhuHeader.classList.add('under-box');
-        showSideMask();
+        openSide(toolbox);
+        wantOpenToolbox = true;
+    }
+    adjustSide();
+}
+
+var menuOpening = false;
+var toolboxOpening = false;
+var shouldAutoClose = true;
+var wantOpenMenu = windowWidth > 768;
+var wantOpenToolbox = false;
+
+function adjustSide() {
+    if (windowWidth >= 1024) {
+        shouldAutoClose = true;
+        if (wantOpenMenu) {
+            openSide(menu);
+        } else if (wantOpenToolbox) {
+            openSide(toolbox);
+        } else {
+            closeSide(menu);
+            closeSide(toolbox);
+        }
+    } else if (windowWidth > 768 && windowWidth < 1024 ) {
+        shouldAutoClose = true;
+        if (wantOpenToolbox) {
+            if (wantOpenMenu) {
+                closeSide(toolbox);
+                openSide(menu);
+            } else {
+                closeSide(menu);
+                openSide(toolbox);
+            }
+        } else if (wantOpenMenu) {
+            if (wantOpenToolbox) {
+                closeSide(menu);
+                openSide(toolbox);
+            } else {
+                closeSide(toolbox);
+                openSide(menu);
+            }
+        } else if (!wantOpenMenu && !wantOpenToolbox){
+            closeSide(menu);
+            closeSide(toolbox);
+        }
+    } else { // windowWidth <= 768
+        if (shouldAutoClose) {
+            closeSide(menu);
+            // closeSide(toolbox);
+        }
+    }
+    adjustMask();
+}
+
+function adjustMask() {
+    var sideMask = null;
+    if (!gradioApp().querySelector('.chuanhu-side-mask')) {
+        sideMask = document.createElement('div');
+        sideMask.classList.add('chuanhu-side-mask');
+        gradioApp().appendChild(sideMask);
+        sideMask.addEventListener('click', () => {
+            closeSide(menu);
+            closeSide(toolbox);
+        });
+    }
+    sideMask = gradioApp().querySelector('.chuanhu-side-mask');
+
+    if (windowWidth > 768) {
+        sideMask.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+        setTimeout(() => {sideMask.style.display = 'none'; }, 100);
+        return;
+    }
+    // if (windowWidth <= 768)
+    if (menuOpening || toolboxOpening) {
+        document.body.classList.add('popup-open');
+        sideMask.style.display = 'block';
+        setTimeout(() => {sideMask.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';}, 200);
+        sideMask.classList.add('mask-blur');
+    } else if (!menuOpening && !toolboxOpening) {
+        sideMask.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+        setTimeout(() => {sideMask.style.display = 'none'; }, 100);
     }
 }
 
+
+/*
 function setHistroyPanel() {
     const historySelectorInput = gradioApp().querySelector('#history-select-dropdown input');
     const historyPanel = document.createElement('div');
@@ -170,6 +201,7 @@ function setHistroyPanel() {
         }
     });
 }
+*/
 
 // function addHistoryPanelListener(historyPanel){
 //     historyPanel.querySelectorAll('ul.options > li').forEach((historyItem) => {

@@ -10,8 +10,8 @@
     --switch-checkbox-color-light: #e5e7eb;
     --switch-checkbox-color-dark: #515151;
 
-    --menu-width: 300px;
-    --menu-background-fill: white;
+    --menu-width: 320px;
+    --menu-background-fill: transparent;
     --toolbox-width: 280px;
 }
 
@@ -198,10 +198,10 @@ body.popup-open {
     border-bottom: 1px solid var(--border-color-primary);
 
     @media screen and (max-width: 639px) {
-        padding: 6px 24px;
+        padding: 6px 16px;
     }
     @media screen and (min-width: 640px) {
-        padding: 6px 48px;
+        padding: 6px 24px;
     }
     /* @media screen and (min-width: 1024px) {
         padding: 6px 96px;
@@ -216,13 +216,26 @@ body.popup-open {
     gap: 0;
     overflow: hidden;
     display: inline-flex;
+    justify-content: space-between;
     /* margin-top: 54px; */
     /* height: calc(100vh - 72px); */
     position: absolute;
     top: 48px;
 }
-.api-docs-wrap {
-    margin-top: 64px;
+
+#chuanhu-area {
+    flex: unset;
+    width: 100%;
+    flex-wrap: nowrap;
+    /* gap: 0; */
+    justify-content: center;
+    overflow: hidden;
+    flex-direction: row;
+    padding-bottom: 6px;
+    margin: 0 16px;
+}
+#chatbot-area {
+    max-width: 1024px;
 }
 
 /* default invisible */
@@ -245,34 +258,28 @@ body.popup-open {
 #menu-area > div {
     width: var(--menu-width);
 }
+#menu-area.showSide {
+    width: var(--menu-width);
+    max-width: var(--menu-width);
+    height: 100%;
+    visibility: visible;
+    /* margin-right: 16px; */
+}
+
+#toolbox-area {
+
+}
 #toolbox-area > div {
     width: var(--toolbox-width);
 }
-#menu-area.showSide {
-    width: var(--menu-width);
-    height: 100%;
-    visibility: visible;
-    margin-right: 16px;
-}
-
 #toolbox-area.showSide {
     width: var(--toolbox-width);
     height: 100%;
     visibility: visible;
-    margin-left: 16px;
+    /* margin-left: 16px; */
 }
 
-#chuanhu-area {
-    flex: unset;
-    width: 100%;
-    flex-wrap: nowrap;
-    gap: 0;
-    justify-content: center;
-    overflow: hidden;
-    flex-direction: row;
-    padding-bottom: 6px;
-}
-
+/* When screen width <= 768 */
 @media screen and (max-width: 767px) {
     #menu-area {
         position: fixed;
@@ -283,8 +290,6 @@ body.popup-open {
     }
     #menu-area.showSide {
         left: 0;
-        /* box-shadow: 0 2px 64px 4px rgba(0, 0, 0, 0.2); */
-        /* margin-left: -16px; */
     }
 
     #toolbox-area {
@@ -330,6 +335,9 @@ body.popup-open {
 #chuanhu-popup > .gradio-box > .gradio-row:first-of-type {
     padding: 24px !important;
     border-bottom: 1.8px solid var(--border-color-primary);
+}
+#chuanhu-popup > .gradio-box > .gradio-row:first-of-type * {
+    margin: 0;
 }
 
 #toolbox-area > .gradio-box > .gradio-row > .close-btn,
@@ -381,6 +389,7 @@ body.popup-open {
     color: var(--button-primary-text-color);
 }
 
+/* 小屏幕的tab样式 */
 @media screen and (max-width: 767px) {
     
     #popup-wrapper.showBox {
@@ -484,7 +493,8 @@ body.popup-open {
         transform: translateX(-50%);
     }
 }
-/* 下面是大屏幕的 */
+
+/* 下面是大屏幕的 toolbox tab 样式 */
 @media screen and (min-width: 768px) {
     #toolbox-area {
         border-left: 1px solid var(--border-color-primary);
