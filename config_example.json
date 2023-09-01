@@ -11,6 +11,9 @@
     "midjourney_proxy_api_secret": "", // 你的 MidJourney Proxy API Secret，用于鉴权访问 api，可选
     "midjourney_discord_proxy_url": "", // 你的 MidJourney Discord Proxy URL，用于对生成对图进行反代，可选
     "midjourney_temp_folder": "./tmp", // 你的 MidJourney 临时文件夹，用于存放生成的图片，填空则关闭自动下载切图（直接显示MJ的四宫格图）
+    "spark_appid": "", // 你的 讯飞星火大模型 API AppID，用于讯飞星火大模型对话模型
+    "spark_api_key": "", // 你的 讯飞星火大模型 API Key，用于讯飞星火大模型对话模型
+    "spark_api_secret": "", // 你的 讯飞星火大模型 API Secret，用于讯飞星火大模型对话模型
 
 
     //== Azure ==

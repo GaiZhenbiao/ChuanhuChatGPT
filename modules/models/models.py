@@ -625,6 +625,9 @@ def get_model(
             from .midjourney import Midjourney_Client
             mj_proxy_api_secret = os.getenv("MIDJOURNEY_PROXY_API_SECRET")
             model = Midjourney_Client(model_name, mj_proxy_api_secret, user_name=user_name)
+        elif model_type == ModelType.Spark:
+            from .spark import Spark_Client
+            model = Spark_Client(model_name, os.getenv("SPARK_APPID"), os.getenv("SPARK_API_KEY"), os.getenv("SPARK_API_SECRET"), user_name=user_name)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)

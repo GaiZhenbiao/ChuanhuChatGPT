@@ -142,6 +142,7 @@ class ModelType(Enum):
     GooglePaLM = 9
     LangchainChat = 10
     Midjourney = 11
+    Spark = 12
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -171,6 +172,8 @@ class ModelType(Enum):
             model_type = ModelType.Midjourney
         elif "azure" in model_name_lower or "api" in model_name_lower:
             model_type = ModelType.LangchainChat
+        elif "星火大模型" in model_name_lower:
+            model_type = ModelType.Spark
         else:
             model_type = ModelType.Unknown
         return model_type
@@ -269,9 +272,12 @@ class BaseLLMModel:
         if display_append:
             display_append = '\n\n<hr class="append-display no-in-raw" />' + display_append
         partial_text = ""
+        token_increment = 1
         for partial_text in stream_iter:
+            if type(partial_text) == tuple:
+                partial_text, token_increment = partial_text
             chatbot[-1] = (chatbot[-1][0], partial_text + display_append)
-            self.all_token_counts[-1] += 1
+            self.all_token_counts[-1] += token_increment
             status_text = self.token_message()
             yield get_return_value()
             if self.interrupted:
