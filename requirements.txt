@@ -26,3 +26,4 @@ unstructured
 google-api-python-client
 tabulate
 ujson
+python-docx
