@@ -580,8 +580,8 @@ def get_model(
             logging.info(msg)
             lora_selector_visibility = True
             if os.path.isdir("lora"):
-                lora_choices = get_file_names(
-                    "lora", plain=True, filetypes=[""])
+                lora_choices = get_file_names_dropdown_by_pinyin(
+                    "lora", filetypes=[""])
             lora_choices = ["No LoRA"] + lora_choices
         elif model_type == ModelType.LLaMA and lora_model_path != "":
             logging.info(f"正在加载LLaMA模型: {model_name} + {lora_model_path}")

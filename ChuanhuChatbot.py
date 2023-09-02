@@ -31,7 +31,7 @@ def create_new_model():
 
 with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     user_name = gr.State("")
-    promptTemplates = gr.State(load_template(get_template_names(plain=True)[0], mode=2))
+    promptTemplates = gr.State(load_template(get_template_names()[0], mode=2))
     user_question = gr.State("")
     assert type(my_api_key)==str
     user_api_key = gr.State(my_api_key)
@@ -135,9 +135,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 with gr.Column(scale=6):
                                     templateFileSelectDropdown = gr.Dropdown(
                                         label=i18n("选择Prompt模板集合文件"),
-                                        choices=get_template_names(plain=True),
+                                        choices=get_template_names(),
                                         multiselect=False,
-                                        value=get_template_names(plain=True)[0],
+                                        value=get_template_names()[0],
                                         container=False,
                                     )
                                 with gr.Column(scale=1):
@@ -147,7 +147,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                     templateSelectDropdown = gr.Dropdown(
                                         label=i18n("从Prompt模板中加载"),
                                         choices=load_template(
-                                            get_template_names(plain=True)[0], mode=1
+                                            get_template_names()[0], mode=1
                                         ),
                                         multiselect=False,
                                         container=False,
@@ -160,7 +160,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 with gr.Column(scale=6):
                                     historyFileSelectDropdown = gr.Dropdown(
                                         label=i18n("从列表中加载对话"),
-                                        choices=get_history_names(plain=True),
+                                        choices=get_history_names(),
                                         multiselect=False,
                                         container=False,
                                     )
@@ -185,7 +185,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                     gr.Markdown(i18n("默认保存于history文件夹"))
                             with gr.Row():
                                 with gr.Column():
-                                    downloadFile = gr.File(interactive=True)
+                                    downloadFile = gr.File(interactive=True, label="下载/上传历史记录")
 
                 with gr.Tab(label=i18n("微调")):
                     openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("在这里[查看使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B#%E5%BE%AE%E8%B0%83-gpt-35)"))
@@ -336,7 +336,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         current_model = get_model(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key)[0]
         current_model.set_user_identifier(user_name)
         chatbot = gr.Chatbot.update(label=MODELS[DEFAULT_MODEL])
-        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), *current_model.auto_load(), get_history_names(False, user_name), chatbot
+        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), *current_model.auto_load(), get_history_dropdown(user_name), chatbot
     demo.load(create_greeting, inputs=None, outputs=[user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, historyFileSelectDropdown, chatbot], api_name="load")
     chatgpt_predict_args = dict(
         fn=predict,
@@ -383,7 +383,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
 
     refresh_history_args = dict(
-        fn=get_history_names, inputs=[gr.State(False), user_name], outputs=[historyFileSelectDropdown]
+        fn=get_history_dropdown, inputs=[user_name], outputs=[historyFileSelectDropdown]
     )
 
 
@@ -461,8 +461,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     # Template
     systemPromptTxt.change(set_system_prompt, [current_model, systemPromptTxt], None)
-    templateRefreshBtn.click(get_template_names, None, [templateFileSelectDropdown])
-    templateFileSelectDropdown.change(
+    templateRefreshBtn.click(get_template_dropdown, None, [templateFileSelectDropdown])
+    templateFileSelectDropdown.input(
         load_template,
         [templateFileSelectDropdown],
         [promptTemplates, templateSelectDropdown],
@@ -482,7 +482,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         downloadFile,
         show_progress=True,
     )
-    saveHistoryBtn.click(get_history_names, [gr.State(False), user_name], [historyFileSelectDropdown])
+    saveHistoryBtn.click(get_history_dropdown, [user_name], [historyFileSelectDropdown])
     exportMarkdownBtn.click(
         export_markdown,
         [current_model, saveFileName, chatbot, user_name],

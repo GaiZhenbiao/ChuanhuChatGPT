@@ -354,31 +354,50 @@ def save_file(filename, system, history, chatbot, user_name):
 def sorted_by_pinyin(list):
     return sorted(list, key=lambda char: lazy_pinyin(char)[0][0])
 
+def sorted_by_last_modified_time(list, dir):
+    return sorted(list, key=lambda char: os.path.getmtime(os.path.join(dir, char)), reverse=True)
 
-def get_file_names(dir, plain=False, filetypes=[".json"]):
-    logging.debug(f"获取文件名列表，目录为{dir}，文件类型为{filetypes}，是否为纯文本列表{plain}")
+def get_file_names_by_type(dir, filetypes=[".json"]):
+    logging.debug(f"获取文件名列表，目录为{dir}，文件类型为{filetypes}")
     files = []
     try:
         for type in filetypes:
             files += [f for f in os.listdir(dir) if f.endswith(type)]
     except FileNotFoundError:
-        files = []
-    files = sorted_by_pinyin(files)
-    if files == []:
         files = [""]
     logging.debug(f"files are:{files}")
-    if plain:
-        return files
-    else:
-        return gr.Dropdown.update(choices=files)
+    return files
+
+def get_file_names_by_pinyin(dir, filetypes=[".json"]):
+    files = get_file_names_by_type(dir, filetypes)
+    if files != [""]:
+        files = sorted_by_pinyin(files)
+    logging.debug(f"files are:{files}")
+    return files
+
+def get_file_names_dropdown_by_pinyin(dir, filetypes=[".json"]):
+    files = get_file_names_by_pinyin(dir, filetypes)
+    return gr.Dropdown.update(choices=files)
+
+def get_file_names_by_last_modified_time(dir, filetypes=[".json"]):
+    files = get_file_names_by_type(dir, filetypes)
+    if files != [""]:
+        files = sorted_by_last_modified_time(files, dir)
+    logging.debug(f"files are:{files}")
+    return files
 
 
-def get_history_names(plain=False, user_name=""):
+def get_history_names(user_name=""):
     logging.debug(f"从用户 {user_name} 中获取历史记录文件名列表")
     if user_name == "" and hide_history_when_not_logged_in:
         return ""
     else:
-        return get_file_names(os.path.join(HISTORY_DIR, user_name), plain)
+        history_files = get_file_names_by_last_modified_time(os.path.join(HISTORY_DIR, user_name))
+        return history_files
+
+def get_history_dropdown(user_name=""):
+    history_names = get_history_names(user_name)
+    return gr.Dropdown.update(choices=history_names)
 
 
 def load_template(filename, mode=0):
@@ -406,9 +425,14 @@ def load_template(filename, mode=0):
         )
 
 
-def get_template_names(plain=False):
+def get_template_names():
     logging.debug("获取模板文件名列表")
-    return get_file_names(TEMPLATES_DIR, plain, filetypes=[".csv", "json"])
+    return get_file_names_by_pinyin(TEMPLATES_DIR, filetypes=[".csv", "json"])
+
+def get_template_dropdown():
+    logging.debug("获取模板下拉菜单")
+    template_names = get_template_names()
+    return gr.Dropdown.update(choices=template_names)
 
 
 def get_template_content(templates, selection, original_system_prompt):

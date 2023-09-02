@@ -23,6 +23,7 @@ def get_documents(file_src):
         filename = os.path.basename(filepath)
         file_type = os.path.splitext(filename)[1]
         logging.info(f"loading file: {filename}")
+        texts = None
         try:
             if file_type == ".pdf":
                 logging.debug("Loading PDF...")
@@ -72,8 +73,9 @@ def get_documents(file_src):
             logging.error(f"Error loading file: {filename}")
             traceback.print_exc()
 
-        texts = text_splitter.split_documents(texts)
-        documents.extend(texts)
+        if texts is not None:
+            texts = text_splitter.split_documents(texts)
+            documents.extend(texts)
     logging.debug("Documents loaded.")
     return documents
 
