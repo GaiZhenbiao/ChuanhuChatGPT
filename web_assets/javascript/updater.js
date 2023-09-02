@@ -75,6 +75,7 @@ async function updateLatestVersion() {
                 latestVersionElement.textContent = latestVersion;
                 console.log(`New version ${latestVersion} found!`);
                 if (!isInIframe) openUpdateToast();
+                gradioApp().classList.add('is-outdated');
             }
         } else { //如果当前版本号获取失败，使用时间比较
             const latestVersionTime = (new Date(data.created_at)).getTime();
@@ -88,6 +89,7 @@ async function updateLatestVersion() {
                     disableUpdateBtn_enableCancelBtn();
                     localStorage.setItem('isLatestVersion', 'false');
                     isLatestVersion = false;
+                    gradioApp().classList.add('is-outdated');
                 } else if (localVersionTime < latestVersionTime) {
                     const infoMessage = `Local version check failed, it seems to be a local rivision. \n\nBut latest revision is ${latestVersionInfo}. Try ${manualUpdateInfo}.`
                     versionInfoElement.innerHTML = marked.parse(infoMessage, {mangle: false, headerIds: false});
@@ -96,8 +98,10 @@ async function updateLatestVersion() {
                     // if (!isInIframe) openUpdateToast();
                     localStorage.setItem('isLatestVersion', 'false');
                     isLatestVersion = false;
+                    gradioApp().classList.add('is-outdated');
                 } else {
                     noUpdate("Local version check failed, it seems to be a local rivision. <br>But your revision is newer than the latest release.");
+                    gradioApp().classList.add('is-outdated');
                 }
             }
         }

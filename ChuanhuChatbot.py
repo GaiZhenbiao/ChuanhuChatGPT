@@ -92,8 +92,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             with gr.Column():
                                 downloadFile = gr.File(interactive=True)
 
-            with gr.Row(elem_id="chuanhu-func-nav"):
-                gr.HTML(get_html("func_nav.html"))
+            with gr.Column(elem_id="chuanhu-menu-footer"):
+                with gr.Row(elem_id="chuanhu-func-nav"):
+                    gr.HTML(get_html("func_nav.html"))
+                # gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
+                # gr.Markdown(CHUANHU_DESCRIPTION, elem_id="chuanhu-author")
+                
+
 
         with gr.Column(elem_id="chuanhu-area", scale=5):
             with gr.Column(elem_id="chatbot-area"):

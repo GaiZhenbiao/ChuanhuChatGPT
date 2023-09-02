@@ -10,10 +10,18 @@
     --switch-checkbox-color-light: #e5e7eb;
     --switch-checkbox-color-dark: #515151;
 
+    --chatbot-header-background-color-light: #F3F3F3bb;
+    --chatbot-header-background-color-dark: #121111bb;
+    /* --menu-background-color-light: #F0F0F0;
+    --menu-background-color-dark: #282828; */
+
     --menu-width: 320px;
-    --menu-background-fill: transparent;
+    --menu-background-fill: var(--background-fill-primary);
+
     --toolbox-width: 280px;
+    --toolbox-background-fill: var(--background-fill-secondary);
 }
+
 
 body.popup-open {
     overflow: hidden;
@@ -28,10 +36,11 @@ body.popup-open {
     font-size: var(--text-xxl);
     line-height: 1.3;
     text-align: left;
-    margin-top: 6px;
+    margin-top: 4px;
     white-space: nowrap;
     flex-direction: row;
     display: inline-flex;
+    align-items: center;
 }
 #description {
     text-align: center;
@@ -194,8 +203,9 @@ body.popup-open {
     left: 0;
     right: 0;
     /* padding: 6px 64px; */
+    height: 65px;
     background: var(--background-fill-primary);
-    border-bottom: 1px solid var(--border-color-primary);
+    border-bottom: 0.5px solid var(--border-color-primary);
 
     @media screen and (max-width: 639px) {
         padding: 6px 16px;
@@ -239,25 +249,31 @@ body.popup-open {
 .dark #chuanhu-area {
     background: var(--chatbot-background-color-dark);
 }
-#chatbot-area {
-    /* max-width: 1024px; */
-    /* gap: 0; */
-}
+/* #chatbot-area {
+    max-width: 1024px; */
+    /* gap: 0;
+} */
 #chatbot-header {
     justify-content: space-between;
     border-bottom: 1px solid var(--border-color-primary);
     height: 60px;
+    padding-inline: 20px;
+    gap: 0;
     position: absolute;
     top: 0;
     z-index: 50;
-    /* background: var(--header); */
-    /* !!!!!!!!!!!!!!!!!!!!!!!!这里颜色还要再写!!!!!!!!!!!!!!!!!!!!!! */
+    background: var(--chatbot-header-background-color-light);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
 }
+.dark #chatbot-header {
+    background: var(--chatbot-header-background-color-dark);
+}
+
 #chatbot-header .gradio-dropdown {
     max-width: 14em;
     background: none;
+    height: 60px;
 }
 #chatbot-header .gradio-dropdown > label {
     display: flex;
@@ -275,15 +291,54 @@ body.popup-open {
 }
 #chatbot-header .gradio-dropdown > label > .wrap {
     background: none;
+    padding-left: 8px;
 }
 #model-select-dropdown > label > span[data-testid="block-info"]  {
     display: none;
 }
+#chatbot-header .gradio-dropdown > label > .wrap input {
+    font-weight: bold;
+}
+#chatbot-header .gradio-dropdown > label::before {
+    content: "";
+    background: var(--primary-600);
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    position: absolute;
+    /* left: 2px; */
+    top: calc(50% - 6px);
+}
 
 #chatbot-header-btn-bar {
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     display: flex;
+    height: 60px;
 }
+#chatbot-header-btn-bar > * {
+    width: 100%;
+}
+#header-btn-groups {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+/* #header-btn-group {
+    justify-content: space-between;
+    display: flex;
+    height: 36px;
+    align-items: center;
+} */
+.show-on-gpt {
+    /* visibility: hidden; */
+    display: none;
+}
+.is-gpt .show-on-gpt {
+    /* visibility: visible; */
+    display: block;
+}
+
 /* default invisible */
 #menu-area, #toolbox-area {
     width: 0;
@@ -298,7 +353,10 @@ body.popup-open {
 }
 #menu-area {
     border-radius: 0;
-    background: var(--menu-background-fill);
+    background: var(--background-fill-primary);
+}
+#toolbox-area {
+    background: var(--background-fill-secondary);
 }
 #menu-area > div {
     width: var(--menu-width);
@@ -309,6 +367,8 @@ body.popup-open {
     height: calc(100vh - 65px);
     visibility: visible;
     /* margin-right: 16px; */
+    border-right: 0.5px solid var(--border-color-primary);
+    box-shadow: -1px 0 4px 0 rgba(0, 0, 0, 0.1) inset;
 }
 
 #toolbox-area > div {
@@ -353,6 +413,7 @@ body.popup-open {
         right: 0;
         top: calc( 10vh + 48px );
         margin: 0;
+        border-radius: 6px;
         box-shadow: 0 2px 64px 4px rgba(0, 0, 0, 0.2);
     }
     /* #menu-area.showSide, #toolbox-area.showSide {
@@ -542,6 +603,9 @@ body.popup-open {
     #toolbox-area {
         border-left: 1px solid var(--border-color-primary);
     }
+    #toolbox-area > .gradio-box {
+        border-radius: 0;
+    }
     #toolbox-area > .gradio-box > .gradio-row > .close-btn {
         display: none;
     }
@@ -603,15 +667,77 @@ body.popup-open {
 } */
 
 #chuanhu-history {
-    height: calc(100vh - 65px - 65px);
+    height: calc(100vh - 65px - 61px);
     overflow-y: auto;
 }
-#chuanhu-func-nav {
+#chuanhu-history > div {
+    border-radius: 0;
+    background: none;
+}
+
+#chuanhu-menu-footer {
     position: absolute;
     bottom: 0;
     /* background: black; */
-    height: 64px;
+    height: auto;
     overflow: hidden;
+    padding: 12px 18px;
+    border-top: 0.8px solid var(--border-color-primary);
+}
+#menu-footer-btn-bar {
+    justify-content: space-between;
+    display: flex;
+    height: 36px;
+    align-items: center;
+}
+.btn-bar-group {
+    gap: 6px;
+    display: inline-flex;
+}
+.chuanhu-ui-btn {
+    border-radius: 8px;
+    /* color: rgba(120, 120, 120, 0.64) !important; */
+    padding: 6px !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    transition: background-color .2s ease;
+}
+.chuanhu-ui-btn:hover {
+    background-color: rgba(167, 167, 167, 0.25) !important;
+    /* color: unset !important; */
+}
+.chuanhu-ui-btn:active {
+    background-color: rgba(167, 167, 167, 0.5) !important;
+}
+
+.hover-round-btn {
+    border-radius: 50% !important;
+}
+
+.show-on-light {
+    display: block;
+}
+.show-on-dark {
+    display: none;
+}
+.dark .show-on-light {
+    display: none;
+}
+.dark .show-on-dark {
+    display: block;
+}
+
+.show-on-latest {
+    display: block;
+}
+.show-on-outdated {
+    display: none;
+}
+.outdated .show-on-latest {
+    display: none;
+}
+.outdated .show-on-outdated {
+    display: block;
 }
 
 #history-select-wrap {

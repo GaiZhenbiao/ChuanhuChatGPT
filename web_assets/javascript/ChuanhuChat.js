@@ -98,6 +98,7 @@ function initialize() {
     setPopupBoxPosition();
     setChatAreaWidth();
     setSlider();
+    checkModel();
 
     if (!historyLoaded) loadHistoryHtml();
     if (!usernameGotten) getUserInfo();
@@ -195,17 +196,34 @@ function disableSendBtn() {
     });
 }
 
-function adjustDarkMode() {
-    function toggleDarkMode(isEnabled) {
-        if (isEnabled) {
-            document.body.classList.add("dark");
-            document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
+function checkModel() {
+    const model = gradioApp().querySelector('#model-select-dropdown input');
+    var modelValue = model.value;
+    checkGPT();
+    function checkGPT() {
+        modelValue = model.value;
+        if (modelValue.includes('gpt')) {
+            gradioApp().querySelector('#header-btn-groups').classList.add('is-gpt');
         } else {
-            document.body.classList.remove("dark");
-            document.body.style.backgroundColor = "";
+            gradioApp().querySelector('#header-btn-groups').classList.remove('is-gpt');
         }
+        console.log('gpt model checked')
     }
-    
+    model.addEventListener('blur', ()=>{
+        setTimeout(checkGPT, 100);
+    });
+}
+
+function toggleDarkMode(isEnabled) {
+    if (isEnabled) {
+        document.body.classList.add("dark");
+        document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
+    } else {
+        document.body.classList.remove("dark");
+        document.body.style.backgroundColor = "";
+    }
+}
+function adjustDarkMode() {
     const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
     apSwitch.checked = darkModeQuery.matches;
     toggleDarkMode(darkModeQuery.matches);
@@ -217,7 +235,10 @@ function adjustDarkMode() {
         toggleDarkMode(e.target.checked);
     });
 }
-
+function btnToggleDarkMode() {
+    apSwitch.checked = !apSwitch.checked;
+    toggleDarkMode(apSwitch.checked);
+}
 
 function setChatAreaWidth() {
     const screenWidth = window.innerWidth;
