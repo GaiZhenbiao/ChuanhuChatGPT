@@ -1,3 +1,8 @@
+
+function newChatClick() {
+    gradioApp().querySelector('#empty-btn').click();
+}
+
 function openSettingBox() {
     chuanhuPopup.classList.add('showBox');
     popupWrapper.classList.add('showBox');

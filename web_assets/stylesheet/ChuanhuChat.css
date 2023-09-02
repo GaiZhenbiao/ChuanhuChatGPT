@@ -10,10 +10,7 @@
     --switch-checkbox-color-light: #e5e7eb;
     --switch-checkbox-color-dark: #515151;
 
-    --chatbot-blur-background-color: #F3F3F388;
-    /* --chatbot-blur-background-color-dark: #121111bb; */
-    /* --menu-background-color-light: #F0F0F0;
-    --menu-background-color-dark: #282828; */
+    --chatbot-blur-background-color: #F3F3F366;
 
     --menu-width: 320px;
     --menu-background-fill: var(--background-fill-primary);
@@ -21,7 +18,7 @@
     --toolbox-width: 280px;
     --toolbox-background-fill: var(--background-fill-secondary);
     .dark {
-        --chatbot-blur-background-color: #12111188;
+        --chatbot-blur-background-color: #12111166;
     }
 }
 

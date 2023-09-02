@@ -350,7 +350,7 @@ window.addEventListener("DOMContentLoaded", function () {
     historyLoaded = false;
 });
 window.addEventListener('resize', ()=>{
-    setChatbotHeight();
+    // setChatbotHeight();
     setPopupBoxPosition();
     adjustSide();
     windowWidth = window.innerWidth;

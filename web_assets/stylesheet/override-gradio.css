@@ -14,7 +14,7 @@ div.no-container {
 
 /* gradio的页脚信息 */
 footer {
-    /* display: none !important; */
+    display: none !important;
     margin-top: .2em !important;
     font-size: 85%;
 }
