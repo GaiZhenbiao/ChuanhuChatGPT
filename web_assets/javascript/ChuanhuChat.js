@@ -278,6 +278,7 @@ function setPopupBoxPosition() {
 }
 
 function setChatbotHeight() {
+    return;
     const screenWidth = window.innerWidth;
     const statusDisplay = document.querySelector('#status-display');
     const statusDisplayHeight = statusDisplay ? statusDisplay.offsetHeight : 0;

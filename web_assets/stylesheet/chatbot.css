@@ -55,6 +55,16 @@ hr.append-display {
     border: none !important;
 }
 
+#user-input-tb {
+    padding: 0 !important;
+    border: 1px solid rgba(167, 167, 167, 0.5) !important;
+    border-radius: 21px !important;
+}
+#user-input-tb textarea {
+    /* max-height: 110px; */
+    background: transparent;
+}
+
 /* 亮色（默认） */
 #chuanhu-chatbot {
     background-color: var(--chatbot-background-color-light) !important;
@@ -107,21 +117,21 @@ hr.append-display {
 /* 屏幕宽度大于等于500px的设备 */
 /* update on 2023.4.8: 高度的细致调整已写入JavaScript */
 @media screen and (min-width: 500px) {
-    #chuanhu-chatbot {
+    /* #chuanhu-chatbot {
         height: calc(100vh - 200px);
     }
     #chuanhu-chatbot>.wrapper>.wrap {
         max-height: calc(100vh - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
-    }
+    } */
 }
 /* 屏幕宽度小于500px的设备 */
 @media screen and (max-width: 499px) {
-    #chuanhu-chatbot {
+    /* #chuanhu-chatbot {
         height: calc(100vh - 140px);
     }
     #chuanhu-chatbot>.wrapper>.wrap {
         max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
-    }
+    } */
     [data-testid = "bot"] {
         max-width: calc(100% - 84px) !important;
     }
@@ -136,6 +146,10 @@ hr.append-display {
     }
 }
 
+#chuanhu-chatbot {
+    height: calc(100vh - 65px) !important;
+    border-radius: 0;
+}
 #chuanhu-chatbot>.wrapper>.wrap {
     overflow-x: hidden;
     display: flex;
@@ -143,6 +157,7 @@ hr.append-display {
     flex-direction: column;
     padding-inline: 20px;
     padding-top: 72px;
+    padding-bottom: 220px;
 }
 #chuanhu-chatbot>.wrapper>.wrap .message-wrap {
     align-self: center;

@@ -117,37 +117,46 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         label="Chuanhu Chat", 
                         elem_id="chuanhu-chatbot", 
                         latex_delimiters=latex_delimiters_set, 
-                        height=700, 
+                        # height=700, 
                         show_label=False,
                         avatar_images=[config.user_avatar, config.bot_avatar], 
-                        show_share_button=False
+                        show_share_button=False,
                     )
-                with gr.Row():
-                    with gr.Column(min_width=225, scale=12):
-                        user_input = gr.Textbox(
-                            elem_id="user-input-tb",
-                            show_label=False, placeholder=i18n("在这里输入"),
-                            container=False
-                        )
-                    with gr.Column(min_width=42, scale=1):
-                        submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
-                        cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
-                with gr.Row(elem_id="chatbot-buttons"):
-                    with gr.Column(min_width=120, scale=1):
-                        emptyBtn = gr.Button(
-                            i18n("🧹 新的对话"), elem_id="empty-btn"
-                        )
-                    with gr.Column(min_width=120, scale=1):
-                        retryBtn = gr.Button(i18n("🔄 重新生成"))
-                    with gr.Column(min_width=120, scale=1):
-                        delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
-                    with gr.Column(min_width=120, scale=1):
-                        delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"))
-                    with gr.Row(visible=False) as like_dislike_area:
-                        with gr.Column(min_width=20, scale=1):
-                            likeBtn = gr.Button(i18n("👍"))
-                        with gr.Column(min_width=20, scale=1):
-                            dislikeBtn = gr.Button(i18n("👎"))
+                with gr.Row(elem_id="chatbot-footer"):
+                    with gr.Box(elem_id="chatbot-input-box"):
+                        with gr.Row(elem_id="chatbot-input-btn-bar"):
+                            gr.Button(i18n("📄 上传文档"), variant="secondary", elem_id="upload-doc-btn", elem_classes="chatbot-input-button", scale=0)
+                            gr.Button(i18n("📄 xxx"), variant="secondary", elem_id="upload-index-btn", elem_classes="chatbot-input-button", scale=0)
+                            gr.Button(i18n("📄 xxx"), variant="secondary", elem_id="uplasdfasdfoad-qa-btn", elem_classes="chatbot-input-button", scale=0)
+                        with gr.Row(elem_id="chatbot-input-tb-row"):
+                            with gr.Column(min_width=225, scale=12):
+                                user_input = gr.Textbox(
+                                    elem_id="user-input-tb",
+                                    show_label=False, 
+                                    placeholder=i18n("在这里输入"),
+                                    elem_classes="no-container",
+                                    max_lines=5,
+                                    # container=False
+                                )
+                            with gr.Column(min_width=42, scale=1, elem_id="chatbot-ctrl-btns"):
+                                submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
+                                cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
+                        with gr.Row(elem_id="chatbot-buttons", visible=False):
+                            with gr.Column(min_width=120, scale=1):
+                                emptyBtn = gr.Button(
+                                    i18n("🧹 新的对话"), elem_id="empty-btn"
+                                )
+                            with gr.Column(min_width=120, scale=1):
+                                retryBtn = gr.Button(i18n("🔄 重新生成"))
+                            with gr.Column(min_width=120, scale=1):
+                                delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
+                            with gr.Column(min_width=120, scale=1):
+                                delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"))
+                            with gr.Row(visible=False) as like_dislike_area:
+                                with gr.Column(min_width=20, scale=1):
+                                    likeBtn = gr.Button(i18n("👍"))
+                                with gr.Column(min_width=20, scale=1):
+                                    dislikeBtn = gr.Button(i18n("👎"))
 
         with gr.Column(elem_id="toolbox-area", scale=1):
             with gr.Box(elem_id="chuanhu-toolbox"): # For CSS setting, there is an extra box. Don't remove it.

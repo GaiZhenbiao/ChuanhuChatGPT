@@ -10,8 +10,8 @@
     --switch-checkbox-color-light: #e5e7eb;
     --switch-checkbox-color-dark: #515151;
 
-    --chatbot-header-background-color-light: #F3F3F3bb;
-    --chatbot-header-background-color-dark: #121111bb;
+    --chatbot-blur-background-color: #F3F3F388;
+    /* --chatbot-blur-background-color-dark: #121111bb; */
     /* --menu-background-color-light: #F0F0F0;
     --menu-background-color-dark: #282828; */
 
@@ -20,6 +20,9 @@
 
     --toolbox-width: 280px;
     --toolbox-background-fill: var(--background-fill-secondary);
+    .dark {
+        --chatbot-blur-background-color: #12111188;
+    }
 }
 
 
@@ -118,9 +121,11 @@ body.popup-open {
     color: var(--body-text-color-subdued);
 }
 
-
+#chatbot-ctrl-btns {
+    align-self: end;
+}
 #submit-btn, #cancel-btn {
-    height: 40px !important;
+    height: 42px !important;
 }
 #submit-btn::before {
     content: url("data:image/svg+xml, %3Csvg width='21px' height='20px' viewBox='0 0 21 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cg id='page' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send' transform='translate(0.435849, 0.088463)' fill='%23FFFFFF' fill-rule='nonzero'%3E %3Cpath d='M0.579148261,0.0428666046 C0.301105539,-0.0961547561 -0.036517765,0.122307382 0.0032026237,0.420210298 L1.4927172,18.1553639 C1.5125774,18.4334066 1.79062012,18.5922882 2.04880264,18.4929872 L8.24518329,15.8913017 L11.6412765,19.7441794 C11.8597387,19.9825018 12.2370824,19.8832008 12.3165231,19.5852979 L13.9450591,13.4882182 L19.7839562,11.0255541 C20.0619989,10.8865327 20.0818591,10.4694687 19.7839562,10.3105871 L0.579148261,0.0428666046 Z M11.6138902,17.0883151 L9.85385903,14.7195502 L0.718169621,0.618812241 L12.69945,12.9346347 L11.6138902,17.0883151 Z' id='shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E");
@@ -212,7 +217,7 @@ body.popup-open {
     /* padding: 6px 64px; */
     height: 65px;
     background: var(--background-fill-primary);
-    border-bottom: 0.5px solid var(--border-color-primary);
+    border-bottom: 1px solid var(--border-color-primary);
 
     @media screen and (max-width: 639px) {
         padding: 6px 16px;
@@ -257,24 +262,23 @@ body.popup-open {
     background: var(--chatbot-background-color-dark);
 }
 /* #chatbot-area {
-    max-width: 1024px; */
-    /* gap: 0;
+    justify-content: center;
+    display: flex;
 } */
 #chatbot-header {
     justify-content: space-between;
-    border-bottom: 1px solid var(--border-color-primary);
+    border-bottom: 0.5px solid var(--border-color-primary);
     height: 60px;
     padding-inline: 20px;
     gap: 0;
     position: absolute;
     top: 0;
+    right: 4px;
+    width: calc(100% - 4px);
     z-index: 50;
-    background: var(--chatbot-header-background-color-light);
+    background: var(--chatbot-blur-background-color);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-}
-.dark #chatbot-header {
-    background: var(--chatbot-header-background-color-dark);
 }
 
 #chatbot-header .gradio-dropdown {
@@ -344,6 +348,37 @@ body.popup-open {
 .is-gpt .show-on-gpt {
     /* visibility: visible; */
     display: block;
+}
+
+#chatbot-footer {
+    position: absolute;
+    bottom: 0;
+    right: 4px;
+    width: calc(100% - 4px);
+    display: flex;
+    justify-content: center;
+    /* padding: 24px; */
+    padding: 8px 6px;
+    min-height: 120px;
+    max-height: 210px;
+    background: var(--chatbot-blur-background-color);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+}
+
+#chatbot-input-box {
+    max-width: 1024px;
+    /* margin: 0 auto; */
+    gap: 20px;
+    display: flex;
+    background: none;
+    align-self: end;
+}
+
+#chatbot-input-btn-bar {
+    height: 27px;
+    overflow-y: auto;
+    flex-wrap: nowrap;
 }
 
 /* default invisible */
