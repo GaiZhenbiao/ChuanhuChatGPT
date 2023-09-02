@@ -351,7 +351,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         )
 
                     with gr.Tab(label=i18n("关于"), elem_id="about-tab"):
-                        gr.Markdown("\n\n")
                         gr.Markdown("![Chuanhu Chat logo](file=web_assets/chatbot.png)")
                         gr.Markdown("# 川虎Chat")
                         gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")

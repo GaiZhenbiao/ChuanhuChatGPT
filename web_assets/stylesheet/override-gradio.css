@@ -9,6 +9,7 @@ div.form {
 }
 div.no-container {
     padding: 10px 0 0 0 !important;
+    background: none !important;
 }
 
 /* gradio的页脚信息 */

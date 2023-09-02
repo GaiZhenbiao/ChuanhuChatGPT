@@ -55,7 +55,7 @@ body.popup-open {
 
 /* 高级页面 */
 #advanced-warning {
-    /* margin-top: 1rem; */
+    margin-top: 0.5rem;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -628,6 +628,8 @@ body.popup-open {
         height: calc(100% - 35px);
         overflow-y: auto;
         border-style: none;
+        padding: 0;
+        /* 理论上不该是0，但这里考虑内部gradio有好多container有padding了 */
     }
     #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav {
         display: flex;
@@ -673,10 +675,12 @@ body.popup-open {
     padding: 0;
     height: 100%;
 }
+/* 
 #toolbox-area > .gradio-box > .gradio-tabs > div.tabitem {
     padding: 0;
-    /* 理论上不该是0，但这里考虑内部gradio有好多container有padding了 */
-}
+    理论上不该是0，但这里考虑内部gradio有好多container有padding了 
+} 
+*/
 #toolbox-area > .gradio-box > .gradio-tabs > div.tabitem > div > .gradio-markdown {
     padding: 12px;
 }
