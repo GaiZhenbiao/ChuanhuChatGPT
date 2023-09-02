@@ -152,7 +152,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         with gr.Column(elem_id="toolbox-area", scale=1):
             with gr.Box(elem_id="chuanhu-toolbox"): # For CSS setting, there is an extra box. Don't remove it.
                 with gr.Row():
-                    gr.Markdown("## 🛠️ Toolbox")
+                    gr.Markdown("## Toolbox")
                     gr.HTML(get_html("close_btn.html").format(obj="toolbox"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
                     with gr.Tab(label=i18n("Prompt")):
@@ -188,65 +188,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                             container=False,
                                         )
                     with gr.Tab(label=i18n("Parameters")):
-                        gr.Markdown("will be here soon...")
-                    with gr.Tab(label=i18n("Extensions")):
-                        gr.Markdown("no, not yet...")  
-                    with gr.Tab(label=i18n("不知道还有啥tab")):
-                        gr.Markdown("I am Keldos. Hello, world!")
-
-                    # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
-                    updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
-                    historySelectBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="history-select-btn")
-
-    with gr.Row(elem_id="popup-wrapper"):
-        with gr.Box(elem_id="chuanhu-popup"):
-            with gr.Box(elem_id="chuanhu-setting"):
-                with gr.Row():
-                    gr.Markdown("## Settings")
-                    gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
-                with gr.Tabs(elem_id="chuanhu-setting-tabs"):
-                    with gr.Tab(label=i18n("模型")):
-                        keyTxt = gr.Textbox(
-                            show_label=True,
-                            placeholder=f"Your API-key...",
-                            value=hide_middle_chars(user_api_key.value),
-                            type="password",
-                            visible=not HIDE_MY_KEY,
-                            label="API-Key",
-                        )
-                        if multi_api_key:
-                            usageTxt = gr.Markdown(i18n("多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
-                        else:
-                            usageTxt = gr.Markdown(i18n("**发送消息** 或 **提交key** 以显示额度"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
-                        # model_select_dropdown = gr.Dropdown(
-                        #     label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
-                        # )
-                        # lora_select_dropdown = gr.Dropdown(
-                        #     label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
-                        # )
-                        with gr.Row():
-                            single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch-checkbox")
-                            use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False, elem_classes="switch-checkbox")
-                        language_select_dropdown = gr.Dropdown(
-                            label=i18n("选择回复语言（针对搜索&索引功能）"),
-                            choices=REPLY_LANGUAGES,
-                            multiselect=False,
-                            value=REPLY_LANGUAGES[0],
-                        )
-                        index_files = gr.Files(label=i18n("上传"), type="file", elem_id="upload-index-file")
-                        two_column = gr.Checkbox(label=i18n("双栏pdf"), value=advance_docs["pdf"].get("two_column", False))
-                        summarize_btn = gr.Button(i18n("总结"))
-                        # TODO: 公式ocr
-                        # formula_ocr = gr.Checkbox(label=i18n("识别公式"), value=advance_docs["pdf"].get("formula_ocr", False))
-
-                    with gr.Tab(label=i18n("高级")):
-                        gr.HTML(get_html("appearance_switcher.html").format(label=i18n("切换亮暗色主题")), elem_classes="insert-block")
-                        use_streaming_checkbox = gr.Checkbox(
-                                label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
-                            )
-                        checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
                         gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"), elem_id="advanced-warning")
-                        with gr.Accordion(i18n("参数"), open=False):
+                        with gr.Accordion(i18n("参数"), open=True):
                             temperature_slider = gr.Slider(
                                 minimum=-0,
                                 maximum=2.0,
@@ -324,36 +267,94 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 value=user_name.value,
                                 lines=1,
                             )
+                    with gr.Tab(label=i18n("Extensions")):
+                        gr.Markdown("Will be here soon...\n(We hope)")
 
-                        with gr.Accordion(i18n("网络参数"), open=False):
-                            gr.Markdown(i18n("---\n⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置"), elem_id="netsetting-warning")
-                            default_btn = gr.Button(i18n("🔙 恢复默认网络设置"))
-                            # 网络代理
-                            proxyTxt = gr.Textbox(
-                                show_label=True,
-                                placeholder=i18n("未设置代理..."),
-                                label=i18n("代理地址"),
-                                value=config.http_proxy,
-                                lines=1,
-                                interactive=False,
-                                # container=False,
-                                elem_classes="view-only-textbox no-container",
+                    # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
+                    updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
+                    historySelectBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="history-select-btn")
+
+    with gr.Row(elem_id="popup-wrapper"):
+        with gr.Box(elem_id="chuanhu-popup"):
+            with gr.Box(elem_id="chuanhu-setting"):
+                with gr.Row():
+                    gr.Markdown("## Settings")
+                    gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
+                with gr.Tabs(elem_id="chuanhu-setting-tabs"):
+                    with gr.Tab(label=i18n("模型")):
+                        keyTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"Your API-key...",
+                            value=hide_middle_chars(user_api_key.value),
+                            type="password",
+                            visible=not HIDE_MY_KEY,
+                            label="API-Key",
+                        )
+                        if multi_api_key:
+                            usageTxt = gr.Markdown(i18n("多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
+                        else:
+                            usageTxt = gr.Markdown(i18n("**发送消息** 或 **提交key** 以显示额度"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
+                        # model_select_dropdown = gr.Dropdown(
+                        #     label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
+                        # )
+                        # lora_select_dropdown = gr.Dropdown(
+                        #     label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
+                        # )
+                        with gr.Row():
+                            single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch-checkbox")
+                            use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False, elem_classes="switch-checkbox")
+                        language_select_dropdown = gr.Dropdown(
+                            label=i18n("选择回复语言（针对搜索&索引功能）"),
+                            choices=REPLY_LANGUAGES,
+                            multiselect=False,
+                            value=REPLY_LANGUAGES[0],
+                        )
+                        index_files = gr.Files(label=i18n("上传"), type="file", elem_id="upload-index-file")
+                        two_column = gr.Checkbox(label=i18n("双栏pdf"), value=advance_docs["pdf"].get("two_column", False))
+                        summarize_btn = gr.Button(i18n("总结"))
+                        # TODO: 公式ocr
+                        # formula_ocr = gr.Checkbox(label=i18n("识别公式"), value=advance_docs["pdf"].get("formula_ocr", False))
+
+                    with gr.Tab(label=i18n("高级")):
+                        gr.HTML(get_html("appearance_switcher.html").format(label=i18n("切换亮暗色主题")), elem_classes="insert-block", visible=False)
+                        use_streaming_checkbox = gr.Checkbox(
+                                label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
                             )
-                            # changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
+                        # checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
 
-                            # 优先展示自定义的api_host
-                            apihostTxt = gr.Textbox(
-                                show_label=True,
-                                placeholder="api.openai.com",
-                                label="OpenAI API-Host",
-                                value=config.api_host or shared.API_HOST,
-                                lines=1,
-                                interactive=False,
-                                # container=False,
-                                elem_classes="view-only-textbox no-container",
-                            )
+                    with gr.Tab(i18n("网络参数")):
+                        gr.Markdown(i18n("⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置"), elem_id="netsetting-warning")
+                        default_btn = gr.Button(i18n("🔙 恢复默认网络设置"))
+                        # 网络代理
+                        proxyTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=i18n("未设置代理..."),
+                            label=i18n("代理地址"),
+                            value=config.http_proxy,
+                            lines=1,
+                            interactive=False,
+                            # container=False,
+                            elem_classes="view-only-textbox no-container",
+                        )
+                        # changeProxyBtn = gr.Button(i18n("🔄 设置代理地址"))
 
-                    with gr.Tab(label=i18n("关于")):
+                        # 优先展示自定义的api_host
+                        apihostTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder="api.openai.com",
+                            label="OpenAI API-Host",
+                            value=config.api_host or shared.API_HOST,
+                            lines=1,
+                            interactive=False,
+                            # container=False,
+                            elem_classes="view-only-textbox no-container",
+                        )
+
+                    with gr.Tab(label=i18n("关于"), elem_id="about-tab"):
+                        gr.Markdown("\n\n")
+                        gr.Markdown("![Chuanhu Chat logo](file=web_assets/chatbot.png)")
+                        gr.Markdown("# 川虎Chat")
+                        gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
                         gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
 
             with gr.Box(elem_id="chuanhu-training"):
@@ -379,9 +380,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             openai_status_refresh_btn = gr.Button(i18n("刷新状态"))
                             openai_cancel_all_jobs_btn = gr.Button(i18n("取消所有任务"))
                             add_to_models_btn = gr.Button(i18n("添加训练好的模型到模型列表"), interactive=False)
-
-
-    gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
 
     # https://github.com/gradio-app/gradio/pull/3296
     def create_greeting(request: gr.Request):
@@ -590,7 +588,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     #     [status_display],
     #     show_progress=True,
     # )
-    checkUpdateBtn.click(fn=None, _js='manualCheckUpdate')
+    # checkUpdateBtn.click(fn=None, _js='manualCheckUpdate')
 
     # Invisible elements
     updateChuanhuBtn.click(

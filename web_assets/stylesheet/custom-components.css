@@ -28,7 +28,7 @@
 
 /* updater */
 #toast-update {
-    position: absolute;
+    position: fixed;
     display: flex;
     top: -500px;
     width: 100%;
@@ -238,3 +238,25 @@ input:checked + .apSlider::before {
     left: 18px;
 }
 
+
+/* .scroll-shadow-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -6px;
+    width: 6px;
+    height: 100%;
+    box-shadow: 6px 0 10px rgba(0, 0, 0, 0.36);
+    z-index: 1;
+}
+
+.scroll-shadow-right::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -6px;
+    width: 6px;
+    height: 100%;
+    box-shadow: -6px 0 10px rgba(0, 0, 0, 0.36);
+    z-index: 1;
+} */

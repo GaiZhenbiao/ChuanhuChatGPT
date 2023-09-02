@@ -44,11 +44,18 @@ body.popup-open {
 }
 #description {
     text-align: center;
-    margin: 32px 0 4px 0;
+    /* margin: 32px 0 4px 0; */
+}
+#about-tab {
+    text-align: center;
+}
+#about-tab img {
+    margin: 0 auto;
 }
 
 /* 高级页面 */
 #advanced-warning {
+    /* margin-top: 1rem; */
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -618,20 +625,20 @@ body.popup-open {
         overflow: hidden;
     }
     #toolbox-area > .gradio-box > .gradio-tabs > div.tabitem {
-        height: calc(100% - 40px);
+        height: calc(100% - 35px);
         overflow-y: auto;
         border-style: none;
     }
     #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav {
         display: flex;
         margin: 0;
-        padding: 4px;
+        /* padding: 4px; */
         overflow-x: auto;
         overflow-y: hidden;
         flex-direction: row;
         flex-wrap: nowrap;
-        border-radius: 10px;
-        gap: 4px;
+        /* border-radius: 10px; */
+        /* gap: 4px; */
         width: 100%;
         height: auto;
         background: var(--button-secondary-background-fill);
@@ -642,19 +649,23 @@ body.popup-open {
     #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav > button {
         display: inline-block;
         position: relative;
-        padding: 7px 12px;
+        padding: 8px 16px;
         border: none;
         white-space: nowrap;
         width: auto;
         text-align: center;
         background: var(--button-secondary-background-fill);
         transition: font-size 0.3s ease-in-out;
+        border-right: 1px var(--border-color-primary) solid;
+        border-radius: 0;
     }
     #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav > button.selected {
-        background-color: var(--primary-600);
+        background-color: var(--block-background-fill);
         font-weight: bold;
+        /* border-top-left-radius: 8px;
+        border-top-right-radius: 8px; */
         /* font-size: large; */
-        color: white;
+        /* color: white; */
     }
 }
 
@@ -662,6 +673,14 @@ body.popup-open {
     padding: 0;
     height: 100%;
 }
+#toolbox-area > .gradio-box > .gradio-tabs > div.tabitem {
+    padding: 0;
+    /* 理论上不该是0，但这里考虑内部gradio有好多container有padding了 */
+}
+#toolbox-area > .gradio-box > .gradio-tabs > div.tabitem > div > .gradio-markdown {
+    padding: 12px;
+}
+
 /* #chuanhu-popup ul.options {
     transform: translate(-50%, -50%);
 } */

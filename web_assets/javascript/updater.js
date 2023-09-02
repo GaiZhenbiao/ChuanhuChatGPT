@@ -139,7 +139,7 @@ function cancelUpdate() {
 }
 function openUpdateToast() {
     showingUpdateInfo = true;
-    setUpdateWindowHeight();
+    updateToast.style.setProperty('top', '0px');
 }
 function closeUpdateToast() {
     updateToast.style.setProperty('top', '-500px');
@@ -201,10 +201,10 @@ function disableUpdateBtn_enableCancelBtn() {
     document.querySelector('#cancel-button.btn-update').disabled = false;
 }
 
-function setUpdateWindowHeight() {
-    if (!showingUpdateInfo) {return;}
-    const scrollPosition = window.scrollY;
-    // const originalTop = updateToast.style.getPropertyValue('top');
-    const resultTop = scrollPosition - 20 + 'px';
-    updateToast.style.setProperty('top', resultTop);
-}
+// function setUpdateWindowHeight() {
+//     if (!showingUpdateInfo) {return;}
+//     const scrollPosition = window.scrollY;
+//     // const originalTop = updateToast.style.getPropertyValue('top');
+//     const resultTop = scrollPosition - 20 + 'px';
+//     updateToast.style.setProperty('top', resultTop);
+// }

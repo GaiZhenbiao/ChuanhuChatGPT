@@ -96,9 +96,9 @@ function initialize() {
     setChatbotHeight();
     setChatbotScroll();
     setPopupBoxPosition();
-    setChatAreaWidth();
     setSlider();
     checkModel();
+    // setScrollShadow();
 
     if (!historyLoaded) loadHistoryHtml();
     if (!usernameGotten) getUserInfo();
@@ -240,25 +240,30 @@ function btnToggleDarkMode() {
     toggleDarkMode(apSwitch.checked);
 }
 
-function setChatAreaWidth() {
-    const screenWidth = window.innerWidth;
-    const menuArea = gradioApp().querySelector('#menu-area');
-    const chatbotArea = gradioApp().querySelector('#chatbot-area');
-    // const menuWidth = menuArea.offsetWidth;
-    const chatbotAreaWidth = chatbotArea.offsetWidth;
-    return;
-    if (menuArea.classList.contains('hideSide')) {
-    //     // chatbotArea.style.width = `${chatbotAreaWidth}px`;
-    //     chatbotArea.style.flexBasis = '75%'
-    // } else {
-    //     chatbotArea.style.flexBasis = `50%`;
-        // if (screenWidth > 499) {
-        //     // chatbotArea.style.width = `${screenWidth - menuWidth}px`;
-        //     chatbotArea.style.width = `800px`;
-        // } else {
-        //     // chatbotArea.style.width = `${chatbotAreaWidth}px`;
-        // }
+function setScrollShadow() {
+    const toolboxScroll = toolbox.querySelector('#toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav');
+    const toolboxTabs = toolboxScroll.querySelectorAll('button');
+    let toolboxScrollWidth = 0;
+    toolboxTabs.forEach((tab) => {
+        toolboxScrollWidth += tab.offsetWidth; // 获取按钮宽度并累加
+    });
+    function adjustScrollShadow() {
+        if (toolboxScroll.scrollLeft > 0) {
+            toolboxScroll.classList.add('scroll-shadow-left');
+        } else {
+            toolboxScroll.classList.remove('scroll-shadow-left');
+        }
+
+        if (toolboxScroll.scrollLeft + toolboxScroll.clientWidth < toolboxScrollWidth) {
+            toolboxScroll.classList.add('scroll-shadow-right');
+        } else {
+            toolboxScroll.classList.remove('scroll-shadow-right');
+        }
     }
+    toolboxScroll.addEventListener('scroll', () => {
+        adjustScrollShadow();
+    });
+    // no, I failed to make shadow appear on the top layer...
 }
 
 function setPopupBoxPosition() {
@@ -349,7 +354,7 @@ window.addEventListener('resize', ()=>{
     adjustSide();
     windowWidth = window.innerWidth;
 });
-window.addEventListener('scroll', ()=>{setChatbotHeight(); setUpdateWindowHeight();setPopupBoxPosition();});
+window.addEventListener('scroll', ()=>{setChatbotHeight(); setPopupBoxPosition();});
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", adjustDarkMode);
 
 // console suprise
