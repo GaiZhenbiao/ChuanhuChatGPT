@@ -123,6 +123,13 @@ os.environ["MIDJOURNEY_DISCORD_PROXY_URL"] = midjourney_discord_proxy_url
 midjourney_temp_folder = config.get("midjourney_temp_folder", "")
 os.environ["MIDJOURNEY_TEMP_FOLDER"] = midjourney_temp_folder
 
+spark_api_key = config.get("spark_api_key", "")
+os.environ["SPARK_API_KEY"] = spark_api_key
+spark_appid = config.get("spark_appid", "")
+os.environ["SPARK_APPID"] = spark_appid
+spark_api_secret = config.get("spark_api_secret", "")
+os.environ["SPARK_API_SECRET"] = spark_api_secret
+
 load_config_to_environ(["openai_api_type", "azure_openai_api_key", "azure_openai_api_base_url",
                        "azure_openai_api_version", "azure_deployment_name", "azure_embedding_deployment_name", "azure_embedding_model_name"])
 

@@ -26,3 +26,5 @@ unstructured
 google-api-python-client
 tabulate
 ujson
+python-docx
+websocket_client

@@ -142,6 +142,7 @@ class ModelType(Enum):
     GooglePaLM = 9
     LangchainChat = 10
     Midjourney = 11
+    Spark = 12
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -171,6 +172,8 @@ class ModelType(Enum):
             model_type = ModelType.Midjourney
         elif "azure" in model_name_lower or "api" in model_name_lower:
             model_type = ModelType.LangchainChat
+        elif "星火大模型" in model_name_lower:
+            model_type = ModelType.Spark
         else:
             model_type = ModelType.Unknown
         return model_type
@@ -269,9 +272,12 @@ class BaseLLMModel:
         if display_append:
             display_append = '\n\n<hr class="append-display no-in-raw" />' + display_append
         partial_text = ""
+        token_increment = 1
         for partial_text in stream_iter:
+            if type(partial_text) == tuple:
+                partial_text, token_increment = partial_text
             chatbot[-1] = (chatbot[-1][0], partial_text + display_append)
-            self.all_token_counts[-1] += 1
+            self.all_token_counts[-1] += token_increment
             status_text = self.token_message()
             yield get_return_value()
             if self.interrupted:
@@ -718,7 +724,7 @@ class BaseLLMModel:
             history_file_path = filename
         try:
             os.remove(history_file_path)
-            return i18n("删除对话历史成功"), get_history_names(False, user_name), []
+            return i18n("删除对话历史成功"), get_history_dropdown(user_name), []
         except:
             logging.info(f"删除对话历史失败 {history_file_path}")
             return i18n("对话历史")+filename+i18n("已经被删除啦"), gr.update(), gr.update()
