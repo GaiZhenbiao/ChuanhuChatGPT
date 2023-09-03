@@ -1,6 +1,6 @@
 <div align="right">
   <!-- Language: -->
-  <a title="Chinese" href="../README.md">简体中文</a> | <a title="English" href="README_en.md">English</a> | 日本語
+  <a title="Chinese" href="../README.md">简体中文</a> | <a title="English" href="README_en.md">English</a> | 日本語 |  <a title="Russian" href="README_ru.md">Russian</a>
 </div>
 
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
