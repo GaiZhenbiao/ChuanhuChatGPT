@@ -156,8 +156,10 @@ hr.append-display {
     [data-testid = "user"] {
         max-width: calc(100% - 84px) !important;
     }
-    .chatbot-avatar {
-        display: none;
+
+    #app-title {
+        transform: scale(0.95);
+        transform-origin: left center;
     }
     #app-title h1{
         letter-spacing: -1px; font-size: 22px;
