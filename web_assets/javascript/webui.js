@@ -149,6 +149,7 @@ function adjustSide() {
             // closeSide(toolbox);
         }
     }
+    checkChatbotWidth();
     adjustMask();
 }
 
@@ -182,6 +183,15 @@ function adjustMask() {
     }
 }
 
+function checkChatbotWidth() {
+    // let chatbotWidth = chatbotArea.clientWidth;
+    // if (chatbotWidth > 488) {
+    if (windowWidth > 768) {
+        chatbotArea.classList.add('chatbot-full-width');
+    } else {
+        chatbotArea.classList.remove('chatbot-full-width');
+    }
+}
 
 /*
 function setHistroyPanel() {

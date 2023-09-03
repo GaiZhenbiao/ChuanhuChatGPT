@@ -15,6 +15,8 @@
     --chatbot-blur-background-color: #F3F3F366;
     --chatbot-input-background-color: rgba(255, 255, 255, 0.32);
     --chatbot-input-more-background-color: #FFFFFF;
+    --chatbot-input-more-background-fullwidth-hover: #FFFFFF88;
+    --chatbot-input-more-background-mobilewidth-hover: #F6F6F6;
 
     --menu-width: 320px;
     --menu-background-fill: var(--background-fill-primary);
@@ -26,6 +28,8 @@
         --chatbot-blur-background-color: #12111166;
         --chatbot-input-background-color: rgba(144, 144, 144, 0.32);
         --chatbot-input-more-background-color: #3C3C3C;
+        --chatbot-input-more-background-fullwidth-hover: #1F1F1F88;
+        --chatbot-input-more-background-mobilewidth-hover: #1F1F1F44;
     }
 }
 
@@ -370,7 +374,7 @@ body.popup-open {
     /* padding: 24px; */
     /* padding: 8px 6px; */
     min-height: 82px;
-    max-height: 166px;
+    /* max-height: 166px; */
     background: var(--chatbot-blur-background-color);
     -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
@@ -405,40 +409,43 @@ button.chatbot-input-more-btn:active .sm-round-bg {
     fill-opacity: 0.25;
 }
 
+/* 三个点号点开！ */
+/* no！屏幕宽度窄的时候！ */
 #chatbot-input-more-area {
     position: absolute;
     display: flex;
     flex-direction: column;
     bottom: 60px;
     min-width: 120px;
-    z-index: 50;
+    z-index: 5000;
     border-radius: 6px;
     box-shadow: var(--shadow-sm);
     background: var(--chatbot-input-more-background-color);
 
 }
-#chatbot-input-more-area > div {
+#chatbot-input-more-area > span > div {
     min-width: 120px;
     padding: 2px;
     align-content: center;
     /* display: flex; */
     border-bottom: 0.5px solid var(--border-color-primary);
 }
-#chatbot-input-more-area > div:last-child {
+#chatbot-input-more-area > span > div.last-btn {
     border-bottom: none;
 }
-#chatbot-input-more-area > div > label {
+#chatbot-input-more-area > span > div > label {
     padding: 6px 8px;
     border-radius: 4px;
+    height: 39px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
 }
-#chatbot-input-more-area > div:hover > label {
-    background: var(--input-background-fill-hover);
+#chatbot-input-more-area > span > div:hover > label {
+    background: var(--chatbot-input-more-background-mobilewidth-hover);
 }
-#chatbot-input-more-area > div > label button {
+#chatbot-input-more-area > span > div > label button {
     margin: 0;
     width: 100%;
     display: flex;
@@ -450,6 +457,51 @@ button.chatbot-input-more-btn:active .sm-round-bg {
 }
 .chatbot-input-more-span {
     white-space: nowrap;
+}
+
+/* 哈哈！川虎哥觉得不方便，那再写个全宽的吧！
+ * 再让我重写一份样式我是狗
+ */
+.chatbot-full-width #chatbot-input-row {
+    flex-direction: column;
+    justify-content: flex-start !important;
+    justify-items: start;
+}
+.chatbot-full-width #chatbot-input-more-area {
+    position: relative;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    height: 32px;
+    min-width: unset;
+    background: none;
+    box-shadow: none;
+    bottom: 0;
+}
+.chatbot-full-width #chatbot-input-more-area > span > div {
+    /* min-width: unset; */
+    border-bottom: none;
+}
+.chatbot-full-width #chatbot-input-more-area > span > div > label {
+    height: 32px;
+    border-radius: 8px;
+}
+.chatbot-full-width #chatbot-input-more-area > span > div:hover > label {
+    background: var(--chatbot-input-more-background-fullwidth-hover);
+}
+.chatbot-full-width #chatbot-input-more-btn-div {
+    display: none;
+}
+.chatbot-full-width #chatbot-input-box {
+    padding-top: 4px;
+}
+.chatbot-full-width #chatbot-input-row .gradio-html {
+    width: 100%;
+    max-width: unset;
+}
+.chatbot-full-width .chatbot-input-more-label-group {
+    flex-wrap: nowrap;
+    flex-direction: row-reverse;
+    display: inline-flex;
 }
 
 /* default invisible */

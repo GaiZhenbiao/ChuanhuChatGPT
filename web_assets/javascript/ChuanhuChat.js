@@ -11,6 +11,7 @@ var user_input_ta = null;
 var user_input_tb = null;
 var userInfoDiv = null;
 var appTitleDiv = null;
+var chatbotArea = null;
 var chatbot = null;
 var chatbotIndicator = null;
 var chatbotWrap = null;
@@ -65,6 +66,7 @@ function initialize() {
     user_input_tb = gradioApp().getElementById('user-input-tb');
     userInfoDiv = gradioApp().getElementById("user-info");
     appTitleDiv = gradioApp().getElementById("app-title");
+    chatbotArea = gradioApp().querySelector('#chatbot-area');
     chatbot = gradioApp().querySelector('#chuanhu-chatbot');
     chatbotWrap = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .wrap');
     apSwitch = gradioApp().querySelector('.apSwitch input[type="checkbox"]');
