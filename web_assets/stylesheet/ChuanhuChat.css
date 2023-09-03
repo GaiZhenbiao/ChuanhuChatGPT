@@ -1,4 +1,6 @@
 :root {
+    --vh: 1vh;
+
     --chatbot-color-light: #000000;
     --chatbot-color-dark: #FFFFFF;
     --chatbot-background-color-light: #F3F3F3;
@@ -237,10 +239,10 @@ body.popup-open {
     display: inline-flex;
     justify-content: space-between;
     /* margin-top: 54px; */
-    /* height: calc(100vh - 72px); */
+    /* height: calc(100*var(--vh) - 72px); */
     position: absolute;
     top: 65px;
-    height: calc(100vh - 65px);
+    height: calc(100*var(--vh) - 65px);
 }
 
 #chuanhu-area {
@@ -403,7 +405,7 @@ body.popup-open {
 #menu-area.showSide {
     width: var(--menu-width);
     max-width: var(--menu-width);
-    height: calc(100vh - 65px);
+    height: calc(100*var(--vh) - 65px);
     visibility: visible;
     /* margin-right: 16px; */
     border-right: 0.5px solid var(--border-color-primary);
@@ -415,7 +417,7 @@ body.popup-open {
 }
 #toolbox-area.showSide {
     width: var(--toolbox-width);
-    height: calc(100vh - 65px);
+    height: calc(100*var(--vh) - 65px);
     visibility: visible;
     /* margin-left: 16px; */
 }
@@ -440,17 +442,17 @@ body.popup-open {
         /* right: calc(0px - var(--toolbox-width)); */
         z-index: 10008;
         overflow: unset;
-        top: 100vh;
+        top: calc(100*var(--vh));
         margin: 0;
     }
     #toolbox-area > div {
         width: 100vw;
-        height: calc( 90vh - 48px );
+        height: calc( 90*var(--vh) - 48px );
     }
     #toolbox-area.showSide {
         width: 100vw;
         right: 0;
-        top: calc( 10vh + 48px );
+        top: calc( 10*var(--vh) + 48px );
         margin: 0;
         border-radius: 6px;
         box-shadow: 0 2px 64px 4px rgba(0, 0, 0, 0.2);
@@ -540,7 +542,7 @@ body.popup-open {
     }
     #chuanhu-popup {
         width: 100vw;
-        height: calc( 90vh - 48px );
+        height: calc( 90*var(--vh) - 48px );
         border-radius: inherit inherit 0 0;
     }
     #toolbox-area > .gradio-box > .gradio-row:first-of-type,
@@ -556,7 +558,7 @@ body.popup-open {
     }
     #toolbox-area > .gradio-box > .gradio-tabs > div.tabitem,
     #chuanhu-popup > .gradio-box > .gradio-tabs > div.tabitem {
-        height: calc( 90vh - 48px - 46px - 45px );
+        height: calc( 90*var(--vh) - 48px - 46px - 45px );
         overflow-x: auto;
         border: none;
     }
@@ -722,7 +724,7 @@ body.popup-open {
 } */
 
 #chuanhu-history {
-    height: calc(100vh - 65px - 61px);
+    height: calc(100*var(--vh) - 65px - 61px);
     overflow-y: auto;
 }
 #chuanhu-history > div {
@@ -807,14 +809,14 @@ body.popup-open {
     overflow: hidden;
     display: inline-flex;
     /* margin-top: 54px; */
-    /* height: calc(100vh - 72px); */
+    /* height: calc(100*var(--vh) - 72px); */
     /* position: absolute;
     top: 48px;
 } */
 /* 
 .hide-body {
     display: none;
-    top: -100vh;
+    top: calc(-100*var(--vh));
     
 }
 #train-body {
@@ -823,7 +825,7 @@ body.popup-open {
 
 #chuanhu-body.hide-body {
     display: none;
-    top: calc(100vh + 48px);
+    top: calc(100*var(--vh) + 48px);
 }
 #chuanhu-body {
     transition: top 0.3s ease-in-out, display 0.3s ease;

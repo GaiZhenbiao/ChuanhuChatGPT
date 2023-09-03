@@ -277,6 +277,11 @@ function setPopupBoxPosition() {
     // chuanhuPopup.style.top = `${(screenHeight - popupBoxHeight) / 2}px`;
 }
 
+function updateVH() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
 function setChatbotHeight() {
     return;
     const screenWidth = window.innerWidth;
@@ -345,17 +350,19 @@ var gradioObserver = new MutationObserver(function (mutations) {
 // 监视页面变化
 window.addEventListener("DOMContentLoaded", function () {
     // const ga = document.getElementsByTagName("gradio-app");
+    updateVH();
     gradioApp().addEventListener("render", initialize);
     isInIframe = (window.self !== window.top);
     historyLoaded = false;
 });
 window.addEventListener('resize', ()=>{
     // setChatbotHeight();
+    updateVH();
     setPopupBoxPosition();
     adjustSide();
     windowWidth = window.innerWidth;
 });
-window.addEventListener('scroll', ()=>{setChatbotHeight(); setPopupBoxPosition();});
+window.addEventListener('scroll', ()=>{setPopupBoxPosition();});
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", adjustDarkMode);
 
 // console suprise
