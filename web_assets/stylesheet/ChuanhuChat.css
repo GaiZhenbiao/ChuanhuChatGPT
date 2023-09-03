@@ -536,14 +536,14 @@ body.popup-open {
 
 /* 小屏幕的tab样式 */
 @media screen and (max-width: 767px) {
-    
     #popup-wrapper.showBox {
         place-items: end;
     }
     #chuanhu-popup {
         width: 100vw;
         height: calc( 90*var(--vh) - 48px );
-        border-radius: inherit inherit 0 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
     #toolbox-area > .gradio-box > .gradio-row:first-of-type,
     #chuanhu-popup > .gradio-box > .gradio-row:first-of-type {
