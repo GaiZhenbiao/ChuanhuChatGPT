@@ -140,6 +140,7 @@ function cancelUpdate() {
 function openUpdateToast() {
     showingUpdateInfo = true;
     updateToast.style.setProperty('top', '0px');
+    showMask("update-toast");
 }
 function closeUpdateToast() {
     updateToast.style.setProperty('top', '-500px');
@@ -147,6 +148,7 @@ function closeUpdateToast() {
     if (updatingInfoElement.classList.contains('hideK') === false) {
         updatingInfoElement.classList.add('hideK');
     }
+    document.querySelector('.chuanhu-mask')?.remove();
 }
 function manualCheckUpdate() {
     openUpdateToast();

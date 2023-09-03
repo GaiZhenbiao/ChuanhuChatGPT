@@ -170,14 +170,17 @@ body.popup-open {
     z-index: 999;
     /* background-color: transparent; */
 }
-.chuanhu-mask {
+/* .chuanhu-mask {
     background-color: rgba(0, 0, 0, 0.5);
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
-}
+    /* -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px); 
+} */
 .mask-blur {
     -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
+}
+.transparent-mask {
+    background-color: transparent !important;
 }
 
 .chuanhu-side-mask {
@@ -401,6 +404,7 @@ button.chatbot-input-more-btn {
     height: 32px;
     width: 32px;
     border-radius: 50%;
+    z-index: 1001;
 }
 button.chatbot-input-more-btn:hover .sm-round-bg {
     fill-opacity: 0.2125;
@@ -410,14 +414,17 @@ button.chatbot-input-more-btn:active .sm-round-bg {
 }
 
 /* 三个点号点开！ */
+.show-chat-more #chatbot-input-more-area {
+    display: flex;
+}
 /* no！屏幕宽度窄的时候！ */
 #chatbot-input-more-area {
+    display: none;
     position: absolute;
-    display: flex;
     flex-direction: column;
     bottom: 60px;
     min-width: 120px;
-    z-index: 5000;
+    z-index: 1001;
     border-radius: 6px;
     box-shadow: var(--shadow-sm);
     background: var(--chatbot-input-more-background-color);
@@ -468,6 +475,7 @@ button.chatbot-input-more-btn:active .sm-round-bg {
     justify-items: start;
 }
 .chatbot-full-width #chatbot-input-more-area {
+    display: flex;
     position: relative;
     flex-direction: row-reverse;
     justify-content: space-between;

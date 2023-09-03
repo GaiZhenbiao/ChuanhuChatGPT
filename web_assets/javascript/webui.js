@@ -8,7 +8,7 @@ function openSettingBox() {
     popupWrapper.classList.add('showBox');
     settingBox.classList.remove('hideBox');
     trainingBox.classList.add('hideBox');
-    showMask();
+    showMask("box");
 
 }
 
@@ -17,17 +17,55 @@ function openTrainingBox() {
     popupWrapper.classList.add('showBox');
     trainingBox.classList.remove('hideBox');
     settingBox.classList.add('hideBox');
-    showMask();
+    showMask("box");
 }
 
-function showMask() {
+function openChatMore() {
+    chatbotArea.classList.add('show-chat-more');
+    showMask("chat-more");
+}
+
+function closeChatMore() {
+    chatbotArea.classList.remove('show-chat-more');
+    chatbotArea.querySelector('.chuanhu-mask')?.remove();
+}
+
+
+function showMask(obj) {
     const mask = document.createElement('div');
     mask.classList.add('chuanhu-mask');
-    popupWrapper.appendChild(mask);
-    document.body.classList.add('popup-open');
+    if (obj == "box") {
+        mask.classList.add('mask-blur');
+        document.body.classList.add('popup-open');
+        popupWrapper.appendChild(mask);
+    } else if (obj == "chat-more") {
+        mask.classList.add('transparent-mask');
+        chatbotArea.querySelector('#chatbot-input-more-area').parentNode.appendChild(mask);
+    } else if (obj == "update-toast") {
+        mask.classList.add('chuanhu-top-mask');
+        document.body.appendChild(mask);
+        // mask.classList.add('transparent-mask');
+    }
+    
+    
+
     mask.addEventListener('click', () => {
-        closeBox();
+        if (obj == "box") {
+            closeBox();
+        } else if (obj == "chat-more") {
+            closeChatMore();
+        } else if (obj == "update-toast") {
+            closeUpdateToast();
+        }
     });
+}
+
+function chatMoreBtnClick() {
+    if (chatbotArea.classList.contains('show-chat-more')) {
+        closeChatMore();
+    } else {
+        openChatMore();
+    }
 }
 
 function closeBtnClick(obj) {
@@ -190,6 +228,14 @@ function checkChatbotWidth() {
         chatbotArea.classList.add('chatbot-full-width');
     } else {
         chatbotArea.classList.remove('chatbot-full-width');
+    }
+    checkChatMoreMask();
+}
+
+function checkChatMoreMask() {
+    if (!chatbotArea.classList.contains('chatbot-full-width')) {
+        chatbotArea.querySelector('.chuanhu-mask')?.remove();
+        chatbotArea.classList.remove('show-chat-more');
     }
 }
 
