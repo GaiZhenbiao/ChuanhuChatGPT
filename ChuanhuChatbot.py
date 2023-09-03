@@ -124,24 +124,26 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     )
                 with gr.Row(elem_id="chatbot-footer"):
                     with gr.Box(elem_id="chatbot-input-box"):
-                        with gr.Row(elem_id="chatbot-input-btn-bar"):
-                            gr.Button(i18n("📄 上传文档"), variant="secondary", elem_id="upload-doc-btn", elem_classes="chatbot-input-button", scale=0)
-                            gr.Button(i18n("📄 xxx"), variant="secondary", elem_id="upload-index-btn", elem_classes="chatbot-input-button", scale=0)
-                            gr.Button(i18n("📄 xxx"), variant="secondary", elem_id="uplasdfasdfoad-qa-btn", elem_classes="chatbot-input-button", scale=0)
-                        with gr.Row(elem_id="chatbot-input-tb-row"):
-                            with gr.Column(min_width=225, scale=12):
-                                user_input = gr.Textbox(
-                                    elem_id="user-input-tb",
-                                    show_label=False, 
-                                    placeholder=i18n("在这里输入"),
-                                    elem_classes="no-container",
-                                    max_lines=5,
-                                    # container=False
-                                )
-                            with gr.Column(min_width=42, scale=1, elem_id="chatbot-ctrl-btns"):
-                                submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
-                                cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
-                        with gr.Row(elem_id="chatbot-buttons", visible=False):
+                        # with gr.Row(elem_id="chatbot-input-btn-bar"):
+                        #     gr.Button(i18n("📄 上传文档"), variant="secondary", elem_id="upload-doc-btn", elem_classes="chatbot-input-button", scale=0)
+                        #     gr.Button(i18n("📄 xxx"), variant="secondary", elem_id="upload-index-btn", elem_classes="chatbot-input-button", scale=0)
+                        #     gr.Button(i18n("📄 xxx"), variant="secondary", elem_id="uplasdfasdfoad-qa-btn", elem_classes="chatbot-input-button", scale=0)
+                        with gr.Row(elem_id="chatbot-input-row"):
+                            gr.HTML(get_html("chatbot_more.html"))
+                            with gr.Row(elem_id="chatbot-input-tb-row"):
+                                with gr.Column(min_width=225, scale=12):
+                                    user_input = gr.Textbox(
+                                        elem_id="user-input-tb",
+                                        show_label=False, 
+                                        placeholder=i18n("在这里输入"),
+                                        elem_classes="no-container",
+                                        max_lines=5,
+                                        # container=False
+                                    )
+                                with gr.Column(min_width=42, scale=1, elem_id="chatbot-ctrl-btns"):
+                                    submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
+                                    cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
+                        with gr.Row(elem_id="chatbot-buttons", visible=False): # Note: Buttons below are set invisible in UI. But they are used in JS.
                             with gr.Column(min_width=120, scale=1):
                                 emptyBtn = gr.Button(
                                     i18n("🧹 新的对话"), elem_id="empty-btn"

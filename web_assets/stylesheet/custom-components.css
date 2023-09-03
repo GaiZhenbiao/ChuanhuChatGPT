@@ -203,6 +203,7 @@ input:checked + .apSlider::before {
     position: relative !important;
     border: none !important;
     outline: none;
+    margin: 0;
     width: 40px !important;
     height: 22px !important;
     border-radius: 11px !important;

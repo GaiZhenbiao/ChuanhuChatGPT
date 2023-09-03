@@ -55,10 +55,28 @@ hr.append-display {
     border: none !important;
 }
 
+
+
+#chatbot-input-row {
+    align-items: end;
+    gap: 6px;
+}
+#chatbot-input-row .gradio-html {
+    min-width: 0;
+    max-width: 42px;
+    width: 42px;
+}
+#chatbot-input-tb-row {
+    gap: 0;
+    justify-content: end;
+    border-radius: 21px;
+    background: var(--chatbot-input-background-color);
+    box-shadow: var(--shadow-md);
+}
 #user-input-tb {
     padding: 0 !important;
-    border: 1px solid rgba(167, 167, 167, 0.5) !important;
-    border-radius: 21px !important;
+    /* border: 1px solid rgba(167, 167, 167, 0.5) !important; */
+    /* border-radius: 21px !important; */
 }
 #user-input-tb textarea {
     /* max-height: 110px; */
@@ -157,7 +175,7 @@ hr.append-display {
     flex-direction: column;
     padding-inline: 20px;
     padding-top: 72px;
-    padding-bottom: 220px;
+    padding-bottom: 180px;
 }
 #chuanhu-chatbot>.wrapper>.wrap .message-wrap {
     align-self: center;
