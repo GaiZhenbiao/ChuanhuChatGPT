@@ -82,6 +82,10 @@ hr.append-display {
     /* max-height: 110px; */
     background: transparent;
 }
+#user-input-tb .wrap {
+    background: none !important;
+    border-radius: 21px !important;
+}
 
 /* 亮色（默认） */
 #chuanhu-chatbot {
