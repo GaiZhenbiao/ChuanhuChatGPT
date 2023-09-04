@@ -286,7 +286,7 @@ body.popup-open {
     justify-content: space-between;
     border-bottom: 0.5px solid var(--border-color-primary);
     height: 60px;
-    padding-inline: 20px;
+    padding-inline: 20px 16px;
     gap: 0;
     position: absolute;
     top: 0;
@@ -510,6 +510,9 @@ button.chatbot-input-more-btn:active .sm-round-bg {
     flex-wrap: nowrap;
     flex-direction: row-reverse;
     display: inline-flex;
+}
+.chatbot-full-width .chatbot-input-more-span {
+    opacity: 0.64;
 }
 
 /* default invisible */
