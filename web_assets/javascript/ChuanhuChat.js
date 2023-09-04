@@ -222,9 +222,11 @@ function checkModel() {
 function toggleDarkMode(isEnabled) {
     if (isEnabled) {
         document.body.classList.add("dark");
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#171717');
         document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
     } else {
         document.body.classList.remove("dark");
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
         document.body.style.backgroundColor = "";
     }
 }
