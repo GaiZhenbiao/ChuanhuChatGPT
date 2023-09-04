@@ -26,7 +26,7 @@
     "azure_embedding_model_name": "text-embedding-ada-002", // 你的 Azure OpenAI Embedding 模型名称
 
     //== 基础配置 ==
-    "language": "auto", // 界面语言，可选"auto", "zh-CN", "en-US", "ja-JP", "ko-KR", "sv-SE"
+    "language": "auto", // 界面语言，可选"auto", "zh-CN", "en-US", "ja-JP", "ko-KR", "sv-SE", "ru-RU"
     "users": [], // 用户列表，[[用户名1, 密码1], [用户名2, 密码2], ...]
     "local_embedding": false, //是否在本地编制索引
     "hide_history_when_not_logged_in": false, //未登录情况下是否不展示对话历史
