@@ -100,6 +100,9 @@ function initialize() {
     setPopupBoxPosition();
     setSlider();
     checkModel();
+    transUpload();
+    // transCheckbox();
+    setCheckboxes();
     // setScrollShadow();
 
     if (!historyLoaded) loadHistoryHtml();

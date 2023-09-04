@@ -124,10 +124,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     )
                 with gr.Row(elem_id="chatbot-footer"):
                     with gr.Box(elem_id="chatbot-input-box"):
-                        # with gr.Row(elem_id="chatbot-input-btn-bar"):
-                        #     gr.Button(i18n("📄 上传文档"), variant="secondary", elem_id="upload-doc-btn", elem_classes="chatbot-input-button", scale=0)
-                        #     gr.Button(i18n("📄 xxx"), variant="secondary", elem_id="upload-index-btn", elem_classes="chatbot-input-button", scale=0)
-                        #     gr.Button(i18n("📄 xxx"), variant="secondary", elem_id="uplasdfasdfoad-qa-btn", elem_classes="chatbot-input-button", scale=0)
                         with gr.Row(elem_id="chatbot-input-row"):
                             gr.HTML(get_html("chatbot_more.html"))
                             with gr.Row(elem_id="chatbot-input-tb-row"):
@@ -279,11 +275,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 lines=1,
                             )
                     with gr.Tab(label=i18n("Extensions")):
-                        gr.Markdown("Will be here soon...\n(We hope)")
+                        gr.Markdown("Will be here soon...\n(We hope)\nAnd we hope you can help us to make more extensions!")
 
                     # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
-                    updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
-                    historySelectBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="history-select-btn")
 
     with gr.Row(elem_id="popup-wrapper"):
         with gr.Box(elem_id="chuanhu-popup"):
@@ -311,9 +305,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         # lora_select_dropdown = gr.Dropdown(
                         #     label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
                         # )
-                        with gr.Row():
-                            single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch-checkbox")
-                            use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False, elem_classes="switch-checkbox")
+                        # with gr.Row():
+                        single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb")
+                        use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False, elem_classes="switch-checkbox", elem_id="gr-websearch-cb")
                         language_select_dropdown = gr.Dropdown(
                             label=i18n("选择回复语言（针对搜索&索引功能）"),
                             choices=REPLY_LANGUAGES,
@@ -390,6 +384,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             openai_status_refresh_btn = gr.Button(i18n("刷新状态"))
                             openai_cancel_all_jobs_btn = gr.Button(i18n("取消所有任务"))
                             add_to_models_btn = gr.Button(i18n("添加训练好的模型到模型列表"), interactive=False)
+
+            with gr.Box(elem_id="fake-gradio-components", visible=False): 
+                updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
+                changeSingleSessionBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="change-single-session-btn")
+                changeOnlineSearchBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="change-online-search-btn")
+                historySelectBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="history-select-btn") # Not used
+
 
     # https://github.com/gradio-app/gradio/pull/3296
     def create_greeting(request: gr.Request):
@@ -607,12 +608,26 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         [status_display],
         show_progress=True,
     )
-    historySelectBtn.click(
+    changeSingleSessionBtn.click(
+        fn=lambda value: gr.Checkbox.update(value=value),
+        inputs=[single_turn_checkbox], 
+        outputs=[single_turn_checkbox],
+        _js='(a)=>{return bgChangeSingleSession(a);}'
+    )
+    changeOnlineSearchBtn.click(
+        fn=lambda value: gr.Checkbox.update(value=value),
+        inputs=[use_websearch_checkbox], 
+        outputs=[use_websearch_checkbox],
+        _js='(a)=>{return bgChangeOnlineSearch(a);}'
+    )
+    historySelectBtn.click( # This is an experimental feature... Not actually used.
         fn=load_chat_history,
         inputs=[current_model, historyFileSelectDropdown, user_name],
         outputs=[saveFileName, systemPromptTxt, chatbot],
         _js='(a,b,c)=>{return bgSelectHistory(a,b,c);}'
     )
+
+
 
 logging.info(
     colorama.Back.GREEN

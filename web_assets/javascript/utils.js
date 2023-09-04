@@ -1,25 +1,4 @@
 
-var gradioUploader = null;
-
-function testUpload(target) {
-    gradioUploader = gradioApp().querySelector("#upload-index-file > .center.flex");
-    let uploaderEvents = ["click", "drag", "dragend", "dragenter", "dragleave", "dragover", "dragstart", "drop"];
-    transEventListeners(target, gradioUploader, uploaderEvents);
-}
-
-
-function transEventListeners(target, source, events) {
-    events.forEach((sourceEvent) => {
-        target.addEventListener(sourceEvent, function (targetEvent) {
-            if(targetEvent.preventDefault) targetEvent.preventDefault();
-            if(targetEvent.stopPropagation) targetEvent.stopPropagation();
-
-            source.dispatchEvent(new Event(sourceEvent, {detail: targetEvent.detail}));
-            console.log(targetEvent.detail);
-        });
-    });
-}
-
 
 function isImgUrl(url) {
     const imageExtensions = /\.(jpg|jpeg|png|gif|bmp|webp)$/i;

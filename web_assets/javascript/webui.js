@@ -1,8 +1,4 @@
 
-function newChatClick() {
-    gradioApp().querySelector('#empty-btn').click();
-}
-
 function openSettingBox() {
     chuanhuPopup.classList.add('showBox');
     popupWrapper.classList.add('showBox');
@@ -277,11 +273,6 @@ function setHistroyPanel() {
 //     });
 // }
 
-// function bgSelectHistory(a,b,c){
-//     const historySelectorInput = gradioApp().querySelector('#history-select-dropdown input');
-//     let file = historySelectorInput.value;
-//     return [a,file,c]
-// }
 
 // function testTrain() {
     
