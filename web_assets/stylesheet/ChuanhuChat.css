@@ -13,7 +13,7 @@
     --switch-checkbox-color-dark: #515151;
 
     --chatbot-blur-background-color: #F3F3F366;
-    --chatbot-input-background-color: rgba(255, 255, 255, 0.32);
+    --chatbot-input-background-color: rgba(255, 255, 255, 0.64);
     --chatbot-input-more-background-color: #FFFFFF;
     --chatbot-input-more-background-fullwidth-hover: #FFFFFF88;
     --chatbot-input-more-background-mobilewidth-hover: #F6F6F6;
@@ -544,7 +544,7 @@ button.chatbot-input-more-btn:active .sm-round-bg {
     visibility: visible;
     /* margin-right: 16px; */
     border-right: 0.5px solid var(--border-color-primary);
-    box-shadow: -1px 0 4px 0 rgba(0, 0, 0, 0.1) inset;
+    /* box-shadow: -1px 0 4px 0 rgba(0, 0, 0, 0.1) inset; */
 }
 
 #toolbox-area > div {
@@ -850,8 +850,15 @@ button.chatbot-input-more-btn:active .sm-round-bg {
     理论上不该是0，但这里考虑内部gradio有好多container有padding了 
 } 
 */
-#toolbox-area > .gradio-box > .gradio-tabs > div.tabitem > div > .gradio-markdown {
+#toolbox-area .tabitem > div > .gradio-markdown {
     padding: 12px;
+}
+
+#toolbox-area .tabitem > div > .gradio-accordion > .label-wrap > span {
+    font-weight: bold;
+}
+#toolbox-area .tabitem > div {
+    gap: 0 !important;
 }
 
 /* #chuanhu-popup ul.options {
