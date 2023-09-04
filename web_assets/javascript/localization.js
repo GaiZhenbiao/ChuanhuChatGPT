@@ -11,6 +11,7 @@ const forView_i18n = {
     'fr': "Pour consultation seulement",
     'es': "Solo para visualización",
     'sv': "Endast för visning",
+    'ru': "Только для просмотра"
 };
 
 const deleteConfirm_i18n_pref = {
@@ -18,7 +19,8 @@ const deleteConfirm_i18n_pref = {
     'en': "Are you sure you want to delete ",
     'ja': "本当に ",
     'ko': "정말로 ",
-    'sv': "Är du säker på att du vill ta bort "
+    'sv': "Är du säker på att du vill ta bort ",
+    'ru': "Вы уверены, что хотите удалить "
 };
 
 const deleteConfirm_i18n_suff = {
@@ -26,7 +28,8 @@ const deleteConfirm_i18n_suff = {
     'en': " ?",
     'ja': " を削除してもよろしいですか？",
     'ko': " 을(를) 삭제하시겠습니까?",
-    'sv': " ?"
+    'sv': " ?",
+    'ru': " ?"
 };
 
 const usingLatest_i18n = {
@@ -34,7 +37,8 @@ const usingLatest_i18n = {
     'en': "You are using the latest version!",
     'ja': "最新バージョンを使用しています！",
     'ko': "최신 버전을 사용하고 있습니다!",
-    'sv': "Du använder den senaste versionen!"
+    'sv': "Du använder den senaste versionen!",
+    'ru': "Вы используете последнюю версию!"
 };
 
 const updatingMsg_i18n = {
@@ -42,7 +46,8 @@ const updatingMsg_i18n = {
     'en': "Trying to update...",
     'ja': "更新を試みています...",
     'ko': "업데이트를 시도 중...",
-    'sv': "Försöker uppdatera..."
+    'sv': "Försöker uppdatera...",
+    'ru': "Попытка обновления..."
 }
 
 const updateSuccess_i18n = {
@@ -50,7 +55,8 @@ const updateSuccess_i18n = {
     'en': "Updated successfully, please restart this program.",
     'ja': "更新が成功しました、このプログラムを再起動してください。",
     'ko': "업데이트 성공, 이 프로그램을 재시작 해주세요.",
-    'sv': "Uppdaterat framgångsrikt, starta om programmet."
+    'sv': "Uppdaterat framgångsrikt, starta om programmet.",
+    'ru': "Обновлено успешно, перезапустите эту программу."
 }
 
 const updateFailure_i18n = {
@@ -58,7 +64,8 @@ const updateFailure_i18n = {
     'en': 'Update failed, please try <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">manually updating</a>.',
     'ja': '更新に失敗しました、<a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">手動での更新</a>をお試しください。',
     'ko': '업데이트 실패, <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">수동 업데이트</a>를 시도하십시오.',
-    'sv': 'Uppdateringen misslyckades, prova att <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">uppdatera manuellt</a>.'
+    'sv': 'Uppdateringen misslyckades, prova att <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">uppdatera manuellt</a>.',
+    'ru': 'Обновление не удалось, попробуйте <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">обновление вручную</a>.'
 }
 
 
