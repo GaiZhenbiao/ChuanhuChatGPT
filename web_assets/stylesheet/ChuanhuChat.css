@@ -959,17 +959,24 @@ button.chatbot-input-more-btn:active .sm-round-bg {
 #chatbot-area.no-menu #chatbot-input-box {
     padding-left: max(16px, env(safe-area-inset-left));
 }
+#chatbot-area.no-menu #chuanhu-chatbot>.wrapper>.wrap {
+    padding-left: max(20px, env(safe-area-inset-left));
+}
+
 #chatbot-area.no-toolbox #chatbot-header {
     padding-right: max(16px, env(safe-area-inset-right));
 }
-
 #chatbot-area.no-toolbox #chatbot-area {
     padding-right: env(safe-area-inset-right);
 }
-
 #chatbot-area.no-toolbox #chatbot-input-box {
     padding-right: max(16px, env(safe-area-inset-right));
 }
+#chatbot-area.no-toolbox #chuanhu-chatbot>.wrapper>.wrap {
+    padding-right: max(20px, env(safe-area-inset-right));
+}
+
+
 #history-select-wrap {
     height: 600px;
     overflow: auto;

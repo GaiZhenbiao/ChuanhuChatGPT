@@ -7,16 +7,16 @@
     "start_url": "/",
     "icons": [
         {
-            "src": "/file=web_assets/icon/any-icon-512.png",
-            "type": "image/png",
-            "sizes": "512x512",
-            "purpose": "any"
-        },
-        {
             "src": "/file=web_assets/icon/mask-icon-512.png",
             "type": "image/png",
             "sizes": "512x512",
             "purpose": "maskable"
+        },
+        {
+            "src": "/file=web_assets/icon/any-icon-512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "any"
         }
     ]
 }
