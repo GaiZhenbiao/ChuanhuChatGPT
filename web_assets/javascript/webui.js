@@ -87,8 +87,10 @@ function closeSide(sideArea) {
     sideArea.classList.remove('showSide');
     if (sideArea == toolbox) {
         chuanhuHeader.classList.remove('under-box');
+        chatbotArea.classList.remove('toolbox-open')
         toolboxOpening = false;
     } else if (sideArea == menu) {
+        chatbotArea.classList.remove('menu-open')
         menuOpening = false;
     }
     adjustMask();
@@ -98,8 +100,10 @@ function openSide(sideArea) {
     sideArea.classList.add('showSide');
     if (sideArea == toolbox) {
         chuanhuHeader.classList.add('under-box');
+        chatbotArea.classList.add('toolbox-open')
         toolboxOpening = true;
     } else if (sideArea == menu) {
+        chatbotArea.classList.add('menu-open')
         menuOpening = true;
     }
     // document.body.classList.add('popup-open');
@@ -225,6 +229,21 @@ function checkChatbotWidth() {
     } else {
         chatbotArea.classList.remove('chatbot-full-width');
     }
+
+    if (windowWidth > 768) {
+        chatbotArea.classList.remove('no-toolbox');
+        chatbotArea.classList.remove('no-menu');
+
+        if (!chatbotArea.classList.contains('toolbox-open') && chatbotArea.classList.contains('menu-open')) {
+            chatbotArea.classList.add('no-toolbox');
+        } else if (!chatbotArea.classList.contains('menu-open') && chatbotArea.classList.contains('toolbox-open')) {
+            chatbotArea.classList.add('no-menu');
+        } else if (!chatbotArea.classList.contains('menu-open') && !chatbotArea.classList.contains('toolbox-open')) {
+            chatbotArea.classList.add('no-toolbox');
+            chatbotArea.classList.add('no-menu');
+        }
+    }
+
     checkChatMoreMask();
 }
 

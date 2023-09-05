@@ -356,6 +356,7 @@ var gradioObserver = new MutationObserver(function (mutations) {
 window.addEventListener("DOMContentLoaded", function () {
     // const ga = document.getElementsByTagName("gradio-app");
     updateVH();
+    windowWidth = window.innerWidth;
     gradioApp().addEventListener("render", initialize);
     isInIframe = (window.self !== window.top);
     historyLoaded = false;
@@ -363,9 +364,15 @@ window.addEventListener("DOMContentLoaded", function () {
 window.addEventListener('resize', ()=>{
     // setChatbotHeight();
     updateVH();
+    windowWidth = window.innerWidth;
+    setPopupBoxPosition();
+    adjustSide(); 
+});
+window.addEventListener('orientationchange', (event) => {
+    updateVH();
+    windowWidth = window.innerWidth;
     setPopupBoxPosition();
     adjustSide();
-    windowWidth = window.innerWidth;
 });
 window.addEventListener('scroll', ()=>{setPopupBoxPosition();});
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", adjustDarkMode);

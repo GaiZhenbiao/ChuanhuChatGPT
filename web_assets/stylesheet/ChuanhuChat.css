@@ -238,9 +238,13 @@ body.popup-open {
 
     @media screen and (max-width: 639px) {
         padding: 6px 16px;
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
     }
     @media screen and (min-width: 640px) {
         padding: 6px 24px;
+        padding-left: max(24px, env(safe-area-inset-left));
+        padding-right: max(24px, env(safe-area-inset-right));
     }
     /* @media screen and (min-width: 1024px) {
         padding: 6px 96px;
@@ -278,10 +282,6 @@ body.popup-open {
 .dark #chuanhu-area {
     background: var(--chatbot-background-color-dark);
 }
-/* #chatbot-area {
-    justify-content: center;
-    display: flex;
-} */
 #chatbot-header {
     justify-content: space-between;
     border-bottom: 0.5px solid var(--border-color-primary);
@@ -388,6 +388,7 @@ body.popup-open {
     /* margin: 0 auto; */
     gap: 20px;
     padding: 16px 16px 24px;
+    padding-bottom: max(24px, calc( env(safe-area-inset-bottom) + 6px));
     display: flex;
     background: none;
     align-self: end;
@@ -537,6 +538,9 @@ button.chatbot-input-more-btn:active .sm-round-bg {
 #menu-area > div {
     width: var(--menu-width);
 }
+#chuanhu-history {
+    padding-left: env(safe-area-inset-left);
+}
 #menu-area.showSide {
     width: var(--menu-width);
     max-width: var(--menu-width);
@@ -565,6 +569,9 @@ button.chatbot-input-more-btn:active .sm-round-bg {
         left: calc(0px - var(--menu-width));
         z-index: 9999;
         overflow: unset;
+    }
+    #chuanhu-history {
+        padding-left: 0;
     }
     #menu-area.showSide {
         left: 0;
@@ -799,6 +806,7 @@ button.chatbot-input-more-btn:active .sm-round-bg {
         border-style: none;
         padding: 0;
         /* 理论上不该是0，但这里考虑内部gradio有好多container有padding了 */
+        padding-right: env(safe-area-inset-right);
     }
     #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav {
         display: flex;
@@ -867,6 +875,7 @@ button.chatbot-input-more-btn:active .sm-round-bg {
 
 #chuanhu-history {
     height: calc(100*var(--vh) - 65px - 61px);
+    height: calc(100*var(--vh) - 65px - calc(36px + 12px + max(12px, env(safe-area-inset-bottom)) + 1px ));
     overflow-y: auto;
 }
 #chuanhu-history > div {
@@ -877,10 +886,12 @@ button.chatbot-input-more-btn:active .sm-round-bg {
 #chuanhu-menu-footer {
     position: absolute;
     bottom: 0;
-    /* background: black; */
+    background: var(--background-fill-primary);
     height: auto;
     overflow: hidden;
     padding: 12px 18px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    padding-left: max(18px, env(safe-area-inset-left));
     border-top: 0.8px solid var(--border-color-primary);
 }
 #menu-footer-btn-bar {
@@ -939,6 +950,26 @@ button.chatbot-input-more-btn:active .sm-round-bg {
     display: block;
 }
 
+#chatbot-area.no-menu #chatbot-header {
+    padding-left: max(20px, env(safe-area-inset-left));
+}
+#chatbot-area.no-menu #chatbot-area {
+    padding-left: env(safe-area-inset-left);
+}
+#chatbot-area.no-menu #chatbot-input-box {
+    padding-left: max(16px, env(safe-area-inset-left));
+}
+#chatbot-area.no-toolbox #chatbot-header {
+    padding-right: max(16px, env(safe-area-inset-right));
+}
+
+#chatbot-area.no-toolbox #chatbot-area {
+    padding-right: env(safe-area-inset-right);
+}
+
+#chatbot-area.no-toolbox #chatbot-input-box {
+    padding-right: max(16px, env(safe-area-inset-right));
+}
 #history-select-wrap {
     height: 600px;
     overflow: auto;
