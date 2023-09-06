@@ -129,6 +129,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 single_turn_label=i18n("单轮对话"),
                                 websearch_label=i18n("在线搜索"),
                                 upload_file_label=i18n("上传文件"),
+                                uploaded_files_label=i18n("知识库文件"),
+                                uploaded_files_tip=i18n("在toolbox中管理知识库文件")
                             ))
                             with gr.Row(elem_id="chatbot-input-tb-row"):
                                 with gr.Column(min_width=225, scale=12):
@@ -199,7 +201,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                                 container=False,
                                             )
                         gr.Markdown("---", elem_classes="hr-line")
-                        with gr.Accordion(label=i18n("索引"), open=True):
+                        with gr.Accordion(label=i18n("知识库"), open=True):
                             use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False, elem_classes="switch-checkbox", elem_id="gr-websearch-cb", visible=False)
                             index_files = gr.Files(label=i18n("上传"), type="file", elem_id="upload-index-file")
                             two_column = gr.Checkbox(label=i18n("双栏pdf"), value=advance_docs["pdf"].get("two_column", False))

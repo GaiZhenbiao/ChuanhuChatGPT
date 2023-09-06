@@ -18,7 +18,11 @@
 
         <span class="chatbot-input-more-label-group">
             <div class="chatbot-input-more-btn last-btn">
-                <label>
+                <label class="may-disable-label">
+                    <div id="uploaded-files-div">
+                        <span class="chatbot-input-more-span tooltip-toggle" aria-label="{uploaded_files_tip}">{uploaded_files_label}</span>
+                        <span class="chatbot-input-more-icon" id="uploaded-files-count"></span>
+                    </div>
                     <button id="upload-files-btn">
                         <span class="chatbot-input-more-span">{upload_file_label}</span>
                         <span class="chatbot-input-more-icon">

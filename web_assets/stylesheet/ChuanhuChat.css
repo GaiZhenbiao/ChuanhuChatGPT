@@ -512,8 +512,38 @@ button.chatbot-input-more-btn:active .sm-round-bg {
     flex-direction: row-reverse;
     display: inline-flex;
 }
-.chatbot-full-width .chatbot-input-more-span {
+.chatbot-input-more-span {
     opacity: 0.64;
+}
+input:checked + .chatbot-input-more-span {
+    opacity: 1;
+}
+
+#uploaded-files-div {
+    display: none;
+}
+.with-file #uploaded-files-div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.with-file label.may-disable-label {
+    cursor: not-allowed !important;
+}
+.with-file #uploaded-files-div > .chatbot-input-more-span {
+    opacity: 1;
+}
+#uploaded-files-count {
+    background: var(--primary-600);
+    color: white;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    margin-right: 6px;
+    text-align: center;
+}
+.with-file #upload-files-btn {
+    display: none;
 }
 
 /* default invisible */

@@ -13,10 +13,11 @@ function setUploader() {
         var fileInput = null;
         var fileCount = 0;
         fileInput = gradioApp().querySelector("#upload-index-file table.file-preview");
+        var fileCountSpan = gradioApp().querySelector("#uploaded-files-count");
         if (fileInput) {
             chatbotArea.classList.add('with-file');
             fileCount = fileInput.querySelectorAll('tbody > tr.file').length;
-            // chatbotArea.
+            fileCountSpan.innerText = fileCount;
         } else {
             chatbotArea.classList.remove('with-file');
             fileCount = 0;
