@@ -14,6 +14,7 @@ var appTitleDiv = null;
 var chatbotArea = null;
 var chatbot = null;
 var chatbotIndicator = null;
+var uploaderIndicator = null;
 var chatbotWrap = null;
 var apSwitch = null;
 var messageBotDivs = null;
@@ -42,9 +43,10 @@ var currentTime = new Date().getTime();
 let windowWidth = window.innerWidth; // 初始窗口宽度
 
 function addInit() {
-    var needInit = {chatbotIndicator};
+    var needInit = {chatbotIndicator, uploaderIndicator};
     
     chatbotIndicator = gradioApp().querySelector('#chuanhu-chatbot > div.wrap');
+    uploaderIndicator = gradioApp().querySelector('#upload-index-file > div.wrap');
 
     for (let elem in needInit) {
         if (needInit[elem] == null) {
@@ -54,7 +56,8 @@ function addInit() {
     }
 
     chatbotObserver.observe(chatbotIndicator, { attributes: true });
-
+    setUploader();
+    
     return true;
 }
 
@@ -100,7 +103,7 @@ function initialize() {
     setPopupBoxPosition();
     setSlider();
     checkModel();
-    transUpload();
+    // transUpload();
     // transCheckbox();
     setCheckboxes();
     // setScrollShadow();

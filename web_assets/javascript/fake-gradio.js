@@ -7,11 +7,39 @@ function newChatClick() {
 }
 
 // index files
+function setUploader() {
+    transUpload();
+    var uploaderObserver = new MutationObserver(function (mutations) {
+        var fileInput = null;
+        var fileCount = 0;
+        fileInput = gradioApp().querySelector("#upload-index-file table.file-preview");
+        if (fileInput) {
+            chatbotArea.classList.add('with-file');
+            fileCount = fileInput.querySelectorAll('tbody > tr.file').length;
+            // chatbotArea.
+        } else {
+            chatbotArea.classList.remove('with-file');
+            fileCount = 0;
+            transUpload();
+        }
+    });
+    uploaderObserver.observe(uploaderIndicator, {attributes: true})
+}
+var grUploader;
+var chatbotUploader;
+var handleClick = function() {
+    grUploader.click();
+
+};
 function transUpload() {
-    var grUploader = gradioApp().querySelector("#upload-index-file > .center.flex");
-    var chatbotUploader = gradioApp().querySelector("#upload-files-btn");
-    let uploaderEvents = ["click", "drag", "dragend", "dragenter", "dragleave", "dragover", "dragstart", "drop"];
-    transEventListeners(chatbotUploader, grUploader, uploaderEvents);
+    chatbotUploader = gradioApp().querySelector("#upload-files-btn");
+    chatbotUploader.removeEventListener('click', handleClick);
+    grUploader = gradioApp().querySelector("#upload-index-file > .center.flex");
+
+    // let uploaderEvents = ["click", "drag", "dragend", "dragenter", "dragleave", "dragover", "dragstart", "drop"];
+    // transEventListeners(chatbotUploader, grUploader, uploaderEvents);
+    
+    chatbotUploader.addEventListener('click', handleClick);
 }
 
 // checkbox
