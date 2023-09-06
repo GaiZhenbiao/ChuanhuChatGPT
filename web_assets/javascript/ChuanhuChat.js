@@ -207,6 +207,7 @@ function checkModel() {
     const model = gradioApp().querySelector('#model-select-dropdown input');
     var modelValue = model.value;
     checkGPT();
+    checkXMChat();
     function checkGPT() {
         modelValue = model.value;
         if (modelValue.includes('gpt')) {
@@ -216,8 +217,20 @@ function checkModel() {
         }
         // console.log('gpt model checked')
     }
+    function checkXMChat() {
+        modelValue = model.value;
+        if (modelValue.includes('xmchat')) {
+            chatbotArea.classList.add('is-xmchat');
+        } else {
+            chatbotArea.classList.remove('is-xmchat');
+        }
+    }
+
     model.addEventListener('blur', ()=>{
-        setTimeout(checkGPT, 100);
+        setTimeout(()=>{
+            checkGPT();
+            checkXMChat();
+        }, 100);
     });
 }
 
@@ -417,5 +430,5 @@ let description = `
 GitHub repository: [https://github.com/GaiZhenbiao/ChuanhuChatGPT]\n
 Enjoy our project!\n
 `
-console.log(`%c${makeML(ChuanhuInfo)}`,styleTitle1)
-console.log(`%c${description}`, styleDesc1)
+console.log(`%c${makeML(ChuanhuInfo)}`,styleTitle1);
+console.log(`%c${description}`, styleDesc1);

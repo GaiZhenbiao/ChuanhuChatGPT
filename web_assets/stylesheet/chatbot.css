@@ -281,6 +281,14 @@ hr.append-display {
     padding-block: 2px !important;
 }
 
+.like-latest-btn, .dislike-latest-btn {
+    display: none !important;
+    /* filter: grayscale(); */
+}
+.is-xmchat .like-latest-btn, .is-xmchat .dislike-latest-btn {
+    display: inline-flex !important;
+}
+
 /* .copy-bot-btn {
     top: 18px; */
     /* bottom: 0;
