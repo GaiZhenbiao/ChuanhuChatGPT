@@ -47,7 +47,8 @@ function showOrHideUserInfo() {
         toggleUserInfoVisibility(true);
     }, 2000);
 
-    let triggerElements = {appTitleDiv, userInfoDiv, sendBtn};
+    // let triggerElements = {appTitleDiv, userInfoDiv, sendBtn};
+    let triggerElements = {userInfoDiv, statusDisplay};
     for (let elem in triggerElements) {
         triggerElements[elem].addEventListener("mouseenter", function () {
             toggleUserInfoVisibility(false);
