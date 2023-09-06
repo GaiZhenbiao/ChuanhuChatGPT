@@ -68,6 +68,23 @@ const updateFailure_i18n = {
     'ru': 'Обновление не удалось, попробуйте <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">обновление вручную</a>.'
 }
 
+const regenerate_i18n = {
+    'zh': "重新生成",
+    'en': "Regenerate",
+    'ja': "再生成",
+    'ko': "재생성",
+    'sv': "Återgenerera",
+    'ru': "Пересоздать"
+}
+
+const delete_i18n = {
+    'zh': "删除这轮问答",
+    'en': "Delete this round of Q&A",
+    'ja': "この質疑応答を削除",
+    'ko': "이 라운드의 질문과 답변 삭제",
+    'sv': "Ta bort denna omgång av Q&A",
+    'ru': "Удалить этот раунд вопросов и ответов"
+}
 
 function i18n(msg) {
     return msg.hasOwnProperty(language) ? msg[language] : msg['en'];

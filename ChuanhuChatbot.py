@@ -151,16 +151,16 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                     i18n("🧹 新的对话"), elem_id="empty-btn"
                                 )
                             with gr.Column(min_width=120, scale=1):
-                                retryBtn = gr.Button(i18n("🔄 重新生成"))
+                                retryBtn = gr.Button(i18n("🔄 重新生成"), elem_id="gr-retry-btn")
                             with gr.Column(min_width=120, scale=1):
                                 delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
                             with gr.Column(min_width=120, scale=1):
-                                delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"))
+                                delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"), elem_id="gr-dellast-btn")
                             with gr.Row(visible=False) as like_dislike_area:
                                 with gr.Column(min_width=20, scale=1):
-                                    likeBtn = gr.Button(i18n("👍"))
+                                    likeBtn = gr.Button(i18n("👍"), elem_id="gr-like-btn")
                                 with gr.Column(min_width=20, scale=1):
-                                    dislikeBtn = gr.Button(i18n("👎"))
+                                    dislikeBtn = gr.Button(i18n("👎"), elem_id="gr-dislike-btn")
 
         with gr.Column(elem_id="toolbox-area", scale=1):
             with gr.Box(elem_id="chuanhu-toolbox"): # For CSS setting, there is an extra box. Don't remove it.
@@ -334,7 +334,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         use_streaming_checkbox = gr.Checkbox(
                                 label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
                             )
-                        single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb")
+                        single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb", visible=False)
                         # checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
 
                     with gr.Tab(i18n("网络")):

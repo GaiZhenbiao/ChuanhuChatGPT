@@ -30,6 +30,14 @@ function loadHistoryHtml() {
         for (var i = 0; i < gradioCopyButtons.length; i++) {
             gradioCopyButtons[i].parentNode.removeChild(gradioCopyButtons[i]);
         }
+        var messageBtnRows = tempDiv.querySelectorAll('.message-btn-row');
+        for (var i = 0; i < messageBtnRows.length; i++) {
+            messageBtnRows[i].parentNode.removeChild(messageBtnRows[i]);
+        }
+        var latestMessages = tempDiv.querySelectorAll('.message.latest');
+        for (var i = 0; i < latestMessages.length; i++) {
+            latestMessages[i].classList.remove('latest');
+        }
 
         var fakeHistory = document.createElement('div');
         fakeHistory.classList.add('history-message');

@@ -136,6 +136,10 @@ hr.append-display {
     justify-content: flex-end;
 }
 
+/* .message-row.has-message-btn-row{
+    padding-bottom: 19px !important;
+} */
+
 /* 屏幕宽度大于等于500px的设备 */
 /* update on 2023.4.8: 高度的细致调整已写入JavaScript */
 @media screen and (min-width: 500px) {
@@ -227,8 +231,6 @@ hr.append-display {
     /* background-color: #E6E6E6 !important; */
     color: rgba(120, 120, 120, 0.64) !important;
     padding: 4px !important;
-    position: absolute;
-    right: -22px;
     cursor: pointer !important;
     transition: color .2s ease, background-color .2s ease;
 }
@@ -243,14 +245,50 @@ hr.append-display {
     outline: none;
 }
 
-.copy-bot-btn {
-    /* top: 18px; */
+.message-btn-column {
+    position: absolute;
+    right: -23px;
     bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-content: end;
+    gap: 2px;
+}
+
+.message-btn-row {
+    /* background: red; */
+    width: 100%;
+    height: 19px;
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+}
+.message-btn-row-leading, .message-btn-row-trailing {
+    display: inline-flex;
+    gap: 4px;
+}
+.message-btn-row button {
+    font-size: 10px;
+    align-self: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 4px;
+    padding-block: 2px !important;
+}
+
+/* .copy-bot-btn {
+    top: 18px; */
+    /* bottom: 0;
 }
 .toggle-md-btn {
-    /* top: 0; */
-    bottom: 20px;
-}
+    top: 0; */
+    /* bottom: 20px;
+} */
 
 /* note: this is deprecated */
 .copy-code-btn {
