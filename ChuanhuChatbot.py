@@ -165,7 +165,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         with gr.Column(elem_id="toolbox-area", scale=1):
             with gr.Box(elem_id="chuanhu-toolbox"): # For CSS setting, there is an extra box. Don't remove it.
                 with gr.Row():
-                    gr.Markdown("## Toolbox")
+                    gr.Markdown("## 工具箱")
                     gr.HTML(get_html("close_btn.html").format(obj="toolbox"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
                     with gr.Tab(label=i18n("对话")):
@@ -298,7 +298,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         with gr.Box(elem_id="chuanhu-popup"):
             with gr.Box(elem_id="chuanhu-setting"):
                 with gr.Row():
-                    gr.Markdown("## Settings")
+                    gr.Markdown("## 设置")
                     gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-setting-tabs"):
                     with gr.Tab(label=i18n("模型")):
@@ -373,10 +373,10 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
             with gr.Box(elem_id="chuanhu-training"):
                 with gr.Row():
-                    gr.Markdown("## Training")
+                    gr.Markdown(i18n("## 训练"))
                     gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-training-tabs"):
-                    with gr.Tab(label=i18n("OpenAI 微调")):
+                    with gr.Tab(label="OpenAI"+i18n("微调")):
                         openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("在这里[查看使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B#%E5%BE%AE%E8%B0%83-gpt-35)"))
 
                         with gr.Tab(label=i18n("准备数据集")):

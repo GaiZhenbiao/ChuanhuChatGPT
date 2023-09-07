@@ -1,4 +1,6 @@
 {
+    "川虎Chat 🚀": "Chuanhu Чат 🚀",
+    "川虎Chat": "Chuanhu Чат",
     "未命名对话历史记录": "Безымянная история диалога",
     "在这里输入": "Введите здесь",
     "🧹 新的对话": "🧹 Новый диалог",
@@ -59,7 +61,6 @@
     "更新成功，请重启本程序": "Обновление успешно, пожалуйста, перезапустите программу",
     "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)": "Обновление не удалось, пожалуйста, попробуйте обновить вручную",
     "更新失败，请尝试<a href=\"https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新\" target=\"_blank\">手动更新</a>。": "Обновление не удалось, попробуйте <a href=\"https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新\" target=\"_blank\">обновление вручную</a>.",
-    "川虎Chat 🚀": "Chuanhu Чат 🚀",
     "开始实时传输回答……": "Начните трансляцию ответов в режиме реального времени...",
     "Token 计数: ": "Использованно токенов: ",
     "，本次对话累计消耗了 ": ", Общая стоимость этого диалога составляет ",
@@ -82,7 +83,7 @@
     "API key为空，请检查是否输入正确。": "Пустой API-Key, пожалуйста, проверьте правильность ввода.",
     "请输入对话内容。": "Пожалуйста, введите содержание диалога.",
     "账单信息不适用": "Информация о счете не применима",
-    "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "Перевод: 由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) и [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) Загрузите последнюю версию программы",
+    "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "Разработано [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) и [Keldos](https://github.com/Keldos-Li).<br />посетите [GitHub Project](https://github.com/GaiZhenbiao/ChuanhuChatGPT) чата Chuanhu, чтобы загрузить последнюю версию скрипта",
     "切换亮暗色主题": "Переключить светлую/темную тему",
     "您的IP区域：未知。": "Ваша IP-зона: неизвестно.",
     "获取IP地理位置失败。原因：": "Не удалось получить географическое положение IP. Причина:",
@@ -99,6 +100,7 @@
     "剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)": "Недостаточно остаточного квоты, [подробнее](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)",
     "你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843": "У вас нет доступа к GPT4, подробнее",
     "请查看 config_example.json，配置 Azure OpenAI": "Пожалуйста, просмотрите config_example.json для настройки Azure OpenAI",
+
     "微调": "Своя модель",
     "训练状态": "Статус обучения",
     "在这里[查看使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B#%E5%BE%AE%E8%B0%83-gpt-35)": "[Здесь](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B#%E5%BE%AE%E8%B0%83-gpt-35) можно ознакомиться с инструкцией по использованию",
@@ -116,5 +118,17 @@
     "状态": "Статус",
     "刷新状态": "Обновить статус",
     "取消所有任务": "Отменить все задачи",
-    "添加训练好的模型到模型列表": "Добавить обученную модель в список моделей"
+    "添加训练好的模型到模型列表": "Добавить обученную модель в список моделей",
+
+    "## 设置": "## Настройки",
+    "## 训练": "## Обучение",
+    "## 工具箱": "## Инструменты",
+    "对话": "Диалог",
+    "拓展": "Расширенные настройки",
+    "上传文件": "Загрузить файл",
+    "知识库": "База знаний",
+    "知识库文件": "Файл базы знаний",
+    "在工具箱中管理知识库文件": "Управление файлами базы знаний в инструментах",
+    "在线搜索": "Онлайн-поиск",
+    "关于": "О программе"
 }

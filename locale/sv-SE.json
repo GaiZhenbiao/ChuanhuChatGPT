@@ -1,4 +1,6 @@
-{  
+{
+    "川虎Chat 🚀": "Chuanhu Chat 🚀",
+    "川虎Chat": "Chuanhu Chat",
     "未命名对话历史记录": "Onämnd Dialoghistorik",  
     "在这里输入": "Skriv in här",  
     "🧹 新的对话": "🧹 Ny Dialog",  
@@ -59,7 +61,6 @@
     "更新成功，请重启本程序": "Uppdaterat framgångsrikt, starta om programmet",
     "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)": "Uppdateringen misslyckades, prova att [uppdatera manuellt](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)",
     "更新失败，请尝试<a href=\"https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新\" target=\"_blank\">手动更新</a>。": "Uppdateringen misslyckades, prova att <a href=\"https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新\" target=\"_blank\">uppdatera manuellt</a>.",
-    "川虎Chat 🚀": "Chuanhu Chat 🚀",  
     "开始实时传输回答……": "Börjar strömma utdata...",  
     "Token 计数: ": "Tokenräkning: ",  
     "，本次对话累计消耗了 ": ", Total kostnad för denna dialog är ",  
@@ -94,5 +95,17 @@
     "由于下面的原因，Google 拒绝返回 PaLM 的回答：\n\n": "På grund av följande skäl vägrar Google att ge ett svar till PaLM: \n\n",
     "⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置": "⚠️ För att säkerställa säkerheten för API-nyckeln, vänligen ändra nätverksinställningarna i konfigurationsfilen `config.json`.",
     "网络": "nätverksparametrar",
-    "暂时未知": "Okänd"
-}  
+    "暂时未知": "Okänd",
+
+    "## 设置": "## inställningar",
+    "## 训练": "## träning",
+    "## 工具箱": "## verktygslåda",
+    "对话": "konversation",
+    "拓展": "utvidgning",
+    "上传文件": "ladda upp fil",
+    "知识库": "kunskapsbank",
+    "知识库文件": "kunskapsbankfil",
+    "在工具箱中管理知识库文件": "hantera kunskapsbankfiler i verktygslådan",
+    "在线搜索": "onlinesökning",
+    "关于": "om"
+}

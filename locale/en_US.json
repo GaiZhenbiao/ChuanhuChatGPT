@@ -1,4 +1,6 @@
 {
+    "川虎Chat 🚀": "Chuanhu Chat 🚀",
+    "川虎Chat": "Chuanhu Chat",
     "未命名对话历史记录": "Unnamed Dialog History",
     "在这里输入": "Type in here",
     "🧹 新的对话": "🧹 New Dialogue",
@@ -59,7 +61,6 @@
     "更新成功，请重启本程序": "Updated successfully, please restart this program",
     "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)": "Update failed, please try [manually updating](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)",
     "更新失败，请尝试<a href=\"https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新\" target=\"_blank\">手动更新</a>。": "Update failed, please try <a href=\"https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新\" target=\"_blank\">manually updating</a>.",
-    "川虎Chat 🚀": "Chuanhu Chat 🚀",
     "开始实时传输回答……": "Start streaming output...",
     "Token 计数: ": "Token Count: ",
     "，本次对话累计消耗了 ": ", Total cost for this dialogue is ",
@@ -94,5 +95,17 @@
     "由于下面的原因，Google 拒绝返回 PaLM 的回答：\n\n": "Due to the following reasons, Google refuses to provide an answer to PaLM: \n\n",
     "⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置": "⚠️ To ensure the security of API-Key, please modify the network settings in the configuration file `config.json`.",
     "网络": "Network parameter",
-    "暂时未知": "Unknown"
+    "暂时未知": "Unknown",
+
+    "## 设置": "## Settings",
+    "## 训练": "## Training",
+    "## 工具箱": "## Toolbox",
+    "对话": "Dialogue",
+    "拓展": "Extensions",
+    "上传文件": "Upload file",
+    "知识库": "Knowledge base",
+    "知识库文件": "Knowledge base file",
+    "在工具箱中管理知识库文件": "Manage knowledge base files in the toolbox",
+    "在线搜索": "Online search",
+    "关于": "About"
 }
