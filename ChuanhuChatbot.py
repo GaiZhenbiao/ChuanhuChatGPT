@@ -97,7 +97,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     gr.HTML(get_html("func_nav.html"))
                 # gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
                 # gr.Markdown(CHUANHU_DESCRIPTION, elem_id="chuanhu-author")
-                
+
 
 
         with gr.Column(elem_id="chuanhu-area", scale=5):
@@ -114,12 +114,12 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     gr.HTML(get_html("chatbot_header_btn.html"),elem_id="chatbot-header-btn-bar")
                 with gr.Row():
                     chatbot = gr.Chatbot(
-                        label="Chuanhu Chat", 
-                        elem_id="chuanhu-chatbot", 
-                        latex_delimiters=latex_delimiters_set, 
-                        # height=700, 
+                        label="Chuanhu Chat",
+                        elem_id="chuanhu-chatbot",
+                        latex_delimiters=latex_delimiters_set,
+                        # height=700,
                         show_label=False,
-                        avatar_images=[config.user_avatar, config.bot_avatar], 
+                        avatar_images=[config.user_avatar, config.bot_avatar],
                         show_share_button=False,
                     )
                 with gr.Row(elem_id="chatbot-footer"):
@@ -136,7 +136,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 with gr.Column(min_width=225, scale=12):
                                     user_input = gr.Textbox(
                                         elem_id="user-input-tb",
-                                        show_label=False, 
+                                        show_label=False,
                                         placeholder=i18n("在这里输入"),
                                         elem_classes="no-container",
                                         max_lines=5,
@@ -321,13 +321,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         #     label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False
                         # )
                         # with gr.Row():
-                        
+
                         language_select_dropdown = gr.Dropdown(
                             label=i18n("选择回复语言（针对搜索&索引功能）"),
                             choices=REPLY_LANGUAGES,
                             multiselect=False,
                             value=REPLY_LANGUAGES[0],
-                        )                        
+                        )
 
                     with gr.Tab(label=i18n("高级")):
                         gr.HTML(get_html("appearance_switcher.html").format(label=i18n("切换亮暗色主题")), elem_classes="insert-block", visible=False)
@@ -407,7 +407,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     regenerate_i18n=i18n("重新生成"),
                     deleteRound_i18n=i18n("删除这轮问答"),
                 ))
-            with gr.Box(elem_id="fake-gradio-components", visible=False): 
+            with gr.Box(elem_id="fake-gradio-components", visible=False):
                 updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
                 changeSingleSessionBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="change-single-session-btn")
                 changeOnlineSearchBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="change-online-search-btn")
@@ -424,8 +424,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         current_model = get_model(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key)[0]
         current_model.set_user_identifier(user_name)
         chatbot = gr.Chatbot.update(label=MODELS[DEFAULT_MODEL])
-        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), *current_model.auto_load(), get_history_dropdown(user_name), chatbot
-    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, historyFileSelectDropdown, chatbot], api_name="load")
+        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), *current_model.auto_load(), chatbot
+    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, chatbot], api_name="load")
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[
@@ -632,13 +632,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
     changeSingleSessionBtn.click(
         fn=lambda value: gr.Checkbox.update(value=value),
-        inputs=[single_turn_checkbox], 
+        inputs=[single_turn_checkbox],
         outputs=[single_turn_checkbox],
         _js='(a)=>{return bgChangeSingleSession(a);}'
     )
     changeOnlineSearchBtn.click(
         fn=lambda value: gr.Checkbox.update(value=value),
-        inputs=[use_websearch_checkbox], 
+        inputs=[use_websearch_checkbox],
         outputs=[use_websearch_checkbox],
         _js='(a)=>{return bgChangeOnlineSearch(a);}'
     )
