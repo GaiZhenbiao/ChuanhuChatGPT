@@ -395,6 +395,18 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             openai_cancel_all_jobs_btn = gr.Button(i18n("取消所有任务"))
                             add_to_models_btn = gr.Button(i18n("添加训练好的模型到模型列表"), interactive=False)
 
+            with gr.Box(elem_id="web-config", visible=False):
+                gr.HTML(get_html('web_config.html').format(
+                    forView_i18n=i18n("仅供查看"),
+                    deleteConfirm_i18n_pref=i18n("你真的要删除 "),
+                    deleteConfirm_i18n_suff=i18n(" 吗？"),
+                    usingLatest_i18n=i18n("您使用的就是最新版！"),
+                    updatingMsg_i18n=i18n("正在尝试更新..."),
+                    updateSuccess_i18n=i18n("更新成功，请重启本程序"),
+                    updateFailure_i18n=i18n('更新失败，请尝试<a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">手动更新</a>'),
+                    regenerate_i18n=i18n("重新生成"),
+                    deleteRound_i18n=i18n("删除这轮问答"),
+                ))
             with gr.Box(elem_id="fake-gradio-components", visible=False): 
                 updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
                 changeSingleSessionBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="change-single-session-btn")

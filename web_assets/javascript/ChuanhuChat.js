@@ -97,6 +97,7 @@ function initialize() {
 
     adjustDarkMode();
     adjustSide();
+    setLoclize();
     selectHistory();
     // setChatbotHeight();
     setPopupBoxPosition();

@@ -139,7 +139,7 @@ function addLatestMessageButtons(botElement) {
     deleteButton.classList.add('chuanhu-btn');
     deleteButton.classList.add('delete-latest-btn');
     deleteButton.setAttribute('aria-label', 'Delete');
-    deleteButton.innerHTML = deleteIcon + `<span>${i18n(delete_i18n)}</span>`;
+    deleteButton.innerHTML = deleteIcon + `<span>${i18n(deleteRound_i18n)}</span>`;
 
     var gradioDelLastBtn = gradioApp().querySelector('#gr-dellast-btn');
     deleteButton.addEventListener('click', () => {
