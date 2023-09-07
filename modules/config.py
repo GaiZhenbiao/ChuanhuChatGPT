@@ -45,10 +45,6 @@ def load_config_to_environ(key_list):
         if key in config:
             os.environ[key.upper()] = os.environ.get(key.upper(), config[key])
 
-
-lang_config = config.get("language", "auto")
-language = os.environ.get("LANGUAGE", lang_config)
-
 hide_history_when_not_logged_in = config.get(
     "hide_history_when_not_logged_in", False)
 check_update = config.get("check_update", True)
