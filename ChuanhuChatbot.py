@@ -71,9 +71,11 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 )
                             with gr.Row():
                                 with gr.Column(min_width=42, scale=1):
-                                    historyRefreshBtn = gr.Button(i18n("🔄 刷新"))
+                                    historyRefreshBtn = gr.Button(i18n("🔄"))
                                 with gr.Column(min_width=42, scale=1):
-                                    historyDeleteBtn = gr.Button(i18n("🗑️ 删除"))
+                                    historyDeleteBtn = gr.Button(i18n("🗑️"))
+                                with gr.Column(min_width=42, scale=1):
+                                    historyDownloadBtn = gr.Button(i18n("⏬"))
                         with gr.Row():
                             with gr.Column(scale=6):
                                 saveFileName = gr.Textbox(
@@ -581,6 +583,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     historyDeleteBtn.click(delete_chat_history, [current_model, historyFileSelectDropdown, user_name], [status_display, historyFileSelectDropdown, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}')
     historyFileSelectDropdown.change(**load_history_from_file_args)
     downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [saveFileName, systemPromptTxt, chatbot])
+    historyDownloadBtn.click(None, [user_name, historyFileSelectDropdown], None, _js=download_history_js)
 
     # Train
     dataset_selection.upload(handle_dataset_selection, dataset_selection, [dataset_preview_json, upload_to_openai_btn, openai_train_status])
