@@ -16,7 +16,7 @@
     "选择模型": "Select Model",
     "选择LoRA模型": "Select LoRA Model",
     "实时传输回答": "Stream output",
-    "单轮对话": "Single-turn dialogue",
+    "单轮对话": "Single-turn",
     "使用在线搜索": "Use online search",
     "选择回复语言（针对搜索&索引功能）": "Select reply language (for search & index)",
     "上传索引文件": "Upload",
@@ -127,8 +127,8 @@
     "拓展": "Extensions",
     "上传文件": "Upload files",
     "知识库": "Knowledge base",
-    "知识库文件": "Knowledge base file",
+    "知识库文件": "Knowledge base files",
     "在工具箱中管理知识库文件": "Manage knowledge base files in the toolbox",
-    "在线搜索": "Online search",
+    "在线搜索": "Web search",
     "关于": "About"
 }
