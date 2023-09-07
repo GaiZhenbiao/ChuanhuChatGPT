@@ -90,7 +90,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 gr.Markdown(i18n("默认保存于history文件夹"))
                         with gr.Row():
                             with gr.Column():
-                                downloadFile = gr.File(interactive=True, label="下载/上传历史记录")
+                                downloadFile = gr.File(interactive=True, label=i18n("下载/上传历史记录"))
 
             with gr.Column(elem_id="chuanhu-menu-footer"):
                 with gr.Row(elem_id="chuanhu-func-nav"):
@@ -130,7 +130,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 websearch_label=i18n("在线搜索"),
                                 upload_file_label=i18n("上传文件"),
                                 uploaded_files_label=i18n("知识库文件"),
-                                uploaded_files_tip=i18n("在toolbox中管理知识库文件")
+                                uploaded_files_tip=i18n("在工具箱中管理知识库文件")
                             ))
                             with gr.Row(elem_id="chatbot-input-tb-row"):
                                 with gr.Column(min_width=225, scale=12):
@@ -165,7 +165,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         with gr.Column(elem_id="toolbox-area", scale=1):
             with gr.Box(elem_id="chuanhu-toolbox"): # For CSS setting, there is an extra box. Don't remove it.
                 with gr.Row():
-                    gr.Markdown("## 工具箱")
+                    gr.Markdown("## "+i18n("工具箱"))
                     gr.HTML(get_html("close_btn.html").format(obj="toolbox"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
                     with gr.Tab(label=i18n("对话")):
@@ -298,7 +298,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         with gr.Box(elem_id="chuanhu-popup"):
             with gr.Box(elem_id="chuanhu-setting"):
                 with gr.Row():
-                    gr.Markdown("## 设置")
+                    gr.Markdown("## "+i18n("设置"))
                     gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-setting-tabs"):
                     with gr.Tab(label=i18n("模型")):
@@ -367,17 +367,17 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
                     with gr.Tab(label=i18n("关于"), elem_id="about-tab"):
                         gr.Markdown('<img alt="Chuanhu Chat logo" src="file=web_assets/icon/any-icon-512.png" style="max-width: 144px;">')
-                        gr.Markdown("# 川虎Chat")
+                        gr.Markdown("# "+i18n("川虎Chat"))
                         gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
                         gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
 
             with gr.Box(elem_id="chuanhu-training"):
                 with gr.Row():
-                    gr.Markdown(i18n("## 训练"))
+                    gr.Markdown("## "+i18n("训练"))
                     gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-training-tabs"):
-                    with gr.Tab(label="OpenAI"+i18n("微调")):
-                        openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("在这里[查看使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B#%E5%BE%AE%E8%B0%83-gpt-35)"))
+                    with gr.Tab(label="OpenAI "+i18n("微调")):
+                        openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("查看[使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35)"))
 
                         with gr.Tab(label=i18n("准备数据集")):
                             dataset_preview_json = gr.JSON(label=i18n("数据集预览"), readonly=True)

@@ -468,6 +468,7 @@ button.chatbot-input-more-btn:active .sm-round-bg {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 4px;
 }
 .chatbot-input-more-icon {
     margin-right: 12px;
