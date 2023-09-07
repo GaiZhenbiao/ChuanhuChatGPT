@@ -175,9 +175,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 placeholder=i18n("在这里输入System Prompt..."),
                                 label="System prompt",
                                 value=INITIAL_SYSTEM_PROMPT,
-                                lines=10
+                                lines=8
                             )
-                            with gr.Accordion(label=i18n("加载Prompt模板"), open=True):
+                            with gr.Accordion(label=i18n("加载Prompt模板"), open=False):
                                 with gr.Column():
                                     with gr.Row():
                                         with gr.Column(scale=6):
@@ -209,7 +209,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             # TODO: 公式ocr
                             # formula_ocr = gr.Checkbox(label=i18n("识别公式"), value=advance_docs["pdf"].get("formula_ocr", False))
 
-                    with gr.Tab(label=i18n("Parameters")):
+                    with gr.Tab(label=i18n("参数")):
                         gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"), elem_id="advanced-warning")
                         with gr.Accordion(i18n("参数"), open=True):
                             temperature_slider = gr.Slider(
@@ -289,7 +289,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 value=user_name.value,
                                 lines=1,
                             )
-                    with gr.Tab(label=i18n("Extensions")):
+                    with gr.Tab(label=i18n("拓展")):
                         gr.Markdown("Will be here soon...\n(We hope)\n\nAnd we hope you can help us to make more extensions!")
 
                     # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
@@ -366,7 +366,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         )
 
                     with gr.Tab(label=i18n("关于"), elem_id="about-tab"):
-                        gr.Markdown("![Chuanhu Chat logo](file=web_assets/chatbot.png)")
+                        gr.Markdown('<img alt="Chuanhu Chat logo" src="file=web_assets/icon/any-icon-512.png" style="max-width: 144px;">')
                         gr.Markdown("# 川虎Chat")
                         gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
                         gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
