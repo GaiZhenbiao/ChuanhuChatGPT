@@ -19,6 +19,9 @@
     --chatbot-input-more-background-fullwidth-hover: #FFFFFF99;
     --chatbot-input-more-background-mobilewidth-hover: #E6E6E644;
 
+    --message-list-background-hover: #F3F3F3;
+    --message-list-background-selected: #EAEAEA;
+
     --menu-width: 320px;
     --menu-background-fill: var(--background-fill-primary);
 
@@ -32,6 +35,9 @@
         --chatbot-input-more-background-solid-color: #3C3C3C;
         --chatbot-input-more-background-fullwidth-hover: #2F2F2F88;
         --chatbot-input-more-background-mobilewidth-hover: #1F1F1F44;
+
+        --message-list-background-hover: #202020;
+        --message-list-background-selected: #2F3030;
     }
 }
 
