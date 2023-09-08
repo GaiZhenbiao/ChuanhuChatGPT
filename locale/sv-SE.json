@@ -35,6 +35,8 @@
     "对话历史记录": "Dialoghistorik",  
     "💾 保存对话": "💾 Spara Dialog",  
     "📝 导出为Markdown": "📝 Exportera som Markdown",  
+    "历史记录（JSON）": "Historikfil (JSON)",
+    "导出为 Markdown": "Exportera som Markdown",
     "默认保存于history文件夹": "Sparas som standard i mappen history",
     "下载/上传历史记录": "Ladda ner/ladda upp historik",
     "高级": "Avancerat",  

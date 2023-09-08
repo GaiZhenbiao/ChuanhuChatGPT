@@ -113,7 +113,10 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False,
                         container=False,
                     )
-                    gr.HTML(get_html("chatbot_header_btn.html"),elem_id="chatbot-header-btn-bar")
+                    gr.HTML(get_html("chatbot_header_btn.html").format(
+                        json_label=i18n("历史记录（JSON）"),
+                        md_label=i18n("导出为 Markdown")
+                    ),elem_id="chatbot-header-btn-bar")
                 with gr.Row():
                     chatbot = gr.Chatbot(
                         label="Chuanhu Chat",

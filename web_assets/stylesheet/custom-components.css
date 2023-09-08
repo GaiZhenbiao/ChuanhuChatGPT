@@ -322,3 +322,45 @@ input:checked + .apSlider::before {
     opacity: 1;
     transition: all 0.5s ease;
 }
+
+
+.nav-item-dropdown, .dropdown-trigger {
+    position: relative;
+}
+.nav-item-dropdown:hover>.dropdown-menu {
+    display: block;
+    opacity: 1;
+}
+.dropdown-trigger:focus+.dropdown-menu {
+    display: block;
+    opacity: 1;
+}
+.dropdown-menu {
+    background-color: var(--chatbot-input-more-background-solid-color);
+    display: inline-block;
+    /* text-align: right; */
+    position: absolute;
+    /* top: 2.5rem; */
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    width: auto;
+    border-radius: 5px;
+    box-shadow: var(--shadow-sm);
+}
+
+.dropdown-menu-item {
+    cursor: pointer;
+    padding: 8px 12px;
+    text-align: center;
+    white-space: nowrap;
+    margin: 0 !important;
+}
+.dropdown-menu-item button {
+    margin: 0 !important;
+}
+.dropdown-menu-item:hover {
+    background-color: var(--chatbot-input-more-background-mobilewidth-hover);
+}

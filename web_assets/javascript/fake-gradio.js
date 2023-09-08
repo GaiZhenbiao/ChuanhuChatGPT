@@ -5,6 +5,12 @@
 function newChatClick() {
     gradioApp().querySelector('#empty-btn').click();
 }
+function jsonDownloadClick() {
+    gradioApp().querySelector('#gr-history-download-btn').click();
+}
+function mdDownloadClick() {
+    return;
+}
 
 // index files
 function setUploader() {
