@@ -97,6 +97,7 @@ function initialize() {
 
     adjustDarkMode();
     adjustSide();
+    setChatList();
     setLoclize();
     selectHistory();
     // setChatbotHeight();
@@ -349,6 +350,7 @@ function chatbotContentChanged(attempt = 1) {
             gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message-row.bot-row').forEach(addChuanhuButton);
             if (chatbotIndicator.classList.contains('hide')) {
                 setLatestMessage();
+                setChatList();
             }
         }, i === 0 ? 0 : 200);
     }

@@ -33,6 +33,7 @@ fieldset#history-select-dropdown .wrap label {
     background: none;
     padding: 10px 16px 10px;
     box-shadow: none;
+    justify-content: space-between;
 }
 fieldset#history-select-dropdown .wrap label:hover {
     background: var(--message-list-background-hover);
@@ -41,12 +42,17 @@ fieldset#history-select-dropdown .wrap label:active {
     background: var(--message-list-background-selected);
 }
 fieldset#history-select-dropdown .wrap label.selected {
+    color: var(--checkbox-label-text-color);
     background: var(--message-list-background-selected);
+    padding: 10px 64px 10px 16px;
 }
 fieldset#history-select-dropdown .wrap label > span {
     /* font-size: small; */
     margin-left: 0;
-    color: var(--checkbox-label-text-color);
+    /* text-overflow: ellipsis; */
+    white-space: nowrap;
+    word-break: break-all;
+    overflow: hidden;
 }
 fieldset#history-select-dropdown .wrap label > span::before {
     content: url("data:image/svg+xml,%3Csvg stroke='%23000000' fill='none' stroke-opacity='0.85' stroke-width='2' viewBox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'%3E%3C/path%3E%3C/svg%3E");

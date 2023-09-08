@@ -1036,6 +1036,28 @@ input:checked + .chatbot-input-more-span {
     overflow-x: hidden;
 }
 
+.chat-selected-btns {
+    height: 18px;
+    gap: 8px;
+    display: inline-flex;
+    position: absolute;
+    right: 16px;
+}
+.chat-selected-btns::before {
+    content: "";
+    position: absolute;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--message-list-background-selected) 80%);
+    width: 32px;
+    height: 22px;
+    top: 0;
+    left: -32px;
+}
+.icon-need-hover {
+    opacity: 0.64;
+}
+button:hover .icon-need-hover {
+    opacity: 0.85;
+}
 /* .main-body {
     flex-wrap: nowrap;
     gap: 0;
