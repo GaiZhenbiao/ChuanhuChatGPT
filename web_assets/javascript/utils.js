@@ -15,6 +15,43 @@ function isImgUrl(url) {
     return false;
 }
 
+function downloadHistory(username, historyname) {
+    let fileUrl;
+    if (username === null) {
+        fileUrl = `/file=./history/${historyname}`;
+    } else {
+        fileUrl = `/file=./history/${username}/${historyname}`;
+    }
+    downloadFile(fileUrl, historyname);
+}
+
+function downloadFile(fileUrl, filename="") {
+    // 发送下载请求
+    fetch(fileUrl)
+        .then(response => response.blob())
+        .then(blob => {
+            // 创建一个临时的URL
+            const url = URL.createObjectURL(blob);
+
+            // 创建一个隐藏的<a>元素，设置下载属性
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = filename;
+
+            // 添加到DOM并触发点击事件
+            document.body.appendChild(a);
+            a.click();
+
+            // 清理临时URL和DOM中的<a>元素
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        })
+        .catch(error => {
+            console.error('Failed to download file:', error);
+        });
+}
+
 
 /* NOTE: These reload functions are not used in the current version of the code.
  *       From stable-diffusion-webui

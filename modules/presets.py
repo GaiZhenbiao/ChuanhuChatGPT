@@ -250,39 +250,3 @@ small_and_beautiful_theme = gr.themes.Soft(
         chatbot_code_background_color_dark="*neutral_950",
     )
 
-download_history_js = """
-function downloadFile(username, historyname) {
-  // 构建文件的URL
-  let fileUrl;
-  if (username === null) {
-    fileUrl = `/file=./history/${historyname}`;
-  } else {
-    fileUrl = `/file=./history/${username}/${historyname}`;
-  }
-
-  // 发送下载请求
-  fetch(fileUrl)
-    .then(response => response.blob())
-    .then(blob => {
-      // 创建一个临时的URL
-      const url = URL.createObjectURL(blob);
-
-      // 创建一个隐藏的<a>元素，设置下载属性
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = historyname;
-
-      // 添加到DOM并触发点击事件
-      document.body.appendChild(a);
-      a.click();
-
-      // 清理临时URL和DOM中的<a>元素
-      URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    })
-    .catch(error => {
-      console.error('下载文件出错:', error);
-    });
-}
-"""
