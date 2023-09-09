@@ -57,42 +57,42 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
         with gr.Column(elem_id="menu-area"):
             with gr.Row(elem_id="chuanhu-history"):
-                with gr.Accordion(label=i18n("保存/加载对话历史记录"), open=True):
-                    with gr.Column():
+                with gr.Column():
+                    historySearchTextbox = gr.Textbox(show_label=False, placeholder=i18n("搜索..."), lines=1, elem_id="history-search-tb")
+                    with gr.Row():
+                        with gr.Column(scale=6, elem_id="history-select-wrap"):
+                            historySelectList = gr.Radio(
+                                label=i18n("从列表中加载对话"),
+                                choices=get_history_names(),
+                                value=get_history_names()[0],
+                                # multiselect=False,
+                                container=False,
+                                elem_id="history-select-dropdown"
+                            )
                         with gr.Row():
-                            with gr.Column(scale=6, elem_id="history-select-wrap"):
-                                historyFileSelectDropdown = gr.Radio(
-                                    label=i18n("从列表中加载对话"),
-                                    choices=get_history_names(),
-                                    value=get_history_names()[0],
-                                    # multiselect=False,
-                                    container=False,
-                                    elem_id="history-select-dropdown"
-                                )
-                            with gr.Row():
-                                with gr.Column(min_width=42, scale=1):
-                                    historyRefreshBtn = gr.Button(i18n("🔄"))
-                                with gr.Column(min_width=42, scale=1):
-                                    historyDeleteBtn = gr.Button(i18n("🗑️"), elem_id="gr-history-delete-btn")
-                                with gr.Column(min_width=42, scale=1):
-                                    historyDownloadBtn = gr.Button(i18n("⏬"), elem_id="gr-history-download-btn")
-                        with gr.Row():
-                            with gr.Column(scale=6):
-                                saveFileName = gr.Textbox(
-                                    show_label=True,
-                                    placeholder=i18n("设置文件名: 默认为.json，可选为.md"),
-                                    label=i18n("设置保存文件名"),
-                                    value=i18n("对话历史记录"),
-                                    elem_classes="no-container"
-                                    # container=False,
-                                )
-                            with gr.Column(scale=1):
-                                saveHistoryBtn = gr.Button(i18n("💾 保存对话"), elem_id="gr-history-save-btn")
-                                exportMarkdownBtn = gr.Button(i18n("📝 导出为Markdown"))
-                                gr.Markdown(i18n("默认保存于history文件夹"))
-                        with gr.Row():
-                            with gr.Column():
-                                downloadFile = gr.File(interactive=True, label=i18n("下载/上传历史记录"))
+                            with gr.Column(min_width=42, scale=1):
+                                historyRefreshBtn = gr.Button(i18n("🔄"))
+                            with gr.Column(min_width=42, scale=1):
+                                historyDeleteBtn = gr.Button(i18n("🗑️"), elem_id="gr-history-delete-btn")
+                            with gr.Column(min_width=42, scale=1):
+                                historyDownloadBtn = gr.Button(i18n("⏬"), elem_id="gr-history-download-btn")
+                    with gr.Row():
+                        with gr.Column(scale=6):
+                            saveFileName = gr.Textbox(
+                                show_label=True,
+                                placeholder=i18n("设置文件名: 默认为.json，可选为.md"),
+                                label=i18n("设置保存文件名"),
+                                value=i18n("对话历史记录"),
+                                elem_classes="no-container"
+                                # container=False,
+                            )
+                        with gr.Column(scale=1):
+                            saveHistoryBtn = gr.Button(i18n("💾 保存对话"), elem_id="gr-history-save-btn")
+                            exportMarkdownBtn = gr.Button(i18n("📝 导出为Markdown"))
+                            gr.Markdown(i18n("默认保存于history文件夹"))
+                    with gr.Row():
+                        with gr.Column():
+                            downloadFile = gr.File(interactive=True, label=i18n("下载/上传历史记录"))
 
             with gr.Column(elem_id="chuanhu-menu-footer"):
                 with gr.Row(elem_id="chuanhu-func-nav"):
@@ -436,7 +436,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             system_prompt = gr.update()
             chatbot = gr.Chatbot.update(label=MODELS[DEFAULT_MODEL])
         return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), system_prompt, chatbot, init_history_list(user_name)
-    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, historyFileSelectDropdown], api_name="load")
+    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, historySelectList], api_name="load")
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[
@@ -477,12 +477,12 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     load_history_from_file_args = dict(
         fn=load_chat_history,
-        inputs=[current_model, historyFileSelectDropdown, user_name],
+        inputs=[current_model, historySelectList, user_name],
         outputs=[saveFileName, systemPromptTxt, chatbot]
     )
 
     refresh_history_args = dict(
-        fn=get_history_list, inputs=[user_name], outputs=[historyFileSelectDropdown]
+        fn=get_history_list, inputs=[user_name], outputs=[historySelectList]
     )
 
 
@@ -501,7 +501,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     emptyBtn.click(
         reset,
         inputs=[current_model],
-        outputs=[chatbot, status_display, historyFileSelectDropdown],
+        outputs=[chatbot, status_display, historySelectList],
         show_progress=True,
         _js='clearChatbot',
     )
@@ -578,11 +578,11 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     saveHistoryBtn.click(
         save_chat_history,
         [current_model, saveFileName, chatbot, user_name],
-        [downloadFile, historyFileSelectDropdown],
+        [downloadFile, historySelectList],
         show_progress=True,
         _js='(a,b,c,d)=>{return saveChatHistory(a,b,c,d);}'
     )
-    saveHistoryBtn.click(get_history_list, [user_name], [historyFileSelectDropdown])
+    saveHistoryBtn.click(get_history_list, [user_name], [historySelectList])
     exportMarkdownBtn.click(
         export_markdown,
         [current_model, saveFileName, chatbot, user_name],
@@ -590,10 +590,15 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         show_progress=True,
     )
     historyRefreshBtn.click(**refresh_history_args)
-    historyDeleteBtn.click(delete_chat_history, [current_model, historyFileSelectDropdown, user_name], [status_display, historyFileSelectDropdown, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}')
-    historyFileSelectDropdown.input(**load_history_from_file_args)
+    historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList, user_name], [status_display, historySelectList, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}')
+    historySelectList.input(**load_history_from_file_args)
     downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [saveFileName, systemPromptTxt, chatbot])
-    historyDownloadBtn.click(None, [user_name, historyFileSelectDropdown], None, _js='(a,b)=>{return downloadHistory(a,b);}')
+    historyDownloadBtn.click(None, [user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b);}')
+    historySearchTextbox.input(
+        filter_history,
+        [user_name, historySearchTextbox],
+        [historySelectList]
+    )
 
     # Train
     dataset_selection.upload(handle_dataset_selection, dataset_selection, [dataset_preview_json, upload_to_openai_btn, openai_train_status])
@@ -657,7 +662,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
     historySelectBtn.click( # This is an experimental feature... Not actually used.
         fn=load_chat_history,
-        inputs=[current_model, historyFileSelectDropdown],
+        inputs=[current_model, historySelectList],
         outputs=[saveFileName, systemPromptTxt, chatbot],
         _js='(a,b)=>{return bgSelectHistory(a,b);}'
     )
