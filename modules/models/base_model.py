@@ -688,6 +688,8 @@ class BaseLLMModel:
                     HISTORY_DIR, user_name, filename)
             else:
                 history_file_path = filename
+            if not filename.endswith(".json"):
+                history_file_path += ".json"
             with open(history_file_path, "r", encoding="utf-8") as f:
                 json_s = json.load(f)
             try:
