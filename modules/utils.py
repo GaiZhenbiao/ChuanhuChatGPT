@@ -393,6 +393,7 @@ def get_history_names(user_name=""):
         return ""
     else:
         history_files = get_file_names_by_last_modified_time(os.path.join(HISTORY_DIR, user_name))
+        history_files = [f[:f.rfind(".")] for f in history_files]
         return history_files
 
 def get_history_list(user_name=""):
