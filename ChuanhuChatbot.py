@@ -483,13 +483,14 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             model_name=MODELS[DEFAULT_MODEL], access_key=my_api_key)[0]
         current_model.set_user_identifier(user_name)
         if not hide_history_when_not_logged_in or user_name:
-            system_prompt, chatbot = current_model.auto_load()
+            filename, system_prompt, chatbot = current_model.auto_load()
         else:
             system_prompt = gr.update()
+            filename = gr.update()
             chatbot = gr.Chatbot.update(label=MODELS[DEFAULT_MODEL])
-        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), system_prompt, chatbot, init_history_list(user_name)
+        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), filename, system_prompt, chatbot, init_history_list(user_name)
     demo.load(create_greeting, inputs=None, outputs=[
-              user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, historySelectList], api_name="load")
+              user_info, user_name, current_model, like_dislike_area, saveFileName, systemPromptTxt, chatbot, historySelectList], api_name="load")
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[

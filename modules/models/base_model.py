@@ -746,7 +746,8 @@ class BaseLLMModel:
     def auto_load(self):
         self.history_file_path = get_history_filepath(self.user_identifier)
         filename, system_prompt, chatbot = self.load_chat_history()
-        return system_prompt, chatbot
+        filename = filename[:-5]
+        return filename, system_prompt, chatbot
 
     def like(self):
         """like the last response, implement if needed
