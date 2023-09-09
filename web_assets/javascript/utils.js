@@ -17,12 +17,11 @@ function isImgUrl(url) {
 
 function downloadHistory(gradioUsername, historyname, format=".json") {
     let fileUrl;
-    if (gradioUsername === null || usegradioUsernamername.trim() === "") {
+    if (gradioUsername === null || gradioUsername.trim() === "") {
         fileUrl = `/file=./history/${historyname}`;
     } else {
         fileUrl = `/file=./history/${gradioUsername}/${historyname}`;
     }
-    console.log("gradioUsername",gradioUsername, "fileUrl ",fileUrl, "historyname", historyname, "format", format);
     downloadFile(fileUrl, historyname, format);
 }
 
