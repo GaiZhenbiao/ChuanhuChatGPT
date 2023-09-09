@@ -621,7 +621,8 @@ input:checked + .chatbot-input-more-span {
         transition: left 0.3s ease, visibility 0.1s ease;
         left: calc(0px - var(--menu-width));
         z-index: 9999;
-        overflow: unset;
+        /* overflow: unset; */
+        border-right: none !important;
     }
     #chuanhu-history {
         padding-left: 0;
@@ -727,6 +728,11 @@ input:checked + .chatbot-input-more-span {
     background-color: var(--button-primary-background-fill);
     /* font-weight: bold; */
     color: var(--button-primary-text-color);
+}
+
+/* 这是为了第二级tab的选项，比如training里的openai tab下的几个准备数据集tab */
+.gradio-box > .gradio-tabs .gradio-tabs > div.tab-nav > button.selected {
+    background-color: var(--block-background-fill);
 }
 
 /* 小屏幕的tab样式 */

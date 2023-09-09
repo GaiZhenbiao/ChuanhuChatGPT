@@ -346,6 +346,7 @@ input:checked + .apSlider::before {
     display: none;
     opacity: 0;
     transition: opacity 0.5s ease;
+    font-size: small;
     width: auto;
     border-radius: 5px;
     box-shadow: var(--shadow-sm);
