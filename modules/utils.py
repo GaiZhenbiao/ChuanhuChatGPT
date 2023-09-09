@@ -695,3 +695,6 @@ def get_file_hash(file_src=None, file_paths=None):
                 md5_hash.update(chunk)
 
     return md5_hash.hexdigest()
+
+def myprint(**args):
+    print(args)

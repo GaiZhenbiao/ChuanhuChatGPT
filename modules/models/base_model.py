@@ -679,7 +679,6 @@ class BaseLLMModel:
 
     def load_chat_history(self, new_history_file_path=None, username=None):
         logging.debug(f"{self.user_identifier} 加载对话历史中……")
-        logging.info(f"filename: {self.history_file_path}")
         if new_history_file_path is not None:
             if type(new_history_file_path) != str:
                 self.history_file_path = new_history_file_path.name
@@ -735,9 +734,6 @@ class BaseLLMModel:
             return i18n("对话历史")+filename+i18n("已经被删除啦"), gr.update(), gr.update()
 
     def auto_load(self):
-        if self.user_identifier == "":
-            self.reset()
-            return self.system_prompt, gr.update()
         self.history_file_path = get_history_filepath(self.user_identifier)
         filename, system_prompt, chatbot = self.load_chat_history()
         return system_prompt, chatbot
