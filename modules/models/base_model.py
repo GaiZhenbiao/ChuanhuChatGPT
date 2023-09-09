@@ -207,7 +207,7 @@ class BaseLLMModel:
         self.api_key = None
         self.need_api_key = False
         self.single_turn = False
-        self.history_file_path = None
+        self.history_file_path = get_history_names(user)[0]
 
         self.temperature = temperature
         self.top_p = top_p
@@ -663,10 +663,12 @@ class BaseLLMModel:
 
     def save_chat_history(self, filename, chatbot, user_name):
         if filename == "":
-            return
+            return gr.update(), gr.update()
         if not filename.endswith(".json"):
             filename += ".json"
-        return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+        self.delete_chat_history(self.history_file_path, user_name)
+        self.history_file_path = filename
+        return save_file(filename, self.system_prompt, self.history, chatbot, user_name), init_history_list(user_name)
 
     def auto_save(self, chatbot):
         save_file(self.history_file_path, self.system_prompt,
@@ -715,7 +717,7 @@ class BaseLLMModel:
         except:
             # 没有对话历史或者对话历史解析失败
             logging.info(f"没有找到对话历史记录 {self.history_file_path}")
-            return gr.update(), self.system_prompt, gr.update()
+            return self.history_file_path, self.system_prompt, []
 
     def delete_chat_history(self, filename, user_name):
         if filename == "CANCELED":

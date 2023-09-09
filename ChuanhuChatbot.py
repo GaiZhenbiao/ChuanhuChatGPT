@@ -578,7 +578,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     saveHistoryBtn.click(
         save_chat_history,
         [current_model, saveFileName, chatbot, user_name],
-        downloadFile,
+        [downloadFile, historyFileSelectDropdown],
         show_progress=True,
         _js='(a,b,c,d)=>{return saveChatHistory(a,b,c,d);}'
     )

@@ -356,7 +356,7 @@ def sorted_by_pinyin(list):
     return sorted(list, key=lambda char: lazy_pinyin(char)[0][0])
 
 def sorted_by_last_modified_time(list, dir):
-    return sorted(list, key=lambda char: os.path.getmtime(os.path.join(dir, char)), reverse=True)
+    return sorted(list, key=lambda char: os.path.getctime(os.path.join(dir, char)), reverse=True)
 
 def get_file_names_by_type(dir, filetypes=[".json"]):
     logging.debug(f"获取文件名列表，目录为{dir}，文件类型为{filetypes}")
