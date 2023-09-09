@@ -395,9 +395,9 @@ def get_history_names(user_name=""):
         history_files = get_file_names_by_last_modified_time(os.path.join(HISTORY_DIR, user_name))
         return history_files
 
-def get_history_dropdown(user_name=""):
+def get_history_list(user_name=""):
     history_names = get_history_names(user_name)
-    return gr.Dropdown.update(choices=history_names)
+    return gr.Radio.update(choices=history_names)
 
 
 def load_template(filename, mode=0):

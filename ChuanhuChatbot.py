@@ -476,7 +476,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
 
     refresh_history_args = dict(
-        fn=get_history_dropdown, inputs=[user_name], outputs=[historyFileSelectDropdown]
+        fn=get_history_list, inputs=[user_name], outputs=[historyFileSelectDropdown]
     )
 
 
@@ -575,7 +575,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         downloadFile,
         show_progress=True,
     )
-    saveHistoryBtn.click(get_history_dropdown, [user_name], [historyFileSelectDropdown])
+    saveHistoryBtn.click(get_history_list, [user_name], [historyFileSelectDropdown])
     exportMarkdownBtn.click(
         export_markdown,
         [current_model, saveFileName, chatbot, user_name],
@@ -584,7 +584,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
     historyRefreshBtn.click(**refresh_history_args)
     historyDeleteBtn.click(delete_chat_history, [current_model, historyFileSelectDropdown, user_name], [status_display, historyFileSelectDropdown, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}')
-    historyFileSelectDropdown.change(**load_history_from_file_args)
+    historyFileSelectDropdown.input(**load_history_from_file_args)
     downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [saveFileName, systemPromptTxt, chatbot])
     historyDownloadBtn.click(None, [user_name, historyFileSelectDropdown], None, _js='(a,b)=>{return downloadHistory(a,b);}')
 
