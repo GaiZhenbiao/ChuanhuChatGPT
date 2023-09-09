@@ -20,10 +20,13 @@ function loadHistoryHtml() {
         return; // no history, do nothing
     }
     userLogged = localStorage.getItem('userLogged');
-    if (userLogged){
+    hideHistoryWhenNotLoggedIn = gradioApp().querySelector('#hideHistoryWhenNotLoggedIn_config').innerText === "True";
+    if (userLogged || (!userLogged && !hideHistoryWhenNotLoggedIn)){
         historyLoaded = true;
-        return; // logged in, do nothing
+        return; // logged in, do nothing. OR, not logged in but not hide history list, do nothing.
     }
+
+    // 只有用户未登录，还隐藏历史记录列表时，才选用只读历史记录
     if (!historyLoaded) {
         // preprocess, gradio buttons in history lost their event listeners
         var gradioCopyButtons = tempDiv.querySelectorAll('button.copy_code_button');
@@ -51,7 +54,7 @@ function loadHistoryHtml() {
         // fakeHistory.innerHTML = historyHtml;
         // chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
         historyLoaded = true;
-        console.log("History Loaded");
+        // console.log("History Loaded");
         loadhistorytime += 1; // for debugging
     } else {
         historyLoaded = false;

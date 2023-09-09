@@ -44,7 +44,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         status_display = gr.Markdown(get_geoip(), elem_id="status-display")
     with gr.Row(elem_id="float-display"):
         user_info = gr.Markdown(value="getting user info...", elem_id="user-info")
-        config_info = gr.HTML(get_html("config_info.html").format(), visible=False, elem_id="config-info")
         update_info = gr.HTML(get_html("update.html").format(
             current_version=repo_tag_html(),
             version_time=version_time(),
@@ -403,6 +402,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
             with gr.Box(elem_id="web-config", visible=False):
                 gr.HTML(get_html('web_config.html').format(
+                    hideHistoryWhenNotLoggedIn_config=hide_history_when_not_logged_in,
                     forView_i18n=i18n("仅供查看"),
                     deleteConfirm_i18n_pref=i18n("你真的要删除 "),
                     deleteConfirm_i18n_suff=i18n(" 吗？"),
