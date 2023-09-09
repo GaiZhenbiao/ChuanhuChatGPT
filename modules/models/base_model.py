@@ -735,7 +735,7 @@ class BaseLLMModel:
             return i18n("删除对话历史成功"), get_history_list(user_name), []
         except:
             logging.info(f"删除对话历史失败 {history_file_path}")
-            return i18n("对话历史")+filename+i18n("已经被删除啦"), gr.update(), gr.update()
+            return i18n("对话历史")+filename+i18n("已经被删除啦"), get_history_list(user_name), []
 
     def auto_load(self):
         self.history_file_path = get_history_filepath(self.user_identifier)

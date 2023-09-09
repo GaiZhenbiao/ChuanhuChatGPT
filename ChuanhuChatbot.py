@@ -1,22 +1,21 @@
 # -*- coding:utf-8 -*-
+from modules.models.models import get_model
+from modules.train_func import *
+from modules.repo import *
+from modules.webui import *
+from modules.overwrites import *
+from modules.presets import *
+from modules.utils import *
+from modules.config import *
+from modules import config
+import gradio as gr
+import colorama
 import logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
 )
 
-import colorama
-import gradio as gr
-
-from modules import config
-from modules.config import *
-from modules.utils import *
-from modules.presets import *
-from modules.overwrites import *
-from modules.webui import *
-from modules.repo import *
-from modules.train_func import *
-from modules.models.models import get_model
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
@@ -26,24 +25,28 @@ gr.Chatbot.postprocess = postprocess
 # with open("web_assets/css/ChuanhuChat.css", "r", encoding="utf-8") as f:
 #     ChuanhuChatCSS = f.read()
 
+
 def create_new_model():
-    return get_model(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key)[0]
+    return get_model(model_name=MODELS[DEFAULT_MODEL], access_key=my_api_key)[0]
+
 
 with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     user_name = gr.State("")
     promptTemplates = gr.State(load_template(get_template_names()[0], mode=2))
     user_question = gr.State("")
-    assert type(my_api_key)==str
+    assert type(my_api_key) == str
     user_api_key = gr.State(my_api_key)
     current_model = gr.State()
 
     topic = gr.State(i18n("未命名对话历史记录"))
 
     with gr.Row(elem_id="chuanhu-header"):
-        gr.HTML(get_html("header_title.html").format(app_title=CHUANHU_TITLE), elem_id="app-title")
+        gr.HTML(get_html("header_title.html").format(
+            app_title=CHUANHU_TITLE), elem_id="app-title")
         status_display = gr.Markdown(get_geoip(), elem_id="status-display")
     with gr.Row(elem_id="float-display"):
-        user_info = gr.Markdown(value="getting user info...", elem_id="user-info")
+        user_info = gr.Markdown(
+            value="getting user info...", elem_id="user-info")
         update_info = gr.HTML(get_html("update.html").format(
             current_version=repo_tag_html(),
             version_time=version_time(),
@@ -51,14 +54,15 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             update_btn=i18n("更新"),
             seenew_btn=i18n("详情"),
             ok_btn=i18n("好"),
-            ), visible=check_update)
+        ), visible=check_update)
 
     with gr.Row(equal_height=True, elem_id="chuanhu-body"):
 
         with gr.Column(elem_id="menu-area"):
             with gr.Row(elem_id="chuanhu-history"):
                 with gr.Column():
-                    historySearchTextbox = gr.Textbox(show_label=False, placeholder=i18n("搜索..."), lines=1, elem_id="history-search-tb")
+                    historySearchTextbox = gr.Textbox(show_label=False, placeholder=i18n(
+                        "搜索..."), lines=1, elem_id="history-search-tb")
                     with gr.Row():
                         with gr.Column(scale=6, elem_id="history-select-wrap"):
                             historySelectList = gr.Radio(
@@ -73,9 +77,11 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             with gr.Column(min_width=42, scale=1):
                                 historyRefreshBtn = gr.Button(i18n("🔄"))
                             with gr.Column(min_width=42, scale=1):
-                                historyDeleteBtn = gr.Button(i18n("🗑️"), elem_id="gr-history-delete-btn")
+                                historyDeleteBtn = gr.Button(
+                                    i18n("🗑️"), elem_id="gr-history-delete-btn")
                             with gr.Column(min_width=42, scale=1):
-                                historyDownloadBtn = gr.Button(i18n("⏬"), elem_id="gr-history-download-btn")
+                                historyDownloadBtn = gr.Button(
+                                    i18n("⏬"), elem_id="gr-history-download-btn")
                     with gr.Row():
                         with gr.Column(scale=6):
                             saveFileName = gr.Textbox(
@@ -87,12 +93,15 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 # container=False,
                             )
                         with gr.Column(scale=1):
-                            saveHistoryBtn = gr.Button(i18n("💾 保存对话"), elem_id="gr-history-save-btn")
-                            exportMarkdownBtn = gr.Button(i18n("📝 导出为Markdown"))
+                            saveHistoryBtn = gr.Button(
+                                i18n("💾 保存对话"), elem_id="gr-history-save-btn")
+                            exportMarkdownBtn = gr.Button(
+                                i18n("📝 导出为Markdown"))
                             gr.Markdown(i18n("默认保存于history文件夹"))
                     with gr.Row():
                         with gr.Column():
-                            downloadFile = gr.File(interactive=True, label=i18n("下载/上传历史记录"))
+                            downloadFile = gr.File(
+                                interactive=True, label=i18n("下载/上传历史记录"))
 
             with gr.Column(elem_id="chuanhu-menu-footer"):
                 with gr.Row(elem_id="chuanhu-func-nav"):
@@ -100,15 +109,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                 # gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
                 # gr.Markdown(CHUANHU_DESCRIPTION, elem_id="chuanhu-author")
 
-
-
         with gr.Column(elem_id="chuanhu-area", scale=5):
             with gr.Column(elem_id="chatbot-area"):
                 with gr.Row(elem_id="chatbot-header"):
                     model_select_dropdown = gr.Dropdown(
-                            label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True,
-                            show_label=False, container=False, elem_id="model-select-dropdown"
-                        )
+                        label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True,
+                        show_label=False, container=False, elem_id="model-select-dropdown"
+                    )
                     lora_select_dropdown = gr.Dropdown(
                         label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False,
                         container=False,
@@ -116,7 +123,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     gr.HTML(get_html("chatbot_header_btn.html").format(
                         json_label=i18n("历史记录（JSON）"),
                         md_label=i18n("导出为 Markdown")
-                    ),elem_id="chatbot-header-btn-bar")
+                    ), elem_id="chatbot-header-btn-bar")
                 with gr.Row():
                     chatbot = gr.Chatbot(
                         label="Chuanhu Chat",
@@ -148,30 +155,39 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                         # container=False
                                     )
                                 with gr.Column(min_width=42, scale=1, elem_id="chatbot-ctrl-btns"):
-                                    submitBtn = gr.Button(value="", variant="primary", elem_id="submit-btn")
-                                    cancelBtn = gr.Button(value="", variant="secondary", visible=False, elem_id="cancel-btn")
-                        with gr.Row(elem_id="chatbot-buttons", visible=False): # Note: Buttons below are set invisible in UI. But they are used in JS.
+                                    submitBtn = gr.Button(
+                                        value="", variant="primary", elem_id="submit-btn")
+                                    cancelBtn = gr.Button(
+                                        value="", variant="secondary", visible=False, elem_id="cancel-btn")
+                        # Note: Buttons below are set invisible in UI. But they are used in JS.
+                        with gr.Row(elem_id="chatbot-buttons", visible=False):
                             with gr.Column(min_width=120, scale=1):
                                 emptyBtn = gr.Button(
                                     i18n("🧹 新的对话"), elem_id="empty-btn"
                                 )
                             with gr.Column(min_width=120, scale=1):
-                                retryBtn = gr.Button(i18n("🔄 重新生成"), elem_id="gr-retry-btn")
+                                retryBtn = gr.Button(
+                                    i18n("🔄 重新生成"), elem_id="gr-retry-btn")
                             with gr.Column(min_width=120, scale=1):
                                 delFirstBtn = gr.Button(i18n("🗑️ 删除最旧对话"))
                             with gr.Column(min_width=120, scale=1):
-                                delLastBtn = gr.Button(i18n("🗑️ 删除最新对话"), elem_id="gr-dellast-btn")
+                                delLastBtn = gr.Button(
+                                    i18n("🗑️ 删除最新对话"), elem_id="gr-dellast-btn")
                             with gr.Row(visible=False) as like_dislike_area:
                                 with gr.Column(min_width=20, scale=1):
-                                    likeBtn = gr.Button(i18n("👍"), elem_id="gr-like-btn")
+                                    likeBtn = gr.Button(
+                                        i18n("👍"), elem_id="gr-like-btn")
                                 with gr.Column(min_width=20, scale=1):
-                                    dislikeBtn = gr.Button(i18n("👎"), elem_id="gr-dislike-btn")
+                                    dislikeBtn = gr.Button(
+                                        i18n("👎"), elem_id="gr-dislike-btn")
 
         with gr.Column(elem_id="toolbox-area", scale=1):
-            with gr.Box(elem_id="chuanhu-toolbox"): # For CSS setting, there is an extra box. Don't remove it.
+            # For CSS setting, there is an extra box. Don't remove it.
+            with gr.Box(elem_id="chuanhu-toolbox"):
                 with gr.Row():
                     gr.Markdown("## "+i18n("工具箱"))
-                    gr.HTML(get_html("close_btn.html").format(obj="toolbox"), elem_classes="close-btn")
+                    gr.HTML(get_html("close_btn.html").format(
+                        obj="toolbox"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
                     with gr.Tab(label=i18n("对话")):
                         with gr.Accordion(label="Prompt", open=True):
@@ -194,28 +210,34 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                                 container=False,
                                             )
                                         with gr.Column(scale=1):
-                                            templateRefreshBtn = gr.Button(i18n("🔄 刷新"))
+                                            templateRefreshBtn = gr.Button(
+                                                i18n("🔄 刷新"))
                                     with gr.Row():
                                         with gr.Column():
                                             templateSelectDropdown = gr.Dropdown(
                                                 label=i18n("从Prompt模板中加载"),
                                                 choices=load_template(
-                                                    get_template_names()[0], mode=1
+                                                    get_template_names()[
+                                                        0], mode=1
                                                 ),
                                                 multiselect=False,
                                                 container=False,
                                             )
                         gr.Markdown("---", elem_classes="hr-line")
                         with gr.Accordion(label=i18n("知识库"), open=True):
-                            use_websearch_checkbox = gr.Checkbox(label=i18n("使用在线搜索"), value=False, elem_classes="switch-checkbox", elem_id="gr-websearch-cb", visible=False)
-                            index_files = gr.Files(label=i18n("上传"), type="file", elem_id="upload-index-file")
-                            two_column = gr.Checkbox(label=i18n("双栏pdf"), value=advance_docs["pdf"].get("two_column", False))
+                            use_websearch_checkbox = gr.Checkbox(label=i18n(
+                                "使用在线搜索"), value=False, elem_classes="switch-checkbox", elem_id="gr-websearch-cb", visible=False)
+                            index_files = gr.Files(label=i18n(
+                                "上传"), type="file", elem_id="upload-index-file")
+                            two_column = gr.Checkbox(label=i18n(
+                                "双栏pdf"), value=advance_docs["pdf"].get("two_column", False))
                             summarize_btn = gr.Button(i18n("总结"))
                             # TODO: 公式ocr
                             # formula_ocr = gr.Checkbox(label=i18n("识别公式"), value=advance_docs["pdf"].get("formula_ocr", False))
 
                     with gr.Tab(label=i18n("参数")):
-                        gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"), elem_id="advanced-warning")
+                        gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"),
+                                    elem_id="advanced-warning")
                         with gr.Accordion(i18n("参数"), open=True):
                             temperature_slider = gr.Slider(
                                 minimum=-0,
@@ -295,7 +317,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 lines=1,
                             )
                     with gr.Tab(label=i18n("拓展")):
-                        gr.Markdown("Will be here soon...\n(We hope)\n\nAnd we hope you can help us to make more extensions!")
+                        gr.Markdown(
+                            "Will be here soon...\n(We hope)\n\nAnd we hope you can help us to make more extensions!")
 
                     # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
 
@@ -304,7 +327,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             with gr.Box(elem_id="chuanhu-setting"):
                 with gr.Row():
                     gr.Markdown("## "+i18n("设置"))
-                    gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
+                    gr.HTML(get_html("close_btn.html").format(
+                        obj="box"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-setting-tabs"):
                     with gr.Tab(label=i18n("模型")):
                         keyTxt = gr.Textbox(
@@ -316,9 +340,11 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             label="API-Key",
                         )
                         if multi_api_key:
-                            usageTxt = gr.Markdown(i18n("多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
+                            usageTxt = gr.Markdown(i18n(
+                                "多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
                         else:
-                            usageTxt = gr.Markdown(i18n("**发送消息** 或 **提交key** 以显示额度"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
+                            usageTxt = gr.Markdown(i18n(
+                                "**发送消息** 或 **提交key** 以显示额度"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
                         # model_select_dropdown = gr.Dropdown(
                         #     label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
                         # )
@@ -335,15 +361,18 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         )
 
                     with gr.Tab(label=i18n("高级")):
-                        gr.HTML(get_html("appearance_switcher.html").format(label=i18n("切换亮暗色主题")), elem_classes="insert-block", visible=False)
+                        gr.HTML(get_html("appearance_switcher.html").format(
+                            label=i18n("切换亮暗色主题")), elem_classes="insert-block", visible=False)
                         use_streaming_checkbox = gr.Checkbox(
-                                label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
-                            )
-                        single_turn_checkbox = gr.Checkbox(label=i18n("单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb", visible=False)
+                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
+                        )
+                        single_turn_checkbox = gr.Checkbox(label=i18n(
+                            "单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb", visible=False)
                         # checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
 
                     with gr.Tab(i18n("网络")):
-                        gr.Markdown(i18n("⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置"), elem_id="netsetting-warning")
+                        gr.Markdown(
+                            i18n("⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置"), elem_id="netsetting-warning")
                         default_btn = gr.Button(i18n("🔙 恢复默认网络设置"))
                         # 网络代理
                         proxyTxt = gr.Textbox(
@@ -371,34 +400,47 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         )
 
                     with gr.Tab(label=i18n("关于"), elem_id="about-tab"):
-                        gr.Markdown('<img alt="Chuanhu Chat logo" src="file=web_assets/icon/any-icon-512.png" style="max-width: 144px;">')
+                        gr.Markdown(
+                            '<img alt="Chuanhu Chat logo" src="file=web_assets/icon/any-icon-512.png" style="max-width: 144px;">')
                         gr.Markdown("# "+i18n("川虎Chat"))
-                        gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
+                        gr.HTML(get_html("footer.html").format(
+                            versions=versions_html()), elem_id="footer")
                         gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
 
             with gr.Box(elem_id="chuanhu-training"):
                 with gr.Row():
                     gr.Markdown("## "+i18n("训练"))
-                    gr.HTML(get_html("close_btn.html").format(obj="box"),elem_classes="close-btn")
+                    gr.HTML(get_html("close_btn.html").format(
+                        obj="box"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-training-tabs"):
                     with gr.Tab(label="OpenAI "+i18n("微调")):
-                        openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n("查看[使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35)"))
+                        openai_train_status = gr.Markdown(label=i18n("训练状态"), value=i18n(
+                            "查看[使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35)"))
 
                         with gr.Tab(label=i18n("准备数据集")):
-                            dataset_preview_json = gr.JSON(label=i18n("数据集预览"), readonly=True)
-                            dataset_selection = gr.Files(label = i18n("选择数据集"), file_types=[".xlsx", ".jsonl"], file_count="single")
-                            upload_to_openai_btn = gr.Button(i18n("上传到OpenAI"), variant="primary", interactive=False)
+                            dataset_preview_json = gr.JSON(
+                                label=i18n("数据集预览"), readonly=True)
+                            dataset_selection = gr.Files(label=i18n("选择数据集"), file_types=[
+                                                         ".xlsx", ".jsonl"], file_count="single")
+                            upload_to_openai_btn = gr.Button(
+                                i18n("上传到OpenAI"), variant="primary", interactive=False)
 
                         with gr.Tab(label=i18n("训练")):
-                            openai_ft_file_id = gr.Textbox(label=i18n("文件ID"), value="", lines=1, placeholder=i18n("上传到 OpenAI 后自动填充"))
-                            openai_ft_suffix = gr.Textbox(label=i18n("模型名称后缀"), value="", lines=1, placeholder=i18n("可选，用于区分不同的模型"))
-                            openai_train_epoch_slider = gr.Slider(label=i18n("训练轮数（Epochs）"), minimum=1, maximum=100, value=3, step=1, interactive=True)
-                            openai_start_train_btn = gr.Button(i18n("开始训练"), variant="primary", interactive=False)
+                            openai_ft_file_id = gr.Textbox(label=i18n(
+                                "文件ID"), value="", lines=1, placeholder=i18n("上传到 OpenAI 后自动填充"))
+                            openai_ft_suffix = gr.Textbox(label=i18n(
+                                "模型名称后缀"), value="", lines=1, placeholder=i18n("可选，用于区分不同的模型"))
+                            openai_train_epoch_slider = gr.Slider(label=i18n(
+                                "训练轮数（Epochs）"), minimum=1, maximum=100, value=3, step=1, interactive=True)
+                            openai_start_train_btn = gr.Button(
+                                i18n("开始训练"), variant="primary", interactive=False)
 
                         with gr.Tab(label=i18n("状态")):
                             openai_status_refresh_btn = gr.Button(i18n("刷新状态"))
-                            openai_cancel_all_jobs_btn = gr.Button(i18n("取消所有任务"))
-                            add_to_models_btn = gr.Button(i18n("添加训练好的模型到模型列表"), interactive=False)
+                            openai_cancel_all_jobs_btn = gr.Button(
+                                i18n("取消所有任务"))
+                            add_to_models_btn = gr.Button(
+                                i18n("添加训练好的模型到模型列表"), interactive=False)
 
             with gr.Box(elem_id="web-config", visible=False):
                 gr.HTML(get_html('web_config.html').format(
@@ -409,26 +451,34 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     usingLatest_i18n=i18n("您使用的就是最新版！"),
                     updatingMsg_i18n=i18n("正在尝试更新..."),
                     updateSuccess_i18n=i18n("更新成功，请重启本程序"),
-                    updateFailure_i18n=i18n('更新失败，请尝试<a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">手动更新</a>'),
+                    updateFailure_i18n=i18n(
+                        '更新失败，请尝试<a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">手动更新</a>'),
                     regenerate_i18n=i18n("重新生成"),
                     deleteRound_i18n=i18n("删除这轮问答"),
                     renameChat_i18n=i18n("重命名该对话"),
                 ))
             with gr.Box(elem_id="fake-gradio-components", visible=False):
-                updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
-                changeSingleSessionBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="change-single-session-btn")
-                changeOnlineSearchBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="change-online-search-btn")
-                historySelectBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="history-select-btn") # Not used
-
+                updateChuanhuBtn = gr.Button(
+                    visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
+                changeSingleSessionBtn = gr.Button(
+                    visible=False, elem_classes="invisible-btn", elem_id="change-single-session-btn")
+                changeOnlineSearchBtn = gr.Button(
+                    visible=False, elem_classes="invisible-btn", elem_id="change-online-search-btn")
+                historySelectBtn = gr.Button(
+                    visible=False, elem_classes="invisible-btn", elem_id="history-select-btn")  # Not used
 
     # https://github.com/gradio-app/gradio/pull/3296
+
     def create_greeting(request: gr.Request):
-        if hasattr(request, "username") and request.username: # is not None or is not ""
+        if hasattr(request, "username") and request.username:  # is not None or is not ""
             logging.info(f"Get User Name: {request.username}")
-            user_info, user_name = gr.Markdown.update(value=f"User: {request.username}"), request.username
+            user_info, user_name = gr.Markdown.update(
+                value=f"User: {request.username}"), request.username
         else:
-            user_info, user_name = gr.Markdown.update(value=f"", visible=False), ""
-        current_model = get_model(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key)[0]
+            user_info, user_name = gr.Markdown.update(
+                value=f"", visible=False), ""
+        current_model = get_model(
+            model_name=MODELS[DEFAULT_MODEL], access_key=my_api_key)[0]
         current_model.set_user_identifier(user_name)
         if not hide_history_when_not_logged_in or user_name:
             system_prompt, chatbot = current_model.auto_load()
@@ -436,7 +486,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             system_prompt = gr.update()
             chatbot = gr.Chatbot.update(label=MODELS[DEFAULT_MODEL])
         return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), system_prompt, chatbot, init_history_list(user_name)
-    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, historySelectList], api_name="load")
+    demo.load(create_greeting, inputs=None, outputs=[
+              user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, historySelectList], api_name="load")
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[
@@ -468,11 +519,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
 
     transfer_input_args = dict(
-        fn=transfer_input, inputs=[user_input], outputs=[user_question, user_input, submitBtn, cancelBtn], show_progress=True
+        fn=transfer_input, inputs=[user_input], outputs=[
+            user_question, user_input, submitBtn, cancelBtn], show_progress=True
     )
 
     get_usage_args = dict(
-        fn=billing_info, inputs=[current_model], outputs=[usageTxt], show_progress=False
+        fn=billing_info, inputs=[current_model], outputs=[
+            usageTxt], show_progress=False
     )
 
     load_history_from_file_args = dict(
@@ -485,18 +538,21 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         fn=get_history_list, inputs=[user_name], outputs=[historySelectList]
     )
 
-
     # Chatbot
     cancelBtn.click(interrupt, [current_model], [])
 
-    user_input.submit(**transfer_input_args).then(**chatgpt_predict_args).then(**end_outputing_args)
+    user_input.submit(**transfer_input_args).then(**
+                                                  chatgpt_predict_args).then(**end_outputing_args)
     user_input.submit(**get_usage_args)
 
-    submitBtn.click(**transfer_input_args).then(**chatgpt_predict_args, api_name="predict").then(**end_outputing_args)
+    submitBtn.click(**transfer_input_args).then(**chatgpt_predict_args,
+                                                api_name="predict").then(**end_outputing_args)
     submitBtn.click(**get_usage_args)
 
-    index_files.change(handle_file_upload, [current_model, index_files, chatbot, language_select_dropdown], [index_files, chatbot, status_display])
-    summarize_btn.click(handle_summarize_index, [current_model, index_files, chatbot, language_select_dropdown], [chatbot, status_display])
+    index_files.change(handle_file_upload, [current_model, index_files, chatbot, language_select_dropdown], [
+                       index_files, chatbot, status_display])
+    summarize_btn.click(handle_summarize_index, [
+                        current_model, index_files, chatbot, language_select_dropdown], [chatbot, status_display])
 
     emptyBtn.click(
         reset,
@@ -551,16 +607,23 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     two_column.change(update_doc_config, [two_column], None)
 
     # LLM Models
-    keyTxt.change(set_key, [current_model, keyTxt], [user_api_key, status_display], api_name="set_key").then(**get_usage_args)
+    keyTxt.change(set_key, [current_model, keyTxt], [
+                  user_api_key, status_display], api_name="set_key").then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
-    single_turn_checkbox.change(set_single_turn, [current_model, single_turn_checkbox], None)
-    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name], [current_model, status_display, chatbot, lora_select_dropdown, user_api_key, keyTxt], show_progress=True, api_name="get_model")
-    model_select_dropdown.change(toggle_like_btn_visibility, [model_select_dropdown], [like_dislike_area], show_progress=False)
-    lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name], [current_model, status_display, chatbot], show_progress=True)
+    single_turn_checkbox.change(
+        set_single_turn, [current_model, single_turn_checkbox], None)
+    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name], [
+                                 current_model, status_display, chatbot, lora_select_dropdown, user_api_key, keyTxt], show_progress=True, api_name="get_model")
+    model_select_dropdown.change(toggle_like_btn_visibility, [model_select_dropdown], [
+                                 like_dislike_area], show_progress=False)
+    lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider,
+                                top_p_slider, systemPromptTxt, user_name], [current_model, status_display, chatbot], show_progress=True)
 
     # Template
-    systemPromptTxt.change(set_system_prompt, [current_model, systemPromptTxt], None)
-    templateRefreshBtn.click(get_template_dropdown, None, [templateFileSelectDropdown])
+    systemPromptTxt.change(set_system_prompt, [
+                           current_model, systemPromptTxt], None)
+    templateRefreshBtn.click(get_template_dropdown, None, [
+                             templateFileSelectDropdown])
     templateFileSelectDropdown.input(
         load_template,
         [templateFileSelectDropdown],
@@ -590,10 +653,18 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         show_progress=True,
     )
     historyRefreshBtn.click(**refresh_history_args)
-    historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList, user_name], [status_display, historySelectList, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}')
+    historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList, user_name], [status_display, historySelectList, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}').then(
+        reset,
+        inputs=[current_model],
+        outputs=[chatbot, status_display, historySelectList],
+        show_progress=True,
+        _js='clearChatbot',
+    )
     historySelectList.input(**load_history_from_file_args)
-    downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [saveFileName, systemPromptTxt, chatbot])
-    historyDownloadBtn.click(None, [user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b);}')
+    downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [
+                        saveFileName, systemPromptTxt, chatbot])
+    historyDownloadBtn.click(None, [
+                             user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b);}')
     historySearchTextbox.input(
         filter_history,
         [user_name, historySearchTextbox],
@@ -601,28 +672,45 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
 
     # Train
-    dataset_selection.upload(handle_dataset_selection, dataset_selection, [dataset_preview_json, upload_to_openai_btn, openai_train_status])
-    dataset_selection.clear(handle_dataset_clear, [], [dataset_preview_json, upload_to_openai_btn])
-    upload_to_openai_btn.click(upload_to_openai, [dataset_selection], [openai_ft_file_id, openai_train_status], show_progress=True)
+    dataset_selection.upload(handle_dataset_selection, dataset_selection, [
+                             dataset_preview_json, upload_to_openai_btn, openai_train_status])
+    dataset_selection.clear(handle_dataset_clear, [], [
+                            dataset_preview_json, upload_to_openai_btn])
+    upload_to_openai_btn.click(upload_to_openai, [dataset_selection], [
+                               openai_ft_file_id, openai_train_status], show_progress=True)
 
-    openai_ft_file_id.change(lambda x: gr.update(interactive=True) if len(x) > 0 else gr.update(interactive=False), [openai_ft_file_id], [openai_start_train_btn])
-    openai_start_train_btn.click(start_training, [openai_ft_file_id, openai_ft_suffix, openai_train_epoch_slider], [openai_train_status])
+    openai_ft_file_id.change(lambda x: gr.update(interactive=True) if len(
+        x) > 0 else gr.update(interactive=False), [openai_ft_file_id], [openai_start_train_btn])
+    openai_start_train_btn.click(start_training, [
+                                 openai_ft_file_id, openai_ft_suffix, openai_train_epoch_slider], [openai_train_status])
 
-    openai_status_refresh_btn.click(get_training_status, [], [openai_train_status, add_to_models_btn])
-    add_to_models_btn.click(add_to_models, [], [model_select_dropdown, openai_train_status], show_progress=True)
-    openai_cancel_all_jobs_btn.click(cancel_all_jobs, [], [openai_train_status], show_progress=True)
+    openai_status_refresh_btn.click(get_training_status, [], [
+                                    openai_train_status, add_to_models_btn])
+    add_to_models_btn.click(add_to_models, [], [
+                            model_select_dropdown, openai_train_status], show_progress=True)
+    openai_cancel_all_jobs_btn.click(
+        cancel_all_jobs, [], [openai_train_status], show_progress=True)
 
     # Advanced
-    max_context_length_slider.change(set_token_upper_limit, [current_model, max_context_length_slider], None)
-    temperature_slider.change(set_temperature, [current_model, temperature_slider], None)
+    max_context_length_slider.change(
+        set_token_upper_limit, [current_model, max_context_length_slider], None)
+    temperature_slider.change(
+        set_temperature, [current_model, temperature_slider], None)
     top_p_slider.change(set_top_p, [current_model, top_p_slider], None)
-    n_choices_slider.change(set_n_choices, [current_model, n_choices_slider], None)
-    stop_sequence_txt.change(set_stop_sequence, [current_model, stop_sequence_txt], None)
-    max_generation_slider.change(set_max_tokens, [current_model, max_generation_slider], None)
-    presence_penalty_slider.change(set_presence_penalty, [current_model, presence_penalty_slider], None)
-    frequency_penalty_slider.change(set_frequency_penalty, [current_model, frequency_penalty_slider], None)
-    logit_bias_txt.change(set_logit_bias, [current_model, logit_bias_txt], None)
-    user_identifier_txt.change(set_user_identifier, [current_model, user_identifier_txt], None)
+    n_choices_slider.change(
+        set_n_choices, [current_model, n_choices_slider], None)
+    stop_sequence_txt.change(
+        set_stop_sequence, [current_model, stop_sequence_txt], None)
+    max_generation_slider.change(
+        set_max_tokens, [current_model, max_generation_slider], None)
+    presence_penalty_slider.change(
+        set_presence_penalty, [current_model, presence_penalty_slider], None)
+    frequency_penalty_slider.change(
+        set_frequency_penalty, [current_model, frequency_penalty_slider], None)
+    logit_bias_txt.change(
+        set_logit_bias, [current_model, logit_bias_txt], None)
+    user_identifier_txt.change(set_user_identifier, [
+                               current_model, user_identifier_txt], None)
 
     default_btn.click(
         reset_default, [], [apihostTxt, proxyTxt, status_display], show_progress=True
@@ -660,13 +748,12 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         outputs=[use_websearch_checkbox],
         _js='(a)=>{return bgChangeOnlineSearch(a);}'
     )
-    historySelectBtn.click( # This is an experimental feature... Not actually used.
+    historySelectBtn.click(  # This is an experimental feature... Not actually used.
         fn=load_chat_history,
         inputs=[current_model, historySelectList],
         outputs=[saveFileName, systemPromptTxt, chatbot],
         _js='(a,b)=>{return bgSelectHistory(a,b);}'
     )
-
 
 
 logging.info(
@@ -686,5 +773,5 @@ if __name__ == "__main__":
         share=share,
         auth=auth_from_conf if authflag else None,
         favicon_path="./web_assets/favicon.ico",
-        inbrowser=not dockerflag, # 禁止在docker下开启inbrowser
+        inbrowser=not dockerflag,  # 禁止在docker下开启inbrowser
     )
