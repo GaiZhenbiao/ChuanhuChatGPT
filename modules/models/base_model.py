@@ -10,6 +10,7 @@ import requests
 import urllib3
 import traceback
 import pathlib
+import shutil
 
 from tqdm import tqdm
 import colorama
@@ -686,7 +687,11 @@ class BaseLLMModel:
         logging.debug(f"{self.user_identifier} 加载对话历史中……")
         if new_history_file_path is not None:
             if type(new_history_file_path) != str:
-                self.history_file_path = new_history_file_path.name
+                # copy file from new_history_file_path.name to os.path.join(HISTORY_DIR, self.user_identifier)
+                new_history_file_path = new_history_file_path.name
+                shutil.copyfile(new_history_file_path, os.path.join(
+                    HISTORY_DIR, self.user_identifier, os.path.basename(new_history_file_path)))
+                self.history_file_path = os.path.basename(new_history_file_path)
             else:
                 self.history_file_path = new_history_file_path
         try:

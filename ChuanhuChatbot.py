@@ -102,8 +102,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 i18n("📝 Export as Markdown"), elem_id="gr-markdown-export-btn")
                     with gr.Row():
                         with gr.Column():
-                            downloadFile = gr.File(
-                                interactive=True, label=i18n("下载/上传历史记录"))
+                            uploadFileBtn = gr.UploadButton(
+                                interactive=True, label=i18n("Upload Chat History (.json)"), file_types=[".json"])
 
             with gr.Column(elem_id="chuanhu-menu-footer"):
                 with gr.Row(elem_id="chuanhu-func-nav"):
@@ -662,8 +662,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         _js='clearChatbot',
     )
     historySelectList.input(**load_history_from_file_args)
-    downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [
-                        saveFileName, systemPromptTxt, chatbot])
+    uploadFileBtn.upload(upload_chat_history, [current_model, uploadFileBtn, user_name], [
+                        saveFileName, systemPromptTxt, chatbot]).then(**refresh_history_args)
     historyDownloadBtn.click(None, [
                              user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b,".json");}')
     historyMarkdownDownloadBtn.click(None, [
