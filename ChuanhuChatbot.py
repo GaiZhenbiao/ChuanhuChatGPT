@@ -82,6 +82,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             with gr.Column(min_width=42, scale=1):
                                 historyDownloadBtn = gr.Button(
                                     i18n("⏬"), elem_id="gr-history-download-btn")
+                            with gr.Column(min_width=42, scale=1):
+                                historyMarkdownDownloadBtn = gr.Button(
+                                    i18n("⤵️"), elem_id="gr-history-mardown-download-btn")
                     with gr.Row():
                         with gr.Column(scale=6):
                             saveFileName = gr.Textbox(
@@ -665,6 +668,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         saveFileName, systemPromptTxt, chatbot])
     historyDownloadBtn.click(None, [
                              user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b);}')
+    historyMarkdownDownloadBtn.click(None, [
+                                     user_name, historySelectList], None, _js='(a,b)=>{return downloadHistoryMarkdown(a,b);}')
     historySearchTextbox.input(
         filter_history,
         [user_name, historySearchTextbox],

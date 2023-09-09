@@ -22,7 +22,17 @@ function downloadHistory(username, historyname) {
     } else {
         fileUrl = `/file=./history/${username}/${historyname}`;
     }
-    downloadFile(fileUrl, historyname);
+    downloadFile(fileUrl + ".json", historyname + ".json");
+}
+
+function downloadHistoryMarkdown(username, historyname) {
+    let fileUrl;
+    if (username === null) {
+        fileUrl = `/file=./history/${historyname}`;
+    } else {
+        fileUrl = `/file=./history/${username}/${historyname}`;
+    }
+    downloadFile(fileUrl + ".md", historyname + ".md");
 }
 
 function downloadFile(fileUrl, filename="") {

@@ -332,23 +332,26 @@ def construct_assistant(text):
 
 def save_file(filename, system, history, chatbot, user_name):
     os.makedirs(os.path.join(HISTORY_DIR, user_name), exist_ok=True)
+    if filename.endswith(".md"):
+        filename = filename[:-3]
     if not filename.endswith(".json") and not filename.endswith(".md"):
         filename += ".json"
-    if filename.endswith(".json"):
-        json_s = {"system": system, "history": history, "chatbot": chatbot}
-        if "/" in filename or "\\" in filename:
-            history_file_path = filename
-        else:
-            history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
-        logging.info(f"保存文件，文件名为{filename}，用户为{user_name}, 文件路径为{history_file_path}")
-        with open(history_file_path, "w", encoding='utf-8') as f:
-            json.dump(json_s, f, ensure_ascii=False)
-    elif filename.endswith(".md"):
-        md_s = f"system: \n- {system} \n"
-        for data in history:
-            md_s += f"\n{data['role']}: \n- {data['content']} \n"
-        with open(os.path.join(HISTORY_DIR, user_name, filename), "w", encoding="utf8") as f:
-            f.write(md_s)
+
+    json_s = {"system": system, "history": history, "chatbot": chatbot}
+    if "/" in filename or "\\" in filename:
+        history_file_path = filename
+    else:
+        history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
+    with open(history_file_path, "w", encoding='utf-8') as f:
+        json.dump(json_s, f, ensure_ascii=False)
+
+    filename = filename.split("/")[-1]
+    filename_md = filename[:-5] + ".md"
+    md_s = f"system: \n- {system} \n"
+    for data in history:
+        md_s += f"\n{data['role']}: \n- {data['content']} \n"
+    with open(os.path.join(HISTORY_DIR, user_name, filename_md), "w", encoding="utf8") as f:
+        f.write(md_s)
     return os.path.join(HISTORY_DIR, user_name, filename)
 
 
