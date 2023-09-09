@@ -35,7 +35,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     user_question = gr.State("")
     assert type(my_api_key)==str
     user_api_key = gr.State(my_api_key)
-    current_model = gr.State(create_new_model)
+    current_model = gr.State()
 
     topic = gr.State(i18n("未命名对话历史记录"))
 
@@ -65,6 +65,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 historyFileSelectDropdown = gr.Radio(
                                     label=i18n("从列表中加载对话"),
                                     choices=get_history_names(),
+                                    value=get_history_names()[0],
                                     # multiselect=False,
                                     container=False,
                                     elem_id="history-select-dropdown"
@@ -430,8 +431,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         current_model = get_model(model_name = MODELS[DEFAULT_MODEL], access_key = my_api_key)[0]
         current_model.set_user_identifier(user_name)
         chatbot = gr.Chatbot.update(label=MODELS[DEFAULT_MODEL])
-        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), *current_model.auto_load(), chatbot
-    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, chatbot], api_name="load")
+        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), *current_model.auto_load(), chatbot, init_history_list(user_name)
+    demo.load(create_greeting, inputs=None, outputs=[user_info, user_name, current_model, like_dislike_area, systemPromptTxt, chatbot, chatbot, historyFileSelectDropdown], api_name="load")
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[
@@ -652,9 +653,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
     historySelectBtn.click( # This is an experimental feature... Not actually used.
         fn=load_chat_history,
-        inputs=[current_model, historyFileSelectDropdown, user_name],
+        inputs=[current_model, historyFileSelectDropdown],
         outputs=[saveFileName, systemPromptTxt, chatbot],
-        _js='(a,b,c)=>{return bgSelectHistory(a,b,c);}'
+        _js='(a,b)=>{return bgSelectHistory(a,b);}'
     )
 
 

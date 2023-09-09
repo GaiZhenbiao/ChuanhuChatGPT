@@ -207,6 +207,7 @@ class BaseLLMModel:
         self.api_key = None
         self.need_api_key = False
         self.single_turn = False
+        self.history_file_path = None
 
         self.temperature = temperature
         self.top_p = top_p
@@ -623,8 +624,8 @@ class BaseLLMModel:
         self.history = []
         self.all_token_counts = []
         self.interrupted = False
-        pathlib.Path(os.path.join(HISTORY_DIR, self.user_identifier, new_auto_history_filename(
-            os.path.join(HISTORY_DIR, self.user_identifier)))).touch()
+        self.history_file_path = new_auto_history_filename(
+            os.path.join(HISTORY_DIR, self.user_identifier))
         return [], self.token_message([0])
 
     def delete_first_conversation(self):
@@ -666,8 +667,7 @@ class BaseLLMModel:
         return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
 
     def auto_save(self, chatbot):
-        history_file_path = get_history_filepath(self.user_identifier)
-        save_file(history_file_path, self.system_prompt,
+        save_file(self.history_file_path, self.system_prompt,
                   self.history, chatbot, self.user_identifier)
 
     def export_markdown(self, filename, chatbot, user_name):
@@ -677,18 +677,21 @@ class BaseLLMModel:
             filename += ".md"
         return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
 
-    def load_chat_history(self, filename, user_name):
-        logging.debug(f"{user_name} 加载对话历史中……")
-        logging.info(f"filename: {filename}")
-        if type(filename) != str and filename is not None:
-            filename = filename.name
-        try:
-            if "/" not in filename:
-                history_file_path = os.path.join(
-                    HISTORY_DIR, user_name, filename)
+    def load_chat_history(self, new_history_file_path=None, username=None):
+        logging.debug(f"{self.user_identifier} 加载对话历史中……")
+        logging.info(f"filename: {self.history_file_path}")
+        if new_history_file_path is not None:
+            if type(new_history_file_path) != str:
+                self.history_file_path = new_history_file_path.name
             else:
-                history_file_path = filename
-            if not filename.endswith(".json"):
+                self.history_file_path = new_history_file_path
+        try:
+            if "/" not in self.history_file_path:
+                history_file_path = os.path.join(
+                    HISTORY_DIR, self.user_identifier, self.history_file_path)
+            else:
+                history_file_path = self.history_file_path
+            if not self.history_file_path.endswith(".json"):
                 history_file_path += ".json"
             with open(history_file_path, "r", encoding="utf-8") as f:
                 json_s = json.load(f)
@@ -705,12 +708,12 @@ class BaseLLMModel:
                     logging.info(new_history)
             except:
                 pass
-            logging.debug(f"{user_name} 加载对话历史完毕")
+            logging.debug(f"{self.user_identifier} 加载对话历史完毕")
             self.history = json_s["history"]
-            return os.path.basename(filename), json_s["system"], json_s["chatbot"]
+            return os.path.basename(self.history_file_path), json_s["system"], json_s["chatbot"]
         except:
             # 没有对话历史或者对话历史解析失败
-            logging.info(f"没有找到对话历史记录 {filename}")
+            logging.info(f"没有找到对话历史记录 {self.history_file_path}")
             return gr.update(), self.system_prompt, gr.update()
 
     def delete_chat_history(self, filename, user_name):
@@ -735,9 +738,8 @@ class BaseLLMModel:
         if self.user_identifier == "":
             self.reset()
             return self.system_prompt, gr.update()
-        history_file_path = get_history_filepath(self.user_identifier)
-        filename, system_prompt, chatbot = self.load_chat_history(
-            history_file_path, self.user_identifier)
+        self.history_file_path = get_history_filepath(self.user_identifier)
+        filename, system_prompt, chatbot = self.load_chat_history()
         return system_prompt, chatbot
 
     def like(self):

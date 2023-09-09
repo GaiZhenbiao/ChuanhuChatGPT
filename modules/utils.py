@@ -331,14 +331,16 @@ def construct_assistant(text):
 
 
 def save_file(filename, system, history, chatbot, user_name):
-    logging.debug(f"{user_name} 保存对话历史中……")
     os.makedirs(os.path.join(HISTORY_DIR, user_name), exist_ok=True)
+    if not filename.endswith(".json") and not filename.endswith(".md"):
+        filename += ".json"
     if filename.endswith(".json"):
         json_s = {"system": system, "history": history, "chatbot": chatbot}
         if "/" in filename or "\\" in filename:
             history_file_path = filename
         else:
             history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
+        logging.info(f"保存文件，文件名为{filename}，用户为{user_name}, 文件路径为{history_file_path}")
         with open(history_file_path, "w", encoding='utf-8') as f:
             json.dump(json_s, f, ensure_ascii=False)
     elif filename.endswith(".md"):
@@ -347,7 +349,6 @@ def save_file(filename, system, history, chatbot, user_name):
             md_s += f"\n{data['role']}: \n- {data['content']} \n"
         with open(os.path.join(HISTORY_DIR, user_name, filename), "w", encoding="utf8") as f:
             f.write(md_s)
-    logging.debug(f"{user_name} 保存对话历史完毕")
     return os.path.join(HISTORY_DIR, user_name, filename)
 
 
@@ -400,6 +401,9 @@ def get_history_list(user_name=""):
     history_names = get_history_names(user_name)
     return gr.Radio.update(choices=history_names)
 
+def init_history_list(user_name=""):
+    history_names = get_history_names(user_name)
+    return gr.Radio.update(choices=history_names, value=history_names[0] if history_names else "")
 
 def load_template(filename, mode=0):
     logging.debug(f"加载模板文件{filename}，模式为{mode}（0为返回字典和下拉菜单，1为返回下拉菜单，2为返回字典）")
@@ -640,7 +644,7 @@ def toggle_like_btn_visibility(selected_model_name):
         return gr.update(visible=False)
 
 def new_auto_history_filename(dirname):
-    latest_file = get_latest_filepath(dirname)
+    latest_file = get_file_names_by_last_modified_time(dirname)[0]
     if latest_file:
         with open(os.path.join(dirname, latest_file), 'r', encoding="utf-8") as f:
             if len(f.read()) == 0:
@@ -648,25 +652,10 @@ def new_auto_history_filename(dirname):
     now = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     return f'{now}.json'
 
-def get_latest_filepath(dirname):
-    pattern = re.compile(r'\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}')
-    latest_time = None
-    latest_file = None
-    for filename in os.listdir(dirname):
-        if os.path.isfile(os.path.join(dirname, filename)):
-            match = pattern.search(filename)
-            if match and match.group(0) == filename[:19]:
-                time_str = filename[:19]
-                filetime = datetime.datetime.strptime(time_str, '%Y-%m-%d_%H-%M-%S')
-                if not latest_time or filetime > latest_time:
-                    latest_time = filetime
-                    latest_file = filename
-    return latest_file
-
 def get_history_filepath(username):
     dirname = os.path.join(HISTORY_DIR, username)
     os.makedirs(dirname, exist_ok=True)
-    latest_file = get_latest_filepath(dirname)
+    latest_file = get_file_names_by_last_modified_time(dirname)[0]
     if not latest_file:
         latest_file = new_auto_history_filename(dirname)
 

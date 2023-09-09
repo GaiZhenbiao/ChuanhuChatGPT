@@ -45,7 +45,7 @@ function transUpload() {
 
     // let uploaderEvents = ["click", "drag", "dragend", "dragenter", "dragleave", "dragover", "dragstart", "drop"];
     // transEventListeners(chatbotUploader, grUploader, uploaderEvents);
-    
+
     chatbotUploader.addEventListener('click', handleClick);
 }
 
@@ -101,8 +101,8 @@ function transEventListeners(target, source, events) {
     /* 事实上，我发现这样写的大多数gradio组件并不适用。。所以。。。生气 */
 }
 
-function bgSelectHistory(a,b,c){
+function bgSelectHistory(a,b){
     const historySelectorInput = gradioApp().querySelector('#history-select-dropdown input');
     let file = historySelectorInput.value;
-    return [a,file,c]
+    return [a,file]
 }
