@@ -62,7 +62,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             with gr.Row(elem_id="chuanhu-history"):
                 with gr.Column():
                     historySearchTextbox = gr.Textbox(show_label=False, placeholder=i18n(
-                        "搜索..."), lines=1, elem_id="history-search-tb")
+                        "搜索（支持正则）..."), lines=1, elem_id="history-search-tb")
                     with gr.Row():
                         with gr.Column(scale=6, elem_id="history-select-wrap"):
                             historySelectList = gr.Radio(

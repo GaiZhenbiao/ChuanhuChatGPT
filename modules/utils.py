@@ -410,8 +410,11 @@ def init_history_list(user_name=""):
 
 def filter_history(user_name, keyword):
     history_names = get_history_names(user_name)
-    history_names = [name for name in history_names if re.search(keyword, name)]
-    return gr.update(choices=history_names)
+    try:
+        history_names = [name for name in history_names if re.search(keyword, name)]
+        return gr.update(choices=history_names)
+    except:
+        return gr.update(choices=history_names)
 
 def load_template(filename, mode=0):
     logging.debug(f"加载模板文件{filename}，模式为{mode}（0为返回字典和下拉菜单，1为返回下拉菜单，2为返回字典）")
