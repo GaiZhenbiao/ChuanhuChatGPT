@@ -668,7 +668,8 @@ class BaseLLMModel:
             filename += ".json"
         self.delete_chat_history(self.history_file_path, user_name)
         self.history_file_path = filename
-        return save_file(filename, self.system_prompt, self.history, chatbot, user_name), init_history_list(user_name)
+        save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+        return init_history_list(user_name)
 
     def auto_save(self, chatbot):
         save_file(self.history_file_path, self.system_prompt,
@@ -679,7 +680,7 @@ class BaseLLMModel:
             return
         if not filename.endswith(".md"):
             filename += ".md"
-        return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+        save_file(filename, self.system_prompt, self.history, chatbot, user_name)
 
     def load_chat_history(self, new_history_file_path=None, username=None):
         logging.debug(f"{self.user_identifier} 加载对话历史中……")

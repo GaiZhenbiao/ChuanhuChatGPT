@@ -96,11 +96,10 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 # container=False,
                             )
                         with gr.Column(scale=1):
-                            saveHistoryBtn = gr.Button(
-                                i18n("💾 保存对话"), elem_id="gr-history-save-btn")
+                            renameHistoryBtn = gr.Button(
+                                i18n("💾 Rename Chat"), elem_id="gr-history-save-btn")
                             exportMarkdownBtn = gr.Button(
-                                i18n("📝 导出为Markdown"), elem_id="gr-markdown-export-btn")
-                            gr.Markdown(i18n("默认保存于history文件夹"))
+                                i18n("📝 Export as Markdown"), elem_id="gr-markdown-export-btn")
                     with gr.Row():
                         with gr.Column():
                             downloadFile = gr.File(
@@ -641,18 +640,17 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
 
     # S&L
-    saveHistoryBtn.click(
+    renameHistoryBtn.click(
         save_chat_history,
         [current_model, saveFileName, chatbot, user_name],
-        [downloadFile, historySelectList],
+        [historySelectList],
         show_progress=True,
         _js='(a,b,c,d)=>{return saveChatHistory(a,b,c,d);}'
     )
-    saveHistoryBtn.click(get_history_list, [user_name], [historySelectList])
     exportMarkdownBtn.click(
         export_markdown,
         [current_model, saveFileName, chatbot, user_name],
-        downloadFile,
+        [],
         show_progress=True,
     )
     historyRefreshBtn.click(**refresh_history_args)
