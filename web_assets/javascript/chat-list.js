@@ -4,8 +4,6 @@ function setChatList() {
     var chatList = gradioApp().querySelector('fieldset#history-select-dropdown');
     selectedChat = chatList.querySelector(".wrap label.selected")
     if (!selectedChat || selectedChat.classList.contains('added-chat-btns')) {
-        chatList.querySelector('.chat-selected-btns')?.remove(); // remove old buttons
-        chatList.querySelectorAll('.added-chat-btns').forEach(chat => chat.classList.remove('added-chat-btns'));
         return;
     }
 
