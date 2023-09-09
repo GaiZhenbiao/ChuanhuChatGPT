@@ -68,8 +68,8 @@ def delete_last_conversation(current_model, *args):
 def set_system_prompt(current_model, *args):
     return current_model.set_system_prompt(*args)
 
-def save_chat_history(current_model, *args):
-    return current_model.save_chat_history(*args)
+def rename_chat_history(current_model, *args):
+    return current_model.rename_chat_history(*args)
 
 def export_markdown(current_model, *args):
     return current_model.export_markdown(*args)

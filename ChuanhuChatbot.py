@@ -641,7 +641,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     # S&L
     renameHistoryBtn.click(
-        save_chat_history,
+        rename_chat_history,
         [current_model, saveFileName, chatbot, user_name],
         [historySelectList],
         show_progress=True,

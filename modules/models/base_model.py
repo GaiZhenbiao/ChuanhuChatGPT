@@ -661,7 +661,7 @@ class BaseLLMModel:
             token_sum += sum(token_lst[: i + 1])
         return i18n("Token 计数: ") + f"{sum(token_lst)}" + i18n("，本次对话累计消耗了 ") + f"{token_sum} tokens"
 
-    def save_chat_history(self, filename, chatbot, user_name):
+    def rename_chat_history(self, filename, chatbot, user_name):
         if filename == "":
             return gr.update(), gr.update()
         if not filename.endswith(".json"):
