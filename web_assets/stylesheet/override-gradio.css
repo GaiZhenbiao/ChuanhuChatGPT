@@ -46,6 +46,9 @@ fieldset#history-select-dropdown .wrap label.selected {
     background: var(--message-list-background-selected);
     padding: 10px 64px 10px 16px;
 }
+fieldset#history-select-dropdown .wrap label:not(.selected) .chat-selected-btns{
+    display: none;
+}
 fieldset#history-select-dropdown .wrap label > span {
     /* font-size: small; */
     margin-left: 0;

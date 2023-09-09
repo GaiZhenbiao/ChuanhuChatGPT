@@ -87,7 +87,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                     # container=False,
                                 )
                             with gr.Column(scale=1):
-                                saveHistoryBtn = gr.Button(i18n("💾 保存对话"))
+                                saveHistoryBtn = gr.Button(i18n("💾 保存对话"), elem_id="gr-history-save-btn")
                                 exportMarkdownBtn = gr.Button(i18n("📝 导出为Markdown"))
                                 gr.Markdown(i18n("默认保存于history文件夹"))
                         with gr.Row():
@@ -411,6 +411,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     updateFailure_i18n=i18n('更新失败，请尝试<a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">手动更新</a>'),
                     regenerate_i18n=i18n("重新生成"),
                     deleteRound_i18n=i18n("删除这轮问答"),
+                    renameChat_i18n=i18n("重命名该对话"),
                 ))
             with gr.Box(elem_id="fake-gradio-components", visible=False):
                 updateChuanhuBtn = gr.Button(visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
@@ -574,6 +575,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         [current_model, saveFileName, chatbot, user_name],
         downloadFile,
         show_progress=True,
+        _js='(a,b,c,d)=>{return saveChatHistory(a,b,c,d);}'
     )
     saveHistoryBtn.click(get_history_list, [user_name], [historyFileSelectDropdown])
     exportMarkdownBtn.click(

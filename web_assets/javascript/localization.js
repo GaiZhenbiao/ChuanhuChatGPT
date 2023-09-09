@@ -23,6 +23,7 @@ function setLoclize() {
     updateFailure_i18n = gradioApp().querySelector('#updateFailure_i18n').innerText;
     regenerate_i18n = gradioApp().querySelector('#regenerate_i18n').innerText;
     deleteRound_i18n = gradioApp().querySelector('#deleteRound_i18n').innerText;
+    renameChat_i18n = gradioApp().querySelector('#renameChat_i18n').innerText;
 }
 
 function i18n(msg) {

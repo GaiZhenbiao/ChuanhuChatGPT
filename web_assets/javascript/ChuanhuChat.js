@@ -15,6 +15,7 @@ var chatbotArea = null;
 var chatbot = null;
 var chatbotIndicator = null;
 var uploaderIndicator = null;
+var chatListIndicator = null;
 var chatbotWrap = null;
 var apSwitch = null;
 var messageBotDivs = null;
@@ -47,6 +48,7 @@ function addInit() {
     
     chatbotIndicator = gradioApp().querySelector('#chuanhu-chatbot > div.wrap');
     uploaderIndicator = gradioApp().querySelector('#upload-index-file > div.wrap');
+    chatListIndicator = gradioApp().querySelector('#history-select-dropdown > div.wrap');
 
     for (let elem in needInit) {
         if (needInit[elem] == null) {
@@ -56,6 +58,7 @@ function addInit() {
     }
 
     chatbotObserver.observe(chatbotIndicator, { attributes: true });
+    chatListObserver.observe(chatListIndicator, { attributes: true });
     setUploader();
     
     return true;
@@ -363,6 +366,10 @@ var chatbotObserver = new MutationObserver(() => {
         // setLatestMessage();
         chatbotContentChanged(2);
     }
+});
+
+var chatListObserver = new MutationObserver(() => {
+    setChatList();
 });
 
 // 监视页面内部 DOM 变动
