@@ -501,7 +501,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     emptyBtn.click(
         reset,
         inputs=[current_model],
-        outputs=[chatbot, status_display],
+        outputs=[chatbot, status_display, historyFileSelectDropdown],
         show_progress=True,
         _js='clearChatbot',
     )

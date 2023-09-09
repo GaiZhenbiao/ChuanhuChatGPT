@@ -626,7 +626,9 @@ class BaseLLMModel:
         self.interrupted = False
         self.history_file_path = new_auto_history_filename(
             os.path.join(HISTORY_DIR, self.user_identifier))
-        return [], self.token_message([0])
+        history_name = self.history_file_path[:-5]
+        choices = [history_name] + get_history_names(self.user_identifier)
+        return [], self.token_message([0]), gr.Radio.update(choices=choices, value=history_name)
 
     def delete_first_conversation(self):
         if self.history:
