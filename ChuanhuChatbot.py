@@ -99,7 +99,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             saveHistoryBtn = gr.Button(
                                 i18n("💾 保存对话"), elem_id="gr-history-save-btn")
                             exportMarkdownBtn = gr.Button(
-                                i18n("📝 导出为Markdown"))
+                                i18n("📝 导出为Markdown"), elem_id="gr-markdown-export-btn")
                             gr.Markdown(i18n("默认保存于history文件夹"))
                     with gr.Row():
                         with gr.Column():
@@ -667,9 +667,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     downloadFile.change(upload_chat_history, [current_model, downloadFile, user_name], [
                         saveFileName, systemPromptTxt, chatbot])
     historyDownloadBtn.click(None, [
-                             user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b);}')
+                             user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b,".json");}')
     historyMarkdownDownloadBtn.click(None, [
-                                     user_name, historySelectList], None, _js='(a,b)=>{return downloadHistoryMarkdown(a,b);}')
+                                     user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b,".md");}')
     historySearchTextbox.input(
         filter_history,
         [user_name, historySearchTextbox],

@@ -93,10 +93,10 @@ function initialize() {
     toolbox = gradioApp().querySelector('#toolbox-area');
     // trainBody = gradioApp().querySelector('#train-body');
 
-    if (loginUserForm) {
-        localStorage.setItem("userLogged", true);
-        userLogged = true;
-    }
+    // if (loginUserForm) {
+    // localStorage.setItem("userLogged", true);
+    // userLogged = true;
+    // }
 
     adjustDarkMode();
     adjustSide();

@@ -1,9 +1,22 @@
 
+var currentChatName = null;
+
 function setChatList() {
     var selectedChat = null;
     var chatList = gradioApp().querySelector('fieldset#history-select-dropdown');
     selectedChat = chatList.querySelector(".wrap label.selected")
-    if (!selectedChat || selectedChat.classList.contains('added-chat-btns')) {
+    if (!selectedChat) {
+        currentChatName = null;
+        return;
+    }
+
+    // if (userLogged) {
+    //     currentChatName = username + "/" + selectedChat.querySelector('span').innerText;
+    // } else {
+        currentChatName = selectedChat.querySelector('span').innerText;
+    // }
+
+    if (selectedChat.classList.contains('added-chat-btns')) {
         return;
     }
 

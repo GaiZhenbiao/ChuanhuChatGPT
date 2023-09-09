@@ -15,52 +15,62 @@ function isImgUrl(url) {
     return false;
 }
 
-function downloadHistory(username, historyname) {
+function downloadHistory(gradioUsername, historyname, format=".json") {
     let fileUrl;
-    if (username === null) {
+    if (gradioUsername === null || usegradioUsernamername.trim() === "") {
         fileUrl = `/file=./history/${historyname}`;
     } else {
-        fileUrl = `/file=./history/${username}/${historyname}`;
+        fileUrl = `/file=./history/${gradioUsername}/${historyname}`;
     }
-    downloadFile(fileUrl + ".json", historyname + ".json");
+    console.log("gradioUsername",gradioUsername, "fileUrl ",fileUrl, "historyname", historyname, "format", format);
+    downloadFile(fileUrl, historyname, format);
 }
 
-function downloadHistoryMarkdown(username, historyname) {
-    let fileUrl;
-    if (username === null) {
-        fileUrl = `/file=./history/${historyname}`;
-    } else {
-        fileUrl = `/file=./history/${username}/${historyname}`;
+function downloadFile(fileUrl, filename = "", format = "", retryTimeout = 200, maxAttempts = 10) {
+
+    fileUrl = fileUrl + format;
+    filename = filename + format;
+
+    let attempts = 0;
+
+    async function tryDownload() {
+        if (attempts >= maxAttempts) {
+            console.error('Max attempts reached, download failed.');
+            alert('Download failed:' + filename);
+            return;
+        }
+        try {
+            const response = await fetch(fileUrl);
+            if (!response.ok) {
+                attempts++;
+                console.error("Error fetching file, retrying...");
+                setTimeout(tryDownload, retryTimeout);
+            } else {
+                response.blob()
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    })
+                    .catch(error => {
+                        console.error('Error downloading file:', error);
+                    });
+            }
+        } catch (error) {
+            attempts++;
+            setTimeout(tryDownload, retryTimeout);
+        }
     }
-    downloadFile(fileUrl + ".md", historyname + ".md");
+
+    tryDownload();
 }
-
-function downloadFile(fileUrl, filename="") {
-    // 发送下载请求
-    fetch(fileUrl)
-        .then(response => response.blob())
-        .then(blob => {
-            // 创建一个临时的URL
-            const url = URL.createObjectURL(blob);
-
-            // 创建一个隐藏的<a>元素，设置下载属性
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = filename;
-
-            // 添加到DOM并触发点击事件
-            document.body.appendChild(a);
-            a.click();
-
-            // 清理临时URL和DOM中的<a>元素
-            URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        })
-        .catch(error => {
-            console.error('Failed to download file:', error);
-        });
-}
+    
 
 
 /* NOTE: These reload functions are not used in the current version of the code.

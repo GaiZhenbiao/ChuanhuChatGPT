@@ -9,7 +9,10 @@ function jsonDownloadClick() {
     gradioApp().querySelector('#gr-history-download-btn').click();
 }
 function mdDownloadClick() {
-    return;
+    gradioApp().querySelector('#gr-markdown-export-btn').click();
+    gradioApp().querySelector('#gr-history-mardown-download-btn').click();
+
+    // downloadHistory(username, currentChatName, ".md");
 }
 
 // index files
