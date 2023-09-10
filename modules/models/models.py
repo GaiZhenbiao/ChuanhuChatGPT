@@ -228,6 +228,9 @@ class OpenAIClient(BaseLLMModel):
         ret = super().set_key(new_access_key)
         self._refresh_header()
         return ret
+    
+    # def auto_name_chat_history(self, user_question, chatbot, user_name):
+    #     return super().auto_name_chat_history(user_question, chatbot, user_name)
 
 
 class ChatGLM_Client(BaseLLMModel):

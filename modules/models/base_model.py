@@ -679,8 +679,6 @@ class BaseLLMModel:
         else:
             return gr.update()
 
-
-
     def auto_save(self, chatbot):
         save_file(self.history_file_path, self.system_prompt,
                   self.history, chatbot, self.user_identifier)
