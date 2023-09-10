@@ -668,7 +668,7 @@ def new_auto_history_filename(username):
         with open(os.path.join(HISTORY_DIR, username, latest_file + ".json"), 'r', encoding="utf-8") as f:
             if len(f.read()) == 0:
                 return latest_file
-    now = i18n("新对话 ") + datetime.datetime.now().strftime('%m-%d %H:%M')
+    now = i18n("新对话 ") + datetime.datetime.now().strftime('%m-%d %H꞉%M')
     return f'{now}.json'
 
 def get_history_filepath(username):

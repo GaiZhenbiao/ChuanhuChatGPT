@@ -267,7 +267,7 @@ class OpenAIClient(BaseLLMModel):
                 ai_answer = match.group(1)
                 try:
                     history = [
-                        { "role": "system", "content": f"Please summarize the following conversation for a chat topic.\nNo more than 16 characters.\nNo special characters.\nReply in {language}."},
+                        { "role": "system", "content": f"Please summarize the following conversation for a chat topic.\nNo more than 16 characters.\nNo special characters.\nReply in user's language."},
                         { "role": "user", "content": f"User: {user_question}\nAssistant: {ai_answer}"}
                     ]
                     response = self._single_query_at_once(history, temperature=0.0)
@@ -278,7 +278,7 @@ class OpenAIClient(BaseLLMModel):
                     logging.info(f"自动命名失败。{e}")
                     filename = user_question[:16] + ".json"
                 return self.rename_chat_history(filename, chatbot, user_name)
-            elif name_chat_method == i18n("第一次提问"):
+            elif name_chat_method == i18n("第一条提问"):
                 filename = user_question[:16] + ".json"
                 return self.rename_chat_history(filename, chatbot, user_name)
             else:

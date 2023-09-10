@@ -135,5 +135,10 @@
     "在线搜索": "onlinesökning",
     "关于": "om",
     "新对话 ": "Ny dialog ",
-    "搜索（支持正则）...": "Sök (stöd för reguljära uttryck)..."
+    "搜索（支持正则）...": "Sök (stöd för reguljära uttryck)...",
+
+    "对话命名方式": "Dialognamn",
+    "根据日期时间": "Enligt datum och tid",
+    "第一条提问": "Första frågan",
+    "模型自动总结（消耗tokens）": "Modellens automatiska sammanfattning (förbrukar tokens)"
 }

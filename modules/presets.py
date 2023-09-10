@@ -134,8 +134,8 @@ REPLY_LANGUAGES = [
 ]
 
 HISTORY_NAME_METHODS = [
-    i18n("根据时间"), 
-    i18n("第一次提问"), 
+    i18n("根据日期时间"), 
+    i18n("第一条提问"), 
     i18n("模型自动总结（消耗tokens）"),
 ]
 
