@@ -949,17 +949,61 @@ input:checked + .chatbot-input-more-span {
 #chuanhu-history-header {
     margin-top: 12px;
     height: 42px;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
+}
+#chuanhu-history-search-row {
+    gap: 0;
+    /* background:var(--input-background-fill); */
+    /* border-radius: var(--block-radius); */
+    justify-content: space-between;
+    display: flex;
+}
+#history-search-tb {
+    background:var(--input-background-fill);
+    border-radius: var(--block-radius);
+}
+#history-search-tb > label::before {
+    content: url("data:image/svg+xml,%3Csvg fill='gray' fill-opacity='0.64' width='18px' height='18px' viewBox='0 0 18.0938 18.2695' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cpath d='M0 7.45312C0 11.5664 3.33984 14.8945 7.45312 14.8945C9.03516 14.8945 10.4883 14.4023 11.6953 13.5586L16.0547 17.9297C16.3008 18.1641 16.6055 18.2695 16.9219 18.2695C17.6016 18.2695 18.0938 17.7539 18.0938 17.0742C18.0938 16.7461 17.9648 16.4531 17.7656 16.2305L13.4297 11.8828C14.3555 10.6406 14.8945 9.11719 14.8945 7.45312C14.8945 3.33984 11.5664 0 7.45312 0C3.33984 0 0 3.33984 0 7.45312ZM1.80469 7.45312C1.80469 4.32422 4.32422 1.80469 7.45312 1.80469C10.5703 1.80469 13.1016 4.32422 13.1016 7.45312C13.1016 10.5703 10.5703 13.1016 7.45312 13.1016C4.32422 13.1016 1.80469 10.5703 1.80469 7.45312Z'/%3E%3C/g%3E%3C/svg%3E");
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+    padding: 3px 0 3px 3px;
+    left: 7px;
+}
+#history-search-tb textarea {
+    width: calc(100% - 32px);
+    margin-left: 32px;
+    padding-left: 6px;
+    box-shadow: none;
 }
 #chuanhu-history-body {
-    height: calc(100% - 60px);
+    height: calc(100% - 66px);
     overflow-y: auto;
     overflow-x: hidden;
     padding-bottom: 6px;
 }
-.gr-squared-btn-col {
-    max-width: 39px;
+#gr-history-header-btns {
+    max-height: 42px;
+    gap: 4px;
+    display: flex;
+    justify-content: end;
+    align-content: center;
+    flex-direction: row;
+    max-width: 52px;
+    margin-inline: 8px;
 }
+#gr-history-header-btns button {
+    box-shadow: none;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    width: 24px;
+    display: flex;
+}
+
 #chuanhu-menu-footer {
     position: absolute;
     bottom: 0;
@@ -1079,8 +1123,11 @@ input:checked + .chatbot-input-more-span {
 .icon-need-hover {
     opacity: 0.64;
 }
-button:hover .icon-need-hover {
+button:hover .icon-need-hover, button:hover.icon-need-hover {
     opacity: 0.85;
+}
+button:active .icon-need-hover, button:active.icon-need-hover {
+    opacity: 1;
 }
 /* .main-body {
     flex-wrap: nowrap;

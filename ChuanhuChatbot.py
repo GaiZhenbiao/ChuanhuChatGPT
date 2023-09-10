@@ -62,14 +62,15 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             with gr.Column(elem_id="chuanhu-history"):
                 with gr.Box():
                     with gr.Row(elem_id="chuanhu-history-header"):
-                        with gr.Column(min_width=150, scale=2):
-                            historySearchTextbox = gr.Textbox(show_label=False, container=False, placeholder=i18n(
-                                "搜索（支持正则）..."), lines=1, elem_id="history-search-tb")
-                        with gr.Column(min_width=42, scale=1, elem_classes="gr-squared-btn-col"):
-                            uploadFileBtn = gr.UploadButton(
-                                interactive=True, label=i18n("⏏️"), file_types=[".json"])
-                        with gr.Column(min_width=42, scale=1, elem_classes="gr-squared-btn-col"):
-                            historyRefreshBtn = gr.Button(i18n("🔄"))
+                        with gr.Row(elem_id="chuanhu-history-search-row"):
+                            with gr.Column(min_width=150, scale=2):
+                                historySearchTextbox = gr.Textbox(show_label=False, container=False, placeholder=i18n(
+                                    "搜索（支持正则）..."), lines=1, elem_id="history-search-tb")
+                            with gr.Column(min_width=52, scale=1, elem_id="gr-history-header-btns"):
+                                uploadFileBtn = gr.UploadButton(
+                                    interactive=True, label="", file_types=[".json"], elem_id="gr-history-upload-btn")
+                                historyRefreshBtn = gr.Button("", elem_id="gr-history-refresh-btn")
+                            
 
                     with gr.Row(elem_id="chuanhu-history-body"):
                         with gr.Column(scale=6, elem_id="history-select-wrap"):

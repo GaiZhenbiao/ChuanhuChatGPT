@@ -101,6 +101,7 @@ function initialize() {
     adjustDarkMode();
     adjustSide();
     setChatList();
+    setChatListHeader();
     setLoclize();
     selectHistory();
     // setChatbotHeight();
