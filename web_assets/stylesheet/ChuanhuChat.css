@@ -328,6 +328,7 @@ body.popup-open {
     padding: 0;
     position: relative;
     width: auto;
+    color: var(--body-text-color-subdued);
 }
 #chatbot-header .gradio-dropdown > label > .wrap {
     background: none;
@@ -339,7 +340,7 @@ body.popup-open {
 #chatbot-header .gradio-dropdown > label > .wrap input {
     font-weight: bold;
 }
-#chatbot-header .gradio-dropdown > label::before {
+#chatbot-header #model-select-dropdown > label::before {
     content: "";
     background: var(--primary-600);
     height: 12px;
