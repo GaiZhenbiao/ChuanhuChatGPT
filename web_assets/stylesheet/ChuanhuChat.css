@@ -1065,10 +1065,10 @@ input:checked + .chatbot-input-more-span {
 .show-on-outdated {
     display: none;
 }
-.outdated .show-on-latest {
+.is-outdated .show-on-latest {
     display: none;
 }
-.outdated .show-on-outdated {
+.is-outdated .show-on-outdated {
     display: block;
 }
 

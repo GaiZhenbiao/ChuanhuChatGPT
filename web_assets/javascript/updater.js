@@ -60,6 +60,7 @@ async function updateLatestVersion() {
     
     const versionTime = document.getElementById('version-time').innerText;
     const localVersionTime = versionTime !== "unknown" ? (new Date(versionTime)).getTime() : 0;
+    disableUpdateBtns();
     updateInfoGotten = true; //无论成功与否都只执行一次，否则容易api超限...
     try {
         const data = await getLatestRelease();
@@ -77,6 +78,7 @@ async function updateLatestVersion() {
                 if (!isInIframe) openUpdateToast();
                 gradioApp().classList.add('is-outdated');
             }
+            enableUpdateBtns();
         } else { //如果当前版本号获取失败，使用时间比较
             const latestVersionTime = (new Date(data.created_at)).getTime();
             if (latestVersionTime) {
@@ -107,8 +109,10 @@ async function updateLatestVersion() {
         }
         currentTime = new Date().getTime();
         localStorage.setItem('lastCheckTime', currentTime);
+        disableUpdateBtn_enableCancelBtn()
     } catch (error) {
         console.error(error);
+        disableUpdateBtn_enableCancelBtn()
     }
 }
 
@@ -143,7 +147,7 @@ function openUpdateToast() {
     showMask("update-toast");
 }
 function closeUpdateToast() {
-    updateToast.style.setProperty('top', '-500px');
+    updateToast.style.setProperty('top', '-600px');
     showingUpdateInfo = false;
     if (updatingInfoElement.classList.contains('hideK') === false) {
         updatingInfoElement.classList.add('hideK');

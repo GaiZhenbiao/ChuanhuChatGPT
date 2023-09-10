@@ -33,7 +33,7 @@
 #toast-update {
     position: fixed;
     display: flex;
-    top: -500px;
+    top: -600px;
     width: 100%;
     justify-content: center;
     z-index: var(--layer-top);
@@ -65,10 +65,11 @@
 #release-note-wrap {
     width: 100%;
     max-width: 400px;
-    height: 120px;
+    height: 240px;
     border: solid 1px var(--border-color-primary);
-    overflow: auto;
-    padding: 0 8px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px;
 }
 #release-note-wrap.hideK {
     display: none;
