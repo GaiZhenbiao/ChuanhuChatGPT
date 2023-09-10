@@ -228,7 +228,7 @@ class OpenAIClient(BaseLLMModel):
         ret = super().set_key(new_access_key)
         self._refresh_header()
         return ret
-    
+
     # def auto_name_chat_history(self, user_question, chatbot, user_name):
     #     return super().auto_name_chat_history(user_question, chatbot, user_name)
 
@@ -583,8 +583,7 @@ def get_model(
             logging.info(msg)
             lora_selector_visibility = True
             if os.path.isdir("lora"):
-                lora_choices = get_file_names_dropdown_by_pinyin(
-                    "lora", filetypes=[""])
+                get_file_names_by_pinyin("lora", filetypes=[""])
             lora_choices = ["No LoRA"] + lora_choices
         elif model_type == ModelType.LLaMA and lora_model_path != "":
             logging.info(f"正在加载LLaMA模型: {model_name} + {lora_model_path}")
