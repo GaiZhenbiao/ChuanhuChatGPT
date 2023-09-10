@@ -663,11 +663,11 @@ input:checked + .chatbot-input-more-span {
     box-shadow: unset;
     overflow: hidden;
 } */
-.chuanhu-history-panel {
+/* .chuanhu-history-panel {
     height: 500px;
     overflow: auto;
     box-shadow: var(--shadow-drop-lg);
-}
+} */
 
 #chuanhu-popup > .gradio-box {
     height: 100%;
@@ -933,15 +933,33 @@ input:checked + .chatbot-input-more-span {
 } */
 
 #chuanhu-history {
-    height: calc(100*var(--vh) - 65px - 61px);
-    height: calc(100*var(--vh) - 65px - calc(36px + 12px + max(12px, env(safe-area-inset-bottom)) + 1px ));
-    overflow-y: auto;
+    max-height: calc(100*var(--vh) - 65px - 61px);
+    max-height: calc(100*var(--vh) - 65px - calc(36px + 12px + max(12px, env(safe-area-inset-bottom)) + 1px ));
+    /* overflow-y: auto; */
 }
 #chuanhu-history > div {
     border-radius: 0;
     background: none;
+    height: 100%;
+    padding: 0;
 }
-
+#chuanhu-history > div > div {
+    padding-inline: 12px;
+}
+#chuanhu-history-header {
+    margin-top: 12px;
+    height: 42px;
+    margin-bottom: 6px;
+}
+#chuanhu-history-body {
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 6px;
+}
+.gr-squared-btn-col {
+    max-width: 39px;
+}
 #chuanhu-menu-footer {
     position: absolute;
     bottom: 0;
@@ -1036,11 +1054,11 @@ input:checked + .chatbot-input-more-span {
 }
 
 
-#history-select-wrap {
+/* #history-select-wrap {
     height: 600px;
     overflow: auto;
     overflow-x: hidden;
-}
+} */
 
 .chat-selected-btns {
     height: 18px;

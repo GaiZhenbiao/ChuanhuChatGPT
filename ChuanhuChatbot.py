@@ -59,11 +59,19 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     with gr.Row(equal_height=True, elem_id="chuanhu-body"):
 
         with gr.Column(elem_id="menu-area"):
-            with gr.Row(elem_id="chuanhu-history"):
-                with gr.Column():
-                    historySearchTextbox = gr.Textbox(show_label=False, placeholder=i18n(
-                        "搜索（支持正则）..."), lines=1, elem_id="history-search-tb")
-                    with gr.Row():
+            with gr.Column(elem_id="chuanhu-history"):
+                with gr.Box():
+                    with gr.Row(elem_id="chuanhu-history-header"):
+                        with gr.Column(min_width=150, scale=2):
+                            historySearchTextbox = gr.Textbox(show_label=False, container=False, placeholder=i18n(
+                                "搜索（支持正则）..."), lines=1, elem_id="history-search-tb")
+                        with gr.Column(min_width=42, scale=1, elem_classes="gr-squared-btn-col"):
+                            uploadFileBtn = gr.UploadButton(
+                                interactive=True, label=i18n("⏏️"), file_types=[".json"])
+                        with gr.Column(min_width=42, scale=1, elem_classes="gr-squared-btn-col"):
+                            historyRefreshBtn = gr.Button(i18n("🔄"))
+
+                    with gr.Row(elem_id="chuanhu-history-body"):
                         with gr.Column(scale=6, elem_id="history-select-wrap"):
                             historySelectList = gr.Radio(
                                 label=i18n("从列表中加载对话"),
@@ -73,9 +81,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 container=False,
                                 elem_id="history-select-dropdown"
                             )
-                        with gr.Row():
-                            with gr.Column(min_width=42, scale=1):
-                                historyRefreshBtn = gr.Button(i18n("🔄"))
+                        with gr.Row(visible=False):
                             with gr.Column(min_width=42, scale=1):
                                 historyDeleteBtn = gr.Button(
                                     i18n("🗑️"), elem_id="gr-history-delete-btn")
@@ -85,7 +91,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             with gr.Column(min_width=42, scale=1):
                                 historyMarkdownDownloadBtn = gr.Button(
                                     i18n("⤵️"), elem_id="gr-history-mardown-download-btn")
-                    with gr.Row():
+                    with gr.Row(visible=False):
                         with gr.Column(scale=6):
                             saveFileName = gr.Textbox(
                                 show_label=True,
@@ -100,10 +106,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 i18n("💾 Rename Chat"), elem_id="gr-history-save-btn")
                             exportMarkdownBtn = gr.Button(
                                 i18n("📝 Export as Markdown"), elem_id="gr-markdown-export-btn")
-                    with gr.Row():
-                        with gr.Column():
-                            uploadFileBtn = gr.UploadButton(
-                                interactive=True, label=i18n("Upload Chat History (.json)"), file_types=[".json"])
 
             with gr.Column(elem_id="chuanhu-menu-footer"):
                 with gr.Row(elem_id="chuanhu-func-nav"):
