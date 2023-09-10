@@ -314,9 +314,15 @@ body.popup-open {
     max-width: 14em;
     background: none;
     height: 60px;
+    overflow: unset !important;
 }
 #chatbot-header .gradio-dropdown > label {
     display: flex;
+}
+#chatbot-header .gradio-dropdown ul.options {
+    top: 60px !important;
+    left: 0 !important;
+    position: absolute !important;
 }
 #chatbot-header .gradio-dropdown > label > span[data-testid="block-info"] {
     height: unset;
