@@ -28,3 +28,4 @@ tabulate
 ujson
 python-docx
 websocket_client
+pydantic==1.10.8
