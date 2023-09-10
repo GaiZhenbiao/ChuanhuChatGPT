@@ -71,6 +71,9 @@ def set_system_prompt(current_model, *args):
 def rename_chat_history(current_model, *args):
     return current_model.rename_chat_history(*args)
 
+def auto_name_chat_history(current_model, *args):
+    return current_model.auto_name_chat_history(*args)
+
 def export_markdown(current_model, *args):
     return current_model.export_markdown(*args)
 

@@ -671,6 +671,15 @@ class BaseLLMModel:
         self.history_file_path = filename
         save_file(filename, self.system_prompt, self.history, chatbot, user_name)
         return init_history_list(user_name)
+    
+    def auto_name_chat_history(self, user_question, chatbot, user_name):
+        if chatbot == []:
+            filename = user_question[:12] + ".json"
+            return self.rename_chat_history(filename, chatbot, user_name)
+        else:
+            return gr.update()
+
+
 
     def auto_save(self, chatbot):
         save_file(self.history_file_path, self.system_prompt,
