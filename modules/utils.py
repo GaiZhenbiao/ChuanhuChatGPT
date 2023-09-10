@@ -339,6 +339,8 @@ def save_file(filename, system, history, chatbot, user_name):
         filename = filename[:-3]
     if not filename.endswith(".json") and not filename.endswith(".md"):
         filename += ".json"
+    if filename == ".json":
+        raise Exception("文件名不能为空")
 
     json_s = {"system": system, "history": history, "chatbot": chatbot}
     if "/" in filename or "\\" in filename:
@@ -367,11 +369,8 @@ def sorted_by_last_modified_time(list, dir):
 def get_file_names_by_type(dir, filetypes=[".json"]):
     logging.debug(f"获取文件名列表，目录为{dir}，文件类型为{filetypes}")
     files = []
-    try:
-        for type in filetypes:
-            files += [f for f in os.listdir(dir) if f.endswith(type)]
-    except FileNotFoundError:
-        files = [""]
+    for type in filetypes:
+        files += [f for f in os.listdir(dir) if f.endswith(type)]
     logging.debug(f"files are:{files}")
     return files
 
@@ -397,11 +396,15 @@ def get_file_names_by_last_modified_time(dir, filetypes=[".json"]):
 def get_history_names(user_name=""):
     logging.debug(f"从用户 {user_name} 中获取历史记录文件名列表")
     if user_name == "" and hide_history_when_not_logged_in:
-        return [""]
+        return []
     else:
         history_files = get_file_names_by_last_modified_time(os.path.join(HISTORY_DIR, user_name))
         history_files = [f[:f.rfind(".")] for f in history_files]
         return history_files
+
+def get_first_history_name(user_name=""):
+    history_names = get_history_names(user_name)
+    return history_names[0] if history_names else None
 
 def get_history_list(user_name=""):
     history_names = get_history_names(user_name)
@@ -657,10 +660,10 @@ def toggle_like_btn_visibility(selected_model_name):
     else:
         return gr.update(visible=False)
 
-def new_auto_history_filename(dirname):
-    latest_file = get_file_names_by_last_modified_time(dirname)[0]
+def new_auto_history_filename(username):
+    latest_file = get_first_history_name(username)
     if latest_file:
-        with open(os.path.join(dirname, latest_file), 'r', encoding="utf-8") as f:
+        with open(os.path.join(HISTORY_DIR, username, latest_file + ".json"), 'r', encoding="utf-8") as f:
             if len(f.read()) == 0:
                 return latest_file
     now = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
@@ -669,9 +672,9 @@ def new_auto_history_filename(dirname):
 def get_history_filepath(username):
     dirname = os.path.join(HISTORY_DIR, username)
     os.makedirs(dirname, exist_ok=True)
-    latest_file = get_file_names_by_last_modified_time(dirname)[0]
+    latest_file = get_first_history_name(username)
     if not latest_file:
-        latest_file = new_auto_history_filename(dirname)
+        latest_file = new_auto_history_filename(username)
 
     latest_file = os.path.join(dirname, latest_file)
     return latest_file
