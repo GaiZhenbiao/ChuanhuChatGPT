@@ -257,17 +257,13 @@ class OpenAIClient(BaseLLMModel):
 
     
     def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, language):
-        if len(chatbot) == 1:
-            # 用户问题示例”<div class="user-message">你好呀</div>“
-            user_question = chatbot[0][0][26:-6]
+        if len(self.history) == 2:
+            user_question = self.history[0]["content"]
             if name_chat_method == i18n("模型自动总结（消耗tokens）"):
-                # ai回答示例”<div class="raw-message hideM"><pre>你好！有什么我可以帮助你的吗？</pre></div><div class="md-message">\n\n你好！有什么我可以帮助你的吗？\n</div>“
-                pattern = r'<div class="raw-message hideM"><pre>(.*?)</pre></div><div class="md-message">'
-                match = re.search(pattern, chatbot[0][1])
-                ai_answer = match.group(1)
+                ai_answer = self.history[1]["content"]
                 try:
                     history = [
-                        { "role": "system", "content": f"Please summarize the following conversation for a chat topic.\nNo more than 16 characters.\nNo special characters.\nReply in user's language."},
+                        { "role": "system", "content": SUMMARY_CHAT_SYSTEM_PROMPT},
                         { "role": "user", "content": f"User: {user_question}\nAssistant: {ai_answer}"}
                     ]
                     response = self._single_query_at_once(history, temperature=0.0)

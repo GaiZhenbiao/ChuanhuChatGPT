@@ -184,6 +184,15 @@ SUMMARIZE_PROMPT = """Write a concise summary of the following:
 
 CONCISE SUMMARY IN 中文:"""
 
+SUMMARY_CHAT_SYSTEM_PROMPT = """\
+Please summarize the following conversation for a chat topic.
+No more than 16 characters.
+No special characters.
+Punctuation mark is banned.
+Not including '.' ':' '?' '!' '“' '*' '<' '>'.
+Reply in user's language.
+"""
+
 ALREADY_CONVERTED_MARK = "<!-- ALREADY CONVERTED BY PARSER. -->"
 START_OF_OUTPUT_MARK = "<!-- SOO IN MESSAGE -->"
 END_OF_OUTPUT_MARK = "<!-- EOO IN MESSAGE -->"
