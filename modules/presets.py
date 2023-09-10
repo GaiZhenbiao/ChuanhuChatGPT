@@ -36,6 +36,7 @@ BILLING_NOT_APPLICABLE_MSG = i18n("账单信息不适用") # 本地运行的模�
 TIMEOUT_STREAMING = 60  # 流式对话时的超时时间
 TIMEOUT_ALL = 200  # 非流式对话时的超时时间
 ENABLE_STREAMING_OPTION = True  # 是否启用选择选择是否实时显示回答的勾选框
+ENABLE_LLM_NAME_CHAT_OPTION = True  # 是否启用选择是否使用LLM模型的勾选框
 HIDE_MY_KEY = False  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
 CONCURRENT_COUNT = 100 # 允许同时使用的用户数量
 
@@ -130,6 +131,12 @@ REPLY_LANGUAGES = [
     "Deutsch",
     "한국어",
     "跟随问题语言（不稳定）"
+]
+
+HISTORY_NAME_METHODS = [
+    i18n("根据时间"), 
+    i18n("第一次提问"), 
+    i18n("模型自动总结（消耗tokens）"),
 ]
 
 

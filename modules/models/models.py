@@ -228,9 +228,63 @@ class OpenAIClient(BaseLLMModel):
         ret = super().set_key(new_access_key)
         self._refresh_header()
         return ret
+    
+    def _single_query_at_once(self, history, temperature=1.0):
+        timeout = TIMEOUT_ALL
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}",
+            "temperature": f"{temperature}",
+        }
+        payload = {
+            "model": self.model_name,
+            "messages": history,
+        }
+        # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
+        if shared.state.completion_url != COMPLETION_URL:
+            logging.debug(f"使用自定义API URL: {shared.state.completion_url}")
 
-    # def auto_name_chat_history(self, user_question, chatbot, user_name):
-    #     return super().auto_name_chat_history(user_question, chatbot, user_name)
+        with retrieve_proxy():
+            response = requests.post(
+                shared.state.completion_url,
+                headers=headers,
+                json=payload,
+                stream=False,
+                timeout=timeout,
+            )
+
+        return response
+
+    
+    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, language):
+        if len(chatbot) == 1:
+            # 用户问题示例”<div class="user-message">你好呀</div>“
+            user_question = chatbot[0][0][26:-6]
+            if name_chat_method == i18n("模型自动总结（消耗tokens）"):
+                # ai回答示例”<div class="raw-message hideM"><pre>你好！有什么我可以帮助你的吗？</pre></div><div class="md-message">\n\n你好！有什么我可以帮助你的吗？\n</div>“
+                pattern = r'<div class="raw-message hideM"><pre>(.*?)</pre></div><div class="md-message">'
+                match = re.search(pattern, chatbot[0][1])
+                ai_answer = match.group(1)
+                try:
+                    history = [
+                        { "role": "system", "content": f"Please summarize the following conversation for a chat topic.\nNo more than 16 characters.\nNo special characters.\nReply in {language}."},
+                        { "role": "user", "content": f"User: {user_question}\nAssistant: {ai_answer}"}
+                    ]
+                    response = self._single_query_at_once(history, temperature=0.0)
+                    response = json.loads(response.text)
+                    content = response["choices"][0]["message"]["content"]
+                    filename = content + ".json"
+                except Exception as e:
+                    logging.info(f"自动命名失败。{e}")
+                    filename = user_question[:16] + ".json"
+                return self.rename_chat_history(filename, chatbot, user_name)
+            elif name_chat_method == i18n("第一次提问"):
+                filename = user_question[:16] + ".json"
+                return self.rename_chat_history(filename, chatbot, user_name)
+            else:
+                return gr.update()
+        else:
+            return gr.update()
 
 
 class ChatGLM_Client(BaseLLMModel):

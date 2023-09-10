@@ -371,6 +371,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         use_streaming_checkbox = gr.Checkbox(
                             label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
                         )
+                        name_chat_method = gr.Dropdown(
+                            label=i18n("对话命名方式"), 
+                            choices=HISTORY_NAME_METHODS, 
+                            multiselect=False,
+                            interactive=True,
+                            value=HISTORY_NAME_METHODS[0], 
+                        )
                         single_turn_checkbox = gr.Checkbox(label=i18n(
                             "单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb", visible=False)
                         # checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
@@ -544,20 +551,27 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         fn=get_history_list, inputs=[user_name], outputs=[historySelectList]
     )
 
+    auto_name_chat_history_args = dict(
+        fn=auto_name_chat_history,
+        inputs=[current_model, name_chat_method, user_question, chatbot, user_name, language_select_dropdown],
+        outputs=[historySelectList],
+        show_progress=False,
+    )
+
     # Chatbot
     cancelBtn.click(interrupt, [current_model], [])
 
     user_input.submit(**transfer_input_args).then(**
-                                                  chatgpt_predict_args).then(**end_outputing_args)
+                                                  chatgpt_predict_args).then(**end_outputing_args).then(**auto_name_chat_history_args)
     user_input.submit(**get_usage_args)
 
-    user_input.submit(auto_name_chat_history, [current_model, user_question, chatbot, user_name], [historySelectList], show_progress=False)
+    # user_input.submit(auto_name_chat_history, [current_model, user_question, chatbot, user_name], [historySelectList], show_progress=False)
 
     submitBtn.click(**transfer_input_args).then(**chatgpt_predict_args,
-                                                api_name="predict").then(**end_outputing_args)
+                                                api_name="predict").then(**end_outputing_args).then(**auto_name_chat_history_args)
     submitBtn.click(**get_usage_args)
 
-    submitBtn.click(auto_name_chat_history, [current_model, user_question, chatbot, user_name], [historySelectList], show_progress=False)
+    # submitBtn.click(auto_name_chat_history, [current_model, user_question, chatbot, user_name], [historySelectList], show_progress=False)
 
     index_files.change(handle_file_upload, [current_model, index_files, chatbot, language_select_dropdown], [
                        index_files, chatbot, status_display])

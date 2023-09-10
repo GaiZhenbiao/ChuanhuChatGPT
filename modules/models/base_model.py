@@ -679,8 +679,9 @@ class BaseLLMModel:
         save_file(filename, self.system_prompt, self.history, chatbot, user_name)
         return init_history_list(user_name)
 
-    def auto_name_chat_history(self, user_question, chatbot, user_name):
-        if chatbot == []:
+    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, language):
+        if len(chatbot) == 1:
+            user_question = chatbot[0][0][26:-6]
             filename = user_question[:16] + ".json"
             return self.rename_chat_history(filename, chatbot, user_name)
         else:
