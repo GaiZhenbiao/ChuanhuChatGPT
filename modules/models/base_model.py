@@ -208,7 +208,7 @@ class BaseLLMModel:
         self.api_key = None
         self.need_api_key = False
         self.single_turn = False
-        self.history_file_path = get_history_names(user)[0]
+        self.history_file_path = get_first_history_name(user)
 
         self.temperature = temperature
         self.top_p = top_p
@@ -625,8 +625,7 @@ class BaseLLMModel:
         self.history = []
         self.all_token_counts = []
         self.interrupted = False
-        self.history_file_path = new_auto_history_filename(
-            os.path.join(HISTORY_DIR, self.user_identifier))
+        self.history_file_path = new_auto_history_filename(self.user_identifier)
         history_name = self.history_file_path[:-5]
         choices = [history_name] + get_history_names(self.user_identifier)
         return [], self.token_message([0]), gr.Radio.update(choices=choices, value=history_name)
@@ -671,7 +670,7 @@ class BaseLLMModel:
         self.history_file_path = filename
         save_file(filename, self.system_prompt, self.history, chatbot, user_name)
         return init_history_list(user_name)
-    
+
     def auto_name_chat_history(self, user_question, chatbot, user_name):
         if chatbot == []:
             filename = user_question[:12] + ".json"
@@ -751,7 +750,12 @@ class BaseLLMModel:
             return i18n("对话历史")+filename+i18n("已经被删除啦"), get_history_list(user_name), []
 
     def auto_load(self):
-        self.history_file_path = get_history_filepath(self.user_identifier)
+        filepath = get_history_filepath(self.user_identifier)
+        if not filepath:
+            self.history_file_path = new_auto_history_filename(
+                self.user_identifier)
+        else:
+            self.history_file_path = filepath
         filename, system_prompt, chatbot = self.load_chat_history()
         filename = filename[:-5]
         return filename, system_prompt, chatbot
