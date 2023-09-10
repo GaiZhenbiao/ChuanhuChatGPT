@@ -27,7 +27,8 @@ __all__ = [
     "latex_delimiters_set",
     "hide_history_when_not_logged_in",
     "default_chuanhu_assistant_model",
-    "show_api_billing"
+    "show_api_billing",
+    "chat_name_method_index",
 ]
 
 # 添加一个统一的config文件，避免文件过多造成的疑惑（优先级最低）
@@ -50,6 +51,7 @@ hide_history_when_not_logged_in = config.get(
 check_update = config.get("check_update", True)
 show_api_billing = config.get("show_api_billing", False)
 show_api_billing = bool(os.environ.get("SHOW_API_BILLING", show_api_billing))
+chat_name_method_index = config.get("chat_name_method_index", 0)
 
 if os.path.exists("api_key.txt"):
     logging.info("检测到api_key.txt文件，正在进行迁移...")

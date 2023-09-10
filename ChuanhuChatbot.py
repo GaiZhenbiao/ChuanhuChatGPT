@@ -376,7 +376,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             choices=HISTORY_NAME_METHODS, 
                             multiselect=False,
                             interactive=True,
-                            value=HISTORY_NAME_METHODS[0], 
+                            value=HISTORY_NAME_METHODS[chat_name_method_index], 
                         )
                         single_turn_checkbox = gr.Checkbox(label=i18n(
                             "单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb", visible=False)
