@@ -134,5 +134,6 @@
     "在工具箱中管理知识库文件": "Manage knowledge base files in the toolbox",
     "在线搜索": "Web search",
     "关于": "About",
-    "新对话 ": "New Chat "
+    "新对话 ": "New Chat ",
+    "搜索（支持正则）...": "Search (supports regex)..."
 }
