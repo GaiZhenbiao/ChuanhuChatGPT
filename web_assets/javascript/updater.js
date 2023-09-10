@@ -60,6 +60,7 @@ async function updateLatestVersion() {
     
     const versionTime = document.getElementById('version-time').innerText;
     const localVersionTime = versionTime !== "unknown" ? (new Date(versionTime)).getTime() : 0;
+    disableUpdateBtns();
     updateInfoGotten = true; //无论成功与否都只执行一次，否则容易api超限...
     try {
         const data = await getLatestRelease();
@@ -75,7 +76,9 @@ async function updateLatestVersion() {
                 latestVersionElement.textContent = latestVersion;
                 console.log(`New version ${latestVersion} found!`);
                 if (!isInIframe) openUpdateToast();
+                gradioApp().classList.add('is-outdated');
             }
+            enableUpdateBtns();
         } else { //如果当前版本号获取失败，使用时间比较
             const latestVersionTime = (new Date(data.created_at)).getTime();
             if (latestVersionTime) {
@@ -88,6 +91,7 @@ async function updateLatestVersion() {
                     disableUpdateBtn_enableCancelBtn();
                     localStorage.setItem('isLatestVersion', 'false');
                     isLatestVersion = false;
+                    gradioApp().classList.add('is-outdated');
                 } else if (localVersionTime < latestVersionTime) {
                     const infoMessage = `Local version check failed, it seems to be a local rivision. \n\nBut latest revision is ${latestVersionInfo}. Try ${manualUpdateInfo}.`
                     versionInfoElement.innerHTML = marked.parse(infoMessage, {mangle: false, headerIds: false});
@@ -96,15 +100,19 @@ async function updateLatestVersion() {
                     // if (!isInIframe) openUpdateToast();
                     localStorage.setItem('isLatestVersion', 'false');
                     isLatestVersion = false;
+                    gradioApp().classList.add('is-outdated');
                 } else {
                     noUpdate("Local version check failed, it seems to be a local rivision. <br>But your revision is newer than the latest release.");
+                    gradioApp().classList.add('is-outdated');
                 }
             }
         }
         currentTime = new Date().getTime();
         localStorage.setItem('lastCheckTime', currentTime);
+        disableUpdateBtn_enableCancelBtn()
     } catch (error) {
         console.error(error);
+        disableUpdateBtn_enableCancelBtn()
     }
 }
 
@@ -135,14 +143,16 @@ function cancelUpdate() {
 }
 function openUpdateToast() {
     showingUpdateInfo = true;
-    setUpdateWindowHeight();
+    updateToast.style.setProperty('top', '0px');
+    showMask("update-toast");
 }
 function closeUpdateToast() {
-    updateToast.style.setProperty('top', '-500px');
+    updateToast.style.setProperty('top', '-600px');
     showingUpdateInfo = false;
     if (updatingInfoElement.classList.contains('hideK') === false) {
         updatingInfoElement.classList.add('hideK');
     }
+    document.querySelector('.chuanhu-mask')?.remove();
 }
 function manualCheckUpdate() {
     openUpdateToast();
@@ -197,10 +207,10 @@ function disableUpdateBtn_enableCancelBtn() {
     document.querySelector('#cancel-button.btn-update').disabled = false;
 }
 
-function setUpdateWindowHeight() {
-    if (!showingUpdateInfo) {return;}
-    const scrollPosition = window.scrollY;
-    // const originalTop = updateToast.style.getPropertyValue('top');
-    const resultTop = scrollPosition - 20 + 'px';
-    updateToast.style.setProperty('top', resultTop);
-}
+// function setUpdateWindowHeight() {
+//     if (!showingUpdateInfo) {return;}
+//     const scrollPosition = window.scrollY;
+//     // const originalTop = updateToast.style.getPropertyValue('top');
+//     const resultTop = scrollPosition - 20 + 'px';
+//     updateToast.style.setProperty('top', resultTop);
+// }

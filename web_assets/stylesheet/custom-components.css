@@ -2,7 +2,9 @@
 /* user-info */
 #user-info.block {
     white-space: nowrap;
-    position: absolute; left: 8em; top: .8em;
+    position: absolute;
+    right: max(32px, env(safe-area-inset-right));
+    top: 16px;
     z-index: var(--layer-2);
     box-shadow: var(--block-shadow);
     border: none!important; border-radius: var(--block-label-radius);
@@ -11,6 +13,7 @@
     font-size: var(--block-label-text-size); line-height: var(--line-sm);
     width: auto; max-height: 30px!important;
     opacity: 1;
+    z-index: 1000;
     transition: opacity 0.3s ease-in-out;
 }
 #user-info.block .wrap {
@@ -28,9 +31,9 @@
 
 /* updater */
 #toast-update {
-    position: absolute;
+    position: fixed;
     display: flex;
-    top: -500px;
+    top: -600px;
     width: 100%;
     justify-content: center;
     z-index: var(--layer-top);
@@ -62,10 +65,11 @@
 #release-note-wrap {
     width: 100%;
     max-width: 400px;
-    height: 120px;
+    height: 240px;
     border: solid 1px var(--border-color-primary);
-    overflow: auto;
-    padding: 0 8px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px;
 }
 #release-note-wrap.hideK {
     display: none;
@@ -203,6 +207,7 @@ input:checked + .apSlider::before {
     position: relative !important;
     border: none !important;
     outline: none;
+    margin: 0;
     width: 40px !important;
     height: 22px !important;
     border-radius: 11px !important;
@@ -238,3 +243,126 @@ input:checked + .apSlider::before {
     left: 18px;
 }
 
+
+/* .scroll-shadow-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -6px;
+    width: 6px;
+    height: 100%;
+    box-shadow: 6px 0 10px rgba(0, 0, 0, 0.36);
+    z-index: 1;
+}
+
+.scroll-shadow-right::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -6px;
+    width: 6px;
+    height: 100%;
+    box-shadow: -6px 0 10px rgba(0, 0, 0, 0.36);
+    z-index: 1;
+} */
+
+
+.hr-line hr{
+    margin: 0 !important;
+}
+
+.tooltip-toggle {
+    cursor: help;
+    position: relative;
+}
+
+.tooltip-toggle::before {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: calc(50% - 60px + 0.5rem);
+    background-color: #393939;
+    border-radius: 5px;
+    color: #fff;
+    content: attr(aria-label);
+    padding: 0.5rem;
+    text-transform: none;
+    transition: all 0.5s ease;
+    /* height: fit-content; */
+    white-space: normal;
+    width: 120px;
+}
+.tooltip-toggle::after {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #393939;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+    /* margin-left: -5px; */
+    width: 0;
+}
+
+
+.tooltip-toggle::before,
+.tooltip-toggle::after {
+    color: #efefef;
+    /* font-family: monospace; */
+    /* font-size: 16px; */
+    opacity: 0;
+    pointer-events: none;
+    text-align: center;
+}
+
+.tooltip-toggle:focus::before,
+.tooltip-toggle:focus::after,
+.tooltip-toggle:hover::before,
+.tooltip-toggle:hover::after {
+    opacity: 1;
+    transition: all 0.5s ease;
+}
+
+
+.nav-item-dropdown, .dropdown-trigger {
+    position: relative;
+}
+.nav-item-dropdown:hover>.dropdown-menu {
+    display: block;
+    opacity: 1;
+}
+.dropdown-trigger:focus+.dropdown-menu {
+    display: block;
+    opacity: 1;
+}
+.dropdown-menu {
+    background-color: var(--chatbot-input-more-background-solid-color);
+    display: inline-block;
+    /* text-align: right; */
+    position: absolute;
+    /* top: 2.5rem; */
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    font-size: small;
+    width: auto;
+    border-radius: 5px;
+    box-shadow: var(--shadow-sm);
+}
+
+.dropdown-menu-item {
+    cursor: pointer;
+    padding: 8px 12px;
+    text-align: center;
+    white-space: nowrap;
+    margin: 0 !important;
+}
+.dropdown-menu-item button {
+    margin: 0 !important;
+}
+.dropdown-menu-item:hover {
+    background-color: var(--chatbot-input-more-background-mobilewidth-hover);
+}

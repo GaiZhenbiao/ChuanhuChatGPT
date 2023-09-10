@@ -1,25 +1,4 @@
 
-var gradioUploader = null;
-
-function testUpload(target) {
-    gradioUploader = gradioApp().querySelector("#upload-index-file > .center.flex");
-    let uploaderEvents = ["click", "drag", "dragend", "dragenter", "dragleave", "dragover", "dragstart", "drop"];
-    transEventListeners(target, gradioUploader, uploaderEvents);
-}
-
-
-function transEventListeners(target, source, events) {
-    events.forEach((sourceEvent) => {
-        target.addEventListener(sourceEvent, function (targetEvent) {
-            if(targetEvent.preventDefault) targetEvent.preventDefault();
-            if(targetEvent.stopPropagation) targetEvent.stopPropagation();
-
-            source.dispatchEvent(new Event(sourceEvent, {detail: targetEvent.detail}));
-            console.log(targetEvent.detail);
-        });
-    });
-}
-
 
 function isImgUrl(url) {
     const imageExtensions = /\.(jpg|jpeg|png|gif|bmp|webp)$/i;
@@ -35,6 +14,62 @@ function isImgUrl(url) {
 
     return false;
 }
+
+function downloadHistory(gradioUsername, historyname, format=".json") {
+    let fileUrl;
+    if (gradioUsername === null || gradioUsername.trim() === "") {
+        fileUrl = `/file=./history/${historyname}`;
+    } else {
+        fileUrl = `/file=./history/${gradioUsername}/${historyname}`;
+    }
+    downloadFile(fileUrl, historyname, format);
+}
+
+function downloadFile(fileUrl, filename = "", format = "", retryTimeout = 200, maxAttempts = 10) {
+
+    fileUrl = fileUrl + format;
+    filename = filename + format;
+
+    let attempts = 0;
+
+    async function tryDownload() {
+        if (attempts >= maxAttempts) {
+            console.error('Max attempts reached, download failed.');
+            alert('Download failed:' + filename);
+            return;
+        }
+        try {
+            const response = await fetch(fileUrl);
+            if (!response.ok) {
+                attempts++;
+                console.error("Error fetching file, retrying...");
+                setTimeout(tryDownload, retryTimeout);
+            } else {
+                response.blob()
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    })
+                    .catch(error => {
+                        console.error('Error downloading file:', error);
+                    });
+            }
+        } catch (error) {
+            attempts++;
+            setTimeout(tryDownload, retryTimeout);
+        }
+    }
+
+    tryDownload();
+}
+    
 
 
 /* NOTE: These reload functions are not used in the current version of the code.

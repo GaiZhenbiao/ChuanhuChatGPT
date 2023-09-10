@@ -228,6 +228,59 @@ class OpenAIClient(BaseLLMModel):
         ret = super().set_key(new_access_key)
         self._refresh_header()
         return ret
+    
+    def _single_query_at_once(self, history, temperature=1.0):
+        timeout = TIMEOUT_ALL
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}",
+            "temperature": f"{temperature}",
+        }
+        payload = {
+            "model": self.model_name,
+            "messages": history,
+        }
+        # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
+        if shared.state.completion_url != COMPLETION_URL:
+            logging.debug(f"使用自定义API URL: {shared.state.completion_url}")
+
+        with retrieve_proxy():
+            response = requests.post(
+                shared.state.completion_url,
+                headers=headers,
+                json=payload,
+                stream=False,
+                timeout=timeout,
+            )
+
+        return response
+
+    
+    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, language):
+        if len(self.history) == 2:
+            user_question = self.history[0]["content"]
+            if name_chat_method == i18n("模型自动总结（消耗tokens）"):
+                ai_answer = self.history[1]["content"]
+                try:
+                    history = [
+                        { "role": "system", "content": SUMMARY_CHAT_SYSTEM_PROMPT},
+                        { "role": "user", "content": f"User: {user_question}\nAssistant: {ai_answer}"}
+                    ]
+                    response = self._single_query_at_once(history, temperature=0.0)
+                    response = json.loads(response.text)
+                    content = response["choices"][0]["message"]["content"]
+                    filename = content + ".json"
+                except Exception as e:
+                    logging.info(f"自动命名失败。{e}")
+                    filename = user_question[:16] + ".json"
+                return self.rename_chat_history(filename, chatbot, user_name)
+            elif name_chat_method == i18n("第一条提问"):
+                filename = user_question[:16] + ".json"
+                return self.rename_chat_history(filename, chatbot, user_name)
+            else:
+                return gr.update()
+        else:
+            return gr.update()
 
 
 class ChatGLM_Client(BaseLLMModel):
@@ -580,8 +633,7 @@ def get_model(
             logging.info(msg)
             lora_selector_visibility = True
             if os.path.isdir("lora"):
-                lora_choices = get_file_names_dropdown_by_pinyin(
-                    "lora", filetypes=[""])
+                get_file_names_by_pinyin("lora", filetypes=[""])
             lora_choices = ["No LoRA"] + lora_choices
         elif model_type == ModelType.LLaMA and lora_model_path != "":
             logging.info(f"正在加载LLaMA模型: {model_name} + {lora_model_path}")

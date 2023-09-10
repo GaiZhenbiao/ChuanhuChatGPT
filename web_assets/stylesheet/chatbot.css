@@ -50,6 +50,43 @@ hr.append-display {
     padding: 0 4px;
 }
 
+/* 阻止generating时的border */
+#chuanhu-chatbot > .wrap {
+    border: none !important;
+}
+
+
+
+#chatbot-input-row {
+    align-items: end;
+    gap: 6px;
+}
+#chatbot-input-row .gradio-html {
+    min-width: 0;
+    max-width: 42px;
+    width: 42px;
+}
+#chatbot-input-tb-row {
+    gap: 0;
+    justify-content: end;
+    border-radius: 21px;
+    background: var(--chatbot-input-background-color);
+    box-shadow: var(--shadow-md);
+}
+#user-input-tb {
+    padding: 0 !important;
+    /* border: 1px solid rgba(167, 167, 167, 0.5) !important; */
+    /* border-radius: 21px !important; */
+}
+#user-input-tb textarea {
+    /* max-height: 110px; */
+    background: transparent;
+}
+#user-input-tb .wrap {
+    background: none !important;
+    border-radius: 21px !important;
+}
+
 /* 亮色（默认） */
 #chuanhu-chatbot {
     background-color: var(--chatbot-background-color-light) !important;
@@ -99,40 +136,61 @@ hr.append-display {
     justify-content: flex-end;
 }
 
+/* .message-row.has-message-btn-row{
+    padding-bottom: 19px !important;
+} */
+
 /* 屏幕宽度大于等于500px的设备 */
 /* update on 2023.4.8: 高度的细致调整已写入JavaScript */
 @media screen and (min-width: 500px) {
-    #chuanhu-chatbot {
-        height: calc(100vh - 200px);
+    /* #chuanhu-chatbot {
+        height: calc(100*var(--vh) - 200px);
     }
     #chuanhu-chatbot>.wrapper>.wrap {
-        max-height: calc(100vh - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
-    }
+        max-height: calc(100*var(--vh) - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+    } */
 }
 /* 屏幕宽度小于500px的设备 */
 @media screen and (max-width: 499px) {
-    #chuanhu-chatbot {
-        height: calc(100vh - 140px);
+    /* #chuanhu-chatbot {
+        height: calc(100*var(--vh) - 140px);
     }
     #chuanhu-chatbot>.wrapper>.wrap {
-        max-height: calc(100vh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
-    }
+        max-height: calc(100*var(--vh) - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+    } */
     [data-testid = "bot"] {
         max-width: calc(100% - 84px) !important;
     }
     [data-testid = "user"] {
         max-width: calc(100% - 84px) !important;
     }
-    .chatbot-avatar {
-        display: none;
+
+    #app-title {
+        transform: scale(0.95);
+        transform-origin: left center;
     }
     #app-title h1{
         letter-spacing: -1px; font-size: 22px;
     }
 }
 
+#chuanhu-chatbot {
+    height: calc(100*var(--vh) - 65px) !important;
+    border-radius: 0;
+}
 #chuanhu-chatbot>.wrapper>.wrap {
     overflow-x: hidden;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding-inline: 20px;
+    padding-top: 72px;
+    padding-bottom: 180px;
+}
+#chuanhu-chatbot>.wrapper>.wrap .message-wrap {
+    align-self: center;
+    width: 100%;
+    max-width: 1024px;
 }
 
 .message.user p {
@@ -173,8 +231,6 @@ hr.append-display {
     /* background-color: #E6E6E6 !important; */
     color: rgba(120, 120, 120, 0.64) !important;
     padding: 4px !important;
-    position: absolute;
-    right: -22px;
     cursor: pointer !important;
     transition: color .2s ease, background-color .2s ease;
 }
@@ -189,14 +245,58 @@ hr.append-display {
     outline: none;
 }
 
-.copy-bot-btn {
-    /* top: 18px; */
+.message-btn-column {
+    position: absolute;
+    right: -23px;
     bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-content: end;
+    gap: 2px;
+}
+
+.message-btn-row {
+    /* background: red; */
+    width: 100%;
+    height: 19px;
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+}
+.message-btn-row-leading, .message-btn-row-trailing {
+    display: inline-flex;
+    gap: 4px;
+}
+.message-btn-row button {
+    font-size: 10px;
+    align-self: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 4px;
+    padding-block: 2px !important;
+}
+
+.like-latest-btn, .dislike-latest-btn {
+    display: none !important;
+    /* filter: grayscale(); */
+}
+.is-xmchat .like-latest-btn, .is-xmchat .dislike-latest-btn {
+    display: inline-flex !important;
+}
+
+/* .copy-bot-btn {
+    top: 18px; */
+    /* bottom: 0;
 }
 .toggle-md-btn {
-    /* top: 0; */
-    bottom: 20px;
-}
+    top: 0; */
+    /* bottom: 20px;
+} */
 
 /* note: this is deprecated */
 .copy-code-btn {

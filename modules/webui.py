@@ -56,11 +56,24 @@ def reload_javascript():
     js += '<script async type="module" src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>'
     js += '<script async type="module" src="http://spin.js.org/spin.umd.js"></script><link type="text/css" href="https://spin.js.org/spin.css" rel="stylesheet" />'
     
+    meta = """
+        <meta name="apple-mobile-web-app-title" content="川虎 Chat">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="application-name" content="川虎 Chat">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover'>
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="apple-touch-icon-precomposed" href="/file=web_assets/icon/mask-icon-512.png" crossorigin="use-credentials">
+        <link rel="apple-touch-icon" href="/file=web_assets/icon/mask-icon-512.png" crossorigin="use-credentials">
+        
+        <link rel="manifest" href="/file=web_assets/manifest.json" crossorigin="use-credentials">
+    """
     css = css_html()
 
     def template_response(*args, **kwargs):
         res = GradioTemplateResponseOriginal(*args, **kwargs)
-        res.body = res.body.replace(b'</head>', f'{js}</head>'.encode("utf8"))
+        res.body = res.body.replace(b'</head>', f'{meta}{js}</head>'.encode("utf8"))
+        # res.body = res.body.replace(b'</head>', f'{js}</head>'.encode("utf8"))
         res.body = res.body.replace(b'</body>', f'{css}</body>'.encode("utf8"))
         res.init_headers()
         return res

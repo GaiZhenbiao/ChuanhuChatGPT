@@ -1,6 +1,7 @@
 
-var userLogged = false;
+// var userLogged = false;
 var usernameGotten = false;
+var usernameTmp = null;
 var username = null;
 
 
@@ -8,27 +9,28 @@ function getUserInfo() {
     if (usernameGotten) {
         return;
     }
-    userLogged = localStorage.getItem('userLogged');
-    if (userLogged) {
-        username = userInfoDiv.innerText;
-        if (username) {
-            if (username.includes("getting user info…")) {
-                setTimeout(getUserInfo, 500);
-                return;
-            } else if (username === " ") {
-                localStorage.removeItem("username");
-                localStorage.removeItem("userLogged")
-                userLogged = false;
-                usernameGotten = true;
-                return;
-            } else {
-                username = username.match(/User:\s*(.*)/)[1] || username;
-                localStorage.setItem("username", username);
-                usernameGotten = true;
-                clearHistoryHtml();
-            }
+    // userLogged = localStorage.getItem('userLogged');
+    // if (userLogged) {
+    usernameTmp = userInfoDiv.innerText;
+    if (usernameTmp) {
+        if (usernameTmp.includes("getting user info")) {
+            setTimeout(getUserInfo, 500);
+            return;
+        } else if (usernameTmp === " ") {
+            localStorage.removeItem("username");
+            // localStorage.removeItem("userLogged")
+            // userLogged = false;
+            usernameGotten = true;
+            return;
+        } else {
+            usernameTmp = usernameTmp.match(/User:\s*(.*)/)[1] || usernameTmp;
+            localStorage.setItem("username", usernameTmp);
+            username = usernameTmp;
+            usernameGotten = true;
+            clearHistoryHtml();
         }
     }
+    // }
 }
 
 function showOrHideUserInfo() {
@@ -47,7 +49,8 @@ function showOrHideUserInfo() {
         toggleUserInfoVisibility(true);
     }, 2000);
 
-    let triggerElements = {appTitleDiv, userInfoDiv, sendBtn};
+    // let triggerElements = {appTitleDiv, userInfoDiv, sendBtn};
+    let triggerElements = {userInfoDiv, statusDisplay};
     for (let elem in triggerElements) {
         triggerElements[elem].addEventListener("mouseenter", function () {
             toggleUserInfoVisibility(false);

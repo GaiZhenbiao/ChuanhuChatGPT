@@ -1,4 +1,4 @@
-gradio==3.41.2
+gradio==3.43.2
 gradio_client==0.5.0
 pypinyin
 tiktoken
@@ -28,3 +28,4 @@ tabulate
 ujson
 python-docx
 websocket_client
+pydantic==1.10.8

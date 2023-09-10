@@ -10,6 +10,7 @@ import requests
 import urllib3
 import traceback
 import pathlib
+import shutil
 
 from tqdm import tqdm
 import colorama
@@ -207,6 +208,7 @@ class BaseLLMModel:
         self.api_key = None
         self.need_api_key = False
         self.single_turn = False
+        self.history_file_path = get_first_history_name(user)
 
         self.temperature = temperature
         self.top_p = top_p
@@ -623,9 +625,10 @@ class BaseLLMModel:
         self.history = []
         self.all_token_counts = []
         self.interrupted = False
-        pathlib.Path(os.path.join(HISTORY_DIR, self.user_identifier, new_auto_history_filename(
-            os.path.join(HISTORY_DIR, self.user_identifier)))).touch()
-        return [], self.token_message([0])
+        self.history_file_path = new_auto_history_filename(self.user_identifier)
+        history_name = self.history_file_path[:-5]
+        choices = [history_name] + get_history_names(self.user_identifier)
+        return [], self.token_message([0]), gr.Radio.update(choices=choices, value=history_name)
 
     def delete_first_conversation(self):
         if self.history:
@@ -658,16 +661,34 @@ class BaseLLMModel:
             token_sum += sum(token_lst[: i + 1])
         return i18n("Token 计数: ") + f"{sum(token_lst)}" + i18n("，本次对话累计消耗了 ") + f"{token_sum} tokens"
 
-    def save_chat_history(self, filename, chatbot, user_name):
+    def rename_chat_history(self, filename, chatbot, user_name):
         if filename == "":
-            return
+            return gr.update(), gr.update()
         if not filename.endswith(".json"):
             filename += ".json"
-        return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+        self.delete_chat_history(self.history_file_path, user_name)
+        # 命名重复检测
+        repeat_file_index = 2
+        full_path = os.path.join(HISTORY_DIR, user_name, filename)
+        while os.path.exists(full_path):
+            full_path = os.path.join(HISTORY_DIR, user_name, f"{repeat_file_index}_{filename}")
+            repeat_file_index += 1
+        filename = os.path.basename(full_path)
+
+        self.history_file_path = filename
+        save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+        return init_history_list(user_name)
+
+    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, language):
+        if len(self.history) == 2:
+            user_question = self.history[0]["content"]
+            filename = user_question[:16] + ".json"
+            return self.rename_chat_history(filename, chatbot, user_name)
+        else:
+            return gr.update()
 
     def auto_save(self, chatbot):
-        history_file_path = get_history_filepath(self.user_identifier)
-        save_file(history_file_path, self.system_prompt,
+        save_file(self.history_file_path, self.system_prompt,
                   self.history, chatbot, self.user_identifier)
 
     def export_markdown(self, filename, chatbot, user_name):
@@ -675,19 +696,27 @@ class BaseLLMModel:
             return
         if not filename.endswith(".md"):
             filename += ".md"
-        return save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+        save_file(filename, self.system_prompt, self.history, chatbot, user_name)
 
-    def load_chat_history(self, filename, user_name):
-        logging.debug(f"{user_name} 加载对话历史中……")
-        logging.info(f"filename: {filename}")
-        if type(filename) != str and filename is not None:
-            filename = filename.name
-        try:
-            if "/" not in filename:
-                history_file_path = os.path.join(
-                    HISTORY_DIR, user_name, filename)
+    def load_chat_history(self, new_history_file_path=None, username=None):
+        logging.debug(f"{self.user_identifier} 加载对话历史中……")
+        if new_history_file_path is not None:
+            if type(new_history_file_path) != str:
+                # copy file from new_history_file_path.name to os.path.join(HISTORY_DIR, self.user_identifier)
+                new_history_file_path = new_history_file_path.name
+                shutil.copyfile(new_history_file_path, os.path.join(
+                    HISTORY_DIR, self.user_identifier, os.path.basename(new_history_file_path)))
+                self.history_file_path = os.path.basename(new_history_file_path)
             else:
-                history_file_path = filename
+                self.history_file_path = new_history_file_path
+        try:
+            if "/" not in self.history_file_path:
+                history_file_path = os.path.join(
+                    HISTORY_DIR, self.user_identifier, self.history_file_path)
+            else:
+                history_file_path = self.history_file_path
+            if not self.history_file_path.endswith(".json"):
+                history_file_path += ".json"
             with open(history_file_path, "r", encoding="utf-8") as f:
                 json_s = json.load(f)
             try:
@@ -703,13 +732,13 @@ class BaseLLMModel:
                     logging.info(new_history)
             except:
                 pass
-            logging.debug(f"{user_name} 加载对话历史完毕")
+            logging.debug(f"{self.user_identifier} 加载对话历史完毕")
             self.history = json_s["history"]
-            return os.path.basename(filename), json_s["system"], json_s["chatbot"]
+            return os.path.basename(self.history_file_path), json_s["system"], json_s["chatbot"]
         except:
             # 没有对话历史或者对话历史解析失败
-            logging.info(f"没有找到对话历史记录 {filename}")
-            return gr.update(), self.system_prompt, gr.update()
+            logging.info(f"没有找到对话历史记录 {self.history_file_path}")
+            return self.history_file_path, self.system_prompt, []
 
     def delete_chat_history(self, filename, user_name):
         if filename == "CANCELED":
@@ -724,19 +753,21 @@ class BaseLLMModel:
             history_file_path = filename
         try:
             os.remove(history_file_path)
-            return i18n("删除对话历史成功"), get_history_dropdown(user_name), []
+            return i18n("删除对话历史成功"), get_history_list(user_name), []
         except:
             logging.info(f"删除对话历史失败 {history_file_path}")
-            return i18n("对话历史")+filename+i18n("已经被删除啦"), gr.update(), gr.update()
+            return i18n("对话历史")+filename+i18n("已经被删除啦"), get_history_list(user_name), []
 
     def auto_load(self):
-        if self.user_identifier == "":
-            self.reset()
-            return self.system_prompt, gr.update()
-        history_file_path = get_history_filepath(self.user_identifier)
-        filename, system_prompt, chatbot = self.load_chat_history(
-            history_file_path, self.user_identifier)
-        return system_prompt, chatbot
+        filepath = get_history_filepath(self.user_identifier)
+        if not filepath:
+            self.history_file_path = new_auto_history_filename(
+                self.user_identifier)
+        else:
+            self.history_file_path = filepath
+        filename, system_prompt, chatbot = self.load_chat_history()
+        filename = filename[:-5]
+        return filename, system_prompt, chatbot
 
     def like(self):
         """like the last response, implement if needed

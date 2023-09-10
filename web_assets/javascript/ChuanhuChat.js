@@ -11,8 +11,11 @@ var user_input_ta = null;
 var user_input_tb = null;
 var userInfoDiv = null;
 var appTitleDiv = null;
+var chatbotArea = null;
 var chatbot = null;
 var chatbotIndicator = null;
+var uploaderIndicator = null;
+var chatListIndicator = null;
 var chatbotWrap = null;
 var apSwitch = null;
 var messageBotDivs = null;
@@ -25,14 +28,27 @@ var sliders = null;
 var updateChuanhuBtn = null;
 var statusDisplay = null;
 
+var historySelector = null;
+var chuanhuPopup = null;
+var settingBox = null;
+var trainingBox = null;
+var popupWrapper = null;
+var chuanhuHeader = null;
+var menu = null;
+var toolbox = null;
+// var trainBody = null;
+
 var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
 
+let windowWidth = window.innerWidth; // 初始窗口宽度
 
 function addInit() {
-    var needInit = {chatbotIndicator};
+    var needInit = {chatbotIndicator, uploaderIndicator};
     
     chatbotIndicator = gradioApp().querySelector('#chuanhu-chatbot > div.wrap');
+    uploaderIndicator = gradioApp().querySelector('#upload-index-file > div.wrap');
+    chatListIndicator = gradioApp().querySelector('#history-select-dropdown > div.wrap');
 
     for (let elem in needInit) {
         if (needInit[elem] == null) {
@@ -42,7 +58,9 @@ function addInit() {
     }
 
     chatbotObserver.observe(chatbotIndicator, { attributes: true });
-
+    chatListObserver.observe(chatListIndicator, { attributes: true });
+    setUploader();
+    
     return true;
 }
 
@@ -54,6 +72,7 @@ function initialize() {
     user_input_tb = gradioApp().getElementById('user-input-tb');
     userInfoDiv = gradioApp().getElementById("user-info");
     appTitleDiv = gradioApp().getElementById("app-title");
+    chatbotArea = gradioApp().querySelector('#chatbot-area');
     chatbot = gradioApp().querySelector('#chuanhu-chatbot');
     chatbotWrap = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .wrap');
     apSwitch = gradioApp().querySelector('.apSwitch input[type="checkbox"]');
@@ -64,17 +83,35 @@ function initialize() {
     updateChuanhuBtn = gradioApp().getElementById("update-chuanhu-btn");
     statusDisplay = gradioApp().querySelector('#status-display');
 
-    if (loginUserForm) {
-        localStorage.setItem("userLogged", true);
-        userLogged = true;
-    }
+    historySelector = gradioApp().querySelector('#history-select-dropdown');
+    chuanhuPopup = gradioApp().querySelector('#chuanhu-popup');
+    settingBox = gradioApp().querySelector('#chuanhu-setting');
+    trainingBox = gradioApp().querySelector('#chuanhu-training');
+    popupWrapper = gradioApp().querySelector('#popup-wrapper');
+    chuanhuHeader = gradioApp().querySelector('#chuanhu-header');
+    menu = gradioApp().querySelector('#menu-area');
+    toolbox = gradioApp().querySelector('#toolbox-area');
+    // trainBody = gradioApp().querySelector('#train-body');
+
+    // if (loginUserForm) {
+    // localStorage.setItem("userLogged", true);
+    // userLogged = true;
+    // }
 
     adjustDarkMode();
+    adjustSide();
+    setChatList();
+    setChatListHeader();
+    setLoclize();
     selectHistory();
-    setTimeout(showOrHideUserInfo(), 2000);
-    setChatbotHeight();
-    setChatbotScroll();
+    // setChatbotHeight();
+    setPopupBoxPosition();
     setSlider();
+    setCheckboxes();
+    checkModel();
+
+    settingBox.classList.add('hideBox');
+    trainingBox.classList.add('hideBox');
 
     if (!historyLoaded) loadHistoryHtml();
     if (!usernameGotten) getUserInfo();
@@ -84,6 +121,14 @@ function initialize() {
     if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten) {
         updateLatestVersion();
     }
+    setChatbotScroll();
+    setTimeout(showOrHideUserInfo(), 2000);
+
+    // setHistroyPanel();
+    // trainBody.classList.add('hide-body');
+
+    
+
     return true;
 }
 
@@ -164,17 +209,49 @@ function disableSendBtn() {
     });
 }
 
-function adjustDarkMode() {
-    function toggleDarkMode(isEnabled) {
-        if (isEnabled) {
-            document.body.classList.add("dark");
-            document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
+function checkModel() {
+    const model = gradioApp().querySelector('#model-select-dropdown input');
+    var modelValue = model.value;
+    checkGPT();
+    checkXMChat();
+    function checkGPT() {
+        modelValue = model.value;
+        if (modelValue.includes('gpt')) {
+            gradioApp().querySelector('#header-btn-groups').classList.add('is-gpt');
         } else {
-            document.body.classList.remove("dark");
-            document.body.style.backgroundColor = "";
+            gradioApp().querySelector('#header-btn-groups').classList.remove('is-gpt');
+        }
+        // console.log('gpt model checked')
+    }
+    function checkXMChat() {
+        modelValue = model.value;
+        if (modelValue.includes('xmchat')) {
+            chatbotArea.classList.add('is-xmchat');
+        } else {
+            chatbotArea.classList.remove('is-xmchat');
         }
     }
-    
+
+    model.addEventListener('blur', ()=>{
+        setTimeout(()=>{
+            checkGPT();
+            checkXMChat();
+        }, 100);
+    });
+}
+
+function toggleDarkMode(isEnabled) {
+    if (isEnabled) {
+        document.body.classList.add("dark");
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#171717');
+        document.body.style.setProperty("background-color", "var(--neutral-950)", "important");
+    } else {
+        document.body.classList.remove("dark");
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+        document.body.style.backgroundColor = "";
+    }
+}
+function adjustDarkMode() {
     const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
     apSwitch.checked = darkModeQuery.matches;
     toggleDarkMode(darkModeQuery.matches);
@@ -186,8 +263,55 @@ function adjustDarkMode() {
         toggleDarkMode(e.target.checked);
     });
 }
+function btnToggleDarkMode() {
+    apSwitch.checked = !apSwitch.checked;
+    toggleDarkMode(apSwitch.checked);
+}
+
+function setScrollShadow() {
+    const toolboxScroll = toolbox.querySelector('#toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav');
+    const toolboxTabs = toolboxScroll.querySelectorAll('button');
+    let toolboxScrollWidth = 0;
+    toolboxTabs.forEach((tab) => {
+        toolboxScrollWidth += tab.offsetWidth; // 获取按钮宽度并累加
+    });
+    function adjustScrollShadow() {
+        if (toolboxScroll.scrollLeft > 0) {
+            toolboxScroll.classList.add('scroll-shadow-left');
+        } else {
+            toolboxScroll.classList.remove('scroll-shadow-left');
+        }
+
+        if (toolboxScroll.scrollLeft + toolboxScroll.clientWidth < toolboxScrollWidth) {
+            toolboxScroll.classList.add('scroll-shadow-right');
+        } else {
+            toolboxScroll.classList.remove('scroll-shadow-right');
+        }
+    }
+    toolboxScroll.addEventListener('scroll', () => {
+        adjustScrollShadow();
+    });
+    // no, I failed to make shadow appear on the top layer...
+}
+
+function setPopupBoxPosition() {
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    popupWrapper.style.height = `${screenHeight}px`;
+    popupWrapper.style.width = `${screenWidth}px`;
+    // const popupBoxWidth = 680;
+    // const popupBoxHeight = 400;
+    // chuanhuPopup.style.left = `${(screenWidth - popupBoxWidth) / 2}px`;
+    // chuanhuPopup.style.top = `${(screenHeight - popupBoxHeight) / 2}px`;
+}
+
+function updateVH() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
 
 function setChatbotHeight() {
+    return;
     const screenWidth = window.innerWidth;
     const statusDisplay = document.querySelector('#status-display');
     const statusDisplayHeight = statusDisplay ? statusDisplay.offsetHeight : 0;
@@ -226,8 +350,13 @@ function chatbotContentChanged(attempt = 1) {
             saveHistoryHtml();
             disableSendBtn();
             // gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.user').forEach((userElement) => {addAvatars(userElement, 'user')});
-            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
-        }, i === 0 ? 0 : 500);
+            // gradioApp().querySelectorAll('#chuanhu-chatbot > .wrapper > .wrap > .message-wrap .message-row.bot-row').forEach(addChuanhuButton);
+            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message-row.bot-row').forEach(addChuanhuButton);
+            if (chatbotIndicator.classList.contains('hide')) {
+                setLatestMessage();
+                setChatList();
+            }
+        }, i === 0 ? 0 : 200);
     }
     // 理论上是不需要多次尝试执行的，可惜gradio的bug导致message可能没有渲染完毕，所以尝试500ms后再次执行
 }
@@ -235,8 +364,13 @@ function chatbotContentChanged(attempt = 1) {
 var chatbotObserver = new MutationObserver(() => {
     chatbotContentChanged(1);
     if (chatbotIndicator.classList.contains('hide')) {
+        // setLatestMessage();
         chatbotContentChanged(2);
     }
+});
+
+var chatListObserver = new MutationObserver(() => {
+    setChatList();
 });
 
 // 监视页面内部 DOM 变动
@@ -254,12 +388,26 @@ var gradioObserver = new MutationObserver(function (mutations) {
 // 监视页面变化
 window.addEventListener("DOMContentLoaded", function () {
     // const ga = document.getElementsByTagName("gradio-app");
+    updateVH();
+    windowWidth = window.innerWidth;
     gradioApp().addEventListener("render", initialize);
     isInIframe = (window.self !== window.top);
     historyLoaded = false;
 });
-window.addEventListener('resize', setChatbotHeight);
-window.addEventListener('scroll', function(){setChatbotHeight(); setUpdateWindowHeight();});
+window.addEventListener('resize', ()=>{
+    // setChatbotHeight();
+    updateVH();
+    windowWidth = window.innerWidth;
+    setPopupBoxPosition();
+    adjustSide(); 
+});
+window.addEventListener('orientationchange', (event) => {
+    updateVH();
+    windowWidth = window.innerWidth;
+    setPopupBoxPosition();
+    adjustSide();
+});
+window.addEventListener('scroll', ()=>{setPopupBoxPosition();});
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", adjustDarkMode);
 
 // console suprise
@@ -293,11 +441,5 @@ let description = `
 GitHub repository: [https://github.com/GaiZhenbiao/ChuanhuChatGPT]\n
 Enjoy our project!\n
 `
-console.log(`%c${makeML(ChuanhuInfo)}`,styleTitle1)
-console.log(`%c${description}`, styleDesc1)
-
-// button svg code
-const copyIcon   = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>';
-const copiedIcon = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12"></polyline></svg></span>';
-const mdIcon     = '<span><svg stroke="currentColor" fill="none" stroke-width="1" viewBox="0 0 14 18" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><g transform-origin="center" transform="scale(0.85)"><path d="M1.5,0 L12.5,0 C13.3284271,-1.52179594e-16 14,0.671572875 14,1.5 L14,16.5 C14,17.3284271 13.3284271,18 12.5,18 L1.5,18 C0.671572875,18 1.01453063e-16,17.3284271 0,16.5 L0,1.5 C-1.01453063e-16,0.671572875 0.671572875,1.52179594e-16 1.5,0 Z" stroke-width="1.8"></path><line x1="3.5" y1="3.5" x2="10.5" y2="3.5"></line><line x1="3.5" y1="6.5" x2="8" y2="6.5"></line></g><path d="M4,9 L10,9 C10.5522847,9 11,9.44771525 11,10 L11,13.5 C11,14.0522847 10.5522847,14.5 10,14.5 L4,14.5 C3.44771525,14.5 3,14.0522847 3,13.5 L3,10 C3,9.44771525 3.44771525,9 4,9 Z" stroke="none" fill="currentColor"></path></svg></span>';
-const rawIcon    = '<span><svg stroke="currentColor" fill="none" stroke-width="1.8" viewBox="0 0 18 14" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><g transform-origin="center" transform="scale(0.85)"><polyline points="4 3 0 7 4 11"></polyline><polyline points="14 3 18 7 14 11"></polyline><line x1="12" y1="0" x2="6" y2="14"></line></g></svg></span>';
+console.log(`%c${makeML(ChuanhuInfo)}`,styleTitle1);
+console.log(`%c${description}`, styleDesc1);
