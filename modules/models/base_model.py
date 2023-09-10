@@ -681,7 +681,7 @@ class BaseLLMModel:
 
     def auto_name_chat_history(self, user_question, chatbot, user_name):
         if chatbot == []:
-            filename = user_question[:12] + ".json"
+            filename = user_question[:16] + ".json"
             return self.rename_chat_history(filename, chatbot, user_name)
         else:
             return gr.update()
