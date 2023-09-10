@@ -346,15 +346,8 @@ def save_file(filename, system, history, chatbot, user_name):
     repeat_file_index = 2
     if "/" in filename or "\\" in filename:
         history_file_path = filename
-        dir_path, file_name = os.path.split(history_file_path)
-        while os.path.exists(history_file_path):
-            history_file_path = os.path.join(dir_path, f"{repeat_file_index}_{file_name}")
-            repeat_file_index += 1
     else:
         history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
-        while os.path.exists(history_file_path):
-            history_file_path = os.path.join(HISTORY_DIR, user_name, f"{repeat_file_index}_{filename}")
-            repeat_file_index += 1
 
     with open(history_file_path, "w", encoding='utf-8') as f:
         json.dump(json_s, f, ensure_ascii=False)

@@ -667,6 +667,14 @@ class BaseLLMModel:
         if not filename.endswith(".json"):
             filename += ".json"
         self.delete_chat_history(self.history_file_path, user_name)
+        # 命名重复检测
+        repeat_file_index = 2
+        full_path = os.path.join(HISTORY_DIR, user_name, filename)
+        while os.path.exists(full_path):
+            full_path = os.path.join(HISTORY_DIR, user_name, f"{repeat_file_index}_{filename}")
+            repeat_file_index += 1
+        filename = os.path.basename(full_path)
+
         self.history_file_path = filename
         save_file(filename, self.system_prompt, self.history, chatbot, user_name)
         return init_history_list(user_name)
