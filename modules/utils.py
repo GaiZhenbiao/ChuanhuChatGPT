@@ -717,3 +717,11 @@ def get_file_hash(file_src=None, file_paths=None):
 
 def myprint(**args):
     print(args)
+
+def replace_special_symbols(string, replace_string=" "):
+    # 定义正则表达式，匹配所有特殊符号
+    pattern = r'[!@#$%^&*()<>?/\|}{~:]'
+
+    new_string = re.sub(pattern, replace_string, string)
+
+    return new_string

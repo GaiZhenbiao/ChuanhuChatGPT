@@ -264,18 +264,18 @@ class OpenAIClient(BaseLLMModel):
                 try:
                     history = [
                         { "role": "system", "content": SUMMARY_CHAT_SYSTEM_PROMPT},
-                        { "role": "user", "content": f"User: {user_question}\nAssistant: {ai_answer}"}
+                        { "role": "user", "content": f"Please write a title based on the following conversation:\n---\nUser: {user_question}\nAssistant: {ai_answer}"}
                     ]
                     response = self._single_query_at_once(history, temperature=0.0)
                     response = json.loads(response.text)
                     content = response["choices"][0]["message"]["content"]
-                    filename = content + ".json"
+                    filename = replace_special_symbols(content) + ".json"
                 except Exception as e:
                     logging.info(f"自动命名失败。{e}")
-                    filename = user_question[:16] + ".json"
+                    filename = replace_special_symbols(user_question)[:16] + ".json"
                 return self.rename_chat_history(filename, chatbot, user_name)
             elif name_chat_method == i18n("第一条提问"):
-                filename = user_question[:16] + ".json"
+                filename = replace_special_symbols(user_question)[:16] + ".json"
                 return self.rename_chat_history(filename, chatbot, user_name)
             else:
                 return gr.update()
