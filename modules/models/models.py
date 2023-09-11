@@ -256,8 +256,8 @@ class OpenAIClient(BaseLLMModel):
         return response
 
     
-    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, language):
-        if len(self.history) == 2:
+    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
+        if len(self.history) == 2 and not single_turn_checkbox:
             user_question = self.history[0]["content"]
             if name_chat_method == i18n("模型自动总结（消耗tokens）"):
                 ai_answer = self.history[1]["content"]
