@@ -54,14 +54,25 @@ function setChatList() {
     return;
 }
 
+
 function saveChatHistory(a, b, c, d) {
     var fileName = b;
-    fileName = prompt(renameChat_i18n, b);
-    if (fileName && fileName.trim() !== "") {
-        return [a, fileName, c, d];
-    } else {
-        return [a, "", c, d];
+
+    while (true) {
+        fileName = prompt(renameChat_i18n, fileName);
+
+        if (isValidFileName(fileName)) {
+            return [a, fileName, c, d];
+        } else {
+            alert(validFileName_i18n + "!@#$%^&*()<>?/\\|}{~:");
+        }
     }
+}
+
+function isValidFileName(fileName) {
+    // 使用正则表达式来检查文件名是否包含不合格字符
+    var regex = /[!@#$%^&*()<>?/\\|}{~:]/;
+    return !regex.test(fileName) && fileName.trim() !== "";
 }
 
 const selectedChatBtns = `

@@ -55,6 +55,7 @@
     "你真的要删除 ": "Are you sure you want to delete ",
     " 吗？": " ?",
     "重命名该对话": "Rename this chat",
+    "请输入有效的文件名，不要包含以下特殊字符：": "Please enter a valid file name, do not include the following special characters: ",
     "🔄 检查更新...": "🔄 Check for Update...",
     "您使用的就是最新版！": "You are using the latest version!",
     "正在尝试更新...": "Trying to update...",
