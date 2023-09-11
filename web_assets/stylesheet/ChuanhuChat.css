@@ -338,6 +338,7 @@ body.popup-open {
 }
 #chatbot-header .gradio-dropdown > label > .wrap {
     background: none;
+    box-shadow: none;
     padding-left: 8px;
 }
 #model-select-dropdown > label > span[data-testid="block-info"]  {
