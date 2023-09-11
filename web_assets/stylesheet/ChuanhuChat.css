@@ -1078,6 +1078,10 @@ input:checked + .chatbot-input-more-span {
     display: block;
 }
 
+.disable-update .show-on-latest, .disable-update .show-on-outdated {
+    display: none;
+}
+
 #chatbot-area.no-menu #chatbot-header {
     padding-left: max(20px, env(safe-area-inset-left));
 }

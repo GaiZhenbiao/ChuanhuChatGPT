@@ -456,6 +456,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
             with gr.Box(elem_id="web-config", visible=False):
                 gr.HTML(get_html('web_config.html').format(
+                    enableCheckUpdate_config=check_update,
                     hideHistoryWhenNotLoggedIn_config=hide_history_when_not_logged_in,
                     forView_i18n=i18n("仅供查看"),
                     deleteConfirm_i18n_pref=i18n("你真的要删除 "),

@@ -2,6 +2,20 @@
 var updateInfoGotten = false;
 var isLatestVersion = localStorage.getItem('isLatestVersion') || false;
 
+function setUpdater() {
+    const enableCheckUpdate = gradioApp().querySelector('#enableCheckUpdate_config').innerText;
+
+    if (enableCheckUpdate == "False" || enableCheckUpdate == "false") {
+        gradioApp().classList.add('disable-update');
+        return;
+    }
+
+    const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
+    const longTimeNoCheck = currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000;
+    if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten) {
+        updateLatestVersion();
+    }
+}
 
 var statusObserver = new MutationObserver(function (mutationsList) {
     for (const mutation of mutationsList) {

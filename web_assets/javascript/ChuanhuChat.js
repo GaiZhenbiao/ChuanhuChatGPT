@@ -116,11 +116,8 @@ function initialize() {
     if (!historyLoaded) loadHistoryHtml();
     if (!usernameGotten) getUserInfo();
 
-    const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
-    const longTimeNoCheck = currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000;
-    if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten) {
-        updateLatestVersion();
-    }
+    setUpdater();
+
     setChatbotScroll();
     setTimeout(showOrHideUserInfo(), 2000);
 
