@@ -663,7 +663,7 @@ class BaseLLMModel:
 
     def rename_chat_history(self, filename, chatbot, user_name):
         if filename == "":
-            return gr.update(), gr.update()
+            return gr.update()
         if not filename.endswith(".json"):
             filename += ".json"
         self.delete_chat_history(self.history_file_path, user_name)
