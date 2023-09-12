@@ -348,7 +348,7 @@ function chatbotContentChanged(attempt = 1) {
             disableSendBtn();
             // gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.user').forEach((userElement) => {addAvatars(userElement, 'user')});
             // gradioApp().querySelectorAll('#chuanhu-chatbot > .wrapper > .wrap > .message-wrap .message-row.bot-row').forEach(addChuanhuButton);
-            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message-row.bot-row').forEach(addChuanhuButton);
+            gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
             if (chatbotIndicator.classList.contains('hide')) {
                 setLatestMessage();
                 setChatList();

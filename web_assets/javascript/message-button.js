@@ -1,10 +1,10 @@
 
 // 为 bot 消息添加复制与切换显示按钮 以及最新消息加上重新生成，删除最新消息，嗯。
 
-function addChuanhuButton(botRow) {
+function addChuanhuButton(botElement) {
 
-    botElement = botRow.querySelector('.message.bot');
-    isLatestMessage = botElement.classList.contains('latest');
+    // botElement = botRow.querySelector('.message.bot');
+    var isLatestMessage = botElement.classList.contains('latest');
 
     var rawMessage = botElement.querySelector('.raw-message');
     var mdMessage = botElement.querySelector('.md-message');
