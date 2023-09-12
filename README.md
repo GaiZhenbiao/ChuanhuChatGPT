@@ -22,11 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        流式传输 / 无限对话 / 保存对话 / 预设Prompt集 / 联网搜索 / 根据文件回答 <br />
-        一键复制代码 / 一键复制输出 / 一键切换markdown渲染显示 / 显示用量 / 设置聊天头像 <br />
-        渲染LaTeX / 渲染表格 / 代码高亮 / 自动亮暗色切换 / 自适应分栏 / 支持PWA / 适配全面屏 <br />
-        多用户显示 / 自动命名历史记录 / 搜索、重命名与删除历史记录 / 下载、导出历史记录 <br />
-        微调模型 / 自定义api-Host / 多参数可调 / 多API Key均衡负载 / 适配GPT-4 / 本地部署LLM
+        支持 GPT-4 · 基于文件问答 · LLM本地部署 · 联网搜索 · Agent 助理 ·  支持 Finetune
       </p>
       <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
         ·
@@ -46,13 +42,32 @@
 | [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) |
 | ------------------ | ------------------ | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------- |
 
+## ✨ 5.0 新功能
+
+- 全新的用户界面！精致得不像 Gradio，甚至有毛玻璃效果。
+
+<img width="350" alt="image" src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/d49c64e3-599b-4747-8178-6ad3d41e33a1">
+
+- 适配了移动端（包括全面屏手机的挖孔/刘海），还有更清晰的层级。
+
+<img width="150" alt="image" src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/2ab6fdb6-0904-4fd6-a8bb-8aa45ff67dae">
+
+- 左侧现在有了历史记录侧栏，管理历史记录更方便。支持搜索、删除、重命名聊天历史（搜索支持正则）。
+
+<img width="200" alt="image" src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/7386b273-8862-4f32-94ce-71cc0348e75a">
+
+- 现在可以将川虎 Chat 作为 PWA 应用程序安装！支持 Chrome/Edge/Safari 等浏览器。
+- 支持 Finetune（微调） GPT 3.5！
+
+<img width="350" alt="image" src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/129dc7a9-c493-413e-9fbe-d4a345cd1b20">
+
+
 ## 支持模型
 
 **通过API调用的语言模型**：
 
 - [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
 - [Google PaLM](https://developers.generativeai.google/products/palm)
-- [讯飞星火认知大模型](https://xinghuo.xfyun.cn)
 - [Inspur Yuan 1.0](https://air.inspur.com/home)
 - [MiniMax](https://api.minimax.chat/)
 - [XMChat](https://github.com/MILVLG/xmchat)
