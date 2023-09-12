@@ -22,7 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        支持 GPT-4 · 基于文件问答 · LLM本地部署 · 联网搜索 · Agent 助理 ·  支持 Finetune
+        支持 GPT-4 · 基于文件问答 · LLM本地部署 · 联网搜索 · Agent 助理 ·  支持 Fine-tune
       </p>
       <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
         ·
@@ -58,7 +58,7 @@
 
 ## 支持模型
 
-| API调用模型 | 备注 | 本地部署模型 | 备注 |
+| API 调用模型 | 备注 | 本地部署模型 | 备注 |
 | --- | --- | --- | --- |
 | [ChatGPT(GPT-4)](https://chat.openai.com) | 支持微调 gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
 | [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | 支持 Lora 模型
