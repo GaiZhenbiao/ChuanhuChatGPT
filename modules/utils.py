@@ -344,7 +344,7 @@ def save_file(filename, system, history, chatbot, user_name):
 
     json_s = {"system": system, "history": history, "chatbot": chatbot}
     repeat_file_index = 2
-    if "/" in filename or "\\" in filename:
+    if not filename == os.path.basename(filename):
         history_file_path = filename
     else:
         history_file_path = os.path.join(HISTORY_DIR, user_name, filename)

@@ -711,7 +711,7 @@ class BaseLLMModel:
             else:
                 self.history_file_path = new_history_file_path
         try:
-            if "/" not in self.history_file_path:
+            if self.history_file_path == os.path.basename(self.history_file_path):
                 history_file_path = os.path.join(
                     HISTORY_DIR, self.user_identifier, self.history_file_path)
             else:
@@ -748,7 +748,7 @@ class BaseLLMModel:
             return i18n("你没有选择任何对话历史"), gr.update(), gr.update()
         if not filename.endswith(".json"):
             filename += ".json"
-        if "/" not in filename:
+        if filename == os.path.basename(filename):
             history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
         else:
             history_file_path = filename
