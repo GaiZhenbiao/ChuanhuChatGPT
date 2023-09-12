@@ -628,7 +628,7 @@ class BaseLLMModel:
         self.history_file_path = new_auto_history_filename(self.user_identifier)
         history_name = self.history_file_path[:-5]
         choices = [history_name] + get_history_names(self.user_identifier)
-        return [], self.token_message([0]), gr.Radio.update(choices=choices, value=history_name)
+        return [], self.token_message([0]), gr.Radio.update(choices=choices, value=history_name), ""
 
     def delete_first_conversation(self):
         if self.history:
@@ -738,7 +738,7 @@ class BaseLLMModel:
         except:
             # 没有对话历史或者对话历史解析失败
             logging.info(f"没有找到对话历史记录 {self.history_file_path}")
-            return self.history_file_path, self.system_prompt, []
+            return self.history_file_path, "", []
 
     def delete_chat_history(self, filename, user_name):
         if filename == "CANCELED":
