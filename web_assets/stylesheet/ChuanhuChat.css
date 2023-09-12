@@ -398,6 +398,7 @@ body.popup-open {
     /* padding: 8px 6px; */
     min-height: 82px;
     /* max-height: 166px; */
+    z-index: 2;
     background: var(--chatbot-blur-background-color);
     -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
