@@ -651,6 +651,7 @@ class BaseLLMModel:
             msg = "删除了一组对话的token计数记录"
             self.all_token_counts.pop()
         msg = "删除了一组对话"
+        self.auto_save(chatbot)
         return chatbot, msg
 
     def token_message(self, token_lst=None):
