@@ -352,7 +352,7 @@ def save_file(filename, system, history, chatbot, user_name):
     with open(history_file_path, "w", encoding='utf-8') as f:
         json.dump(json_s, f, ensure_ascii=False)
 
-    filename = filename.split("/")[-1]
+    filename = os.path.basename(filename)
     filename_md = filename[:-5] + ".md"
     md_s = f"system: \n- {system} \n"
     for data in history:
