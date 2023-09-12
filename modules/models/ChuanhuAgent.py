@@ -96,7 +96,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
     def google_search_simple(self, query):
         results = []
         with DDGS() as ddgs:
-            ddgs_gen = ddgs.text("notes from a dead house", backend="lite")
+            ddgs_gen = ddgs.text(query, backend="lite")
             for r in islice(ddgs_gen, 10):
                 results.append({
                     "title": r["title"],
