@@ -59,14 +59,19 @@ function saveChatHistory(a, b, c, d) {
     var fileName = b;
 
     while (true) {
-        fileName = prompt(renameChat_i18n, fileName);
+        var result = prompt(renameChat_i18n, fileName);
 
-        if (isValidFileName(fileName)) {
-            return [a, fileName, c, d];
+        if (result === null) {
+            throw new Error("rename operation cancelled");
+            // 不返回原文件名，而是使用 throw new Error() 打断程序，避免 gradio 进行保存操作
+            // break;
+        } else if (isValidFileName(result)) {
+            return [a, result, c, d];
         } else {
             alert(validFileName_i18n + "!@#$%^&*()<>?/\\|}{~:");
         }
     }
+    return [a, b, c, d]; // 兜底保障
 }
 
 function isValidFileName(fileName) {
