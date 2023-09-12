@@ -57,7 +57,7 @@ function addInit() {
         }
     }
 
-    chatbotObserver.observe(chatbotIndicator, { attributes: true });
+    chatbotObserver.observe(chatbotIndicator, { attributes: true, childList: true, subtree: true });
     chatListObserver.observe(chatListIndicator, { attributes: true });
     setUploader();
     
@@ -340,19 +340,32 @@ function clearChatbot() {
     // clearMessageRows();
 }
 
-function chatbotContentChanged(attempt = 1) {
+function chatbotContentChanged(attempt = 1, force = false) {
     for (var i = 0; i < attempt; i++) {
         setTimeout(() => {
             // clearMessageRows();
             saveHistoryHtml();
             disableSendBtn();
-            // gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.user').forEach((userElement) => {addAvatars(userElement, 'user')});
-            // gradioApp().querySelectorAll('#chuanhu-chatbot > .wrapper > .wrap > .message-wrap .message-row.bot-row').forEach(addChuanhuButton);
+
             gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
-            if (chatbotIndicator.classList.contains('hide')) {
+
+            if (chatbotIndicator.classList.contains('hide')) { // generation finished
                 setLatestMessage();
                 setChatList();
             }
+
+            if (!chatbotIndicator.classList.contains('translucent')) { // message deleted
+                var checkLatestAdded = setInterval(() => {
+                    var latestMessageNow = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .wrap > .message-wrap .message.bot.latest');
+                    if (latestMessageNow && latestMessageNow.querySelector('.message-btn-row')) {
+                        clearInterval(checkLatestAdded);
+                    } else {
+                        setLatestMessage();
+                    }
+                }, 200);
+            }
+        
+            
         }, i === 0 ? 0 : 200);
     }
     // 理论上是不需要多次尝试执行的，可惜gradio的bug导致message可能没有渲染完毕，所以尝试500ms后再次执行
@@ -364,6 +377,10 @@ var chatbotObserver = new MutationObserver(() => {
         // setLatestMessage();
         chatbotContentChanged(2);
     }
+    if (!chatbotIndicator.classList.contains('translucent')) {
+        chatbotContentChanged(2);
+    }
+
 });
 
 var chatListObserver = new MutationObserver(() => {
