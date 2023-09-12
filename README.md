@@ -42,27 +42,18 @@
 | [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) |
 | ------------------ | ------------------ | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------- |
 
-## ✨ 5.0 新功能
+## ✨ 5.0 重磅更新！
 
-- 全新的用户界面！精致得不像 Gradio，甚至有毛玻璃效果。
+![ChuanhuChat5更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/f2c2be3a-ea93-4edf-8221-94eddd4a0178)
 
-<img height="350" alt="image" src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/d49c64e3-599b-4747-8178-6ad3d41e33a1">
 
-- 适配了移动端（包括全面屏手机的挖孔/刘海），还有更清晰的层级。
-
-<img width="200" alt="image" src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/2ab6fdb6-0904-4fd6-a8bb-8aa45ff67dae">
-
-- 左侧现在有了历史记录侧栏，管理历史记录更方便。支持搜索、删除、重命名聊天历史（搜索支持正则）。
-
-<img width="250" alt="image" src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/7386b273-8862-4f32-94ce-71cc0348e75a">
-
-- 现在可以将川虎 Chat 作为 PWA 应用程序安装！支持 Chrome/Edge/Safari 等浏览器。
-
-<img width="150" alt="image" src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/900f945c-8e19-4ec4-a30f-a38a09e7a6b4">
-
+- 全新的用户界面！精致得不像 Gradio，甚至有毛玻璃效果！
+- 适配了移动端（包括全面屏手机的挖孔/刘海），层级更加清晰。
+- 历史记录移到左侧，使用更加方便。并且支持搜索（支持正则）、删除、重命名。
+- 现在可以让大模型自动命名历史记录（需在设置或配置文件中开启）。
+- 现在可以将 川虎Chat 作为 PWA 应用程序安装，体验更加原生！支持 Chrome/Edge/Safari 等浏览器。
+- 图标适配各个平台，看起来更舒服。
 - 支持 Finetune（微调） GPT 3.5！
-
-<img width="280" alt="image" src="https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/129dc7a9-c493-413e-9fbe-d4a345cd1b20">
 
 
 ## 支持模型
