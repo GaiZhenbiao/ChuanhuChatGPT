@@ -67,20 +67,16 @@
 
 ## 支持模型
 
-**通过API调用的语言模型**：
-
-- [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
-- [Google PaLM](https://developers.generativeai.google/products/palm)
-- [Inspur Yuan 1.0](https://air.inspur.com/home)
-- [MiniMax](https://api.minimax.chat/)
-- [XMChat](https://github.com/MILVLG/xmchat)
-
-**本地部署语言模型**：
-
-- [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B))
-- [LLaMA](https://github.com/facebookresearch/llama)
-- [StableLM](https://github.com/Stability-AI/StableLM)
-- [MOSS](https://github.com/OpenLMLab/MOSS)
+| API调用模型 | 备注 | 本地部署模型 | 备注 |
+| --- | --- | --- | --- |
+| [ChatGPT(GPT-4)](https://chat.openai.com) | 支持微调 gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | 支持 Lora 模型
+| [Google PaLM](https://developers.generativeai.google/products/palm) | 不支持流式传输 | [StableLM](https://github.com/Stability-AI/StableLM)
+| [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | 
+| [MiniMax](https://api.minimax.chat/) | 
+| [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输
+| [Midjourney](https://www.midjourney.com/) | 不支持流式传输
 
 ## 使用技巧
 
