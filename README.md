@@ -23,8 +23,10 @@
       </a>
       <p>
         流式传输 / 无限对话 / 保存对话 / 预设Prompt集 / 联网搜索 / 根据文件回答 <br />
-        渲染LaTeX / 渲染表格 / 代码高亮 / 自动亮暗色切换 / 自适应界面 / “小而美”的体验 <br />
-        自定义api-Host / 多参数可调 / 多API Key均衡负载 / 多用户显示 / 适配GPT-4 / 支持本地部署LLM
+        一键复制代码 / 一键复制输出 / 一键切换markdown渲染显示 / 显示用量 / 设置聊天头像 <br />
+        渲染LaTeX / 渲染表格 / 代码高亮 / 自动亮暗色切换 / 自适应分栏 / 支持PWA / 适配全面屏 <br />
+        多用户显示 / 自动命名历史记录 / 搜索、重命名与删除历史记录 / 下载、导出历史记录 <br />
+        微调模型 / 自定义api-Host / 多参数可调 / 多API Key均衡负载 / 适配GPT-4 / 本地部署LLM
       </p>
       <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
         ·
@@ -50,6 +52,7 @@
 
 - [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
 - [Google PaLM](https://developers.generativeai.google/products/palm)
+- [讯飞星火认知大模型](https://xinghuo.xfyun.cn)
 - [Inspur Yuan 1.0](https://air.inspur.com/home)
 - [MiniMax](https://api.minimax.chat/)
 - [XMChat](https://github.com/MILVLG/xmchat)
