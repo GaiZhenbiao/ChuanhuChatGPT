@@ -22,7 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-	Поддержка GPT-4 · Ответы на вопросы на основе файлов · Локальная установка LLM · Онлайн-поиск · Помощник Agent · Поддержка Fine-tune
+	Поддержка GPT-4 · Анализ файлов в чате · Локальная установка LLM · Онлайн-поиск · Помощник Agent · Поддержка Fine-tune
       </p>
       <a href="https://www.youtube.com/watch?v=MtxS4XZWbJE"><strong>Видео туториал</strong></a>
         ·
