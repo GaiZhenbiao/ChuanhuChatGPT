@@ -128,6 +128,7 @@ REPLY_LANGUAGES = [
     "日本語",
     "Español",
     "Français",
+    "Russian",
     "Deutsch",
     "한국어",
     "跟随问题语言（不稳定）"
