@@ -86,7 +86,7 @@
 ### 💬 Basic Conversation
 - If the answer is not satisfactory, you can try the `Regenerate` button again, or directly `Delete this round of conversation`;
 - Input box supports line breaks, press `Shift `+ `Enter` to make one;
-- Using the `↑ ` `↓` arrow keys in the input box, you can quickly switch between send records;
+- Using the `↑` `↓` arrow keys in the input box, you can quickly switch between send records;
 - Generating a new conversation every time is too cumbersome, try the `single-dialogue` function;
 - The small button next to the answer bubble not only allows `one-click copy`, but also lets you `view the original Markdown text`;
 - Specify the answer language, so that ChatGPT will always reply in a certain language.
