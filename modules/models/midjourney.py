@@ -221,7 +221,7 @@ class Midjourney_Client(XMChat):
     def reset(self):
         self.image_bytes = None
         self.image_path = None
-        return [], "已重置"
+        return super().reset()
 
     def get_answer_at_once(self):
         content = self.history[-1]['content']
@@ -367,7 +367,7 @@ UPSCALE - 确认后放大图片，第一个数值为需要放大的图片（1~4�
     请使用SD进行UPSCALE
 VARIATION - 图片变体，第一个数值为需要放大的图片（1~4），第二参数为任务ID
     /mj VARIATION::1::123456789
-    
+
 【绘图参数】
 所有命令默认会带上参数--v 5.2
 其他参数参照 https://docs.midjourney.com/docs/parameter-list

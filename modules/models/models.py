@@ -474,7 +474,7 @@ class XMChat(BaseLLMModel):
     def reset(self):
         self.session_id = str(uuid.uuid4())
         self.last_conv_id = None
-        return [], "已重置"
+        return super().reset()
 
     def image_to_base64(self, image_path):
         # 打开并加载图片
