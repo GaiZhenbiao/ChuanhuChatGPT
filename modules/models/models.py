@@ -118,7 +118,7 @@ def get_model(
         traceback.print_exc()
         msg = f"{STANDARD_ERROR_MSG}: {e}"
     presudo_key = hide_middle_chars(access_key)
-    if original_model is not None:
+    if original_model is not None and model is not None:
         model.history = original_model.history
         model.history_file_path = original_model.history_file_path
     if dont_change_lora_selector:
