@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import traceback
 
 import colorama
 import requests
@@ -85,11 +86,11 @@ class OpenAIClient(BaseLLMModel):
 
             # return i18n("**本月使用金额** ") + f"\u3000 ${rounded_usage}"
             return get_html("billing_info.html").format(
-                label=i18n("本月使用金额"),
-                usage_percent=usage_percent,
-                rounded_usage=rounded_usage,
-                usage_limit=usage_limit
-            )
+                    label = i18n("本月使用金额"),
+                    usage_percent = usage_percent,
+                    rounded_usage = rounded_usage,
+                    usage_limit = usage_limit
+                )
         except requests.exceptions.ConnectTimeout:
             status_text = (
                 STANDARD_ERROR_MSG + CONNECTION_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
@@ -161,6 +162,7 @@ class OpenAIClient(BaseLLMModel):
                     timeout=timeout,
                 )
             except:
+                traceback.print_exc()
                 return None
         return response
 
@@ -169,6 +171,7 @@ class OpenAIClient(BaseLLMModel):
             "Content-Type": "application/json",
             "Authorization": f"Bearer {sensitive_id}",
         }
+
 
     def _get_billing_data(self, billing_url):
         with retrieve_proxy():
@@ -240,6 +243,7 @@ class OpenAIClient(BaseLLMModel):
 
         return response
 
+
     def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
         if len(self.history) == 2 and not single_turn_checkbox:
             user_question = self.history[0]["content"]
@@ -247,22 +251,19 @@ class OpenAIClient(BaseLLMModel):
                 ai_answer = self.history[1]["content"]
                 try:
                     history = [
-                        {"role": "system", "content": SUMMARY_CHAT_SYSTEM_PROMPT},
-                        {"role": "user", "content": f"Please write a title based on the following conversation:\n---\nUser: {user_question}\nAssistant: {ai_answer}"}
+                        { "role": "system", "content": SUMMARY_CHAT_SYSTEM_PROMPT},
+                        { "role": "user", "content": f"Please write a title based on the following conversation:\n---\nUser: {user_question}\nAssistant: {ai_answer}"}
                     ]
-                    response = self._single_query_at_once(
-                        history, temperature=0.0)
+                    response = self._single_query_at_once(history, temperature=0.0)
                     response = json.loads(response.text)
                     content = response["choices"][0]["message"]["content"]
                     filename = replace_special_symbols(content) + ".json"
                 except Exception as e:
                     logging.info(f"自动命名失败。{e}")
-                    filename = replace_special_symbols(user_question)[
-                        :16] + ".json"
+                    filename = replace_special_symbols(user_question)[:16] + ".json"
                 return self.rename_chat_history(filename, chatbot, user_name)
             elif name_chat_method == i18n("第一条提问"):
-                filename = replace_special_symbols(user_question)[
-                    :16] + ".json"
+                filename = replace_special_symbols(user_question)[:16] + ".json"
                 return self.rename_chat_history(filename, chatbot, user_name)
             else:
                 return gr.update()

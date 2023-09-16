@@ -69,10 +69,10 @@ def get_model(
             model = LLaMA_Client(
                 model_name, lora_model_path, user_name=user_name)
         elif model_type == ModelType.XMChat:
-            from .XMChat import XMChatClient
+            from .XMChat import XMChat
             if os.environ.get("XMCHAT_API_KEY") != "":
                 access_key = os.environ.get("XMCHAT_API_KEY")
-            model = XMChatClient(api_key=access_key, user_name=user_name)
+            model = XMChat(api_key=access_key, user_name=user_name)
         elif model_type == ModelType.StableLM:
             from .StableLM import StableLM_Client
             model = StableLM_Client(model_name, user_name=user_name)

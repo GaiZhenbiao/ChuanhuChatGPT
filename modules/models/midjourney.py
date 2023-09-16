@@ -2,11 +2,10 @@ import base64
 import io
 import json
 import logging
-import pathlib
-import time
-import tempfile
 import os
-
+import pathlib
+import tempfile
+import time
 from datetime import datetime
 
 import requests
@@ -14,7 +13,7 @@ import tiktoken
 from PIL import Image
 
 from modules.config import retrieve_proxy
-from modules.models.models import XMChat
+from modules.models.XMChat import XMChat
 
 mj_proxy_api_base = os.getenv("MIDJOURNEY_PROXY_API_BASE")
 mj_discord_proxy_url = os.getenv("MIDJOURNEY_DISCORD_PROXY_URL")

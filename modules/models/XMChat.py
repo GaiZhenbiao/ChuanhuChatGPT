@@ -16,7 +16,7 @@ from ..utils import *
 from .base_model import BaseLLMModel
 
 
-class XMChatClient(BaseLLMModel):
+class XMChat(BaseLLMModel):
     def __init__(self, api_key, user_name=""):
         super().__init__(model_name="xmchat", user=user_name)
         self.api_key = api_key
@@ -31,7 +31,7 @@ class XMChatClient(BaseLLMModel):
     def reset(self):
         self.session_id = str(uuid.uuid4())
         self.last_conv_id = None
-        return [], "已重置"
+        return super().reset()
 
     def image_to_base64(self, image_path):
         # 打开并加载图片
