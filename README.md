@@ -22,9 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        流式传输 / 无限对话 / 保存对话 / 预设Prompt集 / 联网搜索 / 根据文件回答 <br />
-        渲染LaTeX / 渲染表格 / 代码高亮 / 自动亮暗色切换 / 自适应界面 / “小而美”的体验 <br />
-        自定义api-Host / 多参数可调 / 多API Key均衡负载 / 多用户显示 / 适配GPT-4 / 支持本地部署LLM
+        支持 GPT-4 · 基于文件问答 · LLM本地部署 · 联网搜索 · Agent 助理 ·  支持 Fine-tune
       </p>
       <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
         ·
@@ -42,37 +40,91 @@
 ## 目录
 
 | [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) |
-| ------------------ | ------------------ | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------- |
+| --- | --- | --- | --- | --- |
+
+## ✨ 5.0 重磅更新！
+
+![ChuanhuChat5更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/f2c2be3a-ea93-4edf-8221-94eddd4a0178)
+
+
+<sup>New!</sup> 全新的用户界面！精致得不像 Gradio，甚至有毛玻璃效果！
+
+<sup>New!</sup> 适配了移动端（包括全面屏手机的挖孔/刘海），层级更加清晰。
+
+<sup>New!</sup> 历史记录移到左侧，使用更加方便。并且支持搜索（支持正则）、删除、重命名。
+
+<sup>New!</sup> 现在可以让大模型自动命名历史记录（需在设置或配置文件中开启）。
+
+<sup>New!</sup> 现在可以将 川虎Chat 作为 PWA 应用程序安装，体验更加原生！支持 Chrome/Edge/Safari 等浏览器。
+
+<sup>New!</sup> 图标适配各个平台，看起来更舒服。
+
+<sup>New!</sup> 支持 Finetune（微调） GPT 3.5！
+
 
 ## 支持模型
 
-**通过API调用的语言模型**：
-
-- [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
-- [Google PaLM](https://developers.generativeai.google/products/palm)
-- [Inspur Yuan 1.0](https://air.inspur.com/home)
-- [MiniMax](https://api.minimax.chat/)
-- [XMChat](https://github.com/MILVLG/xmchat)
-
-**本地部署语言模型**：
-
-- [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B))
-- [LLaMA](https://github.com/facebookresearch/llama)
-- [StableLM](https://github.com/Stability-AI/StableLM)
-- [MOSS](https://github.com/OpenLMLab/MOSS)
+| API 调用模型 | 备注 | 本地部署模型 | 备注 |
+| :---: | --- | :---: | --- |
+| [ChatGPT(GPT-4)](https://chat.openai.com) | 支持微调 gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | 支持 Lora 模型 
+| [Google PaLM](https://developers.generativeai.google/products/palm) | 不支持流式传输 | [StableLM](https://github.com/Stability-AI/StableLM)
+| [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | 
+| [MiniMax](https://api.minimax.chat/) | 
+| [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输
+| [Midjourney](https://www.midjourney.com/) | 不支持流式传输
 
 ## 使用技巧
 
-- 使用System Prompt可以很有效地设定前提条件。
-- 使用Prompt模板功能时，选择Prompt模板集合文件，然后从下拉菜单中选择想要的prompt。
-- 如果回答不满意，可以使用 `重新生成`按钮再试一次
-- 输入框支持换行，按 `shift enter`即可。
-- 可以在输入框按上下箭头在输入历史之间切换
+### 💪 强力功能
+- **川虎助理**：类似 AutoGPT，全自动解决你的问题；
+- **在线搜索**：ChatGPT 的数据太旧？给 LLM 插上网络的翅膀；
+- **知识库**：让 ChatGPT 帮你量子速读！根据文件回答问题。
+- **本地部署LLM**：一键部署，获取属于你自己的大语言模型。
+
+### 🤖 System Prompt
+- 通过 System Prompt 设定前提条件，可以很有效地进行角色扮演；
+- 川虎Chat 预设了Prompt模板，点击`加载Prompt模板`，先选择 Prompt 模板集合，然后在下方选择想要的 Prompt。
+
+### 💬 基础对话
+- 如果回答不满意，可以使用 `重新生成` 按钮再试一次，或者直接 `删除这轮对话`;
+- 输入框支持换行，按 <kbd>Shift</kbd> + <kbd>Enter</kbd>即可；
+- 在输入框按 <kbd>↑</kbd> <kbd>↓</kbd> 方向键，可以在发送记录中快速切换；
+- 每次新建一个对话太麻烦，试试 `单论对话` 功能；
+- 回答气泡旁边的小按钮，不仅能 `一键复制`，还能 `查看Markdown原文`；
+- 指定回答语言，让 ChatGPT 固定以某种语言回答。
+
+### 📜 对话历史
+- 对话历史记录会被自动保存，不用担心问完之后找不到了；
+- 多用户历史记录隔离，除了你都看不到；
+- 重命名历史记录，方便日后查找；
+- <sup>New!</sup> 魔法般自动命名历史记录，让 LLM 理解对话内容，帮你自动为历史记录命名！
+- <sup>New!</sup> 搜索历史记录，支持正则表达式！
+
+### 🖼️ 小而美的体验
+- 自研 Small-and-Beautiful 主题，带给你小而美的体验；
+- 自动亮暗色切换，给你从早到晚的舒适体验；
+- 完美渲染 LaTeX / 表格 / 代码块，支持代码高亮；
+- <sup>New!</sup> 非线性动画、毛玻璃效果，精致得不像 Gradio！
+- <sup>New!</sup> 适配 Windows / macOS / Linux / iOS / Android，从图标到全面屏适配，给你最合适的体验！
+- <sup>New!</sup> 支持以 PWA应用程序 安装，体验更加原生！
+
+### 👨‍💻 极客功能
+- <sup>New!</sup> 支持 Fine-tune（微调）gpt-3.5！
+- 大量 LLM 参数可调；
+- 支持更换 api-host；
+- 支持自定义代理；
+- 支持多 api-key 负载均衡。
+
+### ⚒️ 部署相关
 - 部署到服务器：在 `config.json` 中设置 `"server_name": "0.0.0.0", "server_port": <你的端口号>,`。
 - 获取公共链接：在 `config.json` 中设置 `"share": true,`。注意程序必须在运行，才能通过公共链接访问。
 - 在Hugging Face上使用：建议在右上角 **复制Space** 再使用，这样App反应可能会快一点。
 
 ## 快速上手
+
+在终端执行以下命令：
 
 ```shell
 git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git
@@ -89,14 +141,14 @@ python ChuanhuChatbot.py
 一个浏览器窗口将会自动打开，此时您将可以使用 **川虎Chat** 与ChatGPT或其他模型进行对话。
 
 > **Note**
->
+> 
 > 具体详尽的安装教程和使用教程请查看[本项目的wiki页面](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程)。
 
 ## 疑难杂症解决
 
-在遇到各种问题查阅相关信息前，您可以先尝试手动拉取本项目的最新更改并更新依赖库，然后重试。步骤为：
+在遇到各种问题查阅相关信息前，您可以先尝试 **手动拉取本项目的最新更改<sup>1</sup>** 并 **更新依赖库<sup>2</sup>**，然后重试。步骤为：
 
-1. 点击网页上的 `Download ZIP` 下载最新代码，或
+1. 点击网页上的 `Download ZIP` 按钮，下载最新代码并解压覆盖，或
    ```shell
    git pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f
    ```

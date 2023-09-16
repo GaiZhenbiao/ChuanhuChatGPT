@@ -22,11 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        Streaming / Unlimited conversations / Save history / Preset prompts / Chat with files / Web search <br />
-        LaTeX rendering / Table rendering / Code highlighting <br />
-        Auto dark mode / Adaptive web interface / WeChat-like theme <br />
-        Multi-parameters tuning / Multi-API-Key support / Multi-user support <br />
-        Compatible with GPT-4 / Local deployment for LLMs
+        Compatible with GPT-4 · Chat with files · LLMs local deployment · Web search · Chuanhu Agent ·  Fine-tuning
       </p>
       <a href="https://www.youtube.com/watch?v=MtxS4XZWbJE"><strong>Video Tutorial</strong></a>
         ·
@@ -43,35 +39,88 @@
 
 [![Video Title](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7.jpg)](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7?autoplay=1)
 
-## Supported LLM Models
+## ✨ 5.0 Major Update!
 
-**LLM models via API**:
+![ChuanhuChat5update](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/f2c2be3a-ea93-4edf-8221-94eddd4a0178)
 
-- [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
-- [Google PaLM](https://developers.generativeai.google/products/palm)
-- [Inspur Yuan 1.0](https://air.inspur.com/home)
-- [MiniMax](https://api.minimax.chat/)
-- [XMChat](https://github.com/MILVLG/xmchat)
 
-**LLM models via local deployment**:
+<sup>New!</sup> An all-new user interface! So exquisite that it doesn't look like Gradio, it even has a frosted glass effect!
 
-- [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B))
-- [LLaMA](https://github.com/facebookresearch/llama)
-- [StableLM](https://github.com/Stability-AI/StableLM)
-- [MOSS](https://github.com/OpenLMLab/MOSS)
+<sup>New!</sup> Adapted for mobile devices (including perforated/bezel-less phones), the hierarchy is clearer.
+
+<sup>New!</sup> The history is moved to the left for easier use. And supports search (with regular expressions), delete, and rename.
+
+<sup>New!</sup> Now you can let the large model automatically name the history (Enabled in the settings or configuration file).
+
+<sup>New!</sup> Chuanhu Chat can now be installed as a PWA application for a more native experience! Supported on Chrome/Edge/Safari etc.
+
+<sup>New!</sup> Icons adapted for all platforms, looking more comfortable.
+
+<sup>New!</sup> Supports Finetune (fine-tuning) GPT 3.5!
+
+## Supported Models
+
+| API Callable Models | Remarks | Locally Deployed Models | Remarks |
+| :---: | --- | :---: | --- |
+| [ChatGPT(GPT-4)](https://chat.openai.com) | Support fine-tune gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Support Lora models 
+| [Google PaLM](https://developers.generativeai.google/products/palm) | Not support streaming | [StableLM](https://github.com/Stability-AI/StableLM)
+| [iFlytek Starfire Cognition Large Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | 
+| [MiniMax](https://api.minimax.chat/) | 
+| [XMChat](https://github.com/MILVLG/xmchat) | Not support streaming
+| [Midjourney](https://www.midjourney.com/) | Not support streaming
 
 ## Usage Tips
 
-- To better control the ChatGPT, use System Prompt.
-- To use a Prompt Template, select the Prompt Template Collection file first, and then choose certain prompt from the drop-down menu.
-- To try again if the response is unsatisfactory, use `🔄 Regenerate` button.
-- To start a new line in the input box, press <kbd>Shift</kbd> + <kbd>Enter</kbd> keys.
-- To quickly switch between input history, press <kbd>↑</kbd> and <kbd>↓</kbd> key in the input box.
-- To deploy the program onto a server, set `"server_name": "0.0.0.0", "server_port" <your port number>,` in `config.json`.
-- To get a public shared link, set `"share": true,` in `config.json`. Please be noted that the program must be running in order to be accessed via a public link.
-- To use it in Hugging Face Spaces: It is recommended to **Duplicate Space** and run the program in your own Space for a faster and more secure experience.
+### 💪 Powerful Functions
+- **Chuanhu Assistant**: Similar to AutoGPT, automatically solves your problems;
+- **Online Search**: Is ChatGPT's data too old? Give LLM the wings of the internet;
+- **Knowledge Base**: Let ChatGPT help you speed read quantumly! Answer questions based on files.
+- **Local LLM Deployment**: One-click deployment, get your own large language model.
 
-## Quickstart
+### 🤖 System Prompt
+- The system prompt can effectively enable role-playing by setting prerequisite conditions;
+- ChuanhuChat presets Prompt templates, click `Load Prompt Template`, choose the Prompt template collection first, then choose the Prompt you want in the list below.
+
+### 💬 Basic Conversation
+- If the answer is not satisfactory, you can try the `Regenerate` button again, or directly `Delete this round of conversation`;
+- Input box supports line breaks, press <kbd>Shift</kbd> + <kbd>Enter</kbd> to make one;
+- Using the <kbd>↑</kbd> <kbd>↓</kbd> arrow keys in the input box, you can quickly switch between send records;
+- Generating a new conversation every time is too cumbersome, try the `single-dialogue` function;
+- The small button next to the answer bubble not only allows `one-click copy`, but also lets you `view the original Markdown text`;
+- Specify the answer language, so that ChatGPT will always reply in a certain language.
+
+### 📜 Chat History
+- Dialogue history will be automatically saved, you won't have to worry about not being able to find it after asking;
+- Multi-user history isolation, only you can see them;
+- Rename chat, easy to find in the future;
+- <sup>New!</sup> Magically auto-name the chat, let LLM understand the conversation content, and automatically name the chat for you!
+- <sup>New!</sup> Search chat, supports regular expressions!
+
+### 🖼️ Small and Beautiful Experience
+- Self-developed Small-and-Beautiful theme, gives you a small and beautiful experience;
+- Automatic light and dark color switching, gives you a comfortable experience from morning till night;
+- Perfectly rendering LaTeX / tables / code blocks, supports code highlighting;
+- <sup>New!</sup> Non-linear animations, frosted glass effect, so exquisite it doesn't look like Gradio!
+- <sup>New!</sup> Adapted for Windows / macOS / Linux / iOS / Android, from icon to screen adaptation, gives you the most suitable experience!
+- <sup>New!</sup> Supports PWA app installation for an even more native experience!
+
+### 👨‍💻 Geek Functions
+- <sup>New!</sup> Supports Fine-tuning gpt-3.5!
+- Plenty of available LLM parameters to adjust;
+- Supports API-host switching;
+- Supports custom proxies;
+- Supports multiple api-key load balancing.
+
+### ⚒️ Deployment Related
+- Deployment to the server: Set in `config.json` `"server_name": "0.0.0.0", "server_port": <your port number>,`.
+- Obtain public link: Set in `config.json` `"share": true,`. Note that the program must be running to access it through public links.
+- Use on Hugging Face: It's recommended to **Duplicate the Space** in the top right corner before using, the App response might be faster.
+
+## Quick Start
+
+Execute the following commands in the terminal:
 
 ```shell
 git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git
@@ -85,21 +134,22 @@ Then make a copy of `config_example.json`, rename it to `config.json`, and then 
 python ChuanhuChatbot.py
 ```
 
-A browser window will open and you will be able to chat with ChatGPT.
+A browser window will automatically open, at this point you can use **Chuanhu Chat** to chat with ChatGPT or other models.
 
 > **Note**
 >
-> Please check our [wiki page](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) for detailed instructions.
+> Please check our [wiki page](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) for detailed instructions.).
+
 
 ## Troubleshooting
 
-When you encounter problems, you should try manually pulling the latest changes of this project first. The steps are as follows:
+When you encounter problems, you should try to **manually pull the latest changes<sup>1</sup>** and **update dependencies<sup>2</sup>** first, then retry. Steps are:
 
-1. Download the latest code archive by clicking on `Download ZIP` on the webpage, or
+1. Click on the `Download ZIP` button on the website, download the latest code and unzip to replace, or
    ```shell
    git pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f
    ```
-2. Try installing the dependencies again (as this project may have introduced new dependencies)
+2. Try to install dependencies again (the project might have new dependencies)
    ```
    pip install -r requirements.txt
    ```
