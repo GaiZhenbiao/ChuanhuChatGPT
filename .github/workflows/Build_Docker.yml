@@ -1,0 +1,51 @@
+name: Build Docker when Push
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set commit SHA
+        run: echo "COMMIT_SHA=$(echo ${{ github.sha }} | cut -c 1-7)" >> ${GITHUB_ENV}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.MY_TOKEN }}
+
+      - name: Owner names
+        run: |
+          GITOWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')
+          echo "GITOWNER=$GITOWNER" >> ${GITHUB_ENV}
+
+      - name: Build and export
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: false
+          tags: |
+            ghcr.io/${{ env.GITOWNER }}/chuanhuchatgpt:latest
+            ghcr.io/${{ env.GITOWNER }}/chuanhuchatgpt:${{ github.sha }}
+          outputs: type=oci,dest=/tmp/myimage-${{ env.COMMIT_SHA }}.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: chuanhuchatgpt-${{ env.COMMIT_SHA }}
+          path: /tmp/myimage-${{ env.COMMIT_SHA }}.tar
