@@ -51,7 +51,7 @@ hide_history_when_not_logged_in = config.get(
 check_update = config.get("check_update", True)
 show_api_billing = config.get("show_api_billing", False)
 show_api_billing = bool(os.environ.get("SHOW_API_BILLING", show_api_billing))
-chat_name_method_index = config.get("chat_name_method_index", 0)
+chat_name_method_index = config.get("chat_name_method_index", 2)
 
 if os.path.exists("api_key.txt"):
     logging.info("检测到api_key.txt文件，正在进行迁移...")
