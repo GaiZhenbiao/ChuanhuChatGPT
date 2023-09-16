@@ -3,10 +3,39 @@ from __future__ import annotations
 import json
 import os
 
+from huggingface_hub import hf_hub_download
+from llama_cpp import Llama
+
 from ..index_func import *
 from ..presets import *
 from ..utils import *
 from .base_model import BaseLLMModel
+
+import json
+from llama_cpp import Llama
+from huggingface_hub import hf_hub_download
+
+def download(repo_id, filename, retry=10):
+    if os.path.exists("./models/downloaded_models.json"):
+        with open("./models/downloaded_models.json", "r") as f:
+            downloaded_models = json.load(f)
+        if repo_id in downloaded_models:
+            return downloaded_models[repo_id]["path"]
+    else:
+        downloaded_models = {}
+    while retry > 0:
+        try:
+            model_path = hf_hub_download(repo_id=repo_id, filename=filename, cache_dir="models", resume_download=True)
+            downloaded_models[repo_id] = {"path": model_path}
+            with open("./models/downloaded_models.json", "w") as f:
+                json.dump(downloaded_models, f)
+            break
+        except:
+            print("Error downloading model, retrying...")
+            retry -= 1
+    if retry == 0:
+        raise Exception("Error downloading model, please try again later.")
+    return model_path
 
 
 class LLaMA_Client(BaseLLMModel):
@@ -17,51 +46,28 @@ class LLaMA_Client(BaseLLMModel):
         user_name=""
     ) -> None:
         super().__init__(model_name=model_name, user=user_name)
-        from lmflow.args import (DatasetArguments, InferencerArguments,
-                                 ModelArguments)
-        from lmflow.datasets.dataset import Dataset
-        from lmflow.models.auto_model import AutoModel
-        from lmflow.pipeline.auto_pipeline import AutoPipeline
 
         self.max_generation_token = 1000
         self.end_string = "\n\n"
         # We don't need input data
-        data_args = DatasetArguments(dataset_path=None)
-        self.dataset = Dataset(data_args)
+        path_to_model = download(MODEL_METADATA[model_name]["repo_id"], MODEL_METADATA[model_name]["filelist"][0])
         self.system_prompt = ""
 
-        global LLAMA_MODEL, LLAMA_INFERENCER
-        if LLAMA_MODEL is None or LLAMA_INFERENCER is None:
-            model_path = None
-            if os.path.exists("models"):
-                model_dirs = os.listdir("models")
-                if model_name in model_dirs:
-                    model_path = f"models/{model_name}"
-            if model_path is not None:
-                model_source = model_path
-            else:
-                model_source = f"decapoda-research/{model_name}"
+        global LLAMA_MODEL
+        if LLAMA_MODEL is None:
+            LLAMA_MODEL = Llama(model_path=path_to_model)
+            # model_path = None
+            # if os.path.exists("models"):
+            #     model_dirs = os.listdir("models")
+            #     if model_name in model_dirs:
+            #         model_path = f"models/{model_name}"
+            # if model_path is not None:
+            #     model_source = model_path
+            # else:
+            #     model_source = f"decapoda-research/{model_name}"
                 # raise Exception(f"models目录下没有这个模型: {model_name}")
-            if lora_path is not None:
-                lora_path = f"lora/{lora_path}"
-            model_args = ModelArguments(model_name_or_path=model_source, lora_model_path=lora_path, model_type=None, config_overrides=None, config_name=None, tokenizer_name=None, cache_dir=None,
-                                        use_fast_tokenizer=True, model_revision='main', use_auth_token=False, torch_dtype=None, use_lora=False, lora_r=8, lora_alpha=32, lora_dropout=0.1, use_ram_optimized_load=True)
-            pipeline_args = InferencerArguments(
-                local_rank=0, random_seed=1, deepspeed='configs/ds_config_chatbot.json', mixed_precision='bf16')
-
-            with open(pipeline_args.deepspeed, "r", encoding="utf-8") as f:
-                ds_config = json.load(f)
-            LLAMA_MODEL = AutoModel.get_model(
-                model_args,
-                tune_strategy="none",
-                ds_config=ds_config,
-            )
-            LLAMA_INFERENCER = AutoPipeline.get_pipeline(
-                pipeline_name="inferencer",
-                model_args=model_args,
-                data_args=data_args,
-                pipeline_args=pipeline_args,
-            )
+            # if lora_path is not None:
+            #     lora_path = f"lora/{lora_path}"
 
     def _get_llama_style_input(self):
         history = []
@@ -79,38 +85,14 @@ class LLaMA_Client(BaseLLMModel):
 
     def get_answer_at_once(self):
         context = self._get_llama_style_input()
-
-        input_dataset = self.dataset.from_dict(
-            {"type": "text_only", "instances": [{"text": context}]}
-        )
-
-        output_dataset = LLAMA_INFERENCER.inference(
-            model=LLAMA_MODEL,
-            dataset=input_dataset,
-            max_new_tokens=self.max_generation_token,
-            temperature=self.temperature,
-        )
-
-        response = output_dataset.to_dict()["instances"][0]["text"]
+        response = LLAMA_MODEL(context, max_tokens=self.max_generation_token, stop=[], echo=False, stream=False)
         return response, len(response)
 
     def get_answer_stream_iter(self):
         context = self._get_llama_style_input()
+        iter = LLAMA_MODEL(context, max_tokens=self.max_generation_token, stop=[], echo=False, stream=True)
         partial_text = ""
-        step = 1
-        for _ in range(0, self.max_generation_token, step):
-            input_dataset = self.dataset.from_dict(
-                {"type": "text_only", "instances": [
-                    {"text": context + partial_text}]}
-            )
-            output_dataset = LLAMA_INFERENCER.inference(
-                model=LLAMA_MODEL,
-                dataset=input_dataset,
-                max_new_tokens=step,
-                temperature=self.temperature,
-            )
-            response = output_dataset.to_dict()["instances"][0]["text"]
-            if response == "" or response == self.end_string:
-                break
+        for i in iter:
+            response = i["choices"][0]["text"]
             partial_text += response
             yield partial_text

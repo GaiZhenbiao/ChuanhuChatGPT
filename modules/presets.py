@@ -83,10 +83,7 @@ LOCAL_MODELS = [
     "chatglm2-6b-int4",
     "StableLM",
     "MOSS",
-    "llama-7b-hf",
-    "llama-13b-hf",
-    "llama-30b-hf",
-    "llama-65b-hf",
+    "Llama-2-7B",
 ]
 
 if os.environ.get('HIDE_LOCAL_MODELS', 'false') == 'true':
@@ -134,8 +131,8 @@ REPLY_LANGUAGES = [
 ]
 
 HISTORY_NAME_METHODS = [
-    i18n("根据日期时间"), 
-    i18n("第一条提问"), 
+    i18n("根据日期时间"),
+    i18n("第一条提问"),
     i18n("模型自动总结（消耗tokens）"),
 ]
 
@@ -266,3 +263,10 @@ small_and_beautiful_theme = gr.themes.Soft(
         chatbot_code_background_color_dark="*neutral_950",
     )
 
+# Additional metadate for local models
+MODEL_METADATA = {
+    "Llama-2-7B":{
+        "repo_id": "TheBloke/Llama-2-7B-GGUF",
+        "filelist": ["llama-2-7b.Q6_K.gguf"],
+    }
+}
