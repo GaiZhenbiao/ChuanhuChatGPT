@@ -15,6 +15,13 @@ import json
 from llama_cpp import Llama
 from huggingface_hub import hf_hub_download
 
+SYS_PREFIX = "<<SYS>>\n"
+SYS_POSTFIX = "\n<</SYS>>\n\n"
+INST_PREFIX = "<s>[INST] "
+INST_POSTFIX = " "
+OUTPUT_PREFIX = "[/INST] "
+OUTPUT_POSTFIX = "</s>"
+
 def download(repo_id, filename, retry=10):
     if os.path.exists("./models/downloaded_models.json"):
         with open("./models/downloaded_models.json", "r") as f:
@@ -70,18 +77,15 @@ class LLaMA_Client(BaseLLMModel):
             #     lora_path = f"lora/{lora_path}"
 
     def _get_llama_style_input(self):
-        history = []
-        instruction = ""
-        if self.system_prompt:
-            instruction = (f"Instruction: {self.system_prompt}\n")
-        for x in self.history:
-            if x["role"] == "user":
-                history.append(f"{instruction}Input: {x['content']}")
+        context = []
+        for conv in self.history:
+            if conv["role"] == "system":
+                context.append(SYS_PREFIX+conv["content"]+SYS_POSTFIX)
+            elif conv["role"] == "user":
+                context.append(INST_PREFIX+conv["content"]+INST_POSTFIX+OUTPUT_PREFIX)
             else:
-                history.append(f"Output: {x['content']}")
-        context = "\n\n".join(history)
-        context += "\n\nOutput: "
-        return context
+                context.append(conv["content"]+OUTPUT_POSTFIX)
+        return "".join(context)
 
     def get_answer_at_once(self):
         context = self._get_llama_style_input()

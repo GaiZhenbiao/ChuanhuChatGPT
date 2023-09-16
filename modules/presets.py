@@ -83,8 +83,20 @@ LOCAL_MODELS = [
     "chatglm2-6b-int4",
     "StableLM",
     "MOSS",
-    "Llama-2-7B",
+    "Llama-2-7B-Chat",
 ]
+
+# Additional metadate for local models
+MODEL_METADATA = {
+    "Llama-2-7B":{
+        "repo_id": "TheBloke/Llama-2-7B-GGUF",
+        "filelist": ["llama-2-7b.Q6_K.gguf"],
+    },
+    "Llama-2-7B-Chat":{
+        "repo_id": "TheBloke/Llama-2-7b-Chat-GGUF",
+        "filelist": ["llama-2-7b-chat.Q6_K.gguf"],
+    }
+}
 
 if os.environ.get('HIDE_LOCAL_MODELS', 'false') == 'true':
     MODELS = ONLINE_MODELS
@@ -262,11 +274,3 @@ small_and_beautiful_theme = gr.themes.Soft(
         # gradio 会把这个几个chatbot打头的变量应用到其他md渲染的地方，鬼晓得怎么想的。。。
         chatbot_code_background_color_dark="*neutral_950",
     )
-
-# Additional metadate for local models
-MODEL_METADATA = {
-    "Llama-2-7B":{
-        "repo_id": "TheBloke/Llama-2-7B-GGUF",
-        "filelist": ["llama-2-7b.Q6_K.gguf"],
-    }
-}
