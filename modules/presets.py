@@ -83,11 +83,20 @@ LOCAL_MODELS = [
     "chatglm2-6b-int4",
     "StableLM",
     "MOSS",
-    "llama-7b-hf",
-    "llama-13b-hf",
-    "llama-30b-hf",
-    "llama-65b-hf",
+    "Llama-2-7B-Chat",
 ]
+
+# Additional metadate for local models
+MODEL_METADATA = {
+    "Llama-2-7B":{
+        "repo_id": "TheBloke/Llama-2-7B-GGUF",
+        "filelist": ["llama-2-7b.Q6_K.gguf"],
+    },
+    "Llama-2-7B-Chat":{
+        "repo_id": "TheBloke/Llama-2-7b-Chat-GGUF",
+        "filelist": ["llama-2-7b-chat.Q6_K.gguf"],
+    }
+}
 
 if os.environ.get('HIDE_LOCAL_MODELS', 'false') == 'true':
     MODELS = ONLINE_MODELS
@@ -135,8 +144,8 @@ REPLY_LANGUAGES = [
 ]
 
 HISTORY_NAME_METHODS = [
-    i18n("根据日期时间"), 
-    i18n("第一条提问"), 
+    i18n("根据日期时间"),
+    i18n("第一条提问"),
     i18n("模型自动总结（消耗tokens）"),
 ]
 
@@ -266,4 +275,3 @@ small_and_beautiful_theme = gr.themes.Soft(
         # gradio 会把这个几个chatbot打头的变量应用到其他md渲染的地方，鬼晓得怎么想的。。。
         chatbot_code_background_color_dark="*neutral_950",
     )
-
