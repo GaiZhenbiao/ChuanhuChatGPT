@@ -26,7 +26,7 @@ def get_model(
     msg = i18n("模型设置为了：") + f" {model_name}"
     model_type = ModelType.get_type(model_name)
     lora_selector_visibility = False
-    lora_choices = []
+    lora_choices = ["No LoRA"]
     dont_change_lora_selector = False
     if model_type != ModelType.OpenAI:
         config.local_embedding = True
@@ -55,8 +55,7 @@ def get_model(
             logging.info(msg)
             lora_selector_visibility = True
             if os.path.isdir("lora"):
-                get_file_names_by_pinyin("lora", filetypes=[""])
-            lora_choices = ["No LoRA"] + lora_choices
+                lora_choices = ["No LoRA"] + get_file_names_by_pinyin("lora", filetypes=[""])
         elif model_type == ModelType.LLaMA and lora_model_path != "":
             logging.info(f"正在加载LLaMA模型: {model_name} + {lora_model_path}")
             from .LLaMA import LLaMA_Client
