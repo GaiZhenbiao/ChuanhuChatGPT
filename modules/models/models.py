@@ -32,7 +32,7 @@ def get_model(
     if model_type != ModelType.OpenAI:
         config.local_embedding = True
     # del current_model.model
-    model = None
+    model = original_model
     chatbot = gr.Chatbot.update(label=model_name)
     try:
         if model_type == ModelType.OpenAI:
