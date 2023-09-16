@@ -1,31 +1,26 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
 
-import logging
-import json
-import commentjson as cjson
-import os
-import sys
-import requests
-import urllib3
-import platform
 import base64
+import json
+import logging
+import os
+import platform
+import traceback
+import uuid
 from io import BytesIO
+
+import colorama
+import commentjson as cjson
+import requests
 from PIL import Image
 
-from tqdm import tqdm
-import colorama
-import asyncio
-import aiohttp
-from enum import Enum
-import uuid
-
-from ..presets import *
-from ..index_func import *
-from ..utils import *
-from .. import shared
-from ..config import retrieve_proxy, usage_limit, sensitive_id
 from modules import config
+
+from .. import shared
+from ..config import retrieve_proxy, sensitive_id, usage_limit
+from ..index_func import *
+from ..presets import *
+from ..utils import *
 from .base_model import BaseLLMModel, ModelType
 
 
@@ -97,6 +92,7 @@ class OpenAIClient(BaseLLMModel):
             rounded_usage = round(usage_data["total_usage"] / 100, 5)
             usage_percent = round(usage_data["total_usage"] / usage_limit, 2)
             from ..webui import get_html
+
             # return i18n("**本月使用金额** ") + f"\u3000 ${rounded_usage}"
             return get_html("billing_info.html").format(
                     label = i18n("本月使用金额"),
@@ -175,6 +171,7 @@ class OpenAIClient(BaseLLMModel):
                     timeout=timeout,
                 )
             except:
+                traceback.print_exc()
                 return None
         return response
 
@@ -286,8 +283,8 @@ class OpenAIClient(BaseLLMModel):
 class ChatGLM_Client(BaseLLMModel):
     def __init__(self, model_name, user_name="") -> None:
         super().__init__(model_name=model_name, user=user_name)
-        from transformers import AutoTokenizer, AutoModel
         import torch
+        from transformers import AutoModel, AutoTokenizer
         global CHATGLM_TOKENIZER, CHATGLM_MODEL
         if CHATGLM_TOKENIZER is None or CHATGLM_MODEL is None:
             system_name = platform.system()
@@ -363,10 +360,11 @@ class LLaMA_Client(BaseLLMModel):
         user_name=""
     ) -> None:
         super().__init__(model_name=model_name, user=user_name)
+        from lmflow.args import (DatasetArguments, InferencerArguments,
+                                 ModelArguments)
         from lmflow.datasets.dataset import Dataset
-        from lmflow.pipeline.auto_pipeline import AutoPipeline
         from lmflow.models.auto_model import AutoModel
-        from lmflow.args import ModelArguments, DatasetArguments, InferencerArguments
+        from lmflow.pipeline.auto_pipeline import AutoPipeline
 
         self.max_generation_token = 1000
         self.end_string = "\n\n"
