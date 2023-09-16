@@ -63,7 +63,23 @@ class ChuanhuAgent_Client(BaseLLMModel):
         self.index_summary = None
         self.index = None
         if "Pro" in self.model_name:
-            self.tools = load_tools(["serpapi", "google-search-results-json", "llm-math", "arxiv", "wikipedia", "wolfram-alpha"], llm=self.llm)
+            tools_to_enable = ["llm-math", "arxiv", "wikipedia"]
+            # if exists GOOGLE_CSE_ID and GOOGLE_API_KEY, enable google-search-results-json
+            if os.environ.get("GOOGLE_CSE_ID", None) is not None and os.environ.get("GOOGLE_API_KEY", None) is not None:
+                tools_to_enable.append("google-search-results-json")
+            else:
+                logging.warning("GOOGLE_CSE_ID and/or GOOGLE_API_KEY not found, google-search-results-json is disabled.")
+            # if exists WOLFRAM_ALPHA_APPID, enable wolfram-alpha
+            if os.environ.get("WOLFRAM_ALPHA_APPID", None) is not None:
+                tools_to_enable.append("wolfram-alpha")
+            else:
+                logging.warning("WOLFRAM_ALPHA_APPID not found, wolfram-alpha is disabled.")
+            # if exists SERPAPI_API_KEY, enable serpapi
+            if os.environ.get("SERPAPI_API_KEY", None) is not None:
+                tools_to_enable.append("serpapi")
+            else:
+                logging.warning("SERPAPI_API_KEY not found, serpapi is disabled.")
+            self.tools = load_tools(tools_to_enable, llm=self.llm)
         else:
             self.tools = load_tools(["ddg-search", "llm-math", "arxiv", "wikipedia"], llm=self.llm)
             self.tools.append(

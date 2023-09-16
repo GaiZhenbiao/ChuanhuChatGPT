@@ -665,6 +665,7 @@ def get_model(
         elif model_type == ModelType.ChuanhuAgent:
             from .ChuanhuAgent import ChuanhuAgent_Client
             model = ChuanhuAgent_Client(model_name, access_key, user_name=user_name)
+            msg = i18n("启用的工具：") + ", ".join([i.name for i in model.tools])
         elif model_type == ModelType.GooglePaLM:
             from .Google_PaLM import Google_PaLM_Client
             access_key = os.environ.get("GOOGLE_PALM_API_KEY", access_key)
