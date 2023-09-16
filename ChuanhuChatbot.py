@@ -70,7 +70,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 uploadFileBtn = gr.UploadButton(
                                     interactive=True, label="", file_types=[".json"], elem_id="gr-history-upload-btn")
                                 historyRefreshBtn = gr.Button("", elem_id="gr-history-refresh-btn")
-                            
+
 
                     with gr.Row(elem_id="chuanhu-history-body"):
                         with gr.Column(scale=6, elem_id="history-select-wrap"):
@@ -372,11 +372,11 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
                         )
                         name_chat_method = gr.Dropdown(
-                            label=i18n("对话命名方式"), 
-                            choices=HISTORY_NAME_METHODS, 
+                            label=i18n("对话命名方式"),
+                            choices=HISTORY_NAME_METHODS,
                             multiselect=False,
                             interactive=True,
-                            value=HISTORY_NAME_METHODS[chat_name_method_index], 
+                            value=HISTORY_NAME_METHODS[chat_name_method_index],
                         )
                         single_turn_checkbox = gr.Checkbox(label=i18n(
                             "单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb", visible=False)
@@ -638,12 +638,12 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     keyTxt.submit(**get_usage_args)
     single_turn_checkbox.change(
         set_single_turn, [current_model, single_turn_checkbox], None)
-    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name], [
+    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name, current_model], [
                                  current_model, status_display, chatbot, lora_select_dropdown, user_api_key, keyTxt], show_progress=True, api_name="get_model")
     model_select_dropdown.change(toggle_like_btn_visibility, [model_select_dropdown], [
                                  like_dislike_area], show_progress=False)
     lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider,
-                                top_p_slider, systemPromptTxt, user_name], [current_model, status_display, chatbot], show_progress=True)
+                                top_p_slider, systemPromptTxt, user_name, current_model], [current_model, status_display, chatbot], show_progress=True)
 
     # Template
     systemPromptTxt.change(set_system_prompt, [

@@ -228,7 +228,7 @@ class OpenAIClient(BaseLLMModel):
         ret = super().set_key(new_access_key)
         self._refresh_header()
         return ret
-    
+
     def _single_query_at_once(self, history, temperature=1.0):
         timeout = TIMEOUT_ALL
         headers = {
@@ -255,7 +255,7 @@ class OpenAIClient(BaseLLMModel):
 
         return response
 
-    
+
     def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
         if len(self.history) == 2 and not single_turn_checkbox:
             user_question = self.history[0]["content"]
@@ -601,7 +601,8 @@ def get_model(
     temperature=None,
     top_p=None,
     system_prompt=None,
-    user_name=""
+    user_name="",
+    original_model = None
 ) -> BaseLLMModel:
     msg = i18n("模型设置为了：") + f" {model_name}"
     model_type = ModelType.get_type(model_name)
@@ -671,7 +672,7 @@ def get_model(
             access_key = os.environ.get("GOOGLE_PALM_API_KEY", access_key)
             model = Google_PaLM_Client(model_name, access_key, user_name=user_name)
         elif model_type == ModelType.LangchainChat:
-            from .azure import Azure_OpenAI_Client
+            from .Azure import Azure_OpenAI_Client
             model = Azure_OpenAI_Client(model_name, user_name=user_name)
         elif model_type == ModelType.Midjourney:
             from .midjourney import Midjourney_Client
@@ -688,6 +689,8 @@ def get_model(
         traceback.print_exc()
         msg = f"{STANDARD_ERROR_MSG}: {e}"
     presudo_key = hide_middle_chars(access_key)
+    if original_model is not None:
+        model.history = original_model.history
     if dont_change_lora_selector:
         return model, msg, chatbot, gr.update(), access_key, presudo_key
     else:
