@@ -118,12 +118,12 @@ async function updateLatestVersion() {
                 } else {
                     noUpdate("Local version check failed, it seems to be a local rivision. <br>But your revision is newer than the latest release.");
                     gradioApp().classList.add('is-outdated');
+                    enableUpdateBtns()
                 }
             }
         }
         currentTime = new Date().getTime();
         localStorage.setItem('lastCheckTime', currentTime);
-        disableUpdateBtn_enableCancelBtn()
     } catch (error) {
         console.error(error);
         disableUpdateBtn_enableCancelBtn()
