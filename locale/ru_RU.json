@@ -105,6 +105,7 @@
     "剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)": "Недостаточно остаточного квоты, [подробнее](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)",
     "你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)": "У вас нет доступа к GPT4, [подробнее](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)",
     "请查看 config_example.json，配置 Azure OpenAI": "Пожалуйста, просмотрите config_example.json для настройки Azure OpenAI",
+    "启用的工具：" : "Включенные инструменты：",
 
     "微调": "Своя модель",
     "训练状态": "Статус обучения",

@@ -105,6 +105,7 @@
     "剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)": "남은 할당량이 부족합니다. [자세히 알아보기](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)",
     "你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)": "GPT-4에 접근 권한이 없습니다. [자세히 알아보기](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)",
     "请查看 config_example.json，配置 Azure OpenAI": "Azure OpenAI 설정을 확인하세요",
+    "启用的工具：" : "활성화된 도구: ",
 
     "微调": "미세 조정",
     "训练状态": "훈련 상태",
