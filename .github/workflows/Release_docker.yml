@@ -3,6 +3,7 @@ name: Build and Push Docker when Release
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   docker:
