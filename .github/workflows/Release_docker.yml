@@ -16,7 +16,7 @@ jobs:
 
       - name: Set release tag
         run: |
-          echo "RELEASE_TAG=${{ github.event.release.tag_name }}" >> ${GITHUB_ENV}
+          echo "RELEASE_DATE=$(date +%y.%m.%d)" >> ${GITHUB_ENV}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -50,6 +50,6 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.GITOWNER }}/chuanhuchatgpt:latest
-            ghcr.io/${{ env.GITOWNER }}/chuanhuchatgpt:${{ env.RELEASE_TAG }}
+            ghcr.io/${{ env.GITOWNER }}/chuanhuchatgpt:${{ env.RELEASE_DATE }}
             ${{ secrets.DOCKERHUB_USERNAME }}/chuanhuchatgpt:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/chuanhuchatgpt:${{ env.RELEASE_TAG }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/chuanhuchatgpt:${{ env.RELEASE_DATE }}
