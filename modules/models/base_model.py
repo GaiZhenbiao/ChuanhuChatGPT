@@ -176,7 +176,7 @@ class ModelType(Enum):
         elif "星火大模型" in model_name_lower:
             model_type = ModelType.Spark
         else:
-            model_type = ModelType.Unknown
+            model_type = ModelType.LLaMA
         return model_type
 
 

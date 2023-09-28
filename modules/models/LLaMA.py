@@ -88,6 +88,16 @@ class LLaMA_Client(BaseLLMModel):
             else:
                 context.append(conv["content"] + OUTPUT_POSTFIX)
         return "".join(context)
+        # for conv in self.history:
+        #     if conv["role"] == "system":
+        #         context.append(conv["content"])
+        #     elif conv["role"] == "user":
+        #         context.append(
+        #             conv["content"]
+        #         )
+        #     else:
+        #         context.append(conv["content"])
+        # return "\n\n".join(context)+"\n\n"
 
     def get_answer_at_once(self):
         context = self._get_llama_style_input()
@@ -105,7 +115,7 @@ class LLaMA_Client(BaseLLMModel):
         iter = self.model(
             context,
             max_tokens=self.max_generation_token,
-            stop=[],
+            stop=[SYS_PREFIX, SYS_POSTFIX, INST_PREFIX, OUTPUT_PREFIX,OUTPUT_POSTFIX],
             echo=False,
             stream=True,
         )
