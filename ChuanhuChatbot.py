@@ -85,13 +85,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         with gr.Row(visible=False):
                             with gr.Column(min_width=42, scale=1):
                                 historyDeleteBtn = gr.Button(
-                                    i18n("🗑️"), elem_id="gr-history-delete-btn")
+                                    "🗑️", elem_id="gr-history-delete-btn")
                             with gr.Column(min_width=42, scale=1):
                                 historyDownloadBtn = gr.Button(
-                                    i18n("⏬"), elem_id="gr-history-download-btn")
+                                    "⏬", elem_id="gr-history-download-btn")
                             with gr.Column(min_width=42, scale=1):
                                 historyMarkdownDownloadBtn = gr.Button(
-                                    i18n("⤵️"), elem_id="gr-history-mardown-download-btn")
+                                    "⤵️", elem_id="gr-history-mardown-download-btn")
                     with gr.Row(visible=False):
                         with gr.Column(scale=6):
                             saveFileName = gr.Textbox(
@@ -104,9 +104,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             )
                         with gr.Column(scale=1):
                             renameHistoryBtn = gr.Button(
-                                i18n("💾 Rename Chat"), elem_id="gr-history-save-btn")
+                                i18n("💾 保存对话"), elem_id="gr-history-save-btn")
                             exportMarkdownBtn = gr.Button(
-                                i18n("📝 Export as Markdown"), elem_id="gr-markdown-export-btn")
+                                i18n("📝 导出为 Markdown"), elem_id="gr-markdown-export-btn")
 
             with gr.Column(elem_id="chuanhu-menu-footer"):
                 with gr.Row(elem_id="chuanhu-func-nav"):
@@ -181,10 +181,10 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             with gr.Row(visible=False) as like_dislike_area:
                                 with gr.Column(min_width=20, scale=1):
                                     likeBtn = gr.Button(
-                                        i18n("👍"), elem_id="gr-like-btn")
+                                        "👍", elem_id="gr-like-btn")
                                 with gr.Column(min_width=20, scale=1):
                                     dislikeBtn = gr.Button(
-                                        i18n("👎"), elem_id="gr-dislike-btn")
+                                        "👎", elem_id="gr-dislike-btn")
 
         with gr.Column(elem_id="toolbox-area", scale=1):
             # For CSS setting, there is an extra box. Don't remove it.
@@ -203,7 +203,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 value=INITIAL_SYSTEM_PROMPT,
                                 lines=8
                             )
-                            remain_system_prompt_checkbox = gr.Checkbox(
+                            retain_system_prompt_checkbox = gr.Checkbox(
                                 label=i18n("新建对话保留Prompt"), value=False, visible=True, elem_classes="switch-checkbox")
                             with gr.Accordion(label=i18n("加载Prompt模板"), open=False):
                                 with gr.Column():
@@ -584,7 +584,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     emptyBtn.click(
         reset,
-        inputs=[current_model, remain_system_prompt_checkbox],
+        inputs=[current_model, retain_system_prompt_checkbox],
         outputs=[chatbot, status_display, historySelectList, systemPromptTxt],
         show_progress=True,
         _js='(a,b)=>{return clearChatbot(a,b);}',
@@ -682,7 +682,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     historyRefreshBtn.click(**refresh_history_args)
     historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList, user_name], [status_display, historySelectList, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}').then(
         reset,
-        inputs=[current_model, remain_system_prompt_checkbox],
+        inputs=[current_model, retain_system_prompt_checkbox],
         outputs=[chatbot, status_display, historySelectList, systemPromptTxt],
         show_progress=True,
         _js='(a,b)=>{return clearChatbot(a,b);}',
