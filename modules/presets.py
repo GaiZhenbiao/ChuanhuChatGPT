@@ -68,7 +68,6 @@ ONLINE_MODELS = [
     "yuanai-1.0-translate",
     "yuanai-1.0-dialog",
     "yuanai-1.0-rhythm_poems",
-    "minimax-abab4-chat",
     "minimax-abab5-chat",
     "midjourney",
     "讯飞星火大模型V2.0",
