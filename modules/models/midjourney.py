@@ -217,7 +217,7 @@ class Midjourney_Client(XMChat):
                 logging.info("使用图片作为输入")
         return None, chatbot, None
 
-    def reset(self):
+    def reset(self, remain_system_prompt=False):
         self.image_bytes = None
         self.image_path = None
         return super().reset()

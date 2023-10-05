@@ -335,9 +335,10 @@ function setChatbotScroll() {
     chatbotWrap.scrollTo(0,scrollHeight)
 }
 
-function clearChatbot() {
+function clearChatbot(a, b) {
     clearHistoryHtml();
     // clearMessageRows();
+    return [a, b]
 }
 
 function chatbotContentChanged(attempt = 1, force = false) {

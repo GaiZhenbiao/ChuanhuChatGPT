@@ -28,7 +28,7 @@ class XMChat(BaseLLMModel):
         self.url = "https://xmbot.net/web"
         self.last_conv_id = None
 
-    def reset(self):
+    def reset(self, remain_system_prompt=False):
         self.session_id = str(uuid.uuid4())
         self.last_conv_id = None
         return super().reset()

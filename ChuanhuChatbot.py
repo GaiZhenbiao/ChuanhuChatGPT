@@ -203,6 +203,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 value=INITIAL_SYSTEM_PROMPT,
                                 lines=8
                             )
+                            remain_system_prompt_checkbox = gr.Checkbox(
+                                label=i18n("新建对话保留Prompt"), value=False, visible=True, elem_classes="switch-checkbox")
                             with gr.Accordion(label=i18n("加载Prompt模板"), open=False):
                                 with gr.Column():
                                     with gr.Row():
@@ -582,10 +584,10 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     emptyBtn.click(
         reset,
-        inputs=[current_model],
+        inputs=[current_model, remain_system_prompt_checkbox],
         outputs=[chatbot, status_display, historySelectList, systemPromptTxt],
         show_progress=True,
-        _js='clearChatbot',
+        _js='(a,b)=>{return clearChatbot(a,b);}',
     )
 
     retryBtn.click(**start_outputing_args).then(
@@ -680,10 +682,10 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     historyRefreshBtn.click(**refresh_history_args)
     historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList, user_name], [status_display, historySelectList, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}').then(
         reset,
-        inputs=[current_model],
-        outputs=[chatbot, status_display, historySelectList],
+        inputs=[current_model, remain_system_prompt_checkbox],
+        outputs=[chatbot, status_display, historySelectList, systemPromptTxt],
         show_progress=True,
-        _js='clearChatbot',
+        _js='(a,b)=>{return clearChatbot(a,b);}',
     )
     historySelectList.input(**load_history_from_file_args)
     uploadFileBtn.upload(upload_chat_history, [current_model, uploadFileBtn, user_name], [

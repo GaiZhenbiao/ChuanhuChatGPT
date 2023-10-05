@@ -627,14 +627,15 @@ class BaseLLMModel:
     def set_single_turn(self, new_single_turn):
         self.single_turn = new_single_turn
 
-    def reset(self):
+    def reset(self, remain_system_prompt=False):
         self.history = []
         self.all_token_counts = []
         self.interrupted = False
         self.history_file_path = new_auto_history_filename(self.user_identifier)
         history_name = self.history_file_path[:-5]
         choices = [history_name] + get_history_names(self.user_identifier)
-        return [], self.token_message([0]), gr.Radio.update(choices=choices, value=history_name), ""
+        system_prompt = self.system_prompt if remain_system_prompt else ""
+        return [], self.token_message([0]), gr.Radio.update(choices=choices, value=history_name), system_prompt
 
     def delete_first_conversation(self):
         if self.history:
