@@ -467,7 +467,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     updatingMsg_i18n=i18n("正在尝试更新..."),
                     updateSuccess_i18n=i18n("更新成功，请重启本程序"),
                     updateFailure_i18n=i18n(
-                        '更新失败，请尝试<a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新" target="_blank">手动更新</a>'),
+                        "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)"),
                     regenerate_i18n=i18n("重新生成"),
                     deleteRound_i18n=i18n("删除这轮问答"),
                     renameChat_i18n=i18n("重命名该对话"),
