@@ -28,7 +28,7 @@ var statusObserver = new MutationObserver(function (mutationsList) {
                     isLatestVersion = true;
                     enableUpdateBtns();
                 } else if (getUpdateStatus() === "failure") {
-                    updatingInfoElement.innerHTML = i18n(updateFailure_i18n);
+                    updatingInfoElement.innerHTML = marked.parse(updateFailure_i18n, {mangle: false, headerIds: false});
                     disableUpdateBtn_enableCancelBtn();
                 } else if (getUpdateStatus() != "") {
                     updatingInfoElement.innerText = getUpdateStatus();
