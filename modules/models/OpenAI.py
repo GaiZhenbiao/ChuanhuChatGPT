@@ -201,14 +201,22 @@ class OpenAIClient(BaseLLMModel):
                     print(i18n("JSON解析错误,收到的内容: ") + f"{chunk}")
                     error_msg += chunk
                     continue
-                if chunk_length > 6 and "delta" in chunk["choices"][0]:
-                    if chunk["choices"][0]["finish_reason"] == "stop":
-                        break
-                    try:
-                        yield chunk["choices"][0]["delta"]["content"]
-                    except Exception as e:
-                        # logging.error(f"Error: {e}")
-                        continue
+                try:
+                    if chunk_length > 6 and "delta" in chunk["choices"][0]:
+                        if "finish_reason" in chunk["choices"][0]:
+                            finish_reason = chunk["choices"][0]["finish_reason"]
+                        else:
+                            finish_reason = chunk["finish_reason"]
+                        if finish_reason == "stop":
+                            break
+                        try:
+                            yield chunk["choices"][0]["delta"]["content"]
+                        except Exception as e:
+                            # logging.error(f"Error: {e}")
+                            continue
+                except:
+                    print(f"ERROR: {chunk}")
+                    continue
         if error_msg:
             raise Exception(error_msg)
 
