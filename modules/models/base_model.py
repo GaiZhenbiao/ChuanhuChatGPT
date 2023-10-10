@@ -342,7 +342,7 @@ class BaseLLMModel:
             chatbot.append([i18n("上传了")+str(len(files))+"个文件", summary])
         return chatbot, status
 
-    def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):
+    def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot, load_from_cache_if_possible=True):
         fake_inputs = None
         display_append = []
         limited_context = False
@@ -353,15 +353,18 @@ class BaseLLMModel:
             limited_context = True
             msg = "加载索引中……"
             logging.info(msg)
-            index = construct_index(self.api_key, file_src=files)
+            index = construct_index(self.api_key, file_src=files, load_from_cache_if_possible=load_from_cache_if_possible)
             assert index is not None, "获取索引失败"
             msg = "索引获取成功，生成回答中……"
             logging.info(msg)
             with retrieve_proxy():
                 retriever = VectorStoreRetriever(vectorstore=index, search_type="similarity_score_threshold", search_kwargs={
                                                  "k": 6, "score_threshold": 0.5})
-                relevant_documents = retriever.get_relevant_documents(
-                    real_inputs)
+                try:
+                    relevant_documents = retriever.get_relevant_documents(
+                        real_inputs)
+                except AssertionError:
+                    return self.prepare_inputs(real_inputs, use_websearch, files, reply_language, chatbot, load_from_cache_if_possible=False)
             reference_results = [[d.page_content.strip("�"), os.path.basename(
                 d.metadata["source"])] for d in relevant_documents]
             reference_results = add_source_numbers(reference_results)

@@ -89,6 +89,7 @@ def construct_index(
     chunk_size_limit=600,
     embedding_limit=None,
     separator=" ",
+    load_from_cache_if_possible=True,
 ):
     from langchain.chat_models import ChatOpenAI
     from langchain.vectorstores import FAISS
@@ -116,7 +117,7 @@ def construct_index(
         else:
             embeddings = OpenAIEmbeddings(deployment=os.environ["AZURE_EMBEDDING_DEPLOYMENT_NAME"], openai_api_key=os.environ["AZURE_OPENAI_API_KEY"],
                                           model=os.environ["AZURE_EMBEDDING_MODEL_NAME"], openai_api_base=os.environ["AZURE_OPENAI_API_BASE_URL"], openai_api_type="azure")
-    if os.path.exists(index_path):
+    if os.path.exists(index_path) and load_from_cache_if_possible:
         logging.info("找到了缓存的索引文件，加载中……")
         return FAISS.load_local(index_path, embeddings)
     else:

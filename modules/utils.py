@@ -684,7 +684,7 @@ def get_history_filepath(username):
 def beautify_err_msg(err_msg):
     if "insufficient_quota" in  err_msg:
         return i18n("剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)")
-    if "The model: gpt-4 does not exist" in err_msg:
+    if "The model `gpt-4` does not exist" in err_msg:
         return i18n("你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)")
     if "Resource not found" in err_msg:
         return i18n("请查看 config_example.json，配置 Azure OpenAI")
