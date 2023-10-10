@@ -1,4 +1,10 @@
 # -*- coding:utf-8 -*-
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
+)
+
 from modules.models.models import get_model
 from modules.train_func import *
 from modules.repo import *
@@ -10,11 +16,6 @@ from modules.config import *
 from modules import config
 import gradio as gr
 import colorama
-import logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
-)
 
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -433,7 +434,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
                         with gr.Tab(label=i18n("准备数据集")):
                             dataset_preview_json = gr.JSON(
-                                label=i18n("数据集预览"), readonly=True)
+                                label=i18n("数据集预览"))
                             dataset_selection = gr.Files(label=i18n("选择数据集"), file_types=[
                                                          ".xlsx", ".jsonl"], file_count="single")
                             upload_to_openai_btn = gr.Button(
