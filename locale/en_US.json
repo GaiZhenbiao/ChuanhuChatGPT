@@ -126,7 +126,7 @@
     "重命名该对话": "Rename this chat",
     "重新生成": "Regenerate",
     "高级": "Advanced",
-    "，本次对话累计消耗了 ": ", Total cost for this dialogue is ",
+    "，本次对话累计消耗了 ": ", total cost: ",
     "💾 保存对话": "💾 Save Dialog",
     "📝 导出为 Markdown": "📝 Export as Markdown",
     "🔄 切换API地址": "🔄 Switch API Address",
