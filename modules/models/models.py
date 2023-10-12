@@ -47,6 +47,12 @@ def get_model(
                 top_p=top_p,
                 user_name=user_name,
             )
+        elif model_type == ModelType.OpenAIInstruct:
+            logging.info(f"正在加载OpenAI Instruct模型: {model_name}")
+            from .OpenAIInstruct import OpenAI_Instruct_Client
+            access_key = os.environ.get("OPENAI_API_KEY", access_key)
+            model = OpenAI_Instruct_Client(
+                model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.ChatGLM:
             logging.info(f"正在加载ChatGLM模型: {model_name}")
             from .ChatGLM import ChatGLM_Client

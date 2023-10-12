@@ -144,13 +144,17 @@ class ModelType(Enum):
     LangchainChat = 10
     Midjourney = 11
     Spark = 12
+    OpenAIInstruct = 13
 
     @classmethod
     def get_type(cls, model_name: str):
         model_type = None
         model_name_lower = model_name.lower()
         if "gpt" in model_name_lower:
-            model_type = ModelType.OpenAI
+            if "instruct" in model_name_lower:
+                model_type = ModelType.OpenAIInstruct
+            else:
+                model_type = ModelType.OpenAI
         elif "chatglm" in model_name_lower:
             model_type = ModelType.ChatGLM
         elif "llama" in model_name_lower or "alpaca" in model_name_lower:
@@ -247,7 +251,7 @@ class BaseLLMModel:
 
     def billing_info(self):
         """get billing infomation, inplement if needed"""
-        logging.warning("billing info not implemented, using default")
+        # logging.warning("billing info not implemented, using default")
         return BILLING_NOT_APPLICABLE_MSG
 
     def count_token(self, user_input):
