@@ -77,9 +77,6 @@ def auto_name_chat_history(current_model, *args):
 def export_markdown(current_model, *args):
     return current_model.export_markdown(*args)
 
-def load_chat_history(current_model, *args):
-    return current_model.load_chat_history(*args)
-
 def upload_chat_history(current_model, *args):
     return current_model.load_chat_history(*args)
 

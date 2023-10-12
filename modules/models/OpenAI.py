@@ -217,7 +217,7 @@ class OpenAIClient(BaseLLMModel):
                 except:
                     print(f"ERROR: {chunk}")
                     continue
-        if error_msg:
+        if error_msg and not error_msg=="data: [DONE]":
             raise Exception(error_msg)
 
     def set_key(self, new_access_key):

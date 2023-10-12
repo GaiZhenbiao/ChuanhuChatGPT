@@ -747,6 +747,10 @@ class BaseLLMModel:
                     logging.info(new_history)
             except:
                 pass
+            if len(json_s["chatbot"]) < len(json_s["history"]):
+                logging.info("Trimming corrupted history...")
+                json_s["history"] = json_s["history"][-len(json_s["chatbot"]):]
+                logging.info(f"Trimmed history: {json_s['history']}")
             logging.debug(f"{self.user_identifier} 加载对话历史完毕")
             self.history = json_s["history"]
             return os.path.basename(self.history_file_path), json_s["system"], json_s["chatbot"]
