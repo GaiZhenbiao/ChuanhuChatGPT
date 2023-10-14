@@ -332,6 +332,8 @@ def construct_assistant(text):
 
 def save_file(filename, system, history, chatbot, user_name):
     os.makedirs(os.path.join(HISTORY_DIR, user_name), exist_ok=True)
+    if filename is None:
+        filename = new_auto_history_filename(user_name)
     if filename.endswith(".md"):
         filename = filename[:-3]
     if not filename.endswith(".json") and not filename.endswith(".md"):
