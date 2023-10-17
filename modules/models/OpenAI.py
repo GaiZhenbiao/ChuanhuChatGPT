@@ -149,13 +149,13 @@ class OpenAIClient(BaseLLMModel):
             timeout = TIMEOUT_ALL
 
         # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
-        if shared.state.completion_url != COMPLETION_URL:
-            logging.debug(f"使用自定义API URL: {shared.state.completion_url}")
+        if shared.state.chat_completion_url != CHAT_COMPLETION_URL:
+            logging.debug(f"使用自定义API URL: {shared.state.chat_completion_url}")
 
         with retrieve_proxy():
             try:
                 response = requests.post(
-                    shared.state.completion_url,
+                    shared.state.chat_completion_url,
                     headers=headers,
                     json=payload,
                     stream=stream,
@@ -201,15 +201,23 @@ class OpenAIClient(BaseLLMModel):
                     print(i18n("JSON解析错误,收到的内容: ") + f"{chunk}")
                     error_msg += chunk
                     continue
-                if chunk_length > 6 and "delta" in chunk["choices"][0]:
-                    if chunk["choices"][0]["finish_reason"] == "stop":
-                        break
-                    try:
-                        yield chunk["choices"][0]["delta"]["content"]
-                    except Exception as e:
-                        # logging.error(f"Error: {e}")
-                        continue
-        if error_msg:
+                try:
+                    if chunk_length > 6 and "delta" in chunk["choices"][0]:
+                        if "finish_reason" in chunk["choices"][0]:
+                            finish_reason = chunk["choices"][0]["finish_reason"]
+                        else:
+                            finish_reason = chunk["finish_reason"]
+                        if finish_reason == "stop":
+                            break
+                        try:
+                            yield chunk["choices"][0]["delta"]["content"]
+                        except Exception as e:
+                            # logging.error(f"Error: {e}")
+                            continue
+                except:
+                    print(f"ERROR: {chunk}")
+                    continue
+        if error_msg and not error_msg=="data: [DONE]":
             raise Exception(error_msg)
 
     def set_key(self, new_access_key):
@@ -229,12 +237,12 @@ class OpenAIClient(BaseLLMModel):
             "messages": history,
         }
         # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
-        if shared.state.completion_url != COMPLETION_URL:
-            logging.debug(f"使用自定义API URL: {shared.state.completion_url}")
+        if shared.state.chat_completion_url != CHAT_COMPLETION_URL:
+            logging.debug(f"使用自定义API URL: {shared.state.chat_completion_url}")
 
         with retrieve_proxy():
             response = requests.post(
-                shared.state.completion_url,
+                shared.state.chat_completion_url,
                 headers=headers,
                 json=payload,
                 stream=False,
@@ -245,7 +253,7 @@ class OpenAIClient(BaseLLMModel):
 
 
     def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
-        if len(self.history) == 2 and not single_turn_checkbox:
+        if len(self.history) == 2 and not single_turn_checkbox and not hide_history_when_not_logged_in:
             user_question = self.history[0]["content"]
             if name_chat_method == i18n("模型自动总结（消耗tokens）"):
                 ai_answer = self.history[1]["content"]
