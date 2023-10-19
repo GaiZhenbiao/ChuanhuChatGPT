@@ -74,7 +74,8 @@ ONLINE_MODELS = [
     "minimax-abab5-chat",
     "midjourney",
     "讯飞星火大模型V2.0",
-    "讯飞星火大模型V1.5"
+    "讯飞星火大模型V1.5",
+    "Claude"
 ]
 
 LOCAL_MODELS = [
@@ -125,7 +126,8 @@ MODEL_TOKEN_LIMIT = {
     "gpt-4-0613": 8192,
     "gpt-4-32k": 32768,
     "gpt-4-32k-0314": 32768,
-    "gpt-4-32k-0613": 32768
+    "gpt-4-32k-0613": 32768,
+    "Claude": 4096
 }
 
 TOKEN_OFFSET = 1000 # 模型的token上限减去这个值，得到软上限。到达软上限之后，自动尝试减少token占用。
