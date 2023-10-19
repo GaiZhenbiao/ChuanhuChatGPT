@@ -65,10 +65,11 @@
 | [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Поддерживает модель Lora 
 | [Google PaLM](https://developers.generativeai.google/products/palm) | Не поддерживает потоковую передачу данных | [StableLM](https://github.com/Stability-AI/StableLM)
 | [Xunfei Xinghuo Cognitive Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | 
-| [MiniMax](https://api.minimax.chat/) | 
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  |
+| [MiniMax](https://api.minimax.chat/) |
 | [XMChat](https://github.com/MILVLG/xmchat) | Не поддерживает потоковую передачу данных
 | [Midjourney](https://www.midjourney.com/) | Не поддерживает потоковую передачу данных
+| [Claude](https://www.anthropic.com/) |
 
 ## Советы по использованию
 

@@ -70,10 +70,11 @@
 | [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | 支持 Lora 模型 
 | [Google PaLM](https://developers.generativeai.google/products/palm) | 不支持流式传输 | [StableLM](https://github.com/Stability-AI/StableLM)
 | [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | 
-| [MiniMax](https://api.minimax.chat/) | 
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  |
+| [MiniMax](https://api.minimax.chat/) |
 | [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输
 | [Midjourney](https://www.midjourney.com/) | 不支持流式传输
+| [Claude](https://www.anthropic.com/) |
 
 ## 使用技巧
 
@@ -141,7 +142,7 @@ python ChuanhuChatbot.py
 一个浏览器窗口将会自动打开，此时您将可以使用 **川虎Chat** 与ChatGPT或其他模型进行对话。
 
 > **Note**
-> 
+>
 > 具体详尽的安装教程和使用教程请查看[本项目的wiki页面](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程)。
 
 ## 疑难杂症解决
