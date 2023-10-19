@@ -145,6 +145,7 @@ class ModelType(Enum):
     Midjourney = 11
     Spark = 12
     OpenAIInstruct = 13
+    Claude = 14
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -179,6 +180,8 @@ class ModelType(Enum):
             model_type = ModelType.LangchainChat
         elif "星火大模型" in model_name_lower:
             model_type = ModelType.Spark
+        elif "claude" in model_name_lower:
+            model_type = ModelType.Claude        
         else:
             model_type = ModelType.LLaMA
         return model_type
