@@ -146,6 +146,7 @@ class ModelType(Enum):
     Spark = 12
     OpenAIInstruct = 13
     Claude = 14
+    Qwen = 15
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -181,7 +182,9 @@ class ModelType(Enum):
         elif "星火大模型" in model_name_lower:
             model_type = ModelType.Spark
         elif "claude" in model_name_lower:
-            model_type = ModelType.Claude        
+            model_type = ModelType.Claude
+        elif "qwen" in model_name_lower:
+            model_type = ModelType.Qwen
         else:
             model_type = ModelType.LLaMA
         return model_type
@@ -656,14 +659,13 @@ class BaseLLMModel:
     def delete_last_conversation(self, chatbot):
         if len(chatbot) > 0 and STANDARD_ERROR_MSG in chatbot[-1][1]:
             msg = "由于包含报错信息，只删除chatbot记录"
-            chatbot.pop()
+            chatbot = chatbot[:-1]
             return chatbot, self.history
         if len(self.history) > 0:
-            self.history.pop()
-            self.history.pop()
+            self.history = self.history[:-2]
         if len(chatbot) > 0:
             msg = "删除了一组chatbot对话"
-            chatbot.pop()
+            chatbot = chatbot[:-1]
         if len(self.all_token_counts) > 0:
             msg = "删除了一组对话的token计数记录"
             self.all_token_counts.pop()

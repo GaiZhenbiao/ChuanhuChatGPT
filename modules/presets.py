@@ -87,6 +87,8 @@ LOCAL_MODELS = [
     "StableLM",
     "MOSS",
     "Llama-2-7B-Chat",
+    "Qwen 7B",
+    "Qwen 14B"
 ]
 
 # Additional metadate for local models
@@ -98,6 +100,12 @@ MODEL_METADATA = {
     "Llama-2-7B-Chat":{
         "repo_id": "TheBloke/Llama-2-7b-Chat-GGUF",
         "filelist": ["llama-2-7b-chat.Q6_K.gguf"],
+    },
+    "Qwen 7B": {
+        "repo_id": "Qwen/Qwen-7B-Chat-Int4",
+    },
+    "Qwen 14B": {
+        "repo_id": "Qwen/Qwen-14B-Chat-Int4",
     }
 }
 
