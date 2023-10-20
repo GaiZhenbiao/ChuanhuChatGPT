@@ -152,7 +152,7 @@ def version_time():
         )
         commit_time = commit_datetime.strftime("%Y-%m-%dT%H:%M:%SZ")
 
-        logging.info(f"commit time: {commit_time}")
+        # logging.info(f"commit time: {commit_time}")
     except Exception:
         commit_time = "unknown"
     return commit_time
