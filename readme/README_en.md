@@ -66,7 +66,7 @@
 | [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Support Lora models
 | [Google PaLM](https://developers.generativeai.google/products/palm) | Not support streaming | [StableLM](https://github.com/Stability-AI/StableLM)
 | [iFlytek Starfire Cognition Large Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  |
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)
 | [MiniMax](https://api.minimax.chat/) |
 | [XMChat](https://github.com/MILVLG/xmchat) | Not support streaming
 | [Midjourney](https://www.midjourney.com/) | Not support streaming
