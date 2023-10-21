@@ -7,7 +7,6 @@ import colorama
 import commentjson as cjson
 
 from modules import config
-from modules.models.OpenAIWhisper import WhisperMode
 
 from ..index_func import *
 from ..presets import *
@@ -18,7 +17,6 @@ from .base_model import BaseLLMModel, ModelType
 def get_model(
     model_name,
     lora_model_path=None,
-    openai_whisper_mode_path=None,
     access_key=None,
     temperature=None,
     top_p=None,
@@ -29,11 +27,8 @@ def get_model(
     msg = i18n("模型设置为了：") + f" {model_name}"
     model_type = ModelType.get_type(model_name)
     lora_selector_visibility = False
-    openai_whisper_mode_selector_visibility = False
     lora_choices = ["No LoRA"]
-    openai_whisper_mode_choices = [WhisperMode.Transcription.value, WhisperMode.Translation.value]
     dont_change_lora_selector = False
-    dont_change_openai_whisper_mode_selector = False
     if model_type != ModelType.OpenAI:
         config.local_embedding = True
     # del current_model.model
@@ -58,20 +53,14 @@ def get_model(
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAI_Instruct_Client(
                 model_name, api_key=access_key, user_name=user_name)
-        elif model_type == ModelType.OpenAIWhisper and openai_whisper_mode_path == "":
-            msg = f"Select a mode for {model_name}"
-            logging.info(msg)
-            openai_whisper_mode_selector_visibility = True
-        elif model_type == ModelType.OpenAIWhisper and openai_whisper_mode_path != "":
-            logging.info(f"Loading OpenAI Whisper: {model_name} + {openai_whisper_mode_path}")
-            dont_change_openai_whisper_mode_selector = True
+        elif model_type == ModelType.OpenAIWhisper:
+            logging.info(f"Loading OpenAI Whisper: {model_name}")
             from .OpenAIWhisper import OpenAI_Whisper_Client
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAI_Whisper_Client(
                 model_name=model_name,
                 api_key=access_key,
                 system_prompt=system_prompt,
-                mode=openai_whisper_mode_path,
                 temperature=temperature,
                 user_name=user_name
             )
@@ -156,8 +145,10 @@ def get_model(
     if original_model is not None and model is not None:
         model.history = original_model.history
         model.history_file_path = original_model.history_file_path
-
-    return model, msg, chatbot, gr.update() if dont_change_lora_selector else gr.Dropdown.update(choices=lora_choices, visible=lora_selector_visibility), gr.update() if dont_change_openai_whisper_mode_selector else gr.Dropdown.update(choices=openai_whisper_mode_choices, visible=openai_whisper_mode_selector_visibility), access_key, presudo_key
+    if dont_change_lora_selector:
+        return model, msg, chatbot, gr.update(), access_key, presudo_key
+    else:
+        return model, msg, chatbot, gr.Dropdown.update(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key
 
 
 if __name__ == "__main__":
