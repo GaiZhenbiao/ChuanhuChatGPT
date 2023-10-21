@@ -105,23 +105,23 @@ def construct_index(
 
     index_name = get_file_hash(file_src)
     index_path = f"./index/{index_name}"
-    if local_embedding:
-        from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-        embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/distiluse-base-multilingual-cased-v2")
-    else:
-        from langchain.embeddings import OpenAIEmbeddings
-        if os.environ.get("OPENAI_API_TYPE", "openai") == "openai":
-            embeddings = OpenAIEmbeddings(openai_api_base=os.environ.get(
-                "OPENAI_API_BASE", None), openai_api_key=os.environ.get("OPENAI_EMBEDDING_API_KEY", api_key))
+    try:
+        if local_embedding:
+            from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+            embeddings = HuggingFaceEmbeddings(
+                model_name="sentence-transformers/distiluse-base-multilingual-cased-v2")
         else:
-            embeddings = OpenAIEmbeddings(deployment=os.environ["AZURE_EMBEDDING_DEPLOYMENT_NAME"], openai_api_key=os.environ["AZURE_OPENAI_API_KEY"],
-                                          model=os.environ["AZURE_EMBEDDING_MODEL_NAME"], openai_api_base=os.environ["AZURE_OPENAI_API_BASE_URL"], openai_api_type="azure")
-    if os.path.exists(index_path) and load_from_cache_if_possible:
-        logging.info("找到了缓存的索引文件，加载中……")
-        return FAISS.load_local(index_path, embeddings)
-    else:
-        try:
+            from langchain.embeddings import OpenAIEmbeddings
+            if os.environ.get("OPENAI_API_TYPE", "openai") == "openai":
+                embeddings = OpenAIEmbeddings(openai_api_base=os.environ.get(
+                    "OPENAI_API_BASE", None), openai_api_key=os.environ.get("OPENAI_EMBEDDING_API_KEY", api_key))
+            else:
+                embeddings = OpenAIEmbeddings(deployment=os.environ["AZURE_EMBEDDING_DEPLOYMENT_NAME"], openai_api_key=os.environ["AZURE_OPENAI_API_KEY"],
+                                              model=os.environ["AZURE_EMBEDDING_MODEL_NAME"], openai_api_base=os.environ["AZURE_OPENAI_API_BASE_URL"], openai_api_type="azure")
+        if os.path.exists(index_path) and load_from_cache_if_possible:
+            logging.info("找到了缓存的索引文件，加载中……")
+            return FAISS.load_local(index_path, embeddings)
+        else:
             documents = get_documents(file_src)
             logging.info("构建索引中……")
             with retrieve_proxy():
@@ -132,8 +132,8 @@ def construct_index(
             logging.debug("索引已保存至本地!")
             return index
 
-        except Exception as e:
-            import traceback
-            logging.error("索引构建失败！%s", e)
-            traceback.print_exc()
-            return None
+    except Exception as e:
+        import traceback
+        logging.error("索引构建失败！%s", e)
+        traceback.print_exc()
+        return None

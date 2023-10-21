@@ -126,7 +126,8 @@ class ChuanhuAgent_Client(BaseLLMModel):
         status = gr.Markdown.update()
         if files:
             index = construct_index(self.api_key, file_src=files)
-            assert index is not None, "获取索引失败"
+            if index is None:
+                raise gr.Error("获取索引失败")
             self.index = index
             status = i18n("索引构建完成")
             # Summarize the document
