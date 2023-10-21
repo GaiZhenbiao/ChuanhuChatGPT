@@ -53,7 +53,7 @@ class OpenAI_Whisper_Client(BaseLLMModel):
                 gr.Warning("Only one file will be used. Please upload a single file instead.")
             self._look_at_file(file.name)
             if self.audio_path is not None:
-                chatbot = chatbot + [((self.audio_path,), None)]
+                chatbot += [((self.audio_path,), None)]
                 logging.info(f"Uploaded audio file: {self.audio_path}")
 
         return None, chatbot, None
@@ -62,11 +62,17 @@ class OpenAI_Whisper_Client(BaseLLMModel):
         openai_api_key = self.api_key
         prompt = self.system_prompt
         temperature = self.temperature
-        mode = self.history[-1]["content"].lower()
-        if mode not in [c.value for c in WhisperMode]:
-            return f"To use OpenAI whisper, Please enter either \"{WhisperMode.Transcription.value}\" or \"{WhisperMode.Translation.value}\""
-        if self.audio_path is None:
-            return f"Please upload an audio file. These extensions are supported: `{' '.join(valid_extensions)}.`\n\nDue to OpenAI's limitation, file size must be less than 25 megabytes. Refer to [OpenAI API docs](https://platform.openai.com/docs/guides/speech-to-text) for more info."
+        content = self.history[-1]["content"].lower().split()
+        mode = content[0]
+        response_format = content[1] if len(content) >= 2 else "json"
+
+        # Experimental: Reuse the last uploaded file without re-uploading again. How to fetch "chatbot" object?
+
+        if (len(content) < 1
+                or mode not in [c.value for c in WhisperMode]
+                or self.audio_path is None
+                or response_format not in ["json", "text", "srt", "vtt"]):
+            return self.get_help()
 
         with retrieve_proxy():
             try:
@@ -74,24 +80,49 @@ class OpenAI_Whisper_Client(BaseLLMModel):
                     url = shared.state.transcription_url
                     if url != TRANSCRIPTION_URL:
                         logging.debug(f"使用自定义API URL: {url}")
-                    response = openai.Audio.transcribe(model=self.model_name, api_base=shared.state.openai_api_base, api_key=openai_api_key,
+                    response = openai.Audio.transcribe(model=self.model_name,
+                                                       api_base=shared.state.openai_api_base,
+                                                       api_key=openai_api_key,
                                                        file=open(self.audio_path, "rb"),
-                                                       prompt=prompt, response_format="json", temperature=temperature)
+                                                       prompt=prompt, response_format=response_format, temperature=temperature)
                 elif mode == WhisperMode.Translation.value:
                     url = shared.state.translation_url
                     if url != TRANSLATION_URL:
                         logging.debug(f"使用自定义API URL: {url}")
-                    response = openai.Audio.translate(model=self.model_name, api_base=shared.state.openai_api_base,
+                    response = openai.Audio.translate(model=self.model_name,
+                                                      api_base=shared.state.openai_api_base,
                                                       api_key=openai_api_key,
                                                       file=open(self.audio_path, "rb"),
-                                                      prompt=prompt, response_format="json", temperature=temperature)
-                result = response.text
+                                                      prompt=prompt, response_format=response_format, temperature=temperature)
+                result = response if isinstance(response, str) else response.text
+                result = result.replace("\n", "\n\n")
             except Exception as e:
                 import traceback
                 logging.error(e)
                 traceback.print_exc()
                 return traceback.format_exc()
         return result
+
+    def get_help(self):
+        return f"""
+To use OpenAI whisper, Please select a mode either `{WhisperMode.Transcription.value}` or `{WhisperMode.Translation.value}`
+
+Example:
+
+Get transcription: `{WhisperMode.Transcription.value}`
+
+Get transcription in `srt` format: `{WhisperMode.Transcription.value} srt`
+
+Get translation: `{WhisperMode.Translation.value}`
+
+Get translation in `vtt` format: `{WhisperMode.Translation.value} vtt`
+
+Please upload an audio file. These extensions are supported: `{' '.join(valid_extensions)}`.
+
+Due to OpenAI's limitation, file size must be less than 25 megabytes.
+
+Refer to https://platform.openai.com/docs/guides/speech-to-text for more info.
+        """
 
     @shared.state.switching_api_key
     def get_answer_at_once(self):
