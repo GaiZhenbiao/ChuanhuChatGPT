@@ -147,6 +147,7 @@ class ModelType(Enum):
     OpenAIInstruct = 13
     Claude = 14
     Qwen = 15
+    OpenAIWhisper = 16
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -157,6 +158,8 @@ class ModelType(Enum):
                 model_type = ModelType.OpenAIInstruct
             else:
                 model_type = ModelType.OpenAI
+        elif "whisper" in model_name_lower:
+            model_type = ModelType.OpenAIWhisper
         elif "chatglm" in model_name_lower:
             model_type = ModelType.ChatGLM
         elif "llama" in model_name_lower or "alpaca" in model_name_lower:

@@ -1,4 +1,4 @@
-from modules.presets import CHAT_COMPLETION_URL, BALANCE_API_URL, USAGE_API_URL, API_HOST, OPENAI_API_BASE
+from modules.presets import CHAT_COMPLETION_URL, BALANCE_API_URL, USAGE_API_URL, API_HOST, OPENAI_API_BASE, TRANSLATION_URL, TRANSCRIPTION_URL
 import os
 import queue
 import openai
@@ -7,6 +7,8 @@ class State:
     interrupted = False
     multi_api_key = False
     chat_completion_url = CHAT_COMPLETION_URL
+    translation_url = TRANSLATION_URL
+    transcription_url = TRANSCRIPTION_URL
     balance_api_url = BALANCE_API_URL
     usage_api_url = USAGE_API_URL
     openai_api_base = OPENAI_API_BASE
@@ -24,6 +26,8 @@ class State:
         if api_host.endswith("/v1"):
             api_host = api_host[:-3]
         self.chat_completion_url = f"{api_host}/v1/chat/completions"
+        self.transcription_url = f"{api_host}/v1/audio/transcriptions"
+        self.translation_url = f"{api_host}/v1/audio/translations"
         self.openai_api_base = f"{api_host}/v1"
         self.balance_api_url = f"{api_host}/dashboard/billing/credit_grants"
         self.usage_api_url = f"{api_host}/dashboard/billing/usage"
@@ -31,6 +35,8 @@ class State:
 
     def reset_api_host(self):
         self.chat_completion_url = CHAT_COMPLETION_URL
+        self.translation_url = TRANSLATION_URL
+        self.transcription_url = TRANSCRIPTION_URL
         self.balance_api_url = BALANCE_API_URL
         self.usage_api_url = USAGE_API_URL
         os.environ["OPENAI_API_BASE"] = f"https://{API_HOST}"
@@ -39,6 +45,8 @@ class State:
     def reset_all(self):
         self.interrupted = False
         self.chat_completion_url = CHAT_COMPLETION_URL
+        self.translation_url = TRANSLATION_URL
+        self.transcription_url = TRANSCRIPTION_URL
 
     def set_api_key_queue(self, api_key_list):
         self.multi_api_key = True

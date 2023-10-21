@@ -126,6 +126,10 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False,
                         container=False,
                     )
+                    openai_whisper_select_dropdown = gr.Dropdown(
+                        label="Select OpenAI Whisper mode", choices=[], multiselect=False, interactive=True, visible=False,
+                        container=False
+                    )
                     gr.HTML(get_html("chatbot_header_btn.html").format(
                         json_label=i18n("历史记录（JSON）"),
                         md_label=i18n("导出为 Markdown")
@@ -641,12 +645,14 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     keyTxt.submit(**get_usage_args)
     single_turn_checkbox.change(
         set_single_turn, [current_model, single_turn_checkbox], None)
-    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name, current_model], [
-                                 current_model, status_display, chatbot, lora_select_dropdown, user_api_key, keyTxt], show_progress=True, api_name="get_model")
-    model_select_dropdown.change(toggle_like_btn_visibility, [model_select_dropdown], [
-                                 like_dislike_area], show_progress=False)
-    lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider,
-                                top_p_slider, systemPromptTxt, user_name, current_model], [current_model, status_display, chatbot], show_progress=True)
+
+    model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, openai_whisper_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name, current_model], [current_model, status_display, chatbot, lora_select_dropdown, openai_whisper_select_dropdown, user_api_key, keyTxt], show_progress=True, api_name="get_model")
+
+    model_select_dropdown.change(toggle_like_btn_visibility, [model_select_dropdown], [like_dislike_area], show_progress=False)
+
+    lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, openai_whisper_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name, current_model], [current_model, status_display, chatbot], show_progress=True)
+
+    openai_whisper_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, openai_whisper_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name, current_model], [current_model, status_display, chatbot], show_progress=True)
 
     # Template
     systemPromptTxt.change(set_system_prompt, [
