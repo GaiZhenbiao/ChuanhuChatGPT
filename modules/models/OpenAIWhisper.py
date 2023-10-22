@@ -15,7 +15,7 @@ class WhisperMode(Enum):
     Transcription = "transcriptions"
     Translation = "translations"
 
-valid_extensions = [".flac", ".mp3", ".mp4", ".mpeg", ".mpga", ".m4a", ".ogg", ".wav", ".webm"]
+valid_extensions = [".mp3", ".mp4", ".mpeg", ".mpga", ".m4a", ".ogg", ".wav", ".webm"]
 
 class OpenAI_Whisper_Client(BaseLLMModel):
     def __init__(self, model_name, api_key, system_prompt="", temperature=0, user_name=""):
@@ -70,8 +70,8 @@ class OpenAI_Whisper_Client(BaseLLMModel):
 
         if (len(content) < 1
                 or mode not in [c.value for c in WhisperMode]
-                or self.audio_path is None
-                or response_format not in ["json", "text", "srt", "vtt"]):
+                or response_format not in ["json", "text", "srt", "vtt"]
+                or self.audio_path is None):
             return self.get_help()
 
         with retrieve_proxy():
@@ -127,9 +127,6 @@ Refer to https://platform.openai.com/docs/guides/speech-to-text for more info.
     @shared.state.switching_api_key
     def get_answer_at_once(self):
         return self._get_response(), 0
-
-    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
-        pass
 
     def reset(self, remain_system_prompt=False):
         self.audio_path = None
