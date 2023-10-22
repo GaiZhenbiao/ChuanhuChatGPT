@@ -88,6 +88,9 @@ my_api_key = os.environ.get("OPENAI_API_KEY", my_api_key)
 os.environ["OPENAI_API_KEY"] = my_api_key
 os.environ["OPENAI_EMBEDDING_API_KEY"] = my_api_key
 
+openai_whisper_temp_folder = config.get("openai_whisper_temp_folder", "")
+os.environ["OPENAI_WHISPER_TEMP_FOLDER"] = openai_whisper_temp_folder
+
 if config.get("legacy_api_usage", False):
     sensitive_id = my_api_key
 else:

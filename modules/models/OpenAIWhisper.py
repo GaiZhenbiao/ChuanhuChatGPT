@@ -1,15 +1,19 @@
 import logging
 import os
+
+import tempfile
+import time
 from enum import Enum
 
-import openai
 import gradio as gr
+import openai
 
 from .base_model import BaseLLMModel
 from .. import shared
 from ..config import retrieve_proxy
-from ..presets import TRANSCRIPTION_URL, TRANSLATION_URL, TIMEOUT_ALL
+from ..presets import TRANSCRIPTION_URL, TRANSLATION_URL
 
+openai_whisper_temp_folder = os.getenv("OPENAI_WHISPER_TEMP_FOLDER")
 
 class WhisperMode(Enum):
     Transcription = "transcriptions"
@@ -25,6 +29,16 @@ class OpenAI_Whisper_Client(BaseLLMModel):
         self.audio_path = None
         if self.model_name not in ["whisper-1"]:
             raise Exception("OpenAI whisper only has \"whisper-1\" model available.")
+        if openai_whisper_temp_folder:
+            temp = openai_whisper_temp_folder
+            if user_name:
+                temp = os.path.join(temp, user_name)
+            if not os.path.exists(temp):
+                os.makedirs(temp)
+            self.temp_path = tempfile.mkdtemp(dir=temp)
+            logging.info(f"OpenAI Whisper model temporary directory: {self.temp_path}")
+        else:
+            self.temp_path = None
 
     def _look_at_file(self, filepath):
         def look_at_file_extension(filepath):
@@ -95,7 +109,16 @@ class OpenAI_Whisper_Client(BaseLLMModel):
                                                       file=open(self.audio_path, "rb"),
                                                       prompt=prompt, response_format=response_format, temperature=temperature)
                 result = response if isinstance(response, str) else response.text
+
+                txtstr = ""
+                if self.temp_path:
+                    txtstr = f"{self.temp_path}/{self.model_name}-{str(int(time.time() * 1000))}.txt"
+                    with open(txtstr, "w") as savetext:
+                        savetext.write(result)
                 result = result.replace("\n", "\n\n")
+                if txtstr:
+                    result += f"\n\n[Click to download file](/file={txtstr})"
+
             except Exception as e:
                 import traceback
                 logging.error(e)
