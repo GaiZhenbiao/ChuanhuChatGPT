@@ -53,6 +53,17 @@ def get_model(
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAI_Instruct_Client(
                 model_name, api_key=access_key, user_name=user_name)
+        elif model_type == ModelType.OpenAIWhisper:
+            logging.info(f"Loading OpenAI Whisper: {model_name}")
+            from .OpenAIWhisper import OpenAI_Whisper_Client
+            access_key = os.environ.get("OPENAI_API_KEY", access_key)
+            model = OpenAI_Whisper_Client(
+                model_name=model_name,
+                api_key=access_key,
+                system_prompt=system_prompt,
+                temperature=temperature,
+                user_name=user_name
+            )
         elif model_type == ModelType.ChatGLM:
             logging.info(f"正在加载ChatGLM模型: {model_name}")
             from .ChatGLM import ChatGLM_Client

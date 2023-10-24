@@ -16,6 +16,8 @@ INITIAL_SYSTEM_PROMPT = "You are a helpful assistant."
 API_HOST = "api.openai.com"
 OPENAI_API_BASE = "https://api.openai.com/v1"
 CHAT_COMPLETION_URL = "https://api.openai.com/v1/chat/completions"
+TRANSCRIPTION_URL = "https://api.openai.com/v1/audio/transcriptions"
+TRANSLATION_URL = "https://api.openai.com/v1/audio/translations"
 COMPLETION_URL = "https://api.openai.com/v1/completions"
 BALANCE_API_URL="https://api.openai.com/dashboard/billing/credit_grants"
 USAGE_API_URL="https://api.openai.com/dashboard/billing/usage"
@@ -75,7 +77,8 @@ ONLINE_MODELS = [
     "midjourney",
     "讯飞星火大模型V2.0",
     "讯飞星火大模型V1.5",
-    "Claude"
+    "Claude",
+    "whisper-1"
 ]
 
 LOCAL_MODELS = [

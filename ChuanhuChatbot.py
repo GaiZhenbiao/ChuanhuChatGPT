@@ -31,7 +31,7 @@ def create_new_model():
     return get_model(model_name=MODELS[DEFAULT_MODEL], access_key=my_api_key)[0]
 
 
-with gr.Blocks(theme=small_and_beautiful_theme) as demo:
+with gr.Blocks(theme=small_and_beautiful_theme, analytics_enabled=False) as demo:
     user_name = gr.Textbox("", visible=False)
     promptTemplates = gr.State(load_template(get_template_names()[0], mode=2))
     user_question = gr.State("")
