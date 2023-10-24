@@ -151,6 +151,9 @@ Refer to https://platform.openai.com/docs/guides/speech-to-text for more info.
     def get_answer_at_once(self):
         return self._get_response(), 0
 
+    def token_message(self, token_lst=None):
+        return ""
+
     def reset(self, remain_system_prompt=False):
         self.audio_path = None
-        return super().reset()
+        return super().reset(remain_system_prompt)
