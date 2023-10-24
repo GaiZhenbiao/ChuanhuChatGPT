@@ -139,8 +139,7 @@ def get_model(
     except Exception as e:
         import traceback
         traceback.print_exc()
-        msg = f"{STANDARD_ERROR_MSG} {e}"
-        gr.Warning(msg)
+        msg = f"{STANDARD_ERROR_MSG}: {e}"
     presudo_key = hide_middle_chars(access_key)
     if original_model is not None and model is not None:
         model.history = original_model.history
