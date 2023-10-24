@@ -329,8 +329,6 @@ class BaseLLMModel:
         status = gr.Markdown.update()
         if files:
             index = construct_index(self.api_key, file_src=files)
-            if index is None:
-                raise gr.Error("获取索引失败")
             status = i18n("索引构建完成")
         return gr.Files.update(), chatbot, status
 
@@ -338,8 +336,6 @@ class BaseLLMModel:
         status = gr.Markdown.update()
         if files:
             index = construct_index(self.api_key, file_src=files)
-            if index is None:
-                raise gr.Error("获取索引失败")
             status = i18n("总结完成")
             logging.info(i18n("生成内容总结中……"))
             os.environ["OPENAI_API_KEY"] = self.api_key
@@ -371,8 +367,7 @@ class BaseLLMModel:
             msg = "加载索引中……"
             logging.info(msg)
             index = construct_index(self.api_key, file_src=files, load_from_cache_if_possible=load_from_cache_if_possible)
-            if index is None:
-                raise gr.Error("获取索引失败")
+            assert index is not None, "获取索引失败"
             msg = "索引获取成功，生成回答中……"
             logging.info(msg)
             with retrieve_proxy():
