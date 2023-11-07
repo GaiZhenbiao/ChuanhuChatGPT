@@ -3,9 +3,15 @@ from __future__ import annotations
 import json
 import logging
 import traceback
+import base64
 
 import colorama
 import requests
+from io import BytesIO
+import uuid
+
+import requests
+from PIL import Image
 
 from .. import shared
 from ..config import retrieve_proxy, sensitive_id, usage_limit
@@ -15,7 +21,7 @@ from ..utils import *
 from .base_model import BaseLLMModel
 
 
-class OpenAIClient(BaseLLMModel):
+class OpenAIVisionClient(BaseLLMModel):
     def __init__(
         self,
         model_name,
@@ -34,6 +40,8 @@ class OpenAIClient(BaseLLMModel):
         )
         self.api_key = api_key
         self.need_api_key = True
+        self.max_generation_token = 4096
+        self.images = []
         self._refresh_header()
 
     def get_answer_stream_iter(self):
@@ -53,6 +61,67 @@ class OpenAIClient(BaseLLMModel):
         content = response["choices"][0]["message"]["content"]
         total_token_count = response["usage"]["total_tokens"]
         return content, total_token_count
+
+    def try_read_image(self, filepath):
+        def is_image_file(filepath):
+            # 判断文件是否为图片
+            valid_image_extensions = [
+                ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff"]
+            file_extension = os.path.splitext(filepath)[1].lower()
+            return file_extension in valid_image_extensions
+        def image_to_base64(image_path):
+            # 打开并加载图片
+            img = Image.open(image_path)
+
+            # 获取图片的宽度和高度
+            width, height = img.size
+
+            # 计算压缩比例，以确保最长边小于4096像素
+            max_dimension = 2048
+            scale_ratio = min(max_dimension / width, max_dimension / height)
+
+            if scale_ratio < 1:
+                # 按压缩比例调整图片大小
+                new_width = int(width * scale_ratio)
+                new_height = int(height * scale_ratio)
+                img = img.resize((new_width, new_height), Image.ANTIALIAS)
+
+            # 将图片转换为jpg格式的二进制数据
+            buffer = BytesIO()
+            if img.mode == "RGBA":
+                img = img.convert("RGB")
+            img.save(buffer, format='JPEG')
+            binary_image = buffer.getvalue()
+
+            # 对二进制数据进行Base64编码
+            base64_image = base64.b64encode(binary_image).decode('utf-8')
+
+            return base64_image
+
+        if is_image_file(filepath):
+            logging.info(f"读取图片文件: {filepath}")
+            base64_image = image_to_base64(filepath)
+            self.images.append({
+                "path": filepath,
+                "base64": base64_image,
+            })
+
+    def handle_file_upload(self, files, chatbot, language):
+        """if the model accepts multi modal input, implement this function"""
+        if files:
+            for file in files:
+                if file.name:
+                    self.try_read_image(file.name)
+        if self.images is not None:
+                chatbot = chatbot + [([image["path"] for image in self.images], None)]
+        return None, chatbot, None
+
+    def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):
+        fake_inputs = real_inputs
+        display_append = ""
+        limited_context = False
+        return limited_context, fake_inputs, display_append, real_inputs, chatbot
+
 
     def count_token(self, user_input):
         input_token_count = count_token(construct_user(user_input))
@@ -113,6 +182,12 @@ class OpenAIClient(BaseLLMModel):
         openai_api_key = self.api_key
         system_prompt = self.system_prompt
         history = self.history
+        if self.images:
+            self.history[-1]["content"] = [
+                {"type": "text", "text": self.history[-1]["content"]},
+                *[{"type": "image_url", "image_url": "data:image/jpeg;base64,"+image["base64"]} for image in self.images]
+            ]
+            self.images = []
         logging.debug(colorama.Fore.YELLOW +
                       f"{history}" + colorama.Fore.RESET)
         headers = {
@@ -203,10 +278,10 @@ class OpenAIClient(BaseLLMModel):
                     continue
                 try:
                     if chunk_length > 6 and "delta" in chunk["choices"][0]:
-                        if "finish_reason" in chunk["choices"][0]:
-                            finish_reason = chunk["choices"][0]["finish_reason"]
+                        if "finish_details" in chunk["choices"][0]:
+                            finish_reason = chunk["choices"][0]["finish_details"]
                         else:
-                            finish_reason = chunk["finish_reason"]
+                            finish_reason = chunk["finish_details"]
                         if finish_reason == "stop":
                             break
                         try:
@@ -215,6 +290,7 @@ class OpenAIClient(BaseLLMModel):
                             # logging.error(f"Error: {e}")
                             continue
                 except:
+                    traceback.print_exc()
                     print(f"ERROR: {chunk}")
                     continue
         if error_msg and not error_msg=="data: [DONE]":
@@ -250,30 +326,3 @@ class OpenAIClient(BaseLLMModel):
             )
 
         return response
-
-
-    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
-        if len(self.history) == 2 and not single_turn_checkbox and not hide_history_when_not_logged_in:
-            user_question = self.history[0]["content"]
-            if name_chat_method == i18n("模型自动总结（消耗tokens）"):
-                ai_answer = self.history[1]["content"]
-                try:
-                    history = [
-                        { "role": "system", "content": SUMMARY_CHAT_SYSTEM_PROMPT},
-                        { "role": "user", "content": f"Please write a title based on the following conversation:\n---\nUser: {user_question}\nAssistant: {ai_answer}"}
-                    ]
-                    response = self._single_query_at_once(history, temperature=0.0)
-                    response = json.loads(response.text)
-                    content = response["choices"][0]["message"]["content"]
-                    filename = replace_special_symbols(content) + ".json"
-                except Exception as e:
-                    logging.info(f"自动命名失败。{e}")
-                    filename = replace_special_symbols(user_question)[:16] + ".json"
-                return self.rename_chat_history(filename, chatbot, user_name)
-            elif name_chat_method == i18n("第一条提问"):
-                filename = replace_special_symbols(user_question)[:16] + ".json"
-                return self.rename_chat_history(filename, chatbot, user_name)
-            else:
-                return gr.update()
-        else:
-            return gr.update()

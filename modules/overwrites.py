@@ -44,32 +44,36 @@ def postprocess_chat_messages(
     ) -> str | dict | None:
         if chat_message is None:
             return None
-        elif isinstance(chat_message, (tuple, list)):
-            file_uri = chat_message[0]
-            if utils.validate_url(file_uri):
-                filepath = file_uri
-            else:
-                filepath = self.make_temp_copy_if_needed(file_uri)
-
-            mime_type = client_utils.get_mimetype(filepath)
-            return {
-                "name": filepath,
-                "mime_type": mime_type,
-                "alt_text": chat_message[1] if len(chat_message) > 1 else None,
-                "data": None,  # These last two fields are filled in by the frontend
-                "is_file": True,
-            }
-        elif isinstance(chat_message, str):
-            # chat_message = inspect.cleandoc(chat_message)
-            # escape html spaces
-            # chat_message = chat_message.replace(" ", "&nbsp;")
-            if role == "bot":
-                chat_message = convert_bot_before_marked(chat_message)
-            elif role == "user":
-                chat_message = convert_user_before_marked(chat_message)
-            return chat_message
         else:
-            raise ValueError(f"Invalid message for Chatbot component: {chat_message}")
+            if isinstance(chat_message, (tuple, list)):
+                if len(chat_message) > 0 and "text" in chat_message[0]:
+                    chat_message = chat_message[0]["text"]
+                else:
+                    file_uri = chat_message[0]
+                    if utils.validate_url(file_uri):
+                        filepath = file_uri
+                    else:
+                        filepath = self.make_temp_copy_if_needed(file_uri)
+
+                    mime_type = client_utils.get_mimetype(filepath)
+                    return {
+                        "name": filepath,
+                        "mime_type": mime_type,
+                        "alt_text": chat_message[1] if len(chat_message) > 1 else None,
+                        "data": None,  # These last two fields are filled in by the frontend
+                        "is_file": True,
+                    }
+            if isinstance(chat_message, str):
+                # chat_message = inspect.cleandoc(chat_message)
+                # escape html spaces
+                # chat_message = chat_message.replace(" ", "&nbsp;")
+                if role == "bot":
+                    chat_message = convert_bot_before_marked(chat_message)
+                elif role == "user":
+                    chat_message = convert_user_before_marked(chat_message)
+                return chat_message
+            else:
+                raise ValueError(f"Invalid message for Chatbot component: {chat_message}")
 
 
 
@@ -103,4 +107,3 @@ def BlockContext_init(self, *args, **kwargs):
 
 original_BlockContext_init = gr.blocks.BlockContext.__init__
 gr.blocks.BlockContext.__init__ = BlockContext_init
-

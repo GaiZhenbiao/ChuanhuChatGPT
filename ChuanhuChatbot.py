@@ -578,7 +578,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     # submitBtn.click(auto_name_chat_history, [current_model, user_question, chatbot, user_name], [historySelectList], show_progress=False)
 
-    index_files.change(handle_file_upload, [current_model, index_files, chatbot, language_select_dropdown], [
+    index_files.upload(handle_file_upload, [current_model, index_files, chatbot, language_select_dropdown], [
                        index_files, chatbot, status_display])
     summarize_btn.click(handle_summarize_index, [
                         current_model, index_files, chatbot, language_select_dropdown], [chatbot, status_display])

@@ -51,17 +51,15 @@ CHUANHU_DESCRIPTION = i18n("由Bilibili [土川虎虎虎](https://space.bilibili
 
 
 ONLINE_MODELS = [
-    "gpt-3.5-turbo",
-    "gpt-3.5-turbo-instruct",
-    "gpt-3.5-turbo-16k",
-    "gpt-4",
-    "gpt-3.5-turbo-0301",
-    "gpt-3.5-turbo-0613",
-    "gpt-4-0314",
-    "gpt-4-0613",
-    "gpt-4-32k",
-    "gpt-4-32k-0314",
-    "gpt-4-32k-0613",
+    "GPT3.5 Turbo",
+    "GPT3.5 Turbo Instruct",
+    "GPT3.5 Turbo 16K",
+    "GPT3.5 Turbo 0301",
+    "GPT3.5 Turbo 0613",
+    "GPT4",
+    "GPT4 32K",
+    "GPT4 Turbo",
+    "GPT4 Vision",
     "川虎助理",
     "川虎助理 Pro",
     "GooglePaLM",
@@ -92,7 +90,7 @@ LOCAL_MODELS = [
     "Qwen 14B"
 ]
 
-# Additional metadate for local models
+# Additional metadata for online and local models
 MODEL_METADATA = {
     "Llama-2-7B":{
         "repo_id": "TheBloke/Llama-2-7B-GGUF",
@@ -107,7 +105,47 @@ MODEL_METADATA = {
     },
     "Qwen 14B": {
         "repo_id": "Qwen/Qwen-14B-Chat-Int4",
-    }
+    },
+    "GPT3.5 Turbo": {
+        "model_name": "gpt-3.5-turbo",
+        "token_limit": 4096,
+    },
+    "GPT3.5 Turbo Instruct": {
+        "model_name": "gpt-3.5-turbo-instruct",
+        "token_limit": 4096,
+    },
+    "GPT3.5 Turbo 16K": {
+        "model_name": "gpt-3.5-turbo-16k",
+        "token_limit": 16384,
+    },
+    "GPT3.5 Turbo 0301": {
+        "model_name": "gpt-3.5-turbo-0301",
+        "token_limit": 4096,
+    },
+    "GPT3.5 Turbo 0613": {
+        "model_name": "gpt-3.5-turbo-0613",
+        "token_limit": 4096,
+    },
+    "GPT4": {
+        "model_name": "gpt-4",
+        "token_limit": 8192,
+    },
+    "GPT4 32K": {
+        "model_name": "gpt-4-32k",
+        "token_limit": 32768,
+    },
+    "GPT4 Turbo": {
+        "model_name": "gpt-4-1106-preview",
+        "token_limit": 128000,
+    },
+    "GPT4 Vision": {
+        "model_name": "gpt-4-vision-preview",
+        "token_limit": 128000,
+    },
+    "Claude": {
+        "model_name": "Claude",
+        "token_limit": 4096,
+    },
 }
 
 if os.environ.get('HIDE_LOCAL_MODELS', 'false') == 'true':
@@ -124,20 +162,6 @@ for dir_name in os.listdir("models"):
     if os.path.isdir(os.path.join("models", dir_name)):
         if dir_name not in MODELS:
             MODELS.append(dir_name)
-
-MODEL_TOKEN_LIMIT = {
-    "gpt-3.5-turbo": 4096,
-    "gpt-3.5-turbo-16k": 16384,
-    "gpt-3.5-turbo-0301": 4096,
-    "gpt-3.5-turbo-0613": 4096,
-    "gpt-4": 8192,
-    "gpt-4-0314": 8192,
-    "gpt-4-0613": 8192,
-    "gpt-4-32k": 32768,
-    "gpt-4-32k-0314": 32768,
-    "gpt-4-32k-0613": 32768,
-    "Claude": 4096
-}
 
 TOKEN_OFFSET = 1000 # 模型的token上限减去这个值，得到软上限。到达软上限之后，自动尝试减少token占用。
 DEFAULT_TOKEN_LIMIT = 3000 # 默认的token上限
