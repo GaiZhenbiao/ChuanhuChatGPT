@@ -74,7 +74,10 @@ ONLINE_MODELS = [
     "讯飞星火大模型V3.0",
     "讯飞星火大模型V2.0",
     "讯飞星火大模型V1.5",
-    "Claude"
+    "Claude",
+    "ERNIE-Bot-turbo",
+    "ERNIE-Bot",
+    "ERNIE-Bot-4",
 ]
 
 LOCAL_MODELS = [
@@ -145,6 +148,18 @@ MODEL_METADATA = {
     "Claude": {
         "model_name": "Claude",
         "token_limit": 4096,
+    },
+    "ERNIE-Bot-turbo": {
+        "model_name": "ERNIE-Bot-turbo",
+        "token_limit": 1024,
+    },
+    "ERNIE-Bot": {
+        "model_name": "ERNIE-Bot",
+        "token_limit": 1024,
+    },
+    "ERNIE-Bot-4": {
+        "model_name": "ERNIE-Bot-4",
+        "token_limit": 1024,
     },
 }
 

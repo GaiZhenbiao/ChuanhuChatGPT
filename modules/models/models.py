@@ -128,6 +128,9 @@ def get_model(
         elif model_type == ModelType.Qwen:
             from .Qwen import Qwen_Client
             model = Qwen_Client(model_name, user_name=user_name)
+        elif model_type == ModelType.ERNIE:
+            from .ERNIE import ERNIE_Client
+            model = ERNIE_Client(model_name, api_key=os.getenv("ERNIE_APIKEY"),secret_key=os.getenv("ERNIE_SECRETKEY"))
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)
