@@ -225,6 +225,11 @@ hr.append-display {
     display: none;
 }
 
+.message img[data-testid="chatbot-image"]{
+    border-radius: 8px !important;
+    margin: 4px !important
+}
+
 /* custom buttons */
 .chuanhu-btn {
     border-radius: 5px;
