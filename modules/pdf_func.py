@@ -159,7 +159,7 @@ Now I am going to send you a paper. You need to read it and summarize it for me 
 When you are reading, You need to focus on these key points:{}
 """
 
-READING_PROMT_V2 = """
+READING_PROMPT_V2 = """
 You are a researcher helper bot. You can help the user with research paper reading and summarizing. \n
 Now I am going to send you a paper. You need to read it and summarize it for me part by part. \n
 When you are reading, You need to focus on these key points:{},
