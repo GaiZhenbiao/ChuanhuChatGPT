@@ -84,7 +84,7 @@ class OpenAIVisionClient(BaseLLMModel):
                 # 按压缩比例调整图片大小
                 new_width = int(width * scale_ratio)
                 new_height = int(height * scale_ratio)
-                img = img.resize((new_width, new_height), Image.ANTIALIAS)
+                img = img.resize((new_width, new_height), Image.LANCZOS)
 
             # 将图片转换为jpg格式的二进制数据
             buffer = BytesIO()
