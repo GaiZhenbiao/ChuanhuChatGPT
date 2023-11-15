@@ -62,11 +62,13 @@
     //== 高级配置 ==
     // 是否多个API Key轮换使用
     "multi_api_key": false,
-    "api_key_list": [
-        "sk-xxxxxxxxxxxxxxxxxxxxxxxx1",
-        "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
-        "sk-xxxxxxxxxxxxxxxxxxxxxxxx3"
-    ],
+    // "available_models": ["GPT3.5 Turbo", "GPT4 Turbo", "GPT4 Vision"], // 可用的模型列表，将覆盖默认的可用模型列表
+    // "extra_models": ["模型名称3", "模型名称4", ...], // 额外的模型，将添加到可用的模型列表之后
+    // "api_key_list": [
+    //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx1",
+    //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
+    //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx3"
+    // ],
     // 自定义OpenAI API Base
     // "openai_api_base": "https://api.openai.com",
     // 自定义使用代理（请替换代理URL）
