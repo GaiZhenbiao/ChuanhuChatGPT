@@ -797,7 +797,7 @@ demo.title = i18n("川虎Chat 🚀")
 if __name__ == "__main__":
     reload_javascript()
     demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
-        blocked_paths=["config.json"],
+        allowed_paths=["history", "web_assets"],
         server_name=server_name,
         server_port=server_port,
         share=share,
