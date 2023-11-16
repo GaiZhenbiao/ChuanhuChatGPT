@@ -787,7 +787,7 @@ class BaseLLMModel:
                     logging.info(new_history)
             except:
                 pass
-            if len(json_s["chatbot"]) < len(json_s["history"]):
+            if len(json_s["chatbot"]) < len(json_s["history"])//2:
                 logging.info("Trimming corrupted history...")
                 json_s["history"] = json_s["history"][-len(json_s["chatbot"]):]
                 logging.info(f"Trimmed history: {json_s['history']}")
