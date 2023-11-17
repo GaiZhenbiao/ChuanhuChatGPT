@@ -376,8 +376,9 @@ class BaseLLMModel:
             msg = "索引获取成功，生成回答中……"
             logging.info(msg)
             with retrieve_proxy():
-                retriever = VectorStoreRetriever(vectorstore=index, search_type="similarity_score_threshold", search_kwargs={
-                                                 "k": 6, "score_threshold": 0.5})
+                retriever = VectorStoreRetriever(vectorstore=index, search_type="similarity", search_kwargs={"k": 6})
+                # retriever = VectorStoreRetriever(vectorstore=index, search_type="similarity_score_threshold", search_kwargs={
+                #                                  "k": 6, "score_threshold": 0.2})
                 try:
                     relevant_documents = retriever.get_relevant_documents(
                         fake_inputs)
@@ -790,7 +791,7 @@ class BaseLLMModel:
                     logging.info(new_history)
             except:
                 pass
-            if len(json_s["chatbot"]) < len(json_s["history"]):
+            if len(json_s["chatbot"]) < len(json_s["history"])//2:
                 logging.info("Trimming corrupted history...")
                 json_s["history"] = json_s["history"][-len(json_s["chatbot"]):]
                 logging.info(f"Trimmed history: {json_s['history']}")
@@ -813,8 +814,10 @@ class BaseLLMModel:
             history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
         else:
             history_file_path = filename
+        md_history_file_path = history_file_path[:-5] + ".md"
         try:
             os.remove(history_file_path)
+            os.remove(md_history_file_path)
             return i18n("删除对话历史成功"), get_history_list(user_name), []
         except:
             logging.info(f"删除对话历史失败 {history_file_path}")

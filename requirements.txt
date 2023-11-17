@@ -7,7 +7,7 @@ tqdm
 colorama
 googlesearch-python
 Pygments
-langchain==0.0.276
+langchain==0.0.316
 markdown
 PyPDF2
 pdfplumber
@@ -17,11 +17,11 @@ openpyxl
 pandoc
 wolframalpha
 faiss-cpu==1.7.4
-duckduckgo-search>=3.8
+duckduckgo-search>=3.9.5
 arxiv
 wikipedia
 google.generativeai
-openai>=0.27.9
+openai==0.28.1
 unstructured
 google-api-python-client
 tabulate
@@ -31,4 +31,4 @@ websocket_client
 pydantic==1.10.8
 google-search-results
 anthropic==0.3.11
-
+Pillow>=10.1.0

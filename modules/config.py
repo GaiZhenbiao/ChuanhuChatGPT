@@ -94,6 +94,10 @@ else:
     sensitive_id = config.get("sensitive_id", "")
     sensitive_id = os.environ.get("SENSITIVE_ID", sensitive_id)
 
+if "available_models" in config:
+    presets.MODELS = config["available_models"]
+    logging.info(f"已设置可用模型：{config['available_models']}")
+
 # 模型配置
 if "extra_models" in  config:
     presets.MODELS.extend(config["extra_models"])
