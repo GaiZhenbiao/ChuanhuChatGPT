@@ -236,7 +236,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             use_websearch_checkbox = gr.Checkbox(label=i18n(
                                 "使用在线搜索"), value=False, elem_classes="switch-checkbox", elem_id="gr-websearch-cb", visible=False)
                             index_files = gr.Files(label=i18n(
-                                "上传"), type="file", elem_id="upload-index-file")
+                                "上传"), type="file", file_types=[".pdf", ".docx", ".pptx", ".epub", ".xlsx", ".txt", "text", "image"], elem_id="upload-index-file")
                             two_column = gr.Checkbox(label=i18n(
                                 "双栏pdf"), value=advance_docs["pdf"].get("two_column", False))
                             summarize_btn = gr.Button(i18n("总结"))
@@ -645,6 +645,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                  current_model, status_display, chatbot, lora_select_dropdown, user_api_key, keyTxt], show_progress=True, api_name="get_model")
     model_select_dropdown.change(toggle_like_btn_visibility, [model_select_dropdown], [
                                  like_dislike_area], show_progress=False)
+    # model_select_dropdown.change(
+    #     toggle_file_type, [model_select_dropdown], [index_files], show_progress=False)
     lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider,
                                 top_p_slider, systemPromptTxt, user_name, current_model], [current_model, status_display, chatbot], show_progress=True)
 

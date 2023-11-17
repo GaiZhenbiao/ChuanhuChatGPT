@@ -661,6 +661,15 @@ def toggle_like_btn_visibility(selected_model_name):
     else:
         return gr.update(visible=False)
 
+def get_corresponding_file_type_by_model_name(selected_model_name):
+    if selected_model_name in ["xmchat", "GPT4 Vision"]:
+        return ["image"]
+    else:
+        return [".pdf", ".docx", ".pptx", ".epub", ".xlsx", ".txt", "text"]
+
+# def toggle_file_type(selected_model_name):
+#     return gr.Files.update(file_types=get_corresponding_file_type_by_model_name(selected_model_name))
+
 def new_auto_history_filename(username):
     latest_file = get_first_history_name(username)
     if latest_file:
