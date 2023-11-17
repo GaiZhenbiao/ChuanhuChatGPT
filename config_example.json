@@ -15,6 +15,8 @@
     "spark_api_key": "", // 你的 讯飞星火大模型 API Key，用于讯飞星火大模型对话模型
     "spark_api_secret": "", // 你的 讯飞星火大模型 API Secret，用于讯飞星火大模型对话模型
     "claude_api_secret":"",// 你的 Claude API Secret，用于 Claude 对话模型
+    "ernie_api_key": "",// 你的文心一言在百度云中的API Key，用于文心一言对话模型
+    "ernie_secret_key": "",// 你的文心一言在百度云中的Secret Key，用于文心一言对话模型
 
 
     //== Azure ==

@@ -135,6 +135,11 @@ os.environ["SPARK_API_SECRET"] = spark_api_secret
 claude_api_secret = config.get("claude_api_secret", "")
 os.environ["CLAUDE_API_SECRET"] = claude_api_secret
 
+ernie_api_key = config.get("ernie_api_key", "")
+os.environ["ERNIE_APIKEY"] = ernie_api_key
+ernie_secret_key = config.get("ernie_secret_key", "")
+os.environ["ERNIE_SECRETKEY"] = ernie_secret_key
+
 load_config_to_environ(["openai_api_type", "azure_openai_api_key", "azure_openai_api_base_url",
                        "azure_openai_api_version", "azure_deployment_name", "azure_embedding_deployment_name", "azure_embedding_model_name"])
 
