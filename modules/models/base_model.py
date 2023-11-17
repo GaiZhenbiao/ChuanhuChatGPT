@@ -811,8 +811,10 @@ class BaseLLMModel:
             history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
         else:
             history_file_path = filename
+        md_history_file_path = history_file_path[:-5] + ".md"
         try:
             os.remove(history_file_path)
+            os.remove(md_history_file_path)
             return i18n("删除对话历史成功"), get_history_list(user_name), []
         except:
             logging.info(f"删除对话历史失败 {history_file_path}")
