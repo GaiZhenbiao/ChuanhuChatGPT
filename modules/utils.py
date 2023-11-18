@@ -233,7 +233,7 @@ def convert_bot_before_marked(chat_message):
     if '<div class="md-message">' in chat_message:
         return chat_message
     else:
-        raw = f'<div class="raw-message hideM"><pre>{clip_rawtext(chat_message)}</pre></div>'
+        raw = f'<div class="raw-message hideM"><pre class="fake-pre">{clip_rawtext(chat_message)}</pre></div>'
         # really_raw = f'{START_OF_OUTPUT_MARK}<div class="really-raw hideM">{clip_rawtext(chat_message, need_escape=False)}\n</div>{END_OF_OUTPUT_MARK}'
 
         code_block_pattern = re.compile(r"```(.*?)(?:```|$)", re.DOTALL)

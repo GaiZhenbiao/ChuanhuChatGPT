@@ -95,7 +95,11 @@ function addChuanhuButton(botElement) {
     function removeMarkdownText(message) {
         var rawDiv = message.querySelector('.raw-message');
         if (rawDiv) {
-            rawDiv.innerHTML = rawDiv.querySelector('pre')?.innerHTML || rawDiv.innerHTML;
+            // 判断pre是否存在fake-pre类，如果不存在，则为20231118之前的历史记录格式，需要转换，增加fake-pre类用于适配
+            if (!rawDiv.querySelector('pre')?.classList.contains('fake-pre')) {
+                rawDiv.innerHTML = rawDiv.innerHTML.replace(/<pre>/g, '<pre class="fake-pre">');
+            }
+            // rawDiv.innerHTML = rawDiv.querySelector('pre')?.innerHTML || rawDiv.innerHTML;
             rawDiv.classList.remove('hideM');
         }
         var mdDiv = message.querySelector('.md-message');

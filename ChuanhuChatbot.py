@@ -135,6 +135,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         label="Chuanhu Chat",
                         elem_id="chuanhu-chatbot",
                         latex_delimiters=latex_delimiters_set,
+                        sanitize_html=False,
                         # height=700,
                         show_label=False,
                         avatar_images=[config.user_avatar, config.bot_avatar],

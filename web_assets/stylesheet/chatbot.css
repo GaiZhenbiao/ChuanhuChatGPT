@@ -216,6 +216,14 @@ hr.append-display {
 .message .raw-message p {
     margin:0 !important;
 }
+.message .raw-message pre.fake-pre {
+    background: unset;
+    margin: unset;
+    font-size: unset;
+    /* font-family: unset; */
+    padding: unset;
+    white-space: inherit;
+}
 .message .raw-message {
     display: block;
     padding: 0 !important;
