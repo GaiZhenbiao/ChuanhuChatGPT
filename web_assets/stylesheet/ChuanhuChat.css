@@ -60,6 +60,7 @@ body.popup-open {
     flex-direction: row;
     display: inline-flex;
     align-items: center;
+    position: absolute;
 }
 #description {
     text-align: center;
@@ -123,12 +124,25 @@ body.popup-open {
 }
 
 /* status-display */
-#status-display {
+#chuanhu-header > #status-display {
     display: flex;
     min-height: 2em;
     align-items: flex-end;
     justify-content: flex-end;
     transition: all 0.6s;
+    max-width: 50%;
+    height: 100%;
+    bottom: 0;
+    position: absolute;
+    
+    @media screen and (max-width: 639px) {
+        right: 16px;
+        right: max(16px, env(safe-area-inset-right));
+    }
+    @media screen and (min-width: 640px) {
+        right: 24px;
+        right: max(24px, env(safe-area-inset-right));
+    }
 }
 #status-display p {
     font-size: .85em;
