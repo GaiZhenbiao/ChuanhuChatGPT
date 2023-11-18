@@ -213,7 +213,10 @@ class BaseLLMModel:
     ) -> None:
         self.history = []
         self.all_token_counts = []
-        self.model_name = model_name
+        if model_name in MODEL_METADATA:
+            self.model_name = MODEL_METADATA[model_name]["model_name"]
+        else:
+            self.model_name = model_name
         self.model_type = ModelType.get_type(model_name)
         try:
             self.token_upper_limit = MODEL_METADATA[model_name]["token_limit"]

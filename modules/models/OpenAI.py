@@ -25,8 +25,6 @@ class OpenAIClient(BaseLLMModel):
         top_p=1.0,
         user_name=""
     ) -> None:
-        if model_name in MODEL_METADATA:
-            model_name = MODEL_METADATA[model_name]["model_name"]
         super().__init__(
             model_name=model_name,
             temperature=temperature,
