@@ -39,10 +39,14 @@ function showMask(obj) {
         chatbotArea.querySelector('#chatbot-input-more-area').parentNode.appendChild(mask);
     } else if (obj == "update-toast") {
         mask.classList.add('chuanhu-top-mask');
+        if (document.querySelector('.chuanhu-top-mask')) {
+            for (var i = 0; i < document.querySelectorAll('.chuanhu-top-mask').length; i++) {
+                document.querySelectorAll('.chuanhu-top-mask')[i].remove();
+            }
+        }
         document.body.appendChild(mask);
         // mask.classList.add('transparent-mask');
     }
-    
     
 
     mask.addEventListener('click', () => {

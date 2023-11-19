@@ -1,6 +1,7 @@
 
 var updateInfoGotten = false;
-var isLatestVersion = localStorage.getItem('isLatestVersion') || false;
+var isLatestVersion = localStorage.getItem('isLatestVersion') === "true" || false;
+var shouldCheckUpdate = false;
 
 function setUpdater() {
     const enableCheckUpdate = gradioApp().querySelector('#enableCheckUpdate_config').innerText;
@@ -10,11 +11,15 @@ function setUpdater() {
         return;
     }
 
-    const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
-    const longTimeNoCheck = currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000;
-    if (longTimeNoCheck && !updateInfoGotten && !isLatestVersion || isLatestVersion && !updateInfoGotten) {
-        updateLatestVersion();
+    if (!isLatestVersion) {
+        gradioApp().classList.add('is-outdated');
     }
+    const lastCheckTime = localStorage.getItem('lastCheckTime') || 0;
+    currentTime = new Date().getTime();
+    const longTimeNoCheck = currentTime - lastCheckTime > 3 * 24 * 60 * 60 * 1000;
+    shouldCheckUpdate = !updateInfoGotten && (!isLatestVersion && longTimeNoCheck || isLatestVersion);
+    // console.log(`shouldCheckUpdate`, shouldCheckUpdate);
+    if (shouldCheckUpdate) updateLatestVersion();
 }
 
 var statusObserver = new MutationObserver(function (mutationsList) {
@@ -26,6 +31,7 @@ var statusObserver = new MutationObserver(function (mutationsList) {
                     noUpdateHtml();
                     localStorage.setItem('isLatestVersion', 'true');
                     isLatestVersion = true;
+                    gradioApp().classList.remove('is-outdated');
                     enableUpdateBtns();
                 } else if (getUpdateStatus() === "failure") {
                     updatingInfoElement.innerHTML = marked.parse(updateFailure_i18n, {mangle: false, headerIds: false});
@@ -86,11 +92,16 @@ async function updateLatestVersion() {
         if (currentVersion) {
             if (latestVersion <= currentVersion) {
                 noUpdate();
+                localStorage.setItem('isLatestVersion', 'true');
+                isLatestVersion = true;
+                gradioApp().classList.remove('is-outdated');
             } else {
                 latestVersionElement.textContent = latestVersion;
                 console.log(`New version ${latestVersion} found!`);
                 if (!isInIframe) openUpdateToast();
                 gradioApp().classList.add('is-outdated');
+                localStorage.setItem('isLatestVersion', 'false');
+                isLatestVersion = false;
             }
             enableUpdateBtns();
         } else { //如果当前版本号获取失败，使用时间比较
@@ -119,6 +130,8 @@ async function updateLatestVersion() {
                     noUpdate("Local version check failed, it seems to be a local rivision. <br>But your revision is newer than the latest release.");
                     gradioApp().classList.add('is-outdated');
                     enableUpdateBtns()
+                    localStorage.setItem('isLatestVersion', 'false');
+                    isLatestVersion = false;
                 }
             }
         }
