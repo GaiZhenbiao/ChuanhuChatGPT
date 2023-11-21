@@ -39,7 +39,6 @@ TIMEOUT_STREAMING = 60  # 流式对话时的超时时间
 TIMEOUT_ALL = 200  # 非流式对话时的超时时间
 ENABLE_STREAMING_OPTION = True  # 是否启用选择选择是否实时显示回答的勾选框
 ENABLE_LLM_NAME_CHAT_OPTION = True  # 是否启用选择是否使用LLM模型的勾选框
-HIDE_MY_KEY = False  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
 CONCURRENT_COUNT = 100 # 允许同时使用的用户数量
 
 SIM_K = 5
@@ -87,6 +86,8 @@ LOCAL_MODELS = [
     "chatglm-6b-int4-ge",
     "chatglm2-6b",
     "chatglm2-6b-int4",
+    "chatglm3-6b",
+    "chatglm3-6b-32k",
     "StableLM",
     "MOSS",
     "Llama-2-7B-Chat",
