@@ -1100,7 +1100,7 @@ input:checked + .chatbot-input-more-span {
     display: block;
 }
 
-.disable-update .show-on-latest, .disable-update .show-on-outdated {
+.disable-update #chuanhu-manual-check-btn {
     display: none;
 }
 
