@@ -197,6 +197,14 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         obj="toolbox"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
                     with gr.Tab(label=i18n("对话")):
+                        keyTxt = gr.Textbox(
+                            show_label=True,
+                            placeholder=f"Your API-key...",
+                            value=hide_middle_chars(user_api_key.value),
+                            type="password",
+                            visible=not HIDE_MY_KEY,
+                            label="API-Key",
+                        )
                         with gr.Accordion(label="Prompt", open=True):
                             systemPromptTxt = gr.Textbox(
                                 show_label=True,
@@ -340,14 +348,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         obj="box"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-setting-tabs"):
                     with gr.Tab(label=i18n("模型")):
-                        keyTxt = gr.Textbox(
-                            show_label=True,
-                            placeholder=f"Your API-key...",
-                            value=hide_middle_chars(user_api_key.value),
-                            type="password",
-                            visible=not HIDE_MY_KEY,
-                            label="API-Key",
-                        )
                         if multi_api_key:
                             usageTxt = gr.Markdown(i18n(
                                 "多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
