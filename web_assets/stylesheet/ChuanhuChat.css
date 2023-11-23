@@ -144,6 +144,12 @@ body.popup-open {
         right: max(24px, env(safe-area-inset-right));
     }
 }
+#chuanhu-header > #status-display #status-display {
+    min-height: unset;
+}
+#chuanhu-header > #status-display > .wrap {
+    margin-top: 8px;
+}
 #status-display p {
     font-size: .85em;
     font-family: ui-monospace, "SF Mono", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "Microsoft Yahei UI", "Microsoft Yahei", monospace;
@@ -1094,7 +1100,7 @@ input:checked + .chatbot-input-more-span {
     display: block;
 }
 
-.disable-update .show-on-latest, .disable-update .show-on-outdated {
+.disable-update #chuanhu-manual-check-btn {
     display: none;
 }
 
