@@ -87,6 +87,8 @@ LOCAL_MODELS = [
     "chatglm-6b-int4-ge",
     "chatglm2-6b",
     "chatglm2-6b-int4",
+    "chatglm3-6b",
+    "chatglm3-6b-32k",
     "StableLM",
     "MOSS",
     "Llama-2-7B-Chat",

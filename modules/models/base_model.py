@@ -847,6 +847,11 @@ class BaseLLMModel:
         """
         return gr.update()
 
+    def deinitialize(self):
+        """deinitialize the model, implement if needed
+        """
+        pass
+
 
 class Base_Chat_Langchain_Client(BaseLLMModel):
     def __init__(self, model_name, user_name=""):

@@ -4,6 +4,8 @@ import logging
 import os
 import platform
 
+import gc
+import torch
 import colorama
 
 from ..index_func import *
@@ -18,6 +20,7 @@ class ChatGLM_Client(BaseLLMModel):
         import torch
         from transformers import AutoModel, AutoTokenizer
         global CHATGLM_TOKENIZER, CHATGLM_MODEL
+        self.deinitialize()
         if CHATGLM_TOKENIZER is None or CHATGLM_MODEL is None:
             system_name = platform.system()
             model_path = None
@@ -53,7 +56,12 @@ class ChatGLM_Client(BaseLLMModel):
             model = model.eval()
             CHATGLM_MODEL = model
 
-    def _get_glm_style_input(self):
+    def _get_glm3_style_input(self):
+        history = self.history
+        query = history.pop()["content"]
+        return history, query
+
+    def _get_glm2_style_input(self):
         history = [x["content"] for x in self.history]
         query = history.pop()
         logging.debug(colorama.Fore.YELLOW +
@@ -64,6 +72,12 @@ class ChatGLM_Client(BaseLLMModel):
         history = [[history[i], history[i + 1]]
                    for i in range(0, len(history), 2)]
         return history, query
+
+    def _get_glm_style_input(self):
+        if "glm2" in self.model_name:
+            return self._get_glm2_style_input()
+        else:
+            return self._get_glm3_style_input()
 
     def get_answer_at_once(self):
         history, query = self._get_glm_style_input()
@@ -82,3 +96,12 @@ class ChatGLM_Client(BaseLLMModel):
             temperature=self.temperature,
         ):
             yield response
+
+    def deinitialize(self):
+        # 释放显存
+        global CHATGLM_MODEL, CHATGLM_TOKENIZER
+        CHATGLM_MODEL = None
+        CHATGLM_TOKENIZER = None
+        gc.collect()
+        torch.cuda.empty_cache()
+        logging.info("ChatGLM model deinitialized")
