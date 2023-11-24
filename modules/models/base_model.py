@@ -721,31 +721,31 @@ class BaseLLMModel:
             token_sum += sum(token_lst[: i + 1])
         return i18n("Token 计数: ") + f"{sum(token_lst)}" + i18n("，本次对话累计消耗了 ") + f"{token_sum} tokens"
 
-    def rename_chat_history(self, filename, chatbot, user_name):
+    def rename_chat_history(self, filename, chatbot):
         if filename == "":
             return gr.update()
         if not filename.endswith(".json"):
             filename += ".json"
-        self.delete_chat_history(self.history_file_path, user_name)
+        self.delete_chat_history(self.history_file_path)
         # 命名重复检测
         repeat_file_index = 2
-        full_path = os.path.join(HISTORY_DIR, user_name, filename)
+        full_path = os.path.join(HISTORY_DIR, self.user_identifier, filename)
         while os.path.exists(full_path):
-            full_path = os.path.join(HISTORY_DIR, user_name, f"{repeat_file_index}_{filename}")
+            full_path = os.path.join(HISTORY_DIR, self.user_identifier, f"{repeat_file_index}_{filename}")
             repeat_file_index += 1
         filename = os.path.basename(full_path)
 
         self.history_file_path = filename
-        save_file(filename, self.system_prompt, self.history, chatbot, user_name)
-        return init_history_list(user_name)
+        save_file(filename, self.system_prompt, self.history, chatbot, self.user_identifier)
+        return init_history_list(self.user_identifier)
 
-    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
+    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, single_turn_checkbox):
         if len(self.history) == 2 and not single_turn_checkbox:
             user_question = self.history[0]["content"]
             if type(user_question) == list:
                 user_question = user_question[0]["text"]
             filename = replace_special_symbols(user_question)[:16] + ".json"
-            return self.rename_chat_history(filename, chatbot, user_name)
+            return self.rename_chat_history(filename, chatbot, self.user_identifier)
         else:
             return gr.update()
 
@@ -753,14 +753,14 @@ class BaseLLMModel:
         save_file(self.history_file_path, self.system_prompt,
                   self.history, chatbot, self.user_identifier)
 
-    def export_markdown(self, filename, chatbot, user_name):
+    def export_markdown(self, filename, chatbot):
         if filename == "":
             return
         if not filename.endswith(".md"):
             filename += ".md"
-        save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+        save_file(filename, self.system_prompt, self.history, chatbot, self.user_identifier)
 
-    def load_chat_history(self, new_history_file_path=None, username=None):
+    def load_chat_history(self, new_history_file_path=None):
         logging.debug(f"{self.user_identifier} 加载对话历史中……")
         if new_history_file_path is not None:
             if type(new_history_file_path) != str:
@@ -806,7 +806,7 @@ class BaseLLMModel:
             logging.info(f"没有找到对话历史记录 {self.history_file_path}")
             return self.history_file_path, "", []
 
-    def delete_chat_history(self, filename, user_name):
+    def delete_chat_history(self, filename):
         if filename == "CANCELED":
             return gr.update(), gr.update(), gr.update()
         if filename == "":
@@ -814,17 +814,17 @@ class BaseLLMModel:
         if not filename.endswith(".json"):
             filename += ".json"
         if filename == os.path.basename(filename):
-            history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
+            history_file_path = os.path.join(HISTORY_DIR, self.user_identifier, filename)
         else:
             history_file_path = filename
         md_history_file_path = history_file_path[:-5] + ".md"
         try:
             os.remove(history_file_path)
             os.remove(md_history_file_path)
-            return i18n("删除对话历史成功"), get_history_list(user_name), []
+            return i18n("删除对话历史成功"), get_history_list(self.user_identifier), []
         except:
             logging.info(f"删除对话历史失败 {history_file_path}")
-            return i18n("对话历史")+filename+i18n("已经被删除啦"), get_history_list(user_name), []
+            return i18n("对话历史")+filename+i18n("已经被删除啦"), get_history_list(self.user_identifier), []
 
     def auto_load(self):
         filepath = get_history_filepath(self.user_identifier)

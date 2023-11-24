@@ -252,7 +252,7 @@ class OpenAIClient(BaseLLMModel):
         return response
 
 
-    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
+    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, single_turn_checkbox):
         if len(self.history) == 2 and not single_turn_checkbox and not hide_history_when_not_logged_in:
             user_question = self.history[0]["content"]
             if name_chat_method == i18n("模型自动总结（消耗tokens）"):
@@ -269,10 +269,10 @@ class OpenAIClient(BaseLLMModel):
                 except Exception as e:
                     logging.info(f"自动命名失败。{e}")
                     filename = replace_special_symbols(user_question)[:16] + ".json"
-                return self.rename_chat_history(filename, chatbot, user_name)
+                return self.rename_chat_history(filename, chatbot)
             elif name_chat_method == i18n("第一条提问"):
                 filename = replace_special_symbols(user_question)[:16] + ".json"
-                return self.rename_chat_history(filename, chatbot, user_name)
+                return self.rename_chat_history(filename, chatbot)
             else:
                 return gr.update()
         else:

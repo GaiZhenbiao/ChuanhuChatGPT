@@ -549,7 +549,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     load_history_from_file_args = dict(
         fn=load_chat_history,
-        inputs=[current_model, historySelectList, user_name],
+        inputs=[current_model, historySelectList],
         outputs=[saveFileName, systemPromptTxt, chatbot]
     )
 
@@ -559,7 +559,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     auto_name_chat_history_args = dict(
         fn=auto_name_chat_history,
-        inputs=[current_model, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox],
+        inputs=[current_model, name_chat_method, user_question, chatbot, single_turn_checkbox],
         outputs=[historySelectList],
         show_progress=False,
     )
@@ -679,12 +679,12 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
     exportMarkdownBtn.click(
         export_markdown,
-        [current_model, saveFileName, chatbot, user_name],
+        [current_model, saveFileName, chatbot],
         [],
         show_progress=True,
     )
     historyRefreshBtn.click(**refresh_history_args)
-    historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList, user_name], [status_display, historySelectList, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}').then(
+    historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList], [status_display, historySelectList, chatbot], _js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}').then(
         reset,
         inputs=[current_model, retain_system_prompt_checkbox],
         outputs=[chatbot, status_display, historySelectList, systemPromptTxt],
@@ -692,7 +692,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         _js='(a,b)=>{return clearChatbot(a,b);}',
     )
     historySelectList.input(**load_history_from_file_args)
-    uploadFileBtn.upload(upload_chat_history, [current_model, uploadFileBtn, user_name], [
+    uploadFileBtn.upload(upload_chat_history, [current_model, uploadFileBtn], [
                         saveFileName, systemPromptTxt, chatbot]).then(**refresh_history_args)
     historyDownloadBtn.click(None, [
                              user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b,".json");}')
