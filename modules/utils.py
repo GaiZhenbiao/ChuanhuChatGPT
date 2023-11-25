@@ -31,96 +31,126 @@ if TYPE_CHECKING:
         headers: List[str]
         data: List[List[str | int | bool]]
 
+
 def predict(current_model, *args):
     iter = current_model.predict(*args)
     for i in iter:
         yield i
 
+
 def billing_info(current_model):
     return current_model.billing_info()
+
 
 def set_key(current_model, *args):
     return current_model.set_key(*args)
 
+
 def load_chat_history(current_model, *args):
     return current_model.load_chat_history(*args)
+
 
 def delete_chat_history(current_model, *args):
     return current_model.delete_chat_history(*args)
 
+
 def interrupt(current_model, *args):
     return current_model.interrupt(*args)
 
+
 def reset(current_model, *args):
     return current_model.reset(*args)
+
 
 def retry(current_model, *args):
     iter = current_model.retry(*args)
     for i in iter:
         yield i
 
+
 def delete_first_conversation(current_model, *args):
     return current_model.delete_first_conversation(*args)
+
 
 def delete_last_conversation(current_model, *args):
     return current_model.delete_last_conversation(*args)
 
+
 def set_system_prompt(current_model, *args):
     return current_model.set_system_prompt(*args)
+
 
 def rename_chat_history(current_model, *args):
     return current_model.rename_chat_history(*args)
 
+
 def auto_name_chat_history(current_model, *args):
     return current_model.auto_name_chat_history(*args)
+
 
 def export_markdown(current_model, *args):
     return current_model.export_markdown(*args)
 
+
 def upload_chat_history(current_model, *args):
     return current_model.load_chat_history(*args)
+
 
 def set_token_upper_limit(current_model, *args):
     return current_model.set_token_upper_limit(*args)
 
+
 def set_temperature(current_model, *args):
     current_model.set_temperature(*args)
+
 
 def set_top_p(current_model, *args):
     current_model.set_top_p(*args)
 
+
 def set_n_choices(current_model, *args):
     current_model.set_n_choices(*args)
+
 
 def set_stop_sequence(current_model, *args):
     current_model.set_stop_sequence(*args)
 
+
 def set_max_tokens(current_model, *args):
     current_model.set_max_tokens(*args)
+
 
 def set_presence_penalty(current_model, *args):
     current_model.set_presence_penalty(*args)
 
+
 def set_frequency_penalty(current_model, *args):
     current_model.set_frequency_penalty(*args)
+
 
 def set_logit_bias(current_model, *args):
     current_model.set_logit_bias(*args)
 
+
 def set_user_identifier(current_model, *args):
     current_model.set_user_identifier(*args)
+
 
 def set_single_turn(current_model, *args):
     current_model.set_single_turn(*args)
 
+
 def handle_file_upload(current_model, *args):
     return current_model.handle_file_upload(*args)
+
 
 def handle_summarize_index(current_model, *args):
     return current_model.summarize_index(*args)
 
+
 def like(current_model, *args):
     return current_model.like(*args)
+
 
 def dislike(current_model, *args):
     return current_model.dislike(*args)
@@ -134,7 +164,7 @@ def count_token(input_str):
     return length
 
 
-def markdown_to_html_with_syntax_highlight(md_str): # deprecated
+def markdown_to_html_with_syntax_highlight(md_str):  # deprecated
     def replacer(match):
         lang = match.group(1) or "text"
         code = match.group(2)
@@ -156,7 +186,7 @@ def markdown_to_html_with_syntax_highlight(md_str): # deprecated
     return html_str
 
 
-def normalize_markdown(md_text: str) -> str: # deprecated
+def normalize_markdown(md_text: str) -> str:  # deprecated
     lines = md_text.split("\n")
     normalized_lines = []
     inside_list = False
@@ -180,7 +210,7 @@ def normalize_markdown(md_text: str) -> str: # deprecated
     return "\n".join(normalized_lines)
 
 
-def convert_mdtext(md_text): # deprecated
+def convert_mdtext(md_text):  # deprecated
     code_block_pattern = re.compile(r"```(.*?)(?:```|$)", re.DOTALL)
     inline_code_pattern = re.compile(r"`(.*?)`", re.DOTALL)
     code_blocks = code_block_pattern.findall(md_text)
@@ -209,16 +239,22 @@ def clip_rawtext(chat_message, need_escape=True):
     # first, clip hr line
     hr_pattern = r'\n\n<hr class="append-display no-in-raw" />(.*?)'
     hr_match = re.search(hr_pattern, chat_message, re.DOTALL)
-    message_clipped = chat_message[:hr_match.start()] if hr_match else chat_message
+    message_clipped = chat_message[: hr_match.start()] if hr_match else chat_message
     # second, avoid agent-prefix being escaped
-    agent_prefix_pattern = r'(<!-- S O PREFIX --><p class="agent-prefix">.*?<\/p><!-- E O PREFIX -->)'
+    agent_prefix_pattern = (
+        r'(<!-- S O PREFIX --><p class="agent-prefix">.*?<\/p><!-- E O PREFIX -->)'
+    )
     # agent_matches = re.findall(agent_prefix_pattern, message_clipped)
     agent_parts = re.split(agent_prefix_pattern, message_clipped, flags=re.DOTALL)
     final_message = ""
     for i, part in enumerate(agent_parts):
         if i % 2 == 0:
             if part != "" and part != "\n":
-                final_message += f'<pre class="fake-pre">{escape_markdown(part)}</pre>' if need_escape else f'<pre class="fake-pre">{part}</pre>'
+                final_message += (
+                    f'<pre class="fake-pre">{escape_markdown(part)}</pre>'
+                    if need_escape
+                    else f'<pre class="fake-pre">{part}</pre>'
+                )
         else:
             final_message += part
     return final_message
@@ -248,11 +284,13 @@ def convert_bot_before_marked(chat_message):
         md = f'<div class="md-message">\n\n{result}\n</div>'
         return raw + md
 
+
 def convert_user_before_marked(chat_message):
     if '<div class="user-message">' in chat_message:
         return chat_message
     else:
         return f'<div class="user-message">{escape_markdown(chat_message)}</div>'
+
 
 def escape_markdown(text):
     """
@@ -260,39 +298,39 @@ def escape_markdown(text):
     """
     escape_chars = {
         # ' ': '&nbsp;',
-        '_': '&#95;',
-        '*': '&#42;',
-        '[': '&#91;',
-        ']': '&#93;',
-        '(': '&#40;',
-        ')': '&#41;',
-        '{': '&#123;',
-        '}': '&#125;',
-        '#': '&#35;',
-        '+': '&#43;',
-        '-': '&#45;',
-        '.': '&#46;',
-        '!': '&#33;',
-        '`': '&#96;',
-        '>': '&#62;',
-        '<': '&#60;',
-        '|': '&#124;',
-        '$': '&#36;',
-        ':': '&#58;',
-        '\n': '<br>',
+        "_": "&#95;",
+        "*": "&#42;",
+        "[": "&#91;",
+        "]": "&#93;",
+        "(": "&#40;",
+        ")": "&#41;",
+        "{": "&#123;",
+        "}": "&#125;",
+        "#": "&#35;",
+        "+": "&#43;",
+        "-": "&#45;",
+        ".": "&#46;",
+        "!": "&#33;",
+        "`": "&#96;",
+        ">": "&#62;",
+        "<": "&#60;",
+        "|": "&#124;",
+        "$": "&#36;",
+        ":": "&#58;",
+        "\n": "<br>",
     }
-    text = text.replace('    ', '&nbsp;&nbsp;&nbsp;&nbsp;')
-    return ''.join(escape_chars.get(c, c) for c in text)
+    text = text.replace("    ", "&nbsp;&nbsp;&nbsp;&nbsp;")
+    return "".join(escape_chars.get(c, c) for c in text)
 
 
-def convert_asis(userinput): # deprecated
+def convert_asis(userinput):  # deprecated
     return (
         f'<p style="white-space:pre-wrap;">{html.escape(userinput)}</p>'
         + ALREADY_CONVERTED_MARK
     )
 
 
-def detect_converted_mark(userinput): # deprecated
+def detect_converted_mark(userinput):  # deprecated
     try:
         if userinput.endswith(ALREADY_CONVERTED_MARK):
             return True
@@ -302,7 +340,7 @@ def detect_converted_mark(userinput): # deprecated
         return True
 
 
-def detect_language(code): # deprecated
+def detect_language(code):  # deprecated
     if code.startswith("\n"):
         first_line = ""
     else:
@@ -328,7 +366,10 @@ def construct_assistant(text):
     return construct_text("assistant", text)
 
 
-def save_file(filename, system, history, chatbot, user_name):
+def save_file(filename, model, chatbot):
+    system = model.system_prompt
+    history = model.history
+    user_name = model.user_name
     os.makedirs(os.path.join(HISTORY_DIR, user_name), exist_ok=True)
     if filename is None:
         filename = new_auto_history_filename(user_name)
@@ -339,22 +380,38 @@ def save_file(filename, system, history, chatbot, user_name):
     if filename == ".json":
         raise Exception("文件名不能为空")
 
-    json_s = {"system": system, "history": history, "chatbot": chatbot}
-    repeat_file_index = 2
+    json_s = {
+        "system": system,
+        "history": history,
+        "chatbot": chatbot,
+        "single_turn": model.single_turn,
+        "temperature": model.temperature,
+        "top_p": model.top_p,
+        "n_choices": model.n_choices,
+        "stop_sequence": model.stop_sequence,
+        "max_generation_token": model.max_generation_token,
+        "presence_penalty": model.presence_penalty,
+        "frequency_penalty": model.frequency_penalty,
+        "logit_bias": model.logit_bias,
+        "user_identifier": model.user_identifier,
+        "metadata": model.metadata
+    }
     if not filename == os.path.basename(filename):
         history_file_path = filename
     else:
         history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
 
-    with open(history_file_path, "w", encoding='utf-8') as f:
-        json.dump(json_s, f, ensure_ascii=False)
+    with open(history_file_path, "w", encoding="utf-8") as f:
+        json.dump(json_s, f, ensure_ascii=False, indent=4)
 
     filename = os.path.basename(filename)
     filename_md = filename[:-5] + ".md"
     md_s = f"system: \n- {system} \n"
     for data in history:
         md_s += f"\n{data['role']}: \n- {data['content']} \n"
-    with open(os.path.join(HISTORY_DIR, user_name, filename_md), "w", encoding="utf8") as f:
+    with open(
+        os.path.join(HISTORY_DIR, user_name, filename_md), "w", encoding="utf8"
+    ) as f:
         f.write(md_s)
     return os.path.join(HISTORY_DIR, user_name, filename)
 
@@ -362,8 +419,12 @@ def save_file(filename, system, history, chatbot, user_name):
 def sorted_by_pinyin(list):
     return sorted(list, key=lambda char: lazy_pinyin(char)[0][0])
 
+
 def sorted_by_last_modified_time(list, dir):
-    return sorted(list, key=lambda char: os.path.getctime(os.path.join(dir, char)), reverse=True)
+    return sorted(
+        list, key=lambda char: os.path.getctime(os.path.join(dir, char)), reverse=True
+    )
+
 
 def get_file_names_by_type(dir, filetypes=[".json"]):
     logging.debug(f"获取文件名列表，目录为{dir}，文件类型为{filetypes}")
@@ -373,6 +434,7 @@ def get_file_names_by_type(dir, filetypes=[".json"]):
     logging.debug(f"files are:{files}")
     return files
 
+
 def get_file_names_by_pinyin(dir, filetypes=[".json"]):
     files = get_file_names_by_type(dir, filetypes)
     if files != [""]:
@@ -380,9 +442,11 @@ def get_file_names_by_pinyin(dir, filetypes=[".json"]):
     logging.debug(f"files are:{files}")
     return files
 
+
 def get_file_names_dropdown_by_pinyin(dir, filetypes=[".json"]):
     files = get_file_names_by_pinyin(dir, filetypes)
     return gr.Dropdown.update(choices=files)
+
 
 def get_file_names_by_last_modified_time(dir, filetypes=[".json"]):
     files = get_file_names_by_type(dir, filetypes)
@@ -397,21 +461,29 @@ def get_history_names(user_name=""):
     if user_name == "" and hide_history_when_not_logged_in:
         return []
     else:
-        history_files = get_file_names_by_last_modified_time(os.path.join(HISTORY_DIR, user_name))
-        history_files = [f[:f.rfind(".")] for f in history_files]
+        history_files = get_file_names_by_last_modified_time(
+            os.path.join(HISTORY_DIR, user_name)
+        )
+        history_files = [f[: f.rfind(".")] for f in history_files]
         return history_files
+
 
 def get_first_history_name(user_name=""):
     history_names = get_history_names(user_name)
     return history_names[0] if history_names else None
 
+
 def get_history_list(user_name=""):
     history_names = get_history_names(user_name)
     return gr.Radio.update(choices=history_names)
 
+
 def init_history_list(user_name=""):
     history_names = get_history_names(user_name)
-    return gr.Radio.update(choices=history_names, value=history_names[0] if history_names else "")
+    return gr.Radio.update(
+        choices=history_names, value=history_names[0] if history_names else ""
+    )
+
 
 def filter_history(user_name, keyword):
     history_names = get_history_names(user_name)
@@ -420,6 +492,7 @@ def filter_history(user_name, keyword):
         return gr.update(choices=history_names)
     except:
         return gr.update(choices=history_names)
+
 
 def load_template(filename, mode=0):
     logging.debug(f"加载模板文件{filename}，模式为{mode}（0为返回字典和下拉菜单，1为返回下拉菜单，2为返回字典）")
@@ -441,14 +514,13 @@ def load_template(filename, mode=0):
         return {row[0]: row[1] for row in lines}
     else:
         choices = sorted_by_pinyin([row[0] for row in lines])
-        return {row[0]: row[1] for row in lines}, gr.Dropdown.update(
-            choices=choices
-        )
+        return {row[0]: row[1] for row in lines}, gr.Dropdown.update(choices=choices)
 
 
 def get_template_names():
     logging.debug("获取模板文件名列表")
     return get_file_names_by_pinyin(TEMPLATES_DIR, filetypes=[".csv", "json"])
+
 
 def get_template_dropdown():
     logging.debug("获取模板下拉菜单")
@@ -524,9 +596,7 @@ def get_geoip():
     if "error" in data.keys():
         logging.warning(f"无法获取IP地址信息。\n{data}")
         if data["reason"] == "RateLimited":
-            return (
-                i18n("您的IP区域：未知。")
-            )
+            return i18n("您的IP区域：未知。")
         else:
             return i18n("获取IP地理位置失败。原因：") + f"{data['reason']}" + i18n("。你仍然可以使用聊天功能。")
     else:
@@ -590,29 +660,36 @@ def update_chuanhu():
     if update_status == "success":
         logging.info("Successfully updated, restart needed")
         status = '<span id="update-status" class="hideK">success</span>'
-        return gr.Markdown.update(value=i18n("更新成功，请重启本程序")+status)
+        return gr.Markdown.update(value=i18n("更新成功，请重启本程序") + status)
     else:
         status = '<span id="update-status" class="hideK">failure</span>'
-        return gr.Markdown.update(value=i18n("更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)")+status)
+        return gr.Markdown.update(
+            value=i18n(
+                "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)"
+            )
+            + status
+        )
 
 
-def add_source_numbers(lst, source_name = "Source", use_source = True):
+def add_source_numbers(lst, source_name="Source", use_source=True):
     if use_source:
-        return [f'[{idx+1}]\t "{item[0]}"\n{source_name}: {item[1]}' for idx, item in enumerate(lst)]
+        return [
+            f'[{idx+1}]\t "{item[0]}"\n{source_name}: {item[1]}'
+            for idx, item in enumerate(lst)
+        ]
     else:
         return [f'[{idx+1}]\t "{item}"' for idx, item in enumerate(lst)]
+
 
 def add_details(lst):
     nodes = []
     for index, txt in enumerate(lst):
         brief = txt[:25].replace("\n", "")
-        nodes.append(
-            f"<details><summary>{brief}...</summary><p>{txt}</p></details>"
-        )
+        nodes.append(f"<details><summary>{brief}...</summary><p>{txt}</p></details>")
     return nodes
 
 
-def sheet_to_string(sheet, sheet_name = None):
+def sheet_to_string(sheet, sheet_name=None):
     result = []
     for index, row in sheet.iterrows():
         row_string = ""
@@ -623,21 +700,21 @@ def sheet_to_string(sheet, sheet_name = None):
         result.append(row_string)
     return result
 
+
 def excel_to_string(file_path):
     # 读取Excel文件中的所有工作表
-    excel_file = pd.read_excel(file_path, engine='openpyxl', sheet_name=None)
+    excel_file = pd.read_excel(file_path, engine="openpyxl", sheet_name=None)
 
     # 初始化结果字符串
     result = []
 
     # 遍历每一个工作表
     for sheet_name, sheet_data in excel_file.items():
-
         # 处理当前工作表并添加到结果字符串
         result += sheet_to_string(sheet_data, sheet_name=sheet_name)
 
-
     return result
+
 
 def get_last_day_of_month(any_day):
     # The day 28 exists in every month. 4 days later, it's always next month
@@ -645,13 +722,16 @@ def get_last_day_of_month(any_day):
     # subtracting the number of the current day brings us back one month
     return next_month - datetime.timedelta(days=next_month.day)
 
+
 def get_model_source(model_name, alternative_source):
     if model_name == "gpt2-medium":
         return "https://huggingface.co/gpt2-medium"
 
+
 def refresh_ui_elements_on_load(current_model, selected_model_name, user_name):
     current_model.set_user_identifier(user_name)
     return toggle_like_btn_visibility(selected_model_name), *current_model.auto_load()
+
 
 def toggle_like_btn_visibility(selected_model_name):
     if selected_model_name == "xmchat":
@@ -659,23 +739,31 @@ def toggle_like_btn_visibility(selected_model_name):
     else:
         return gr.update(visible=False)
 
+
 def get_corresponding_file_type_by_model_name(selected_model_name):
     if selected_model_name in ["xmchat", "GPT4 Vision"]:
         return ["image"]
     else:
         return [".pdf", ".docx", ".pptx", ".epub", ".xlsx", ".txt", "text"]
 
+
 # def toggle_file_type(selected_model_name):
 #     return gr.Files.update(file_types=get_corresponding_file_type_by_model_name(selected_model_name))
+
 
 def new_auto_history_filename(username):
     latest_file = get_first_history_name(username)
     if latest_file:
-        with open(os.path.join(HISTORY_DIR, username, latest_file + ".json"), 'r', encoding="utf-8") as f:
+        with open(
+            os.path.join(HISTORY_DIR, username, latest_file + ".json"),
+            "r",
+            encoding="utf-8",
+        ) as f:
             if len(f.read()) == 0:
                 return latest_file
-    now = i18n("新对话 ") + datetime.datetime.now().strftime('%m-%d %H-%M')
-    return f'{now}.json'
+    now = i18n("新对话 ") + datetime.datetime.now().strftime("%m-%d %H-%M")
+    return f"{now}.json"
+
 
 def get_history_filepath(username):
     dirname = os.path.join(HISTORY_DIR, username)
@@ -687,26 +775,35 @@ def get_history_filepath(username):
     latest_file = os.path.join(dirname, latest_file)
     return latest_file
 
+
 def beautify_err_msg(err_msg):
-    if "insufficient_quota" in  err_msg:
-        return i18n("剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)")
+    if "insufficient_quota" in err_msg:
+        return i18n(
+            "剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)"
+        )
     if "The model `gpt-4` does not exist" in err_msg:
-        return i18n("你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)")
+        return i18n(
+            "你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)"
+        )
     if "Resource not found" in err_msg:
         return i18n("请查看 config_example.json，配置 Azure OpenAI")
     return err_msg
+
 
 def auth_from_conf(username, password):
     try:
         with open("config.json", encoding="utf-8") as f:
             conf = json.load(f)
-        usernames, passwords = [i[0] for i in conf["users"]], [i[1] for i in conf["users"]]
+        usernames, passwords = [i[0] for i in conf["users"]], [
+            i[1] for i in conf["users"]
+        ]
         if username in usernames:
             if passwords[usernames.index(username)] == password:
                 return True
         return False
     except:
         return False
+
 
 def get_file_hash(file_src=None, file_paths=None):
     if file_src:
@@ -721,12 +818,14 @@ def get_file_hash(file_src=None, file_paths=None):
 
     return md5_hash.hexdigest()
 
+
 def myprint(**args):
     print(args)
 
+
 def replace_special_symbols(string, replace_string=" "):
     # 定义正则表达式，匹配所有特殊符号
-    pattern = r'[!@#$%^&*()<>?/\|}{~:]'
+    pattern = r"[!@#$%^&*()<>?/\|}{~:]"
 
     new_string = re.sub(pattern, replace_string, string)
 
