@@ -389,6 +389,7 @@ def save_file(filename, model, chatbot):
         "top_p": model.top_p,
         "n_choices": model.n_choices,
         "stop_sequence": model.stop_sequence,
+        "token_upper_limit": model.token_upper_limit,
         "max_generation_token": model.max_generation_token,
         "presence_penalty": model.presence_penalty,
         "frequency_penalty": model.frequency_penalty,

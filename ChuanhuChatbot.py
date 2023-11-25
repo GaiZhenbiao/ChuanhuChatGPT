@@ -499,14 +499,12 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             model_name=MODELS[DEFAULT_MODEL], access_key=my_api_key)[0]
         current_model.set_user_identifier(user_name)
         if not hide_history_when_not_logged_in or user_name:
-            filename, system_prompt, chatbot = current_model.auto_load()
+            loaded_stuff = current_model.auto_load()
         else:
-            system_prompt = gr.update()
-            filename = gr.update()
-            chatbot = gr.Chatbot.update(label=MODELS[DEFAULT_MODEL])
-        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), filename, system_prompt, chatbot, init_history_list(user_name)
+            loaded_stuff = [gr.update(), gr.update(), gr.Chatbot.update(label=MODELS[DEFAULT_MODEL]), current_model.single_turn, current_model.temperature, current_model.top_p, current_model.n_choices, current_model.stop_sequence, current_model.token_upper_limit, current_model.max_generation_token, current_model.presence_penalty, current_model.frequency_penalty, current_model.logit_bias, current_model.user_identifier]
+        return user_info, user_name, current_model, toggle_like_btn_visibility(DEFAULT_MODEL), *loaded_stuff, init_history_list(user_name)
     demo.load(create_greeting, inputs=None, outputs=[
-              user_info, user_name, current_model, like_dislike_area, saveFileName, systemPromptTxt, chatbot, historySelectList], api_name="load")
+              user_info, user_name, current_model, like_dislike_area, saveFileName, systemPromptTxt, chatbot, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt, historySelectList], api_name="load")
     chatgpt_predict_args = dict(
         fn=predict,
         inputs=[
@@ -550,7 +548,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     load_history_from_file_args = dict(
         fn=load_chat_history,
         inputs=[current_model, historySelectList],
-        outputs=[saveFileName, systemPromptTxt, chatbot]
+        outputs=[saveFileName, systemPromptTxt, chatbot, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt],
     )
 
     refresh_history_args = dict(
@@ -587,7 +585,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     emptyBtn.click(
         reset,
         inputs=[current_model, retain_system_prompt_checkbox],
-        outputs=[chatbot, status_display, historySelectList, systemPromptTxt],
+        outputs=[chatbot, status_display, historySelectList, systemPromptTxt, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt],
         show_progress=True,
         _js='(a,b)=>{return clearChatbot(a,b);}',
     )
@@ -693,7 +691,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     )
     historySelectList.input(**load_history_from_file_args)
     uploadFileBtn.upload(upload_chat_history, [current_model, uploadFileBtn], [
-                        saveFileName, systemPromptTxt, chatbot]).then(**refresh_history_args)
+                        saveFileName, systemPromptTxt, chatbot, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt]).then(**refresh_history_args)
     historyDownloadBtn.click(None, [
                              user_name, historySelectList], None, _js='(a,b)=>{return downloadHistory(a,b,".json");}')
     historyMarkdownDownloadBtn.click(None, [
@@ -725,24 +723,24 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         cancel_all_jobs, [], [openai_train_status], show_progress=True)
 
     # Advanced
-    max_context_length_slider.change(
+    max_context_length_slider.input(
         set_token_upper_limit, [current_model, max_context_length_slider], None)
-    temperature_slider.change(
+    temperature_slider.input(
         set_temperature, [current_model, temperature_slider], None)
-    top_p_slider.change(set_top_p, [current_model, top_p_slider], None)
-    n_choices_slider.change(
+    top_p_slider.input(set_top_p, [current_model, top_p_slider], None)
+    n_choices_slider.input(
         set_n_choices, [current_model, n_choices_slider], None)
-    stop_sequence_txt.change(
+    stop_sequence_txt.input(
         set_stop_sequence, [current_model, stop_sequence_txt], None)
-    max_generation_slider.change(
+    max_generation_slider.input(
         set_max_tokens, [current_model, max_generation_slider], None)
-    presence_penalty_slider.change(
+    presence_penalty_slider.input(
         set_presence_penalty, [current_model, presence_penalty_slider], None)
-    frequency_penalty_slider.change(
+    frequency_penalty_slider.input(
         set_frequency_penalty, [current_model, frequency_penalty_slider], None)
-    logit_bias_txt.change(
+    logit_bias_txt.input(
         set_logit_bias, [current_model, logit_bias_txt], None)
-    user_identifier_txt.change(set_user_identifier, [
+    user_identifier_txt.input(set_user_identifier, [
                                current_model, user_identifier_txt], None)
 
     default_btn.click(
@@ -784,7 +782,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     historySelectBtn.click(  # This is an experimental feature... Not actually used.
         fn=load_chat_history,
         inputs=[current_model, historySelectList],
-        outputs=[saveFileName, systemPromptTxt, chatbot],
+        outputs=[saveFileName, systemPromptTxt, chatbot, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt],
         _js='(a,b)=>{return bgSelectHistory(a,b);}'
     )
 

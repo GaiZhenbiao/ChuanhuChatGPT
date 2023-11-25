@@ -214,6 +214,7 @@ class BaseLLMModel:
         frequency_penalty=0,
         logit_bias=None,
         user="",
+        single_turn=False,
     ) -> None:
         self.history = []
         self.all_token_counts = []
@@ -230,10 +231,21 @@ class BaseLLMModel:
         self.system_prompt = system_prompt
         self.api_key = None
         self.need_api_key = False
-        self.single_turn = False
         self.history_file_path = get_first_history_name(user)
         self.user_name = user
 
+        self.default_single_turn = single_turn
+        self.default_temperature = temperature
+        self.default_top_p = top_p
+        self.default_n_choices = n_choices
+        self.default_stop_sequence = stop
+        self.default_max_generation_token = max_generation_token
+        self.default_presence_penalty = presence_penalty
+        self.default_frequency_penalty = frequency_penalty
+        self.default_logit_bias = logit_bias
+        self.default_user_identifier = user
+
+        self.single_turn = single_turn
         self.temperature = temperature
         self.top_p = top_p
         self.n_choices = n_choices
@@ -251,7 +263,9 @@ class BaseLLMModel:
         Conversations are stored in self.history, with the most recent question in OpenAI format.
         Should return a generator that yields the next word (str) in the answer.
         """
-        logging.warning("Stream prediction is not implemented. Using at once prediction instead.")
+        logging.warning(
+            "Stream prediction is not implemented. Using at once prediction instead."
+        )
         response, _ = self.get_answer_at_once()
         yield response
 
@@ -749,11 +763,34 @@ class BaseLLMModel:
         history_name = self.history_file_path[:-5]
         choices = [history_name] + get_history_names(self.user_name)
         system_prompt = self.system_prompt if remain_system_prompt else ""
+
+        self.single_turn = self.default_single_turn
+        self.temperature = self.default_temperature
+        self.top_p = self.default_top_p
+        self.n_choices = self.default_n_choices
+        self.stop_sequence = self.default_stop_sequence
+        self.max_generation_token = self.default_max_generation_token
+        self.presence_penalty = self.default_presence_penalty
+        self.frequency_penalty = self.default_frequency_penalty
+        self.logit_bias = self.default_logit_bias
+        self.user_identifier = self.default_user_identifier
+
         return (
             [],
             self.token_message([0]),
             gr.Radio.update(choices=choices, value=history_name),
             system_prompt,
+            self.single_turn,
+            self.temperature,
+            self.top_p,
+            self.n_choices,
+            self.stop_sequence,
+            self.token_upper_limit,
+            self.max_generation_token,
+            self.presence_penalty,
+            self.frequency_penalty,
+            self.logit_bias,
+            self.user_identifier,
         )
 
     def delete_first_conversation(self):
@@ -877,30 +914,67 @@ class BaseLLMModel:
                 pass
             if len(saved_json["chatbot"]) < len(saved_json["history"]) // 2:
                 logging.info("Trimming corrupted history...")
-                saved_json["history"] = saved_json["history"][-len(saved_json["chatbot"]) :]
+                saved_json["history"] = saved_json["history"][
+                    -len(saved_json["chatbot"]) :
+                ]
                 logging.info(f"Trimmed history: {saved_json['history']}")
             logging.debug(f"{self.user_name} 加载对话历史完毕")
             self.history = saved_json["history"]
-            self.single_turn = saved_json.get("single_turn", False)
-            self.temperature = saved_json.get("temperature", 1.0)
-            self.top_p = saved_json.get("top_p", None)
-            self.n_choices = saved_json.get("n_choices", 1)
-            self.stop_sequence = saved_json.get("stop_sequence", None)
-            self.max_generation_token = saved_json.get("max_generation_token", None)
-            self.presence_penalty = saved_json.get("presence_penalty", 0)
-            self.frequency_penalty = saved_json.get("frequency_penalty", 0)
-            self.logit_bias = saved_json.get("logit_bias", None)
+            self.single_turn = saved_json.get("single_turn", self.single_turn)
+            self.temperature = saved_json.get("temperature", self.temperature)
+            self.top_p = saved_json.get("top_p", self.top_p)
+            self.n_choices = saved_json.get("n_choices", self.n_choices)
+            self.stop_sequence = saved_json.get("stop_sequence", self.stop_sequence)
+            self.token_upper_limit = saved_json.get(
+                "token_upper_limit", self.token_upper_limit
+            )
+            self.max_generation_token = saved_json.get(
+                "max_generation_token", self.max_generation_token
+            )
+            self.presence_penalty = saved_json.get(
+                "presence_penalty", self.presence_penalty
+            )
+            self.frequency_penalty = saved_json.get(
+                "frequency_penalty", self.frequency_penalty
+            )
+            self.logit_bias = saved_json.get("logit_bias", self.logit_bias)
             self.user_identifier = saved_json.get("user_identifier", self.user_name)
-            self.metadata = saved_json.get("metadata", {})
+            self.metadata = saved_json.get("metadata", self.metadata)
             return (
-                os.path.basename(self.history_file_path),
+                os.path.basename(self.history_file_path)[:-5],
                 saved_json["system"],
                 saved_json["chatbot"],
+                self.single_turn,
+                self.temperature,
+                self.top_p,
+                self.n_choices,
+                self.stop_sequence,
+                self.token_upper_limit,
+                self.max_generation_token,
+                self.presence_penalty,
+                self.frequency_penalty,
+                self.logit_bias,
+                self.user_identifier,
             )
         except:
             # 没有对话历史或者对话历史解析失败
             logging.info(f"没有找到对话历史记录 {self.history_file_path}")
-            return self.history_file_path, "", []
+            return (
+                os.path.basename(self.history_file_path),
+                "",
+                [],
+                self.single_turn,
+                self.temperature,
+                self.top_p,
+                self.n_choices,
+                self.stop_sequence,
+                self.token_upper_limit,
+                self.max_generation_token,
+                self.presence_penalty,
+                self.frequency_penalty,
+                self.logit_bias,
+                self.user_identifier,
+            )
 
     def delete_chat_history(self, filename):
         if filename == "CANCELED":
@@ -910,9 +984,7 @@ class BaseLLMModel:
         if not filename.endswith(".json"):
             filename += ".json"
         if filename == os.path.basename(filename):
-            history_file_path = os.path.join(
-                HISTORY_DIR, self.user_name, filename
-            )
+            history_file_path = os.path.join(HISTORY_DIR, self.user_name, filename)
         else:
             history_file_path = filename
         md_history_file_path = history_file_path[:-5] + ".md"
@@ -934,9 +1006,7 @@ class BaseLLMModel:
             self.history_file_path = new_auto_history_filename(self.user_name)
         else:
             self.history_file_path = filepath
-        filename, system_prompt, chatbot = self.load_chat_history()
-        filename = filename[:-5]
-        return filename, system_prompt, chatbot
+        return self.load_chat_history()
 
     def like(self):
         """like the last response, implement if needed"""

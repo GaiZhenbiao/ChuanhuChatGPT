@@ -32,6 +32,7 @@ class OpenAIClient(BaseLLMModel):
             system_prompt=system_prompt,
             user=user_name
         )
+        logging.info(f"TEMPERATURE: {self.temperature}")
         self.api_key = api_key
         self.need_api_key = True
         self._refresh_header()
