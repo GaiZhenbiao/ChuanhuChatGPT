@@ -44,7 +44,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     with gr.Row(elem_id="chuanhu-header"):
         gr.HTML(get_html("header_title.html").format(
             app_title=CHUANHU_TITLE), elem_id="app-title")
-        status_display = gr.Markdown(get_geoip(), elem_id="status-display")
+        status_display = gr.Markdown(get_geoip, elem_id="status-display")
     with gr.Row(elem_id="float-display"):
         user_info = gr.Markdown(
             value="getting user info...", elem_id="user-info")

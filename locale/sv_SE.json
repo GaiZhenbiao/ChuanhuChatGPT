@@ -137,5 +137,6 @@
     "🔙 恢复默认网络设置": "🔙 Återställ standardnätverksinställningar+",
     "🗑️ 删除最新对话": "🗑️ Ta bort senaste dialogen",
     "🗑️ 删除最旧对话": "🗑️ Ta bort äldsta dialogen",
-    "🧹 新的对话": "🧹 Ny Dialog"
+    "🧹 新的对话": "🧹 Ny Dialog",
+    "正在获取IP地址信息，请稍候...": "Hämtar IP-adressinformation, vänta...",
 }

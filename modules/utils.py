@@ -6,6 +6,7 @@ import commentjson as json
 import os
 import datetime
 import csv
+import threading
 import requests
 import re
 import html
@@ -586,28 +587,53 @@ def replace_today(prompt):
     today = datetime.datetime.today().strftime("%Y-%m-%d")
     return prompt.replace("{current_date}", today)
 
+SERVER_GEO_IP_MSG = None
+FETCHING_IP = False
 
 def get_geoip():
-    try:
-        with retrieve_proxy():
-            response = requests.get("https://ipapi.co/json/", timeout=5)
-        data = response.json()
-    except:
-        data = {"error": True, "reason": "连接ipapi失败"}
-    if "error" in data.keys():
-        logging.warning(f"无法获取IP地址信息。\n{data}")
-        if data["reason"] == "RateLimited":
-            return i18n("您的IP区域：未知。")
+    global SERVER_GEO_IP_MSG, FETCHING_IP
+
+    # 如果已经获取了IP信息，则直接返回
+    if SERVER_GEO_IP_MSG is not None:
+        return SERVER_GEO_IP_MSG
+
+    # 如果正在获取IP信息，则返回等待消息
+    if FETCHING_IP:
+        return i18n("IP地址信息正在获取中，请稍候...")
+
+    # 定义一个内部函数用于在新线程中执行IP信息的获取
+    def fetch_ip():
+        global SERVER_GEO_IP_MSG, FETCHING_IP
+        try:
+            with retrieve_proxy():
+                response = requests.get("https://ipapi.co/json/", timeout=5)
+            data = response.json()
+        except:
+            data = {"error": True, "reason": "连接ipapi失败"}
+        if "error" in data.keys():
+            logging.warning(f"无法获取IP地址信息。\n{data}")
+            if data["reason"] == "RateLimited":
+                SERVER_GEO_IP_MSG = i18n("您的IP区域：未知。")
+            else:
+                SERVER_GEO_IP_MSG = i18n("获取IP地理位置失败。原因：") + f"{data['reason']}" + i18n("。你仍然可以使用聊天功能。")
         else:
-            return i18n("获取IP地理位置失败。原因：") + f"{data['reason']}" + i18n("。你仍然可以使用聊天功能。")
-    else:
-        country = data["country_name"]
-        if country == "China":
-            text = "**您的IP区域：中国。请立即检查代理设置，在不受支持的地区使用API可能导致账号被封禁。**"
-        else:
-            text = i18n("您的IP区域：") + f"{country}。"
-        logging.info(text)
-        return text
+            country = data["country_name"]
+            if country == "China":
+                SERVER_GEO_IP_MSG = "**您的IP区域：中国。请立即检查代理设置，在不受支持的地区使用API可能导致账号被封禁。**"
+            else:
+                SERVER_GEO_IP_MSG = i18n("您的IP区域：") + f"{country}。"
+            logging.info(SERVER_GEO_IP_MSG)
+        FETCHING_IP = False
+
+    # 设置正在获取IP信息的标志
+    FETCHING_IP = True
+
+    # 启动一个新线程来获取IP信息
+    thread = threading.Thread(target=fetch_ip)
+    thread.start()
+
+    # 返回一个默认消息，真正的IP信息将由新线程更新
+    return i18n("正在获取IP地址信息，请稍候...")
 
 
 def find_n(lst, max_num):

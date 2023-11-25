@@ -137,5 +137,6 @@
     "🔙 恢复默认网络设置": "🔙 Khôi phục cài đặt mạng mặc định",
     "🗑️ 删除最新对话": "🗑️ Xóa cuộc trò chuyện mới nhất",
     "🗑️ 删除最旧对话": "🗑️ Xóa cuộc trò chuyện cũ nhất",
-    "🧹 新的对话": "🧹 Cuộc trò chuyện mới"
+    "🧹 新的对话": "🧹 Cuộc trò chuyện mới",
+    "正在获取IP地址信息，请稍候...": "Đang lấy thông tin địa chỉ IP, vui lòng đợi...",
 }
