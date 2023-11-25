@@ -43,8 +43,6 @@ def get_model(
                 model_name=model_name,
                 api_key=access_key,
                 system_prompt=system_prompt,
-                temperature=temperature,
-                top_p=top_p,
                 user_name=user_name,
             )
         elif model_type == ModelType.OpenAIInstruct:
