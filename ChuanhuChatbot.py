@@ -329,7 +329,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             user_identifier_txt = gr.Textbox(
                                 show_label=True,
                                 placeholder=i18n("用于定位滥用行为"),
-                                label=i18n("用户名"),
+                                label=i18n("用户标识符"),
                                 value=user_name.value,
                                 lines=1,
                             )
@@ -496,8 +496,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             user_info, user_name = gr.Markdown.update(
                 value=f"", visible=False), ""
         current_model = get_model(
-            model_name=MODELS[DEFAULT_MODEL], access_key=my_api_key)[0]
-        current_model.set_user_identifier(user_name)
+            model_name=MODELS[DEFAULT_MODEL], access_key=my_api_key, user_name=user_name)[0]
         if not hide_history_when_not_logged_in or user_name:
             loaded_stuff = current_model.auto_load()
         else:
@@ -639,7 +638,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                   user_api_key, status_display], api_name="set_key").then(**get_usage_args)
     keyTxt.submit(**get_usage_args)
     single_turn_checkbox.change(
-        set_single_turn, [current_model, single_turn_checkbox], None)
+        set_single_turn, [current_model, single_turn_checkbox], None, show_progress=False)
     model_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider, top_p_slider, systemPromptTxt, user_name, current_model], [
                                  current_model, status_display, chatbot, lora_select_dropdown, user_api_key, keyTxt], show_progress=True, api_name="get_model")
     model_select_dropdown.change(toggle_like_btn_visibility, [model_select_dropdown], [
@@ -650,7 +649,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 top_p_slider, systemPromptTxt, user_name, current_model], [current_model, status_display, chatbot], show_progress=True)
 
     # Template
-    systemPromptTxt.change(set_system_prompt, [
+    systemPromptTxt.input(set_system_prompt, [
                            current_model, systemPromptTxt], None)
     templateRefreshBtn.click(get_template_dropdown, None, [
                              templateFileSelectDropdown])
@@ -723,25 +722,25 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         cancel_all_jobs, [], [openai_train_status], show_progress=True)
 
     # Advanced
-    max_context_length_slider.input(
-        set_token_upper_limit, [current_model, max_context_length_slider], None)
     temperature_slider.input(
-        set_temperature, [current_model, temperature_slider], None)
-    top_p_slider.input(set_top_p, [current_model, top_p_slider], None)
+        set_temperature, [current_model, temperature_slider], None, show_progress=False)
+    top_p_slider.input(set_top_p, [current_model, top_p_slider], None, show_progress=False)
     n_choices_slider.input(
-        set_n_choices, [current_model, n_choices_slider], None)
+        set_n_choices, [current_model, n_choices_slider], None, show_progress=False)
     stop_sequence_txt.input(
-        set_stop_sequence, [current_model, stop_sequence_txt], None)
+        set_stop_sequence, [current_model, stop_sequence_txt], None, show_progress=False)
+    max_context_length_slider.input(
+        set_token_upper_limit, [current_model, max_context_length_slider], None, show_progress=False)
     max_generation_slider.input(
-        set_max_tokens, [current_model, max_generation_slider], None)
+        set_max_tokens, [current_model, max_generation_slider], None, show_progress=False)
     presence_penalty_slider.input(
-        set_presence_penalty, [current_model, presence_penalty_slider], None)
+        set_presence_penalty, [current_model, presence_penalty_slider], None, show_progress=False)
     frequency_penalty_slider.input(
-        set_frequency_penalty, [current_model, frequency_penalty_slider], None)
+        set_frequency_penalty, [current_model, frequency_penalty_slider], None, show_progress=False)
     logit_bias_txt.input(
-        set_logit_bias, [current_model, logit_bias_txt], None)
+        set_logit_bias, [current_model, logit_bias_txt], None, show_progress=False)
     user_identifier_txt.input(set_user_identifier, [
-                               current_model, user_identifier_txt], None)
+                               current_model, user_identifier_txt], None, show_progress=False)
 
     default_btn.click(
         reset_default, [], [apihostTxt, proxyTxt, status_display], show_progress=True

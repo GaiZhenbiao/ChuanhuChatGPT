@@ -208,7 +208,7 @@ class BaseLLMModel:
         temperature=1.0,
         top_p=1.0,
         n_choices=1,
-        stop=None,
+        stop="",
         max_generation_token=None,
         presence_penalty=0,
         frequency_penalty=0,
@@ -233,6 +233,7 @@ class BaseLLMModel:
         self.need_api_key = False
         self.history_file_path = get_first_history_name(user)
         self.user_name = user
+        self.chatbot = []
 
         self.default_single_turn = single_turn
         self.default_temperature = temperature
@@ -637,6 +638,7 @@ class BaseLLMModel:
             status_text = f"为了防止token超限，模型忘记了早期的 {count} 轮对话"
             yield chatbot, status_text
 
+        self.chatbot = chatbot
         self.auto_save(chatbot)
 
     def retry(
@@ -702,32 +704,45 @@ class BaseLLMModel:
 
     def set_token_upper_limit(self, new_upper_limit):
         self.token_upper_limit = new_upper_limit
-        print(f"token上限设置为{new_upper_limit}")
+        self.auto_save()
 
     def set_temperature(self, new_temperature):
         self.temperature = new_temperature
+        self.auto_save()
 
     def set_top_p(self, new_top_p):
         self.top_p = new_top_p
+        self.auto_save()
 
     def set_n_choices(self, new_n_choices):
         self.n_choices = new_n_choices
+        self.auto_save()
 
     def set_stop_sequence(self, new_stop_sequence: str):
         new_stop_sequence = new_stop_sequence.split(",")
         self.stop_sequence = new_stop_sequence
+        self.auto_save()
 
     def set_max_tokens(self, new_max_tokens):
         self.max_generation_token = new_max_tokens
+        self.auto_save()
 
     def set_presence_penalty(self, new_presence_penalty):
         self.presence_penalty = new_presence_penalty
+        self.auto_save()
 
     def set_frequency_penalty(self, new_frequency_penalty):
         self.frequency_penalty = new_frequency_penalty
+        self.auto_save()
 
     def set_logit_bias(self, logit_bias):
-        logit_bias = logit_bias.split()
+        self.logit_bias = logit_bias
+        self.auto_save()
+
+    def encoded_logit_bias(self):
+        if self.logit_bias is None:
+            return {}
+        logit_bias = self.logit_bias.split()
         bias_map = {}
         encoding = tiktoken.get_encoding("cl100k_base")
         for line in logit_bias:
@@ -735,13 +750,15 @@ class BaseLLMModel:
             if word:
                 for token in encoding.encode(word):
                     bias_map[token] = float(bias_amount)
-        self.logit_bias = bias_map
+        return bias_map
 
     def set_user_identifier(self, new_user_identifier):
         self.user_identifier = new_user_identifier
+        self.auto_save()
 
     def set_system_prompt(self, new_system_prompt):
         self.system_prompt = new_system_prompt
+        self.auto_save()
 
     def set_key(self, new_access_key):
         if "*" not in new_access_key:
@@ -754,6 +771,7 @@ class BaseLLMModel:
 
     def set_single_turn(self, new_single_turn):
         self.single_turn = new_single_turn
+        self.auto_save()
 
     def reset(self, remain_system_prompt=False):
         self.history = []
@@ -813,6 +831,7 @@ class BaseLLMModel:
             msg = "删除了一组对话的token计数记录"
             self.all_token_counts.pop()
         msg = "删除了一组对话"
+        self.chatbot = chatbot
         self.auto_save(chatbot)
         return chatbot, msg
 
@@ -861,7 +880,9 @@ class BaseLLMModel:
         else:
             return gr.update()
 
-    def auto_save(self, chatbot):
+    def auto_save(self, chatbot=None):
+        if chatbot is None:
+            chatbot = self.chatbot
         save_file(self.history_file_path, self, chatbot)
 
     def export_markdown(self, filename, chatbot):
@@ -924,7 +945,7 @@ class BaseLLMModel:
             self.temperature = saved_json.get("temperature", self.temperature)
             self.top_p = saved_json.get("top_p", self.top_p)
             self.n_choices = saved_json.get("n_choices", self.n_choices)
-            self.stop_sequence = saved_json.get("stop_sequence", self.stop_sequence)
+            self.stop_sequence = list(saved_json.get("stop_sequence", self.stop_sequence))
             self.token_upper_limit = saved_json.get(
                 "token_upper_limit", self.token_upper_limit
             )
@@ -940,6 +961,7 @@ class BaseLLMModel:
             self.logit_bias = saved_json.get("logit_bias", self.logit_bias)
             self.user_identifier = saved_json.get("user_identifier", self.user_name)
             self.metadata = saved_json.get("metadata", self.metadata)
+            self.chatbot = saved_json["chatbot"]
             return (
                 os.path.basename(self.history_file_path)[:-5],
                 saved_json["system"],
@@ -948,7 +970,7 @@ class BaseLLMModel:
                 self.temperature,
                 self.top_p,
                 self.n_choices,
-                self.stop_sequence,
+                ",".join(self.stop_sequence),
                 self.token_upper_limit,
                 self.max_generation_token,
                 self.presence_penalty,
@@ -959,6 +981,7 @@ class BaseLLMModel:
         except:
             # 没有对话历史或者对话历史解析失败
             logging.info(f"没有找到对话历史记录 {self.history_file_path}")
+            self.reset()
             return (
                 os.path.basename(self.history_file_path),
                 "",
@@ -967,7 +990,7 @@ class BaseLLMModel:
                 self.temperature,
                 self.top_p,
                 self.n_choices,
-                self.stop_sequence,
+                ",".join(self.stop_sequence),
                 self.token_upper_limit,
                 self.max_generation_token,
                 self.presence_penalty,
