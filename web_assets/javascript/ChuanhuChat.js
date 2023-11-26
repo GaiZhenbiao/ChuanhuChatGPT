@@ -347,6 +347,8 @@ function chatbotContentChanged(attempt = 1, force = false) {
             // clearMessageRows();
             saveHistoryHtml();
             disableSendBtn();
+            updateSlider();
+            updateCheckboxes();
 
             gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
 
