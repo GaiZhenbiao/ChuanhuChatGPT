@@ -1,3 +1,20 @@
+function suggestAPIKey() {
+    switchTab(0);
+    openSettingBox();
+    let apiKeyForm = settingBox.querySelector('.gradio-tabs > .gradio-tabitem > div:nth-child(1) > div.form:nth-child(1)');
+    letThisSparkle(apiKeyForm);
+}
+
+function letThisSparkle(element) {
+    element.classList.add('chuanhu-sparkle');
+    setTimeout(() => {element.classList.remove('chuanhu-sparkle');}, 3000);
+}
+
+function switchTab(tabIndex) {
+    let tabButtons = gradioApp().querySelectorAll('#chuanhu-setting .tab-nav > button');
+    let tab = tabButtons[tabIndex];
+    tab.click();
+}
 
 function openSettingBox() {
     chuanhuPopup.classList.add('showBox');
@@ -5,7 +22,6 @@ function openSettingBox() {
     settingBox.classList.remove('hideBox');
     trainingBox.classList.add('hideBox');
     showMask("box");
-
 }
 
 function openTrainingBox() {

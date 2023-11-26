@@ -1162,6 +1162,34 @@ button:hover .icon-need-hover, button:hover.icon-need-hover {
 button:active .icon-need-hover, button:active.icon-need-hover {
     opacity: 1;
 }
+
+.chuanhu-sparkle >::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    height: calc(100% - 4px);
+    width: calc(100% - 4px);
+    animation: border-pulse 2s cubic-bezier(.5,0,.5,1) infinite;
+    border: 2px solid var(--color-accent) !important;
+    border-radius: 4px;
+    pointer-events: none;
+}
+/* .chuanhu-sparkle {
+    animation: content-pulse 1s cubic-bezier(.5,0,.5,1) infinite;
+} */
+@keyframes border-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.1;
+    }
+}
+
 /* .main-body {
     flex-wrap: nowrap;
     gap: 0;

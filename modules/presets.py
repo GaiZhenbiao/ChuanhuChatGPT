@@ -31,7 +31,7 @@ CONNECTION_TIMEOUT_MSG = i18n("连接超时，无法获取对话。")  # 连接�
 READ_TIMEOUT_MSG = i18n("读取超时，无法获取对话。")  # 读取超时
 PROXY_ERROR_MSG = i18n("代理错误，无法获取对话。")  # 代理错误
 SSL_ERROR_PROMPT = i18n("SSL错误，无法获取对话。")  # SSL 错误
-NO_APIKEY_MSG = i18n("API key为空，请检查是否输入正确。")  # API key 长度不足 51 位
+NO_APIKEY_MSG = i18n('API key为空，请检查是否输入正确。在<a href="javascript:suggestAPIKey();">此处</a>设置apikey')  # API key 长度不足 51 位
 NO_INPUT_MSG = i18n("请输入对话内容。")  # 未输入对话内容
 BILLING_NOT_APPLICABLE_MSG = i18n("账单信息不适用") # 本地运行的模型返回的账单信息
 
