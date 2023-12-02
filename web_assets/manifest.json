@@ -1,0 +1,22 @@
+{
+    "name": "川虎Chat",
+    "short_name": "川虎Chat",
+    "description": "川虎Chat - 为ChatGPT等多种LLM提供了一个轻快好用的Web图形界面和众多附加功能 \nChuanhu Chat - Lightweight and User-friendly Web-UI for LLMs including ChatGPT/ChatGLM/LLaMA ",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "/file=web_assets/icon/mask-icon-512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/file=web_assets/icon/any-icon-512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "any"
+        }
+    ]
+}

@@ -14,7 +14,9 @@ LLAMA_INFERENCER = None
 # ChatGPT 设置
 INITIAL_SYSTEM_PROMPT = "You are a helpful assistant."
 API_HOST = "api.openai.com"
-COMPLETION_URL = "https://api.openai.com/v1/chat/completions"
+OPENAI_API_BASE = "https://api.openai.com/v1"
+CHAT_COMPLETION_URL = "https://api.openai.com/v1/chat/completions"
+COMPLETION_URL = "https://api.openai.com/v1/completions"
 BALANCE_API_URL="https://api.openai.com/dashboard/billing/credit_grants"
 USAGE_API_URL="https://api.openai.com/dashboard/billing/usage"
 HISTORY_DIR = Path("history")
@@ -36,7 +38,7 @@ BILLING_NOT_APPLICABLE_MSG = i18n("账单信息不适用") # 本地运行的模�
 TIMEOUT_STREAMING = 60  # 流式对话时的超时时间
 TIMEOUT_ALL = 200  # 非流式对话时的超时时间
 ENABLE_STREAMING_OPTION = True  # 是否启用选择选择是否实时显示回答的勾选框
-HIDE_MY_KEY = False  # 如果你想在UI中隐藏你的 API 密钥，将此值设置为 True
+ENABLE_LLM_NAME_CHAT_OPTION = True  # 是否启用选择是否使用LLM模型的勾选框
 CONCURRENT_COUNT = 100 # 允许同时使用的用户数量
 
 SIM_K = 5
@@ -48,38 +50,124 @@ CHUANHU_DESCRIPTION = i18n("由Bilibili [土川虎虎虎](https://space.bilibili
 
 
 ONLINE_MODELS = [
-    "gpt-3.5-turbo",
-    "gpt-3.5-turbo-16k",
-    "gpt-3.5-turbo-0301",
-    "gpt-3.5-turbo-0613",
-    "gpt-4",
-    "gpt-4-0314",
-    "gpt-4-0613",
-    "gpt-4-32k",
-    "gpt-4-32k-0314",
-    "gpt-4-32k-0613",
+    "GPT3.5 Turbo",
+    "GPT3.5 Turbo Instruct",
+    "GPT3.5 Turbo 16K",
+    "GPT3.5 Turbo 0301",
+    "GPT3.5 Turbo 0613",
+    "GPT3.5 Turbo 1106",
+    "GPT4",
+    "GPT4 32K",
+    "GPT4 Turbo",
+    "GPT4 Vision",
     "川虎助理",
     "川虎助理 Pro",
+    "GooglePaLM",
     "xmchat",
+    "Azure OpenAI",
     "yuanai-1.0-base_10B",
     "yuanai-1.0-translate",
     "yuanai-1.0-dialog",
     "yuanai-1.0-rhythm_poems",
-    "minimax-abab4-chat",
     "minimax-abab5-chat",
+    "midjourney",
+    "讯飞星火大模型V3.0",
+    "讯飞星火大模型V2.0",
+    "讯飞星火大模型V1.5",
+    "Claude",
+    "ERNIE-Bot-turbo",
+    "ERNIE-Bot",
+    "ERNIE-Bot-4",
 ]
 
 LOCAL_MODELS = [
     "chatglm-6b",
     "chatglm-6b-int4",
-    "chatglm-6b-int4-qe",
+    "chatglm-6b-int4-ge",
+    "chatglm2-6b",
+    "chatglm2-6b-int4",
+    "chatglm3-6b",
+    "chatglm3-6b-32k",
     "StableLM",
     "MOSS",
-    "llama-7b-hf",
-    "llama-13b-hf",
-    "llama-30b-hf",
-    "llama-65b-hf",
+    "Llama-2-7B-Chat",
+    "Qwen 7B",
+    "Qwen 14B"
 ]
+
+# Additional metadata for online and local models
+MODEL_METADATA = {
+    "Llama-2-7B":{
+        "repo_id": "TheBloke/Llama-2-7B-GGUF",
+        "filelist": ["llama-2-7b.Q6_K.gguf"],
+    },
+    "Llama-2-7B-Chat":{
+        "repo_id": "TheBloke/Llama-2-7b-Chat-GGUF",
+        "filelist": ["llama-2-7b-chat.Q6_K.gguf"],
+    },
+    "Qwen 7B": {
+        "repo_id": "Qwen/Qwen-7B-Chat-Int4",
+    },
+    "Qwen 14B": {
+        "repo_id": "Qwen/Qwen-14B-Chat-Int4",
+    },
+    "GPT3.5 Turbo": {
+        "model_name": "gpt-3.5-turbo",
+        "token_limit": 4096,
+    },
+    "GPT3.5 Turbo Instruct": {
+        "model_name": "gpt-3.5-turbo-instruct",
+        "token_limit": 4096,
+    },
+    "GPT3.5 Turbo 16K": {
+        "model_name": "gpt-3.5-turbo-16k",
+        "token_limit": 16384,
+    },
+    "GPT3.5 Turbo 0301": {
+        "model_name": "gpt-3.5-turbo-0301",
+        "token_limit": 4096,
+    },
+    "GPT3.5 Turbo 0613": {
+        "model_name": "gpt-3.5-turbo-0613",
+        "token_limit": 4096,
+    },
+    "GPT3.5 Turbo 1106": {
+    "model_name": "gpt-3.5-turbo-1106",
+    "token_limit": 16384,
+    },
+    "GPT4": {
+        "model_name": "gpt-4",
+        "token_limit": 8192,
+    },
+    "GPT4 32K": {
+        "model_name": "gpt-4-32k",
+        "token_limit": 32768,
+    },
+    "GPT4 Turbo": {
+        "model_name": "gpt-4-1106-preview",
+        "token_limit": 128000,
+    },
+    "GPT4 Vision": {
+        "model_name": "gpt-4-vision-preview",
+        "token_limit": 128000,
+    },
+    "Claude": {
+        "model_name": "Claude",
+        "token_limit": 4096,
+    },
+    "ERNIE-Bot-turbo": {
+        "model_name": "ERNIE-Bot-turbo",
+        "token_limit": 1024,
+    },
+    "ERNIE-Bot": {
+        "model_name": "ERNIE-Bot",
+        "token_limit": 1024,
+    },
+    "ERNIE-Bot-4": {
+        "model_name": "ERNIE-Bot-4",
+        "token_limit": 1024,
+    },
+}
 
 if os.environ.get('HIDE_LOCAL_MODELS', 'false') == 'true':
     MODELS = ONLINE_MODELS
@@ -96,19 +184,6 @@ for dir_name in os.listdir("models"):
         if dir_name not in MODELS:
             MODELS.append(dir_name)
 
-MODEL_TOKEN_LIMIT = {
-    "gpt-3.5-turbo": 4096,
-    "gpt-3.5-turbo-16k": 16384,
-    "gpt-3.5-turbo-0301": 4096,
-    "gpt-3.5-turbo-0613": 4096,
-    "gpt-4": 8192,
-    "gpt-4-0314": 8192,
-    "gpt-4-0613": 8192,
-    "gpt-4-32k": 32768,
-    "gpt-4-32k-0314": 32768,
-    "gpt-4-32k-0613": 32768
-}
-
 TOKEN_OFFSET = 1000 # 模型的token上限减去这个值，得到软上限。到达软上限之后，自动尝试减少token占用。
 DEFAULT_TOKEN_LIMIT = 3000 # 默认的token上限
 REDUCE_TOKEN_FACTOR = 0.5 # 与模型token上限想乘，得到目标token数。减少token占用时，将token占用减少到目标token数以下。
@@ -120,8 +195,16 @@ REPLY_LANGUAGES = [
     "日本語",
     "Español",
     "Français",
+    "Russian",
     "Deutsch",
+    "한국어",
     "跟随问题语言（不稳定）"
+]
+
+HISTORY_NAME_METHODS = [
+    i18n("根据日期时间"),
+    i18n("第一条提问"),
+    i18n("模型自动总结（消耗tokens）"),
 ]
 
 
@@ -169,7 +252,18 @@ SUMMARIZE_PROMPT = """Write a concise summary of the following:
 
 CONCISE SUMMARY IN 中文:"""
 
+SUMMARY_CHAT_SYSTEM_PROMPT = """\
+Please summarize the following conversation for a chat topic.
+No more than 16 characters.
+No special characters.
+Punctuation mark is banned.
+Not including '.' ':' '?' '!' '“' '*' '<' '>'.
+Reply in user's language.
+"""
+
 ALREADY_CONVERTED_MARK = "<!-- ALREADY CONVERTED BY PARSER. -->"
+START_OF_OUTPUT_MARK = "<!-- SOO IN MESSAGE -->"
+END_OF_OUTPUT_MARK = "<!-- EOO IN MESSAGE -->"
 
 small_and_beautiful_theme = gr.themes.Soft(
         primary_hue=gr.themes.Color(
@@ -222,7 +316,7 @@ small_and_beautiful_theme = gr.themes.Soft(
         # button_primary_background_fill_hover="*primary_400",
         # button_primary_border_color="*primary_500",
         button_primary_border_color_dark="*primary_600",
-        button_primary_text_color="wihte",
+        button_primary_text_color="white",
         button_primary_text_color_dark="white",
         button_secondary_background_fill="*neutral_100",
         button_secondary_background_fill_hover="*neutral_50",
@@ -235,6 +329,7 @@ small_and_beautiful_theme = gr.themes.Soft(
         block_title_background_fill_dark="*primary_900",
         block_label_background_fill_dark="*primary_900",
         input_background_fill="#F6F6F6",
-        chatbot_code_background_color="*neutral_950",
+        # chatbot_code_background_color="*neutral_950",
+        # gradio 会把这个几个chatbot打头的变量应用到其他md渲染的地方，鬼晓得怎么想的。。。
         chatbot_code_background_color_dark="*neutral_950",
     )

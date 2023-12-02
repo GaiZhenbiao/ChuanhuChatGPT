@@ -1,50 +1,83 @@
 {
-    // 你的OpenAI API Key，一般必填，
-    // 若缺省填为 "openai_api_key": "" 则必须再在图形界面中填入API Key
-    "openai_api_key": "",
-    "google_palm_api_key": "",
-    "xmchat_api_key": "",
-    "usage_limit": 120, // API Key的当月限额，单位：美元
-    // 你的xmchat API Key，与OpenAI API Key不同
-    // MiniMax的APIKey（见账户管理页面 https://api.minimax.chat/basic-information）和Group ID，用于MiniMax对话模型
-    "minimax_api_key": "",
-    "minimax_group_id": "",
-    "language": "auto",
-    // 支持自定义OpenAI API Base
-    // "openai_api_base": "https://api.openai.com",
-    // 如果使用代理，请取消注释下面的两行，并替换代理URL
-    // "https_proxy": "http://127.0.0.1:1079",
-    // "http_proxy": "http://127.0.0.1:1079",
+    // 各配置具体说明，见 [https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#配置-configjson]
+
+    //== API 配置 ==
+    "openai_api_key": "", // 你的 OpenAI API Key，一般必填，若空缺则需在图形界面中填入API Key
+    "google_palm_api_key": "", // 你的 Google PaLM API Key，用于 Google PaLM 对话模型
+    "xmchat_api_key": "", // 你的 xmchat API Key，用于 XMChat 对话模型
+    "minimax_api_key": "", // 你的 MiniMax API Key，用于 MiniMax 对话模型
+    "minimax_group_id": "", // 你的 MiniMax Group ID，用于 MiniMax 对话模型
+    "midjourney_proxy_api_base": "https://xxx/mj", // 你的 https://github.com/novicezk/midjourney-proxy 代理地址
+    "midjourney_proxy_api_secret": "", // 你的 MidJourney Proxy API Secret，用于鉴权访问 api，可选
+    "midjourney_discord_proxy_url": "", // 你的 MidJourney Discord Proxy URL，用于对生成对图进行反代，可选
+    "midjourney_temp_folder": "./tmp", // 你的 MidJourney 临时文件夹，用于存放生成的图片，填空则关闭自动下载切图（直接显示MJ的四宫格图）
+    "spark_appid": "", // 你的 讯飞星火大模型 API AppID，用于讯飞星火大模型对话模型
+    "spark_api_key": "", // 你的 讯飞星火大模型 API Key，用于讯飞星火大模型对话模型
+    "spark_api_secret": "", // 你的 讯飞星火大模型 API Secret，用于讯飞星火大模型对话模型
+    "claude_api_secret":"",// 你的 Claude API Secret，用于 Claude 对话模型
+    "ernie_api_key": "",// 你的文心一言在百度云中的API Key，用于文心一言对话模型
+    "ernie_secret_key": "",// 你的文心一言在百度云中的Secret Key，用于文心一言对话模型
+
+
+    //== Azure ==
+    "openai_api_type": "openai", // 可选项：azure, openai
+    "azure_openai_api_key": "", // 你的 Azure OpenAI API Key，用于 Azure OpenAI 对话模型
+    "azure_openai_api_base_url": "", // 你的 Azure Base URL
+    "azure_openai_api_version": "2023-05-15", // 你的 Azure OpenAI API 版本
+    "azure_deployment_name": "", // 你的 Azure OpenAI Chat 模型 Deployment 名称
+    "azure_embedding_deployment_name": "", // 你的 Azure OpenAI Embedding 模型 Deployment 名称
+    "azure_embedding_model_name": "text-embedding-ada-002", // 你的 Azure OpenAI Embedding 模型名称
+
+    //== 基础配置 ==
+    "language": "auto", // 界面语言，可选"auto", "zh_CN", "en_US", "ja_JP", "ko_KR", "sv_SE", "ru_RU", "vi_VN"
     "users": [], // 用户列表，[[用户名1, 密码1], [用户名2, 密码2], ...]
     "local_embedding": false, //是否在本地编制索引
     "hide_history_when_not_logged_in": false, //未登录情况下是否不展示对话历史
     "check_update": true, //是否启用检查更新
     "default_model": "gpt-3.5-turbo", // 默认模型
+    "chat_name_method_index": 2, // 选择对话名称的方法。0: 使用日期时间命名；1: 使用第一条提问命名，2: 使用模型自动总结
+    "bot_avatar": "default", // 机器人头像，可填写本地或网络图片链接，或者"none"（不显示头像）
+    "user_avatar": "default", // 用户头像，可填写本地或网络图片链接，或者"none"（不显示头像）
 
-    //川虎助理设置
-    "default_chuanhu_assistant_model": "gpt-4", //川虎助理使用的模型，可选gpt-3.5-turbo或者gpt-4
+    //== API 用量 ==
+    "show_api_billing": false, //是否显示OpenAI API用量（启用需要填写sensitive_id）
+    "sensitive_id": "", // 你 OpenAI 账户的 Sensitive ID，用于查询 API 用量
+    "usage_limit": 120, // 该 OpenAI API Key 的当月限额，单位：美元，用于计算百分比和显示上限
+    "legacy_api_usage": false, // 是否使用旧版 API 用量查询接口（OpenAI现已关闭该接口，但是如果你在使用第三方 API，第三方可能仍然支持此接口）
+
+    //== 川虎助理设置 ==
+    "default_chuanhu_assistant_model": "gpt-4", //川虎助理使用的模型，可选gpt-3.5-turbo或者gpt-4等
     "GOOGLE_CSE_ID": "", //谷歌搜索引擎ID，用于川虎助理Pro模式，获取方式请看 https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search
     "GOOGLE_API_KEY": "", //谷歌API Key，用于川虎助理Pro模式
     "WOLFRAM_ALPHA_APPID": "", //Wolfram Alpha API Key，用于川虎助理Pro模式，获取方式请看 https://products.wolframalpha.com/api/
     "SERPAPI_API_KEY": "", //SerpAPI API Key，用于川虎助理Pro模式，获取方式请看 https://serpapi.com/
 
-    "latex_option": "default", // latex 公式显示方式，可选"default", "strict", "all"或者"disabled"
+    //== 文档处理与显示 ==
+    "latex_option": "default", // LaTeX 公式渲染策略，可选"default", "strict", "all"或者"disabled"
     "advance_docs": {
         "pdf": {
-            // 是否认为PDF是双栏的
-            "two_column": false,
-            // 是否使用OCR识别PDF中的公式
-            "formula_ocr": true
+            "two_column": false, // 是否认为PDF是双栏的
+            "formula_ocr": true // 是否使用OCR识别PDF中的公式
         }
     },
+
+    //== 高级配置 ==
     // 是否多个API Key轮换使用
     "multi_api_key": false,
-    "api_key_list": [
-        "sk-xxxxxxxxxxxxxxxxxxxxxxxx1",
-        "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
-        "sk-xxxxxxxxxxxxxxxxxxxxxxxx3"
-    ],
-    // 如果使用自定义端口、自定义ip，请取消注释并替换对应内容
+    "hide_my_key": false, // 如果你想在UI中隐藏 API 密钥输入框，将此值设置为 true
+    // "available_models": ["GPT3.5 Turbo", "GPT4 Turbo", "GPT4 Vision"], // 可用的模型列表，将覆盖默认的可用模型列表
+    // "extra_models": ["模型名称3", "模型名称4", ...], // 额外的模型，将添加到可用的模型列表之后
+    // "api_key_list": [
+    //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx1",
+    //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
+    //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx3"
+    // ],
+    // 自定义OpenAI API Base
+    // "openai_api_base": "https://api.openai.com",
+    // 自定义使用代理（请替换代理URL）
+    // "https_proxy": "http://127.0.0.1:1079",
+    // "http_proxy": "http://127.0.0.1:1079",
+    // 自定义端口、自定义ip（请替换对应内容）
     // "server_name": "0.0.0.0",
     // "server_port": 7860,
     // 如果要share到gradio，设置为true

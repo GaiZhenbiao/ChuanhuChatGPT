@@ -1,26 +1,13 @@
 import os
 import logging
 
-import colorama
+import hashlib
 import PyPDF2
 from tqdm import tqdm
 
 from modules.presets import *
 from modules.utils import *
 from modules.config import local_embedding
-
-
-def get_index_name(file_src):
-    file_paths = [x.name for x in file_src]
-    file_paths.sort(key=lambda x: os.path.basename(x))
-
-    md5_hash = hashlib.md5()
-    for file_path in file_paths:
-        with open(file_path, "rb") as f:
-            while chunk := f.read(8192):
-                md5_hash.update(chunk)
-
-    return md5_hash.hexdigest()
 
 
 def get_documents(file_src):
@@ -36,6 +23,7 @@ def get_documents(file_src):
         filename = os.path.basename(filepath)
         file_type = os.path.splitext(filename)[1]
         logging.info(f"loading file: {filename}")
+        texts = None
         try:
             if file_type == ".pdf":
                 logging.debug("Loading PDF...")
@@ -51,7 +39,8 @@ def get_documents(file_src):
                         pdfReader = PyPDF2.PdfReader(pdfFileObj)
                         for page in tqdm(pdfReader.pages):
                             pdftext += page.extract_text()
-                texts = [Document(page_content=pdftext, metadata={"source": filepath})]
+                texts = [Document(page_content=pdftext,
+                                  metadata={"source": filepath})]
             elif file_type == ".docx":
                 logging.debug("Loading Word...")
                 from langchain.document_loaders import UnstructuredWordDocumentLoader
@@ -72,7 +61,8 @@ def get_documents(file_src):
                 text_list = excel_to_string(filepath)
                 texts = []
                 for elem in text_list:
-                    texts.append(Document(page_content=elem, metadata={"source": filepath}))
+                    texts.append(Document(page_content=elem,
+                                 metadata={"source": filepath}))
             else:
                 logging.debug("Loading text file...")
                 from langchain.document_loaders import TextLoader
@@ -83,8 +73,9 @@ def get_documents(file_src):
             logging.error(f"Error loading file: {filename}")
             traceback.print_exc()
 
-        texts = text_splitter.split_documents(texts)
-        documents.extend(texts)
+        if texts is not None:
+            texts = text_splitter.split_documents(texts)
+            documents.extend(texts)
     logging.debug("Documents loaded.")
     return documents
 
@@ -98,6 +89,7 @@ def construct_index(
     chunk_size_limit=600,
     embedding_limit=None,
     separator=" ",
+    load_from_cache_if_possible=True,
 ):
     from langchain.chat_models import ChatOpenAI
     from langchain.vectorstores import FAISS
@@ -111,15 +103,21 @@ def construct_index(
     embedding_limit = None if embedding_limit == 0 else embedding_limit
     separator = " " if separator == "" else separator
 
-    index_name = get_index_name(file_src)
+    index_name = get_file_hash(file_src)
     index_path = f"./index/{index_name}"
     if local_embedding:
         from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-        embeddings = HuggingFaceEmbeddings(model_name = "sentence-transformers/distiluse-base-multilingual-cased-v2")
+        embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/distiluse-base-multilingual-cased-v2")
     else:
         from langchain.embeddings import OpenAIEmbeddings
-        embeddings = OpenAIEmbeddings(openai_api_base=os.environ.get("OPENAI_API_BASE", None), openai_api_key=os.environ.get("OPENAI_EMBEDDING_API_KEY", api_key))
-    if os.path.exists(index_path):
+        if os.environ.get("OPENAI_API_TYPE", "openai") == "openai":
+            embeddings = OpenAIEmbeddings(openai_api_base=os.environ.get(
+                "OPENAI_API_BASE", None), openai_api_key=os.environ.get("OPENAI_EMBEDDING_API_KEY", api_key))
+        else:
+            embeddings = OpenAIEmbeddings(deployment=os.environ["AZURE_EMBEDDING_DEPLOYMENT_NAME"], openai_api_key=os.environ["AZURE_OPENAI_API_KEY"],
+                                          model=os.environ["AZURE_EMBEDDING_MODEL_NAME"], openai_api_base=os.environ["AZURE_OPENAI_API_BASE_URL"], openai_api_type="azure")
+    if os.path.exists(index_path) and load_from_cache_if_possible:
         logging.info("找到了缓存的索引文件，加载中……")
         return FAISS.load_local(index_path, embeddings)
     else:
