@@ -100,9 +100,14 @@ if "available_models" in config:
     logging.info(f"已设置可用模型：{config['available_models']}")
 
 # 模型配置
-if "extra_models" in  config:
+if "extra_models" in config:
     presets.MODELS.extend(config["extra_models"])
     logging.info(f"已添加额外的模型：{config['extra_models']}")
+if "openai_assistant" in config:
+    for assistant in config["openai_assistant"]:
+        asst_name = assistant["assistant_name"]
+        presets.MODELS.append("asst_" + asst_name)
+        logging.info(f"已添加 assistant：{asst_name}")
 
 HIDE_MY_KEY = config.get("hide_my_key", False)
 

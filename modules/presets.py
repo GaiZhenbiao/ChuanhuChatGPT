@@ -133,8 +133,8 @@ MODEL_METADATA = {
         "token_limit": 4096,
     },
     "GPT3.5 Turbo 1106": {
-    "model_name": "gpt-3.5-turbo-1106",
-    "token_limit": 16384,
+        "model_name": "gpt-3.5-turbo-1106",
+        "token_limit": 16384,
     },
     "GPT4": {
         "model_name": "gpt-4",

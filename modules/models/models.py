@@ -133,6 +133,10 @@ def get_model(
             from .DALLE3 import OpenAI_DALLE3_Client
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAI_DALLE3_Client(model_name, api_key=access_key, user_name=user_name)
+        elif model_type == ModelType.Assistant:
+            from .OpenAIAssistant import OpenAI_Assistant_Client
+            access_key = os.environ.get("OPENAI_API_KEY", access_key)
+            model = OpenAI_Assistant_Client(model_name, assisant_id="", api_key=access_key, user_name=user_name)
         elif model_type == ModelType.Unknown:
             raise ValueError(f"未知模型: {model_name}")
         logging.info(msg)
