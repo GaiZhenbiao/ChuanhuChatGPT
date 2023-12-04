@@ -153,6 +153,7 @@ class ModelType(Enum):
     Qwen = 15
     OpenAIVision = 16
     ERNIE = 17
+    DALLE3 = 18
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -195,6 +196,8 @@ class ModelType(Enum):
             model_type = ModelType.Qwen
         elif "ernie" in model_name_lower:
             model_type = ModelType.ERNIE
+        elif "dall" in model_name_lower:
+            model_type = ModelType.DALLE3
         else:
             model_type = ModelType.LLaMA
         return model_type

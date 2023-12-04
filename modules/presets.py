@@ -62,6 +62,7 @@ ONLINE_MODELS = [
     "GPT4 Vision",
     "川虎助理",
     "川虎助理 Pro",
+    "DALL-E 3",
     "GooglePaLM",
     "xmchat",
     "Azure OpenAI",
