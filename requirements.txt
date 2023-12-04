@@ -8,7 +8,8 @@ tqdm
 colorama
 googlesearch-python
 Pygments
-langchain==0.0.316
+openai==1.3.7
+langchain==0.0.345
 markdown
 PyPDF2
 pdfplumber
@@ -22,14 +23,13 @@ duckduckgo-search>=3.9.5
 arxiv
 wikipedia
 google.generativeai
-openai==0.28.1
 unstructured
 google-api-python-client
 tabulate
 ujson
 python-docx
 websocket_client
-pydantic==1.10.8
+pydantic==2.5.2
 google-search-results
 anthropic==0.3.11
 Pillow>=10.1.0

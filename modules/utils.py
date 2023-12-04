@@ -385,6 +385,7 @@ def save_file(filename, model, chatbot):
         "system": system,
         "history": history,
         "chatbot": chatbot,
+        "model_name": model.model_name,
         "single_turn": model.single_turn,
         "temperature": model.temperature,
         "top_p": model.top_p,

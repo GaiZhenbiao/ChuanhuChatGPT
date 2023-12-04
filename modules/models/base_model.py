@@ -21,7 +21,7 @@ import aiohttp
 from enum import Enum
 
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.callbacks.manager import BaseCallbackManager
+from langchain.callbacks.base import BaseCallbackManager
 
 from typing import Any, Dict, List, Optional, Union
 
