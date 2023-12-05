@@ -243,7 +243,7 @@ def clip_rawtext(chat_message, need_escape=True):
     message_clipped = chat_message[: hr_match.start()] if hr_match else chat_message
     # second, avoid agent-prefix being escaped
     agent_prefix_pattern = (
-        r'(<!-- S O PREFIX --><p class="agent-prefix">.*?<\/p><!-- E O PREFIX -->)'
+        r'(<!-- S O PREFIX -->.*?<!-- E O PREFIX -->)'
     )
     # agent_matches = re.findall(agent_prefix_pattern, message_clipped)
     agent_parts = re.split(agent_prefix_pattern, message_clipped, flags=re.DOTALL)
@@ -257,6 +257,7 @@ def clip_rawtext(chat_message, need_escape=True):
                     else f'<pre class="fake-pre">{part}</pre>'
                 )
         else:
+            part = part.replace(' data-fancybox="gallery"', '')
             final_message += part
     return final_message
 

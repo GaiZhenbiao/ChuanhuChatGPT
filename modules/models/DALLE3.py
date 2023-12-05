@@ -35,4 +35,4 @@ class OpenAI_DALLE3_Client(BaseLLMModel):
                 msg = str(e)
                 match = re.search(r"'message': '([^']*)'", msg)
                 return match.group(1), 0
-        return f'<img src="{response.data[0].url}"> {response.data[0].revised_prompt}', 0
+        return f'<!-- S O PREFIX --><a data-fancybox="gallery" target="_blank" href="{response.data[0].url}"><img src="{response.data[0].url}" /></a><!-- E O PREFIX -->{response.data[0].revised_prompt}', 0

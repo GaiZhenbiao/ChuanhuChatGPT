@@ -71,6 +71,16 @@ function downloadFile(fileUrl, filename = "", format = "", retryTimeout = 200, m
 }
     
 
+function bindFancyBox() {
+    Fancybox.bind('[data-fancybox]', {
+        Carousel: {
+            Panzoom: {
+                decelFriction: 0.5
+            }
+        }
+    });
+}
+
 
 /* NOTE: These reload functions are not used in the current version of the code.
  *       From stable-diffusion-webui

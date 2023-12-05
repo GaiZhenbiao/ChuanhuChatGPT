@@ -243,6 +243,14 @@ hr.append-display {
     border-radius: 8px !important;
     margin: 4px !important
 }
+.message.bot img {
+    border-radius: 8px !important;
+    width: 512px;
+    max-height: unset !important;
+    max-width: 100% !important;
+    margin: unset !important;
+    margin-bottom: .8em !important;
+}
 
 /* custom buttons */
 .chuanhu-btn {
