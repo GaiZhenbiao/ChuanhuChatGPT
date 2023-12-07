@@ -1,6 +1,6 @@
 <div align="right">
   <!-- 语言: -->
-  简体中文 | <a title="English" href="./readme/README_en.md">English</a> | <a title="Japanese" href="./readme/README_ja.md">日本語</a> | <a title="Russian" href="./readme/README_ru.md">Russian</a> | <a title="Korean" href="README_ko.md">한국어</a>
+  简体中文 | <a title="English" href="./readme/README_en.md">English</a> | <a title="Japanese" href="./readme/README_ja.md">日本語</a> | <a title="Russian" href="./readme/README_ru.md">Russian</a> | <a title="Korean" href="./readme/README_ko.md">한국어</a>
 </div>
 
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
