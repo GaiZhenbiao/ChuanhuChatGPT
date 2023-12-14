@@ -1005,7 +1005,7 @@ class SetupWizard:
 
     def set_users(self):
         # 询问设置用户账户
-        choice = input(i18n("是否设置用户账户？设置后，用户需要登陆才可访问。输入 Yes(y) 或 No(n)，默认No："))
+        choice = input(colorama.Fore.YELLOW + i18n("是否设置用户账户？设置后，用户需要登陆才可访问。输入 Yes(y) 或 No(n)，默认No：") + colorama.Style.RESET_ALL)
         if choice.lower() in ["y", "yes"]:
             users = []
             while True:
@@ -1205,6 +1205,9 @@ def setup_wizard():
             ],
             "是否设置 Azure OpenAI？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 Azure OpenAI 模型。",
         )
+        print(
+            colorama.Back.GREEN + i18n("现在开始进行软件功能设置") + colorama.Style.RESET_ALL
+        )
         # 用户列表
         wizard.set_users()
         # 未登录情况下是否不展示对话历史
@@ -1261,12 +1264,12 @@ def setup_wizard():
             [
                 ConfigItem(
                     "chat_name_method_index",
-                    "如何自动命名对话历史",
+                    "自动命名对话历史的方式（0: 使用日期时间命名；1: 使用第一条提问命名，2: 使用模型自动总结。）",
                     type=ConfigType.Number,
                     default=2,
                 )
             ],
-            "如何自动命名对话历史？选择对话名称的方法。0: 使用日期时间命名；1: 使用第一条提问命名，2: 使用模型自动总结。",
+            "是否选择自动命名对话历史的方式？",
         )
         # 头像
         wizard.set(
@@ -1347,7 +1350,7 @@ def setup_wizard():
             [
                 ConfigItem(
                     "available_models",
-                    "是否指定可用模型列表",
+                    "可用模型列表",
                     type=ConfigType.ListOfStrings,
                 )
             ],
@@ -1395,5 +1398,5 @@ def setup_wizard():
             "是否通过gradio分享？可以通过公网访问。",
         )
         wizard.save()
-        print(i18n("设置完成。现在请重启本程序。"))
+        print(colorama.Back.GREEN + i18n("设置完成。现在请重启本程序。") + colorama.Style.RESET_ALL)
         exit()
