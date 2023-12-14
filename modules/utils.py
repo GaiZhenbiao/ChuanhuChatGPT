@@ -923,12 +923,17 @@ class SetupWizard:
     def __init__(self, file_path="config.json") -> None:
         self.config = {}
         self.file_path = file_path
+        language = input('请问是否需要更改语言？可选："auto", "zh_CN", "en_US", "ja_JP", "ko_KR", "sv_SE", "ru_RU", "vi_VN"\nChange the language? Options: "auto", "zh_CN", "en_US", "ja_JP", "ko_KR", "sv_SE", "ru_RU", "vi_VN"\n目前正在使用中文(zh_CN)\nCurrently using Chinese(zh_CN)\n如果需要，请输入你想用的语言的代码：\nIf you need, please enter the code of the language you want to use:')
+        if language.lower() in ["auto", "zh_cn", "en_us", "ja_jp", "ko_kr", "sv_se", "ru_ru", "vi_vn"]:
+            i18n.change_language(language)
+        else:
+            print("你没有输入有效的语言代码，将使用默认语言中文(zh_CN)\nYou did not enter a valid language code, the default language Chinese(zh_CN) will be used.")
         print(
             i18n("正在进行首次设置，请按照提示进行配置，配置将会被保存在")
             + colorama.Fore.GREEN
-            + " config.json"
+            + " config.json "
             + colorama.Style.RESET_ALL
-            + i18n(" 中。")
+            + i18n("中。")
         )
         print(
             i18n("在")
@@ -972,7 +977,10 @@ class SetupWizard:
                 elif config_item.type == ConfigType.Number:
                     config_value = input(generate_prompt_string(config_item))
                     print(generate_result_string(config_item, config_value))
-                    self.config[config_item.key] = int(config_value)
+                    try:
+                        self.config[config_item.key] = int(config_value)
+                    except:
+                        print("输入的不是数字，将使用默认值。")
                 elif config_item.type == ConfigType.ListOfStrings:
                     # read one string at a time
                     config_value = []
@@ -1035,11 +1043,6 @@ def setup_wizard():
     if not os.path.exists("config.json"):
         wizard = SetupWizard()
         flag = False
-        # 设置语言
-        wizard.set(
-            [ConfigItem("language", "语言", type=ConfigType.String)],
-            '请问是否需要更改语言？可选："auto", "zh_CN", "en_US", "ja_JP", "ko_KR", "sv_SE", "ru_RU", "vi_VN"',
-        )
         # 设置openai_api_key。
         flag = wizard.set(
             [ConfigItem("openai_api_key", "OpenAI API Key", type=ConfigType.Password)],
@@ -1081,7 +1084,7 @@ def setup_wizard():
             "是否在本地编制知识库索引？如果是，可以在使用本地模型时离线使用知识库，否则使用OpenAI服务来编制索引（需要OpenAI API Key）。请确保你的电脑有至少16GB内存。本地索引模型需要从互联网下载。",
         )
         print(
-            colorama.Back.GREEN + i18n("现在开始设置在线模型的API Key") + colorama.Style.RESET_ALL
+            colorama.Back.GREEN + i18n("现在开始设置其他在线模型的API Key") + colorama.Style.RESET_ALL
         )
         # Google Palm
         wizard.set(
@@ -1116,7 +1119,7 @@ def setup_wizard():
             [
                 ConfigItem(
                     "midjourney_proxy_api_base",
-                    "你的 https://github.com/novicezk/midjourney-proxy 代理地址",
+                    i18n("你的") + "https://github.com/novicezk/midjourney-proxy" + i18n("代理地址"),
                     type=ConfigType.String,
                 ),
                 ConfigItem(
@@ -1133,6 +1136,7 @@ def setup_wizard():
                     "midjourney_temp_folder",
                     "你的 MidJourney 临时文件夹，用于存放生成的图片，填空则关闭自动下载切图（直接显示MJ的四宫格图）",
                     type=ConfigType.String,
+                    default="files",
                 ),
             ],
             "是否设置 Midjourney ？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 Midjourney 模型。",
@@ -1245,6 +1249,7 @@ def setup_wizard():
             + "\n".join(ONLINE_MODELS)
             + "\n"
             + "可选的本地模型为："
+            + "\n"
             + "\n".join(LOCAL_MODELS),
         )
         # 是否启用自动加载
