@@ -112,7 +112,7 @@ body.popup-open {
 .insert-block {
     position: relative;
     margin: 0;
-    padding: 8px 12px;
+    padding: 8px 0;
     box-shadow: var(--block-shadow);
     border-width: var(--block-border-width);
     border-color: var(--block-border-color);
@@ -892,9 +892,10 @@ input:checked + .chatbot-input-more-span {
         height: calc(100% - 35px);
         overflow-y: auto;
         border-style: none;
-        padding: 0;
+        padding-block: 0;
+        padding-left: 4px;
         /* 理论上不该是0，但这里考虑内部gradio有好多container有padding了 */
-        padding-right: env(safe-area-inset-right);
+        padding-right: max(4px, env(safe-area-inset-right));
     }
     #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav {
         display: flex;
@@ -946,10 +947,13 @@ input:checked + .chatbot-input-more-span {
     理论上不该是0，但这里考虑内部gradio有好多container有padding了 
 } 
 */
-#toolbox-area .tabitem > div > .gradio-markdown {
+#toolbox-area .tabitem > div > .gradio-markdown:not(.hr-line) {
     padding: 12px;
 }
 
+/* #toolbox-area .tabitem > div > .gradio-accordion > .label-wrap {
+    padding-inline: 12px;
+} */
 #toolbox-area .tabitem > div > .gradio-accordion > .label-wrap > span {
     font-weight: bold;
 }
@@ -957,6 +961,12 @@ input:checked + .chatbot-input-more-span {
     gap: 0 !important;
 }
 
+#toolbox-area .tabitem > div > .gradio-accordion > div div.block.padded {
+    padding-inline: 0 !important;
+}
+#toolbox-area .tabitem > div > .gradio-accordion > div > div.gap{
+    gap: 0 !important;
+}
 /* #chuanhu-popup ul.options {
     transform: translate(-50%, -50%);
 } */
