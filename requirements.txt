@@ -33,4 +33,3 @@ pydantic==2.5.2
 google-search-results
 anthropic==0.3.11
 Pillow>=10.1.0
-getpass
