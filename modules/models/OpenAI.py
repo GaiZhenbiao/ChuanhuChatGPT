@@ -37,6 +37,8 @@ class OpenAIClient(BaseLLMModel):
         self._refresh_header()
 
     def get_answer_stream_iter(self):
+        if not self.api_key:
+            raise Exception(NO_APIKEY_MSG)
         response = self._get_response(stream=True)
         if response is not None:
             iter = self._decode_chat_response(response)
@@ -48,6 +50,8 @@ class OpenAIClient(BaseLLMModel):
             yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
 
     def get_answer_at_once(self):
+        if not self.api_key:
+            raise Exception(NO_APIKEY_MSG)
         response = self._get_response()
         response = json.loads(response.text)
         content = response["choices"][0]["message"]["content"]
