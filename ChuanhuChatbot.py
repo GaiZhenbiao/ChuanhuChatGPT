@@ -197,14 +197,22 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         obj="toolbox"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
                     with gr.Tab(label=i18n("对话")):
-                        keyTxt = gr.Textbox(
-                            show_label=True,
-                            placeholder=f"Your API-key...",
-                            value=hide_middle_chars(user_api_key.value),
-                            type="password",
-                            visible=not HIDE_MY_KEY,
-                            label="API-Key",
-                        )
+                        with gr.Accordion(label=i18n("模型"), open=not HIDE_MY_KEY, visible=not HIDE_MY_KEY):
+                            keyTxt = gr.Textbox(
+                                show_label=True,
+                                placeholder=f"Your API-key...",
+                                value=hide_middle_chars(user_api_key.value),
+                                type="password",
+                                visible=not HIDE_MY_KEY,
+                                label="API-Key",
+                            )
+                            if multi_api_key:
+                                usageTxt = gr.Markdown(i18n(
+                                    "多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
+                            else:
+                                usageTxt = gr.Markdown(i18n(
+                                    "**发送消息** 或 **提交key** 以显示额度"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
+                        gr.Markdown("---", elem_classes="hr-line", visible=not HIDE_MY_KEY)
                         with gr.Accordion(label="Prompt", open=True):
                             systemPromptTxt = gr.Textbox(
                                 show_label=True,
@@ -347,13 +355,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     gr.HTML(get_html("close_btn.html").format(
                         obj="box"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-setting-tabs"):
-                    with gr.Tab(label=i18n("模型")):
-                        if multi_api_key:
-                            usageTxt = gr.Markdown(i18n(
-                                "多账号模式已开启，无需输入key，可直接开始对话"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
-                        else:
-                            usageTxt = gr.Markdown(i18n(
-                                "**发送消息** 或 **提交key** 以显示额度"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
+                    # with gr.Tab(label=i18n("模型")):
+                        
                         # model_select_dropdown = gr.Dropdown(
                         #     label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
                         # )
@@ -362,18 +365,18 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         # )
                         # with gr.Row():
 
-                        language_select_dropdown = gr.Dropdown(
-                            label=i18n("选择回复语言（针对搜索&索引功能）"),
-                            choices=REPLY_LANGUAGES,
-                            multiselect=False,
-                            value=REPLY_LANGUAGES[0],
-                        )
 
                     with gr.Tab(label=i18n("高级")):
                         gr.HTML(get_html("appearance_switcher.html").format(
                             label=i18n("切换亮暗色主题")), elem_classes="insert-block", visible=False)
                         use_streaming_checkbox = gr.Checkbox(
                             label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
+                        )
+                        language_select_dropdown = gr.Dropdown(
+                            label=i18n("选择回复语言（针对搜索&索引功能）"),
+                            choices=REPLY_LANGUAGES,
+                            multiselect=False,
+                            value=REPLY_LANGUAGES[0],
                         )
                         name_chat_method = gr.Dropdown(
                             label=i18n("对话命名方式"),
