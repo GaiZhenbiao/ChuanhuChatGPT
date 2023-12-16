@@ -93,7 +93,7 @@
     "状态": "Tình trạng",
     "生成内容总结中……": "Đang tạo tóm tắt nội dung...",
     "用于定位滥用行为": "Sử dụng để xác định hành vi lạm dụng",
-    "用户名": "Tên người dùng",
+    "用户标识符": "Định danh người dùng",
     "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "Phát triển bởi Bilibili [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) và [Keldos](https://github.com/Keldos-Li)\n\nTải mã nguồn mới nhất từ [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
     "知识库": "Cơ sở kiến thức",
     "知识库文件": "Tệp cơ sở kiến thức",
@@ -137,5 +137,6 @@
     "🔙 恢复默认网络设置": "🔙 Khôi phục cài đặt mạng mặc định",
     "🗑️ 删除最新对话": "🗑️ Xóa cuộc trò chuyện mới nhất",
     "🗑️ 删除最旧对话": "🗑️ Xóa cuộc trò chuyện cũ nhất",
-    "🧹 新的对话": "🧹 Cuộc trò chuyện mới"
+    "🧹 新的对话": "🧹 Cuộc trò chuyện mới",
+    "正在获取IP地址信息，请稍候...": "Đang lấy thông tin địa chỉ IP, vui lòng đợi...",
 }

@@ -21,7 +21,7 @@ import aiohttp
 from enum import Enum
 
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.callbacks.manager import BaseCallbackManager
+from langchain.callbacks.base import BaseCallbackManager
 
 from typing import Any, Dict, List, Optional, Union
 
@@ -70,13 +70,13 @@ class CallbackToIterator:
 
 
 def get_action_description(text):
-    match = re.search('```(.*?)```', text, re.S)
+    match = re.search("```(.*?)```", text, re.S)
     json_text = match.group(1)
     # 把json转化为python字典
     json_dict = json.loads(json_text)
     # 提取'action'和'action_input'的值
-    action_name = json_dict['action']
-    action_input = json_dict['action_input']
+    action_name = json_dict["action"]
+    action_input = json_dict["action_input"]
     if action_name != "Final Answer":
         return f'<!-- S O PREFIX --><p class="agent-prefix">{action_name}: {action_input}\n</p><!-- E O PREFIX -->'
     else:
@@ -84,7 +84,6 @@ def get_action_description(text):
 
 
 class ChuanhuCallbackHandler(BaseCallbackHandler):
-
     def __init__(self, callback) -> None:
         """Initialize callback handler."""
         self.callback = callback
@@ -124,7 +123,12 @@ class ChuanhuCallbackHandler(BaseCallbackHandler):
         """Run on new LLM token. Only available when streaming is enabled."""
         self.callback(token)
 
-    def on_chat_model_start(self, serialized: Dict[str, Any], messages: List[List[BaseMessage]],  **kwargs: Any) -> Any:
+    def on_chat_model_start(
+        self,
+        serialized: Dict[str, Any],
+        messages: List[List[BaseMessage]],
+        **kwargs: Any,
+    ) -> Any:
         """Run when a chat model starts running."""
         pass
 
@@ -149,6 +153,7 @@ class ModelType(Enum):
     Qwen = 15
     OpenAIVision = 16
     ERNIE = 17
+    DALLE3 = 18
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -191,6 +196,8 @@ class ModelType(Enum):
             model_type = ModelType.Qwen
         elif "ernie" in model_name_lower:
             model_type = ModelType.ERNIE
+        elif "dall" in model_name_lower:
+            model_type = ModelType.DALLE3
         else:
             model_type = ModelType.LLaMA
         return model_type
@@ -204,12 +211,13 @@ class BaseLLMModel:
         temperature=1.0,
         top_p=1.0,
         n_choices=1,
-        stop=None,
+        stop="",
         max_generation_token=None,
         presence_penalty=0,
         frequency_penalty=0,
         logit_bias=None,
         user="",
+        single_turn=False,
     ) -> None:
         self.history = []
         self.all_token_counts = []
@@ -226,26 +234,42 @@ class BaseLLMModel:
         self.system_prompt = system_prompt
         self.api_key = None
         self.need_api_key = False
-        self.single_turn = False
         self.history_file_path = get_first_history_name(user)
+        self.user_name = user
+        self.chatbot = []
 
+        self.default_single_turn = single_turn
+        self.default_temperature = temperature
+        self.default_top_p = top_p
+        self.default_n_choices = n_choices
+        self.default_stop_sequence = stop
+        self.default_max_generation_token = max_generation_token
+        self.default_presence_penalty = presence_penalty
+        self.default_frequency_penalty = frequency_penalty
+        self.default_logit_bias = logit_bias
+        self.default_user_identifier = user
+
+        self.single_turn = single_turn
         self.temperature = temperature
         self.top_p = top_p
         self.n_choices = n_choices
         self.stop_sequence = stop
-        self.max_generation_token = None
+        self.max_generation_token = max_generation_token
         self.presence_penalty = presence_penalty
         self.frequency_penalty = frequency_penalty
         self.logit_bias = logit_bias
         self.user_identifier = user
 
+        self.metadata = {}
+
     def get_answer_stream_iter(self):
-        """stream predict, need to be implemented
-        conversations are stored in self.history, with the most recent question, in OpenAI format
-        should return a generator, each time give the next word (str) in the answer
+        """Implement stream prediction.
+        Conversations are stored in self.history, with the most recent question in OpenAI format.
+        Should return a generator that yields the next word (str) in the answer.
         """
         logging.warning(
-            "stream predict not implemented, using at once predict instead")
+            "Stream prediction is not implemented. Using at once prediction instead."
+        )
         response, _ = self.get_answer_at_once()
         yield response
 
@@ -256,8 +280,7 @@ class BaseLLMModel:
         the answer (str)
         total token count (int)
         """
-        logging.warning(
-            "at once predict not implemented, using stream predict instead")
+        logging.warning("at once predict not implemented, using stream predict instead")
         response_iter = self.get_answer_stream_iter()
         count = 0
         for response in response_iter:
@@ -291,7 +314,9 @@ class BaseLLMModel:
         stream_iter = self.get_answer_stream_iter()
 
         if display_append:
-            display_append = '\n\n<hr class="append-display no-in-raw" />' + display_append
+            display_append = (
+                '\n\n<hr class="append-display no-in-raw" />' + display_append
+            )
         partial_text = ""
         token_increment = 1
         for partial_text in stream_iter:
@@ -322,11 +347,9 @@ class BaseLLMModel:
             self.history[-2] = construct_user(fake_input)
         chatbot[-1] = (chatbot[-1][0], ai_reply + display_append)
         if fake_input is not None:
-            self.all_token_counts[-1] += count_token(
-                construct_assistant(ai_reply))
+            self.all_token_counts[-1] += count_token(construct_assistant(ai_reply))
         else:
-            self.all_token_counts[-1] = total_token_count - \
-                sum(self.all_token_counts)
+            self.all_token_counts[-1] = total_token_count - sum(self.all_token_counts)
         status_text = self.token_message()
         return chatbot, status_text
 
@@ -349,46 +372,80 @@ class BaseLLMModel:
             from langchain.prompts import PromptTemplate
             from langchain.chat_models import ChatOpenAI
             from langchain.callbacks import StdOutCallbackHandler
-            prompt_template = "Write a concise summary of the following:\n\n{text}\n\nCONCISE SUMMARY IN " + language + ":"
-            PROMPT = PromptTemplate(
-                template=prompt_template, input_variables=["text"])
+
+            prompt_template = (
+                "Write a concise summary of the following:\n\n{text}\n\nCONCISE SUMMARY IN "
+                + language
+                + ":"
+            )
+            PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
             llm = ChatOpenAI()
             chain = load_summarize_chain(
-                llm, chain_type="map_reduce", return_intermediate_steps=True, map_prompt=PROMPT, combine_prompt=PROMPT)
-            summary = chain({"input_documents": list(index.docstore.__dict__[
-                            "_dict"].values())}, return_only_outputs=True)["output_text"]
+                llm,
+                chain_type="map_reduce",
+                return_intermediate_steps=True,
+                map_prompt=PROMPT,
+                combine_prompt=PROMPT,
+            )
+            summary = chain(
+                {"input_documents": list(index.docstore.__dict__["_dict"].values())},
+                return_only_outputs=True,
+            )["output_text"]
             print(i18n("总结") + f": {summary}")
-            chatbot.append([i18n("上传了")+str(len(files))+"个文件", summary])
+            chatbot.append([i18n("上传了") + str(len(files)) + "个文件", summary])
         return chatbot, status
 
-    def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot, load_from_cache_if_possible=True):
+    def prepare_inputs(
+        self,
+        real_inputs,
+        use_websearch,
+        files,
+        reply_language,
+        chatbot,
+        load_from_cache_if_possible=True,
+    ):
         display_append = []
         limited_context = False
         if type(real_inputs) == list:
-            fake_inputs = real_inputs[0]['text']
+            fake_inputs = real_inputs[0]["text"]
         else:
             fake_inputs = real_inputs
         if files:
             from langchain.embeddings.huggingface import HuggingFaceEmbeddings
             from langchain.vectorstores.base import VectorStoreRetriever
+
             limited_context = True
             msg = "加载索引中……"
             logging.info(msg)
-            index = construct_index(self.api_key, file_src=files, load_from_cache_if_possible=load_from_cache_if_possible)
+            index = construct_index(
+                self.api_key,
+                file_src=files,
+                load_from_cache_if_possible=load_from_cache_if_possible,
+            )
             assert index is not None, "获取索引失败"
             msg = "索引获取成功，生成回答中……"
             logging.info(msg)
             with retrieve_proxy():
-                retriever = VectorStoreRetriever(vectorstore=index, search_type="similarity", search_kwargs={"k": 6})
+                retriever = VectorStoreRetriever(
+                    vectorstore=index, search_type="similarity", search_kwargs={"k": 6}
+                )
                 # retriever = VectorStoreRetriever(vectorstore=index, search_type="similarity_score_threshold", search_kwargs={
                 #                                  "k": 6, "score_threshold": 0.2})
                 try:
-                    relevant_documents = retriever.get_relevant_documents(
-                        fake_inputs)
+                    relevant_documents = retriever.get_relevant_documents(fake_inputs)
                 except AssertionError:
-                    return self.prepare_inputs(fake_inputs, use_websearch, files, reply_language, chatbot, load_from_cache_if_possible=False)
-            reference_results = [[d.page_content.strip("�"), os.path.basename(
-                d.metadata["source"])] for d in relevant_documents]
+                    return self.prepare_inputs(
+                        fake_inputs,
+                        use_websearch,
+                        files,
+                        reply_language,
+                        chatbot,
+                        load_from_cache_if_possible=False,
+                    )
+            reference_results = [
+                [d.page_content.strip("�"), os.path.basename(d.metadata["source"])]
+                for d in relevant_documents
+            ]
             reference_results = add_source_numbers(reference_results)
             display_append = add_details(reference_results)
             display_append = "\n\n" + "".join(display_append)
@@ -415,16 +472,17 @@ class BaseLLMModel:
             reference_results = []
             for idx, result in enumerate(search_results):
                 logging.debug(f"搜索结果{idx + 1}：{result}")
-                domain_name = urllib3.util.parse_url(result['href']).host
-                reference_results.append([result['body'], result['href']])
+                domain_name = urllib3.util.parse_url(result["href"]).host
+                reference_results.append([result["body"], result["href"]])
                 display_append.append(
                     # f"{idx+1}. [{domain_name}]({result['href']})\n"
                     f"<a href=\"{result['href']}\" target=\"_blank\">{idx+1}.&nbsp;{result['title']}</a>"
                 )
             reference_results = add_source_numbers(reference_results)
             # display_append = "<ol>\n\n" + "".join(display_append) + "</ol>"
-            display_append = '<div class = "source-a">' + \
-                "".join(display_append) + '</div>'
+            display_append = (
+                '<div class = "source-a">' + "".join(display_append) + "</div>"
+            )
             if type(real_inputs) == list:
                 real_inputs[0]["text"] = (
                     replace_today(WEBSEARCH_PTOMPT_TEMPLATE)
@@ -453,33 +511,54 @@ class BaseLLMModel:
         reply_language="中文",
         should_check_token_count=True,
     ):  # repetition_penalty, top_k
-
         status_text = "开始生成回答……"
         if type(inputs) == list:
-                logging.info(
-                "用户" + f"{self.user_identifier}" + "的输入为：" +
-                colorama.Fore.BLUE + "(" + str(len(inputs)-1) + " images) " + f"{inputs[0]['text']}" + colorama.Style.RESET_ALL
+            logging.info(
+                "用户"
+                + f"{self.user_name}"
+                + "的输入为："
+                + colorama.Fore.BLUE
+                + "("
+                + str(len(inputs) - 1)
+                + " images) "
+                + f"{inputs[0]['text']}"
+                + colorama.Style.RESET_ALL
             )
         else:
             logging.info(
-                "用户" + f"{self.user_identifier}" + "的输入为：" +
-                colorama.Fore.BLUE + f"{inputs}" + colorama.Style.RESET_ALL
+                "用户"
+                + f"{self.user_name}"
+                + "的输入为："
+                + colorama.Fore.BLUE
+                + f"{inputs}"
+                + colorama.Style.RESET_ALL
             )
         if should_check_token_count:
             if type(inputs) == list:
-                 yield chatbot + [(inputs[0]['text'], "")], status_text
+                yield chatbot + [(inputs[0]["text"], "")], status_text
             else:
                 yield chatbot + [(inputs, "")], status_text
         if reply_language == "跟随问题语言（不稳定）":
             reply_language = "the same language as the question, such as English, 中文, 日本語, Español, Français, or Deutsch."
 
-        limited_context, fake_inputs, display_append, inputs, chatbot = self.prepare_inputs(
-            real_inputs=inputs, use_websearch=use_websearch, files=files, reply_language=reply_language, chatbot=chatbot)
+        (
+            limited_context,
+            fake_inputs,
+            display_append,
+            inputs,
+            chatbot,
+        ) = self.prepare_inputs(
+            real_inputs=inputs,
+            use_websearch=use_websearch,
+            files=files,
+            reply_language=reply_language,
+            chatbot=chatbot,
+        )
         yield chatbot + [(fake_inputs, "")], status_text
 
         if (
-            self.need_api_key and
-            self.api_key is None
+            self.need_api_key
+            and self.api_key is None
             and not shared.state.multi_api_key
         ):
             status_text = STANDARD_ERROR_MSG + NO_APIKEY_MSG
@@ -562,6 +641,7 @@ class BaseLLMModel:
             status_text = f"为了防止token超限，模型忘记了早期的 {count} 轮对话"
             yield chatbot, status_text
 
+        self.chatbot = chatbot
         self.auto_save(chatbot)
 
     def retry(
@@ -627,32 +707,45 @@ class BaseLLMModel:
 
     def set_token_upper_limit(self, new_upper_limit):
         self.token_upper_limit = new_upper_limit
-        print(f"token上限设置为{new_upper_limit}")
+        self.auto_save()
 
     def set_temperature(self, new_temperature):
         self.temperature = new_temperature
+        self.auto_save()
 
     def set_top_p(self, new_top_p):
         self.top_p = new_top_p
+        self.auto_save()
 
     def set_n_choices(self, new_n_choices):
         self.n_choices = new_n_choices
+        self.auto_save()
 
     def set_stop_sequence(self, new_stop_sequence: str):
         new_stop_sequence = new_stop_sequence.split(",")
         self.stop_sequence = new_stop_sequence
+        self.auto_save()
 
     def set_max_tokens(self, new_max_tokens):
         self.max_generation_token = new_max_tokens
+        self.auto_save()
 
     def set_presence_penalty(self, new_presence_penalty):
         self.presence_penalty = new_presence_penalty
+        self.auto_save()
 
     def set_frequency_penalty(self, new_frequency_penalty):
         self.frequency_penalty = new_frequency_penalty
+        self.auto_save()
 
     def set_logit_bias(self, logit_bias):
-        logit_bias = logit_bias.split()
+        self.logit_bias = logit_bias
+        self.auto_save()
+
+    def encoded_logit_bias(self):
+        if self.logit_bias is None:
+            return {}
+        logit_bias = self.logit_bias.split()
         bias_map = {}
         encoding = tiktoken.get_encoding("cl100k_base")
         for line in logit_bias:
@@ -660,13 +753,15 @@ class BaseLLMModel:
             if word:
                 for token in encoding.encode(word):
                     bias_map[token] = float(bias_amount)
-        self.logit_bias = bias_map
+        return bias_map
 
     def set_user_identifier(self, new_user_identifier):
         self.user_identifier = new_user_identifier
+        self.auto_save()
 
     def set_system_prompt(self, new_system_prompt):
         self.system_prompt = new_system_prompt
+        self.auto_save()
 
     def set_key(self, new_access_key):
         if "*" not in new_access_key:
@@ -679,16 +774,45 @@ class BaseLLMModel:
 
     def set_single_turn(self, new_single_turn):
         self.single_turn = new_single_turn
+        self.auto_save()
 
     def reset(self, remain_system_prompt=False):
         self.history = []
         self.all_token_counts = []
         self.interrupted = False
-        self.history_file_path = new_auto_history_filename(self.user_identifier)
+        self.history_file_path = new_auto_history_filename(self.user_name)
         history_name = self.history_file_path[:-5]
-        choices = [history_name] + get_history_names(self.user_identifier)
+        choices = [history_name] + get_history_names(self.user_name)
         system_prompt = self.system_prompt if remain_system_prompt else ""
-        return [], self.token_message([0]), gr.Radio.update(choices=choices, value=history_name), system_prompt
+
+        self.single_turn = self.default_single_turn
+        self.temperature = self.default_temperature
+        self.top_p = self.default_top_p
+        self.n_choices = self.default_n_choices
+        self.stop_sequence = self.default_stop_sequence
+        self.max_generation_token = self.default_max_generation_token
+        self.presence_penalty = self.default_presence_penalty
+        self.frequency_penalty = self.default_frequency_penalty
+        self.logit_bias = self.default_logit_bias
+        self.user_identifier = self.default_user_identifier
+
+        return (
+            [],
+            self.token_message([0]),
+            gr.Radio.update(choices=choices, value=history_name),
+            system_prompt,
+            self.single_turn,
+            self.temperature,
+            self.top_p,
+            self.n_choices,
+            self.stop_sequence,
+            self.token_upper_limit,
+            self.max_generation_token,
+            self.presence_penalty,
+            self.frequency_penalty,
+            self.logit_bias,
+            self.user_identifier,
+        )
 
     def delete_first_conversation(self):
         if self.history:
@@ -710,6 +834,7 @@ class BaseLLMModel:
             msg = "删除了一组对话的token计数记录"
             self.all_token_counts.pop()
         msg = "删除了一组对话"
+        self.chatbot = chatbot
         self.auto_save(chatbot)
         return chatbot, msg
 
@@ -719,94 +844,165 @@ class BaseLLMModel:
         token_sum = 0
         for i in range(len(token_lst)):
             token_sum += sum(token_lst[: i + 1])
-        return i18n("Token 计数: ") + f"{sum(token_lst)}" + i18n("，本次对话累计消耗了 ") + f"{token_sum} tokens"
+        return (
+            i18n("Token 计数: ")
+            + f"{sum(token_lst)}"
+            + i18n("，本次对话累计消耗了 ")
+            + f"{token_sum} tokens"
+        )
 
-    def rename_chat_history(self, filename, chatbot, user_name):
+    def rename_chat_history(self, filename, chatbot):
         if filename == "":
             return gr.update()
         if not filename.endswith(".json"):
             filename += ".json"
-        self.delete_chat_history(self.history_file_path, user_name)
+        self.delete_chat_history(self.history_file_path)
         # 命名重复检测
         repeat_file_index = 2
-        full_path = os.path.join(HISTORY_DIR, user_name, filename)
+        full_path = os.path.join(HISTORY_DIR, self.user_name, filename)
         while os.path.exists(full_path):
-            full_path = os.path.join(HISTORY_DIR, user_name, f"{repeat_file_index}_{filename}")
+            full_path = os.path.join(
+                HISTORY_DIR, self.user_name, f"{repeat_file_index}_{filename}"
+            )
             repeat_file_index += 1
         filename = os.path.basename(full_path)
 
         self.history_file_path = filename
-        save_file(filename, self.system_prompt, self.history, chatbot, user_name)
-        return init_history_list(user_name)
+        save_file(filename, self, chatbot)
+        return init_history_list(self.user_name)
 
-    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
+    def auto_name_chat_history(
+        self, name_chat_method, user_question, chatbot, single_turn_checkbox
+    ):
         if len(self.history) == 2 and not single_turn_checkbox:
             user_question = self.history[0]["content"]
             if type(user_question) == list:
                 user_question = user_question[0]["text"]
             filename = replace_special_symbols(user_question)[:16] + ".json"
-            return self.rename_chat_history(filename, chatbot, user_name)
+            return self.rename_chat_history(filename, chatbot)
         else:
             return gr.update()
 
-    def auto_save(self, chatbot):
-        save_file(self.history_file_path, self.system_prompt,
-                  self.history, chatbot, self.user_identifier)
+    def auto_save(self, chatbot=None):
+        if chatbot is None:
+            chatbot = self.chatbot
+        save_file(self.history_file_path, self, chatbot)
 
-    def export_markdown(self, filename, chatbot, user_name):
+    def export_markdown(self, filename, chatbot):
         if filename == "":
             return
         if not filename.endswith(".md"):
             filename += ".md"
-        save_file(filename, self.system_prompt, self.history, chatbot, user_name)
+        save_file(filename, self, chatbot)
 
-    def load_chat_history(self, new_history_file_path=None, username=None):
-        logging.debug(f"{self.user_identifier} 加载对话历史中……")
+    def load_chat_history(self, new_history_file_path=None):
+        logging.debug(f"{self.user_name} 加载对话历史中……")
         if new_history_file_path is not None:
             if type(new_history_file_path) != str:
-                # copy file from new_history_file_path.name to os.path.join(HISTORY_DIR, self.user_identifier)
+                # copy file from new_history_file_path.name to os.path.join(HISTORY_DIR, self.user_name)
                 new_history_file_path = new_history_file_path.name
-                shutil.copyfile(new_history_file_path, os.path.join(
-                    HISTORY_DIR, self.user_identifier, os.path.basename(new_history_file_path)))
+                shutil.copyfile(
+                    new_history_file_path,
+                    os.path.join(
+                        HISTORY_DIR,
+                        self.user_name,
+                        os.path.basename(new_history_file_path),
+                    ),
+                )
                 self.history_file_path = os.path.basename(new_history_file_path)
             else:
                 self.history_file_path = new_history_file_path
         try:
             if self.history_file_path == os.path.basename(self.history_file_path):
                 history_file_path = os.path.join(
-                    HISTORY_DIR, self.user_identifier, self.history_file_path)
+                    HISTORY_DIR, self.user_name, self.history_file_path
+                )
             else:
                 history_file_path = self.history_file_path
             if not self.history_file_path.endswith(".json"):
                 history_file_path += ".json"
             with open(history_file_path, "r", encoding="utf-8") as f:
-                json_s = json.load(f)
+                saved_json = json.load(f)
             try:
-                if type(json_s["history"][0]) == str:
+                if type(saved_json["history"][0]) == str:
                     logging.info("历史记录格式为旧版，正在转换……")
                     new_history = []
-                    for index, item in enumerate(json_s["history"]):
+                    for index, item in enumerate(saved_json["history"]):
                         if index % 2 == 0:
                             new_history.append(construct_user(item))
                         else:
                             new_history.append(construct_assistant(item))
-                    json_s["history"] = new_history
+                    saved_json["history"] = new_history
                     logging.info(new_history)
             except:
                 pass
-            if len(json_s["chatbot"]) < len(json_s["history"])//2:
+            if len(saved_json["chatbot"]) < len(saved_json["history"]) // 2:
                 logging.info("Trimming corrupted history...")
-                json_s["history"] = json_s["history"][-len(json_s["chatbot"]):]
-                logging.info(f"Trimmed history: {json_s['history']}")
-            logging.debug(f"{self.user_identifier} 加载对话历史完毕")
-            self.history = json_s["history"]
-            return os.path.basename(self.history_file_path), json_s["system"], json_s["chatbot"]
+                saved_json["history"] = saved_json["history"][
+                    -len(saved_json["chatbot"]) :
+                ]
+                logging.info(f"Trimmed history: {saved_json['history']}")
+            logging.debug(f"{self.user_name} 加载对话历史完毕")
+            self.history = saved_json["history"]
+            self.single_turn = saved_json.get("single_turn", self.single_turn)
+            self.temperature = saved_json.get("temperature", self.temperature)
+            self.top_p = saved_json.get("top_p", self.top_p)
+            self.n_choices = saved_json.get("n_choices", self.n_choices)
+            self.stop_sequence = list(saved_json.get("stop_sequence", self.stop_sequence))
+            self.token_upper_limit = saved_json.get(
+                "token_upper_limit", self.token_upper_limit
+            )
+            self.max_generation_token = saved_json.get(
+                "max_generation_token", self.max_generation_token
+            )
+            self.presence_penalty = saved_json.get(
+                "presence_penalty", self.presence_penalty
+            )
+            self.frequency_penalty = saved_json.get(
+                "frequency_penalty", self.frequency_penalty
+            )
+            self.logit_bias = saved_json.get("logit_bias", self.logit_bias)
+            self.user_identifier = saved_json.get("user_identifier", self.user_name)
+            self.metadata = saved_json.get("metadata", self.metadata)
+            self.chatbot = saved_json["chatbot"]
+            return (
+                os.path.basename(self.history_file_path)[:-5],
+                saved_json["system"],
+                saved_json["chatbot"],
+                self.single_turn,
+                self.temperature,
+                self.top_p,
+                self.n_choices,
+                ",".join(self.stop_sequence),
+                self.token_upper_limit,
+                self.max_generation_token,
+                self.presence_penalty,
+                self.frequency_penalty,
+                self.logit_bias,
+                self.user_identifier,
+            )
         except:
             # 没有对话历史或者对话历史解析失败
             logging.info(f"没有找到对话历史记录 {self.history_file_path}")
-            return self.history_file_path, "", []
+            self.reset()
+            return (
+                os.path.basename(self.history_file_path),
+                "",
+                [],
+                self.single_turn,
+                self.temperature,
+                self.top_p,
+                self.n_choices,
+                ",".join(self.stop_sequence),
+                self.token_upper_limit,
+                self.max_generation_token,
+                self.presence_penalty,
+                self.frequency_penalty,
+                self.logit_bias,
+                self.user_identifier,
+            )
 
-    def delete_chat_history(self, filename, user_name):
+    def delete_chat_history(self, filename):
         if filename == "CANCELED":
             return gr.update(), gr.update(), gr.update()
         if filename == "":
@@ -814,38 +1010,41 @@ class BaseLLMModel:
         if not filename.endswith(".json"):
             filename += ".json"
         if filename == os.path.basename(filename):
-            history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
+            history_file_path = os.path.join(HISTORY_DIR, self.user_name, filename)
         else:
             history_file_path = filename
         md_history_file_path = history_file_path[:-5] + ".md"
         try:
             os.remove(history_file_path)
             os.remove(md_history_file_path)
-            return i18n("删除对话历史成功"), get_history_list(user_name), []
+            return i18n("删除对话历史成功"), get_history_list(self.user_name), []
         except:
             logging.info(f"删除对话历史失败 {history_file_path}")
-            return i18n("对话历史")+filename+i18n("已经被删除啦"), get_history_list(user_name), []
+            return (
+                i18n("对话历史") + filename + i18n("已经被删除啦"),
+                get_history_list(self.user_name),
+                [],
+            )
 
     def auto_load(self):
-        filepath = get_history_filepath(self.user_identifier)
+        filepath = get_history_filepath(self.user_name)
         if not filepath:
-            self.history_file_path = new_auto_history_filename(
-                self.user_identifier)
+            self.history_file_path = new_auto_history_filename(self.user_name)
         else:
             self.history_file_path = filepath
-        filename, system_prompt, chatbot = self.load_chat_history()
-        filename = filename[:-5]
-        return filename, system_prompt, chatbot
+        return self.load_chat_history()
 
     def like(self):
-        """like the last response, implement if needed
-        """
+        """like the last response, implement if needed"""
         return gr.update()
 
     def dislike(self):
-        """dislike the last response, implement if needed
-        """
+        """dislike the last response, implement if needed"""
         return gr.update()
+
+    def deinitialize(self):
+        """deinitialize the model, implement if needed"""
+        pass
 
 
 class Base_Chat_Langchain_Client(BaseLLMModel):
@@ -869,7 +1068,8 @@ class Base_Chat_Langchain_Client(BaseLLMModel):
 
     def get_answer_at_once(self):
         assert isinstance(
-            self.model, BaseChatModel), "model is not instance of LangChain BaseChatModel"
+            self.model, BaseChatModel
+        ), "model is not instance of LangChain BaseChatModel"
         history = self._get_langchain_style_history()
         response = self.model.generate(history)
         return response.content, sum(response.content)
@@ -877,13 +1077,16 @@ class Base_Chat_Langchain_Client(BaseLLMModel):
     def get_answer_stream_iter(self):
         it = CallbackToIterator()
         assert isinstance(
-            self.model, BaseChatModel), "model is not instance of LangChain BaseChatModel"
+            self.model, BaseChatModel
+        ), "model is not instance of LangChain BaseChatModel"
         history = self._get_langchain_style_history()
 
         def thread_func():
-            self.model(messages=history, callbacks=[
-                ChuanhuCallbackHandler(it.callback)])
+            self.model(
+                messages=history, callbacks=[ChuanhuCallbackHandler(it.callback)]
+            )
             it.finish()
+
         t = Thread(target=thread_func)
         t.start()
         partial_text = ""

@@ -266,9 +266,15 @@ input:checked + .apSlider::before {
     z-index: 1;
 } */
 
-
+.hr-line .hr-line {
+    padding: 4px 12px 8px 12px !important;
+    /* opacity: 40%; */
+}
 .hr-line hr{
     margin: 0 !important;
+}
+.dark .hr-line hr {
+    opacity: 40%;
 }
 
 .tooltip-toggle {

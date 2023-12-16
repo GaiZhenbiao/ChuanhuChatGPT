@@ -43,8 +43,9 @@ body:
       description: 你之前干了什么，然后出现了错误呢？
       placeholder: |
         1. 正常完成本地部署
-        2. 在对话框中要求 ChatGPT “以LaTeX格式输出三角函数”
-        3. ChatGPT 输出部分内容后程序被自动终止
+        2. 选取GPT3.5-turbo模型，正确填写API
+        3. 在对话框中要求 ChatGPT “以LaTeX格式输出三角函数”
+        4. ChatGPT 输出部分内容后程序被自动终止
     validations:
       required: true
   - type: textarea

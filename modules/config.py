@@ -29,6 +29,7 @@ __all__ = [
     "default_chuanhu_assistant_model",
     "show_api_billing",
     "chat_name_method_index",
+    "HIDE_MY_KEY",
 ]
 
 # 添加一个统一的config文件，避免文件过多造成的疑惑（优先级最低）
@@ -102,6 +103,8 @@ if "available_models" in config:
 if "extra_models" in  config:
     presets.MODELS.extend(config["extra_models"])
     logging.info(f"已添加额外的模型：{config['extra_models']}")
+
+HIDE_MY_KEY = config.get("hide_my_key", False)
 
 google_palm_api_key = config.get("google_palm_api_key", "")
 google_palm_api_key = os.environ.get(

@@ -37,6 +37,8 @@ class OpenAIClient(BaseLLMModel):
         self._refresh_header()
 
     def get_answer_stream_iter(self):
+        if not self.api_key:
+            raise Exception(NO_APIKEY_MSG)
         response = self._get_response(stream=True)
         if response is not None:
             iter = self._decode_chat_response(response)
@@ -48,6 +50,8 @@ class OpenAIClient(BaseLLMModel):
             yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
 
     def get_answer_at_once(self):
+        if not self.api_key:
+            raise Exception(NO_APIKEY_MSG)
         response = self._get_response()
         response = json.loads(response.text)
         content = response["choices"][0]["message"]["content"]
@@ -105,9 +109,6 @@ class OpenAIClient(BaseLLMModel):
             logging.error(i18n("获取API使用情况失败:") + str(e))
             return STANDARD_ERROR_MSG + ERROR_RETRIEVE_MSG
 
-    def set_token_upper_limit(self, new_upper_limit):
-        pass
-
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
     def _get_response(self, stream=False):
         openai_api_key = self.api_key
@@ -139,7 +140,7 @@ class OpenAIClient(BaseLLMModel):
         if self.stop_sequence is not None:
             payload["stop"] = self.stop_sequence
         if self.logit_bias is not None:
-            payload["logit_bias"] = self.logit_bias
+            payload["logit_bias"] = self.encoded_logit_bias()
         if self.user_identifier:
             payload["user"] = self.user_identifier
 
@@ -252,7 +253,7 @@ class OpenAIClient(BaseLLMModel):
         return response
 
 
-    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, user_name, single_turn_checkbox):
+    def auto_name_chat_history(self, name_chat_method, user_question, chatbot, single_turn_checkbox):
         if len(self.history) == 2 and not single_turn_checkbox and not hide_history_when_not_logged_in:
             user_question = self.history[0]["content"]
             if name_chat_method == i18n("模型自动总结（消耗tokens）"):
@@ -269,10 +270,10 @@ class OpenAIClient(BaseLLMModel):
                 except Exception as e:
                     logging.info(f"自动命名失败。{e}")
                     filename = replace_special_symbols(user_question)[:16] + ".json"
-                return self.rename_chat_history(filename, chatbot, user_name)
+                return self.rename_chat_history(filename, chatbot)
             elif name_chat_method == i18n("第一条提问"):
                 filename = replace_special_symbols(user_question)[:16] + ".json"
-                return self.rename_chat_history(filename, chatbot, user_name)
+                return self.rename_chat_history(filename, chatbot)
             else:
                 return gr.update()
         else:

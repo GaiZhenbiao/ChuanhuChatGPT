@@ -13,7 +13,7 @@ from langchain.docstore.document import Document
 from langchain.tools import BaseTool, StructuredTool, Tool, tool
 from langchain.callbacks.stdout import StdOutCallbackHandler
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.callbacks.manager import BaseCallbackManager
+from langchain.callbacks.base import BaseCallbackManager
 from duckduckgo_search import DDGS
 from itertools import islice
 
