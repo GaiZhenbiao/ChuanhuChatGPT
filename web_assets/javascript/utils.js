@@ -70,6 +70,10 @@ function downloadFile(fileUrl, filename = "", format = "", retryTimeout = 200, m
     tryDownload();
 }
     
+function statusDisplayMessage(message) {
+    statusDisplayBlock = statusDisplay.querySelector("#status-display .md p");
+    statusDisplayBlock.innerText = message;
+}
 
 function bindFancyBox() {
     Fancybox.bind('[data-fancybox]', {
