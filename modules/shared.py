@@ -24,6 +24,7 @@ class State:
         if api_host.endswith("/v1"):
             api_host = api_host[:-3]
         self.chat_completion_url = f"{api_host}/v1/chat/completions"
+        self.images_completion_url = f"{api_host}/v1/images/generations"
         self.openai_api_base = f"{api_host}/v1"
         self.balance_api_url = f"{api_host}/dashboard/billing/credit_grants"
         self.usage_api_url = f"{api_host}/dashboard/billing/usage"
@@ -31,6 +32,7 @@ class State:
 
     def reset_api_host(self):
         self.chat_completion_url = CHAT_COMPLETION_URL
+        self.images_completion_url = IMAGES_COMPLETION_URL
         self.balance_api_url = BALANCE_API_URL
         self.usage_api_url = USAGE_API_URL
         os.environ["OPENAI_API_BASE"] = f"https://{API_HOST}"
