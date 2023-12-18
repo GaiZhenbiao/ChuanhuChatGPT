@@ -28,6 +28,9 @@ var sliders = null;
 var updateChuanhuBtn = null;
 var statusDisplay = null;
 
+var uploadIndexFileElement = null
+var uploadedFilesCountElement = null
+
 var historySelector = null;
 var chuanhuPopup = null;
 var settingBox = null;
@@ -91,6 +94,8 @@ function initialize() {
     chuanhuHeader = gradioApp().querySelector('#chuanhu-header');
     menu = gradioApp().querySelector('#menu-area');
     toolbox = gradioApp().querySelector('#toolbox-area');
+    uploadIndexFileElement = document.getElementById('upload-index-file');
+    uploadedFilesCountElement = document.getElementById('uploaded-files-count');
     // trainBody = gradioApp().querySelector('#train-body');
 
     // if (loginUserForm) {
@@ -121,6 +126,7 @@ function initialize() {
     setChatbotScroll();
     setTimeout(showOrHideUserInfo(), 2000);
 
+    add_func_event();
     // setHistroyPanel();
     // trainBody.classList.add('hide-body');
 

@@ -372,3 +372,15 @@ input:checked + .apSlider::before {
 .dropdown-menu-item:hover {
     background-color: var(--chatbot-input-more-background-mobilewidth-hover);
 }
+
+#upload-index-file {
+    width: 200px;
+    display: none;
+    position: fixed;
+    bottom: 110px;
+    opacity: 0.90;
+    backdrop-filter: blur(24px);
+}
+.chatbot-full-width #upload-index-file {
+    left: 250px;
+}
