@@ -2,7 +2,9 @@ import os
 import logging
 import traceback
 
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 import gradio as gr
 import ujson as json
 import commentjson
@@ -84,7 +86,6 @@ def handle_dataset_selection(file_src):
     return preview, gr.update(interactive=True), estimate_cost(ds)
 
 def upload_to_openai(file_src):
-    openai.api_key = os.getenv("OPENAI_API_KEY")
     dspath = file_src.name
     msg = ""
     logging.info(f"Uploading dataset {dspath}...")
@@ -92,10 +93,8 @@ def upload_to_openai(file_src):
         jsonl = excel_to_jsonl(dspath)
         dspath = jsonl_save_to_disk(jsonl, dspath)
     try:
-        uploaded = openai.File.create(
-            file=open(dspath, "rb"),
-            purpose='fine-tune'
-            )
+        uploaded = client.files.create(file=open(dspath, "rb"),
+        purpose='fine-tune')
         return uploaded.id, f"上传成功"
     except Exception as e:
         traceback.print_exc()
@@ -114,9 +113,8 @@ def build_event_description(id, status, trained_tokens, name=i18n("暂时未知"
     """
 
 def start_training(file_id, suffix, epochs):
-    openai.api_key = os.getenv("OPENAI_API_KEY")
     try:
-        job = openai.FineTuningJob.create(training_file=file_id, model="gpt-3.5-turbo", suffix=suffix, hyperparameters={"n_epochs": epochs})
+        job = client.fine_tuning.jobs.create(training_file=file_id, model="gpt-3.5-turbo", suffix=suffix, hyperparameters={"n_epochs": epochs})
         return build_event_description(job.id, job.status, job.trained_tokens)
     except Exception as e:
         traceback.print_exc()
@@ -125,17 +123,15 @@ def start_training(file_id, suffix, epochs):
         return f"训练失败，原因：{ e }"
 
 def get_training_status():
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    active_jobs = [build_event_description(job["id"], job["status"], job["trained_tokens"], job["fine_tuned_model"]) for job in openai.FineTuningJob.list(limit=10)["data"] if job["status"] != "cancelled"]
+    active_jobs = [build_event_description(job.id, job.status, job.trained_tokens, job.fine_tuned_model) for job in client.fine_tuning.jobs.list().data if job.status != "cancelled"]
     return "\n\n".join(active_jobs), gr.update(interactive=True) if len(active_jobs) > 0 else gr.update(interactive=False)
 
 def handle_dataset_clear():
     return gr.update(value=None), gr.update(interactive=False)
 
 def add_to_models():
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    succeeded_jobs = [job for job in openai.FineTuningJob.list()["data"] if job["status"] == "succeeded"]
-    extra_models = [job["fine_tuned_model"] for job in succeeded_jobs]
+    succeeded_jobs = [job for job in client.fine_tuning.jobs.list().data if job.status == "succeeded"]
+    extra_models = [job.fine_tuned_model for job in succeeded_jobs]
     for i in extra_models:
         if i not in presets.MODELS:
             presets.MODELS.append(i)
@@ -154,8 +150,7 @@ def add_to_models():
     return gr.update(choices=presets.MODELS), f"成功添加了 {len(succeeded_jobs)} 个模型。"
 
 def cancel_all_jobs():
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    jobs = [job for job in openai.FineTuningJob.list()["data"] if job["status"] not in ["cancelled", "succeeded"]]
+    jobs = [job for job in client.fine_tuning.jobs.list().data if job.status not in ["cancelled", "succeeded"]]
     for job in jobs:
-        openai.FineTuningJob.cancel(job["id"])
+        client.fine_tuning.jobs.cancel(job.id)
     return f"成功取消了 {len(jobs)} 个训练任务。"
