@@ -477,7 +477,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     deleteRound_i18n=i18n("删除这轮问答"),
                     renameChat_i18n=i18n("重命名该对话"),
                     validFileName_i18n=i18n("请输入有效的文件名，不要包含以下特殊字符："),
-                    clearFileHistoryMsg_i18n=i18n("⚠️请先删除知识库中的历史文件，再尝试粘贴！"),
+                    clearFileHistoryMsg_i18n=i18n("⚠️请先删除知识库中的历史文件，再尝试上传！"),
+                    dropUploadMsg_i18n=i18n("释放文件以上传"),
                 ))
             with gr.Box(elem_id="fake-gradio-components", visible=False):
                 updateChuanhuBtn = gr.Button(

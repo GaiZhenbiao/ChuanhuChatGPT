@@ -1,5 +1,5 @@
 
-// 参考:
+// paste和upload部分参考:
 // https://github.com/binary-husky/gpt_academic/tree/master/themes/common.js
 // @Kilig947
 
@@ -22,17 +22,57 @@ function setPasteUploader() {
                 }
                 if (paste_files.length > 0) {
                     // 按照文件列表执行批量上传逻辑
-                    await paste_upload_files(paste_files);
-                    paste_files = []
-
+                    await upload_files(paste_files);
+                    paste_files = [];
                 }
             }
         });
     }
 }
 
+var hintArea;
+function setDragUploader() {
+    input = chatbotArea;
+    if (input) {
+        const dragEvents = ["dragover", "dragenter"];
+        const leaveEvents = ["dragleave", "dragend", "drop"];
 
-async function paste_upload_files(files) {
+        const onDrag = function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!chatbotArea.classList.contains("with-file")) {
+                chatbotArea.classList.add("dragging");
+                draggingHint();
+            } else {
+                statusDisplayMessage(clearFileHistoryMsg_i18n, 2000);
+            }
+        };
+
+        const onLeave = function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            chatbotArea.classList.remove("dragging");
+            if (hintArea) {
+                hintArea.remove();
+            }
+        };
+
+        dragEvents.forEach(event => {
+            input.addEventListener(event, onDrag);
+        });
+
+        leaveEvents.forEach(event => {
+            input.addEventListener(event, onLeave);
+        });
+
+        input.addEventListener("drop", async function (e) {
+            const files = e.dataTransfer.files;
+            await upload_files(files);
+        });
+    }
+}
+
+async function upload_files(files) {
     const uploadInputElement = gradioApp().querySelector("#upload-index-file > .center.flex input[type=file]");
     let totalSizeMb = 0
     if (files && files.length > 0) {
@@ -54,10 +94,21 @@ async function paste_upload_files(files) {
             Object.defineProperty(event, "currentTarget", {value: uploadInputElement, enumerable: true});
             Object.defineProperty(uploadInputElement, "files", {value: files, enumerable: true});
             uploadInputElement.dispatchEvent(event);
+            // statusDisplayMessage("");
         } else {
-            statusDisplayMessage(clearFileHistoryMsg_i18n);
+            statusDisplayMessage(clearFileHistoryMsg_i18n, 3000);
             return;
         }
     }
 }
 
+function draggingHint() {
+    hintArea = chatbotArea.querySelector(".dragging-hint");
+    if (hintArea) {
+        return;
+    }
+    hintArea = document.createElement("div");
+    hintArea.classList.add("dragging-hint");
+    hintArea.innerHTML = `<div class="dragging-hint-text"><p>${dropUploadMsg_i18n}</p></div>`;
+    chatbotArea.appendChild(hintArea);
+}
