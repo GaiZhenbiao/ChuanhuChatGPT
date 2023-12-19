@@ -39,8 +39,8 @@
 
 ## 目录
 
-| [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) |
-| --- | --- | --- | --- | --- |
+| [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) | [加入Telegram群组](https://t.me/tkdifferent) |
+| --- | --- | --- | --- | --- | --- |
 
 ## ✨ 5.0 重磅更新！
 
@@ -75,6 +75,7 @@
 | [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输
 | [Midjourney](https://www.midjourney.com/) | 不支持流式传输
 | [Claude](https://www.anthropic.com/) |
+| DALL·E 3 |
 
 ## 使用技巧
 
