@@ -204,10 +204,9 @@ class OpenAIVisionClient(BaseLLMModel):
             "stream": stream,
             "presence_penalty": self.presence_penalty,
             "frequency_penalty": self.frequency_penalty,
+            "max_tokens": 4096
         }
 
-        if self.max_generation_token is not None:
-            payload["max_tokens"] = self.max_generation_token
         if self.stop_sequence is not None:
             payload["stop"] = self.stop_sequence
         if self.logit_bias is not None:
