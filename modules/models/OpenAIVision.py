@@ -277,6 +277,8 @@ class OpenAIVisionClient(BaseLLMModel):
                     if chunk_length > 6 and "delta" in chunk["choices"][0]:
                         if "finish_details" in chunk["choices"][0]:
                             finish_reason = chunk["choices"][0]["finish_details"]
+                        elif "finish_reason" in chunk["choices"][0]:
+                            finish_reason = chunk["choices"][0]["finish_reason"]
                         else:
                             finish_reason = chunk["finish_details"]
                         if finish_reason == "stop":
