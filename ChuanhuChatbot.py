@@ -249,7 +249,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                                 container=False,
                                             )
                         gr.Markdown("---", elem_classes="hr-line")
-                        with gr.Accordion(label=i18n("知识库"), open=True):
+                        with gr.Accordion(label=i18n("知识库"), open=True, elem_id="gr-kb-accordion"):
                             use_websearch_checkbox = gr.Checkbox(label=i18n(
                                 "使用在线搜索"), value=False, elem_classes="switch-checkbox", elem_id="gr-websearch-cb", visible=False)
                             index_files = gr.Files(label=i18n(

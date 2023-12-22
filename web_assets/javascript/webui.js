@@ -258,6 +258,32 @@ function checkChatMoreMask() {
     }
 }
 
+function showKnowledgeBase(){
+    if (!toolboxOpening) {
+        toolboxClick();
+    }
+    switchToolBoxTab(0);
+    let knoledgeBaseAccordion = gradioApp().querySelector('#gr-kb-accordion');
+    let knoledgeBase = knoledgeBaseAccordion.querySelector('#upload-index-file');
+    if (knoledgeBase.parentElement.parentElement.style.display == 'none') {
+        knoledgeBaseAccordion.querySelector('.label-wrap')?.click();
+    }
+    // 将 knoledgeBase 滚动到可见区域
+    setTimeout(() => {knoledgeBaseAccordion.scrollIntoView({ behavior: "smooth"}); }, 100);
+    letThisSparkle(knoledgeBase, 5000);
+}
+
+function letThisSparkle(element, sparkleTime = 3000) {
+    element.classList.add('chuanhu-sparkle');
+    setTimeout(() => {element.classList.remove('chuanhu-sparkle');}, sparkleTime);
+}
+
+function switchToolBoxTab(tabIndex) {
+    let tabButtons = gradioApp().querySelectorAll('#chuanhu-toolbox-tabs .tab-nav > button');
+    let tab = tabButtons[tabIndex];
+    tab.click();
+}
+
 /*
 function setHistroyPanel() {
     const historySelectorInput = gradioApp().querySelector('#history-select-dropdown input');
