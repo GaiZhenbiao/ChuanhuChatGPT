@@ -1241,10 +1241,10 @@ def setup_wizard():
                     "default_model",
                     "默认模型",
                     type=ConfigType.String,
-                    default="gpt-3.5-turbo",
+                    default="GPT3.5 Turbo",
                 )
             ],
-            "是否更改默认模型？如果设置，软件启动时会自动加载该模型，无需在 UI 中手动选择。目前的默认模型为 gpt-3.5-turbo。可选的在线模型有："
+            "是否更改默认模型？如果设置，软件启动时会自动加载该模型，无需在 UI 中手动选择。目前的默认模型为 GPT3.5 Turbo。可选的在线模型有："
             + "\n"
             + "\n".join(ONLINE_MODELS)
             + "\n"
