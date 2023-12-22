@@ -139,4 +139,6 @@
     "🗑️ 删除最旧对话": "🗑️ Ta bort äldsta dialogen",
     "🧹 新的对话": "🧹 Ny Dialog",
     "正在获取IP地址信息，请稍候...": "Hämtar IP-adressinformation, vänta...",
+    "⚠️请先删除知识库中的历史文件，再尝试上传！": "⚠️ Ta bort historikfilen i kunskapsbanken innan du försöker ladda upp!",
+    "释放文件以上传": "Släpp filen för att ladda upp"
 }

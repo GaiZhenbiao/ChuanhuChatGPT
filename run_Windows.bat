@@ -4,11 +4,12 @@ echo Opening ChuanhuChatGPT...
 if not exist "%~dp0\ChuanhuChat\Scripts" (
     echo Creating venv...
     python -m venv ChuanhuChat
-    
+
     cd /d "%~dp0\ChuanhuChat\Scripts"
     call activate.bat
-    
+
     cd /d "%~dp0"
+    python -m pip install --upgrade pip
     pip install -r requirements.txt
 )
 

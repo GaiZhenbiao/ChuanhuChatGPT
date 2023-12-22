@@ -139,6 +139,8 @@
     "🗑️ 删除最旧对话": "🗑️ Delete oldest dialog",
     "🧹 新的对话": "🧹 New Dialogue",
     "正在获取IP地址信息，请稍候...": "Getting IP address information, please wait...",
+    "⚠️请先删除知识库中的历史文件，再尝试上传！": "⚠️ Please clear the files in the knowledge base before trying to upload new files!",
+    "释放文件以上传": "Drop files to upload",
     "正在进行首次设置，请按照提示进行配置，配置将会被保存在": "First-time setup is in progress, please follow the prompts to configure, and the configuration will be saved in",
     "中。": ".",
     "在": "",
@@ -222,5 +224,5 @@
     "设置完成。现在请重启本程序。": "Setup completed. Please restart this program now.",
     "你设置了 ": "You set ",
     " 为: ": " as: ",
-    "输入的不是数字，将使用默认值。": "The input is not a number, the default value will be used.",
+    "输入的不是数字，将使用默认值。": "The input is not a number, the default value will be used."
 }

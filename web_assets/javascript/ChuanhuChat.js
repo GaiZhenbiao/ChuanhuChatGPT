@@ -47,7 +47,7 @@ function addInit() {
     var needInit = {chatbotIndicator, uploaderIndicator};
 
     chatbotIndicator = gradioApp().querySelector('#chuanhu-chatbot > div.wrap');
-    uploaderIndicator = gradioApp().querySelector('#upload-index-file > div.wrap');
+    uploaderIndicator = gradioApp().querySelector('#upload-index-file > div[data-testid="block-label"]');
     chatListIndicator = gradioApp().querySelector('#history-select-dropdown > div.wrap');
 
     for (let elem in needInit) {
@@ -60,7 +60,8 @@ function addInit() {
     chatbotObserver.observe(chatbotIndicator, { attributes: true, childList: true, subtree: true });
     chatListObserver.observe(chatListIndicator, { attributes: true });
     setUploader();
-
+    setPasteUploader();
+    setDragUploader();
     return true;
 }
 

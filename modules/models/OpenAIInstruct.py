@@ -1,4 +1,6 @@
-import openai
+from openai import OpenAI
+
+client = OpenAI()
 from .base_model import BaseLLMModel
 from .. import shared
 from ..config import retrieve_proxy
@@ -16,12 +18,10 @@ class OpenAI_Instruct_Client(BaseLLMModel):
     def get_answer_at_once(self):
         prompt = self._get_instruct_style_input()
         with retrieve_proxy():
-            response = openai.Completion.create(
-                api_key=self.api_key,
-                api_base=shared.state.openai_api_base,
+            response = client.completions.create(
                 model=self.model_name,
                 prompt=prompt,
                 temperature=self.temperature,
                 top_p=self.top_p,
-                )
-        return response.choices[0].text.strip(), response.usage["total_tokens"]
+            )
+        return response.choices[0].text.strip(), response.usage.total_tokens

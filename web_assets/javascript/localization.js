@@ -14,6 +14,8 @@ var regenerate_i18n;
 var deleteRound_i18n;
 var renameChat_i18n;
 var validFileName_i18n;
+var clearFileHistoryMsg_i18n;
+var dropUploadMsg_i18n;
 
 function setLoclize() {
     forView_i18n = gradioApp().querySelector('#forView_i18n').innerText;
@@ -27,6 +29,8 @@ function setLoclize() {
     deleteRound_i18n = gradioApp().querySelector('#deleteRound_i18n').innerText;
     renameChat_i18n = gradioApp().querySelector('#renameChat_i18n').innerText;
     validFileName_i18n = gradioApp().querySelector('#validFileName_i18n').innerText;
+    clearFileHistoryMsg_i18n = gradioApp().querySelector('#clearFileHistoryMsg_i18n').innerText;
+    dropUploadMsg_i18n = gradioApp().querySelector('#dropUploadMsg_i18n').innerText;
 }
 
 function i18n(msg) {
