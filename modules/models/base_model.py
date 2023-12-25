@@ -221,9 +221,9 @@ class BaseLLMModel:
     ) -> None:
         self.history = []
         self.all_token_counts = []
-        if model_name in MODEL_METADATA:
+        try:
             self.model_name = MODEL_METADATA[model_name]["model_name"]
-        else:
+        except:
             self.model_name = model_name
         self.model_type = ModelType.get_type(model_name)
         try:
