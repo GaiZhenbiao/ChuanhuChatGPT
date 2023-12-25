@@ -21,7 +21,7 @@ class Qwen_Client(BaseLLMModel):
             except KeyError:
                 model_source = model_name
         self.tokenizer = AutoTokenizer.from_pretrained(model_source, trust_remote_code=True, resume_download=True)
-        self.model = AutoModelForCausalLM.from_pretrained(model_source, device_map="auto", trust_remote_code=True, resume_download=True).eval()
+        self.model = AutoModelForCausalLM.from_pretrained(model_source, device_map="cuda", trust_remote_code=True, resume_download=True).eval()
 
     def generation_config(self):
         return GenerationConfig.from_dict({
