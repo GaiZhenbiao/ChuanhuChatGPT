@@ -803,5 +803,5 @@ if __name__ == "__main__":
         share=share,
         auth=auth_from_conf if authflag else None,
         favicon_path="./web_assets/favicon.ico",
-        inbrowser=not dockerflag,  # 禁止在docker下开启inbrowser
+        inbrowser=autobrowser and not dockerflag,  # 禁止在docker下开启inbrowser
     )

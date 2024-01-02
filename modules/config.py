@@ -24,6 +24,7 @@ __all__ = [
     "server_name",
     "server_port",
     "share",
+    "autobrowser",
     "check_update",
     "latex_delimiters_set",
     "hide_history_when_not_logged_in",
@@ -299,6 +300,7 @@ except ValueError:
     logging.error("你填写的默认模型" + default_model + "不存在！请从下面的列表中挑一个填写：" + str(presets.MODELS))
 
 share = config.get("share", False)
+autobrowser = config.get("autobrowser", True)
 
 # avatar
 bot_avatar = config.get("bot_avatar", "default")
