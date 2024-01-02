@@ -23,7 +23,7 @@ from langchain.callbacks.base import BaseCallbackHandler
 from langchain.input import print_text
 from langchain.schema import AgentAction, AgentFinish, LLMResult
 
-from pydantic import BaseModel, Field
+from pydantic.v1 import BaseModel, Field
 
 import requests
 from bs4 import BeautifulSoup
