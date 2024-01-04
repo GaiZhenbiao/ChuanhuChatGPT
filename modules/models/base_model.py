@@ -465,10 +465,19 @@ class BaseLLMModel:
                 )
         elif use_websearch:
             search_results = []
-            with DDGS() as ddgs:
-                ddgs_gen = ddgs.text(fake_inputs, backend="lite")
-                for r in islice(ddgs_gen, 10):
-                    search_results.append(r)
+            with retrieve_proxy() as proxy:
+                if proxy[0] or proxy[1]:
+                    proxies = {}
+                    if proxy[0]:
+                        proxies["http"] = proxy[0]
+                    if proxy[1]:
+                        proxies["https"] = proxy[1]
+                else:
+                    proxies = None
+                with DDGS(proxies=proxies) as ddgs:
+                    ddgs_gen = ddgs.text(fake_inputs, backend="lite")
+                    for r in islice(ddgs_gen, 10):
+                        search_results.append(r)
             reference_results = []
             for idx, result in enumerate(search_results):
                 logging.debug(f"搜索结果{idx + 1}：{result}")
