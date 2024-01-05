@@ -205,6 +205,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 type="password",
                                 visible=not HIDE_MY_KEY,
                                 label="API-Key",
+                                elem_id="api-key"
                             )
                             if multi_api_key:
                                 usageTxt = gr.Markdown(i18n(
