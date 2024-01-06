@@ -109,6 +109,7 @@ function initialize() {
     setPopupBoxPosition();
     setSlider();
     setCheckboxes();
+    setAutocomplete();
     checkModel();
 
     settingBox.classList.add('hideBox');
@@ -334,6 +335,12 @@ function setChatbotHeight() {
 function setChatbotScroll() {
     var scrollHeight = chatbotWrap.scrollHeight;
     chatbotWrap.scrollTo(0,scrollHeight)
+}
+
+function setAutocomplete() {
+    // 避免API Key被当成密码导致的模型下拉框被当成用户名而引发的浏览器自动填充行为
+    const apiKeyInput = gradioApp().querySelector("#api-key input");
+    apiKeyInput.setAttribute("autocomplete", "new-password");
 }
 
 function clearChatbot(a, b) {
