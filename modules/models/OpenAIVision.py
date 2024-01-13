@@ -4,6 +4,7 @@ import json
 import logging
 import traceback
 import base64
+from math import ceil
 
 import colorama
 import requests
@@ -38,6 +39,7 @@ class OpenAIVisionClient(BaseLLMModel):
             system_prompt=system_prompt,
             user=user_name
         )
+        self.image_token = 0
         self.api_key = api_key
         self.need_api_key = True
         self.max_generation_token = 4096
@@ -82,9 +84,11 @@ class OpenAIVisionClient(BaseLLMModel):
 
             if scale_ratio < 1:
                 # 按压缩比例调整图片大小
-                new_width = int(width * scale_ratio)
-                new_height = int(height * scale_ratio)
-                img = img.resize((new_width, new_height), Image.LANCZOS)
+                width = int(width * scale_ratio)
+                height = int(height * scale_ratio)
+                img = img.resize((width, height), Image.LANCZOS)
+            # 使用新的宽度和高度计算图片的token数量
+            self.image_token = self.count_image_tokens(width, height)
 
             # 将图片转换为jpg格式的二进制数据
             buffer = BytesIO()
@@ -131,6 +135,13 @@ class OpenAIVisionClient(BaseLLMModel):
             )
             return input_token_count + system_prompt_token_count
         return input_token_count
+
+    def count_image_tokens(self, width: int, height: int):
+        h = ceil(height / 512)
+        w = ceil(width / 512)
+        n = w * h
+        total = 85 + 170 * n
+        return total
 
     def billing_info(self):
         try:
@@ -185,6 +196,10 @@ class OpenAIVisionClient(BaseLLMModel):
                 *[{"type": "image_url", "image_url": "data:image/jpeg;base64,"+image["base64"]} for image in self.images]
             ]
             self.images = []
+            # 添加图片token到总计数中
+            self.all_token_counts[-1] += self.image_token
+            self.image_token = 0
+
         logging.debug(colorama.Fore.YELLOW +
                       f"{history}" + colorama.Fore.RESET)
         headers = {
