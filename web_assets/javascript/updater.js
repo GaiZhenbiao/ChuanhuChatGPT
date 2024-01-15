@@ -25,7 +25,7 @@ function setUpdater() {
 var statusObserver = new MutationObserver(function (mutationsList) {
     for (const mutation of mutationsList) {
         if (mutation.type === 'attributes' || mutation.type === 'childList') {
-            if (statusDisplay.innerHTML.includes('<span id="update-status"')) {
+            if (statusDisplay.innerHTML.includes('id="update-status"')) {
                 if (getUpdateStatus() === "success") {
                     updatingInfoElement.innerText = i18n(updateSuccess_i18n);
                     noUpdateHtml();

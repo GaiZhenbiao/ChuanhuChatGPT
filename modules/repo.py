@@ -261,6 +261,7 @@ def background_update():
                     f"{git} merge --no-edit {updater_branch} -q",
                     desc=f"[Updater] Trying to apply latest update on version {latest_release_tag}...",
                 )
+                run(f"{git} pull {track_repo} --tags", live=False)
             except Exception:
                 logging.error(f"Update failed in merging")
                 try:
