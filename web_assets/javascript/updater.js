@@ -27,8 +27,8 @@ var statusObserver = new MutationObserver(function (mutationsList) {
         if (mutation.type === 'attributes' || mutation.type === 'childList') {
             if (statusDisplay.innerHTML.includes('id="update-status"')) {
                 if (getUpdateStatus() === "success") {
-                    updatingInfoElement.innerText = i18n(updateSuccess_i18n);
-                    noUpdateHtml();
+                    // noUpdateHtml();
+                    updateSuccessHtml();
                     localStorage.setItem('isLatestVersion', 'true');
                     isLatestVersion = true;
                     gradioApp().classList.remove('is-outdated');
@@ -186,6 +186,14 @@ function manualCheckUpdate() {
     updateLatestVersion();
     currentTime = new Date().getTime();
     localStorage.setItem('lastCheckTime', currentTime);
+}
+
+function updateSuccessHtml() {
+    updatingInfoElement.innerText = i18n(updateSuccess_i18n);
+    const gotoUpdateBtn = document.getElementById('goto-update-btn');
+    const successUpdateBtn = document.getElementById('success-update-btn');
+    gotoUpdateBtn.classList.add('hideK');
+    successUpdateBtn.classList.remove('hideK');
 }
 function noUpdate(message="") {
     localStorage.setItem('isLatestVersion', 'true');

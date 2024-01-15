@@ -26,6 +26,7 @@ var sendBtn = null;
 var cancelBtn = null;
 var sliders = null;
 var updateChuanhuBtn = null;
+var rebootChuanhuBtn = null;
 var statusDisplay = null;
 
 var historySelector = null;
@@ -82,6 +83,7 @@ function initialize() {
     cancelBtn = gradioApp().getElementById("cancel-btn");
     sliders = gradioApp().querySelectorAll('input[type="range"]');
     updateChuanhuBtn = gradioApp().getElementById("update-chuanhu-btn");
+    rebootChuanhuBtn = gradioApp().getElementById("reboot-chuanhu-btn");
     statusDisplay = gradioApp().querySelector('#status-display');
 
     historySelector = gradioApp().querySelector('#history-select-dropdown');

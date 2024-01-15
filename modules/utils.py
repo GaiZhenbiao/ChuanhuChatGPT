@@ -1405,3 +1405,8 @@ def setup_wizard():
         wizard.save()
         print(colorama.Back.GREEN + i18n("设置完成。现在请重启本程序。") + colorama.Style.RESET_ALL)
         exit()
+
+def reboot_chuanhu():
+    import sys
+    print(colorama.Back.GREEN + i18n("正在尝试重启...") + colorama.Style.RESET_ALL)
+    os.execl(sys.executable, sys.executable, *sys.argv)

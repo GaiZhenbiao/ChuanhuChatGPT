@@ -55,6 +55,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             update_btn=i18n("更新"),
             seenew_btn=i18n("详情"),
             ok_btn=i18n("好"),
+            close_btn=i18n("关闭"),
+            reboot_btn=i18n("立即重启"),
         ), visible=check_update)
 
     with gr.Row(equal_height=True, elem_id="chuanhu-body"):
@@ -484,6 +486,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             with gr.Box(elem_id="fake-gradio-components", visible=False):
                 updateChuanhuBtn = gr.Button(
                     visible=False, elem_classes="invisible-btn", elem_id="update-chuanhu-btn")
+                rebootChuanhuBtn = gr.Button(
+                    visible=False, elem_classes="invisible-btn", elem_id="reboot-chuanhu-btn")
                 changeSingleSessionBtn = gr.Button(
                     visible=False, elem_classes="invisible-btn", elem_id="change-single-session-btn")
                 changeOnlineSearchBtn = gr.Button(
@@ -771,6 +775,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         [],
         [status_display],
         show_progress=True,
+    )
+    rebootChuanhuBtn.click(
+        reboot_chuanhu,
+        [],
+        [],
+        show_progress=True,
+        _js='rebootingChuanhu'
     )
     changeSingleSessionBtn.click(
         fn=lambda value: gr.Checkbox.update(value=value),

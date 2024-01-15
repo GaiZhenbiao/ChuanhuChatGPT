@@ -115,3 +115,7 @@ function bgSelectHistory(a,b){
     let file = historySelectorInput.value;
     return [a,file]
 }
+
+function bgRebootChuanhu() {
+    rebootChuanhuBtn.click()
+}
