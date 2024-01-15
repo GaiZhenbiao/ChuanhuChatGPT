@@ -168,7 +168,7 @@ api_host = os.environ.get(
     "OPENAI_API_BASE", config.get("openai_api_base", None))
 if api_host is not None:
     shared.state.set_api_host(api_host)
-    os.environ["OPENAI_API_BASE"] = f"{api_host}/v1"
+    # os.environ["OPENAI_API_BASE"] = f"{api_host}/v1"
     logging.info(f"OpenAI API Base set to: {os.environ['OPENAI_API_BASE']}")
 
 default_chuanhu_assistant_model = config.get(
