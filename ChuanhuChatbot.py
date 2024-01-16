@@ -394,7 +394,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             "单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb", visible=False)
                         # checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
                         logout_btn = gr.Button(
-                            i18n("退出用户"), variant="primary", interactive=authflag)
+                            i18n("退出用户"), variant="primary", visible=authflag)
 
                     with gr.Tab(i18n("网络")):
                         gr.Markdown(
