@@ -359,7 +359,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         obj="box"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-setting-tabs"):
                     # with gr.Tab(label=i18n("模型")):
-                        
+
                         # model_select_dropdown = gr.Dropdown(
                         #     label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True
                         # )
@@ -659,7 +659,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 top_p_slider, systemPromptTxt, user_name, current_model], [current_model, status_display, chatbot], show_progress=True)
 
     # Template
-    systemPromptTxt.input(set_system_prompt, [
+    systemPromptTxt.change(set_system_prompt, [
                            current_model, systemPromptTxt], None)
     templateRefreshBtn.click(get_template_dropdown, None, [
                              templateFileSelectDropdown])
