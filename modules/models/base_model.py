@@ -791,7 +791,9 @@ class BaseLLMModel:
         self.interrupted = False
         self.history_file_path = new_auto_history_filename(self.user_name)
         history_name = self.history_file_path[:-5]
-        choices = [history_name] + get_history_names(self.user_name)
+        choices = get_history_names(self.user_name)
+        if history_name not in choices:
+            choices.insert(0, history_name)
         system_prompt = self.system_prompt if remain_system_prompt else ""
 
         self.single_turn = self.default_single_turn
@@ -893,9 +895,8 @@ class BaseLLMModel:
             return gr.update()
 
     def auto_save(self, chatbot=None):
-        if chatbot is None:
-            chatbot = self.chatbot
-        save_file(self.history_file_path, self, chatbot)
+        if chatbot is not None:
+            save_file(self.history_file_path, self, chatbot)
 
     def export_markdown(self, filename, chatbot):
         if filename == "":
@@ -1036,11 +1037,7 @@ class BaseLLMModel:
             )
 
     def auto_load(self):
-        filepath = get_history_filepath(self.user_name)
-        if not filepath:
-            self.history_file_path = new_auto_history_filename(self.user_name)
-        else:
-            self.history_file_path = filepath
+        self.history_file_path = new_auto_history_filename(self.user_name)
         return self.load_chat_history()
 
     def like(self):
