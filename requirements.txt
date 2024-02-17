@@ -1,6 +1,7 @@
 httpx==0.25.1
 gradio==3.43.2
 gradio_client==0.5.0
+gradio[oauth]
 pypinyin
 tiktoken
 socksio
