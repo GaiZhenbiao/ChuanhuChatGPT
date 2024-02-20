@@ -154,6 +154,7 @@ class ModelType(Enum):
     OpenAIVision = 16
     ERNIE = 17
     DALLE3 = 18
+    GoogleGemini = 19
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -184,6 +185,8 @@ class ModelType(Enum):
             model_type = ModelType.ChuanhuAgent
         elif "palm" in model_name_lower:
             model_type = ModelType.GooglePaLM
+        elif "gemini" in model_name_lower:
+            model_type = ModelType.GoogleGemini
         elif "midjourney" in model_name_lower:
             model_type = ModelType.Midjourney
         elif "azure" in model_name_lower or "api" in model_name_lower:

@@ -105,8 +105,13 @@ def get_model(
             msg = i18n("启用的工具：") + ", ".join([i.name for i in model.tools])
         elif model_type == ModelType.GooglePaLM:
             from .GooglePaLM import Google_PaLM_Client
-            access_key = os.environ.get("GOOGLE_PALM_API_KEY", access_key)
+            access_key = os.environ.get("GOOGLE_GENAI_API_KEY", access_key)
             model = Google_PaLM_Client(
+                model_name, access_key, user_name=user_name)
+        elif model_type == ModelType.GoogleGemini:
+            from .GoogleGemini import GoogleGeminiClient
+            access_key = os.environ.get("GOOGLE_GENAI_API_KEY", access_key)
+            model = GoogleGeminiClient(
                 model_name, access_key, user_name=user_name)
         elif model_type == ModelType.LangchainChat:
             from .Azure import Azure_OpenAI_Client

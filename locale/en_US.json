@@ -170,7 +170,7 @@
     "本地编制索引": "Local indexing",
     "是否在本地编制知识库索引？如果是，可以在使用本地模型时离线使用知识库，否则使用OpenAI服务来编制索引（需要OpenAI API Key）。请确保你的电脑有至少16GB内存。本地索引模型需要从互联网下载。": "Do you want to index the knowledge base locally? If so, you can use the knowledge base offline when using the local model, otherwise use the OpenAI service to index (requires OpenAI API Key). Make sure your computer has at least 16GB of memory. The local index model needs to be downloaded from the Internet.",
     "现在开始设置其他在线模型的API Key": "Start setting the API Key for other online models",
-    "是否设置默认 Google Palm API 密钥？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，可以在软件启动后手动输入 API Key。": "Set the default Google Palm API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, you can manually enter the API Key after the software starts.",
+    "是否设置默认 Google AI Studio API 密钥？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，可以在软件启动后手动输入 API Key。": "Set the default Google Palm API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, you can manually enter the API Key after the software starts.",
     "是否设置默认 XMChat API 密钥？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，可以在软件启动后手动输入 API Key。": "Set the default XMChat API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, you can manually enter the API Key after the software starts.",
     "是否设置默认 MiniMax API 密钥和 Group ID？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 MiniMax 模型。": "Set the default MiniMax API Key and Group ID? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the MiniMax model will not be available.",
     "你的": "Your ",
@@ -227,5 +227,6 @@
     "设置完成。现在请重启本程序。": "Setup completed. Please restart this program now.",
     "你设置了 ": "You set ",
     " 为: ": " as: ",
-    "输入的不是数字，将使用默认值。": "The input is not a number, the default value will be used."
+    "输入的不是数字，将使用默认值。": "The input is not a number, the default value will be used.",
+    "由于下面的原因，Google 拒绝返回 Gemini 的回答：\n\n": "For the following reasons, Google refuses to return Gemini's response:\n\n",
 }

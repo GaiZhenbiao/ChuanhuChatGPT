@@ -23,6 +23,7 @@ faiss-cpu==1.7.4
 duckduckgo-search>=4.1.1
 arxiv
 wikipedia
+google-cloud-aiplatform
 google.generativeai
 unstructured
 google-api-python-client
