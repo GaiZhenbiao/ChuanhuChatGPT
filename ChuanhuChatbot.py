@@ -129,7 +129,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         show_label=False, container=False, elem_id="model-select-dropdown"
                     )
                     lora_select_dropdown = gr.Dropdown(
-                        label=i18n("选择LoRA模型"), choices=[], multiselect=False, interactive=True, visible=False,
+                        label=i18n("选择模型"), choices=[], multiselect=False, interactive=True, visible=False,
                         container=False,
                     )
                     gr.HTML(get_html("chatbot_header_btn.html").format(
