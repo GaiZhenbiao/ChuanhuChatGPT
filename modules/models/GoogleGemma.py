@@ -14,6 +14,7 @@ class GoogleGemmaClient(BaseLLMModel):
 
         global GEMMA_TOKENIZER, GEMMA_MODEL
         # self.deinitialize()
+        self.default_max_generation_token = self.token_upper_limit
         self.max_generation_token = self.token_upper_limit
         if GEMMA_TOKENIZER is None or GEMMA_MODEL is None:
             model_path = None
