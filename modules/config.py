@@ -109,9 +109,9 @@ if "extra_models" in  config:
 HIDE_MY_KEY = config.get("hide_my_key", False)
 
 google_genai_api_key = os.environ.get(
-    "GOOGLE_PALM_API_KEY", None)
+    "GOOGLE_PALM_API_KEY", "")
 google_genai_api_key = os.environ.get(
-    "GOOGLE_GENAI_API_KEY", None)
+    "GOOGLE_GENAI_API_KEY", "")
 google_genai_api_key = config.get("google_palm_api_key", google_genai_api_key)
 google_genai_api_key = config.get("google_genai_api_key", google_genai_api_key)
 os.environ["GOOGLE_GENAI_API_KEY"] = google_genai_api_key
