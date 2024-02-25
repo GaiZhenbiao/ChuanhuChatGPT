@@ -116,6 +116,10 @@ google_genai_api_key = config.get("google_palm_api_key", google_genai_api_key)
 google_genai_api_key = config.get("google_genai_api_key", google_genai_api_key)
 os.environ["GOOGLE_GENAI_API_KEY"] = google_genai_api_key
 
+huggingface_auth_token = os.environ.get("HF_AUTH_TOKEN", "")
+huggingface_auth_token = config.get("hf_auth_token", huggingface_auth_token)
+os.environ["HF_AUTH_TOKEN"] = huggingface_auth_token
+
 xmchat_api_key = config.get("xmchat_api_key", "")
 os.environ["XMCHAT_API_KEY"] = xmchat_api_key
 

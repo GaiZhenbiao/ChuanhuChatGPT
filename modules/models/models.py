@@ -138,8 +138,14 @@ def get_model(
             from .DALLE3 import OpenAI_DALLE3_Client
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAI_DALLE3_Client(model_name, api_key=access_key, user_name=user_name)
+        elif model_type == ModelType.GoogleGemma:
+            from .GoogleGemma import GoogleGemmaClient
+            model = GoogleGemmaClient(
+                model_name, access_key, user_name=user_name)
         elif model_type == ModelType.Unknown:
-            raise ValueError(f"未知模型: {model_name}")
+            raise ValueError(f"Unknown model: {model_name}")
+        else:
+            raise ValueError(f"Unimplemented model type: {model_type}")
         logging.info(msg)
     except Exception as e:
         import traceback

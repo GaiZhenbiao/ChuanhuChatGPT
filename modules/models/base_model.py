@@ -1,43 +1,41 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
 
-import logging
+import asyncio
+import gc
 import json
-import commentjson as cjson
+import logging
 import os
-import sys
-import requests
-import urllib3
-import traceback
 import pathlib
 import shutil
-
-from tqdm import tqdm
-import colorama
-from duckduckgo_search import DDGS
-from itertools import islice
-import asyncio
-import aiohttp
-from enum import Enum
-
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.callbacks.base import BaseCallbackManager
-
-from typing import Any, Dict, List, Optional, Union
-
-from langchain.callbacks.base import BaseCallbackHandler
-from langchain.input import print_text
-from langchain.schema import AgentAction, AgentFinish, LLMResult
-from threading import Thread, Condition
+import sys
+import traceback
 from collections import deque
-from langchain.chat_models.base import BaseChatModel
-from langchain.schema import HumanMessage, AIMessage, SystemMessage, BaseMessage
+from enum import Enum
+from itertools import islice
+from threading import Condition, Thread
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
-from ..presets import *
-from ..index_func import *
-from ..utils import *
+import aiohttp
+import colorama
+import commentjson as cjson
+import requests
+import torch
+import urllib3
+from duckduckgo_search import DDGS
+from huggingface_hub import hf_hub_download
+from langchain.callbacks.base import BaseCallbackHandler, BaseCallbackManager
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.chat_models.base import BaseChatModel
+from langchain.input import print_text
+from langchain.schema import (AgentAction, AgentFinish, AIMessage, BaseMessage,
+                              HumanMessage, LLMResult, SystemMessage)
+from tqdm import tqdm
+
 from .. import shared
 from ..config import retrieve_proxy
+from ..index_func import *
+from ..presets import *
+from ..utils import *
 
 
 class CallbackToIterator:
@@ -155,6 +153,7 @@ class ModelType(Enum):
     ERNIE = 17
     DALLE3 = 18
     GoogleGemini = 19
+    GoogleGemma = 20
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -201,9 +200,39 @@ class ModelType(Enum):
             model_type = ModelType.ERNIE
         elif "dall" in model_name_lower:
             model_type = ModelType.DALLE3
+        elif "gemma" in model_name_lower:
+            model_type = ModelType.GoogleGemma
         else:
             model_type = ModelType.LLaMA
         return model_type
+
+
+def download(repo_id, filename, retry=10):
+    if os.path.exists("./models/downloaded_models.json"):
+        with open("./models/downloaded_models.json", "r") as f:
+            downloaded_models = json.load(f)
+        if repo_id in downloaded_models:
+            return downloaded_models[repo_id]["path"]
+    else:
+        downloaded_models = {}
+    while retry > 0:
+        try:
+            model_path = hf_hub_download(
+                repo_id=repo_id,
+                filename=filename,
+                cache_dir="models",
+                resume_download=True,
+            )
+            downloaded_models[repo_id] = {"path": model_path}
+            with open("./models/downloaded_models.json", "w") as f:
+                json.dump(downloaded_models, f)
+            break
+        except:
+            print("Error downloading model, retrying...")
+            retry -= 1
+    if retry == 0:
+        raise Exception("Error downloading model, please try again later.")
+    return model_path
 
 
 class BaseLLMModel:
@@ -371,10 +400,10 @@ class BaseLLMModel:
             status = i18n("总结完成")
             logging.info(i18n("生成内容总结中……"))
             os.environ["OPENAI_API_KEY"] = self.api_key
-            from langchain.chains.summarize import load_summarize_chain
-            from langchain.prompts import PromptTemplate
-            from langchain.chat_models import ChatOpenAI
             from langchain.callbacks import StdOutCallbackHandler
+            from langchain.chains.summarize import load_summarize_chain
+            from langchain.chat_models import ChatOpenAI
+            from langchain.prompts import PromptTemplate
 
             prompt_template = (
                 "Write a concise summary of the following:\n\n{text}\n\nCONCISE SUMMARY IN "
@@ -1054,6 +1083,10 @@ class BaseLLMModel:
     def deinitialize(self):
         """deinitialize the model, implement if needed"""
         pass
+
+    def clear_cuda_cache(self):
+        gc.collect()
+        torch.cuda.empty_cache()
 
 
 class Base_Chat_Langchain_Client(BaseLLMModel):

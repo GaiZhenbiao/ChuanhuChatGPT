@@ -10,6 +10,8 @@ CHATGLM_MODEL = None
 CHATGLM_TOKENIZER = None
 LLAMA_MODEL = None
 LLAMA_INFERENCER = None
+GEMMA_MODEL = None
+GEMMA_TOKENIZER = None
 
 # ChatGPT 设置
 INITIAL_SYSTEM_PROMPT = "You are a helpful assistant."
@@ -67,6 +69,8 @@ ONLINE_MODELS = [
     "Gemini Pro",
     "Gemini Pro Vision",
     "GooglePaLM",
+    "Gemma 2B",
+    "Gemma 7B",
     "xmchat",
     "Azure OpenAI",
     "yuanai-1.0-base_10B",
@@ -178,6 +182,16 @@ MODEL_METADATA = {
     "Gemini Pro Vision": {
         "model_name": "gemini-pro-vision",
         "token_limit": 30720,
+    },
+    "Gemma 2B": {
+        "repo_id": "google/gemma-2b-it",
+        "model_name": "gemma-2b-it",
+        "token_limit": 8192,
+    },
+    "Gemma 7B": {
+        "repo_id": "google/gemma-7b-it",
+        "model_name": "gemma-7b-it",
+        "token_limit": 8192,
     }
 }
 
@@ -193,7 +207,12 @@ os.makedirs("lora", exist_ok=True)
 os.makedirs("history", exist_ok=True)
 for dir_name in os.listdir("models"):
     if os.path.isdir(os.path.join("models", dir_name)):
-        if dir_name not in MODELS:
+        display_name = None
+        for model_name, metadata in MODEL_METADATA.items():
+            if "model_name" in metadata and metadata["model_name"] == dir_name:
+                display_name = model_name
+                break
+        if display_name is None:
             MODELS.append(dir_name)
 
 TOKEN_OFFSET = 1000 # 模型的token上限减去这个值，得到软上限。到达软上限之后，自动尝试减少token占用。
