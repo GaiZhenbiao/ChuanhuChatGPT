@@ -154,6 +154,7 @@ class ModelType(Enum):
     DALLE3 = 18
     GoogleGemini = 19
     GoogleGemma = 20
+    Ollama = 21
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -168,6 +169,8 @@ class ModelType(Enum):
                 model_type = ModelType.OpenAI
         elif "chatglm" in model_name_lower:
             model_type = ModelType.ChatGLM
+        elif "ollama" in model_name_lower:
+            model_type = ModelType.Ollama
         elif "llama" in model_name_lower or "alpaca" in model_name_lower:
             model_type = ModelType.LLaMA
         elif "xmchat" in model_name_lower:
