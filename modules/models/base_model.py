@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import gc
 import json
 import logging
 import os
@@ -19,7 +18,6 @@ import aiohttp
 import colorama
 import commentjson as cjson
 import requests
-import torch
 import urllib3
 from duckduckgo_search import DDGS
 from huggingface_hub import hf_hub_download
@@ -1088,6 +1086,8 @@ class BaseLLMModel:
         pass
 
     def clear_cuda_cache(self):
+        import gc
+        import torch
         gc.collect()
         torch.cuda.empty_cache()
 
