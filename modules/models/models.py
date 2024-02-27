@@ -145,8 +145,14 @@ def get_model(
             model_list = model.get_model_list()
             lora_selector_visibility = True
             lora_choices = [i["name"] for i in model_list["models"]]
+        elif model_type == ModelType.GoogleGemma:
+            from .GoogleGemma import GoogleGemmaClient
+            model = GoogleGemmaClient(
+                model_name, access_key, user_name=user_name)
         elif model_type == ModelType.Unknown:
-            raise ValueError(f"未知模型: {model_name}")
+            raise ValueError(f"Unknown model: {model_name}")
+        else:
+            raise ValueError(f"Unimplemented model type: {model_type}")
         logging.info(msg)
     except Exception as e:
         import traceback
