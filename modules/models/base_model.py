@@ -390,8 +390,13 @@ class BaseLLMModel:
         """if the model accepts multi modal input, implement this function"""
         status = gr.Markdown.update()
         if files:
-            index = construct_index(self.api_key, file_src=files)
-            status = i18n("索引构建完成")
+            try:
+                construct_index(self.api_key, file_src=files)
+                status = i18n("索引构建完成")
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                status = i18n("索引构建失败！") + str(e)
         return gr.Files.update(), chatbot, status
 
     def summarize_index(self, files, chatbot, language):
