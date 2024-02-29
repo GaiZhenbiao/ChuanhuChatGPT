@@ -126,7 +126,11 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                 with gr.Row(elem_id="chatbot-header"):
                     model_select_dropdown = gr.Dropdown(
                         label=i18n("选择模型"), choices=MODELS, multiselect=False, value=MODELS[DEFAULT_MODEL], interactive=True,
-                        show_label=False, container=False, elem_id="model-select-dropdown"
+                        show_label=False, container=False, elem_id="model-select-dropdown",visible=False
+                    )
+                    sql_select_dropdown = gr.Dropdown(
+                        label=i18n("选择数据库表"), choices=['无', '公司口径', '风场口径', '项目口径'], multiselect=False, value='公司口径', interactive=True,
+                        show_label=False, container=False, elem_id="sql-select-dropdown"
                     )
                     lora_select_dropdown = gr.Dropdown(
                         label=i18n("选择模型"), choices=[], multiselect=False, interactive=True, visible=False,
@@ -150,13 +154,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                 with gr.Row(elem_id="chatbot-footer"):
                     with gr.Box(elem_id="chatbot-input-box"):
                         with gr.Row(elem_id="chatbot-input-row"):
-                            gr.HTML(get_html("chatbot_more.html").format(
-                                single_turn_label=i18n("单轮对话"),
-                                websearch_label=i18n("在线搜索"),
-                                upload_file_label=i18n("上传文件"),
-                                uploaded_files_label=i18n("知识库文件"),
-                                uploaded_files_tip=i18n("在工具箱中管理知识库文件")
-                            ))
+                            # gr.HTML(get_html("chatbot_more.html").format(
+                            #     single_turn_label=i18n("单轮对话"),
+                            #     websearch_label=i18n("在线搜索"),
+                            #     upload_file_label=i18n("上传文件"),
+                            #     uploaded_files_label=i18n("知识库文件"),
+                            #     uploaded_files_tip=i18n("在工具箱中管理知识库文件")
+                            # ))
                             with gr.Row(elem_id="chatbot-input-tb-row"):
                                 with gr.Column(min_width=225, scale=12):
                                     user_input = gr.Textbox(
@@ -663,7 +667,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     #     toggle_file_type, [model_select_dropdown], [index_files], show_progress=False)
     lora_select_dropdown.change(get_model, [model_select_dropdown, lora_select_dropdown, user_api_key, temperature_slider,
                                 top_p_slider, systemPromptTxt, user_name, current_model], [current_model, status_display, chatbot], show_progress=True)
-
+    sql_select_dropdown.change(handle_sql_change, [current_model, sql_select_dropdown])
     # Template
     systemPromptTxt.change(set_system_prompt, [
                            current_model, systemPromptTxt], None)

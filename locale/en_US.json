@@ -234,6 +234,7 @@
     "选择回复语言（针对搜索&索引功能）": "Select reply language (for search & index)",
     "选择数据集": "Select Dataset",
     "选择模型": "Select Model",
+    "选择数据库": "Select SQL Table",
     "配置已保存在 config.json 中。": "The configuration has been saved in config.json.",
     "释放文件以上传": "Drop files to upload",
     "重命名该对话": "Rename this chat",

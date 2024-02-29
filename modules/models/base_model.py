@@ -344,6 +344,7 @@ class BaseLLMModel:
         self.frequency_penalty = frequency_penalty
         self.logit_bias = logit_bias
         self.user_identifier = user
+        self.table_name = 'company'
 
         self.metadata = {}
 
@@ -426,12 +427,14 @@ class BaseLLMModel:
         else:
             user_token_count = self.count_token(inputs)
         self.all_token_counts.append(user_token_count)
-        # ai_reply, total_token_count = self.get_answer_at_once()
-        ai_reply = chat_with_your_database('company', inputs)
-        total_token_count = 1000
-        # ai_reply, total_token_count = self.get_once_answer(text=f"请用中文正确显示如下内容:\n{ai_reply.to_string}")
-        ai_reply = ai_reply.to_markdown() if isinstance(
-            ai_reply, pd.DataFrame) else '完成'
+        if self.table_name == '无':
+            ai_reply, total_token_count = self.get_answer_at_once()
+        else:
+            ai_reply = chat_with_your_database(self.table_name, inputs)
+            total_token_count = 1000
+            ai_reply = ai_reply.to_markdown() if isinstance(
+            ai_reply, pd.DataFrame) else '无输出'
+
         self.history.append(construct_assistant(ai_reply))
         if fake_input is not None:
             self.history[-2] = construct_user(fake_input)
@@ -442,6 +445,11 @@ class BaseLLMModel:
             self.all_token_counts[-1] = total_token_count - sum(self.all_token_counts)
         status_text = self.token_message()
         return chatbot, status_text
+
+    def handle_sql_change(self, table_name):
+        d = {'公司口径': 'company', '风场口径': 'wind', '项目口径': 'project'}
+        self.table_name = d.get(table_name, '无')
+        print(f"{self.table_name=}")
 
     def handle_file_upload(self, files, chatbot, language):
         """if the model accepts multi modal input, implement this function"""
