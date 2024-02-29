@@ -99,6 +99,7 @@ def construct_index(
     else:
         # 由于一个依赖的愚蠢的设计，这里必须要有一个API KEY
         os.environ["OPENAI_API_KEY"] = "sk-xxxxxxx"
+    logging.debug(f"api base: {os.environ.get('OPENAI_API_BASE', None)}")
     chunk_size_limit = None if chunk_size_limit == 0 else chunk_size_limit
     embedding_limit = None if embedding_limit == 0 else embedding_limit
     separator = " " if separator == "" else separator

@@ -29,7 +29,7 @@ class State:
         self.openai_api_base = f"{api_host}/v1"
         self.balance_api_url = f"{api_host}/dashboard/billing/credit_grants"
         self.usage_api_url = f"{api_host}/dashboard/billing/usage"
-        os.environ["OPENAI_API_BASE"] = api_host
+        os.environ["OPENAI_API_BASE"] = api_host + "/v1"
 
     def reset_api_host(self):
         self.chat_completion_url = CHAT_COMPLETION_URL
