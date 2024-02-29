@@ -68,7 +68,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         with gr.Column(elem_id="menu-area"):
             with gr.Column(elem_id="chuanhu-history"):
                 with gr.Box():
-                    with gr.Row(elem_id="chuanhu-history-header"):
+                    with gr.Row(elem_id="chuanhu-history-header", visible=False):
                         with gr.Row(elem_id="chuanhu-history-search-row"):
                             with gr.Column(min_width=150, scale=2):
                                 historySearchTextbox = gr.Textbox(show_label=False, container=False, placeholder=i18n(
@@ -115,7 +115,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             exportMarkdownBtn = gr.Button(
                                 i18n("📝 导出为 Markdown"), elem_id="gr-markdown-export-btn")
 
-            with gr.Column(elem_id="chuanhu-menu-footer"):
+            with gr.Column(elem_id="chuanhu-menu-footer", visible=False):
                 with gr.Row(elem_id="chuanhu-func-nav"):
                     gr.HTML(get_html("func_nav.html"))
                 # gr.HTML(get_html("footer.html").format(versions=versions_html()), elem_id="footer")
@@ -207,7 +207,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         obj="toolbox"), elem_classes="close-btn")
                 with gr.Tabs(elem_id="chuanhu-toolbox-tabs"):
                     with gr.Tab(label=i18n("对话")):
-                        with gr.Accordion(label=i18n("模型"), open=not HIDE_MY_KEY, visible=not HIDE_MY_KEY):
+                        with gr.Accordion(label=i18n("模型"), open=not HIDE_MY_KEY, visible=False):
                             keyTxt = gr.Textbox(
                                 show_label=True,
                                 placeholder=f"Your API-key...",
@@ -224,7 +224,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 usageTxt = gr.Markdown(i18n(
                                     "**发送消息** 或 **提交key** 以显示额度"), elem_id="usage-display", elem_classes="insert-block", visible=show_api_billing)
                         gr.Markdown("---", elem_classes="hr-line", visible=not HIDE_MY_KEY)
-                        with gr.Accordion(label="Prompt", open=True):
+                        with gr.Accordion(label="Prompt", open=True, visible=False):
                             systemPromptTxt = gr.Textbox(
                                 show_label=True,
                                 placeholder=i18n("在这里输入System Prompt..."),
@@ -233,8 +233,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 lines=8
                             )
                             retain_system_prompt_checkbox = gr.Checkbox(
-                                label=i18n("新建对话保留Prompt"), value=False, visible=True, elem_classes="switch-checkbox")
-                            with gr.Accordion(label=i18n("加载Prompt模板"), open=False):
+                                label=i18n("新建对话保留Prompt"), value=False, visible=False, elem_classes="switch-checkbox")
+                            with gr.Accordion(label=i18n("加载Prompt模板"), open=False, visible=False):
                                 with gr.Column():
                                     with gr.Row():
                                         with gr.Column(scale=6):
@@ -259,22 +259,23 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                                 multiselect=False,
                                                 container=False,
                                             )
-                        gr.Markdown("---", elem_classes="hr-line")
-                        with gr.Accordion(label=i18n("知识库"), open=True, elem_id="gr-kb-accordion"):
+                        # gr.Markdown("---", elem_classes="hr-line")
+                        with gr.Accordion(label=i18n("上传数据表"), open=True, elem_id="gr-kb-accordion"):
                             use_websearch_checkbox = gr.Checkbox(label=i18n(
                                 "使用在线搜索"), value=False, elem_classes="switch-checkbox", elem_id="gr-websearch-cb", visible=False)
                             index_files = gr.Files(label=i18n(
-                                "上传"), type="file", file_types=[".pdf", ".docx", ".pptx", ".epub", ".xlsx", ".txt", "text", "image"], elem_id="upload-index-file")
+                                "上传"), type="file", file_types=[".pdf", ".docx", ".pptx", ".epub", ".xlsx", ".txt", "text", "image"], elem_id="upload-index-file", visible=False)
+                            sql_files = gr.Files(label=i18n("上传"), type="file", file_count='single', file_types=[".xlsx"], elem_id="upload-sql-file")
                             two_column = gr.Checkbox(label=i18n(
-                                "双栏pdf"), value=advance_docs["pdf"].get("two_column", False))
-                            summarize_btn = gr.Button(i18n("总结"))
+                                "双栏pdf"), value=advance_docs["pdf"].get("two_column", False), visible=False)
+                            summarize_btn = gr.Button(i18n("总结"), visible=False)
                             # TODO: 公式ocr
                             # formula_ocr = gr.Checkbox(label=i18n("识别公式"), value=advance_docs["pdf"].get("formula_ocr", False))
 
-                    with gr.Tab(label=i18n("参数")):
-                        gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"),
-                                    elem_id="advanced-warning")
-                        with gr.Accordion(i18n("参数"), open=True):
+                    with gr.Tab(label=i18n("参数"), visible=False):
+                        # gr.Markdown(i18n("# ⚠️ 务必谨慎更改 ⚠️"),
+                        #             elem_id="advanced-warning")
+                        with gr.Accordion(i18n("参数"), open=True, visible=False):
                             temperature_slider = gr.Slider(
                                 minimum=-0,
                                 maximum=2.0,
@@ -352,9 +353,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 value=user_name.value,
                                 lines=1,
                             )
-                    with gr.Tab(label=i18n("拓展")):
-                        gr.Markdown(
-                            "Will be here soon...\n(We hope)\n\nAnd we hope you can help us to make more extensions!")
+                    # with gr.Tab(label=i18n("拓展")):
+                    #     gr.Markdown(
+                    #         "Will be here soon...\n(We hope)\n\nAnd we hope you can help us to make more extensions!")
 
                     # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
 
