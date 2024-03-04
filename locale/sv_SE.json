@@ -97,6 +97,8 @@
     "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "Utvecklad av Bilibili [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) och [Keldos](https://github.com/Keldos-Li)\n\nLadda ner senaste koden från [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
     "知识库": "kunskapsbank",
     "知识库文件": "kunskapsbankfil",
+    "选择或输入知识库名字": "Välj eller skriv in kunskapsbankens namn",
+    "保存知识库": "Spara kunskapsbank",
     "第一条提问": "Första frågan",
     "索引构建完成": "Indexet har blivit byggt färdigt.",
     "网络": "nätverksparametrar",

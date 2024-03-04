@@ -37,6 +37,8 @@
     "刷新状态": "Refresh Status",
     "剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)": "Insufficient remaining quota, [learn more](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)",
     "加载Prompt模板": "Load Prompt Template",
+    "选择或输入知识库名字": "Select or enter knowledge base",
+    "保存知识库": "Save knowledge base",
     "单轮对话": "Single-turn",
     "历史记录（JSON）": "History file (JSON)",
     "参数": "Parameters",
