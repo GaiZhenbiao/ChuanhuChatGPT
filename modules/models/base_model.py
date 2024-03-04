@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import gc
 import json
 import logging
 import os
@@ -19,7 +18,6 @@ import aiohttp
 import colorama
 import commentjson as cjson
 import requests
-import torch
 import urllib3
 from duckduckgo_search import DDGS
 from huggingface_hub import hf_hub_download
@@ -154,6 +152,7 @@ class ModelType(Enum):
     DALLE3 = 18
     GoogleGemini = 19
     GoogleGemma = 20
+    Ollama = 21
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -168,6 +167,8 @@ class ModelType(Enum):
                 model_type = ModelType.OpenAI
         elif "chatglm" in model_name_lower:
             model_type = ModelType.ChatGLM
+        elif "ollama" in model_name_lower:
+            model_type = ModelType.Ollama
         elif "llama" in model_name_lower or "alpaca" in model_name_lower:
             model_type = ModelType.LLaMA
         elif "xmchat" in model_name_lower:
@@ -389,8 +390,13 @@ class BaseLLMModel:
         """if the model accepts multi modal input, implement this function"""
         status = gr.Markdown.update()
         if files:
-            index = construct_index(self.api_key, file_src=files)
-            status = i18n("索引构建完成")
+            try:
+                construct_index(self.api_key, file_src=files)
+                status = i18n("索引构建完成")
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                status = i18n("索引构建失败！") + str(e)
         return gr.Files.update(), chatbot, status
 
     def load_index_file(self, knowledge_base_name):
@@ -1101,6 +1107,8 @@ class BaseLLMModel:
         pass
 
     def clear_cuda_cache(self):
+        import gc
+        import torch
         gc.collect()
         torch.cuda.empty_cache()
 

@@ -63,6 +63,8 @@ def get_documents(file_src):
                 for elem in text_list:
                     texts.append(Document(page_content=elem,
                                  metadata={"source": filepath}))
+            elif file_type in [".jpg", ".jpeg", ".png", ".heif", ".heic", ".webp", ".bmp", ".gif", ".tiff", ".tif"]:
+                raise gr.Warning(i18n("不支持的文件: ") + filename + i18n("，请使用 .pdf, .docx, .pptx, .epub, .xlsx 等文档。"))
             else:
                 logging.debug("Loading text file...")
                 from langchain.document_loaders import TextLoader
@@ -99,6 +101,7 @@ def construct_index(
     else:
         # 由于一个依赖的愚蠢的设计，这里必须要有一个API KEY
         os.environ["OPENAI_API_KEY"] = "sk-xxxxxxx"
+    logging.debug(f"api base: {os.environ.get('OPENAI_API_BASE', None)}")
     chunk_size_limit = None if chunk_size_limit == 0 else chunk_size_limit
     embedding_limit = None if embedding_limit == 0 else embedding_limit
     separator = " " if separator == "" else separator
@@ -118,22 +121,18 @@ def construct_index(
             embeddings = OpenAIEmbeddings(deployment=os.environ["AZURE_EMBEDDING_DEPLOYMENT_NAME"], openai_api_key=os.environ["AZURE_OPENAI_API_KEY"],
                                           model=os.environ["AZURE_EMBEDDING_MODEL_NAME"], openai_api_base=os.environ["AZURE_OPENAI_API_BASE_URL"], openai_api_type="azure")
     if os.path.exists(index_path) and load_from_cache_if_possible:
-        logging.info("找到了缓存的索引文件，加载中……")
+        logging.info(i18n("找到了缓存的索引文件，加载中……"))
         return FAISS.load_local(index_path, embeddings)
     else:
-        try:
-            documents = get_documents(file_src)
-            logging.info("构建索引中……")
+        documents = get_documents(file_src)
+        logging.debug(i18n("构建索引中……"))
+        if documents:
             with retrieve_proxy():
                 index = FAISS.from_documents(documents, embeddings)
-            logging.debug("索引构建完成！")
-            os.makedirs("./index", exist_ok=True)
-            index.save_local(index_path)
-            logging.debug("索引已保存至本地!")
-            return index
-
-        except Exception as e:
-            import traceback
-            logging.error("索引构建失败！%s", e)
-            traceback.print_exc()
-            return None
+        else:
+            raise Exception(i18n("没有找到任何支持的文档。"))
+        logging.debug(i18n("索引构建完成！"))
+        os.makedirs("./index", exist_ok=True)
+        index.save_local(index_path)
+        logging.debug(i18n("索引已保存至本地!"))
+        return index

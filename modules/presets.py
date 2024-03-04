@@ -86,6 +86,7 @@ ONLINE_MODELS = [
     "ERNIE-Bot-turbo",
     "ERNIE-Bot",
     "ERNIE-Bot-4",
+    "Ollama"
 ]
 
 LOCAL_MODELS = [
@@ -182,6 +183,10 @@ MODEL_METADATA = {
     "Gemini Pro Vision": {
         "model_name": "gemini-pro-vision",
         "token_limit": 30720,
+    },
+    "Ollama": {
+        "model_name": "ollama",
+        "token_limit": 4096,
     },
     "Gemma 2B": {
         "repo_id": "google/gemma-2b-it",

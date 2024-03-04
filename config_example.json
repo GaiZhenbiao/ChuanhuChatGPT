@@ -17,8 +17,8 @@
     "claude_api_secret":"",// 你的 Claude API Secret，用于 Claude 对话模型
     "ernie_api_key": "",// 你的文心一言在百度云中的API Key，用于文心一言对话模型
     "ernie_secret_key": "",// 你的文心一言在百度云中的Secret Key，用于文心一言对话模型
+    "ollama_host": "", // 你的 Ollama Host，用于 Ollama 对话模型
     "huggingface_auth_token": "", // 你的 Hugging Face API Token，用于访问有限制的模型
-
 
     //== Azure ==
     "openai_api_type": "openai", // 可选项：azure, openai
