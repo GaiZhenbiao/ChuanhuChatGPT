@@ -74,16 +74,19 @@ class Claude_Client(BaseLLMModel):
         system_prompt = self.system_prompt
         history = self._get_claude_style_history()
 
-        with self.claude_client.messages.stream(
-            model=self.model_name,
-            max_tokens=self.max_generation_token,
-            messages=history,
-            system=system_prompt,
-        ) as stream:
-            partial_text = ""
-            for text in stream.text_stream:
-                partial_text += text
-                yield partial_text
+        try:
+            with self.claude_client.messages.stream(
+                model=self.model_name,
+                max_tokens=self.max_generation_token,
+                messages=history,
+                system=system_prompt,
+            ) as stream:
+                partial_text = ""
+                for text in stream.text_stream:
+                    partial_text += text
+                    yield partial_text
+        except Exception as e:
+            yield i18n(GENERAL_ERROR_MSG) + ": " + str(e)
 
     def get_answer_at_once(self):
         system_prompt = self.system_prompt
