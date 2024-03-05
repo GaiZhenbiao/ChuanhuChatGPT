@@ -160,6 +160,7 @@ MODEL_METADATA = {
     "GPT4 Vision": {
         "model_name": "gpt-4-vision-preview",
         "token_limit": 128000,
+        "multimodal": True
     },
     "Claude": {
         "model_name": "Claude",

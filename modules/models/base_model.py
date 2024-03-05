@@ -423,7 +423,9 @@ class BaseLLMModel:
                     import traceback
                     traceback.print_exc()
                     status = i18n("索引构建失败！") + str(e)
-        if not other_files:
+        if other_files:
+            other_files = [f.name for f in other_files]
+        else:
             other_files = None
         return gr.File.update(value=other_files), chatbot, status
 
