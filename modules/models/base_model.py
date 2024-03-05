@@ -14,6 +14,8 @@ from enum import Enum
 from itertools import islice
 from threading import Condition, Thread
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+import PIL
+from io import BytesIO
 
 import aiohttp
 import colorama
@@ -403,7 +405,7 @@ class BaseLLMModel:
         other_files = []
         if files:
             for f in files:
-                if f.name.endswith((".jpg", ".png", ".jpeg", ".gif", ".webp")):
+                if f.name.endswith(IMAGE_FORMATS):
                     image_files.append(f)
                 else:
                     other_files.append(f)
@@ -1123,14 +1125,22 @@ class BaseLLMModel:
         torch.cuda.empty_cache()
 
     def get_base64_image(self, image_path):
-        with open(image_path, "rb") as f:
-            return base64.b64encode(f.read()).decode("utf-8")
+        if image_path.endswith(DIRECTLY_SUPPORTED_IMAGE_FORMATS):
+            with open(image_path, "rb") as f:
+                return base64.b64encode(f.read()).decode("utf-8")
+        else:
+            # convert to jpeg
+            image = PIL.Image.open(image_path)
+            image = image.convert("RGB")
+            buffer = BytesIO()
+            image.save(buffer, format="JPEG")
+            return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
     def get_image_type(self, image_path):
-        extension = os.path.splitext(image_path)[1][1:]
-        if extension == "jpg":
-            extension = "jpeg"
-        return extension
+        if image_path.lower().endswith(DIRECTLY_SUPPORTED_IMAGE_FORMATS):
+            return os.path.splitext(image_path)[1][1:].lower()
+        else:
+            return "jpeg"
 
 
 class Base_Chat_Langchain_Client(BaseLLMModel):

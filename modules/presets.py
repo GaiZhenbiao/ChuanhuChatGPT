@@ -256,6 +256,9 @@ HISTORY_NAME_METHODS = [
     i18n("模型自动总结（消耗tokens）"),
 ]
 
+DIRECTLY_SUPPORTED_IMAGE_FORMATS = (".png", ".jpeg", ".gif", ".webp") # image types that can be directly uploaded, other formats will be converted to jpeg
+IMAGE_FORMATS = DIRECTLY_SUPPORTED_IMAGE_FORMATS + (".jpg", ".bmp", "heic", "heif") # all supported image formats
+
 
 WEBSEARCH_PTOMPT_TEMPLATE = """\
 Web search results:

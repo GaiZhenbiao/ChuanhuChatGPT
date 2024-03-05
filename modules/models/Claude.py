@@ -59,6 +59,15 @@ class Claude_Client(BaseLLMModel):
             elif message["role"] == "image":
                 image_buffer.append(message["content"])
                 image_count += 1
+        # history with base64 data replaced with "#base64#"
+        # history_for_display = history.copy()
+        # for message in history_for_display:
+        #     if message["role"] == "user":
+        #         if type(message["content"]) == list:
+        #             for content in message["content"]:
+        #                 if content["type"] == "image":
+        #                     content["source"]["data"] = "#base64#"
+        # logging.info(f"History for Claude: {history_for_display}")
         return history
 
     def get_answer_stream_iter(self):
