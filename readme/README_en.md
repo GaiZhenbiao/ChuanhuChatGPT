@@ -70,7 +70,8 @@
 | [MiniMax](https://api.minimax.chat/) |
 | [XMChat](https://github.com/MILVLG/xmchat) | Not support streaming
 | [Midjourney](https://www.midjourney.com/) | Not support streaming
-| [Claude](https://www.anthropic.com/) |
+| [Claude](https://www.anthropic.com/) | ✨ Now supports Claude 3 Opus and Sonnet, Haiku will be supported as soon as it is released
+| DALL·E 3 |
 
 ## Usage Tips
 

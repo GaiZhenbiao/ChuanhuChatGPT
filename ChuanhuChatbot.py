@@ -18,7 +18,8 @@ import gradio as gr
 import colorama
 from modules.gradio_patch import reg_patch
 
-reg_patch()
+if not hfspaceflag:
+    reg_patch()
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 

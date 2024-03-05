@@ -31,7 +31,7 @@ python-docx
 websocket_client
 pydantic==2.5.2
 google-search-results
-anthropic==0.3.11
+anthropic==0.18.1
 Pillow>=10.1.0
 protobuf==3.20.3
 ollama>=0.1.6

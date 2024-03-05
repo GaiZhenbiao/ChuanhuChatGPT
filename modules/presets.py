@@ -82,7 +82,8 @@ ONLINE_MODELS = [
     "讯飞星火大模型V3.0",
     "讯飞星火大模型V2.0",
     "讯飞星火大模型V1.5",
-    "Claude",
+    "Claude 3 Sonnet",
+    "Claude 3 Opus",
     "ERNIE-Bot-turbo",
     "ERNIE-Bot",
     "ERNIE-Bot-4",
@@ -163,6 +164,18 @@ MODEL_METADATA = {
     "Claude": {
         "model_name": "Claude",
         "token_limit": 4096,
+    },
+    "Claude 3 Sonnet": {
+        "model_name": "claude-3-sonnet-20240229",
+        "token_limit": 200000,
+        "max_generation": 4096,
+        "multimodal": True
+    },
+    "Claude 3 Opus": {
+        "model_name": "claude-3-opus-20240229",
+        "token_limit": 200000,
+        "max_generation": 4096,
+        "multimodal": True
     },
     "ERNIE-Bot-turbo": {
         "model_name": "ERNIE-Bot-turbo",

@@ -74,7 +74,7 @@
 | [MiniMax](https://api.minimax.chat/) |
 | [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输
 | [Midjourney](https://www.midjourney.com/) | 不支持流式传输
-| [Claude](https://www.anthropic.com/) |
+| [Claude](https://www.anthropic.com/) | ✨ 现已支持Claude 3 Opus、Sonnet，Haiku将会在推出后的第一时间支持
 | DALL·E 3 |
 
 ## 使用技巧

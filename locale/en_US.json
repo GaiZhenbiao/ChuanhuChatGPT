@@ -62,6 +62,8 @@
     "输入的不是数字，将使用默认值。": "The input is not a number, the default value will be used.",
     "额外模型列表": "Extra model list",
     "默认模型": "Default model",
+    "获取资源错误": "Error retrieving resources.",
+    "该模型不支持多模态输入": "This model does not support multi-modal input.",
     " 中。": ".",
     " 为: ": " as: ",
     " 吗？": " ?",

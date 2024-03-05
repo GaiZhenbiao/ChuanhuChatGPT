@@ -362,6 +362,9 @@ def construct_text(role, text):
 def construct_user(text):
     return construct_text("user", text)
 
+def construct_image(path):
+    return construct_text("image", path)
+
 
 def construct_system(text):
     return construct_text("system", text)

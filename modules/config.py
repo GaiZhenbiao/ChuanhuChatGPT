@@ -32,6 +32,7 @@ __all__ = [
     "show_api_billing",
     "chat_name_method_index",
     "HIDE_MY_KEY",
+    "hfspaceflag",
 ]
 
 # 添加一个统一的config文件，避免文件过多造成的疑惑（优先级最低）
@@ -84,6 +85,8 @@ if os.path.exists("auth.json"):
 dockerflag = config.get("dockerflag", False)
 if os.environ.get("dockerrun") == "yes":
     dockerflag = True
+
+hfspaceflag = os.environ.get("HF_SPACE", "false") == "true"
 
 # 处理 api-key 以及 允许的用户列表
 my_api_key = config.get("openai_api_key", "")
