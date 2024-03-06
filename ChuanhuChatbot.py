@@ -262,7 +262,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 "上传"), type="file", file_types=[".pdf", ".docx", ".pptx", ".epub", ".xlsx", ".txt", "text", "image"], elem_id="upload-index-file")
                             with gr.Row():
                                 knowledge_base_name = gr.Dropdown(
-                                    label=i18n("选择或输入知识库名字"), choices=load_knowledge_base_names(), allow_custom_value=True, multiselect=False, visible=True, elem_id="gr-kb-select-dropdown")
+                                    label=i18n("选择或输入知识库名字"), choices=load_knowledge_base_names(), multiselect=True, visible=True, elem_id="gr-kb-select-dropdown")
                                 with gr.Row():
                                     knowledge_base_refresh_btn = gr.Button(
                                                 i18n("🔄"))
