@@ -1,5 +1,5 @@
-gradio[oauth]==3.44.0
-gradio_client==0.5.0
+gradio==4.26.0
+gradio_client==0.15.1
 pypinyin
 tiktoken
 socksio
