@@ -247,7 +247,7 @@ class BaseLLMModel:
         temperature=1.0,
         top_p=1.0,
         n_choices=1,
-        stop="",
+        stop=[],
         max_generation_token=None,
         presence_penalty=0,
         frequency_penalty=0,
