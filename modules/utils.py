@@ -154,7 +154,7 @@ def load_index_file(current_model, *args):
     return current_model.load_index_file(*args)
 
 def load_knowledge_base_names():
-    return [x.name for x in Path("./knowledge_base/").glob("*")]
+    return [x.name for x in Path("./files/knowledge_base/").glob("*")]
 
 def handle_summarize_index(current_model, *args):
     return current_model.summarize_index(*args)
