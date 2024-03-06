@@ -162,6 +162,7 @@ def get_model(
     if original_model is not None and model is not None:
         model.history = original_model.history
         model.history_file_path = original_model.history_file_path
+        model.system_prompt = original_model.system_prompt
     if dont_change_lora_selector:
         return model, msg, chatbot, gr.update(), access_key, presudo_key
     else:
