@@ -54,7 +54,8 @@ body.popup-open {
     display: none;
 }
 
-#app-title {
+#app-title,
+#app-title .gradio-html {
     font-weight: var(--prose-header-text-weight);
     font-size: var(--text-xxl);
     line-height: 1.3;
@@ -68,10 +69,11 @@ body.popup-open {
 }
 #description {
     text-align: center;
-    /* margin: 32px 0 4px 0; */
+    /* margin: 16px 0 4px 0; */
 }
-#about-tab {
+#about-tab * {
     text-align: center;
+    justify-content: center;
 }
 #about-tab img {
     margin: 0 auto;
@@ -245,7 +247,7 @@ body.popup-open {
     display: none;
     z-index: 99999;
     width: 680px;
-    height: 400px;
+    height: 420px;
     padding: 0;
 }
 #chuanhu-popup.showBox {
@@ -257,7 +259,7 @@ body.popup-open {
     padding: 0;
 }
 .hideBox {
-    display: none;
+    display: none !important;
 }
 
 
@@ -340,7 +342,7 @@ body.popup-open {
     height: 60px;
     overflow: unset !important;
 }
-#chatbot-header .gradio-dropdown > label {
+#chatbot-header .gradio-dropdown > div[class^="svelte-"] {
     display: flex;
 }
 #chatbot-header .gradio-dropdown ul.options {
@@ -348,7 +350,7 @@ body.popup-open {
     left: 0 !important;
     position: absolute !important;
 }
-#chatbot-header .gradio-dropdown > label > span[data-testid="block-info"] {
+#chatbot-header .gradio-dropdown > div[class^="svelte-"] > span[data-testid="block-info"] {
     height: unset;
     overflow: visible;
     top: 0;
@@ -360,18 +362,23 @@ body.popup-open {
     width: auto;
     color: var(--body-text-color-subdued);
 }
-#chatbot-header .gradio-dropdown > label > .wrap {
+#chatbot-header .gradio-dropdown > div[class^="svelte-"] > .wrap {
     background: none;
     box-shadow: none;
     padding-left: 8px;
 }
-#model-select-dropdown > label > span[data-testid="block-info"]  {
+#model-select-dropdown > div[class^="svelte-"] > span[data-testid="block-info"]  {
     display: none;
 }
-#chatbot-header .gradio-dropdown > label > .wrap input {
+#model-select-dropdown > div, 
+#model-select-dropdown > div > div {
+    height: 100%;
+    background: none;
+}
+#chatbot-header .gradio-dropdown > div[class^="svelte-"] > .wrap input {
     font-weight: bold;
 }
-#chatbot-header #model-select-dropdown > label::before {
+#chatbot-header #model-select-dropdown > div[class^="svelte-"]::before {
     content: "";
     background: var(--primary-600);
     height: 12px;
@@ -702,40 +709,40 @@ input:checked + .chatbot-input-more-span {
     box-shadow: var(--shadow-drop-lg);
 } */
 
-#chuanhu-popup > .gradio-group {
+#chuanhu-popup .gradio-group {
     height: 100%;
 }
-#chuanhu-popup > .gradio-group > div.styler > .gradio-row:first-of-type {
+#chuanhu-popup .gradio-group > div.styler > .gradio-row:first-of-type {
     padding: 24px !important;
     border-bottom: 1.8px solid var(--border-color-primary);
 }
-#toolbox-area > .gradio-group > div.styler > .gradio-row:first-of-type * ,
-#chuanhu-popup > .gradio-group > div.styler > .gradio-row:first-of-type * {
+#toolbox-area .gradio-group > div.styler > .gradio-row:first-of-type * ,
+#chuanhu-popup .gradio-group > div.styler > .gradio-row:first-of-type * {
     margin: 0;
 }
 
-#toolbox-area > .gradio-group > div.styler > .gradio-row > .close-btn,
-#chuanhu-popup > .gradio-group > div.styler > .gradio-row > .close-btn {
+#toolbox-area .gradio-group > div.styler > .gradio-row > .close-btn,
+#chuanhu-popup .gradio-group > div.styler > .gradio-row > .close-btn {
     max-width: 28px;
     display: flex;
     justify-content: flex-end;
 }
 
 
-#chuanhu-popup > .gradio-group > div.styler > .gradio-tabs {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs {
     display: block;
-    height: 322px;
+    height: calc(100% - 78px);
     /* margin: 16px 24px; */
 }
 
-#chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tabitem {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tabitem {
     border: none;
     border-radius: 0;
     overflow: auto;
     height: 100%;
     padding: 16px 24px;
 }
-#chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tab-nav {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav {
     float: left;
     display: block;
     border: none;
@@ -747,7 +754,7 @@ input:checked + .chatbot-input-more-span {
     border-bottom-left-radius: var(--block-radius);
     border-right: 1px solid var(--border-color-primary);
 }
-#chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button {
     display: block;
     border: none;
     border-radius: 6px;
@@ -757,7 +764,7 @@ input:checked + .chatbot-input-more-span {
     /* height: 32px; */
     padding: 7px 12px;
 }
-#chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected {
     background-color: var(--button-primary-background-fill);
     /* font-weight: bold; */
     color: var(--button-primary-text-color);
@@ -780,18 +787,18 @@ input:checked + .chatbot-input-more-span {
         border-bottom-right-radius: 0;
     }
     #toolbox-area > .gradio-group > div.styler > .gradio-row:first-of-type,
-    #chuanhu-popup > .gradio-group > div.styler > .gradio-row:first-of-type {
+    #chuanhu-popup .gradio-group > div.styler > .gradio-row:first-of-type {
         padding: 18px 24px 0 !important;
         border-bottom: 0;
     }
     #toolbox-area > .gradio-group > div.styler > .gradio-tabs,
-    #chuanhu-popup > .gradio-group > div.styler > .gradio-tabs {
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs {
         height: auto;
         width: 100vw;
         overflow: hidden;
     }
     #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tabitem,
-    #chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tabitem {
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tabitem {
         height: calc( 90*var(--vh) - 48px - 46px - 45px );
         overflow-x: auto;
         border: none;
@@ -824,7 +831,7 @@ input:checked + .chatbot-input-more-span {
     }
     */
     #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav,
-    #chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tab-nav {
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav {
         display: flex;
         margin: 0;
         padding: 6px 16px 0;
@@ -841,7 +848,7 @@ input:checked + .chatbot-input-more-span {
         align-items: baseline;
     }
     #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button,
-    #chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button {
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button {
         display: inline-block;
         position: relative;
         padding: 7px 6px;
@@ -853,14 +860,14 @@ input:checked + .chatbot-input-more-span {
         transition: font-size 0.3s ease-in-out;
     }
     #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected,
-    #chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected {
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected {
         background-color: unset !important;
         font-weight: bold;
         font-size: large;
         color: var(--body-text-color);
     }
     #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected::after,
-    #chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected::after {
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected::after {
         content: "";
         background-color: var(--primary-600);
         height: 4px;
@@ -986,7 +993,7 @@ input:checked + .chatbot-input-more-span {
     height: 100%;
     padding: 0;
 }
-#chuanhu-history > div > div {
+#chuanhu-history > .gradio-group > div.styler > div {
     padding-inline: 12px;
 }
 #chuanhu-history-header {
@@ -1147,10 +1154,19 @@ input:checked + .chatbot-input-more-span {
 div.gradio-group > div.styler {
     background: unset !important;
     border-radius: unset !important;
+    height: 100%;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: unset !important;
-    overflow: unset !important;
+    /* overflow: unset !important; */
+
+    --block-radius: unset !important;
+    --block-border-width: unset !important;
+    --layout-gap: unset !important;
+    --form-gap-width: unset !important;
+    --button-border-width: unset !important;
+    --button-large-radius: unset !important;
+    --button-small-radius: unset !important;
 }
 
 div.gradio-group {
