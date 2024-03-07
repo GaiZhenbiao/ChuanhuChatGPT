@@ -76,21 +76,24 @@ def postprocess_chat_messages(
                 raise ValueError(f"Invalid message for Chatbot component: {chat_message}")
 
 
+def init_with_class_name_as_elem_classes(original_func):
+    def wrapper(self, *args, **kwargs):
+        if "elem_classes" in kwargs and isinstance(kwargs["elem_classes"], str):
+            kwargs["elem_classes"] = [kwargs["elem_classes"]]
+        else:
+            kwargs["elem_classes"] = []
 
-def Component_init(self, *args, **kwargs):
-    if "elem_classes" in kwargs and isinstance(kwargs["elem_classes"], str):
-        kwargs["elem_classes"] = [kwargs["elem_classes"]]
-    else:
-        kwargs["elem_classes"] = []
+        kwargs["elem_classes"].append("gradio-" + self.__class__.__name__.lower())
 
-    kwargs["elem_classes"].append("gradio-" + self.__class__.__name__.lower())
+        if kwargs.get("multiselect", False):
+            kwargs["elem_classes"].append('multiselect')
 
-    if kwargs.get("multiselect", False):
-        kwargs["elem_classes"].append('multiselect')
+        res = original_func(self, *args, **kwargs)
+        return res
+    return wrapper
 
-    res = original_IOComponent_init(self, *args, **kwargs)
-    return res
+original_Component_init = gr.components.Component.__init__
+gr.components.Component.__init__ = init_with_class_name_as_elem_classes(original_Component_init)
+gr.components.FormComponent.__init__ = init_with_class_name_as_elem_classes(original_Component_init)
 
-original_IOComponent_init = gr.components.Component.__init__
-gr.components.Component.__init__ = Component_init
-gr.components.FormComponent.__init__ = Component_init
+gr.blocks.BlockContext.__init__ = init_with_class_name_as_elem_classes(gr.blocks.BlockContext.__init__)
