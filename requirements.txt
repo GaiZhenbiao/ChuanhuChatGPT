@@ -1,4 +1,4 @@
-gradio[oauth]==4.20.0
+gradio==4.20.0
 gradio_client==0.11.0
 pypinyin
 tiktoken
