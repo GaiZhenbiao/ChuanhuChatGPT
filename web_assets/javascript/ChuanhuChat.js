@@ -270,7 +270,7 @@ function btnToggleDarkMode() {
 }
 
 function setScrollShadow() {
-    const toolboxScroll = toolbox.querySelector('#toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav');
+    const toolboxScroll = toolbox.querySelector('#toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav');
     const toolboxTabs = toolboxScroll.querySelectorAll('button');
     let toolboxScrollWidth = 0;
     toolboxTabs.forEach((tab) => {
