@@ -83,7 +83,7 @@ def Component_init(self, *args, **kwargs):
     else:
         kwargs["elem_classes"] = []
 
-    kwargs["elem_classes"].append(self.__class__.__name__)
+    kwargs["elem_classes"].append("gradio-" + self.__class__.__name__.lower())
 
     if kwargs.get("multiselect", False):
         kwargs["elem_classes"].append('multiselect')
