@@ -4,7 +4,7 @@ import os
 import fastapi
 import gradio
 from fastapi.responses import RedirectResponse
-from gradio.oauth import MOCKED_OAUTH_TOKEN
+# from gradio.oauth import MOCKED_OAUTH_TOKEN
 
 from modules.presets import i18n
 
@@ -109,6 +109,7 @@ def _add_mocked_oauth_routes(app: fastapi.FastAPI) -> None:
 
 
 def reg_patch():
-    gradio.oauth._add_mocked_oauth_routes = _add_mocked_oauth_routes
-    gradio.oauth._add_oauth_routes = _add_oauth_routes
-    logging.info(i18n("覆盖gradio.oauth /logout路由"))
+    # gradio.oauth._add_mocked_oauth_routes = _add_mocked_oauth_routes
+    # gradio.oauth._add_oauth_routes = _add_oauth_routes
+    # logging.info(i18n("覆盖gradio.oauth /logout路由"))
+    pass

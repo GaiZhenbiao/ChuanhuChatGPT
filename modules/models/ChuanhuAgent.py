@@ -123,7 +123,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
 
     def handle_file_upload(self, files, chatbot, language):
         """if the model accepts multi modal input, implement this function"""
-        status = gr.Markdown.update()
+        status = gr.Markdown()
         if files:
             index = construct_index(self.api_key, file_src=files)
             assert index is not None, "获取索引失败"

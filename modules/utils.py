@@ -456,7 +456,7 @@ def get_file_names_by_pinyin(dir, filetypes=[".json"]):
 
 def get_file_names_dropdown_by_pinyin(dir, filetypes=[".json"]):
     files = get_file_names_by_pinyin(dir, filetypes)
-    return gr.Dropdown.update(choices=files)
+    return gr.Dropdown(choices=files)
 
 
 def get_file_names_by_last_modified_time(dir, filetypes=[".json"]):
@@ -486,14 +486,14 @@ def get_first_history_name(user_name=""):
 
 def get_history_list(user_name=""):
     history_names = get_history_names(user_name)
-    return gr.Radio.update(choices=history_names)
+    return gr.Radio(choices=history_names)
 
 
 def init_history_list(user_name="", prepend=None):
     history_names = get_history_names(user_name)
     if prepend is not None and prepend not in history_names:
         history_names.insert(0, prepend)
-    return gr.Radio.update(
+    return gr.Radio(
         choices=history_names, value=history_names[0] if history_names else ""
     )
 
@@ -527,7 +527,7 @@ def load_template(filename, mode=0):
         return {row[0]: row[1] for row in lines}
     else:
         choices = sorted_by_pinyin([row[0] for row in lines])
-        return {row[0]: row[1] for row in lines}, gr.Dropdown.update(choices=choices)
+        return {row[0]: row[1] for row in lines}, gr.Dropdown(choices=choices)
 
 
 def get_template_names():
@@ -538,7 +538,7 @@ def get_template_names():
 def get_template_dropdown():
     logging.debug("获取模板下拉菜单")
     template_names = get_template_names()
-    return gr.Dropdown.update(choices=template_names)
+    return gr.Dropdown(choices=template_names)
 
 
 def get_template_content(templates, selection, original_system_prompt):
@@ -667,13 +667,13 @@ def find_n(lst, max_num):
 
 def start_outputing():
     logging.debug("显示取消按钮，隐藏发送按钮")
-    return gr.Button.update(visible=False), gr.Button.update(visible=True)
+    return gr.Button(visible=False), gr.Button(visible=True)
 
 
 def end_outputing():
     return (
-        gr.Button.update(visible=True),
-        gr.Button.update(visible=False),
+        gr.Button(visible=True),
+        gr.Button(visible=False),
     )
 
 
@@ -689,8 +689,8 @@ def transfer_input(inputs):
     return (
         inputs,
         gr.update(value=""),
-        gr.Button.update(visible=False),
-        gr.Button.update(visible=True),
+        gr.Button(visible=False),
+        gr.Button(visible=True),
     )
 
 
@@ -702,10 +702,10 @@ def update_chuanhu():
     if update_status == "success":
         logging.info("Successfully updated, restart needed")
         status = '<span id="update-status" class="hideK">success</span>'
-        return gr.Markdown.update(value=i18n("更新成功，请重启本程序") + status)
+        return gr.Markdown(value=i18n("更新成功，请重启本程序") + status)
     else:
         status = '<span id="update-status" class="hideK">failure</span>'
-        return gr.Markdown.update(
+        return gr.Markdown(
             value=i18n(
                 "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)"
             )

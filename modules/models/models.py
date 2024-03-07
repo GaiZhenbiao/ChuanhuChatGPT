@@ -33,7 +33,7 @@ def get_model(
         config.local_embedding = True
     # del current_model.model
     model = original_model
-    chatbot = gr.Chatbot.update(label=model_name)
+    chatbot = gr.Chatbot(label=model_name)
     try:
         if model_type == ModelType.OpenAI:
             logging.info(f"正在加载OpenAI模型: {model_name}")
@@ -166,7 +166,7 @@ def get_model(
     if dont_change_lora_selector:
         return model, msg, chatbot, gr.update(), access_key, presudo_key
     else:
-        return model, msg, chatbot, gr.Dropdown.update(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key
+        return model, msg, chatbot, gr.Dropdown(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key
 
 
 if __name__ == "__main__":

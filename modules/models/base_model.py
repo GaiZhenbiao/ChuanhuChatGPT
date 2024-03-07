@@ -400,7 +400,7 @@ class BaseLLMModel:
 
     def handle_file_upload(self, files, chatbot, language):
         """if the model accepts multi modal input, implement this function"""
-        status = gr.Markdown.update()
+        status = gr.Markdown()
         image_files = []
         other_files = []
         if files:
@@ -430,7 +430,7 @@ class BaseLLMModel:
         return gr.File.update(value=other_files), chatbot, status
 
     def summarize_index(self, files, chatbot, language):
-        status = gr.Markdown.update()
+        status = gr.Markdown()
         if files:
             index = construct_index(self.api_key, file_src=files)
             status = i18n("总结完成")
@@ -878,7 +878,7 @@ class BaseLLMModel:
         return (
             [],
             self.token_message([0]),
-            gr.Radio.update(choices=choices, value=history_name),
+            gr.Radio(choices=choices, value=history_name),
             system_prompt,
             self.single_turn,
             self.temperature,
