@@ -77,33 +77,20 @@ def postprocess_chat_messages(
 
 
 
-def add_classes_to_gradio_component(comp):
-    """
-    this adds gradio-* to the component for css styling (ie gradio-button to gr.Button), as well as some others
-    code from stable-diffusion-webui <AUTOMATIC1111/stable-diffusion-webui>
-    """
+def Component_init(self, *args, **kwargs):
+    if "elem_classes" in kwargs and isinstance(kwargs["elem_classes"], str):
+        kwargs["elem_classes"] = [kwargs["elem_classes"]]
+    else:
+        kwargs["elem_classes"] = []
 
-    comp.elem_classes = [f"gradio-{comp.get_block_name()}", *(comp.elem_classes or [])]
+    kwargs["elem_classes"].append(self.__class__.__name__)
 
-    if getattr(comp, 'multiselect', False):
-        comp.elem_classes.append('multiselect')
+    if kwargs.get("multiselect", False):
+        kwargs["elem_classes"].append('multiselect')
 
-
-def IOComponent_init(self, *args, **kwargs):
     res = original_IOComponent_init(self, *args, **kwargs)
-    add_classes_to_gradio_component(self)
-
     return res
 
-original_IOComponent_init = gr.components.IOComponent.__init__
-gr.components.IOComponent.__init__ = IOComponent_init
-
-
-def BlockContext_init(self, *args, **kwargs):
-    res = original_BlockContext_init(self, *args, **kwargs)
-    add_classes_to_gradio_component(self)
-
-    return res
-
-original_BlockContext_init = gr.blocks.BlockContext.__init__
-gr.blocks.BlockContext.__init__ = BlockContext_init
+original_IOComponent_init = gr.components.Component.__init__
+gr.components.Component.__init__ = Component_init
+gr.components.FormComponent.__init__ = Component_init

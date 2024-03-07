@@ -391,5 +391,5 @@ small_and_beautiful_theme = gr.themes.Soft(
         input_background_fill="#F6F6F6",
         # chatbot_code_background_color="*neutral_950",
         # gradio 会把这个几个chatbot打头的变量应用到其他md渲染的地方，鬼晓得怎么想的。。。
-        chatbot_code_background_color_dark="*neutral_950",
+        # chatbot_code_background_color_dark="*neutral_950",
     )
