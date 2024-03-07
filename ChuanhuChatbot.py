@@ -143,7 +143,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         show_share_button=False,
                     )
                 with gr.Row(elem_id="chatbot-footer"):
-                    with gr.Group(elem_id="chatbot-input-box"):
+                    with gr.Column(elem_id="chatbot-input-box"):
                         with gr.Row(elem_id="chatbot-input-row"):
                             gr.HTML(get_html("chatbot_more.html").format(
                                 single_turn_label=i18n("单轮对话"),
@@ -234,7 +234,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                                 choices=get_template_names(),
                                                 multiselect=False,
                                                 value=get_template_names()[0],
-                                                container=False,
+                                                # container=False,
                                             )
                                         with gr.Column(scale=1):
                                             templateRefreshBtn = gr.Button(
@@ -248,7 +248,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                                         0], mode=1
                                                 ),
                                                 multiselect=False,
-                                                container=False,
+                                                # container=False,
                                             )
                         gr.Markdown("---", elem_classes="hr-line")
                         with gr.Accordion(label=i18n("知识库"), open=True, elem_id="gr-kb-accordion"):
@@ -372,13 +372,14 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         gr.HTML(get_html("appearance_switcher.html").format(
                             label=i18n("切换亮暗色主题")), elem_classes="insert-block", visible=False)
                         use_streaming_checkbox = gr.Checkbox(
-                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox"
+                            label=i18n("实时传输回答"), value=True, visible=ENABLE_STREAMING_OPTION, elem_classes="switch-checkbox no-container"
                         )
                         language_select_dropdown = gr.Dropdown(
                             label=i18n("选择回复语言（针对搜索&索引功能）"),
                             choices=REPLY_LANGUAGES,
                             multiselect=False,
                             value=REPLY_LANGUAGES[0],
+                            elem_classes="no-container",
                         )
                         name_chat_method = gr.Dropdown(
                             label=i18n("对话命名方式"),
@@ -386,10 +387,12 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             multiselect=False,
                             interactive=True,
                             value=HISTORY_NAME_METHODS[chat_name_method_index],
+                            elem_classes="no-container",
                         )
                         single_turn_checkbox = gr.Checkbox(label=i18n(
                             "单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb", visible=False)
                         # checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
+
                         logout_btn = gr.Button("Logout", link="/logout")
 
                     with gr.Tab(i18n("网络")):
