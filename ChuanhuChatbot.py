@@ -16,10 +16,6 @@ from modules.config import *
 from modules import config
 import gradio as gr
 import colorama
-from modules.gradio_patch import reg_patch
-
-if not hfspaceflag:
-    reg_patch()
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
@@ -36,8 +32,6 @@ def create_new_model():
 
 with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     user_name = gr.Textbox("", visible=False)
-    # 激活/logout路由
-    logout_hidden_btn = gr.LogoutButton(visible=False)
     promptTemplates = gr.State(load_template(get_template_names()[0], mode=2))
     user_question = gr.State("")
     assert type(my_api_key) == str
@@ -396,8 +390,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         single_turn_checkbox = gr.Checkbox(label=i18n(
                             "单轮对话"), value=False, elem_classes="switch-checkbox", elem_id="gr-single-session-cb", visible=False)
                         # checkUpdateBtn = gr.Button(i18n("🔄 检查更新..."), visible=check_update)
-                        logout_btn = gr.Button(
-                            i18n("退出用户"), variant="primary", visible=authflag)
+                        logout_btn = gr.Button("Logout", link="/logout")
 
                     with gr.Tab(i18n("网络")):
                         gr.Markdown(
@@ -534,6 +527,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         ],
         outputs=[chatbot, status_display],
         show_progress=True,
+        concurrency_limit=CONCURRENT_COUNT
     )
 
     start_outputing_args = dict(
@@ -553,7 +547,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     transfer_input_args = dict(
         fn=transfer_input, inputs=[user_input], outputs=[
-            user_question, user_input, submitBtn, cancelBtn], show_progress=True, concurrency_limit=CONCURRENT_COUNT
+            user_question, user_input, submitBtn, cancelBtn], show_progress=True
     )
 
     get_usage_args = dict(
@@ -808,12 +802,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         outputs=[saveFileName, systemPromptTxt, chatbot, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt],
         js='(a,b)=>{return bgSelectHistory(a,b);}'
     )
-    logout_btn.click(
-            fn=None,
-            inputs=[],
-            outputs=[],
-            js='self.location="/logout"'
-        )
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
 demo.title = i18n("川虎Chat 🚀")
 
