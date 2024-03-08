@@ -150,7 +150,7 @@ body.popup-open {
         right: max(24px, env(safe-area-inset-right));
     }
 }
-#chuanhu-header > #status-display #status-display {
+#chuanhu-header > #status-display div.gradio-markdown {
     min-height: unset;
 }
 #chuanhu-header > #status-display > .wrap {
@@ -1134,7 +1134,7 @@ input:checked + .chatbot-input-more-span {
 #chatbot-area.no-menu #chatbot-input-box {
     padding-left: max(16px, env(safe-area-inset-left));
 }
-#chatbot-area.no-menu #chuanhu-chatbot>.wrapper>.wrap {
+#chatbot-area.no-menu #chuanhu-chatbot > .wrapper > .bubble-wrap {
     padding-left: max(20px, env(safe-area-inset-left));
 }
 
@@ -1147,7 +1147,7 @@ input:checked + .chatbot-input-more-span {
 #chatbot-area.no-toolbox #chatbot-input-box {
     padding-right: max(16px, env(safe-area-inset-right));
 }
-#chatbot-area.no-toolbox #chuanhu-chatbot>.wrapper>.wrap {
+#chatbot-area.no-toolbox #chuanhu-chatbot > .wrapper > .bubble-wrap {
     padding-right: max(20px, env(safe-area-inset-right));
 }
 

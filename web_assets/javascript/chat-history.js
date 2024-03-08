@@ -4,7 +4,7 @@ var loadhistorytime = 0; // for debugging
 
 
 function saveHistoryHtml() {
-    var historyHtml = document.querySelector('#chuanhu-chatbot>.wrapper>.wrap');
+    var historyHtml = document.querySelector('#chuanhu-chatbot > .wrapper > .bubble-wrap');
     if (!historyHtml) return;   // no history, do nothing
     localStorage.setItem('chatHistory', historyHtml.innerHTML);
     // console.log("History Saved")
@@ -46,7 +46,7 @@ function loadHistoryHtml() {
         fakeHistory.classList.add('history-message');
         fakeHistory.innerHTML = tempDiv.innerHTML;
         const forViewStyle = document.createElement('style');
-        forViewStyle.innerHTML = '.wrapper>.wrap>.history-message>:last-child::after { content: "' + i18n(forView_i18n) + '"!important; }';
+        forViewStyle.innerHTML = '.wrapper > .bubble-wrap > .history-message > :last-child::after { content: "' + i18n(forView_i18n) + '"!important; }';
         document.head.appendChild(forViewStyle);
         chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
         // var fakeHistory = document.createElement('div');

@@ -20,6 +20,8 @@ function addChuanhuButton(botElement) {
     }
     // botElement.querySelectorAll('button.copy-bot-btn, button.toggle-md-btn').forEach(btn => btn.remove()); // 就算原先有了，也必须重新添加，而不是跳过
     if (!isLatestMessage) botElement.querySelector('.message-btn-row')?.remove();
+    setLatestMessage();
+
     botElement.querySelector('.message-btn-column')?.remove();
 
     // Copy bot button
@@ -108,12 +110,24 @@ function addChuanhuButton(botElement) {
 }
 
 function setLatestMessage() {
-    var latestMessage = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .wrap > .message-wrap .message.bot.latest');
+    // var latestMessage = gradioApp().querySelector('#chuanhu-chatbot > .wrapper .message-wrap .message.bot:last-of-type');
+    var botMessages = gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot');
+    var messageCount = botMessages.length;
+    var latestMessage = botMessages[messageCount - 1];
+    botMessages.forEach((message, index) => {
+        if (index === messageCount -1) {
+            message.classList.add('latest');
+        } else {
+            message.classList.remove('latest');
+            message.querySelector('.message-btn-row')?.remove();
+        }
+    });
     if (latestMessage) addLatestMessageButtons(latestMessage);
 }
 
 function addLatestMessageButtons(botElement) {
-    botElement.querySelector('.message-btn-row')?.remove();
+    // botElement.querySelector('.message-btn-row')?.remove();
+    if (botElement.querySelector('.message-btn-row')) return;
 
     var messageBtnRow = document.createElement('div');
     messageBtnRow.classList.add('message-btn-row');
