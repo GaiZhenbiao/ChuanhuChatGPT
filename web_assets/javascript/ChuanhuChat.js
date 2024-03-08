@@ -45,7 +45,10 @@ var currentTime = new Date().getTime();
 let windowWidth = window.innerWidth; // 初始窗口宽度
 
 function addInit() {
-    var needInit = {chatbotIndicator, uploaderIndicator};
+    // var needInit = {chatbotIndicator, uploaderIndicator};
+    // WIP: 因为 gradio 修改了 file uploader, 暂时无法检查 uploaderIndicator
+    // 在之后再考虑修复文件上传功能
+    var needInit = {chatbotIndicator};
 
     chatbotIndicator = gradioApp().querySelector('#chuanhu-chatbot > div.wrap');
     uploaderIndicator = gradioApp().querySelector('#upload-index-file > div[data-testid="block-label"]');
@@ -76,7 +79,7 @@ function initialize() {
     appTitleDiv = gradioApp().getElementById("app-title");
     chatbotArea = gradioApp().querySelector('#chatbot-area');
     chatbot = gradioApp().querySelector('#chuanhu-chatbot');
-    chatbotWrap = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .wrap');
+    chatbotWrap = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .bubble-wrap');
     apSwitch = gradioApp().querySelector('.apSwitch input[type="checkbox"]');
     updateToast = gradioApp().querySelector("#toast-update");
     sendBtn = gradioApp().getElementById("submit-btn");
@@ -352,12 +355,13 @@ function clearChatbot(a, b) {
 }
 
 function chatbotContentChanged(attempt = 1, force = false) {
+    // console.log('chatbotContentChanged');
     for (var i = 0; i < attempt; i++) {
         setTimeout(() => {
             // clearMessageRows();
             saveHistoryHtml();
             disableSendBtn();
-            updateSlider();
+            // updateSlider();
             updateCheckboxes();
             bindFancyBox();
 
@@ -370,7 +374,7 @@ function chatbotContentChanged(attempt = 1, force = false) {
 
             if (!chatbotIndicator.classList.contains('translucent')) { // message deleted
                 var checkLatestAdded = setInterval(() => {
-                    var latestMessageNow = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .wrap > .message-wrap .message.bot.latest');
+                    var latestMessageNow = gradioApp().querySelector('#chuanhu-chatbot .message-wrap .message.bot:last-of-type');
                     if (latestMessageNow && latestMessageNow.querySelector('.message-btn-row')) {
                         clearInterval(checkLatestAdded);
                     } else {
@@ -386,6 +390,7 @@ function chatbotContentChanged(attempt = 1, force = false) {
 }
 
 var chatbotObserver = new MutationObserver(() => {
+    console.log('chatbotContentChanged');
     chatbotContentChanged(1);
     if (chatbotIndicator.classList.contains('hide')) {
         // setLatestMessage();

@@ -17,6 +17,7 @@ function mdDownloadClick() {
 
 // index files
 function setUploader() {
+    return;
     transUpload();
     var uploaderObserver = new MutationObserver(function (mutations) {
         var fileInput = null;

@@ -16,7 +16,7 @@ function setChatListHeader() {
 function setChatList() {
     var selectedChat = null;
     var chatList = gradioApp().querySelector('fieldset#history-select-dropdown');
-    selectedChat = chatList.querySelector(".wrap label.selected")
+    selectedChat = chatList.querySelector("label.selected")
     if (!selectedChat) {
         currentChatName = null;
         return;

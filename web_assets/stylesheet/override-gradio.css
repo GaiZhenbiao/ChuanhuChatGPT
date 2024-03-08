@@ -125,17 +125,17 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 
 
-#chuanhu-chatbot>.wrapper>.wrap::-webkit-scrollbar {
+#chuanhu-chatbot > .wrapper > .bubble-wrap::-webkit-scrollbar {
     height: 1rem;
     width: 4px;
 }
 
-#chuanhu-chatbot>.wrapper>.wrap::-webkit-scrollbar-track {
+#chuanhu-chatbot > .wrapper > .bubble-wrap::-webkit-scrollbar-track {
     background-color: transparent;
     border-radius:9999px
 }
 
-#chuanhu-chatbot>.wrapper>.wrap::-webkit-scrollbar-thumb {
+#chuanhu-chatbot > .wrapper > .bubble-wrap::-webkit-scrollbar-thumb {
     background-color: rgba(231, 231, 231, 0.8);
     /* border-color: rgba(255, 255, 255, var(--tw-border-opacity)); */
     border: none;
@@ -143,15 +143,15 @@ input[type=range]::-webkit-slider-runnable-track {
     /* border-width:1px */
 }
 
-#chuanhu-chatbot>.wrapper>.wrap::-webkit-scrollbar-thumb:hover {
+#chuanhu-chatbot > .wrapper > .bubble-wrap::-webkit-scrollbar-thumb:hover {
     --tw-bg-opacity: 1;
     background-color:rgb(195, 195, 195);
 }
 
-.dark #chuanhu-chatbot>.wrapper>.wrap::-webkit-scrollbar-thumb {
+.dark #chuanhu-chatbot > .wrapper > .bubble-wrap::-webkit-scrollbar-thumb {
     background-color: rgba(56, 56, 56, 0.5);
 }
 
-.dark #chuanhu-chatbot>.wrapper>.wrap::-webkit-scrollbar-thumb:hover {
+.dark #chuanhu-chatbot > .wrapper > .bubble-wrap::-webkit-scrollbar-thumb:hover {
     background-color: rgba(56, 56, 56, 0.8);
 }
