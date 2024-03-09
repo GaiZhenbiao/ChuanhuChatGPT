@@ -51,7 +51,7 @@ class GoogleGeminiClient(BaseLLMModel):
             else:
                 construct_index(self.api_key, file_src=files)
                 status = i18n("索引构建完成")
-                return gr.Files.update(), chatbot, status
+                return gr.update(), chatbot, status
 
     def get_answer_at_once(self):
         genai.configure(api_key=self.api_key)
