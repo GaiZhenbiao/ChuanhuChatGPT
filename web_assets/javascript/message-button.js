@@ -1,24 +1,55 @@
 
 // 为 bot 消息添加复制与切换显示按钮 以及最新消息加上重新生成，删除最新消息，嗯。
 
+function convertBotMessage(gradioButtonMsg) {
+    var rawMessageStr = gradioButtonMsg.getAttribute('aria-label');
+    rawMessageStr = rawMessageStr.replace(/^bot's message: /, ''); // 去掉开头的“bot's message: ”
+    var insertChild = gradioButtonMsg.querySelector('.md');
+
+    var rawMessage = document.createElement('div');
+    rawMessage.classList.add('raw-message');
+    rawMessage.classList.add('hideM');
+    rawMessage.innerHTML = `<pre class="fake-pre">${rawMessageStr}</pre>`;
+
+    var mdMessage = document.createElement('div');
+    mdMessage.classList.add('md-message');
+    mdMessage.innerHTML = insertChild.innerHTML;
+
+    insertChild.innerHTML = '';
+    insertChild.appendChild(rawMessage);
+    insertChild.appendChild(mdMessage);
+}
+
 function addChuanhuButton(botElement) {
 
     // botElement = botRow.querySelector('.message.bot');
     var isLatestMessage = botElement.classList.contains('latest');
 
+    var gradioButtonMsg = botElement.querySelector('button[data-testid="bot"]');
     var rawMessage = botElement.querySelector('.raw-message');
     var mdMessage = botElement.querySelector('.md-message');
     
-    if (!rawMessage) { // 如果没有 raw message，说明是早期历史记录，去除按钮
-        // var buttons = botElement.querySelectorAll('button.chuanhu-btn');
-        // for (var i = 0; i < buttons.length; i++) {
-        //     buttons[i].parentNode.removeChild(buttons[i]);
-        // }
-        botElement.querySelector('.message-btn-row')?.remove();
-        botElement.querySelector('.message-btn-column')?.remove();
-        return;
+    if (!rawMessage && !mdMessage) {
+        // 现在动态更新会导致 svelte.js 的 flush 出错，所以生成时不更新
+        if (chatbotIndicator.classList.contains('generating')) return;
+
+        convertBotMessage(gradioButtonMsg);
+        rawMessage = botElement.querySelector('.raw-message');
+        mdMessage = botElement.querySelector('.md-message');
     }
+    // 没有办法，太早的版本就不管了。没有办法区分最早版本和适配gradio4版本。
+
+    // if (!rawMessage) { // 如果没有 raw message，说明是早期历史记录，去除按钮
+    //     // var buttons = botElement.querySelectorAll('button.chuanhu-btn');
+    //     // for (var i = 0; i < buttons.length; i++) {
+    //     //     buttons[i].parentNode.removeChild(buttons[i]);
+    //     // }
+    //     botElement.querySelector('.message-btn-row')?.remove();
+    //     botElement.querySelector('.message-btn-column')?.remove();
+    //     return;
+    // }
     // botElement.querySelectorAll('button.copy-bot-btn, button.toggle-md-btn').forEach(btn => btn.remove()); // 就算原先有了，也必须重新添加，而不是跳过
+    
     if (!isLatestMessage) botElement.querySelector('.message-btn-row')?.remove();
     setLatestMessage();
 
