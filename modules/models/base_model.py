@@ -419,7 +419,7 @@ class BaseLLMModel:
             other_files = [f.name for f in other_files]
         else:
             other_files = None
-        return gr.File.update(value=other_files), chatbot, status
+        return gr.File(value=other_files), chatbot, status
 
     def summarize_index(self, files, chatbot, language):
         status = gr.Markdown()
