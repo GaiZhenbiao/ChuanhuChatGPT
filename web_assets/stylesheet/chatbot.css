@@ -210,7 +210,7 @@ hr.append-display {
     white-space: pre-wrap;
 }
 
-.message .md-message p {
+.message .md-message p:not(.agent-prefix) {
     margin-top: 0.6em !important;
     margin-bottom: 0.6em !important;
 }
@@ -231,6 +231,7 @@ hr.append-display {
     /* font-family: unset; */
     padding: unset !important;
     white-space: inherit;
+    word-break: break-word;
 }
 .message .raw-message {
     display: block;
