@@ -154,7 +154,7 @@ MODEL_METADATA = {
         "token_limit": 32768,
     },
     "GPT4 Turbo": {
-        "model_name": "gpt-4-1106-preview",
+        "model_name": "gpt-4-turbo-preview",
         "token_limit": 128000,
     },
     "GPT4 Vision": {
