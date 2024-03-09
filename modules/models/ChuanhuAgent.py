@@ -145,7 +145,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
                 self.index_summary = summary
                 chatbot.append((f"Uploaded {len(files)} files", summary))
             logging.info(cb)
-        return gr.Files.update(), chatbot, status
+        return gr.update(), chatbot, status
 
     def query_index(self, query):
         if self.index is not None:
