@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import time
 import logging
 import os
 import pathlib
@@ -662,7 +663,7 @@ class BaseLLMModel:
             self.history.append(inputs)
         else:
             self.history.append(construct_user(inputs))
-
+        start_time = time.time()
         try:
             if stream:
                 logging.debug("使用流式传输")
@@ -687,7 +688,7 @@ class BaseLLMModel:
             traceback.print_exc()
             status_text = STANDARD_ERROR_MSG + beautify_err_msg(str(e))
             yield chatbot, status_text
-
+        end_time = time.time()
         if len(self.history) > 1 and self.history[-1]["content"] != fake_inputs:
             logging.info(
                 "回答为："
@@ -695,6 +696,7 @@ class BaseLLMModel:
                 + f"{self.history[-1]['content']}"
                 + colorama.Style.RESET_ALL
             )
+            logging.info(i18n("Tokens per second：{token_generation_speed}").format(token_generation_speed=str(self.all_token_counts[-1] / (end_time - start_time))))
 
         if limited_context:
             # self.history = self.history[-4:]
