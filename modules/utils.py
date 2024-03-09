@@ -265,7 +265,7 @@ def clip_rawtext(chat_message, need_escape=True):
     return final_message
 
 
-def convert_bot_before_marked(chat_message):
+def convert_bot_before_marked(chat_message): # deprecated after gradio 4.0
     """
     注意不能给输出加缩进, 否则会被marked解析成代码块
     """

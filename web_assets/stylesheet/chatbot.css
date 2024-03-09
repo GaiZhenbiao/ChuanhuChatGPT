@@ -225,11 +225,11 @@ hr.append-display {
     margin:0 !important;
 }
 .message .raw-message pre.fake-pre {
-    background: unset;
-    margin: unset;
-    font-size: unset;
+    background: unset !important;
+    margin: unset !important;
+    font-size: unset !important;
     /* font-family: unset; */
-    padding: unset;
+    padding: unset !important;
     white-space: inherit;
 }
 .message .raw-message {

@@ -468,7 +468,7 @@ let ChuanhuInfo = function () {
  */
 }
 let description = `
-© 2023 Chuanhu, MZhao, Keldos
+© 2023 - 2024 Chuanhu, MZhao, Keldos
 GitHub repository: [https://github.com/GaiZhenbiao/ChuanhuChatGPT]\n
 Enjoy our project!\n
 `
