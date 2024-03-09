@@ -177,7 +177,7 @@ class OpenAIVisionClient(BaseLLMModel):
             "max_tokens": 4096
         }
 
-        if self.stop_sequence is not None:
+        if self.stop_sequence:
             payload["stop"] = self.stop_sequence
         if self.logit_bias is not None:
             payload["logit_bias"] = self.encoded_logit_bias()
