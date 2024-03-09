@@ -414,8 +414,8 @@ class BaseLLMModel:
                 if image_files:
                     chatbot.extend([(((image.name, None)), None) for image in image_files])
                     self.history.extend([construct_image(image.name) for image in image_files])
-            else:
-                gr.Warning(i18n("该模型不支持多模态输入"))
+                else:
+                    gr.Warning(i18n("该模型不支持多模态输入"))
             if other_files:
                 try:
                     construct_index(self.api_key, file_src=files)
