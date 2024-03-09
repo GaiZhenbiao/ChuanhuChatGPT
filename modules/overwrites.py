@@ -92,8 +92,12 @@ def init_with_class_name_as_elem_classes(original_func):
         return res
     return wrapper
 
-original_Component_init = gr.components.Component.__init__
-gr.components.Component.__init__ = init_with_class_name_as_elem_classes(original_Component_init)
-gr.components.FormComponent.__init__ = init_with_class_name_as_elem_classes(original_Component_init)
+def patch_gradio():
+    original_Component_init = gr.components.Component.__init__
+    gr.components.Component.__init__ = init_with_class_name_as_elem_classes(original_Component_init)
+    gr.components.FormComponent.__init__ = init_with_class_name_as_elem_classes(original_Component_init)
 
-gr.blocks.BlockContext.__init__ = init_with_class_name_as_elem_classes(gr.blocks.BlockContext.__init__)
+    gr.blocks.BlockContext.__init__ = init_with_class_name_as_elem_classes(gr.blocks.BlockContext.__init__)
+
+    # gr.Chatbot._postprocess_chat_messages = postprocess_chat_messages
+    # gr.Chatbot.postprocess = postprocess

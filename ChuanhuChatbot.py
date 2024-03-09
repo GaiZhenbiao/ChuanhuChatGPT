@@ -9,7 +9,7 @@ from modules.models.models import get_model
 from modules.train_func import *
 from modules.repo import *
 from modules.webui import *
-from modules.overwrites import *
+from modules.overwrites import patch_gradio
 from modules.presets import *
 from modules.utils import *
 from modules.config import *
@@ -19,8 +19,7 @@ import colorama
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
-gr.Chatbot._postprocess_chat_messages = postprocess_chat_messages
-gr.Chatbot.postprocess = postprocess
+patch_gradio()
 
 # with open("web_assets/css/ChuanhuChat.css", "r", encoding="utf-8") as f:
 #     ChuanhuChatCSS = f.read()
