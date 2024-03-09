@@ -787,13 +787,13 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         js='rebootingChuanhu'
     )
     changeSingleSessionBtn.click(
-        fn=lambda value: gr.Checkbox.update(value=value),
+        fn=lambda value: gr.Checkbox(value=value),
         inputs=[single_turn_checkbox],
         outputs=[single_turn_checkbox],
         js='(a)=>{return bgChangeSingleSession(a);}'
     )
     changeOnlineSearchBtn.click(
-        fn=lambda value: gr.Checkbox.update(value=value),
+        fn=lambda value: gr.Checkbox(value=value),
         inputs=[use_websearch_checkbox],
         outputs=[use_websearch_checkbox],
         js='(a)=>{return bgChangeOnlineSearch(a);}'
