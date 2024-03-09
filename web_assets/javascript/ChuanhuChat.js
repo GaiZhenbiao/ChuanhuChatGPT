@@ -15,6 +15,7 @@ var chatbotArea = null;
 var chatbot = null;
 var chatbotIndicator = null;
 var uploaderIndicator = null;
+var uploaderIndicator2 = null;
 var chatListIndicator = null;
 var chatbotWrap = null;
 var apSwitch = null;
@@ -45,13 +46,11 @@ var currentTime = new Date().getTime();
 let windowWidth = window.innerWidth; // 初始窗口宽度
 
 function addInit() {
-    // var needInit = {chatbotIndicator, uploaderIndicator};
-    // WIP: 因为 gradio 修改了 file uploader, 暂时无法检查 uploaderIndicator
-    // 在之后再考虑修复文件上传功能
-    var needInit = {chatbotIndicator};
+    var needInit = {chatbotIndicator, uploaderIndicator};
 
     chatbotIndicator = gradioApp().querySelector('#chuanhu-chatbot > div.wrap');
-    uploaderIndicator = gradioApp().querySelector('#upload-index-file > div[data-testid="block-label"]');
+    uploaderIndicator = gradioApp().querySelector('#upload-index-file > div.wrap');
+    uploaderIndicator2 = gradioApp().querySelector('#upload-index-file');
     chatListIndicator = gradioApp().querySelector('#history-select-dropdown > div.wrap');
 
     for (let elem in needInit) {

@@ -17,7 +17,6 @@ function mdDownloadClick() {
 
 // index files
 function setUploader() {
-    return;
     transUpload();
     var uploaderObserver = new MutationObserver(function (mutations) {
         var fileInput = null;
@@ -36,6 +35,7 @@ function setUploader() {
         }
     });
     uploaderObserver.observe(uploaderIndicator, {attributes: true})
+    uploaderObserver.observe(uploaderIndicator2, {attributes: true})
 }
 var grUploader;
 var chatbotUploader;
