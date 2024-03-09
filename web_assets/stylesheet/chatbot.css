@@ -354,17 +354,17 @@ hr.append-display {
     display: flex;
     flex-direction: column;
 }
-.history-message>.history-message {
+.history-message > .history-message {
     padding: 0 !important;
 }
-.history-message>.message-wrap {
+.history-message > .message-wrap {
     padding: 0 !important;
     margin-bottom: 16px;
 }
-.history-message>.message {
+.history-message > .message {
     margin-bottom: 16px;
 }
-.wrapper>.bubble-wrap>.history-message::after {
+.wrapper > .bubble-wrap > .history-message::after {
     content: "";
     display: block;
     height: 2px;
@@ -373,7 +373,7 @@ hr.append-display {
     margin-top: -10px;
     clear: both;
 }
-.wrapper>.bubble-wrap>.history-message>:last-child::after {
+.wrapper > .bubble-wrap > .history-message > :last-child::after {
     content: "仅供查看";
     display: block;
     text-align: center;
