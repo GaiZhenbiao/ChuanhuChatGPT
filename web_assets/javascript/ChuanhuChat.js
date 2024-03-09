@@ -390,7 +390,6 @@ function chatbotContentChanged(attempt = 1, force = false) {
 }
 
 var chatbotObserver = new MutationObserver(() => {
-    console.log('chatbotContentChanged');
     chatbotContentChanged(1);
     if (chatbotIndicator.classList.contains('hide')) {
         // setLatestMessage();

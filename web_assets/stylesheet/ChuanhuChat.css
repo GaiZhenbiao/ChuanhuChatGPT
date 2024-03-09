@@ -1027,6 +1027,7 @@ input:checked + .chatbot-input-more-span {
     width: calc(100% - 32px);
     margin-left: 32px;
     padding-left: 6px;
+    align-content: center;
     box-shadow: none;
 }
 #chuanhu-history-body {
