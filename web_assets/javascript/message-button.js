@@ -2,14 +2,43 @@
 // 为 bot 消息添加复制与切换显示按钮 以及最新消息加上重新生成，删除最新消息，嗯。
 
 function convertBotMessage(gradioButtonMsg) {
-    var rawMessageStr = gradioButtonMsg.getAttribute('aria-label');
-    rawMessageStr = rawMessageStr.replace(/^bot's message: /, ''); // 去掉开头的“bot's message: ”
+    function clipRawMessage(message) {
+        const hrPattern = /<hr class="append-display no-in-raw" \/>([\s\S]*?)/;
+        const hrMatch = message.match(hrPattern);
+        let finalMessage = "";
+        let suffixMessage = "";
+        let rawMessage = message;
+        if (hrMatch) {
+            message = rawMessage.substring(0, hrMatch.index).trim();
+            suffixMessage = rawMessage.substring(hrMatch.index).trim();
+        }
+
+        const agentPrefixPattern = new RegExp('<!-- S O PREFIX -->([\\s\\S]*?)<!-- E O PREFIX -->', 'g');
+        const agentParts = message.split(agentPrefixPattern);
+
+        for (let i = 0; i < agentParts.length; i++) {
+            const part = agentParts[i];
+            if (i % 2 === 0) {
+                if (part !== "" && part !== "\n") {
+                    finalMessage += `<pre class="fake-pre">${part.trim()}</pre>`;
+                }
+            } else {
+                finalMessage += part.replace(' data-fancybox="gallery"', ''); // 避免 raw message 中的图片被 fancybox 处理
+            }
+        }
+        finalMessage += suffixMessage
+        return finalMessage;
+    }
+
     var insertChild = gradioButtonMsg.querySelector('.md');
+
+    var rawMessageStr = gradioButtonMsg.getAttribute('aria-label');
+    rawMessageStr = rawMessageStr.replace(/^bot's message: /, ''); // 去掉开头的“bot's message: ”，删去结尾可能的多余的空行
 
     var rawMessage = document.createElement('div');
     rawMessage.classList.add('raw-message');
     rawMessage.classList.add('hideM');
-    rawMessage.innerHTML = `<pre class="fake-pre">${rawMessageStr}</pre>`;
+    rawMessage.innerHTML = clipRawMessage(rawMessageStr);
 
     var mdMessage = document.createElement('div');
     mdMessage.classList.add('md-message');
