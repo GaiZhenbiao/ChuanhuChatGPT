@@ -47,7 +47,7 @@
     "legacy_api_usage": false, // 是否使用旧版 API 用量查询接口（OpenAI现已关闭该接口，但是如果你在使用第三方 API，第三方可能仍然支持此接口）
 
     //== 川虎助理设置 ==
-    "default_chuanhu_assistant_model": "gpt-4", //川虎助理使用的模型，可选gpt-3.5-turbo或者gpt-4等
+    "default_chuanhu_assistant_model": "gpt-4-turbo-preview", //川虎助理使用的模型，可选gpt-3.5-turbo或者gpt-4等
     "GOOGLE_CSE_ID": "", //谷歌搜索引擎ID，用于川虎助理Pro模式，获取方式请看 https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search
     "GOOGLE_API_KEY": "", //谷歌API Key，用于川虎助理Pro模式
     "WOLFRAM_ALPHA_APPID": "", //Wolfram Alpha API Key，用于川虎助理Pro模式，获取方式请看 https://products.wolframalpha.com/api/

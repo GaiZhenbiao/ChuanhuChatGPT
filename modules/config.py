@@ -185,7 +185,7 @@ if api_host is not None:
     logging.info(f"OpenAI API Base set to: {os.environ['OPENAI_API_BASE']}")
 
 default_chuanhu_assistant_model = config.get(
-    "default_chuanhu_assistant_model", "gpt-3.5-turbo")
+    "default_chuanhu_assistant_model", "gpt-4-turbo-preview")
 for x in ["GOOGLE_CSE_ID", "GOOGLE_API_KEY", "WOLFRAM_ALPHA_APPID", "SERPAPI_API_KEY"]:
     if config.get(x, None) is not None:
         os.environ[x] = config[x]
