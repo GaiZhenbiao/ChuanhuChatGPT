@@ -401,8 +401,8 @@ class BaseLLMModel:
                     image_files.append(f)
                 else:
                     other_files.append(f)
-            if self.multimodal:
-                if image_files:
+            if image_files:
+                if self.multimodal:
                     chatbot.extend([(((image.name, None)), None) for image in image_files])
                     self.history.extend([construct_image(image.name) for image in image_files])
                 else:
