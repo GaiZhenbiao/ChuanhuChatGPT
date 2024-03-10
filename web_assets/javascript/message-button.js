@@ -20,7 +20,7 @@ function convertBotMessage(gradioButtonMsg) {
             const part = agentParts[i];
             if (i % 2 === 0) {
                 if (part !== "" && part !== "\n") {
-                    finalMessage += `<pre class="fake-pre">${part.trim()}</pre>`;
+                    finalMessage += `<pre class="fake-pre">${escapeMarkdown(part.trim())}</pre>`;
                 }
             } else {
                 finalMessage += part.replace(' data-fancybox="gallery"', ''); // 避免 raw message 中的图片被 fancybox 处理

@@ -15,6 +15,44 @@ function isImgUrl(url) {
     return false;
 }
 
+function escapeMarkdown(text) {
+    /*
+    Escape Markdown special characters to HTML-safe equivalents.
+    */
+    const escapeChars = {
+        // ' ': '&nbsp;',
+        "_": "&#95;",
+        "*": "&#42;",
+        "[": "&#91;",
+        "]": "&#93;",
+        "(": "&#40;",
+        ")": "&#41;",
+        "{": "&#123;",
+        "}": "&#125;",
+        "#": "&#35;",
+        "+": "&#43;",
+        "-": "&#45;",
+        ".": "&#46;",
+        "!": "&#33;",
+        "`": "&#96;",
+        ">": "&#62;",
+        "<": "&#60;",
+        "|": "&#124;",
+        "$": "&#36;",
+        ":": "&#58;",
+    };
+
+    text = text.replace(/ {4}/g, "&nbsp;&nbsp;&nbsp;&nbsp;"); // Replace 4 spaces with non-breaking spaces
+
+    let escapedText = "";
+    for (let i = 0; i < text.length; i++) {
+        const currentChar = text.charAt(i);
+        escapedText += escapeChars[currentChar] || currentChar;
+    }
+
+    return escapedText;
+}
+
 function downloadHistory(gradioUsername, historyname, format=".json") {
     let fileUrl;
     if (gradioUsername === null || gradioUsername.trim() === "") {
