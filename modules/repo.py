@@ -313,7 +313,7 @@ def background_update():
         if need_pip:
             try:
                 run_pip(
-                    f"install -r requirements.txt",
+                    f"install -r requirements.txt --upgrade",
                     pref="[Updater]",
                     desc="requirements",
                     live=False,
