@@ -822,6 +822,7 @@ if __name__ == "__main__":
     setup_wizard()
     demo.queue(concurrency_count=CONCURRENT_COUNT).launch(
         allowed_paths=["history", "web_assets"],
+        blocked_paths=["config.json", "files", "models", "lora", "modules"],
         server_name=server_name,
         server_port=server_port,
         share=share,
