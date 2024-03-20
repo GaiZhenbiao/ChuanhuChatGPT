@@ -701,7 +701,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         show_progress=True,
         js='(a,b)=>{return clearChatbot(a,b);}',
     )
-    historySelectList.input(**load_history_from_file_args)
+    historySelectList.select(**load_history_from_file_args)
     uploadFileBtn.upload(upload_chat_history, [current_model, uploadFileBtn], [
                         saveFileName, systemPromptTxt, chatbot, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt]).then(**refresh_history_args)
     historyDownloadBtn.click(None, [
