@@ -225,6 +225,7 @@ hr.append-display {
     margin:0 !important;
 }
 .message .raw-message pre.fake-pre {
+    color: inherit;
     background: unset !important;
     margin: unset !important;
     font-size: unset !important;
