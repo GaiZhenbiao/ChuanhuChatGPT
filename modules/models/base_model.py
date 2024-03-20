@@ -421,6 +421,21 @@ class BaseLLMModel:
             other_files = None
         return gr.File.update(value=other_files), chatbot, status
 
+    def load_index_file(self, knowledge_base_name):
+        return [os.path.join("./files/knowledge_base", name) for name in knowledge_base_name]
+
+    def save_index_file(self, files, knowledge_base_name):
+        if files:
+            knowledge_base_path = f"./files/knowledge_base/{knowledge_base_name}"
+            Path(knowledge_base_path).mkdir(parents=True, exist_ok=True)
+            for file in files:
+                try:
+                    shutil.copy(file.name, str(Path(knowledge_base_path) / Path(file.name).name))
+                except FileExistsError:
+                    pass
+            gr.Info(i18n("索引文件保存成功！"))
+        return
+
     def summarize_index(self, files, chatbot, language):
         status = gr.Markdown.update()
         if files:

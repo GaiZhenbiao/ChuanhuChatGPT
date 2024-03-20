@@ -33,7 +33,6 @@ gr.Chatbot.postprocess = postprocess
 def create_new_model():
     return get_model(model_name=MODELS[DEFAULT_MODEL], access_key=my_api_key)[0]
 
-
 with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     user_name = gr.Textbox("", visible=False)
     # 激活/logout路由
@@ -262,6 +261,14 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 "使用在线搜索"), value=False, elem_classes="switch-checkbox", elem_id="gr-websearch-cb", visible=False)
                             index_files = gr.Files(label=i18n(
                                 "上传"), type="file", file_types=[".pdf", ".docx", ".pptx", ".epub", ".xlsx", ".txt", "text", "image"], elem_id="upload-index-file")
+                            with gr.Row():
+                                knowledge_base_name = gr.Dropdown(
+                                    label=i18n("选择或输入知识库名字"), choices=load_knowledge_base_names(), multiselect=True, visible=True, elem_id="gr-kb-select-dropdown")
+                                with gr.Row():
+                                    knowledge_base_refresh_btn = gr.Button(
+                                                i18n("🔄"))
+                                save_index_file_btn = gr.Button(
+                                    i18n("保存知识库"), elem_id="save-index-file-btn")
                             two_column = gr.Checkbox(label=i18n(
                                 "双栏pdf"), value=advance_docs["pdf"].get("two_column", False))
                             summarize_btn = gr.Button(i18n("总结"))
@@ -595,6 +602,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     index_files.upload(handle_file_upload, [current_model, index_files, chatbot, language_select_dropdown], [
                        index_files, chatbot, status_display])
+    knowledge_base_name.select(load_index_file, [current_model, knowledge_base_name], [index_files])
+    knowledge_base_refresh_btn.click(lambda: gr.Dropdown.update(choices=load_knowledge_base_names()), [], [knowledge_base_name])
+    save_index_file_btn.click(save_index_file, [current_model, index_files, knowledge_base_name], [])
     summarize_btn.click(handle_summarize_index, [
                         current_model, index_files, chatbot, language_select_dropdown], [chatbot, status_display])
 

@@ -131,6 +131,8 @@
     "由于下面的原因，Google 拒绝返回 Gemini 的回答：\\n\\n": "Vì lý do dưới đây, Google từ chối trả lời của Gemini:",
     "知识库": "Cơ sở kiến thức",
     "知识库文件": "Tệp cơ sở kiến thức",
+    "选择或输入知识库名字": "Chọn hoặc nhập tên cơ sở kiến thức",
+    "保存知识库": "Lưu cơ sở kiến thức",
     "立即重启": "Khởi động lại ngay",
     "第一条提问": "Theo câu hỏi đầu tiên",
     "索引已保存至本地!": "Chỉ số đã được lưu cục bộ!",
