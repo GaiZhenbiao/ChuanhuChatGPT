@@ -256,6 +256,9 @@ hr.append-display {
     margin-bottom: .8em !important;
 }
 
+.message.pending {
+    display: none !important;
+}
 /* custom buttons */
 .chuanhu-btn {
     border-radius: 5px;
