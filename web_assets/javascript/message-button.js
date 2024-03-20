@@ -2,6 +2,8 @@
 // 为 bot 消息添加复制与切换显示按钮 以及最新消息加上重新生成，删除最新消息，嗯。
 
 function convertBotMessage(gradioButtonMsg) {
+    return;
+    // should use old version with raw-message applied in python
     function clipRawMessage(message) {
         const hrPattern = /<hr class="append-display no-in-raw" \/>([\s\S]*?)/;
         const hrMatch = message.match(hrPattern);
@@ -58,29 +60,33 @@ function addChuanhuButton(botElement) {
     var rawMessage = botElement.querySelector('.raw-message');
     var mdMessage = botElement.querySelector('.md-message');
     
-    if (!rawMessage && !mdMessage) {
-        // 现在动态更新会导致 svelte.js 的 flush 出错，所以生成时不更新
-        if (chatbotIndicator.classList.contains('generating')) return;
+    // if (!rawMessage && !mdMessage) {
+    //     // 现在动态更新会导致 svelte.js 的 flush 出错，所以生成时不更新
+    //     if (chatbotIndicator.classList.contains('generating')) return;
 
-        convertBotMessage(gradioButtonMsg);
-        rawMessage = botElement.querySelector('.raw-message');
-        mdMessage = botElement.querySelector('.md-message');
-    }
-    // 没有办法，太早的版本就不管了。没有办法区分最早版本和适配gradio4版本。
-
-    // if (!rawMessage) { // 如果没有 raw message，说明是早期历史记录，去除按钮
-    //     // var buttons = botElement.querySelectorAll('button.chuanhu-btn');
-    //     // for (var i = 0; i < buttons.length; i++) {
-    //     //     buttons[i].parentNode.removeChild(buttons[i]);
-    //     // }
-    //     botElement.querySelector('.message-btn-row')?.remove();
-    //     botElement.querySelector('.message-btn-column')?.remove();
-    //     return;
+    //     // convertBotMessage(gradioButtonMsg);
+    //     rawMessage = botElement.querySelector('.raw-message');
+    //     mdMessage = botElement.querySelector('.md-message');
     // }
-    // botElement.querySelectorAll('button.copy-bot-btn, button.toggle-md-btn').forEach(btn => btn.remove()); // 就算原先有了，也必须重新添加，而不是跳过
+
+    if (!rawMessage) { // 如果没有 raw message，说明是早期历史记录，去除按钮
+        // var buttons = botElement.querySelectorAll('button.chuanhu-btn');
+        // for (var i = 0; i < buttons.length; i++) {
+        //     buttons[i].parentNode.removeChild(buttons[i]);
+        // }
+        botElement.querySelector('.message-btn-row')?.remove();
+        botElement.querySelector('.message-btn-column')?.remove();
+        return;
+    }
+
     
-    if (!isLatestMessage) botElement.querySelector('.message-btn-row')?.remove();
+    // if (!isLatestMessage) botElement.querySelector('.message-btn-row')?.remove();
     setLatestMessage();
+    
+    // 改成生成时不添加按钮好了……
+    if (chatbotIndicator.classList.contains('generating')) return;
+
+
 
     botElement.querySelector('.message-btn-column')?.remove();
 

@@ -57,8 +57,8 @@ def postprocess_chat_messages(
     elif isinstance(chat_message, str):
         # chat_message = inspect.cleandoc(chat_message)
         if role == "bot":
-            chat_message = inspect.cleandoc(chat_message)
-            # chat_message = convert_bot_before_marked(chat_message)
+            # chat_message = inspect.cleandoc(chat_message)
+            chat_message = convert_bot_before_marked(chat_message)
         elif role == "user":
             chat_message = convert_user_before_marked(chat_message)
         return chat_message
