@@ -57,6 +57,7 @@ function addChuanhuButton(botElement) {
     var isLatestMessage = botElement.classList.contains('latest');
 
     var gradioButtonMsg = botElement.querySelector('button[data-testid="bot"]');
+
     var rawMessage = botElement.querySelector('.raw-message');
     var mdMessage = botElement.querySelector('.md-message');
     
@@ -98,10 +99,17 @@ function addChuanhuButton(botElement) {
     copyButton.innerHTML = copyIcon;
 
     copyButton.addEventListener('click', async () => {
-        const textToCopy = rawMessage.innerText;
+
+        let textToCopyHTML = rawMessage.innerHTML;
+        let textToCopyTMP = textToCopyHTML.replace(/<br\s*\/?>/gi, '\n');
+        let textToCopyDOM = document.createElement('div');
+        textToCopyDOM.innerHTML = textToCopyTMP;
+        let textToCopy = textToCopyDOM.textContent;
+
         try {
             if ("clipboard" in navigator) {
                 await navigator.clipboard.writeText(textToCopy);
+                // console.log("Copied to clipboard: \n", textToCopy);
                 copyButton.innerHTML = copiedIcon;
                 setTimeout(() => {
                     copyButton.innerHTML = copyIcon;
