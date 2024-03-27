@@ -265,7 +265,7 @@ def clip_rawtext(chat_message, need_escape=True):
     return final_message
 
 
-def convert_bot_before_marked(chat_message): # deprecated after gradio 4.0
+def convert_bot_before_marked(chat_message):
     """
     注意不能给输出加缩进, 否则会被marked解析成代码块
     """
@@ -303,6 +303,7 @@ def escape_markdown(text):
     """
     escape_chars = {
         # ' ': '&nbsp;',
+        '"': "&quot;",
         "_": "&#95;",
         "*": "&#42;",
         "[": "&#91;",
