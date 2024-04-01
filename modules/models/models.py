@@ -141,7 +141,7 @@ def get_model(
         elif model_type == ModelType.Ollama:
             from .Ollama import OllamaClient
             ollama_host = os.environ.get("OLLAMA_HOST", access_key)
-            model = OllamaClient(model_name, user_name=user_name, backend_model=lora_model_path)
+            model = OllamaClient(model_name, user_name=user_name, backend_model=lora_model_path, ollama_host=ollama_host)
             model_list = model.get_model_list()
             lora_selector_visibility = True
             lora_choices = [i["name"] for i in model_list["models"]]
