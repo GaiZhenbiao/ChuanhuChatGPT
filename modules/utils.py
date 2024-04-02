@@ -147,6 +147,14 @@ def set_single_turn(current_model, *args):
 def handle_file_upload(current_model, *args):
     return current_model.handle_file_upload(*args)
 
+def save_index_file(current_model, *args):
+    return current_model.save_index_file(*args)
+
+def load_index_file(current_model, *args):
+    return current_model.load_index_file(*args)
+
+def load_knowledge_base_names():
+    return [x.name for x in Path("./files/knowledge_base/").glob("*")]
 
 def handle_summarize_index(current_model, *args):
     return current_model.summarize_index(*args)

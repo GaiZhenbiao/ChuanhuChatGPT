@@ -131,6 +131,8 @@
     "由于下面的原因，Google 拒绝返回 Gemini 的回答：\\n\\n": "Google vägrar att returnera Gemini's svar av följande skäl:",
     "知识库": "kunskapsbank",
     "知识库文件": "kunskapsbankfil",
+    "选择或输入知识库名字": "Välj eller skriv in kunskapsbankens namn",
+    "保存知识库": "Spara kunskapsbank",
     "立即重启": "Starta om nu",
     "第一条提问": "Första frågan",
     "索引已保存至本地!": "Index har sparats lokalt!",

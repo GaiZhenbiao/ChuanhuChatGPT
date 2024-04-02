@@ -130,6 +130,8 @@
     "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "開発：Bilibili [土川虎虎虎](https://space.bilibili.com/29125536) と [明昭MZhao](https://space.bilibili.com/24807452) と [Keldos](https://github.com/Keldos-Li)\n\n最新コードは川虎Chatのサイトへ [GitHubプロジェクト](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
     "由于下面的原因，Google 拒绝返回 Gemini 的回答：\\n\\n": "GoogleがGeminiの回答を返信しない理由：",
     "知识库": "ファイル収納庫",
+    "选择或输入知识库名字": "ナレッジベース名を選択または入力",
+    "保存知识库": "ナレッジベースを保存",
     "知识库文件": "ナレッジベースファイル",
     "立即重启": "今すぐ再起動",
     "第一条提问": "最初の質問",
