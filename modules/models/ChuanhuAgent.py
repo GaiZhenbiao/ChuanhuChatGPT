@@ -1,44 +1,46 @@
-from langchain.chains.summarize import load_summarize_chain
-from langchain import PromptTemplate, LLMChain
-from langchain.chat_models import ChatOpenAI
-from langchain.prompts import PromptTemplate
-from langchain.text_splitter import TokenTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.chains import RetrievalQA
-from langchain.agents import load_tools
-from langchain.agents import initialize_agent
-from langchain.agents import AgentType
-from langchain.docstore.document import Document
-from langchain.tools import BaseTool, StructuredTool, Tool, tool
-from langchain.callbacks.stdout import StdOutCallbackHandler
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.callbacks.base import BaseCallbackManager
-from duckduckgo_search import DDGS
+import logging
+import os
+from collections import deque
 from itertools import islice
-
+from threading import Condition, Thread
 from typing import Any, Dict, List, Optional, Union
 
-from langchain.callbacks.base import BaseCallbackHandler
-from langchain.input import print_text
-from langchain.schema import AgentAction, AgentFinish, LLMResult
-
-from pydantic.v1 import BaseModel, Field
-
+import gradio as gr
 import requests
 from bs4 import BeautifulSoup
-from threading import Thread, Condition
-from collections import deque
-
-from .base_model import BaseLLMModel, CallbackToIterator, ChuanhuCallbackHandler
-from ..config import default_chuanhu_assistant_model
-from ..presets import SUMMARIZE_PROMPT, i18n
-from ..index_func import construct_index
-
+from duckduckgo_search import DDGS
+from langchain import LLMChain, PromptTemplate, hub
+from langchain.agents import (AgentExecutor, AgentType,
+                              create_openai_tools_agent, initialize_agent,
+                              load_tools)
 from langchain.callbacks import get_openai_callback
-import os
-import gradio as gr
-import logging
+from langchain.callbacks.base import BaseCallbackHandler, BaseCallbackManager
+from langchain.callbacks.stdout import StdOutCallbackHandler
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.chains import RetrievalQA
+from langchain.chains.summarize import load_summarize_chain
+from langchain.chat_models import ChatOpenAI
+from langchain.docstore.document import Document
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.input import print_text
+from langchain.prompts import PromptTemplate
+from langchain.schema import AgentAction, AgentFinish, LLMResult
+from langchain.text_splitter import TokenTextSplitter
+from langchain.tools import BaseTool, StructuredTool, Tool, tool
+from langchain.vectorstores import FAISS
+from langchain_community.tools.google_search import GoogleSearchResults
+from langchain_core.messages.human import HumanMessage
+from langchain_core.messages.ai import AIMessage
+from langchain_core.messages.chat import ChatMessage
+from langchain_openai import ChatOpenAI
+from pydantic.v1 import BaseModel, Field
+
+from ..config import default_chuanhu_assistant_model
+from ..index_func import construct_index
+from ..presets import SUMMARIZE_PROMPT, i18n
+from .base_model import (BaseLLMModel, CallbackToIterator,
+                         ChuanhuCallbackHandler)
+
 
 class GoogleSearchInput(BaseModel):
     keywords: str = Field(description="keywords to search")
@@ -49,6 +51,9 @@ class WebBrowsingInput(BaseModel):
 class WebAskingInput(BaseModel):
     url: str = Field(description="URL of a webpage")
     question: str = Field(description="Question that you want to know the answer to, based on the webpage's content.")
+
+
+agent_prompt = hub.pull("hwchase17/openai-tools-agent")
 
 
 class ChuanhuAgent_Client(BaseLLMModel):
@@ -85,7 +90,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
             self.tools.append(
                 Tool.from_function(
                     func=self.google_search_simple,
-                    name="Google Search JSON",
+                    name="google_search_json",
                     description="useful when you need to search the web.",
                     args_schema=GoogleSearchInput
                 )
@@ -94,7 +99,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         self.tools.append(
             Tool.from_function(
                 func=self.summary_url,
-                name="Summary Webpage",
+                name="summary_webpage",
                 description="useful when you need to know the overall content of a webpage.",
                 args_schema=WebBrowsingInput
             )
@@ -103,7 +108,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         self.tools.append(
             StructuredTool.from_function(
                 func=self.ask_url,
-                name="Ask Webpage",
+                name="ask_webpage",
                 description="useful when you need to ask detailed questions about a webpage.",
                 args_schema=WebAskingInput
             )
@@ -134,8 +139,8 @@ class ChuanhuAgent_Client(BaseLLMModel):
             with get_openai_callback() as cb:
                 os.environ["OPENAI_API_KEY"] = self.api_key
                 from langchain.chains.summarize import load_summarize_chain
-                from langchain.prompts import PromptTemplate
                 from langchain.chat_models import ChatOpenAI
+                from langchain.prompts import PromptTemplate
                 prompt_template = "Write a concise summary of the following:\n\n{text}\n\nCONCISE SUMMARY IN " + language + ":"
                 PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
                 llm = ChatOpenAI()
@@ -215,9 +220,18 @@ class ChuanhuAgent_Client(BaseLLMModel):
                         args_schema=WebBrowsingInput
                     )
                 )
-            agent = initialize_agent(self.tools, self.llm, agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True, callback_manager=manager)
+            agent = create_openai_tools_agent(self.llm, tools, agent_prompt)
+            agent_executor = AgentExecutor(agent=agent, tools=tools, callback_manager=manager)
+            messages = []
+            for msg in self.history:
+                if msg["role"] == "user":
+                    messages.append(HumanMessage(content=msg["content"]))
+                elif msg["role"] == "assistant":
+                    messages.append(AIMessage(content=msg["content"]))
+                else:
+                    logging.warning(f"Unknown role: {msg['role']}")
             try:
-                reply = agent.run(input=f"{question} Reply in 简体中文")
+                reply = agent_executor.invoke({"input": question, "chat_history": messages})["output"]
             except Exception as e:
                 import traceback
                 traceback.print_exc()
