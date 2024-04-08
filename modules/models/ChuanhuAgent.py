@@ -90,7 +90,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
             self.tools.append(
                 Tool.from_function(
                     func=self.google_search_simple,
-                    name="google_search_json",
+                    name="ddg_search_json",
                     description="useful when you need to search the web.",
                     args_schema=GoogleSearchInput
                 )
