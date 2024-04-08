@@ -61,14 +61,10 @@ class CallbackToIterator:
             self.cond.notify()  # Wake up the generator if it's waiting.
 
 
-def get_action_description(text):
-    match = re.search("```(.*?)```", text, re.S)
-    json_text = match.group(1)
-    # 把json转化为python字典
-    json_dict = json.loads(json_text)
-    # 提取'action'和'action_input'的值
-    action_name = json_dict["action"]
-    action_input = json_dict["action_input"]
+def get_action_description(action):
+    action_name = action.tool
+    action_name = " ".join(action_name.split("_")).title()
+    action_input = action.tool_input
     if action_name != "Final Answer":
         return f'<!-- S O PREFIX --><p class="agent-prefix">{action_name}: {action_input}\n</p><!-- E O PREFIX -->'
     else:
@@ -83,7 +79,7 @@ class ChuanhuCallbackHandler(BaseCallbackHandler):
     def on_agent_action(
         self, action: AgentAction, color: Optional[str] = None, **kwargs: Any
     ) -> Any:
-        self.callback(get_action_description(action.log))
+        self.callback(get_action_description(action))
 
     def on_tool_end(
         self,
