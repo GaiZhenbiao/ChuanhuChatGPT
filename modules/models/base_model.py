@@ -65,6 +65,8 @@ def get_action_description(action):
     action_name = action.tool
     action_name = " ".join(action_name.split("_")).title()
     action_input = action.tool_input
+    if isinstance(action_input, dict):
+        action_input = " ".join(action_input.values())
     if action_name != "Final Answer":
         return f'<!-- S O PREFIX --><p class="agent-prefix">{action_name}: {action_input}\n</p><!-- E O PREFIX -->'
     else:
