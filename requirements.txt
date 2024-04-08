@@ -20,7 +20,7 @@ openpyxl
 pandoc
 wolframalpha
 faiss-cpu==1.7.4
-duckduckgo-search>=4.1.1
+duckduckgo-search>=5.3.0
 arxiv
 wikipedia
 google-cloud-aiplatform
