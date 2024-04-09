@@ -1,9 +1,9 @@
 
 hr.append-display {
-    margin: 8px 0;
+    margin: 8px 0 !important;
     border: none;
     height: 1px;
-    border-top-width: 0;
+    border-top-width: 0 !important;
     background-image: linear-gradient(to right, rgba(50,50,50, 0.1), rgba(150, 150, 150, 0.8), rgba(50,50,50, 0.1));
 }
 .source-a {
