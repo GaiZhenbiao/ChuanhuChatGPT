@@ -1,4 +1,40 @@
 
+/* list from gradio 4.26, recover what silly gradio has done*/ 
+.message {
+    .prose ul {
+        list-style-position: outside !important;
+        list-style-type: disc;
+    }
+    .prose ol {
+        list-style-position: outside !important;
+    }
+    .prose ul ul,
+    .prose ol ul,
+    .prose ul ol ul,
+    .prose ol ol ul {
+        list-style-type: circle;
+    }
+    .prose ul > p,
+    .prose li > p {
+        display: initial;
+    }
+    .prose ol,
+    .prose ul {
+        margin-top: unset;
+    }
+    .prose ul ul,
+    .prose ul ol,
+    .prose ol ol,
+    .prose ol ul {
+        margin: initial;
+        font-size: inherit;
+    }
+    .prose li {
+        margin-bottom: initial;
+    }
+}
+
+
 /* 表格 */
 .message table {
     margin: 1em 0;
