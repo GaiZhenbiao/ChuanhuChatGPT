@@ -17,12 +17,11 @@ from langchain.docstore.document import Document
 from langchain.text_splitter import TokenTextSplitter
 from langchain.tools import StructuredTool, Tool
 from langchain.vectorstores.base import VectorStoreRetriever
-from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.messages.ai import AIMessage
 from langchain_core.messages.human import HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from pydantic.v1 import BaseModel, Field
 
 from ..index_func import construct_index
@@ -217,6 +216,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         embeddings = OpenAIEmbeddings(
             openai_api_key=self.api_key,
             openai_api_base=os.environ.get("OPENAI_API_BASE", None),
+            model="text-embedding-3-large",
         )
 
         # create vectorstore
