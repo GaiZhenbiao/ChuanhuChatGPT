@@ -14,6 +14,9 @@ from io import BytesIO
 from itertools import islice
 from threading import Condition, Thread
 from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence, TypeVar, Union
+from uuid import UUID
+from langchain_core.outputs import ChatGenerationChunk, GenerationChunk
 
 import colorama
 import PIL
@@ -109,18 +112,23 @@ class ChuanhuCallbackHandler(BaseCallbackHandler):
         # self.callback(f"{finish.log}\n\n")
         logging.info(finish.log)
 
-    def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
-        """Run on new LLM token. Only available when streaming is enabled."""
-        self.callback(token)
-
-    def on_chat_model_start(
+    def on_llm_new_token(
         self,
-        serialized: Dict[str, Any],
-        messages: List[List[BaseMessage]],
+        token: str,
+        *,
+        chunk: Optional[Union[GenerationChunk, ChatGenerationChunk]] = None,
+        run_id: UUID,
+        parent_run_id: Optional[UUID] = None,
         **kwargs: Any,
     ) -> Any:
-        """Run when a chat model starts running."""
-        pass
+        """Run on new LLM token. Only available when streaming is enabled.
+
+        Args:
+            token (str): The new token.
+            chunk (GenerationChunk | ChatGenerationChunk): The new generated chunk,
+            containing content and other information.
+        """
+        logging.info(f"### CHUNK ###: {chunk}")
 
 
 class ModelType(Enum):
