@@ -232,6 +232,8 @@ body.popup-open {
 
 
 #popup-wrapper {
+    width: 100dvw;
+    height: 100dvh;
     display: none;
     position: fixed;
     overflow: auto;
@@ -300,10 +302,10 @@ body.popup-open {
     display: inline-flex;
     justify-content: space-between;
     /* margin-top: 54px; */
-    /* height: calc(100*var(--vh) - 72px); */
+    /* height: calc(100dvh - 72px); */
     position: absolute;
     top: 65px;
-    height: calc(100*var(--vh) - 65px);
+    height: calc(100dvh - 65px);
 }
 
 #chuanhu-area {
@@ -644,7 +646,7 @@ input:checked + .chatbot-input-more-span {
 #menu-area.showSide {
     width: var(--menu-width);
     max-width: var(--menu-width);
-    height: calc(100*var(--vh) - 65px);
+    height: calc(100dvh - 65px);
     visibility: visible;
     /* margin-right: 16px; */
     border-right: 0.5px solid var(--border-color-primary);
@@ -656,7 +658,7 @@ input:checked + .chatbot-input-more-span {
 }
 #toolbox-area.showSide {
     width: var(--toolbox-width);
-    height: calc(100*var(--vh) - 65px);
+    height: calc(100dvh - 65px);
     visibility: visible;
     /* margin-left: 16px; */
 }
@@ -685,17 +687,17 @@ input:checked + .chatbot-input-more-span {
         /* right: calc(0px - var(--toolbox-width)); */
         z-index: 10008;
         overflow: unset;
-        top: calc(100*var(--vh));
+        top: 100dvh;
         margin: 0;
     }
     #toolbox-area > div {
         width: 100vw;
-        height: calc( 90*var(--vh) - 48px );
+        height: calc( 90dvh - 48px );
     }
     #toolbox-area.showSide {
         width: 100vw;
         right: 0;
-        top: calc( 10*var(--vh) + 48px );
+        top: calc( 10dvh + 48px );
         margin: 0;
         border-radius: 6px;
         box-shadow: 0 2px 64px 4px rgba(0, 0, 0, 0.2);
@@ -789,7 +791,7 @@ input:checked + .chatbot-input-more-span {
     }
     #chuanhu-popup {
         width: 100vw;
-        height: calc( 90*var(--vh) - 48px );
+        height: calc( 90dvh - 48px );
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
@@ -806,7 +808,7 @@ input:checked + .chatbot-input-more-span {
     }
     #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tabitem,
     #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tabitem {
-        height: calc( 90*var(--vh) - 48px - 46px - 45px );
+        height: calc( 90dvh - 48px - 46px - 45px );
         overflow-x: auto;
         border: none;
     }
@@ -990,8 +992,8 @@ input:checked + .chatbot-input-more-span {
 } */
 
 #chuanhu-history {
-    max-height: calc(100*var(--vh) - 65px - 61px);
-    max-height: calc(100*var(--vh) - 65px - calc(36px + 12px + max(12px, env(safe-area-inset-bottom)) + 1px ));
+    max-height: calc(100dvh - 65px - 61px);
+    max-height: calc(100dvh - 65px - calc(36px + 12px + max(12px, env(safe-area-inset-bottom)) + 1px ));
     /* overflow-y: auto; */
 }
 #chuanhu-history > div {
@@ -1250,14 +1252,14 @@ button:active .icon-need-hover, button:active.icon-need-hover {
     overflow: hidden;
     display: inline-flex;
     /* margin-top: 54px; */
-    /* height: calc(100*var(--vh) - 72px); */
+    /* height: calc(100dvh - 72px); */
     /* position: absolute;
     top: 48px;
 } */
 /* 
 .hide-body {
     display: none;
-    top: calc(-100*var(--vh));
+    top: calc(-100dvh);
     
 }
 #train-body {
@@ -1266,7 +1268,7 @@ button:active .icon-need-hover, button:active.icon-need-hover {
 
 #chuanhu-body.hide-body {
     display: none;
-    top: calc(100*var(--vh) + 48px);
+    top: calc(100dvh + 48px);
 }
 #chuanhu-body {
     transition: top 0.3s ease-in-out, display 0.3s ease;

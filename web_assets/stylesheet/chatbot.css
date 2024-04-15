@@ -151,19 +151,19 @@ hr.append-display {
 /* update on 2023.4.8: 高度的细致调整已写入JavaScript */
 @media screen and (min-width: 500px) {
     /* #chuanhu-chatbot {
-        height: calc(100*var(--vh) - 200px);
+        height: calc(100dvh - 200px);
     }
     #chuanhu-chatbot>.wrapper>.wrap {
-        max-height: calc(100*var(--vh) - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+        max-height: calc(100dvh - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     } */
 }
 /* 屏幕宽度小于500px的设备 */
 @media screen and (max-width: 499px) {
     /* #chuanhu-chatbot {
-        height: calc(100*var(--vh) - 140px);
+        height: calc(100dvh - 140px);
     }
     #chuanhu-chatbot>.wrapper>.wrap {
-        max-height: calc(100*var(--vh) - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+        max-height: calc(100dvh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     } */
     .message.bot {
         max-width: calc(100% - 84px) !important;
@@ -183,7 +183,7 @@ hr.append-display {
 }
 
 #chuanhu-chatbot {
-    height: calc(100*var(--vh) - 65px) !important;
+    height: calc(100dvh - 65px) !important;
     border-radius: 0;
 }
 #chuanhu-chatbot > .wrapper > .bubble-wrap {

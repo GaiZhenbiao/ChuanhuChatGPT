@@ -327,10 +327,10 @@ function setPopupBoxPosition() {
     // chuanhuPopup.style.top = `${(screenHeight - popupBoxHeight) / 2}px`;
 }
 
-function updateVH() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-}
+// function updateVH() {
+//     const vh = window.innerHeight * 0.01;
+//     document.documentElement.style.setProperty('--vh', `${vh}px`);
+// }
 
 function setChatbotHeight() {
     return;
@@ -442,7 +442,7 @@ var gradioObserver = new MutationObserver(function (mutations) {
 // 监视页面变化
 window.addEventListener("DOMContentLoaded", function () {
     // const ga = document.getElementsByTagName("gradio-app");
-    updateVH();
+    // updateVH();
     windowWidth = window.innerWidth;
     gradioApp().addEventListener("render", initialize);
     isInIframe = (window.self !== window.top);
@@ -450,13 +450,13 @@ window.addEventListener("DOMContentLoaded", function () {
 });
 window.addEventListener('resize', ()=>{
     // setChatbotHeight();
-    updateVH();
+    // updateVH();
     windowWidth = window.innerWidth;
     setPopupBoxPosition();
     adjustSide();
 });
 window.addEventListener('orientationchange', (event) => {
-    updateVH();
+    // updateVH();
     windowWidth = window.innerWidth;
     setPopupBoxPosition();
     adjustSide();
