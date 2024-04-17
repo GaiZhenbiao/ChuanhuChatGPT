@@ -133,7 +133,9 @@ class OpenAIVisionClient(BaseLLMModel):
                         content.append(
                             {
                                 "type": "image_url",
-                                "image_url": f"data:image/{self.get_image_type(image)};base64,{self.get_base64_image(image)}"
+                                "image_url": {
+                                    "url": f"data:image/{self.get_image_type(image)};base64,{self.get_base64_image(image)}",
+                                }
                             },
                         )
                 if content:

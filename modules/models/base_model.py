@@ -161,12 +161,16 @@ class ModelType(Enum):
         model_type = None
         model_name_lower = model_name.lower()
         if "gpt" in model_name_lower:
-            if "instruct" in model_name_lower:
-                model_type = ModelType.OpenAIInstruct
-            elif "vision" in model_name_lower:
+            try:
+                assert MODEL_METADATA[model_name]["multimodal"] == True
                 model_type = ModelType.OpenAIVision
-            else:
-                model_type = ModelType.OpenAI
+            except:
+                if "instruct" in model_name_lower:
+                    model_type = ModelType.OpenAIInstruct
+                elif "vision" in model_name_lower:
+                    model_type = ModelType.OpenAIVision
+                else:
+                    model_type = ModelType.OpenAI
         elif "chatglm" in model_name_lower:
             model_type = ModelType.ChatGLM
         elif "ollama" in model_name_lower:

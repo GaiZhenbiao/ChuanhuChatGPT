@@ -62,7 +62,6 @@ ONLINE_MODELS = [
     "GPT4",
     "GPT4 32K",
     "GPT4 Turbo",
-    "GPT4 Vision",
     "Claude 3 Haiku",
     "Claude 3 Sonnet",
     "Claude 3 Opus",
@@ -155,11 +154,12 @@ MODEL_METADATA = {
         "token_limit": 32768,
     },
     "GPT4 Turbo": {
-        "model_name": "gpt-4-turbo-preview",
+        "model_name": "gpt-4-turbo",
         "token_limit": 128000,
+        "multimodal": True
     },
     "GPT4 Vision": {
-        "model_name": "gpt-4-vision-preview",
+        "model_name": "gpt-4-turbo",
         "token_limit": 128000,
         "multimodal": True
     },
