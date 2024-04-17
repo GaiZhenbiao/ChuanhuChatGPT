@@ -1106,8 +1106,11 @@ class BaseLLMModel:
             )
 
     def auto_load(self):
-        self.history_file_path = new_auto_history_filename(self.user_name)
+        self.new_auto_history_filename()
         return self.load_chat_history()
+
+    def new_auto_history_filename(self):
+        self.history_file_path = new_auto_history_filename(self.user_name)
 
     def like(self):
         """like the last response, implement if needed"""
