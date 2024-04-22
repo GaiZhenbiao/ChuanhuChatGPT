@@ -11,6 +11,7 @@ openai==1.16.2
 langchain==0.1.14
 langchain-openai
 langchainhub
+langchain_community
 markdown
 PyPDF2
 pdfplumber
