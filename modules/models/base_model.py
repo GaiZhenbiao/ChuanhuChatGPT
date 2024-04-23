@@ -867,7 +867,7 @@ class BaseLLMModel:
         choices = get_history_names(self.user_name)
         if history_name not in choices:
             choices.insert(0, history_name)
-        system_prompt = self.system_prompt if remain_system_prompt else ""
+        system_prompt = self.system_prompt if remain_system_prompt else INITIAL_SYSTEM_PROMPT
 
         self.single_turn = self.default_single_turn
         self.temperature = self.default_temperature
