@@ -70,6 +70,11 @@ ONLINE_MODELS = [
     "DALL-E 3",
     "Gemini Pro",
     "Gemini Pro Vision",
+    "Groq LLaMA3 8B",
+    "Groq LLaMA3 70B",
+    "Groq LLaMA2 70B",
+    "Groq Mixtral 8x7B",
+    "Groq Gemma 7B",
     "GooglePaLM",
     "Gemma 2B",
     "Gemma 7B",
@@ -216,6 +221,26 @@ MODEL_METADATA = {
     },
     "Gemma 7B": {
         "repo_id": "google/gemma-7b-it",
+        "model_name": "gemma-7b-it",
+        "token_limit": 8192,
+    },
+    "Groq LLaMA3 8B": {
+        "model_name": "llama3-8b-8192",
+        "token_limit": 8192,
+    },
+    "Groq LLaMA3 70B": {
+        "model_name": "llama3-70b-8192",
+        "token_limit": 8192,
+    },
+    "Groq LLaMA2 70B": {
+        "model_name": "llama2-70b-4096",
+        "token_limit": 4096,
+    },
+    "Groq Mixtral 8x7B": {
+        "model_name": "mixtral-8x7b-32768",
+        "token_limit": 32768,
+    },
+    "Groq Gemma 7B": {
         "model_name": "gemma-7b-it",
         "token_limit": 8192,
     }

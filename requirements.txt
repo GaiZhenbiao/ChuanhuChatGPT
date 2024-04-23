@@ -12,6 +12,7 @@ langchain==0.1.14
 langchain-openai
 langchainhub
 langchain_community
+groq
 markdown
 PyPDF2
 pdfplumber

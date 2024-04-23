@@ -61,6 +61,10 @@ def get_model(
             logging.info(f"正在加载ChatGLM模型: {model_name}")
             from .ChatGLM import ChatGLM_Client
             model = ChatGLM_Client(model_name, user_name=user_name)
+        elif model_type == ModelType.Groq:
+            logging.info(f"正在加载Groq模型: {model_name}")
+            from .Groq import Groq_Client
+            model = Groq_Client(model_name, access_key, user_name=user_name)
         elif model_type == ModelType.LLaMA and lora_model_path == "":
             msg = f"现在请为 {model_name} 选择LoRA模型"
             logging.info(msg)

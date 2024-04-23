@@ -19,6 +19,7 @@
     "ernie_secret_key": "",// 你的文心一言在百度云中的Secret Key，用于文心一言对话模型
     "ollama_host": "", // 你的 Ollama Host，用于 Ollama 对话模型
     "huggingface_auth_token": "", // 你的 Hugging Face API Token，用于访问有限制的模型
+    "groq_api_key": "", // 你的 Groq API Key，用于 Groq 对话模型(https://console.groq.com/)
 
     //== Azure ==
     "openai_api_type": "openai", // 可选项：azure, openai
