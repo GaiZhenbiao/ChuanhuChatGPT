@@ -84,6 +84,8 @@
 - **在线搜索**：ChatGPT 的数据太旧？给 LLM 插上网络的翅膀；
 - **知识库**：让 ChatGPT 帮你量子速读！根据文件回答问题。
 - **本地部署LLM**：一键部署，获取属于你自己的大语言模型。
+- **GPT 3.5微调**：支持微调 GPT 3.5，让 ChatGPT 更加个性化。
+- **[自定义模型](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B-Custom-Models)**：灵活地自定义模型，例如对接本地推理服务。
 
 ### 🤖 System Prompt
 - 通过 System Prompt 设定前提条件，可以很有效地进行角色扮演；

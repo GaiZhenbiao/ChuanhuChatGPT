@@ -63,13 +63,13 @@
 |                                      API 호출 모델들                                       | 설명                    |                                             로컬 배포 모델                                              | 설명                  |
 |:-------------------------------------------------------------------------------------:|-----------------------|:-------------------------------------------------------------------------------------------------:|---------------------|
 |                       [ChatGPT(GPT-4)](https://chat.openai.com)                       | gpt-3.5 파인튜닝 지원       | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |                       |                        [LLaMA](https://github.com/facebookresearch/llama)                         | Lora 모델 지원 
-|          [Google PaLM](https://developers.generativeai.google/products/palm)          | 스트리밍 미지원              |                       [StableLM](https://github.com/Stability-AI/StableLM)                        
-|          [iFlytek Starfire Cognition Large Model](https://xinghuo.xfyun.cn)           |                       |                             [MOSS](https://github.com/OpenLMLab/MOSS)                             
-|                    [Inspur Yuan 1.0](https://air.inspur.com/home)                     |                       |                         [Qwen](https://github.com/QwenLM/Qwen/tree/main)                          
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |                       |                        [LLaMA](https://github.com/facebookresearch/llama)                         | Lora 모델 지원
+|          [Google PaLM](https://developers.generativeai.google/products/palm)          | 스트리밍 미지원              |                       [StableLM](https://github.com/Stability-AI/StableLM)
+|          [iFlytek Starfire Cognition Large Model](https://xinghuo.xfyun.cn)           |                       |                             [MOSS](https://github.com/OpenLMLab/MOSS)
+|                    [Inspur Yuan 1.0](https://air.inspur.com/home)                     |                       |                         [Qwen](https://github.com/QwenLM/Qwen/tree/main)
 |                         [MiniMax](https://api.minimax.chat/)                          |
-|                      [XMChat](https://github.com/MILVLG/xmchat)                       | 스트리밍 미지원 
-|                       [Midjourney](https://www.midjourney.com/)                       | 스트리밍 미지원 
+|                      [XMChat](https://github.com/MILVLG/xmchat)                       | 스트리밍 미지원
+|                       [Midjourney](https://www.midjourney.com/)                       | 스트리밍 미지원
 |                         [Claude](https://www.anthropic.com/)                          |
 
 ## 사용 팁
@@ -79,6 +79,8 @@
 - **온라인 검색**: ChatGPT의 데이터가 너무 오래되었나요? LLM과 인터넷의 정보를 함께 사용하세요.
 - **Knowledge Base**: ChatGPT가 당신의 읽기 속도를 높여줍니다! 파일에 대해 질문하세요.
 - **LLM 로컬 배포**: 원클릭 LLM 배포로 당신만의 LLM을 가지세요.
+- **GPT 3.5 미세 조정**: GPT 3.5를 미세 조정하여 ChatGPT를 더욱 개성화합니다.
+- **[사용자 정의 모델](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B-Custom-Models)**: 유연하게 모델을 사용자 정의하고, 예를 들어 로컬 추론 서비스를 연결합니다.
 
 ### 🤖 시스템 프롬프트
 - 시스템 프롬프트를 통해 사전 조건을 설정하면 역할극을 효과적으로 할 수 있습니다.
@@ -104,7 +106,7 @@
 - 자동 다크/라이트 테마 전환으로 아침부터 밤까지 편안한 경험을 제공합니다.
 - 완벽한 LaTeX / 표 / 소스 코드 렌더링;
 - <sup>New!</sup> 비선형 애니메이션, 반투명 유리효과
-- <sup>New!</sup> Windows / macOS / Linux / iOS / Android 각 플랫폼에 최적화된 경험을 제공합니다. 
+- <sup>New!</sup> Windows / macOS / Linux / iOS / Android 각 플랫폼에 최적화된 경험을 제공합니다.
 - <sup>New!</sup> PWA앱 설치로 더 자연스러운 경험을 제공합니다.
 
 ### 👨‍💻 전문가용 기능
