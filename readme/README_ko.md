@@ -62,7 +62,7 @@
 
 |                                      API 호출 모델들                                       | 설명                    |                                             로컬 배포 모델                                              | 설명                  |
 |:-------------------------------------------------------------------------------------:|-----------------------|:-------------------------------------------------------------------------------------------------:|---------------------|
-|                       [ChatGPT(GPT-4)](https://chat.openai.com)                       | gpt-3.5 파인튜닝 지원       | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ||
+|                       [ChatGPT(GPT-4)](https://chat.openai.com)                       | gpt-3.5 파인튜닝 지원       | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
 | [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |                       |                        [LLaMA](https://github.com/facebookresearch/llama)                         | Lora 모델 지원 |
 |          [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn)          |               |                       [StableLM](https://github.com/Stability-AI/StableLM)                        ||
 |          [iFlytek Starfire Cognition Large Model](https://xinghuo.xfyun.cn)           |                       |                             [MOSS](https://github.com/OpenLMLab/MOSS)                             ||
