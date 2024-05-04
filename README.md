@@ -66,16 +66,17 @@
 
 | API 调用模型 | 备注 | 本地部署模型 | 备注 |
 | :---: | --- | :---: | --- |
-| [ChatGPT(GPT-4)](https://chat.openai.com) | 支持微调 gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | 支持 Lora 模型 
-| [Google PaLM](https://developers.generativeai.google/products/palm) | 不支持流式传输 | [StableLM](https://github.com/Stability-AI/StableLM)
-| [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [通义千问](https://github.com/QwenLM/Qwen/tree/main)
-| [MiniMax](https://api.minimax.chat/) |
-| [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输
-| [Midjourney](https://www.midjourney.com/) | 不支持流式传输
-| [Claude](https://www.anthropic.com/) | ✨ 现已支持Claude 3 Opus、Sonnet，Haiku将会在推出后的第一时间支持
-| DALL·E 3 |
+| [ChatGPT(GPT-4)](https://chat.openai.com) | 支持微调 gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ||
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | 支持 Lora 模型 |
+| [Google PaLM](https://developers.generativeai.google/products/palm) | 不支持流式传输 | [StableLM](https://github.com/Stability-AI/StableLM)||
+| [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS) ||
+| [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [通义千问](https://github.com/QwenLM/Qwen/tree/main) ||
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  |  ||
+| [MiniMax](https://api.minimax.chat/) ||||
+| [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输|||
+| [Midjourney](https://www.midjourney.com/) | 不支持流式传输|||
+| [Claude](https://www.anthropic.com/) | ✨ 现已支持Claude 3 Opus、Sonnet，Haiku将会在推出后的第一时间支持|||
+| DALL·E 3 ||||
 
 ## 使用技巧
 
