@@ -61,15 +61,15 @@
 
 | API呼び出しモデル | 備考 | ローカルデプロイモデル | 備考 |
 | :---: | --- | :---: | --- |
-| [ChatGPT(GPT-4)](https://chat.openai.com) | gpt-3.5の微調整をサポート | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Loraモデルのサポートあり 
-| [Google PaLM](https://developers.generativeai.google/products/palm) | ストリーミング転送はサポートされていません | [StableLM](https://github.com/Stability-AI/StableLM)
-| [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)
-| [MiniMax](https://api.minimax.chat/) |
-| [XMChat](https://github.com/MILVLG/xmchat) | ストリーミング転送はサポートされていません
-| [Midjourney](https://www.midjourney.com/) | ストリーミング転送はサポートされていません
-| [Claude](https://www.anthropic.com/) |
+| [ChatGPT(GPT-4)](https://chat.openai.com) | gpt-3.5の微調整をサポート | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ||
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Loraモデルのサポートあり |
+| [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM)||
+| [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)||
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)||
+| [MiniMax](https://api.minimax.chat/) ||||
+| [XMChat](https://github.com/MILVLG/xmchat) | ストリーミング転送はサポートされていません|||
+| [Midjourney](https://www.midjourney.com/) | ストリーミング転送はサポートされていません|||
+| [Claude](https://www.anthropic.com/) ||||
 
 ## 使う上でのTips
 
