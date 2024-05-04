@@ -1,1 +1,15 @@
-{}
+{
+    "gpt3.5turbo_description": "GPT-3.5 Turbo 是由 OpenAI 开发的一款仅限文本的大型语言模型。它基于 GPT-3 模型，并已经在大量数据上进行了微调。最新版本的 GPT-3.5 Turbo 进行了性能和精度优化，支持最大 16k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 GPT-3.5 Turbo。",
+    "gpt3.5turbo_instruct_description": "GPT3.5 Turbo Instruct 是 OpenAI 开发的文本补全模型，具有与 GPT-3 时代模型相似的功能。它兼容旧版的 Completions 端点，但不兼容 Chat Completions。该模型的上下文窗口为 4096 个 tokens。",
+    "gpt3.5turbo_16k_description": "旧版的 GPT-3.5 Turbo 模型，具有 16k tokens 的上下文窗口。",
+    "gpt4_description": "GPT-4 是 OpenAI 开发的一款仅限文本的大型语言模型。它具有 8192 个 tokens 的上下文窗口和 4096 个 tokens 的最大响应长度。该模型始终使用可用的最新版本的 GPT-4。建议使用 GPT-4 Turbo 以获得更好的性能、更快的速度和更低的成本。",
+    "gpt4_32k_description": "GPT-4 32K 是 OpenAI 开发的一个仅限文本的大型语言模型。它具有 32,000 tokens 的上下文窗口和 4,096 tokens 的最大响应长度。这个模型从未广泛推出,建议使用 GPT-4 Turbo。",
+    "gpt4turbo_description": "GPT-4 Turbo 是由 OpenAI 开发的一款多模态大型语言模型。它在广泛的自然语言处理任务上提供最先进的性能，包括文本生成、翻译、摘要、视觉问题回答等。GPT-4 Turbo 拥有最大 128k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 GPT-4 Turbo。",
+    "claude3_haiku_description": "Claude3 Haiku 是由 Anthropic 开发的一款多模态大型语言模型。它是 Claude 3 模型家族中最快、最紧凑的模型，旨在实现近乎即时的响应速度，但是性能不如 Sonnet 和 Opus。Claude3 Haiku 有最大 200k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 Claude3 Haiku。",
+    "claude3_sonnet_description": "Claude3 Sonnet 是由 Anthropic 开发的一款多模态大型语言模型。它在智能与速度之间保持最佳平衡，适用于企业工作负载和大规模 AI 部署。Claude3 Sonnet 拥有最大 200k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 Claude3 Sonnet。",
+    "claude3_opus_description": "Claude3 Opus 是由 Anthropic 开发的一款多模态大型语言模型。它是 Claude 3 模型家族中最智能、最大的模型，能够在高度复杂的任务上呈现最顶尖的性能，呈现出类似人类的理解能力。Claude3 Opus 拥有最大 200k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 Claude3 Opus。",
+    "groq_llama3_8b_description": "采用 [Groq](https://console.groq.com/) 的 LLaMA 3 8B。Groq 是一个非常快速的语言模型推理服务。",
+    "groq_llama3_70b_description": "采用 [Groq](https://console.groq.com/) 的 LLaMA 3 70B。Groq 是一个非常快速的语言模型推理服务。",
+    "groq_mixtral_8x7b_description": "采用 [Groq](https://console.groq.com/) 的 Mixtral 8x7B。Groq 是一个非常快速的语言模型推理服务。",
+    "groq_gemma_7b_description": "采用 [Groq](https://console.groq.com/) 的 Gemma 7B。Groq 是一个非常快速的语言模型推理服务。",
+}

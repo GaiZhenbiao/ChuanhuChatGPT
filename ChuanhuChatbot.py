@@ -140,6 +140,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         show_label=False,
                         avatar_images=[config.user_avatar, config.bot_avatar],
                         show_share_button=False,
+                        placeholder=i18n(MODEL_METADATA[MODELS[DEFAULT_MODEL]]["description"])
                     )
                 with gr.Row(elem_id="chatbot-footer"):
                     with gr.Column(elem_id="chatbot-input-box"):

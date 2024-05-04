@@ -11,7 +11,7 @@ class OpenAI_Instruct_Client(BaseLLMModel):
         super().__init__(model_name=model_name, user=user_name, config={"api_key": api_key})
 
     def _get_instruct_style_input(self):
-        return "\n\n".join([item["content"] for item in self.history])
+        return "".join([item["content"] for item in self.history])
 
     @shared.state.switching_api_key
     def get_answer_at_once(self):

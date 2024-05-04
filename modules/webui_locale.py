@@ -25,6 +25,9 @@ class I18nAuto:
             logging.warning(f"Available languages: {', '.join([x[:-5] for x in os.listdir('./locale')])}")
             with open(f"./locale/en_US.json", "r", encoding="utf-8") as f:
                 self.language_map.update(json.load(f))
+        with open(f"./locale/en_US.json",  "r", encoding="utf-8") as f:
+            # fallback to English
+            self.fallback_language_map = json.load(f)
 
     def change_language(self, language):
         language = language.replace("-", "_")
@@ -42,5 +45,7 @@ class I18nAuto:
     def __call__(self, key):
         if self.file_is_exists and key in self.language_map:
             return self.language_map[key]
+        elif key in self.fallback_language_map:
+            return self.fallback_language_map[key]
         else:
             return key

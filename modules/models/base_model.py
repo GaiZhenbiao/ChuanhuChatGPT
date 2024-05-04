@@ -1052,7 +1052,7 @@ class BaseLLMModel:
             return (
                 os.path.basename(self.history_file_path)[:-5],
                 saved_json["system"],
-                saved_json["chatbot"],
+                gr.update(placeholder=i18n(self.description), value=saved_json["chatbot"]),
                 self.single_turn,
                 self.temperature,
                 self.top_p,
@@ -1072,7 +1072,7 @@ class BaseLLMModel:
             return (
                 os.path.basename(self.history_file_path),
                 self.system_prompt,
-                [],
+                gr.update(placeholder=i18n(self.description), value=[]),
                 self.single_turn,
                 self.temperature,
                 self.top_p,
