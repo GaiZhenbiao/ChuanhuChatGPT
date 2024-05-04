@@ -18,10 +18,10 @@ from .base_model import BaseLLMModel
 
 class Groq_Client(BaseLLMModel):
     def __init__(self, model_name, api_key, user_name="") -> None:
-        super().__init__(model_name=model_name, user=user_name)
-        self.api_key = api_key
+        super().__init__(model_name=model_name, user=user_name, api_key=api_key)
         self.client = Groq(
             api_key=os.environ.get("GROQ_API_KEY"),
+            base_url=self.api_host,
         )
 
     def _get_groq_style_input(self):

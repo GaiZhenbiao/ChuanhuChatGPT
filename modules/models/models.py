@@ -35,27 +35,17 @@ def get_model(
     model = original_model
     chatbot = gr.Chatbot(label=model_name)
     try:
-        if model_type == ModelType.OpenAI:
-            logging.info(f"正在加载OpenAI模型: {model_name}")
-            from .OpenAI import OpenAIClient
+        if model_type == ModelType.OpenAIVision or model_type == ModelType.OpenAI:
+            logging.info(f"正在加载 OpenAI 模型: {model_name}")
+            from .OpenAIVision import OpenAIVisionClient
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
-            model = OpenAIClient(
-                model_name=model_name,
-                api_key=access_key,
-                system_prompt=system_prompt,
-                user_name=user_name,
-            )
+            model = OpenAIVisionClient(
+                model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.OpenAIInstruct:
             logging.info(f"正在加载OpenAI Instruct模型: {model_name}")
             from .OpenAIInstruct import OpenAI_Instruct_Client
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAI_Instruct_Client(
-                model_name, api_key=access_key, user_name=user_name)
-        elif model_type == ModelType.OpenAIVision:
-            logging.info(f"正在加载OpenAI Vision模型: {model_name}")
-            from .OpenAIVision import OpenAIVisionClient
-            access_key = os.environ.get("OPENAI_API_KEY", access_key)
-            model = OpenAIVisionClient(
                 model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.ChatGLM:
             logging.info(f"正在加载ChatGLM模型: {model_name}")

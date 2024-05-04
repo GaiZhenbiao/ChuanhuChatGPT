@@ -5,9 +5,11 @@ import logging
 import sys
 import commentjson as json
 import colorama
+from collections import defaultdict
 
 from . import shared
 from . import presets
+from .presets import i18n
 
 
 __all__ = [
@@ -100,14 +102,25 @@ else:
     sensitive_id = config.get("sensitive_id", "")
     sensitive_id = os.environ.get("SENSITIVE_ID", sensitive_id)
 
+if "extra_model_metadata" in config:
+    presets.MODEL_METADATA.update(config["extra_model_metadata"])
+    logging.info(i18n("已添加 {extra_model_quantity} 个额外的模型元数据").format(extra_model_quantity=len(config["extra_model_metadata"])))
+
+_model_metadata = {}
+for k, v in presets.MODEL_METADATA.items():
+    temp_dict = presets.DEFAULT_METADATA.copy()
+    temp_dict.update(v)
+    _model_metadata[k] = temp_dict
+presets.MODEL_METADATA = _model_metadata
+
 if "available_models" in config:
     presets.MODELS = config["available_models"]
-    logging.info(f"已设置可用模型：{config['available_models']}")
+    logging.info(i18n("已设置可用模型：{available_models}").format(available_models=config["available_models"]))
 
 # 模型配置
 if "extra_models" in  config:
     presets.MODELS.extend(config["extra_models"])
-    logging.info(f"已添加额外的模型：{config['extra_models']}")
+    logging.info(i18n("已添加额外的模型：{extra_models}").format(extra_models=config["extra_models"]))
 
 HIDE_MY_KEY = config.get("hide_my_key", False)
 

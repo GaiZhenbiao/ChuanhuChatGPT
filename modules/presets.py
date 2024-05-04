@@ -110,6 +110,29 @@ LOCAL_MODELS = [
     "Qwen 14B"
 ]
 
+DEFAULT_METADATA = {
+    "repo_id": None, # HuggingFace repo id, used if this model is meant to be downloaded from HuggingFace then run locally
+    "model_name": None, # api model name, used if this model is meant to be used online
+    "filelist": None, # file list in the repo to download, now only support .gguf file
+    "description": None, # description of the model, displayed in the chat area when no message is present
+    "model_type": None, # model type, used to determine the model's behavior. If not set, the model type is inferred from the model name
+    "multimodal": False, # whether the model is multimodal
+    "api_host": None, # base url for the model's api
+    "api_key": None, # api key for the model's api
+    "system": INITIAL_SYSTEM_PROMPT, # system prompt for the model
+    "token_limit": 4096, # context window size
+    "single_turn": False, # whether the model is single turn
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "n_choices": 1,
+    "stop": [],
+    "max_generation": None, # maximum token limit for a single generation
+    "presence_penalty": 0.0,
+    "frequency_penalty": 0.0,
+    "logit_bias": None,
+    "metadata": {} # additional metadata for the model
+}
+
 # Additional metadata for online and local models
 MODEL_METADATA = {
     "Llama-2-7B":{
@@ -166,11 +189,8 @@ MODEL_METADATA = {
     "GPT4 Vision": {
         "model_name": "gpt-4-turbo",
         "token_limit": 128000,
-        "multimodal": True
-    },
-    "Claude": {
-        "model_name": "Claude",
-        "token_limit": 4096,
+        "multimodal": True,
+        "max_generation": 4096,
     },
     "Claude 3 Haiku": {
         "model_name": "claude-3-haiku-20240307",
@@ -190,6 +210,9 @@ MODEL_METADATA = {
         "max_generation": 4096,
         "multimodal": True
     },
+    "川虎助理": {"model_name": "川虎助理"},
+    "川虎助理 Pro": {"model_name": "川虎助理 Pro"},
+    "DALL-E 3": {"model_name": "dall-e-3"},
     "ERNIE-Bot-turbo": {
         "model_name": "ERNIE-Bot-turbo",
         "token_limit": 1024,
@@ -243,7 +266,19 @@ MODEL_METADATA = {
     "Groq Gemma 7B": {
         "model_name": "gemma-7b-it",
         "token_limit": 8192,
-    }
+    },
+    "GooglePaLM": {"model_name": "models/chat-bison-001"},
+    "xmchat": {"model_name": "xmchat"},
+    "Azure OpenAI": {"model_name": "azure-openai"},
+    "yuanai-1.0-base_10B": {"model_name": "yuanai-1.0-base_10B"},
+    "yuanai-1.0-translate": {"model_name": "yuanai-1.0-translate"},
+    "yuanai-1.0-dialog": {"model_name": "yuanai-1.0-dialog"},
+    "yuanai-1.0-rhythm_poems": {"model_name": "yuanai-1.0-rhythm_poems"},
+    "minimax-abab5-chat": {"model_name": "minimax-abab5-chat"},
+    "midjourney": {"model_name": "midjourney"},
+    "讯飞星火大模型V3.0": {"model_name": "讯飞星火大模型V3.0"},
+    "讯飞星火大模型V2.0": {"model_name": "讯飞星火大模型V2.0"},
+    "讯飞星火大模型V1.5": {"model_name": "讯飞星火大模型V1.5"},
 }
 
 if os.environ.get('HIDE_LOCAL_MODELS', 'false') == 'true':
