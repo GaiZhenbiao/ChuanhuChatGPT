@@ -144,6 +144,12 @@ def add_to_models():
                 data['extra_models'].append(i)
     else:
         data['extra_models'] = extra_models
+    if 'extra_model_metadata' in data:
+        for i in extra_models:
+            if i not in data['extra_model_metadata']:
+                data['extra_model_metadata'][i] = {"model_name": i, "model_type": "OpenAIVision"}
+    else:
+        data['extra_model_metadata'] = {i: {"model_name": i, "model_type": "OpenAIVision"} for i in extra_models}
     with open('config.json', 'w') as f:
         commentjson.dump(data, f, indent=4)
 

@@ -26,6 +26,8 @@ class XMChat(BaseLLMModel):
         self.image_path = None
         self.xm_history = []
         self.url = "https://xmbot.net/web"
+        if self.api_host is not None:
+            self.url = self.api_host
         self.last_conv_id = None
 
     def reset(self, remain_system_prompt=False):

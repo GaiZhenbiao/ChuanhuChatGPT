@@ -54,14 +54,10 @@ CHUANHU_DESCRIPTION = i18n("由Bilibili [土川虎虎虎](https://space.bilibili
 
 ONLINE_MODELS = [
     "GPT3.5 Turbo",
+    "GPT4 Turbo",
     "GPT3.5 Turbo Instruct",
-    "GPT3.5 Turbo 16K",
-    "GPT3.5 Turbo 0301",
-    "GPT3.5 Turbo 0613",
-    "GPT3.5 Turbo 1106",
     "GPT4",
     "GPT4 32K",
-    "GPT4 Turbo",
     "Claude 3 Haiku",
     "Claude 3 Sonnet",
     "Claude 3 Opus",
@@ -110,6 +106,29 @@ LOCAL_MODELS = [
     "Qwen 14B"
 ]
 
+DEFAULT_METADATA = {
+    "repo_id": None, # HuggingFace repo id, used if this model is meant to be downloaded from HuggingFace then run locally
+    "model_name": None, # api model name, used if this model is meant to be used online
+    "filelist": None, # file list in the repo to download, now only support .gguf file
+    "description": "", # description of the model, displayed in the chat area when no message is present
+    "model_type": None, # model type, used to determine the model's behavior. If not set, the model type is inferred from the model name
+    "multimodal": False, # whether the model is multimodal
+    "api_host": None, # base url for the model's api
+    "api_key": None, # api key for the model's api
+    "system": INITIAL_SYSTEM_PROMPT, # system prompt for the model
+    "token_limit": 4096, # context window size
+    "single_turn": False, # whether the model is single turn
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "n_choices": 1,
+    "stop": [],
+    "max_generation": None, # maximum token limit for a single generation
+    "presence_penalty": 0.0,
+    "frequency_penalty": 0.0,
+    "logit_bias": None,
+    "metadata": {} # additional metadata for the model
+}
+
 # Additional metadata for online and local models
 MODEL_METADATA = {
     "Llama-2-7B":{
@@ -128,14 +147,17 @@ MODEL_METADATA = {
     },
     "GPT3.5 Turbo": {
         "model_name": "gpt-3.5-turbo",
+        "description": "gpt3.5turbo_description",
         "token_limit": 4096,
     },
     "GPT3.5 Turbo Instruct": {
         "model_name": "gpt-3.5-turbo-instruct",
+        "description": "gpt3.5turbo_instruct_description",
         "token_limit": 4096,
     },
     "GPT3.5 Turbo 16K": {
         "model_name": "gpt-3.5-turbo-16k",
+        "description": "gpt3.5turbo_16k_description",
         "token_limit": 16384,
     },
     "GPT3.5 Turbo 0301": {
@@ -152,44 +174,44 @@ MODEL_METADATA = {
     },
     "GPT4": {
         "model_name": "gpt-4",
+        "description": "gpt4_description",
         "token_limit": 8192,
     },
     "GPT4 32K": {
         "model_name": "gpt-4-32k",
+        "description": "gpt4_32k_description",
         "token_limit": 32768,
     },
     "GPT4 Turbo": {
         "model_name": "gpt-4-turbo",
+        "description": "gpt4turbo_description",
         "token_limit": 128000,
         "multimodal": True
-    },
-    "GPT4 Vision": {
-        "model_name": "gpt-4-turbo",
-        "token_limit": 128000,
-        "multimodal": True
-    },
-    "Claude": {
-        "model_name": "Claude",
-        "token_limit": 4096,
     },
     "Claude 3 Haiku": {
         "model_name": "claude-3-haiku-20240307",
+        "description": "claude3_haiku_description",
         "token_limit": 200000,
         "max_generation": 4096,
         "multimodal": True
     },
     "Claude 3 Sonnet": {
         "model_name": "claude-3-sonnet-20240229",
+        "description": "claude3_sonnet_description",
         "token_limit": 200000,
         "max_generation": 4096,
         "multimodal": True
     },
     "Claude 3 Opus": {
         "model_name": "claude-3-opus-20240229",
+        "description": "claude3_opus_description",
         "token_limit": 200000,
         "max_generation": 4096,
         "multimodal": True
     },
+    "川虎助理": {"model_name": "川虎助理"},
+    "川虎助理 Pro": {"model_name": "川虎助理 Pro"},
+    "DALL-E 3": {"model_name": "dall-e-3"},
     "ERNIE-Bot-turbo": {
         "model_name": "ERNIE-Bot-turbo",
         "token_limit": 1024,
@@ -226,24 +248,36 @@ MODEL_METADATA = {
     },
     "Groq LLaMA3 8B": {
         "model_name": "llama3-8b-8192",
+        "description": "groq_llama3_8b_description",
         "token_limit": 8192,
     },
     "Groq LLaMA3 70B": {
         "model_name": "llama3-70b-8192",
+        "description": "groq_llama3_70b_description",
         "token_limit": 8192,
-    },
-    "Groq LLaMA2 70B": {
-        "model_name": "llama2-70b-4096",
-        "token_limit": 4096,
     },
     "Groq Mixtral 8x7B": {
         "model_name": "mixtral-8x7b-32768",
+        "description": "groq_mixtral_8x7b_description",
         "token_limit": 32768,
     },
     "Groq Gemma 7B": {
         "model_name": "gemma-7b-it",
+        "description": "groq_gemma_7b_description",
         "token_limit": 8192,
-    }
+    },
+    "GooglePaLM": {"model_name": "models/chat-bison-001"},
+    "xmchat": {"model_name": "xmchat"},
+    "Azure OpenAI": {"model_name": "azure-openai"},
+    "yuanai-1.0-base_10B": {"model_name": "yuanai-1.0-base_10B"},
+    "yuanai-1.0-translate": {"model_name": "yuanai-1.0-translate"},
+    "yuanai-1.0-dialog": {"model_name": "yuanai-1.0-dialog"},
+    "yuanai-1.0-rhythm_poems": {"model_name": "yuanai-1.0-rhythm_poems"},
+    "minimax-abab5-chat": {"model_name": "minimax-abab5-chat"},
+    "midjourney": {"model_name": "midjourney"},
+    "讯飞星火大模型V3.0": {"model_name": "讯飞星火大模型V3.0"},
+    "讯飞星火大模型V2.0": {"model_name": "讯飞星火大模型V2.0"},
+    "讯飞星火大模型V1.5": {"model_name": "讯飞星火大模型V1.5"},
 }
 
 if os.environ.get('HIDE_LOCAL_MODELS', 'false') == 'true':

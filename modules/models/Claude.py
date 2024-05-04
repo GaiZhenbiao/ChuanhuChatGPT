@@ -11,7 +11,7 @@ class Claude_Client(BaseLLMModel):
         self.api_secret = api_secret
         if None in [self.api_secret]:
             raise Exception("请在配置文件或者环境变量中设置Claude的API Secret")
-        self.claude_client = Anthropic(api_key=self.api_secret)
+        self.claude_client = Anthropic(api_key=self.api_secret, base_url=self.api_host)
 
     def _get_claude_style_history(self):
         history = []

@@ -80,6 +80,8 @@
 - **Online Search**: Is ChatGPT's data too old? Give LLM the wings of the internet;
 - **Knowledge Base**: Let ChatGPT help you speed read quantumly! Answer questions based on files.
 - **Local LLM Deployment**: One-click deployment, get your own large language model.
+- **Fine-tuning**: Support fine-tuning GPT-3.5, make your own model!
+- **[Custom Model](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B-Custom-Models)**: Flexibly customize models, such as docking with local inference services.
 
 ### 🤖 System Prompt
 - The system prompt can effectively enable role-playing by setting prerequisite conditions;

@@ -784,7 +784,7 @@ def toggle_like_btn_visibility(selected_model_name):
 
 
 def get_corresponding_file_type_by_model_name(selected_model_name):
-    if selected_model_name in ["xmchat", "GPT4 Vision"]:
+    if selected_model_name in ["xmchat", "GPT4 Turbo"]:
         return ["image"]
     else:
         return [".pdf", ".docx", ".pptx", ".epub", ".xlsx", ".txt", "text"]

@@ -4,8 +4,7 @@ import google.generativeai as palm
 
 class Google_PaLM_Client(BaseLLMModel):
     def __init__(self, model_name, api_key, user_name="") -> None:
-        super().__init__(model_name=model_name, user=user_name)
-        self.api_key = api_key
+        super().__init__(model_name=model_name, user=user_name, config={"api_key": api_key})
 
     def _get_palm_style_input(self):
         new_history = []
@@ -20,7 +19,7 @@ class Google_PaLM_Client(BaseLLMModel):
         palm.configure(api_key=self.api_key)
         messages = self._get_palm_style_input()
         response = palm.chat(context=self.system_prompt, messages=messages,
-                             temperature=self.temperature, top_p=self.top_p)
+                             temperature=self.temperature, top_p=self.top_p, model=self.model_name)
         if response.last is not None:
             return response.last, len(response.last)
         else:

@@ -33,29 +33,18 @@ def get_model(
         config.local_embedding = True
     # del current_model.model
     model = original_model
-    chatbot = gr.Chatbot(label=model_name)
     try:
-        if model_type == ModelType.OpenAI:
-            logging.info(f"正在加载OpenAI模型: {model_name}")
-            from .OpenAI import OpenAIClient
+        if model_type == ModelType.OpenAIVision or model_type == ModelType.OpenAI:
+            logging.info(f"正在加载 OpenAI 模型: {model_name}")
+            from .OpenAIVision import OpenAIVisionClient
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
-            model = OpenAIClient(
-                model_name=model_name,
-                api_key=access_key,
-                system_prompt=system_prompt,
-                user_name=user_name,
-            )
+            model = OpenAIVisionClient(
+                model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.OpenAIInstruct:
             logging.info(f"正在加载OpenAI Instruct模型: {model_name}")
             from .OpenAIInstruct import OpenAI_Instruct_Client
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAI_Instruct_Client(
-                model_name, api_key=access_key, user_name=user_name)
-        elif model_type == ModelType.OpenAIVision:
-            logging.info(f"正在加载OpenAI Vision模型: {model_name}")
-            from .OpenAIVision import OpenAIVisionClient
-            access_key = os.environ.get("OPENAI_API_KEY", access_key)
-            model = OpenAIVisionClient(
                 model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.ChatGLM:
             logging.info(f"正在加载ChatGLM模型: {model_name}")
@@ -168,9 +157,9 @@ def get_model(
         model.history_file_path = original_model.history_file_path
         model.system_prompt = original_model.system_prompt
     if dont_change_lora_selector:
-        return model, msg, chatbot, gr.update(), access_key, presudo_key
+        return model, msg, gr.update(label=model_name, placeholder=i18n(model.description)), gr.update(), access_key, presudo_key
     else:
-        return model, msg, chatbot, gr.Dropdown(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key
+        return model, msg, gr.update(label=model_name, placeholder=i18n(model.description)), gr.Dropdown(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key
 
 
 if __name__ == "__main__":
