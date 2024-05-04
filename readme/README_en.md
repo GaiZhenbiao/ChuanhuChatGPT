@@ -62,16 +62,16 @@
 
 | API Callable Models | Remarks | Locally Deployed Models | Remarks |
 | :---: | --- | :---: | --- |
-| [ChatGPT(GPT-4)](https://chat.openai.com) | Support fine-tune gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Support Lora models
-| [Google PaLM](https://developers.generativeai.google/products/palm) | Not support streaming | [StableLM](https://github.com/Stability-AI/StableLM)
-| [iFlytek Starfire Cognition Large Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)
-| [MiniMax](https://api.minimax.chat/) |
-| [XMChat](https://github.com/MILVLG/xmchat) | Not support streaming
-| [Midjourney](https://www.midjourney.com/) | Not support streaming
-| [Claude](https://www.anthropic.com/) | ✨ Now supports Claude 3 Opus and Sonnet, Haiku will be supported as soon as it is released
-| DALL·E 3 |
+| [ChatGPT(GPT-4)](https://chat.openai.com) | Support fine-tune gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Support Lora models|
+| [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM)||
+| [iFlytek Starfire Cognition Large Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)||
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)||
+| [MiniMax](https://api.minimax.chat/) ||||
+| [XMChat](https://github.com/MILVLG/xmchat) | Not support streaming|||
+| [Midjourney](https://www.midjourney.com/) | Not support streaming|||
+| [Claude](https://www.anthropic.com/) | ✨ Now supports Claude 3 Opus and Sonnet, Haiku will be supported as soon as it is released|||
+| DALL·E 3 ||||
 
 ## Usage Tips
 
