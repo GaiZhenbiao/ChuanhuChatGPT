@@ -151,15 +151,16 @@ def get_model(
         import traceback
         traceback.print_exc()
         msg = f"{STANDARD_ERROR_MSG}: {e}"
+    modelDescription = i18n(model.description)
     presudo_key = hide_middle_chars(access_key)
     if original_model is not None and model is not None:
         model.history = original_model.history
         model.history_file_path = original_model.history_file_path
         model.system_prompt = original_model.system_prompt
     if dont_change_lora_selector:
-        return model, msg, gr.update(label=model_name, placeholder=i18n(model.description)), gr.update(), access_key, presudo_key
+        return model, msg, gr.update(label=model_name), gr.update(), access_key, presudo_key, modelDescription
     else:
-        return model, msg, gr.update(label=model_name, placeholder=i18n(model.description)), gr.Dropdown(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key
+        return model, msg, gr.update(label=model_name), gr.Dropdown(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key, modelDescription
 
 
 if __name__ == "__main__":

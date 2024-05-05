@@ -17,6 +17,8 @@ var chatbotIndicator = null;
 var uploaderIndicator = null;
 var uploaderIndicator2 = null;
 var chatListIndicator = null;
+var modelSelectIndicator = null;
+
 var chatbotWrap = null;
 var apSwitch = null;
 var messageBotDivs = null;
@@ -29,6 +31,7 @@ var cancelBtn = null;
 var updateChuanhuBtn = null;
 var rebootChuanhuBtn = null;
 var statusDisplay = null;
+var grModelDescDiv = null;
 
 var historySelector = null;
 var chuanhuPopup = null;
@@ -52,6 +55,7 @@ function addInit() {
     uploaderIndicator = gradioApp().querySelector('#upload-index-file > div.wrap');
     uploaderIndicator2 = gradioApp().querySelector('#upload-index-file');
     chatListIndicator = gradioApp().querySelector('#history-select-dropdown > div.wrap');
+    modelSelectIndicator = gradioApp().querySelector('#gr-model-description > div.wrap');
 
     for (let elem in needInit) {
         if (needInit[elem] == null) {
@@ -62,6 +66,7 @@ function addInit() {
 
     chatbotObserver.observe(chatbotIndicator, { attributes: true, childList: true, subtree: true });
     chatListObserver.observe(chatListIndicator, { attributes: true });
+    modelSelectObserver.observe(modelSelectIndicator, { attributes: true });
     setUploader();
     setPasteUploader();
     setDragUploader();
@@ -96,6 +101,7 @@ function initialize() {
     chuanhuHeader = gradioApp().querySelector('#chuanhu-header');
     menu = gradioApp().querySelector('#menu-area');
     toolbox = gradioApp().querySelector('#toolbox-area');
+    grModelDescDiv = gradioApp().querySelector('#gr-model-description');
     // trainBody = gradioApp().querySelector('#train-body');
 
     // if (loginUserForm) {
@@ -217,6 +223,7 @@ function checkModel() {
     var modelValue = model.value;
     checkGPT();
     checkXMChat();
+    checkDescription();
     function checkGPT() {
         modelValue = model.value;
         if (modelValue.toLowerCase().includes('gpt')) {
@@ -234,13 +241,25 @@ function checkModel() {
             chatbotArea.classList.remove('is-xmchat');
         }
     }
-
-    model.addEventListener('blur', ()=>{
-        setTimeout(()=>{
-            checkGPT();
-            checkXMChat();
-        }, 100);
-    });
+    function checkDescription() {
+        modelValue = model.value;
+        let grModelDesc = grModelDescDiv.innerText;
+        let modelDesc = gradioApp().querySelector('#model-description p');
+        if (grModelDesc && !grModelDesc.includes('0.0s') && !grModelDesc.includes('processing') && grModelDesc.trim() !== "") {
+            chatbotArea.classList.add('has-description');
+            modelDesc.innerText = grModelDesc;
+        } else {
+            chatbotArea.classList.remove('has-description');
+            modelDesc.innerText = "No Description Found!";
+        }
+    }
+    // model.addEventListener('blur', ()=>{
+    //     setTimeout(()=>{
+    //         checkGPT();
+    //         checkXMChat();
+    //         checkDescription();
+    //     }, 100);
+    // });
 }
 
 function toggleDarkMode(isEnabled) {
@@ -402,6 +421,10 @@ var chatbotObserver = new MutationObserver(() => {
 
 var chatListObserver = new MutationObserver(() => {
     setChatList();
+});
+
+var modelSelectObserver = new MutationObserver(() => {
+    checkModel();
 });
 
 // 监视页面内部 DOM 变动

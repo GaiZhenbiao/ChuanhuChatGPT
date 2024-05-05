@@ -418,6 +418,12 @@ body.popup-open {
     /* visibility: visible; */
     display: block;
 }
+.show-on-description {
+    display: none;
+}
+.has-description .show-on-description {
+    display: block;
+}
 
 #chatbot-footer {
     position: absolute;
