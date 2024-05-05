@@ -196,6 +196,7 @@ function setLatestMessage() {
             message.querySelector('.message-btn-row')?.remove();
         }
     });
+    if (chatbotIndicator.classList.contains('generating')) return;
     if (latestMessage) addLatestMessageButtons(latestMessage);
 }
 
