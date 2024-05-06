@@ -352,6 +352,7 @@ hr.append-display {
 /* history message */
 .wrapper > .bubble-wrap > .history-message {
     padding-bottom: 10px !important;
+    width: 100%;
 }
 .history-message {
     /* padding: 0 !important; */
@@ -399,4 +400,63 @@ img.avatar-image {
     height: 32px !important;
     background-color: transparent;
     background-size: cover;
+}
+
+#chatbot-placeholder-pl {
+    max-width: 960px;
+    width: 100%;
+    margin: auto;
+    translate: 0 60px;
+}
+
+#chatbot-placeholder-header {
+    text-align: center;
+    display: block;
+}
+#chatbot-placeholder-header img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 20px auto;
+}
+
+#chatbot-placeholder-header h1 {
+    font-size: 1.5em;
+    justify-content: center;
+    margin: 20px auto 60px;
+}
+
+.chatbot-placeholder-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0px;
+}
+
+.chatbot-placeholder-options button {
+    display: inline-block;
+    margin: 8px;
+    padding: 8px 12px;
+    /* font-size: 1em; */
+    background-color: var(--chatbot-input-more-background-color);
+    border: 1px solid var(--border-color-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    flex: 0 1 320px;
+    opacity: 0.65;
+    height: 48px;
+}
+
+.chatbot-placeholder-options button:hover {
+    opacity: 1;
+}
+
+.chatbot-placeholder-options button.hide-for-mobile {
+    @media screen and (max-width: 639px) {
+        display: none;
+    }
+    @media screen and (min-width: 640px) {
+        display: inline-block;
+    }
 }

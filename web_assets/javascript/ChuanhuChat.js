@@ -121,6 +121,7 @@ function initialize() {
     setCheckboxes();
     setAutocomplete();
     checkModel();
+    bindChatbotPlaceholderButtons();
 
     settingBox.classList.add('hideBox');
     trainingBox.classList.add('hideBox');
@@ -262,6 +263,28 @@ function checkModel() {
     // });
 }
 
+function bindChatbotPlaceholderButtons() {
+    document.querySelectorAll('.chatbot-placeholder-options button').forEach(button => {
+        button.addEventListener('click', function () {
+            // 获取按钮的文本
+            const buttonText = this.textContent || this.innerText;
+
+            user_input_ta = user_input_tb.querySelector("textarea");
+            // 设置输入框的值
+            user_input_ta.value = buttonText;
+
+            input_event = new InputEvent("input", { bubbles: true, cancelable: true });
+            user_input_ta.dispatchEvent(input_event);
+
+            // 创建并触发回车键事件
+            sendBtn.disabled = false;
+            sendBtn.click();
+            // const enterEvent = new KeyboardEvent('keydown', { 'key': 'Enter' });
+            // userInput.dispatchEvent(enterEvent);
+        });
+    });
+}
+
 function toggleDarkMode(isEnabled) {
     if (isEnabled) {
         document.body.classList.add("dark");
@@ -400,7 +423,7 @@ function chatbotContentChanged(attempt = 1, force = false) {
                     }
                 }, 200);
             }
-
+            bindChatbotPlaceholderButtons();
 
         }, i === 0 ? 0 : 200);
     }

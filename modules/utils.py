@@ -1412,7 +1412,50 @@ def setup_wizard():
         print(colorama.Back.GREEN + i18n("设置完成。现在请重启本程序。") + colorama.Style.RESET_ALL)
         exit()
 
+
 def reboot_chuanhu():
     import sys
     print(colorama.Back.GREEN + i18n("正在尝试重启...") + colorama.Style.RESET_ALL)
     os.execl(sys.executable, sys.executable, *sys.argv)
+
+
+from .models.base_model import BaseLLMModel
+def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = None):
+    from .webui import get_html
+    placeHolder = False
+
+    if model is None:
+        try:
+            model_logo = MODEL_METADATA[model_name]["placeholder"]["logo"]
+            model_slogon = i18n(MODEL_METADATA[model_name]["placeholder"]["slogon"])
+            model_question_1 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_1"])
+            model_question_2 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_2"])
+            model_question_3 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_3"])
+            model_question_4 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_4"])
+            placeHolder = True
+        except:
+            placeHolder = False
+    else:
+        try:
+            model_name = model.model_name
+            model_logo = model.placeholder["logo"]
+            model_slogon = i18n(model.placeholder["slogon"])
+            model_question_1 = i18n(model.placeholder["question_1"])
+            model_question_2 = i18n(model.placeholder["question_2"])
+            model_question_3 = i18n(model.placeholder["question_3"])
+            model_question_4 = i18n(model.placeholder["question_4"])
+            placeHolder = True
+        except:
+            placeHolder = False
+
+    if placeHolder and model_logo and model_slogon and model_question_1 and model_question_2 and model_question_3 and model_question_4:
+        return get_html("chatbot_placeholder.html").format(
+            chatbot_ph_logo = model_logo,
+            chatbot_ph_slogon = model_slogon,
+            chatbot_ph_question_1 = model_question_1,
+            chatbot_ph_question_2 = model_question_2,
+            chatbot_ph_question_3 = model_question_3,
+            chatbot_ph_question_4 = model_question_4,
+        )
+    else:
+        return None
