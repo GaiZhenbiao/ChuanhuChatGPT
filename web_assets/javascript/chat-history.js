@@ -21,10 +21,15 @@ function loadHistoryHtml() {
     }
     userLogged = localStorage.getItem('userLogged');
     hideHistoryWhenNotLoggedIn = gradioApp().querySelector('#hideHistoryWhenNotLoggedIn_config').innerText === "True";
-    if (userLogged || (!userLogged && !hideHistoryWhenNotLoggedIn)){
-        historyLoaded = true;
-        return; // logged in, do nothing. OR, not logged in but not hide history list, do nothing.
-    }
+
+    // 取消该功能
+    historyLoaded = true;
+    return;
+
+    // if (userLogged || (!userLogged && !hideHistoryWhenNotLoggedIn)){
+    //     historyLoaded = true;
+    //     return; // logged in, do nothing. OR, not logged in but not hide history list, do nothing.
+    // }
 
     // 只有用户未登录，还隐藏历史记录列表时，才选用只读历史记录
     if (!historyLoaded) {
@@ -41,6 +46,11 @@ function loadHistoryHtml() {
         for (var i = 0; i < latestMessages.length; i++) {
             latestMessages[i].classList.remove('latest');
         }
+        var chatbotPlaceHolder = tempDiv.querySelector('center');
+        if (chatbotPlaceHolder) {
+            chatbotPlaceHolder.parentNode.removeChild(chatbotPlaceHolder);
+            console.log("Chatbot PlaceHolder Removed");
+        }
 
         var fakeHistory = document.createElement('div');
         fakeHistory.classList.add('history-message');
@@ -49,6 +59,11 @@ function loadHistoryHtml() {
         forViewStyle.innerHTML = '.wrapper > .bubble-wrap > .history-message > :last-child::after { content: "' + i18n(forView_i18n) + '"!important; }';
         document.head.appendChild(forViewStyle);
         chatbotWrap.insertBefore(fakeHistory, chatbotWrap.firstChild);
+
+        var activeChatbotPlaceHolder = document.querySelector('#chuanhu-chatbot > .wrapper > .bubble-wrap center');
+        if (activeChatbotPlaceHolder) {
+            activeChatbotPlaceHolder.style.display = 'none';
+        }
         // var fakeHistory = document.createElement('div');
         // fakeHistory.classList.add('history-message');
         // fakeHistory.innerHTML = historyHtml;
@@ -67,5 +82,10 @@ function clearHistoryHtml() {
     if (historyMessages) {
         chatbotWrap.removeChild(historyMessages);
         console.log("History Cleared");
+
+        var activeChatbotPlaceHolder = document.querySelector('#chuanhu-chatbot > .wrapper > .bubble-wrap center');
+        if (activeChatbotPlaceHolder) {
+            activeChatbotPlaceHolder.style.display = 'block';
+        }
     }
 }
