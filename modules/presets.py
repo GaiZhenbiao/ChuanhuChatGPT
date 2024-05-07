@@ -215,6 +215,7 @@ MODEL_METADATA = {
         "description": "川虎助理是一款虚拟世界游戏，在这个游戏中，川虎扮演……",
         "placeholder": {
             "logo": "file=web_assets/icon/any-icon-512.png",
+            "logo_rounded": "false",
             "slogon": "我川虎今天能帮你做什么？",
             "question_1": "你好",
             "question_2": "你是谁",

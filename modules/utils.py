@@ -1422,34 +1422,56 @@ def reboot_chuanhu():
 from .models.base_model import BaseLLMModel
 def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = None):
     from .webui import get_html
-    placeHolder = False
+    logo_class, slogon_class, question_class = "", "", ""
+    model_logo, model_logo_round, model_slogon, model_question_1, model_question_2, model_question_3, model_question_4 = "", "", "", "", "", "", ""
 
     if model is None:
         try:
             model_logo = MODEL_METADATA[model_name]["placeholder"]["logo"]
+        except:
+            logo_class = "hideK"
+        try:
+            model_logo_round = MODEL_METADATA[model_name]["placeholder"]["logo_rounded"]
+        except:
+            pass
+        try:
             model_slogon = i18n(MODEL_METADATA[model_name]["placeholder"]["slogon"])
+        except:
+            slogon_class = "hideK"
+        try:
             model_question_1 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_1"])
             model_question_2 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_2"])
             model_question_3 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_3"])
             model_question_4 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_4"])
-            placeHolder = True
         except:
-            placeHolder = False
+            question_class = "hideK"
     else:
         try:
-            print(f"model: {model.placeholder}")
-            model_name = model.model_name
             model_logo = model.placeholder["logo"]
+        except:
+            logo_class = "hideK"
+        try:
+            model_logo_round = model.placeholder["logo_rounded"]
+        except:
+            pass
+        try:
             model_slogon = i18n(model.placeholder["slogon"])
+        except:
+            slogon_class = "hideK"
+        try:
             model_question_1 = i18n(model.placeholder["question_1"])
             model_question_2 = i18n(model.placeholder["question_2"])
             model_question_3 = i18n(model.placeholder["question_3"])
             model_question_4 = i18n(model.placeholder["question_4"])
-            placeHolder = True
         except:
-            placeHolder = False
+            question_class = "hideK"
 
-    if placeHolder and model_logo and model_slogon and model_question_1 and model_question_2 and model_question_3 and model_question_4:
+    if logo_class == "hideK" and slogon_class == "hideK" and question_class == "hideK":
+        return ""
+    else:
+        # 除非明确指定为 squared 或 false 等，否则默认为圆角
+        if model_logo_round.lower().strip() not in ["square", "squared", "false", "0", "no", "off"]:
+            logo_class += " rounded"
         return get_html("chatbot_placeholder.html").format(
             chatbot_ph_logo = model_logo,
             chatbot_ph_slogon = model_slogon,
@@ -1457,6 +1479,8 @@ def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = Non
             chatbot_ph_question_2 = model_question_2,
             chatbot_ph_question_3 = model_question_3,
             chatbot_ph_question_4 = model_question_4,
+            chatbot_ph_logo_class = logo_class,
+            chatbot_ph_slogon_class = slogon_class,
+            chatbot_ph_question_class = question_class
         )
-    else:
-        return None
+
