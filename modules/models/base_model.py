@@ -273,6 +273,7 @@ class BaseLLMModel:
         self.model_name = config["model_name"]
         self.multimodal = config["multimodal"]
         self.description = config["description"]
+        self.placeholder = config["placeholder"]
         self.token_upper_limit = config["token_limit"]
         self.system_prompt = config["system"]
         self.api_key = config["api_key"]
