@@ -110,7 +110,8 @@ DEFAULT_METADATA = {
     "repo_id": None, # HuggingFace repo id, used if this model is meant to be downloaded from HuggingFace then run locally
     "model_name": None, # api model name, used if this model is meant to be used online
     "filelist": None, # file list in the repo to download, now only support .gguf file
-    "description": "", # description of the model, displayed in the chat area when no message is present
+    "description": "", # description of the model, displayed in the chatbot header when cursor overing the info icon
+    "placeholder": {}, # placeholder for the model, displayed in the chat area when no message is present
     "model_type": None, # model type, used to determine the model's behavior. If not set, the model type is inferred from the model name
     "multimodal": False, # whether the model is multimodal
     "api_host": None, # base url for the model's api
@@ -209,7 +210,18 @@ MODEL_METADATA = {
         "max_generation": 4096,
         "multimodal": True
     },
-    "川虎助理": {"model_name": "川虎助理"},
+    "川虎助理": {
+        "model_name": "川虎助理",
+        "description": "川虎助理是一款虚拟世界游戏，在这个游戏中，川虎扮演……",
+        "placeholder": {
+            "logo": "file=web_assets/icon/any-icon-512.png",
+            "slogon": "我川虎今天能帮你做什么？",
+            "question_1": "你好",
+            "question_2": "你是谁",
+            "question_3": "你会做什么",
+            "question_4": "你会说什么语言",
+        }
+    },
     "川虎助理 Pro": {"model_name": "川虎助理 Pro"},
     "DALL-E 3": {"model_name": "dall-e-3"},
     "ERNIE-Bot-turbo": {

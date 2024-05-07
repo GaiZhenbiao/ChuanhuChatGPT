@@ -1437,6 +1437,7 @@ def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = Non
             placeHolder = False
     else:
         try:
+            print(f"model: {model.placeholder}")
             model_name = model.model_name
             model_logo = model.placeholder["logo"]
             model_slogon = i18n(model.placeholder["slogon"])
