@@ -290,6 +290,9 @@ else:
         {"left": "\\(", "right": "\\)", "display": False},
         {"left": "\\[", "right": "\\]", "display": True},
     ]
+# ![IMPORTANT] PATCH gradio 4.26, disable latex for now
+user_latex_option = "disabled"
+latex_delimiters_set = []
 
 # 处理advance docs
 advance_docs = defaultdict(lambda: defaultdict(dict))
