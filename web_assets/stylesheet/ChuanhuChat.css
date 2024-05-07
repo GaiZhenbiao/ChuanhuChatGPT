@@ -1135,6 +1135,11 @@ input:checked + .chatbot-input-more-span {
     display: none;
 }
 
+#chatbot-area {
+    container-name: chatbot-area;
+    container-type: inline-size;
+}
+
 #chatbot-area.no-menu #chatbot-header {
     padding-left: max(20px, env(safe-area-inset-left));
 }
