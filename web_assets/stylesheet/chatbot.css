@@ -454,11 +454,8 @@ img.avatar-image {
     opacity: 1;
 }
 
-#chatbot-placeholder-options button.hide-for-mobile {
-    @media screen and (max-width: 639px) {
+@container chatbot-area (width < 712px) {
+    #chatbot-placeholder-options button.hide-for-mobile {
         display: none;
-    }
-    @media screen and (min-width: 640px) {
-        display: inline-block;
     }
 }
