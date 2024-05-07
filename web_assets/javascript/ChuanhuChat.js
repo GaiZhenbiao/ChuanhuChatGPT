@@ -264,7 +264,7 @@ function checkModel() {
 }
 
 function bindChatbotPlaceholderButtons() {
-    document.querySelectorAll('.chatbot-placeholder-options button').forEach(button => {
+    document.querySelectorAll('#chatbot-placeholder-options button').forEach(button => {
         button.addEventListener('click', function () {
             // 获取按钮的文本
             const buttonText = this.textContent || this.innerText;

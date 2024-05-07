@@ -51,7 +51,7 @@ body.popup-open {
 }
 
 .hideK {
-    display: none;
+    display: none !important;
 }
 
 #app-title,
