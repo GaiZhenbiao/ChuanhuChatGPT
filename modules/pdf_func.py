@@ -151,3 +151,4 @@ if __name__ == '__main__':
     z = parse_pdf("./build/test.pdf")
     print(z["user_info"])
     print(z["title"])
+
