@@ -171,11 +171,14 @@ class OpenAIVisionClient(BaseLLMModel):
             "top_p": self.top_p,
             "n": self.n_choices,
             "stream": stream,
-            "presence_penalty": self.presence_penalty,
-            "frequency_penalty": self.frequency_penalty,
-            "max_tokens": self.max_generation_token
         }
 
+        if self.max_generation_token:
+            payload["max_tokens"] = self.max_generation_token
+        if self.presence_penalty:
+            payload["presence_penalty"] = self.presence_penalty
+        if self.frequency_penalty:
+            payload["frequency_penalty"] = self.frequency_penalty
         if self.stop_sequence:
             payload["stop"] = self.stop_sequence
         if self.logit_bias is not None:
