@@ -414,12 +414,16 @@ img.avatar-image {
     display: block;
 }
 #chatbot-placeholder-header img {
-    width: 100px;
-    height: 100px;
+    width: 72px;
+    height: 72px;
     margin: 20px auto;
+    border-radius: 8px;
 }
 .rounded {
     border-radius: 50%;
+}
+#chatbot-placeholder-header img.rounded {
+    border-radius: 50% !important;
 }
 
 #chatbot-placeholder-header h1 {
@@ -448,6 +452,9 @@ img.avatar-image {
     flex: 0 1 320px;
     opacity: 0.65;
     height: 48px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 #chatbot-placeholder-options button:hover {

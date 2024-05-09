@@ -111,7 +111,9 @@ DEFAULT_METADATA = {
     "model_name": None, # api model name, used if this model is meant to be used online
     "filelist": None, # file list in the repo to download, now only support .gguf file
     "description": "", # description of the model, displayed in the chatbot header when cursor overing the info icon
-    "placeholder": {}, # placeholder for the model, displayed in the chat area when no message is present
+    "placeholder": { # placeholder for the model, displayed in the chat area when no message is present
+        "slogan": i18n("gpt_default_slogan"),
+    },
     "model_type": None, # model type, used to determine the model's behavior. If not set, the model type is inferred from the model name
     "multimodal": False, # whether the model is multimodal
     "api_host": None, # base url for the model's api
@@ -150,80 +152,140 @@ MODEL_METADATA = {
         "model_name": "gpt-3.5-turbo",
         "description": "gpt3.5turbo_description",
         "token_limit": 4096,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-green.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "GPT3.5 Turbo Instruct": {
         "model_name": "gpt-3.5-turbo-instruct",
         "description": "gpt3.5turbo_instruct_description",
         "token_limit": 4096,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-green.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "GPT3.5 Turbo 16K": {
         "model_name": "gpt-3.5-turbo-16k",
         "description": "gpt3.5turbo_16k_description",
         "token_limit": 16384,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-green.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "GPT3.5 Turbo 0301": {
         "model_name": "gpt-3.5-turbo-0301",
         "token_limit": 4096,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-green.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "GPT3.5 Turbo 0613": {
         "model_name": "gpt-3.5-turbo-0613",
         "token_limit": 4096,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-green.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "GPT3.5 Turbo 1106": {
     "model_name": "gpt-3.5-turbo-1106",
     "token_limit": 16384,
+    "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-green.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "GPT4": {
         "model_name": "gpt-4",
         "description": "gpt4_description",
         "token_limit": 8192,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-black.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "GPT4 32K": {
         "model_name": "gpt-4-32k",
         "description": "gpt4_32k_description",
         "token_limit": 32768,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-black.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "GPT4 Turbo": {
         "model_name": "gpt-4-turbo",
         "description": "gpt4turbo_description",
         "token_limit": 128000,
-        "multimodal": True
+        "multimodal": True,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-black.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "Claude 3 Haiku": {
         "model_name": "claude-3-haiku-20240307",
         "description": "claude3_haiku_description",
         "token_limit": 200000,
         "max_generation": 4096,
-        "multimodal": True
+        "multimodal": True,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/claude-3.jpg",
+            "slogan": i18n("claude_default_slogan"),
+        }
     },
     "Claude 3 Sonnet": {
         "model_name": "claude-3-sonnet-20240229",
         "description": "claude3_sonnet_description",
         "token_limit": 200000,
         "max_generation": 4096,
-        "multimodal": True
+        "multimodal": True,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/claude-3.jpg",
+            "slogan": i18n("claude_default_slogan"),
+        }
     },
     "Claude 3 Opus": {
         "model_name": "claude-3-opus-20240229",
         "description": "claude3_opus_description",
         "token_limit": 200000,
         "max_generation": 4096,
-        "multimodal": True
+        "multimodal": True,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/claude-3.jpg",
+            "slogan": i18n("claude_default_slogan"),
+        }
     },
     "川虎助理": {
         "model_name": "川虎助理",
-        "description": "川虎助理是一款虚拟世界游戏，在这个游戏中，川虎扮演……",
+        "description": "类似 AutoGPT，全自动解决你的问题",
         "placeholder": {
             "logo": "file=web_assets/icon/any-icon-512.png",
             "logo_rounded": "false",
-            "slogon": "我川虎今天能帮你做什么？",
-            "question_1": "你好",
-            "question_2": "你是谁",
-            "question_3": "你会做什么",
-            "question_4": "你会说什么语言",
+            "slogan": "川虎今天能帮你做些什么？",
+            "question_1": "今天杭州天气如何？",
+            "question_2": "最近 Apple 发布了什么新品？",
+            "question_3": "现在显卡的价格如何？",
+            "question_4": "TikTok 上有什么新梗？",
         }
     },
-    "川虎助理 Pro": {"model_name": "川虎助理 Pro"},
+    "川虎助理 Pro": {
+        "model_name": "川虎助理 Pro",
+        "description": "类似 AutoGPT，全自动解决你的问题",
+        "placeholder": {
+            "logo": "file=web_assets/icon/any-icon-512.png",
+            "logo_rounded": "false",
+            "slogan": "川虎Pro今天能帮你做些什么？",
+            "question_1": "今天杭州天气如何？",
+            "question_2": "最近 Apple 发布了什么新品？",
+            "question_3": "现在显卡的价格如何？",
+            "question_4": "TikTok 上有什么新梗？",
+        }
+    },
     "DALL-E 3": {"model_name": "dall-e-3"},
     "ERNIE-Bot-turbo": {
         "model_name": "ERNIE-Bot-turbo",
@@ -240,10 +302,18 @@ MODEL_METADATA = {
     "Gemini Pro": {
         "model_name": "gemini-pro",
         "token_limit": 30720,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/gemini.svg",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "Gemini Pro Vision": {
         "model_name": "gemini-pro-vision",
         "token_limit": 30720,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/gemini.svg",
+            "slogan": i18n("gpt_default_slogan"),
+        }
     },
     "Ollama": {
         "model_name": "ollama",

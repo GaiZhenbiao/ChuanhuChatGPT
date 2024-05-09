@@ -12,4 +12,6 @@
     "groq_llama3_70b_description": "采用 [Groq](https://console.groq.com/) 的 LLaMA 3 70B。Groq 是一个非常快速的语言模型推理服务。",
     "groq_mixtral_8x7b_description": "采用 [Groq](https://console.groq.com/) 的 Mixtral 8x7B。Groq 是一个非常快速的语言模型推理服务。",
     "groq_gemma_7b_description": "采用 [Groq](https://console.groq.com/) 的 Gemma 7B。Groq 是一个非常快速的语言模型推理服务。",
+    "gpt_default_slogan": "今天能帮您些什么？",
+    "claude_default_slogan": "What can l help you with?",
 }

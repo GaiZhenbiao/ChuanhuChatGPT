@@ -270,4 +270,6 @@
     "groq_llama3_70b_description": "LLaMA 3 70B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
     "groq_mixtral_8x7b_description": "Mixtral 8x7B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
     "groq_gemma_7b_description": "Gemma 7B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
+    "gpt_default_slogan": "How can I help you today?",
+    "claude_default_slogan": "What can l help you with?",
 }
