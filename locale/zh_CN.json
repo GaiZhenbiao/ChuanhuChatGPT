@@ -12,6 +12,12 @@
     "groq_llama3_70b_description": "采用 [Groq](https://console.groq.com/) 的 LLaMA 3 70B。Groq 是一个非常快速的语言模型推理服务。",
     "groq_mixtral_8x7b_description": "采用 [Groq](https://console.groq.com/) 的 Mixtral 8x7B。Groq 是一个非常快速的语言模型推理服务。",
     "groq_gemma_7b_description": "采用 [Groq](https://console.groq.com/) 的 Gemma 7B。Groq 是一个非常快速的语言模型推理服务。",
+    "chuanhu_description": "一个能使用多种工具解决复杂问题的智能体。",
     "gpt_default_slogan": "今天能帮您些什么？",
-    "claude_default_slogan": "What can l help you with?",
+    "claude_default_slogan": "我能帮您什么忙？",
+    "chuanhu_slogan": "川虎今天能帮你做些什么？",
+    "chuanhu_question_1": "今天杭州天气如何？",
+    "chuanhu_question_2": "最近 Apple 发布了什么新品？",
+    "chuanhu_question_3": "现在显卡的价格如何？",
+    "chuanhu_question_4": "TikTok 上有什么新梗？",
 }

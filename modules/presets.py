@@ -262,15 +262,15 @@ MODEL_METADATA = {
     },
     "川虎助理": {
         "model_name": "川虎助理",
-        "description": "类似 AutoGPT，全自动解决你的问题",
+        "description": i18n("chuanhu_description"),
         "placeholder": {
             "logo": "file=web_assets/icon/any-icon-512.png",
             "logo_rounded": "false",
-            "slogan": "川虎今天能帮你做些什么？",
-            "question_1": "今天杭州天气如何？",
-            "question_2": "最近 Apple 发布了什么新品？",
-            "question_3": "现在显卡的价格如何？",
-            "question_4": "TikTok 上有什么新梗？",
+            "slogan": i18n("chuanhu_slogan"),
+            "question_1": i18n("chuanhu_question_1"),
+            "question_2": i18n("chuanhu_question_2"),
+            "question_3": i18n("chuanhu_question_3"),
+            "question_4": i18n("chuanhu_question_4"),
         }
     },
     "川虎助理 Pro": {
@@ -280,7 +280,7 @@ MODEL_METADATA = {
             "logo": "file=web_assets/icon/any-icon-512.png",
             "logo_rounded": "false",
             "slogan": "川虎Pro今天能帮你做些什么？",
-            "question_1": "今天杭州天气如何？",
+            "question_1": "明天杭州天气如何？",
             "question_2": "最近 Apple 发布了什么新品？",
             "question_3": "现在显卡的价格如何？",
             "question_4": "TikTok 上有什么新梗？",

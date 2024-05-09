@@ -270,6 +270,12 @@
     "groq_llama3_70b_description": "LLaMA 3 70B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
     "groq_mixtral_8x7b_description": "Mixtral 8x7B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
     "groq_gemma_7b_description": "Gemma 7B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
+    "chuanhu_description": "An agent that can use multiple tools to solve complex problems.",
     "gpt_default_slogan": "How can I help you today?",
     "claude_default_slogan": "What can l help you with?",
+    "chuanhu_slogan": "What can Chuanhu do for you today?",
+    "chuanhu_question_1": "What's the weather in Hangzhou today?",
+    "chuanhu_question_2": "Any new releases from Apple?",
+    "chuanhu_question_3": "Current prices of graphics cards?",
+    "chuanhu_question_4": "Any new trends on TikTok?",
 }
