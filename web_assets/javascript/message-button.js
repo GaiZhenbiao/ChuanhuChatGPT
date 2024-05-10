@@ -83,6 +83,7 @@ function addChuanhuButton(botElement) {
     
     // if (!isLatestMessage) botElement.querySelector('.message-btn-row')?.remove();
     setLatestMessage();
+    addGeneratingLoader(botElement);
     
     // 改成生成时不添加按钮好了……
     if (chatbotIndicator.classList.contains('generating')) return;
@@ -194,6 +195,7 @@ function setLatestMessage() {
         } else {
             message.classList.remove('latest');
             message.querySelector('.message-btn-row')?.remove();
+            message.querySelector('.generating-loader')?.remove();
         }
     });
     if (chatbotIndicator.classList.contains('generating')) return;
@@ -269,6 +271,20 @@ function addLatestMessageButtons(botElement) {
     messageBtnRowTrailing.appendChild(dislikeButton);
 }
 
+function addGeneratingLoader(botElement) {
+    if (botElement.innerText.trim() === '' && chatbotIndicator.classList.contains('generating')) {
+        var generatingLoader = document.createElement('div');
+        generatingLoader.classList.add('generating-loader');
+        botElement.appendChild(generatingLoader);
+        thisMessageObserver = new MutationObserver((mutations) => {
+            botElement.querySelector('.generating-loader')?.remove();
+            thisMessageObserver.disconnect();
+        });
+        thisMessageObserver.observe(botElement, { childList: true, attributes: true, subtree: true});
+    } else {
+        botElement.querySelector('.generating-loader')?.remove();
+    }
+}
 
 // button svg code
 const copyIcon   = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>';
