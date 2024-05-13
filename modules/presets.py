@@ -65,6 +65,7 @@ ONLINE_MODELS = [
     "川虎助理 Pro",
     "DALL-E 3",
     "Gemini Pro",
+    "Gemini 1.5 Pro",
     "Gemini Pro Vision",
     "Groq LLaMA3 8B",
     "Groq LLaMA3 70B",
@@ -302,6 +303,14 @@ MODEL_METADATA = {
     "Gemini Pro": {
         "model_name": "gemini-pro",
         "token_limit": 30720,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/gemini.svg",
+            "slogan": i18n("gpt_default_slogan"),
+        }
+    },
+    "Gemini 1.5 Pro": {
+        "model_name": "gemini-1.5-pro-latest",
+        "token_limit": 1000000,
         "placeholder": {
             "logo": "file=web_assets/model_logos/gemini.svg",
             "slogan": i18n("gpt_default_slogan"),
