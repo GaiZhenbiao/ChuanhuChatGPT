@@ -54,6 +54,7 @@ CHUANHU_DESCRIPTION = i18n("由Bilibili [土川虎虎虎](https://space.bilibili
 
 ONLINE_MODELS = [
     "GPT3.5 Turbo",
+    "GPT-4o",
     "GPT4 Turbo",
     "GPT3.5 Turbo Instruct",
     "GPT4",
@@ -220,6 +221,16 @@ MODEL_METADATA = {
     "GPT4 Turbo": {
         "model_name": "gpt-4-turbo",
         "description": "gpt4turbo_description",
+        "token_limit": 128000,
+        "multimodal": True,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-black.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
+    },
+    "GPT-4o": {
+        "model_name": "gpt-4o",
+        "description": "gpt4o_description",
         "token_limit": 128000,
         "multimodal": True,
         "placeholder": {

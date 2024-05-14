@@ -273,9 +273,4 @@
     "chuanhu_description": "An agent that can use multiple tools to solve complex problems.",
     "gpt_default_slogan": "How can I help you today?",
     "claude_default_slogan": "What can l help you with?",
-    "chuanhu_slogan": "What can Chuanhu do for you today?",
-    "chuanhu_question_1": "What's the weather in Hangzhou today?",
-    "chuanhu_question_2": "Any new releases from Apple?",
-    "chuanhu_question_3": "Current prices of graphics cards?",
-    "chuanhu_question_4": "Any new trends on TikTok?",
 }
