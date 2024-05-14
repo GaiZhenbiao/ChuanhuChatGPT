@@ -217,6 +217,16 @@ MODEL_METADATA = {
             "slogan": i18n("gpt_default_slogan"),
         }
     },
+    "GPT4o": {
+        "model_name": "gpt-4o",
+        "description": "gpt4o_description",
+        "token_limit": 128000,
+        "multimodal": True,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-black.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
+    },
     "GPT4 Turbo": {
         "model_name": "gpt-4-turbo",
         "description": "gpt4turbo_description",
