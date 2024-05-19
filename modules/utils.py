@@ -10,6 +10,7 @@ import csv
 import threading
 import requests
 import re
+import hmac
 import html
 import hashlib
 
@@ -835,16 +836,25 @@ def beautify_err_msg(err_msg):
 
 def auth_from_conf(username, password):
     try:
-        with open("config.json", encoding="utf-8") as f:
+        with open("config.json", "r", encoding="utf-8") as f:
             conf = json.load(f)
-        usernames, passwords = [i[0] for i in conf["users"]], [
-            i[1] for i in conf["users"]
-        ]
-        if username in usernames:
-            if passwords[usernames.index(username)] == password:
-                return True
+        # Create a dictionary with usernames as keys and passwords as values
+        user_dict = {user[0]: user[1] for user in conf["users"]}
+
+        # Constant-time check if the username exists and the password matches
+        user_password = user_dict.get(username)
+        if user_password is not None:
+            return hmac.compare_digest(user_password, password)
         return False
-    except:
+    except FileNotFoundError:
+        print("Configuration file not found.")
+        return False
+    except json.JSONDecodeError:
+        print("Error decoding JSON.")
+        return False
+    except Exception as e:
+        # General exception handling; consider logging this properly
+        print(f"An unexpected error occurred: {str(e)}")
         return False
 
 
@@ -1483,4 +1493,3 @@ def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = Non
             chatbot_ph_slogan_class = slogan_class,
             chatbot_ph_question_class = question_class
         )
-
