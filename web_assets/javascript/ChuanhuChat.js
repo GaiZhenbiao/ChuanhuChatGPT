@@ -245,7 +245,7 @@ function checkModel() {
     function checkDescription() {
         modelValue = model.value;
         let grModelDesc = grModelDescDiv.innerText;
-        let modelDesc = gradioApp().querySelector('#model-description p');
+        let modelDesc = gradioApp().querySelector('#gr-model-description p');
         if (grModelDesc && !grModelDesc.includes('0.0s') && !grModelDesc.includes('processing') && grModelDesc.trim() !== "") {
             chatbotArea.classList.add('has-description');
             modelDesc.innerText = grModelDesc;
