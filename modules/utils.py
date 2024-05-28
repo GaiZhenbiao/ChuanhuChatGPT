@@ -31,6 +31,7 @@ from modules.config import retrieve_proxy, hide_history_when_not_logged_in
 
 if TYPE_CHECKING:
     from typing import TypedDict
+    from .models.base_model import BaseLLMModel
 
     class DataframeData(TypedDict):
         headers: List[str]
@@ -1429,7 +1430,6 @@ def reboot_chuanhu():
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 
-from .models.base_model import BaseLLMModel
 def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = None):
     from .webui import get_html
     logo_class, slogan_class, question_class = "", "", ""
