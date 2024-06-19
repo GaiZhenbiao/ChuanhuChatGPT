@@ -191,14 +191,10 @@ class OpenAIVisionClient(BaseLLMModel):
         else:
             timeout = TIMEOUT_ALL
 
-        # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
-        if shared.state.chat_completion_url != CHAT_COMPLETION_URL:
-            logging.debug(f"使用自定义API URL: {shared.state.chat_completion_url}")
-
         with retrieve_proxy():
             try:
                 response = requests.post(
-                    shared.state.chat_completion_url,
+                    self.chat_completion_url,
                     headers=headers,
                     json=payload,
                     stream=stream,
@@ -282,13 +278,10 @@ class OpenAIVisionClient(BaseLLMModel):
             "model": self.model_name,
             "messages": history,
         }
-        # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
-        if shared.state.chat_completion_url != CHAT_COMPLETION_URL:
-            logging.debug(f"使用自定义API URL: {shared.state.chat_completion_url}")
 
         with retrieve_proxy():
             response = requests.post(
-                shared.state.chat_completion_url,
+                self.chat_completion_url,
                 headers=headers,
                 json=payload,
                 stream=False,
