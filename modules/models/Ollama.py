@@ -17,6 +17,13 @@ class OllamaClient(BaseLLMModel):
         super().__init__(model_name=model_name, user=user_name)
         self.backend_model = backend_model
         self.ollama_host = ollama_host
+        self.model_list = self.get_model_list()
+        if self.backend_model is None:
+            if len(self.model_list) == 0:
+                logging.error("Ollama未部署模型，请先pull模型")
+            else:
+                self.backend_model = self.model_list["models"][0]["name"]
+                logging.info("Ollama设定默认模型"+self.backend_model)
         self.update_token_limit()
 
     def get_model_list(self):
