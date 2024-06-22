@@ -60,7 +60,7 @@ ONLINE_MODELS = [
     "GPT4",
     "GPT4 32K",
     "Claude 3 Haiku",
-    "Claude 3 Sonnet",
+    "Claude 3.5 Sonnet",
     "Claude 3 Opus",
     "川虎助理",
     "川虎助理 Pro",
@@ -249,8 +249,8 @@ MODEL_METADATA = {
             "slogan": i18n("claude_default_slogan"),
         }
     },
-    "Claude 3 Sonnet": {
-        "model_name": "claude-3-sonnet-20240229",
+    "Claude 3.5 Sonnet": {
+        "model_name": "claude-3-5-sonnet-20240620",
         "description": "claude3_sonnet_description",
         "token_limit": 200000,
         "max_generation": 4096,
