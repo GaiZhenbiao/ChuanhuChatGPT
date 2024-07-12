@@ -161,7 +161,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         return gr.update(), chatbot, status
 
     def prepare_inputs(
-        self, real_inputs, use_websearch, files, reply_language, chatbot
+        self, real_inputs, use_websearch, history_call, files, reply_language, chatbot
     ):
         fake_inputs = real_inputs
         display_append = ""

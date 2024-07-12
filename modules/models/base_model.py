@@ -472,6 +472,7 @@ class BaseLLMModel:
         self,
         real_inputs,
         use_websearch,
+        history_call,
         files,
         reply_language,
         chatbot,
@@ -483,41 +484,51 @@ class BaseLLMModel:
             fake_inputs = real_inputs[0]["text"]
         else:
             fake_inputs = real_inputs
+
         def extract_initial_hashtags(text):
-            # Use a regular expression to find all hashtags at the beginning of the string
-            hashtags = re.findall(r'^\#\w+(?:\s*\#\w+)*', text)
-            # Split the matched string into individual hashtags
+            # Use a regular expression to find a continuous group of hashtags at the beginning of the string
+            hashtags = re.findall(r'^(\#\w+\s*)+', text)
+            # If hashtags are found, split the group into individual hashtags and remove the '#' character
             if hashtags:
-                return re.findall(r'\#\w+', hashtags[0])
+                # Remove leading and trailing whitespace before splitting
+                return [hashtag[1:].strip() for hashtag in hashtags[0].split()]
             return []
         hashtags = extract_initial_hashtags(fake_inputs)
-        hashtags = [hashtag[1:] for hashtag in hashtags]
-        def remove_markup_labels(text):
-            # Regular expression to match any markup labels enclosed in <>
-            clean_text = re.sub(r'<[^>]+>', '', text)
-            return clean_text
-        reference_results = ["\n\n".join(
-            [f"User said: {remove_markup_labels(user_message)}\n Bot said: {remove_markup_labels(bot_message)}"
-             for user_message, bot_message in self.load_chat_history(hashtag)[2]["value"] if bot_message is not None])
-            for hashtag in hashtags]
-        for idx, result in enumerate(reference_results):
-            logging.debug(f"搜索结果{idx + 1}：{result}")
-        if type(real_inputs) == list:
-            real_inputs[0]["text"] = (
-                replace_today(PROMPT_TEMPLATE)
-                .replace("{query_str}", fake_inputs)
-                .replace("{context_str}", "\n\n".join(reference_results))
-                .replace("{reply_language}", reply_language)
-            )
-            fake_inputs = real_inputs[0]["text"]
-        else:
-            real_inputs = (
-                replace_today(PROMPT_TEMPLATE)
-                .replace("{query_str}", real_inputs)
-                .replace("{context_str}", "\n\n".join(reference_results))
-                .replace("{reply_language}", reply_language)
-            )
-            fake_inputs = real_inputs
+
+        if history_call and hashtags != []:
+            def load_previous_chat_history(history_file_path):
+                if history_file_path == os.path.basename(history_file_path):
+                    history_file_path = os.path.join(
+                        HISTORY_DIR, self.user_name, history_file_path
+                    )
+                else:
+                    history_file_path = history_file_path
+                if not history_file_path.endswith(".json"):
+                    history_file_path += ".json"
+                with open(history_file_path, "r", encoding="utf-8") as f:
+                    saved_json = json.load(f)
+                # Format the chat history into a single string with role identifiers
+                history_entries = []
+                for entry in saved_json["history"]:
+                    role = entry['role']
+                    content = entry['content']
+                    history_entries.append(f"{role}: {content}")
+                return "\n".join(history_entries)
+            reference_results = [load_previous_chat_history(hashtag) for hashtag in hashtags]
+            if type(real_inputs) == list:
+                real_inputs[0]["text"] = (
+                    replace_today(PROMPT_TEMPLATE)
+                    .replace("{query_str}", fake_inputs)
+                    .replace("{context_str}", "\n\n".join(reference_results))
+                    .replace("{reply_language}", reply_language)
+                )
+            else:
+                real_inputs = (
+                    replace_today(PROMPT_TEMPLATE)
+                    .replace("{query_str}", real_inputs)
+                    .replace("{context_str}", "\n\n".join(reference_results))
+                    .replace("{reply_language}", reply_language)
+                )
         if files:
             from langchain.embeddings.huggingface import HuggingFaceEmbeddings
             from langchain.vectorstores.base import VectorStoreRetriever
@@ -546,6 +557,7 @@ class BaseLLMModel:
                         fake_inputs,
                         use_websearch,
                         files,
+                        history_call,
                         reply_language,
                         chatbot,
                         load_from_cache_if_possible=False,
@@ -625,6 +637,7 @@ class BaseLLMModel:
         stream=False,
         use_websearch=False,
         files=None,
+        history_call=False,
         reply_language="中文",
         should_check_token_count=True,
     ):  # repetition_penalty, top_k
@@ -668,6 +681,7 @@ class BaseLLMModel:
             real_inputs=inputs,
             use_websearch=use_websearch,
             files=files,
+            history_call=history_call,
             reply_language=reply_language,
             chatbot=chatbot,
         )
@@ -769,6 +783,7 @@ class BaseLLMModel:
         stream=False,
         use_websearch=False,
         files=None,
+        history_call=False,
         reply_language="中文",
     ):
         logging.debug("重试中……")
@@ -795,6 +810,7 @@ class BaseLLMModel:
             stream=stream,
             use_websearch=use_websearch,
             files=files,
+            history_call=history_call,
             reply_language=reply_language,
         )
         for x in iter:

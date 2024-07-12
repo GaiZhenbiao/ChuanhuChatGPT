@@ -100,7 +100,7 @@ class XMChat(BaseLLMModel):
         requests.post(self.url, json=data)
         return "👎点踩成功，感谢反馈～"
 
-    def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):
+    def prepare_inputs(self, real_inputs, use_websearch, files, history_call, reply_language, chatbot):
         fake_inputs = real_inputs
         display_append = ""
         limited_context = False

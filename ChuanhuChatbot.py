@@ -148,6 +148,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             gr.HTML(get_html("chatbot_more.html").format(
                                 single_turn_label=i18n("单轮对话"),
                                 websearch_label=i18n("在线搜索"),
+                                history_call_label=i18n("引用历史"),
                                 upload_file_label=i18n("上传文件"),
                                 uploaded_files_label=i18n("知识库文件"),
                                 uploaded_files_tip=i18n("在工具箱中管理知识库文件")
@@ -259,6 +260,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         with gr.Accordion(label=i18n("知识库"), open=True, elem_id="gr-kb-accordion"):
                             use_websearch_checkbox = gr.Checkbox(label=i18n(
                                 "使用在线搜索"), value=False, elem_classes="switch-checkbox", elem_id="gr-websearch-cb", visible=False)
+                            use_history_call_checkbox = gr.Checkbox(label=i18n(
+                                "#应用历史记录"), value=False, elem_classes="switch-checkbox", elem_id="gr-history-call-cb",
+                                visible=False)
                             index_files = gr.Files(label=i18n(
                                 "上传"), type="filepath", file_types=[".pdf", ".docx", ".pptx", ".epub", ".xlsx", ".txt", "text", "image"], elem_id="upload-index-file")
                             two_column = gr.Checkbox(label=i18n(
@@ -500,6 +504,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     visible=False, elem_classes="invisible-btn", elem_id="change-single-session-btn")
                 changeOnlineSearchBtn = gr.Button(
                     visible=False, elem_classes="invisible-btn", elem_id="change-online-search-btn")
+                changeHistoryCallBtn = gr.Button(
+                    visible=False, elem_classes="invisible-btn", elem_id="change-history-call-btn")
                 historySelectBtn = gr.Button(
                     visible=False, elem_classes="invisible-btn", elem_id="history-select-btn")  # Not used
 
@@ -532,6 +538,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             use_streaming_checkbox,
             use_websearch_checkbox,
             index_files,
+            use_history_call_checkbox,
             language_select_dropdown,
         ],
         outputs=[chatbot, status_display],
@@ -617,6 +624,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
             use_streaming_checkbox,
             use_websearch_checkbox,
             index_files,
+            use_history_call_checkbox,
             language_select_dropdown,
         ],
         [chatbot, status_display],
@@ -804,6 +812,12 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         inputs=[use_websearch_checkbox],
         outputs=[use_websearch_checkbox],
         js='(a)=>{return bgChangeOnlineSearch(a);}'
+    )
+    changeHistoryCallBtn.click(
+        fn=lambda value: gr.Checkbox(value=value),
+        inputs=[use_history_call_checkbox],
+        outputs=[use_history_call_checkbox],
+        js='(a)=>{return bgChangeHistoryCall(a);}'
     )
     historySelectBtn.click(  # This is an experimental feature... Not actually used.
         fn=load_chat_history,

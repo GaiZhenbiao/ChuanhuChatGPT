@@ -57,14 +57,18 @@ function transUpload() {
 // checkbox
 var grSingleSessionCB;
 var grOnlineSearchCB;
+var grHistoryCallCB;
 var chatbotSingleSessionCB;
 var chatbotOnlineSearchCB;
+var chatbotHistoryCallCB;
 function setCheckboxes() {
     chatbotSingleSessionCB = gradioApp().querySelector('input[name="single-session-cb"]');
     chatbotOnlineSearchCB = gradioApp().querySelector('input[name="online-search-cb"]');
+    chatbotHistoryCallCB = gradioApp().querySelector('input[name="history-call-cb"]');
     grSingleSessionCB = gradioApp().querySelector("#gr-single-session-cb > label > input");
     grOnlineSearchCB = gradioApp().querySelector("#gr-websearch-cb > label> input");
-    
+    grHistoryCallCB = gradioApp().querySelector("#gr-history-call-cb > label> input");
+
     chatbotSingleSessionCB.addEventListener('change', (e) => {
         grSingleSessionCB.checked = chatbotSingleSessionCB.checked;
         gradioApp().querySelector('#change-single-session-btn').click();
@@ -73,11 +77,18 @@ function setCheckboxes() {
         grOnlineSearchCB.checked = chatbotOnlineSearchCB.checked;
         gradioApp().querySelector('#change-online-search-btn').click();
     });
+    chatbotHistoryCallCB.addEventListener('change', (e) => {
+        grHistoryCallCB.checked = chatbotHistoryCallCB.checked;
+        gradioApp().querySelector('#change-history-call-btn').click();
+    });
     grSingleSessionCB.addEventListener('change', (e) => {
         chatbotSingleSessionCB.checked = grSingleSessionCB.checked;
     });
     grOnlineSearchCB.addEventListener('change', (e) => {
         chatbotOnlineSearchCB.checked = grOnlineSearchCB.checked;
+    });
+    grHistoryCallCB.addEventListener('change', (e) => {
+        chatbotHistoryCallCB.checked = grHistoryCallCB.checked;
     });
 }
 
@@ -92,9 +103,16 @@ function bgChangeOnlineSearch() {
     return [a];
 }
 
+function bgChangeHistoryCall() {
+    // const grOnlineSearchCB = gradioApp().querySelector("#gr-websearch-cb > label> input");
+    let a = chatbotHistoryCallCB.checked;
+    return [a];
+}
+
 function updateCheckboxes() {
     chatbotSingleSessionCB.checked = grSingleSessionCB.checked;
     chatbotOnlineSearchCB.checked = grOnlineSearchCB.checked;
+    chatbotHistoryCallCB.checked = grHistoryCallCB.checked;
 }
 
 // UTILS
