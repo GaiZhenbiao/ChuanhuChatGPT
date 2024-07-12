@@ -483,6 +483,41 @@ class BaseLLMModel:
             fake_inputs = real_inputs[0]["text"]
         else:
             fake_inputs = real_inputs
+        def extract_initial_hashtags(text):
+            # Use a regular expression to find all hashtags at the beginning of the string
+            hashtags = re.findall(r'^\#\w+(?:\s*\#\w+)*', text)
+            # Split the matched string into individual hashtags
+            if hashtags:
+                return re.findall(r'\#\w+', hashtags[0])
+            return []
+        hashtags = extract_initial_hashtags(fake_inputs)
+        hashtags = [hashtag[1:] for hashtag in hashtags]
+        def remove_markup_labels(text):
+            # Regular expression to match any markup labels enclosed in <>
+            clean_text = re.sub(r'<[^>]+>', '', text)
+            return clean_text
+        reference_results = ["\n\n".join(
+            [f"User said: {remove_markup_labels(user_message)}\n Bot said: {remove_markup_labels(bot_message)}"
+             for user_message, bot_message in self.load_chat_history(hashtag)[2]["value"] if bot_message is not None])
+            for hashtag in hashtags]
+        for idx, result in enumerate(reference_results):
+            logging.debug(f"搜索结果{idx + 1}：{result}")
+        if type(real_inputs) == list:
+            real_inputs[0]["text"] = (
+                replace_today(PROMPT_TEMPLATE)
+                .replace("{query_str}", fake_inputs)
+                .replace("{context_str}", "\n\n".join(reference_results))
+                .replace("{reply_language}", reply_language)
+            )
+            fake_inputs = real_inputs[0]["text"]
+        else:
+            real_inputs = (
+                replace_today(PROMPT_TEMPLATE)
+                .replace("{query_str}", real_inputs)
+                .replace("{context_str}", "\n\n".join(reference_results))
+                .replace("{reply_language}", reply_language)
+            )
+            fake_inputs = real_inputs
         if files:
             from langchain.embeddings.huggingface import HuggingFaceEmbeddings
             from langchain.vectorstores.base import VectorStoreRetriever
