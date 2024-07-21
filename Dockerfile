@@ -16,3 +16,4 @@ COPY . /app
 WORKDIR /app
 ENV dockerrun=yes
 CMD ["python3", "-u", "ChuanhuChatbot.py","2>&1", "|", "tee", "/var/log/application.log"]
+EXPOSE 7860
