@@ -278,5 +278,6 @@
     "chuanhu_question_2": "Any new releases from Apple?",
     "chuanhu_question_3": "Current prices of graphics cards?",
     "chuanhu_question_4": "Any new trends on TikTok?",
-    "gpt4o_description": "OpenAI's most advanced, multimodal flagship model that’s cheaper and faster than GPT-4 Turbo."
+    "gpt4o_description": "OpenAI's most advanced, multimodal flagship model that’s cheaper and faster than GPT-4 Turbo.",
+    "gpt4omini_description": "OpenAI's affordable and intelligent small model for fast, lightweight tasks."
 }

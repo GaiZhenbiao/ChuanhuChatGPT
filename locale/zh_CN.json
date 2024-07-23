@@ -20,5 +20,6 @@
     "chuanhu_question_2": "最近 Apple 发布了什么新品？",
     "chuanhu_question_3": "现在显卡的价格如何？",
     "chuanhu_question_4": "TikTok 上有什么新梗？",
-    "gpt4o_description": "OpenAI 的最先进的多模态旗舰模型，比 GPT-4 Turbo 更便宜、更快。"
+    "gpt4o_description": "OpenAI 的最先进的多模态旗舰模型，比 GPT-4 Turbo 更便宜、更快。",
+    "gpt4omini_description": "OpenAI 的经济实惠且智能的小型模型，适用于快速、轻量级任务。"
 }
