@@ -129,6 +129,7 @@ class ChuanhuCallbackHandler(BaseCallbackHandler):
             containing content and other information.
         """
         logging.info(f"### CHUNK ###: {chunk}")
+        self.callback(token)
 
 
 class ModelType(Enum):
