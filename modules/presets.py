@@ -55,6 +55,7 @@ CHUANHU_DESCRIPTION = i18n("由Bilibili [土川虎虎虎](https://space.bilibili
 ONLINE_MODELS = [
     "GPT3.5 Turbo",
     "GPT-4o",
+    "GPT-4o-mini",
     "GPT4 Turbo",
     "GPT3.5 Turbo Instruct",
     "GPT4",
@@ -83,6 +84,8 @@ ONLINE_MODELS = [
     "yuanai-1.0-rhythm_poems",
     "minimax-abab5-chat",
     "midjourney",
+    "讯飞星火大模型V4.0",
+    "讯飞星火大模型V3.5",
     "讯飞星火大模型V3.0",
     "讯飞星火大模型V2.0",
     "讯飞星火大模型V1.5",
@@ -238,6 +241,16 @@ MODEL_METADATA = {
             "slogan": i18n("gpt_default_slogan"),
         }
     },
+    "GPT-4o-mini": {
+        "model_name": "gpt-4o-mini",
+        "description": "gpt4omini_description",
+        "token_limit": 128000,
+        "multimodal": True,
+        "placeholder": {
+            "logo": "file=web_assets/model_logos/openai-black.webp",
+            "slogan": i18n("gpt_default_slogan"),
+        }
+    },
     "Claude 3 Haiku": {
         "model_name": "claude-3-haiku-20240307",
         "description": "claude3_haiku_description",
@@ -369,6 +382,8 @@ MODEL_METADATA = {
     "yuanai-1.0-rhythm_poems": {"model_name": "yuanai-1.0-rhythm_poems"},
     "minimax-abab5-chat": {"model_name": "minimax-abab5-chat"},
     "midjourney": {"model_name": "midjourney"},
+    "讯飞星火大模型V4.0": {"model_name": "讯飞星火大模型V4.0"},
+    "讯飞星火大模型V3.5": {"model_name": "讯飞星火大模型V3.5"},
     "讯飞星火大模型V3.0": {"model_name": "讯飞星火大模型V3.0"},
     "讯飞星火大模型V2.0": {"model_name": "讯飞星火大模型V2.0"},
     "讯飞星火大模型V1.5": {"model_name": "讯飞星火大模型V1.5"},
