@@ -321,7 +321,7 @@ if server_port is None:
 assert server_port is None or type(server_port) == int, "要求port设置为int类型"
 
 # 设置默认model
-default_model = config.get("default_model", "GPT3.5 Turbo")
+default_model = config.get("default_model", "GPT-4o-mini")
 try:
     if default_model in presets.MODELS:
         presets.DEFAULT_MODEL = presets.MODELS.index(default_model)
