@@ -96,3 +96,59 @@
 .token.url {
     background: none !important;
 }
+
+/* 避免采用亮色背景的高亮样式 */
+.md .token.comment,
+.md .token.prolog,
+.md .token.cdata {
+    color: #5c6370 !important;
+}
+
+.md .token.doctype,
+.md .token.punctuation,
+.md .token.entity {
+    color: #abb2bf !important;
+}
+
+.md .token.attr-name,
+.md .token.class-name,
+.md .token.boolean,
+.md .token.constant,
+.md .token.number,
+.md .token.atrule {
+    color: #d19a66 !important;
+}
+
+.md .token.keyword {
+    color: #c678dd !important;
+}
+
+.md .token.property,
+.md .token.tag,
+.md .token.symbol,
+.md .token.deleted,
+.md .token.important {
+    color: #e06c75 !important;
+}
+
+.md .token.selector,
+.md .token.string,
+.md .token.char,
+.md .token.builtin,
+.md .token.inserted,
+.md .token.regex,
+.md .token.attr-value,
+.md .token.attr-value > .token.punctuation {
+    color: #98c379 !important;
+}
+
+.md .token.variable,
+.md .token.operator,
+.md .token.function {
+    color: #61afef !important;
+}
+
+.md .token.url {
+    color: #56b6c2 !important;
+}
+
