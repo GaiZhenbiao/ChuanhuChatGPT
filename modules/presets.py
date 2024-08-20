@@ -393,35 +393,38 @@ MODEL_METADATA = {
     # 兼容旧配置文件，待删除
     "讯飞星火大模型V4.0": {
         "model_name": "讯飞星火大模型V4.0",
-        "placeholder": {
+        "token_limit": 8192,
+        "metadata": {
             "path": "/v4.0/chat",
             "domain": "4.0Ultra"
         }
     },
     "讯飞星火大模型V3.5": {
         "model_name": "讯飞星火大模型V3.5",
-        "placeholder": {
+        "token_limit": 8192,
+        "metadata": {
             "path": "/v3.5/chat",
             "domain": "generalv3.5"
         }
     },
     "讯飞星火大模型V3.0": {
         "model_name": "讯飞星火大模型V3.0",
-        "placeholder": {
+        "token_limit": 8192,
+        "metadata": {
             "path": "/v3.1/chat",
             "domain": "generalv3"
         }
     },
     "讯飞星火大模型V2.0": {
         "model_name": "讯飞星火大模型V2.0",
-        "placeholder": {
+        "metadata": {
             "path": "/v2.1/chat",
             "domain": "generalv2"
         }
     },
     "讯飞星火大模型V1.5": {
         "model_name": "讯飞星火大模型V1.5",
-        "placeholder": {
+        "metadata": {
             "path": "/v1.1/chat",
             "domain": "general"
         }
@@ -429,14 +432,16 @@ MODEL_METADATA = {
     # 新的名称
     "讯飞星火4.0 Ultra": {
         "model_name": "讯飞星火4.0 Ultra",
-        "placeholder": {
+        "token_limit": 8192,
+        "metadata": {
             "path": "/v4.0/chat",
             "domain": "4.0Ultra"
         }
     },
     "讯飞星火Max": {
         "model_name": "讯飞星火Max",
-        "placeholder": {
+        "token_limit": 8192,
+        "metadata": {
             "path": "/v3.5/chat",
             "domain": "generalv3.5"
         }
@@ -444,29 +449,30 @@ MODEL_METADATA = {
 
     "讯飞星火Pro 128K": {
         "model_name": "讯飞星火Pro 128K",
-        "token_limit": 128000,
-        "placeholder": {
+        "token_limit": 131072, # 128 * 1024
+        "metadata": {
             "path": "/chat/pro-128k",
             "domain": "pro-128k"
         }
     },
     "讯飞星火Pro": {
         "model_name": "讯飞星火Pro",
-        "placeholder": {
+        "token_limit": 8192,
+        "metadata": {
             "path": "/v3.1/chat",
             "domain": "generalv3"
         }
     },
     "讯飞星火V2.0": {
         "model_name": "讯飞星火V2.0",
-        "placeholder": {
+        "metadata": {
             "path": "/v2.1/chat",
             "domain": "generalv2"
         }
     },
     "讯飞星火Lite": {
         "model_name": "讯飞星火Lite",
-        "placeholder": {
+        "metadata": {
             "path": "/v1.1/chat",
             "domain": "general"
         }
