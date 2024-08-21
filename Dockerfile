@@ -1,8 +1,8 @@
 FROM python:3.10-slim-buster as builder
 
-# Install build essentials and Rust
+# Install build essentials, Rust, and additional dependencies
 RUN apt-get update \
-    && apt-get install -y build-essential curl \
+    && apt-get install -y build-essential curl cmake pkg-config libssl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -10,9 +10,16 @@ RUN apt-get update \
 # Add Cargo to PATH
 ENV PATH="/root/.cargo/bin:${PATH}"
 
+# Upgrade pip and install maturin
+RUN pip install --upgrade pip \
+    && pip install maturin
+
 COPY requirements.txt .
 COPY requirements_advanced.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt
+
+# Install Python packages, handling primp separately
+RUN pip install --user --no-cache-dir $(grep -v primp requirements.txt) \
+    && RUSTFLAGS="-C target-feature=-crt-static" pip install --user --no-cache-dir primp
 # RUN pip install --user --no-cache-dir -r requirements_advanced.txt
 
 FROM python:3.10-slim-buster
