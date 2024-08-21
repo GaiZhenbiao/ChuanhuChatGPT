@@ -17,7 +17,6 @@ COPY requirements.txt .
 COPY requirements_advanced.txt .
 
 # Install Python packages
-RUN pip install -U primp
 RUN pip install --user --no-cache-dir -r requirements.txt
 
 # Uncomment the following line if you want to install advanced requirements
