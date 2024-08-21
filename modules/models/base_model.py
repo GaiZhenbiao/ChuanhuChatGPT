@@ -209,7 +209,7 @@ class ModelType(Enum):
             model_type = ModelType.Midjourney
         elif "azure" in model_name_lower or "api" in model_name_lower:
             model_type = ModelType.LangchainChat
-        elif "星火大模型" in model_name_lower:
+        elif "讯飞星火" in model_name_lower:
             model_type = ModelType.Spark
         elif "claude" in model_name_lower:
             model_type = ModelType.Claude
