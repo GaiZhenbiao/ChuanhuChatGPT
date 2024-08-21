@@ -10,16 +10,17 @@ RUN apt-get update \
 # Add Cargo to PATH
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-# Upgrade pip and install maturin
-RUN pip install --upgrade pip \
-    && pip install maturin
+# Upgrade pip
+RUN pip install --upgrade pip
 
 COPY requirements.txt .
 COPY requirements_advanced.txt .
 
-# Install Python packages, handling primp separately
-RUN pip install --user --no-cache-dir $(grep -v primp requirements.txt) \
-    && RUSTFLAGS="-C target-feature=-crt-static" pip install --user --no-cache-dir primp
+# Install Python packages
+RUN pip install -U primp
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+# Uncomment the following line if you want to install advanced requirements
 # RUN pip install --user --no-cache-dir -r requirements_advanced.txt
 
 FROM python:3.10-slim-buster
