@@ -311,7 +311,7 @@ class BaseLLMModel:
         self.logit_bias = self.default_logit_bias
         self.user_identifier = user
 
-        self.metadata = {}
+        self.metadata = config["metadata"]
 
     def get_answer_stream_iter(self):
         """Implement stream prediction.
