@@ -1,16 +1,10 @@
-import hashlib
-import logging
-import os
-
 import PyPDF2
-from langchain_community.chat_models import ChatOpenAI
 from langchain_community.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings, AzureOpenAIEmbeddings
 from tqdm import tqdm
 
 from modules.config import local_embedding
-from modules.presets import *
 from modules.utils import *
 
 
@@ -144,11 +138,11 @@ def construct_index(
                 model="text-embedding-3-large",
             )
         else:
-            embeddings = OpenAIEmbeddings(
+            embeddings = AzureOpenAIEmbeddings(
                 deployment=os.environ["AZURE_EMBEDDING_DEPLOYMENT_NAME"],
                 openai_api_key=os.environ["AZURE_OPENAI_API_KEY"],
                 model=os.environ["AZURE_EMBEDDING_MODEL_NAME"],
-                openai_api_base=os.environ["AZURE_OPENAI_API_BASE_URL"],
+                azure_endpoint=os.environ["AZURE_OPENAI_API_BASE_URL"],
                 openai_api_type="azure",
             )
     if os.path.exists(index_path) and load_from_cache_if_possible:
