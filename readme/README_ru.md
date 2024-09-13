@@ -61,7 +61,7 @@
 
 | Модель с использованием API | Примечание | Локально развернутые модели | Примечание |
 | :---: | --- | :---: | --- |
-| [ChatGPT (GPT-4)](https://chat.openai.com) | Поддерживает микронастройку gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
+| [ChatGPT (GPT-4、GPT-4o、o1)](https://chat.openai.com) | Поддерживает микронастройку gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
 | [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Поддерживает модель Lora |
 | [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM)||
 | [Xunfei Xinghuo Cognitive Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)||

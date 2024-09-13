@@ -61,7 +61,7 @@
 
 | API呼び出しモデル | 備考 | ローカルデプロイモデル | 備考 |
 | :---: | --- | :---: | --- |
-| [ChatGPT(GPT-4、GPT-4o)](https://chat.openai.com) | gpt-3.5の微調整をサポート | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
+| [ChatGPT(GPT-4、GPT-4o、o1)](https://chat.openai.com) | gpt-3.5の微調整をサポート | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
 | [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Loraモデルのサポートあり |
 | [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM)||
 | [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)||

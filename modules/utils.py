@@ -832,6 +832,10 @@ def beautify_err_msg(err_msg):
         )
     if "Resource not found" in err_msg:
         return i18n("请查看 config_example.json，配置 Azure OpenAI")
+    try:
+        err_msg = json.loads(err_msg)["error"]["message"]
+    except:
+        pass
     return err_msg
 
 

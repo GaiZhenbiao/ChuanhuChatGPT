@@ -262,7 +262,7 @@ MODEL_METADATA = {
     },
     "o1-preview": {
         "model_name": "o1-preview",
-        "description": "o1-preview_description",
+        "description": "o1_description",
         "token_limit": 128000,
         "multimodal": False,
         "model_type": "OpenAIVision",
@@ -273,7 +273,7 @@ MODEL_METADATA = {
     },
     "o1-mini": {
         "model_name": "o1-mini",
-        "description": "o1-mini_description",
+        "description": "o1_description",
         "token_limit": 128000,
         "multimodal": False,
         "model_type": "OpenAIVision",
