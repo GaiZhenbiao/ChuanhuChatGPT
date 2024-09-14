@@ -161,7 +161,7 @@ class OpenAIVisionClient(BaseLLMModel):
             "Authorization": f"Bearer {openai_api_key}",
         }
 
-        if system_prompt is not None:
+        if system_prompt is not None and "o1" not in self.model_name:
             history = [construct_system(system_prompt), *history]
 
         payload = {
