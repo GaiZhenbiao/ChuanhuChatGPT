@@ -267,6 +267,7 @@ MODEL_METADATA = {
         "token_limit": 128000,
         "multimodal": False,
         "model_type": "OpenAIVision",
+        "stream": False,
         "placeholder": {
             "logo": "file=web_assets/model_logos/openai-black.webp",
             "slogan": i18n("gpt_default_slogan"),
@@ -278,6 +279,7 @@ MODEL_METADATA = {
         "token_limit": 128000,
         "multimodal": False,
         "model_type": "OpenAIVision",
+        "stream": False,
         "placeholder": {
             "logo": "file=web_assets/model_logos/openai-black.webp",
             "slogan": i18n("gpt_default_slogan"),
