@@ -148,6 +148,7 @@ def set_single_turn(current_model, *args):
 def set_streaming(current_model, *args):
     current_model.set_streaming(*args)
 
+
 def handle_file_upload(current_model, *args):
     return current_model.handle_file_upload(*args)
 

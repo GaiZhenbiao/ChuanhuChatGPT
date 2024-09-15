@@ -300,6 +300,7 @@ class BaseLLMModel:
         self.default_frequency_penalty = config["frequency_penalty"]
         self.default_logit_bias = config["logit_bias"]
         self.default_user_identifier = user
+        self.default_stream = config["stream"]
 
         self.single_turn = self.default_single_turn
         self.temperature = self.default_temperature
@@ -885,6 +886,7 @@ class BaseLLMModel:
         self.frequency_penalty = self.default_frequency_penalty
         self.logit_bias = self.default_logit_bias
         self.user_identifier = self.default_user_identifier
+        self.stream = self.default_stream
 
         return (
             [],
