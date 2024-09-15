@@ -904,6 +904,7 @@ class BaseLLMModel:
             self.frequency_penalty,
             self.logit_bias,
             self.user_identifier,
+            self.stream
         )
 
     def delete_first_conversation(self):
