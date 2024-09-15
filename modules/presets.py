@@ -142,6 +142,7 @@ DEFAULT_METADATA = {
     "presence_penalty": 0.0,
     "frequency_penalty": 0.0,
     "logit_bias": None,
+    "stream": True,
     "metadata": {} # additional metadata for the model
 }
 

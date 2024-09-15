@@ -145,6 +145,8 @@ def set_user_identifier(current_model, *args):
 def set_single_turn(current_model, *args):
     current_model.set_single_turn(*args)
 
+def set_streaming(current_model, *args):
+    current_model.set_streaming(*args)
 
 def handle_file_upload(current_model, *args):
     return current_model.handle_file_upload(*args)
@@ -407,6 +409,7 @@ def save_file(filename, model, chatbot):
         "frequency_penalty": model.frequency_penalty,
         "logit_bias": model.logit_bias,
         "user_identifier": model.user_identifier,
+        "stream": model.stream,
         "metadata": model.metadata,
     }
     if not filename == os.path.basename(filename):
