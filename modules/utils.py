@@ -9,12 +9,12 @@ import datetime
 import csv
 import threading
 import requests
-import re
 import hmac
 import html
 import hashlib
 
 import gradio as gr
+import regex as re
 import getpass
 from pypinyin import lazy_pinyin
 import tiktoken
@@ -511,7 +511,7 @@ def init_history_list(user_name="", prepend=None):
 def filter_history(user_name, keyword):
     history_names = get_history_names(user_name)
     try:
-        history_names = [name for name in history_names if re.search(keyword, name)]
+        history_names = [name for name in history_names if re.search(keyword, name, timeout=0.01)]
         return gr.update(choices=history_names)
     except:
         return gr.update(choices=history_names)

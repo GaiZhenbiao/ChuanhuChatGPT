@@ -41,3 +41,4 @@ Pillow>=10.1.0
 protobuf==3.20.3
 ollama>=0.1.6
 numexpr
+regex
