@@ -1111,8 +1111,8 @@ class BaseLLMModel:
         md_history_file_path = history_file_path[:-5] + ".md"
         # check if history file path matches user_name
         # if user access control is not enabled, user_name is empty, don't check
-        assert os.path.dirname(history_file_path) == self.user_name or self.user_name == ""
-        assert os.path.dirname(md_history_file_path) == self.user_name or self.user_name == ""
+        assert os.path.basename(os.path.dirname(history_file_path)) == self.user_name or self.user_name == ""
+        assert os.path.basename(os.path.dirname(md_history_file_path)) == self.user_name or self.user_name == ""
         try:
             os.remove(history_file_path)
             os.remove(md_history_file_path)
