@@ -520,13 +520,17 @@ def filter_history(user_name, keyword):
 def load_template(filename, mode=0):
     logging.debug(f"加载模板文件{filename}，模式为{mode}（0为返回字典和下拉菜单，1为返回下拉菜单，2为返回字典）")
     lines = []
+    template_file_path = os.path.join(TEMPLATES_DIR, filename)
+    # check if template_file_path is inside TEMPLATES_DIR
+    if not os.path.realpath(template_file_path).startswith(os.path.realpath(TEMPLATES_DIR)):
+        return "Invalid template file path"
     if filename.endswith(".json"):
-        with open(os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8") as f:
+        with open(template_file_path, "r", encoding="utf8") as f:
             lines = json.load(f)
         lines = [[i["act"], i["prompt"]] for i in lines]
     else:
         with open(
-            os.path.join(TEMPLATES_DIR, filename), "r", encoding="utf8"
+            template_file_path, "r", encoding="utf8"
         ) as csvfile:
             reader = csv.reader(csvfile)
             lines = list(reader)
