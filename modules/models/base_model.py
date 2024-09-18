@@ -1077,7 +1077,7 @@ class BaseLLMModel:
             )
         except:
             # 没有对话历史或者对话历史解析失败
-            logging.info(f"没有找到对话历史记录 {self.history_file_path}")
+            logging.debug(f"没有找到对话历史记录 {self.history_file_path}")
             self.reset()
             return (
                 os.path.basename(self.history_file_path),
