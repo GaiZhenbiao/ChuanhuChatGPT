@@ -482,6 +482,9 @@ def get_history_names(user_name=""):
     if user_name == "" and hide_history_when_not_logged_in:
         return []
     else:
+        user_history_dir = os.path.join(HISTORY_DIR, user_name)
+        # ensure the user history directory is inside the HISTORY_DIR
+        assert os.path.realpath(user_history_dir).startswith(os.path.realpath(HISTORY_DIR))
         history_files = get_file_names_by_last_modified_time(
             os.path.join(HISTORY_DIR, user_name)
         )
