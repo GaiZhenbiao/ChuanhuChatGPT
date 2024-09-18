@@ -961,7 +961,7 @@ class BaseLLMModel:
         filename = os.path.basename(full_path)
 
         self.history_file_path = filename
-        save_file(filename, self, chatbot)
+        save_file(filename, self)
         return init_history_list(self.user_name)
 
     def auto_name_chat_history(
@@ -978,14 +978,14 @@ class BaseLLMModel:
 
     def auto_save(self, chatbot=None):
         if chatbot is not None:
-            save_file(self.history_file_path, self, chatbot)
+            save_file(self.history_file_path, self)
 
     def export_markdown(self, filename, chatbot):
         if filename == "":
             return
         if not filename.endswith(".md"):
             filename += ".md"
-        save_file(filename, self, chatbot)
+        save_file(filename, self)
 
     def load_chat_history(self, new_history_file_path=None):
         logging.debug(f"{self.user_name} 加载对话历史中……")
@@ -1034,6 +1034,8 @@ class BaseLLMModel:
                     -len(saved_json["chatbot"]) :
                 ]
                 logging.info(f"Trimmed history: {saved_json['history']}")
+            # Sanitize chatbot
+            saved_json["chatbot"] = remove_html_tags(saved_json["chatbot"])
             logging.debug(f"{self.user_name} 加载对话历史完毕")
             self.history = saved_json["history"]
             self.single_turn = saved_json.get("single_turn", self.single_turn)

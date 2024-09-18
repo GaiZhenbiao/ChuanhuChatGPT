@@ -243,6 +243,21 @@ def convert_mdtext(md_text):  # deprecated
     output += ALREADY_CONVERTED_MARK
     return output
 
+def remove_html_tags(data):
+    def clean_text(text):
+        # Remove all HTML tags
+        cleaned = re.sub(r'<[^>]+>', '', text)
+        # Remove any remaining HTML entities
+        cleaned = re.sub(r'&[#\w]+;', '', cleaned)
+        # Remove extra whitespace and newlines
+        cleaned = re.sub(r'\s+', ' ', cleaned)
+        return cleaned.strip()
+
+    return [
+        [clean_text(item) for item in sublist]
+        for sublist in data
+    ]
+
 
 def clip_rawtext(chat_message, need_escape=True):
     # first, clip hr line
@@ -380,9 +395,10 @@ def construct_assistant(text):
     return construct_text("assistant", text)
 
 
-def save_file(filename, model, chatbot):
+def save_file(filename, model):
     system = model.system_prompt
     history = model.history
+    chatbot = [(history[i]["content"], history[i + 1]["content"]) for i in range(0, len(history), 2)]
     user_name = model.user_name
     os.makedirs(os.path.join(HISTORY_DIR, user_name), exist_ok=True)
     if filename is None:
