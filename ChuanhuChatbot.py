@@ -575,7 +575,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 
     auto_name_chat_history_args = dict(
         fn=auto_name_chat_history,
-        inputs=[current_model, name_chat_method, user_question, chatbot, single_turn_checkbox],
+        inputs=[current_model, name_chat_method, user_question, single_turn_checkbox],
         outputs=[historySelectList],
         show_progress=False,
     )

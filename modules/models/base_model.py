@@ -758,7 +758,6 @@ class BaseLLMModel:
         iter = self.predict(
             inputs,
             chatbot,
-            stream=self.stream,
             use_websearch=use_websearch,
             files=files,
             reply_language=reply_language,
@@ -944,7 +943,7 @@ class BaseLLMModel:
             + f"{token_sum} tokens"
         )
 
-    def rename_chat_history(self, filename, chatbot):
+    def rename_chat_history(self, filename):
         if filename == "":
             return gr.update()
         if not filename.endswith(".json"):
@@ -965,14 +964,14 @@ class BaseLLMModel:
         return init_history_list(self.user_name)
 
     def auto_name_chat_history(
-        self, name_chat_method, user_question, chatbot, single_turn_checkbox
+        self, name_chat_method, user_question, single_turn_checkbox
     ):
         if len(self.history) == 2 and not single_turn_checkbox:
             user_question = self.history[0]["content"]
             if type(user_question) == list:
                 user_question = user_question[0]["text"]
             filename = replace_special_symbols(user_question)[:16] + ".json"
-            return self.rename_chat_history(filename, chatbot)
+            return self.rename_chat_history(filename)
         else:
             return gr.update()
 
@@ -1039,6 +1038,7 @@ class BaseLLMModel:
                     -len(saved_json["chatbot"]) :
                 ]
                 logging.info(f"Trimmed history: {saved_json['history']}")
+
             # Sanitize chatbot
             saved_json["chatbot"] = remove_html_tags(saved_json["chatbot"])
             logging.debug(f"{self.user_name} 加载对话历史完毕")

@@ -249,8 +249,6 @@ def remove_html_tags(data):
         cleaned = re.sub(r'<[^>]+>', '', text)
         # Remove any remaining HTML entities
         cleaned = re.sub(r'&[#\w]+;', '', cleaned)
-        # Remove extra whitespace and newlines
-        cleaned = re.sub(r'\s+', ' ', cleaned)
         return cleaned.strip()
 
     return [
