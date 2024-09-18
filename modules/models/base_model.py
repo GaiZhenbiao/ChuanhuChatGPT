@@ -29,7 +29,7 @@ from langchain.schema import (AgentAction, AgentFinish, AIMessage, BaseMessage,
                               HumanMessage, SystemMessage)
 
 from .. import shared
-from ..config import retrieve_proxy
+from ..config import retrieve_proxy, auth_list
 from ..index_func import *
 from ..presets import *
 from ..utils import *
@@ -993,6 +993,11 @@ class BaseLLMModel:
             if type(new_history_file_path) != str:
                 # copy file from new_history_file_path.name to os.path.join(HISTORY_DIR, self.user_name)
                 new_history_file_path = new_history_file_path.name
+                target_path = os.path.join(HISTORY_DIR, self.user_name, new_history_file_path)
+                # Check if the file is in the history directory
+                assert os.path.realpath(new_history_file_path).startswith(os.path.realpath(HISTORY_DIR))
+                assert os.path.realpath(target_path).startswith(os.path.realpath(HISTORY_DIR))
+                assert self.user_name in [i[0] for i in auth_list]
                 shutil.copyfile(
                     new_history_file_path,
                     os.path.join(
