@@ -418,6 +418,9 @@ def save_file(filename, model, chatbot):
     else:
         history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
 
+    # check if history file path matches user_name
+    # if user access control is not enabled, user_name is empty, don't check
+    assert os.path.dirname(history_file_path) == model.user_name or model.user_name == ""
     with open(history_file_path, "w", encoding="utf-8") as f:
         json.dump(json_s, f, ensure_ascii=False, indent=4)
 
