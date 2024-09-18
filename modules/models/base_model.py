@@ -986,28 +986,37 @@ class BaseLLMModel:
             filename += ".md"
         save_file(filename, self)
 
+    def upload_chat_history(self, new_history_file_content=None):
+        logging.debug(f"{self.user_name} 加载对话历史中……")
+        if new_history_file_content is not None:
+            if isinstance(new_history_file_content, bytes):
+                try:
+                    # Try to parse the content as JSON
+                    json_content = json.loads(new_history_file_content.decode('utf-8'))
+
+                    # If successful, save the content to a file
+                    new_history_filename = new_auto_history_filename(self.user_name)
+                    new_history_file_path = os.path.join(HISTORY_DIR, self.user_name, new_history_filename)
+
+                    # Ensure the directory exists
+                    os.makedirs(os.path.dirname(new_history_file_path), exist_ok=True)
+
+                    # Write the content to the file
+                    with open(new_history_file_path, 'w', encoding='utf-8') as f:
+                        json.dump(json_content, f, ensure_ascii=False, indent=2)
+
+                    self.history_file_path = new_history_filename
+                    logging.info(f"History file uploaded and saved as {new_history_filename}")
+                except json.JSONDecodeError:
+                    logging.error("Uploaded content is not valid JSON. Using default history.")
+            else:
+                logging.warning("Unexpected type for new_history_file_content. Using default history.")
+        return *self.load_chat_history(new_history_file_path), init_history_list(self.user_name)
+
     def load_chat_history(self, new_history_file_path=None):
         logging.debug(f"{self.user_name} 加载对话历史中……")
         if new_history_file_path is not None:
-            if type(new_history_file_path) != str:
-                # copy file from new_history_file_path.name to os.path.join(HISTORY_DIR, self.user_name)
-                new_history_file_path = new_history_file_path.name
-                target_path = os.path.join(HISTORY_DIR, self.user_name, new_history_file_path)
-                # Check if the file is in the history directory
-                assert os.path.realpath(new_history_file_path).startswith(os.path.realpath(HISTORY_DIR))
-                assert os.path.realpath(target_path).startswith(os.path.realpath(HISTORY_DIR))
-                assert self.user_name in [i[0] for i in auth_list]
-                shutil.copyfile(
-                    new_history_file_path,
-                    os.path.join(
-                        HISTORY_DIR,
-                        self.user_name,
-                        os.path.basename(new_history_file_path),
-                    ),
-                )
-                self.history_file_path = os.path.basename(new_history_file_path)
-            else:
-                self.history_file_path = new_history_file_path
+            self.history_file_path = new_history_file_path
         try:
             if self.history_file_path == os.path.basename(self.history_file_path):
                 history_file_path = os.path.join(

@@ -99,7 +99,7 @@ def export_markdown(current_model, *args):
 
 
 def upload_chat_history(current_model, *args):
-    return current_model.load_chat_history(*args)
+    return current_model.upload_chat_history(*args)
 
 
 def set_token_upper_limit(current_model, *args):

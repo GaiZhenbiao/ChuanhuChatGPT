@@ -68,8 +68,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 historySearchTextbox = gr.Textbox(show_label=False, container=False, placeholder=i18n(
                                     "搜索（支持正则）..."), lines=1, elem_id="history-search-tb")
                             with gr.Column(min_width=52, scale=1, elem_id="gr-history-header-btns"):
-                                uploadFileBtn = gr.UploadButton(
-                                    interactive=True, label="", file_types=[".json"], elem_id="gr-history-upload-btn")
+                                uploadHistoryBtn = gr.UploadButton(
+                                    interactive=True, label="", file_types=[".json"], elem_id="gr-history-upload-btn", type="binary")
                                 historyRefreshBtn = gr.Button("", elem_id="gr-history-refresh-btn")
 
 
@@ -708,8 +708,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         js='(a,b)=>{return clearChatbot(a,b);}',
     )
     historySelectList.select(**load_history_from_file_args)
-    uploadFileBtn.upload(upload_chat_history, [current_model, uploadFileBtn], [
-                        saveFileName, systemPromptTxt, chatbot, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt, use_streaming_checkbox]).then(**refresh_history_args)
+    uploadHistoryBtn.upload(upload_chat_history, [current_model, uploadHistoryBtn], [
+                        saveFileName, systemPromptTxt, chatbot, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt, use_streaming_checkbox, historySelectList]).then(**refresh_history_args)
     historyDownloadBtn.click(None, [
                              user_name, historySelectList], None, js='(a,b)=>{return downloadHistory(a,b,".json");}')
     historyMarkdownDownloadBtn.click(None, [
