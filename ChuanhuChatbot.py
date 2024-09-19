@@ -781,7 +781,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     # Invisible elements
     updateChuanhuBtn.click(
         update_chuanhu,
-        [],
+        [user_name],
         [status_display],
         show_progress=True,
     )

@@ -22,5 +22,6 @@
     "chuanhu_question_4": "TikTok 上有什么新梗？",
     "gpt4o_description": "OpenAI 的最先进的多模态旗舰模型，比 GPT-4 Turbo 更便宜、更快。",
     "gpt4omini_description": "OpenAI 的经济实惠且智能的小型模型，适用于快速、轻量级任务。",
-    "o1_description": "o1 系列的大型语言模型通过强化学习训练，能够执行复杂的推理任务。o1 模型在回答之前会进行思考，产生一长串内部思维链，然后再回应用户。"
+    "o1_description": "o1 系列的大型语言模型通过强化学习训练，能够执行复杂的推理任务。o1 模型在回答之前会进行思考，产生一长串内部思维链，然后再回应用户。",
+    "no_permission_to_update_description": "你没有权限更新。请联系管理员。管理员的配置方式为在配置文件 config.json 中的 admin_list 中添加用户名。"
 }

@@ -33,6 +33,7 @@
     //== 基础配置 ==
     "language": "auto", // 界面语言，可选"auto", "zh_CN", "en_US", "ja_JP", "ko_KR", "sv_SE", "ru_RU", "vi_VN"
     "users": [], // 用户列表，[["用户名1", "密码1"], ["用户名2", "密码2"], ...]
+    "admin_list": [], // 管理员列表，["用户名1", "用户名2", ...] 只有管理员可以重启服务
     "local_embedding": false, //是否在本地编制索引
     "hide_history_when_not_logged_in": false, //未登录情况下是否不展示对话历史
     "check_update": true, //是否启用检查更新

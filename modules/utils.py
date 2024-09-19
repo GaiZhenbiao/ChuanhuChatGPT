@@ -27,7 +27,7 @@ import colorama
 
 from modules.presets import *
 from . import shared
-from modules.config import retrieve_proxy, hide_history_when_not_logged_in
+from modules.config import retrieve_proxy, hide_history_when_not_logged_in, admin_list
 
 if TYPE_CHECKING:
     from typing import TypedDict
@@ -741,7 +741,9 @@ def transfer_input(inputs):
     )
 
 
-def update_chuanhu():
+def update_chuanhu(username):
+    if username not in admin_list:
+        return gr.Markdown(value=i18n("no_permission_to_update_description"))
     from .repo import background_update
 
     print("[Updater] Trying to update...")
