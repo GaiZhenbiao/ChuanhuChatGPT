@@ -14,6 +14,7 @@ function setChatListHeader() {
 }
 
 function setChatList() {
+    exportBtnCheck();
     var selectedChat = null;
     var chatList = gradioApp().querySelector('fieldset#history-select-dropdown');
     selectedChat = chatList.querySelector("label.selected")
@@ -54,6 +55,12 @@ function setChatList() {
     return;
 }
 
+function exportBtnCheck() {
+    var grHistoryExportBtn = gradioApp().querySelector('#gr-history-download-json-btn');
+    var exportBtn = gradioApp().querySelector('#export-chat-btn');
+    exportBtn.disabled = grHistoryExportBtn.disabled;
+    exportBtn.classList.toggle('disabled', grHistoryExportBtn.disabled);
+}
 
 function saveChatHistory(a, b, c, d) {
     var fileName = b;

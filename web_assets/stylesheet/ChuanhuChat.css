@@ -1094,11 +1094,20 @@ input:checked + .chatbot-input-more-span {
     transition: background-color .2s ease;
 }
 .chuanhu-ui-btn:hover {
-    background-color: rgba(167, 167, 167, 0.25) !important;
+    background-color: rgba(167, 167, 167, 0.25);
     /* color: unset !important; */
 }
 .chuanhu-ui-btn:active {
-    background-color: rgba(167, 167, 167, 0.5) !important;
+    background-color: rgba(167, 167, 167, 0.5);
+}
+.chuanhu-ui-btn.disabled {
+    /* all content transparent 50% */
+    background-color: transparent;
+    opacity: 0.5;
+    cursor: not-allowed !important;
+}
+.chuanhu-ui-btn.disabled+.dropdown-menu {
+    display: none !important;
 }
 
 .hover-round-btn {
