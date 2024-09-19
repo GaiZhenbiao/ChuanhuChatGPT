@@ -454,17 +454,20 @@ def save_file(filename, model):
     with open(history_file_path, "w", encoding="utf-8") as f:
         json.dump(json_s, f, ensure_ascii=False, indent=4)
 
-    filename = os.path.basename(filename)
-    filename_md = filename[:-5] + ".md"
-    md_s = f"system: \n- {system} \n"
-    for data in history:
-        md_s += f"\n{data['role']}: \n- {data['content']} \n"
-    with open(
-        os.path.join(HISTORY_DIR, user_name, filename_md), "w", encoding="utf8"
-    ) as f:
-        f.write(md_s)
-    return os.path.join(HISTORY_DIR, user_name, filename)
+    save_md_file(history_file_path)
+    return history_file_path
 
+def save_md_file(json_file_path):
+    with open(json_file_path, "r", encoding="utf-8") as f:
+        json_data = json.load(f)
+
+    md_file_path = json_file_path[:-5] + ".md"
+    md_s = f"system: \n- {json_data['system']} \n"
+    for data in json_data['history']:
+        md_s += f"\n{data['role']}: \n- {data['content']} \n"
+
+    with open(md_file_path, "w", encoding="utf8") as f:
+        f.write(md_s)
 
 def sorted_by_pinyin(list):
     return sorted(list, key=lambda char: lazy_pinyin(char)[0][0])
@@ -1543,3 +1546,6 @@ def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = Non
             chatbot_ph_slogan_class = slogan_class,
             chatbot_ph_question_class = question_class
         )
+
+def download_file(path):
+    print(path)
