@@ -688,7 +688,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
     # S&L
     renameHistoryBtn.click(
         rename_chat_history,
-        [current_model, saveFileName, chatbot],
+        [current_model, saveFileName],
         [historySelectList],
         show_progress=True,
         js='(a,b,c,d)=>{return saveChatHistory(a,b,c,d);}'
