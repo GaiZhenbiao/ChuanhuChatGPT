@@ -17,6 +17,8 @@ from typing import Any, Dict, List, Optional
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence, TypeVar, Union
 from uuid import UUID
 from langchain_core.outputs import ChatGenerationChunk, GenerationChunk
+from gradio.utils import get_upload_folder
+from gradio.processing_utils import save_file_to_cache
 
 import colorama
 import PIL
@@ -34,6 +36,7 @@ from ..index_func import *
 from ..presets import *
 from ..utils import *
 
+GRADIO_CACHE = get_upload_folder()
 
 class CallbackToIterator:
     def __init__(self):
@@ -1005,13 +1008,14 @@ class BaseLLMModel:
                     with open(new_history_file_path, 'w', encoding='utf-8') as f:
                         json.dump(json_content, f, ensure_ascii=False, indent=2)
 
-                    self.history_file_path = new_history_filename
-                    logging.info(f"History file uploaded and saved as {new_history_filename}")
+                    self.history_file_path = new_history_filename[:-5]
+                    save_md_file(os.path.join(HISTORY_DIR, self.user_name, new_history_filename))
+                    logging.info(f"History file uploaded and saved as {self.history_file_path}")
                 except json.JSONDecodeError:
                     logging.error("Uploaded content is not valid JSON. Using default history.")
             else:
                 logging.warning("Unexpected type for new_history_file_content. Using default history.")
-        return *self.load_chat_history(new_history_file_path), init_history_list(self.user_name)
+        return *self.load_chat_history(), init_history_list(self.user_name)
 
     def load_chat_history(self, new_history_file_path=None):
         logging.debug(f"{self.user_name} 加载对话历史中……")
@@ -1074,6 +1078,11 @@ class BaseLLMModel:
             self.metadata = saved_json.get("metadata", self.metadata)
             self.stream = saved_json.get("stream", self.stream)
             self.chatbot = saved_json["chatbot"]
+
+            history_json_path = os.path.realpath(os.path.join(HISTORY_DIR, self.user_name, self.history_file_path + ".json"))
+            history_md_path = os.path.realpath(os.path.join(HISTORY_DIR, self.user_name, self.history_file_path + ".md"))
+            tmp_json_for_download = save_file_to_cache(history_json_path, GRADIO_CACHE)
+            tmp_md_for_download = save_file_to_cache(history_md_path, GRADIO_CACHE)
             return (
                 os.path.basename(self.history_file_path)[:-5],
                 saved_json["system"],
@@ -1089,7 +1098,9 @@ class BaseLLMModel:
                 self.frequency_penalty,
                 self.logit_bias,
                 self.user_identifier,
-                self.stream
+                self.stream,
+                gr.DownloadButton(value=tmp_json_for_download, interactive=True),
+                gr.DownloadButton(value=tmp_md_for_download, interactive=True),
             )
         except:
             # 没有对话历史或者对话历史解析失败
@@ -1110,7 +1121,9 @@ class BaseLLMModel:
                 self.frequency_penalty,
                 self.logit_bias,
                 self.user_identifier,
-                self.stream
+                self.stream,
+                gr.DownloadButton(value=None, interactive=False),
+                gr.DownloadButton(value=None, interactive=False),
             )
 
     def delete_chat_history(self, filename):
