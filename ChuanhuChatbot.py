@@ -100,8 +100,10 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         with gr.Column(scale=1):
                             renameHistoryBtn = gr.Button(
                                 i18n("💾 保存对话"), elem_id="gr-history-save-btn")
-                            exportMarkdownBtn = gr.Button(
-                                i18n("📝 导出为 Markdown"), elem_id="gr-markdown-export-btn")
+                            downloadHistoryJSONBtn = gr.DownloadButton(
+                                i18n("历史记录（JSON）"), elem_id="gr-history-download-json-btn")
+                            downloadHistoryMarkdownBtn = gr.DownloadButton(
+                                i18n("导出为 Markdown"), elem_id="gr-history-download-md-btn")
 
             with gr.Column(elem_id="chuanhu-menu-footer"):
                 with gr.Row(elem_id="chuanhu-func-nav"):
@@ -120,9 +122,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         label=i18n("选择模型"), choices=[], multiselect=False, interactive=True, visible=False,
                         container=False,
                     )
-                    # with gr.Column(min_width=150, scale=1, elem_id="chatbot-header-btn-bar"):
-                    downloadHistoryJSONBtn = gr.DownloadButton(i18n("历史记录（JSON）"))
-                    downloadHistoryMarkdownBtn = gr.DownloadButton(i18n("导出为 Markdown"))
                     gr.HTML(get_html("chatbot_header_btn.html").format(
                         json_label=i18n("历史记录（JSON）"),
                         md_label=i18n("导出为 Markdown")
@@ -689,12 +688,6 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         [historySelectList],
         show_progress=True,
         js='(a,b,c,d)=>{return saveChatHistory(a,b,c,d);}'
-    )
-    exportMarkdownBtn.click(
-        export_markdown,
-        [current_model, saveFileName, chatbot],
-        [],
-        show_progress=True,
     )
     historyRefreshBtn.click(**refresh_history_args)
     historyDeleteBtn.click(delete_chat_history, [current_model, historySelectList], [status_display, historySelectList, chatbot], js='(a,b,c)=>{return showConfirmationDialog(a, b, c);}').then(
