@@ -74,6 +74,7 @@
     //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
     //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx3"
     // ],
+    // "rename_model": "GPT-4o-mini", //指定默认命名模型
     // 自定义OpenAI API Base
     // "openai_api_base": "https://api.openai.com",
     // 自定义使用代理（请替换代理URL）

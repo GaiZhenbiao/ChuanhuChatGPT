@@ -275,7 +275,7 @@ class OpenAIVisionClient(BaseLLMModel):
             "temperature": f"{temperature}",
         }
         payload = {
-            "model": self.model_name,
+            "model": RENAME_MODEL if RENAME_MODEL is not None else self.model_name,
             "messages": history,
         }
 
