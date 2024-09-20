@@ -6,13 +6,10 @@ function newChatClick() {
     gradioApp().querySelector('#empty-btn').click();
 }
 function jsonDownloadClick() {
-    gradioApp().querySelector('#gr-history-download-btn').click();
+    gradioApp().querySelector('#gr-history-download-json-btn').click();
 }
 function mdDownloadClick() {
-    gradioApp().querySelector('#gr-markdown-export-btn').click();
-    gradioApp().querySelector('#gr-history-mardown-download-btn').click();
-
-    // downloadHistory(username, currentChatName, ".md");
+    gradioApp().querySelector('#gr-history-download-md-btn').click();
 }
 
 // index files
@@ -35,6 +32,7 @@ function setUploader() {
         }
     });
     uploaderObserver.observe(uploaderIndicator, {attributes: true})
+    uploaderObserver.observe(uploaderIndicator2, {attributes: true})
 }
 var grUploader;
 var chatbotUploader;
@@ -114,4 +112,8 @@ function bgSelectHistory(a,b){
     const historySelectorInput = gradioApp().querySelector('#history-select-dropdown input');
     let file = historySelectorInput.value;
     return [a,file]
+}
+
+function bgRebootChuanhu() {
+    rebootChuanhuBtn.click()
 }

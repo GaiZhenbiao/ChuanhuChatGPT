@@ -15,6 +15,44 @@ function isImgUrl(url) {
     return false;
 }
 
+function escapeMarkdown(text) {
+    /*
+    Escape Markdown special characters to HTML-safe equivalents.
+    */
+    const escapeChars = {
+        // ' ': '&nbsp;',
+        "_": "&#95;",
+        "*": "&#42;",
+        "[": "&#91;",
+        "]": "&#93;",
+        "(": "&#40;",
+        ")": "&#41;",
+        "{": "&#123;",
+        "}": "&#125;",
+        "#": "&#35;",
+        "+": "&#43;",
+        "-": "&#45;",
+        ".": "&#46;",
+        "!": "&#33;",
+        "`": "&#96;",
+        ">": "&#62;",
+        "<": "&#60;",
+        "|": "&#124;",
+        "$": "&#36;",
+        ":": "&#58;",
+    };
+
+    text = text.replace(/ {4}/g, "&nbsp;&nbsp;&nbsp;&nbsp;"); // Replace 4 spaces with non-breaking spaces
+
+    let escapedText = "";
+    for (let i = 0; i < text.length; i++) {
+        const currentChar = text.charAt(i);
+        escapedText += escapeChars[currentChar] || currentChar;
+    }
+
+    return escapedText;
+}
+
 function downloadHistory(gradioUsername, historyname, format=".json") {
     let fileUrl;
     if (gradioUsername === null || gradioUsername.trim() === "") {
@@ -85,6 +123,26 @@ function bindFancyBox() {
     });
 }
 
+function rebootingChuanhu() {
+    reloadSpinner = new Spin.Spinner({color:'#06AE56',lines:9}).spin();
+    pageInfo = document.createElement('div');
+    pageInfo.appendChild(reloadSpinner.el);
+    pageInfo.innerHTML += '<h1 style="position: absolute; left: 50%; top: 50%; transform: translateX(-50%); color: lightgray; text-align: center; font-family: sans-serif;">Rebooting...</h1>'
+    document.body.innerHTML = '';
+    document.body.appendChild(pageInfo);
+
+    var requestPing = function () {
+        requestGet("./file=web_assets/manifest.json", {}, function (data) {
+            location.reload();
+        }, function () {
+            setTimeout(requestPing, 500);
+        });
+    };
+
+    setTimeout(requestPing, 4000);
+
+    return [];
+}
 
 /* NOTE: These reload functions are not used in the current version of the code.
  *       From stable-diffusion-webui

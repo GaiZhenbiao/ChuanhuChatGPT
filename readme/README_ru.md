@@ -61,15 +61,15 @@
 
 | Модель с использованием API | Примечание | Локально развернутые модели | Примечание |
 | :---: | --- | :---: | --- |
-| [ChatGPT (GPT-4)](https://chat.openai.com) | Поддерживает микронастройку gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Поддерживает модель Lora 
-| [Google PaLM](https://developers.generativeai.google/products/palm) | Не поддерживает потоковую передачу данных | [StableLM](https://github.com/Stability-AI/StableLM)
-| [Xunfei Xinghuo Cognitive Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)
-| [MiniMax](https://api.minimax.chat/) |
-| [XMChat](https://github.com/MILVLG/xmchat) | Не поддерживает потоковую передачу данных
-| [Midjourney](https://www.midjourney.com/) | Не поддерживает потоковую передачу данных
-| [Claude](https://www.anthropic.com/) |
+| [ChatGPT (GPT-4、GPT-4o、o1)](https://chat.openai.com) | Поддерживает микронастройку gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Поддерживает модель Lora |
+| [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM)||
+| [Xunfei Xinghuo Cognitive Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)||
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)||
+| [MiniMax](https://api.minimax.chat/) ||||
+| [XMChat](https://github.com/MILVLG/xmchat) | Не поддерживает потоковую передачу данных|||
+| [Midjourney](https://www.midjourney.com/) | Не поддерживает потоковую передачу данных|||
+| [Claude](https://www.anthropic.com/) ||||
 
 ## Советы по использованию
 
@@ -78,6 +78,8 @@
 - **Поиск в Интернете**: данные ChatGPT устарели? Дайте LLM возможность использовать сеть;
 - **База знаний**: позвольте ChatGPT помочь вам быстро прочитать информацию! Ответить на вопросы в соответствии с файлами.
 - **Локальная установка LLM**: одним щелчком разверните свою собственную модель языка большого размера.
+- **GPT 3.5 Микронастройка**: Поддержка микронастройки GPT 3.5, чтобы сделать ChatGPT более персонализированным.
+- **[Пользовательские модели](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B-Custom-Models)**: Гибко настраивайте модели, например, подключите локальные сервисы вывода.
 
 ### 🤖 Системный промт
 - Установка предпосылок через системное сообщение позволяет эффективно играть роль персонажа;

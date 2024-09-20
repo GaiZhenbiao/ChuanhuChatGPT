@@ -353,12 +353,25 @@ input:checked + .apSlider::before {
     display: none;
     opacity: 0;
     transition: opacity 0.5s ease;
-    font-size: small;
+    /* font-size: small; */
     width: auto;
     border-radius: 5px;
     box-shadow: var(--shadow-sm);
 }
 
+.dropdown-menu.dropdown-info {
+    top: 3rem;
+}
+
+.dropdown-info-item {
+    padding: 8px 12px;
+    text-align: start;
+    margin: 0 !important;
+    width: min(400px, 60dvw);
+}
+.dropdown-info-item p {
+    margin: 0 !important;
+}
 .dropdown-menu-item {
     cursor: pointer;
     padding: 8px 12px;

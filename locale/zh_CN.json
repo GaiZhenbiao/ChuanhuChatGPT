@@ -1,1 +1,27 @@
-{}
+{
+    "gpt3.5turbo_description": "GPT-3.5 Turbo 是由 OpenAI 开发的一款仅限文本的大型语言模型。它基于 GPT-3 模型，并已经在大量数据上进行了微调。最新版本的 GPT-3.5 Turbo 进行了性能和精度优化，支持最大 16k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 GPT-3.5 Turbo。",
+    "gpt3.5turbo_instruct_description": "GPT3.5 Turbo Instruct 是 OpenAI 开发的文本补全模型，具有与 GPT-3 时代模型相似的功能。它兼容旧版的 Completions 端点，但不兼容 Chat Completions。该模型的上下文窗口为 4096 个 tokens。",
+    "gpt3.5turbo_16k_description": "旧版的 GPT-3.5 Turbo 模型，具有 16k tokens 的上下文窗口。",
+    "gpt4_description": "GPT-4 是 OpenAI 开发的一款仅限文本的大型语言模型。它具有 8192 个 tokens 的上下文窗口和 4096 个 tokens 的最大响应长度。该模型始终使用可用的最新版本的 GPT-4。建议使用 GPT-4 Turbo 以获得更好的性能、更快的速度和更低的成本。",
+    "gpt4_32k_description": "GPT-4 32K 是 OpenAI 开发的一个仅限文本的大型语言模型。它具有 32,000 tokens 的上下文窗口和 4,096 tokens 的最大响应长度。这个模型从未广泛推出,建议使用 GPT-4 Turbo。",
+    "gpt4turbo_description": "GPT-4 Turbo 是由 OpenAI 开发的一款多模态大型语言模型。它在广泛的自然语言处理任务上提供最先进的性能，包括文本生成、翻译、摘要、视觉问题回答等。GPT-4 Turbo 拥有最大 128k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 GPT-4 Turbo。",
+    "claude3_haiku_description": "Claude3 Haiku 是由 Anthropic 开发的一款多模态大型语言模型。它是 Claude 3 模型家族中最快、最紧凑的模型，旨在实现近乎即时的响应速度，但是性能不如 Sonnet 和 Opus。Claude3 Haiku 有最大 200k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 Claude3 Haiku。",
+    "claude3_sonnet_description": "Claude3 Sonnet 是由 Anthropic 开发的一款多模态大型语言模型。它在智能与速度之间保持最佳平衡，适用于企业工作负载和大规模 AI 部署。Claude3 Sonnet 拥有最大 200k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 Claude3 Sonnet。",
+    "claude3_opus_description": "Claude3 Opus 是由 Anthropic 开发的一款多模态大型语言模型。它是 Claude 3 模型家族中最智能、最大的模型，能够在高度复杂的任务上呈现最顶尖的性能，呈现出类似人类的理解能力。Claude3 Opus 拥有最大 200k tokens 的上下文窗口和最大 4096 tokens 的响应长度。此模型始终使用可用的最新版本的 Claude3 Opus。",
+    "groq_llama3_8b_description": "采用 [Groq](https://console.groq.com/) 的 LLaMA 3 8B。Groq 是一个非常快速的语言模型推理服务。",
+    "groq_llama3_70b_description": "采用 [Groq](https://console.groq.com/) 的 LLaMA 3 70B。Groq 是一个非常快速的语言模型推理服务。",
+    "groq_mixtral_8x7b_description": "采用 [Groq](https://console.groq.com/) 的 Mixtral 8x7B。Groq 是一个非常快速的语言模型推理服务。",
+    "groq_gemma_7b_description": "采用 [Groq](https://console.groq.com/) 的 Gemma 7B。Groq 是一个非常快速的语言模型推理服务。",
+    "chuanhu_description": "一个能使用多种工具解决复杂问题的智能体。",
+    "gpt_default_slogan": "今天能帮您些什么？",
+    "claude_default_slogan": "我能帮您什么忙？",
+    "chuanhu_slogan": "川虎今天能帮你做些什么？",
+    "chuanhu_question_1": "今天杭州天气如何？",
+    "chuanhu_question_2": "最近 Apple 发布了什么新品？",
+    "chuanhu_question_3": "现在显卡的价格如何？",
+    "chuanhu_question_4": "TikTok 上有什么新梗？",
+    "gpt4o_description": "OpenAI 的最先进的多模态旗舰模型，比 GPT-4 Turbo 更便宜、更快。",
+    "gpt4omini_description": "OpenAI 的经济实惠且智能的小型模型，适用于快速、轻量级任务。",
+    "o1_description": "o1 系列的大型语言模型通过强化学习训练，能够执行复杂的推理任务。o1 模型在回答之前会进行思考，产生一长串内部思维链，然后再回应用户。",
+    "no_permission_to_update_description": "你没有权限更新。请联系管理员。管理员的配置方式为在配置文件 config.json 中的 admin_list 中添加用户名。"
+}

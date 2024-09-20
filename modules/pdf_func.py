@@ -61,7 +61,7 @@ def get_title_with_cropped_page(first_page):
         elif word.text == "Abstract": # 获取页面abstract
             top = word.top
 
-    user_info = [i["text"] for i in extract_words(first_page.within_bbox((x0,title_bottom,x1,top)))]
+    user_info = [i["text"] for i in extract_words(first_page.within_bbox((x0,title_bottom,x1,bottom)))]
     # 裁剪掉上半部分, within_bbox: full_included; crop: partial_included
     return title, user_info, first_page.within_bbox((x0,top,x1,bottom))
 
@@ -151,3 +151,4 @@ if __name__ == '__main__':
     z = parse_pdf("./build/test.pdf")
     print(z["user_info"])
     print(z["title"])
+

@@ -4,6 +4,7 @@ import json
 import logging
 import traceback
 import base64
+from math import ceil
 
 import colorama
 import requests
@@ -26,22 +27,19 @@ class OpenAIVisionClient(BaseLLMModel):
         self,
         model_name,
         api_key,
-        system_prompt=INITIAL_SYSTEM_PROMPT,
-        temperature=1.0,
-        top_p=1.0,
         user_name=""
     ) -> None:
         super().__init__(
             model_name=model_name,
-            temperature=temperature,
-            top_p=top_p,
-            system_prompt=system_prompt,
-            user=user_name
+            user=user_name,
+            config={
+                "api_key": api_key
+            }
         )
-        self.api_key = api_key
-        self.need_api_key = True
-        self.max_generation_token = 4096
-        self.images = []
+        if self.api_host is not None:
+            self.chat_completion_url, self.images_completion_url, self.openai_api_base, self.balance_api_url, self.usage_api_url = shared.format_openai_host(self.api_host)
+        else:
+            self.api_host, self.chat_completion_url, self.images_completion_url, self.openai_api_base, self.balance_api_url, self.usage_api_url = shared.state.api_host, shared.state.chat_completion_url, shared.state.images_completion_url, shared.state.openai_api_base, shared.state.balance_api_url, shared.state.usage_api_url
         self._refresh_header()
 
     def get_answer_stream_iter(self):
@@ -62,66 +60,6 @@ class OpenAIVisionClient(BaseLLMModel):
         total_token_count = response["usage"]["total_tokens"]
         return content, total_token_count
 
-    def try_read_image(self, filepath):
-        def is_image_file(filepath):
-            # 判断文件是否为图片
-            valid_image_extensions = [
-                ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff"]
-            file_extension = os.path.splitext(filepath)[1].lower()
-            return file_extension in valid_image_extensions
-        def image_to_base64(image_path):
-            # 打开并加载图片
-            img = Image.open(image_path)
-
-            # 获取图片的宽度和高度
-            width, height = img.size
-
-            # 计算压缩比例，以确保最长边小于4096像素
-            max_dimension = 2048
-            scale_ratio = min(max_dimension / width, max_dimension / height)
-
-            if scale_ratio < 1:
-                # 按压缩比例调整图片大小
-                new_width = int(width * scale_ratio)
-                new_height = int(height * scale_ratio)
-                img = img.resize((new_width, new_height), Image.LANCZOS)
-
-            # 将图片转换为jpg格式的二进制数据
-            buffer = BytesIO()
-            if img.mode == "RGBA":
-                img = img.convert("RGB")
-            img.save(buffer, format='JPEG')
-            binary_image = buffer.getvalue()
-
-            # 对二进制数据进行Base64编码
-            base64_image = base64.b64encode(binary_image).decode('utf-8')
-
-            return base64_image
-
-        if is_image_file(filepath):
-            logging.info(f"读取图片文件: {filepath}")
-            base64_image = image_to_base64(filepath)
-            self.images.append({
-                "path": filepath,
-                "base64": base64_image,
-            })
-
-    def handle_file_upload(self, files, chatbot, language):
-        """if the model accepts multi modal input, implement this function"""
-        if files:
-            for file in files:
-                if file.name:
-                    self.try_read_image(file.name)
-        if self.images is not None:
-                chatbot = chatbot + [([image["path"] for image in self.images], None)]
-        return None, chatbot, None
-
-    def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):
-        fake_inputs = real_inputs
-        display_append = ""
-        limited_context = False
-        return limited_context, fake_inputs, display_append, real_inputs, chatbot
-
 
     def count_token(self, user_input):
         input_token_count = count_token(construct_user(user_input))
@@ -131,6 +69,13 @@ class OpenAIVisionClient(BaseLLMModel):
             )
             return input_token_count + system_prompt_token_count
         return input_token_count
+
+    def count_image_tokens(self, width: int, height: int):
+        h = ceil(height / 512)
+        w = ceil(width / 512)
+        n = w * h
+        total = 85 + 170 * n
+        return total
 
     def billing_info(self):
         try:
@@ -174,17 +119,41 @@ class OpenAIVisionClient(BaseLLMModel):
             logging.error(i18n("获取API使用情况失败:") + str(e))
             return STANDARD_ERROR_MSG + ERROR_RETRIEVE_MSG
 
+    def _get_gpt4v_style_history(self):
+        history = []
+        image_buffer = []
+        for message in self.history:
+            if message["role"] == "user":
+                content = []
+                if image_buffer:
+                    for image in image_buffer:
+                        content.append(
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/{self.get_image_type(image)};base64,{self.get_base64_image(image)}",
+                                }
+                            },
+                        )
+                if content:
+                    content.insert(0, {"type": "text", "text": message["content"]})
+                    history.append(construct_user(content))
+                    image_buffer = []
+                else:
+                    history.append(message)
+            elif message["role"] == "assistant":
+                history.append(message)
+            elif message["role"] == "image":
+                image_buffer.append(message["content"])
+        return history
+
+
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
     def _get_response(self, stream=False):
         openai_api_key = self.api_key
         system_prompt = self.system_prompt
-        history = self.history
-        if self.images:
-            self.history[-1]["content"] = [
-                {"type": "text", "text": self.history[-1]["content"]},
-                *[{"type": "image_url", "image_url": "data:image/jpeg;base64,"+image["base64"]} for image in self.images]
-            ]
-            self.images = []
+        history = self._get_gpt4v_style_history()
+
         logging.debug(colorama.Fore.YELLOW +
                       f"{history}" + colorama.Fore.RESET)
         headers = {
@@ -192,7 +161,7 @@ class OpenAIVisionClient(BaseLLMModel):
             "Authorization": f"Bearer {openai_api_key}",
         }
 
-        if system_prompt is not None:
+        if system_prompt is not None and "o1" not in self.model_name:
             history = [construct_system(system_prompt), *history]
 
         payload = {
@@ -202,12 +171,15 @@ class OpenAIVisionClient(BaseLLMModel):
             "top_p": self.top_p,
             "n": self.n_choices,
             "stream": stream,
-            "presence_penalty": self.presence_penalty,
-            "frequency_penalty": self.frequency_penalty,
-            "max_tokens": 4096
         }
 
-        if self.stop_sequence is not None:
+        if self.max_generation_token:
+            payload["max_tokens"] = self.max_generation_token
+        if self.presence_penalty:
+            payload["presence_penalty"] = self.presence_penalty
+        if self.frequency_penalty:
+            payload["frequency_penalty"] = self.frequency_penalty
+        if self.stop_sequence:
             payload["stop"] = self.stop_sequence
         if self.logit_bias is not None:
             payload["logit_bias"] = self.encoded_logit_bias()
@@ -219,14 +191,10 @@ class OpenAIVisionClient(BaseLLMModel):
         else:
             timeout = TIMEOUT_ALL
 
-        # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
-        if shared.state.chat_completion_url != CHAT_COMPLETION_URL:
-            logging.debug(f"使用自定义API URL: {shared.state.chat_completion_url}")
-
         with retrieve_proxy():
             try:
                 response = requests.post(
-                    shared.state.chat_completion_url,
+                    self.chat_completion_url,
                     headers=headers,
                     json=payload,
                     stream=stream,
@@ -310,13 +278,10 @@ class OpenAIVisionClient(BaseLLMModel):
             "model": self.model_name,
             "messages": history,
         }
-        # 如果有自定义的api-host，使用自定义host发送请求，否则使用默认设置发送请求
-        if shared.state.chat_completion_url != CHAT_COMPLETION_URL:
-            logging.debug(f"使用自定义API URL: {shared.state.chat_completion_url}")
 
         with retrieve_proxy():
             response = requests.post(
-                shared.state.chat_completion_url,
+                self.chat_completion_url,
                 headers=headers,
                 json=payload,
                 stream=False,
@@ -324,3 +289,29 @@ class OpenAIVisionClient(BaseLLMModel):
             )
 
         return response
+
+    def auto_name_chat_history(self, name_chat_method, user_question, single_turn_checkbox):
+        if len(self.history) == 2 and not single_turn_checkbox and not hide_history_when_not_logged_in:
+            user_question = self.history[0]["content"]
+            if name_chat_method == i18n("模型自动总结（消耗tokens）"):
+                ai_answer = self.history[1]["content"]
+                try:
+                    history = [
+                        { "role": "system", "content": SUMMARY_CHAT_SYSTEM_PROMPT},
+                        { "role": "user", "content": f"Please write a title based on the following conversation:\n---\nUser: {user_question}\nAssistant: {ai_answer}"}
+                    ]
+                    response = self._single_query_at_once(history, temperature=0.0)
+                    response = json.loads(response.text)
+                    content = response["choices"][0]["message"]["content"]
+                    filename = replace_special_symbols(content) + ".json"
+                except Exception as e:
+                    logging.info(f"自动命名失败。{e}")
+                    filename = replace_special_symbols(user_question)[:16] + ".json"
+                return self.rename_chat_history(filename)
+            elif name_chat_method == i18n("第一条提问"):
+                filename = replace_special_symbols(user_question)[:16] + ".json"
+                return self.rename_chat_history(filename)
+            else:
+                return gr.update()
+        else:
+            return gr.update()

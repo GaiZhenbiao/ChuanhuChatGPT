@@ -7,8 +7,11 @@ from ..config import retrieve_proxy, sensitive_id
 
 class OpenAI_DALLE3_Client(BaseLLMModel):
     def __init__(self, model_name, api_key, user_name="") -> None:
-        super().__init__(model_name=model_name, user=user_name)
-        self.api_key = api_key
+        super().__init__(model_name=model_name, user=user_name, config={"api_key": api_key})
+        if self.api_host is not None:
+            self.chat_completion_url, self.images_completion_url, self.openai_api_base, self.balance_api_url, self.usage_api_url = shared.format_openai_host(self.api_host)
+        else:
+            self.api_host, self.chat_completion_url, self.images_completion_url, self.openai_api_base, self.balance_api_url, self.usage_api_url = shared.state.api_host, shared.state.chat_completion_url, shared.state.images_completion_url, shared.state.openai_api_base, shared.state.balance_api_url, shared.state.usage_api_url
         self._refresh_header()
 
     def _get_dalle3_prompt(self):
@@ -24,7 +27,7 @@ class OpenAI_DALLE3_Client(BaseLLMModel):
             "Authorization": f"Bearer {self.api_key}"
         }
         payload = {
-            "model": "dall-e-3",
+            "model": self.model_name,
             "prompt": prompt,
             "n": 1,
             "size": "1024x1024",
@@ -35,13 +38,13 @@ class OpenAI_DALLE3_Client(BaseLLMModel):
         else:
             timeout = TIMEOUT_ALL
 
-        if shared.state.images_completion_url != IMAGES_COMPLETION_URL:
-            logging.debug(f"使用自定义API URL: {shared.state.images_completion_url}")
+        if self.images_completion_url != IMAGES_COMPLETION_URL:
+            logging.debug(f"使用自定义API URL: {self.images_completion_url}")
 
         with retrieve_proxy():
             try:
                 response = requests.post(
-                    shared.state.images_completion_url,
+                    self.images_completion_url,
                     headers=headers,
                     json=payload,
                     stream=stream,

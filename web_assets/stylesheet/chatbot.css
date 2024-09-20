@@ -1,9 +1,9 @@
 
 hr.append-display {
-    margin: 8px 0;
+    margin: 8px 0 !important;
     border: none;
     height: 1px;
-    border-top-width: 0;
+    border-top-width: 0 !important;
     background-image: linear-gradient(to right, rgba(50,50,50, 0.1), rgba(150, 150, 150, 0.8), rgba(50,50,50, 0.1));
 }
 .source-a {
@@ -98,21 +98,16 @@ hr.append-display {
     background-color: var(--chatbot-background-color-light) !important;
     color: var(--chatbot-color-light) !important;
 }
-[data-testid = "bot"] {
-    background-color: var(--message-bot-background-color-light) !important;
-}
-[data-testid = "user"] {
-    background-color: var(--message-user-background-color-light) !important;
-}
+
 /* 暗色 */
 .dark #chuanhu-chatbot {
     background-color: var(--chatbot-background-color-dark) !important;
     color: var(--chatbot-color-dark) !important;
 }
-.dark [data-testid = "bot"] {
+.dark .message.bot {
     background-color: var(--message-bot-background-color-dark) !important;
 }
-.dark [data-testid = "user"] {
+.dark .message.user {
     background-color: var(--message-user-background-color-dark) !important;
 }
 
@@ -120,17 +115,21 @@ hr.append-display {
 .message {
     border-radius: var(--radius-xl) !important;
     border: none;
+    border-color: none;
+    overflow-x: visible !important; /* gradio 4.0 开始需要 */
     padding: var(--spacing-xl) !important;
     font-size: var(--text-md) !important;
     line-height: var(--line-md) !important;
     min-height: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl));
     min-width: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl));
 }
-[data-testid = "bot"] {
+.message.bot {
+    background-color: var(--message-bot-background-color-light) !important;
     max-width: calc(85% - 40px);
     border-bottom-left-radius: 0 !important;
 }
-[data-testid = "user"] {
+.message.user {
+    background-color: var(--message-user-background-color-light) !important;
     max-width: calc(85% - 40px);
     width: auto !important;
     border-bottom-right-radius: 0 !important;
@@ -141,7 +140,9 @@ hr.append-display {
 .message-row.user-row {
     justify-content: flex-end;
 }
-
+.message > button {
+    cursor: unset;
+}
 /* .message-row.has-message-btn-row{
     padding-bottom: 19px !important;
 } */
@@ -150,28 +151,29 @@ hr.append-display {
 /* update on 2023.4.8: 高度的细致调整已写入JavaScript */
 @media screen and (min-width: 500px) {
     /* #chuanhu-chatbot {
-        height: calc(100*var(--vh) - 200px);
+        height: calc(100dvh - 200px);
     }
     #chuanhu-chatbot>.wrapper>.wrap {
-        max-height: calc(100*var(--vh) - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+        max-height: calc(100dvh - 200px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     } */
 }
 /* 屏幕宽度小于500px的设备 */
 @media screen and (max-width: 499px) {
     /* #chuanhu-chatbot {
-        height: calc(100*var(--vh) - 140px);
+        height: calc(100dvh - 140px);
     }
     #chuanhu-chatbot>.wrapper>.wrap {
-        max-height: calc(100*var(--vh) - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
+        max-height: calc(100dvh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     } */
-    [data-testid = "bot"] {
+    .message.bot {
         max-width: calc(100% - 84px) !important;
     }
-    [data-testid = "user"] {
+    .message.user {
         max-width: calc(100% - 84px) !important;
     }
 
-    #app-title {
+    #app-title,
+    #app-title .gradio-html {
         transform: scale(0.95);
         transform-origin: left center;
     }
@@ -181,10 +183,10 @@ hr.append-display {
 }
 
 #chuanhu-chatbot {
-    height: calc(100*var(--vh) - 65px) !important;
+    height: calc(100dvh - 65px) !important;
     border-radius: 0;
 }
-#chuanhu-chatbot>.wrapper>.wrap {
+#chuanhu-chatbot > .wrapper > .bubble-wrap {
     overflow-x: hidden;
     display: flex;
     width: 100%;
@@ -193,7 +195,7 @@ hr.append-display {
     padding-top: 72px;
     padding-bottom: 180px;
 }
-#chuanhu-chatbot>.wrapper>.wrap .message-wrap {
+#chuanhu-chatbot > .wrapper > .bubble-wrap .message-wrap {
     align-self: center;
     width: 100%;
     max-width: 1024px;
@@ -208,7 +210,7 @@ hr.append-display {
     white-space: pre-wrap;
 }
 
-.message .md-message p {
+.message .md-message p:not(.agent-prefix) {
     margin-top: 0.6em !important;
     margin-bottom: 0.6em !important;
 }
@@ -223,12 +225,14 @@ hr.append-display {
     margin:0 !important;
 }
 .message .raw-message pre.fake-pre {
-    background: unset;
-    margin: unset;
-    font-size: unset;
+    color: inherit;
+    background: unset !important;
+    margin: unset !important;
+    font-size: unset !important;
     /* font-family: unset; */
-    padding: unset;
+    padding: unset !important;
     white-space: inherit;
+    word-break: break-word;
 }
 .message .raw-message {
     display: block;
@@ -252,6 +256,9 @@ hr.append-display {
     margin-bottom: .8em !important;
 }
 
+.message.pending {
+    display: none !important;
+}
 /* custom buttons */
 .chuanhu-btn {
     border-radius: 5px;
@@ -343,8 +350,9 @@ hr.append-display {
 
 
 /* history message */
-.wrapper>.wrap>.history-message {
+.wrapper > .bubble-wrap > .history-message {
     padding-bottom: 10px !important;
+    width: 100%;
 }
 .history-message {
     /* padding: 0 !important; */
@@ -352,17 +360,17 @@ hr.append-display {
     display: flex;
     flex-direction: column;
 }
-.history-message>.history-message {
+.history-message > .history-message {
     padding: 0 !important;
 }
-.history-message>.message-wrap {
+.history-message > .message-wrap {
     padding: 0 !important;
     margin-bottom: 16px;
 }
-.history-message>.message {
+.history-message > .message {
     margin-bottom: 16px;
 }
-.wrapper>.wrap>.history-message::after {
+.wrapper > .bubble-wrap > .history-message::after {
     content: "";
     display: block;
     height: 2px;
@@ -371,7 +379,7 @@ hr.append-display {
     margin-top: -10px;
     clear: both;
 }
-.wrapper>.wrap>.history-message>:last-child::after {
+.wrapper > .bubble-wrap > .history-message > :last-child::after {
     content: "仅供查看";
     display: block;
     text-align: center;
@@ -392,4 +400,69 @@ img.avatar-image {
     height: 32px !important;
     background-color: transparent;
     background-size: cover;
+}
+
+#chatbot-placeholder-pl {
+    max-width: 960px;
+    width: 100%;
+    margin: auto;
+    translate: 0 60px;
+}
+
+#chatbot-placeholder-header {
+    text-align: center;
+    display: block;
+}
+#chatbot-placeholder-header img {
+    width: 72px;
+    height: 72px;
+    margin: 20px auto;
+    border-radius: 8px;
+}
+.rounded {
+    border-radius: 50%;
+}
+#chatbot-placeholder-header img.rounded {
+    border-radius: 50% !important;
+}
+
+#chatbot-placeholder-header h1 {
+    font-size: 1.5em;
+    justify-content: center;
+    margin: 20px auto 60px;
+}
+
+#chatbot-placeholder-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0px;
+}
+
+#chatbot-placeholder-options button {
+    display: inline-block;
+    margin: 8px;
+    padding: 8px 12px;
+    /* font-size: 1em; */
+    background-color: var(--chatbot-input-more-background-color);
+    border: 1px solid var(--border-color-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    flex: 0 1 320px;
+    opacity: 0.65;
+    height: 48px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#chatbot-placeholder-options button:hover {
+    opacity: 1;
+}
+
+@container chatbot-area (width < 712px) {
+    #chatbot-placeholder-options button.hide-for-mobile {
+        display: none;
+    }
 }

@@ -33,34 +33,27 @@ def get_model(
         config.local_embedding = True
     # del current_model.model
     model = original_model
-    chatbot = gr.Chatbot.update(label=model_name)
     try:
-        if model_type == ModelType.OpenAI:
-            logging.info(f"正在加载OpenAI模型: {model_name}")
-            from .OpenAI import OpenAIClient
+        if model_type == ModelType.OpenAIVision or model_type == ModelType.OpenAI:
+            logging.info(f"正在加载 OpenAI 模型: {model_name}")
+            from .OpenAIVision import OpenAIVisionClient
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
-            model = OpenAIClient(
-                model_name=model_name,
-                api_key=access_key,
-                system_prompt=system_prompt,
-                user_name=user_name,
-            )
+            model = OpenAIVisionClient(
+                model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.OpenAIInstruct:
             logging.info(f"正在加载OpenAI Instruct模型: {model_name}")
             from .OpenAIInstruct import OpenAI_Instruct_Client
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAI_Instruct_Client(
                 model_name, api_key=access_key, user_name=user_name)
-        elif model_type == ModelType.OpenAIVision:
-            logging.info(f"正在加载OpenAI Vision模型: {model_name}")
-            from .OpenAIVision import OpenAIVisionClient
-            access_key = os.environ.get("OPENAI_API_KEY", access_key)
-            model = OpenAIVisionClient(
-                model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.ChatGLM:
             logging.info(f"正在加载ChatGLM模型: {model_name}")
             from .ChatGLM import ChatGLM_Client
             model = ChatGLM_Client(model_name, user_name=user_name)
+        elif model_type == ModelType.Groq:
+            logging.info(f"正在加载Groq模型: {model_name}")
+            from .Groq import Groq_Client
+            model = Groq_Client(model_name, access_key, user_name=user_name)
         elif model_type == ModelType.LLaMA and lora_model_path == "":
             msg = f"现在请为 {model_name} 选择LoRA模型"
             logging.info(msg)
@@ -105,8 +98,13 @@ def get_model(
             msg = i18n("启用的工具：") + ", ".join([i.name for i in model.tools])
         elif model_type == ModelType.GooglePaLM:
             from .GooglePaLM import Google_PaLM_Client
-            access_key = os.environ.get("GOOGLE_PALM_API_KEY", access_key)
+            access_key = os.environ.get("GOOGLE_GENAI_API_KEY", access_key)
             model = Google_PaLM_Client(
+                model_name, access_key, user_name=user_name)
+        elif model_type == ModelType.GoogleGemini:
+            from .GoogleGemini import GoogleGeminiClient
+            access_key = os.environ.get("GOOGLE_GENAI_API_KEY", access_key)
+            model = GoogleGeminiClient(
                 model_name, access_key, user_name=user_name)
         elif model_type == ModelType.LangchainChat:
             from .Azure import Azure_OpenAI_Client
@@ -122,7 +120,7 @@ def get_model(
                 "SPARK_API_KEY"), os.getenv("SPARK_API_SECRET"), user_name=user_name)
         elif model_type == ModelType.Claude:
             from .Claude import Claude_Client
-            model = Claude_Client(model_name="claude-2", api_secret=os.getenv("CLAUDE_API_SECRET"))
+            model = Claude_Client(model_name=model_name, api_secret=os.getenv("CLAUDE_API_SECRET"))
         elif model_type == ModelType.Qwen:
             from .Qwen import Qwen_Client
             model = Qwen_Client(model_name, user_name=user_name)
@@ -133,21 +131,36 @@ def get_model(
             from .DALLE3 import OpenAI_DALLE3_Client
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAI_DALLE3_Client(model_name, api_key=access_key, user_name=user_name)
+        elif model_type == ModelType.Ollama:
+            from .Ollama import OllamaClient
+            ollama_host = os.environ.get("OLLAMA_HOST", access_key)
+            model = OllamaClient(model_name, user_name=user_name, backend_model=lora_model_path)
+            model_list = model.get_model_list()
+            lora_selector_visibility = True
+            lora_choices = [i["name"] for i in model_list["models"]]
+        elif model_type == ModelType.GoogleGemma:
+            from .GoogleGemma import GoogleGemmaClient
+            model = GoogleGemmaClient(
+                model_name, access_key, user_name=user_name)
         elif model_type == ModelType.Unknown:
-            raise ValueError(f"未知模型: {model_name}")
+            raise ValueError(f"Unknown model: {model_name}")
+        else:
+            raise ValueError(f"Unimplemented model type: {model_type}")
         logging.info(msg)
     except Exception as e:
         import traceback
         traceback.print_exc()
         msg = f"{STANDARD_ERROR_MSG}: {e}"
+    modelDescription = i18n(model.description)
     presudo_key = hide_middle_chars(access_key)
     if original_model is not None and model is not None:
         model.history = original_model.history
         model.history_file_path = original_model.history_file_path
+        model.system_prompt = original_model.system_prompt
     if dont_change_lora_selector:
-        return model, msg, chatbot, gr.update(), access_key, presudo_key
+        return model, msg, gr.update(label=model_name, placeholder=setPlaceholder(model=model)), gr.update(), access_key, presudo_key, modelDescription, model.stream
     else:
-        return model, msg, chatbot, gr.Dropdown.update(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key
+        return model, msg, gr.update(label=model_name, placeholder=setPlaceholder(model=model)), gr.Dropdown(choices=lora_choices, visible=lora_selector_visibility), access_key, presudo_key, modelDescription, model.stream
 
 
 if __name__ == "__main__":

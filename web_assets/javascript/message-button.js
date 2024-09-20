@@ -1,14 +1,75 @@
 
 // 为 bot 消息添加复制与切换显示按钮 以及最新消息加上重新生成，删除最新消息，嗯。
 
+function convertBotMessage(gradioButtonMsg) {
+    return;
+    // should use old version with raw-message applied in python
+    function clipRawMessage(message) {
+        const hrPattern = /<hr class="append-display no-in-raw" \/>([\s\S]*?)/;
+        const hrMatch = message.match(hrPattern);
+        let finalMessage = "";
+        let suffixMessage = "";
+        let rawMessage = message;
+        if (hrMatch) {
+            message = rawMessage.substring(0, hrMatch.index).trim();
+            suffixMessage = rawMessage.substring(hrMatch.index).trim();
+        }
+
+        const agentPrefixPattern = new RegExp('<!-- S O PREFIX -->([\\s\\S]*?)<!-- E O PREFIX -->', 'g');
+        const agentParts = message.split(agentPrefixPattern);
+
+        for (let i = 0; i < agentParts.length; i++) {
+            const part = agentParts[i];
+            if (i % 2 === 0) {
+                if (part !== "" && part !== "\n") {
+                    finalMessage += `<pre class="fake-pre">${escapeMarkdown(part.trim())}</pre>`;
+                }
+            } else {
+                finalMessage += part.replace(' data-fancybox="gallery"', ''); // 避免 raw message 中的图片被 fancybox 处理
+            }
+        }
+        finalMessage += suffixMessage
+        return finalMessage;
+    }
+
+    var insertChild = gradioButtonMsg.querySelector('.md');
+
+    var rawMessageStr = gradioButtonMsg.getAttribute('aria-label');
+    rawMessageStr = rawMessageStr.replace(/^bot's message: /, ''); // 去掉开头的“bot's message: ”，删去结尾可能的多余的空行
+
+    var rawMessage = document.createElement('div');
+    rawMessage.classList.add('raw-message');
+    rawMessage.classList.add('hideM');
+    rawMessage.innerHTML = clipRawMessage(rawMessageStr);
+
+    var mdMessage = document.createElement('div');
+    mdMessage.classList.add('md-message');
+    mdMessage.innerHTML = insertChild.innerHTML;
+
+    insertChild.innerHTML = '';
+    insertChild.appendChild(rawMessage);
+    insertChild.appendChild(mdMessage);
+}
+
 function addChuanhuButton(botElement) {
 
     // botElement = botRow.querySelector('.message.bot');
     var isLatestMessage = botElement.classList.contains('latest');
 
+    var gradioButtonMsg = botElement.querySelector('button[data-testid="bot"]');
+
     var rawMessage = botElement.querySelector('.raw-message');
     var mdMessage = botElement.querySelector('.md-message');
     
+    // if (!rawMessage && !mdMessage) {
+    //     // 现在动态更新会导致 svelte.js 的 flush 出错，所以生成时不更新
+    //     if (chatbotIndicator.classList.contains('generating')) return;
+
+    //     // convertBotMessage(gradioButtonMsg);
+    //     rawMessage = botElement.querySelector('.raw-message');
+    //     mdMessage = botElement.querySelector('.md-message');
+    // }
+
     if (!rawMessage) { // 如果没有 raw message，说明是早期历史记录，去除按钮
         // var buttons = botElement.querySelectorAll('button.chuanhu-btn');
         // for (var i = 0; i < buttons.length; i++) {
@@ -18,8 +79,17 @@ function addChuanhuButton(botElement) {
         botElement.querySelector('.message-btn-column')?.remove();
         return;
     }
-    // botElement.querySelectorAll('button.copy-bot-btn, button.toggle-md-btn').forEach(btn => btn.remove()); // 就算原先有了，也必须重新添加，而不是跳过
-    if (!isLatestMessage) botElement.querySelector('.message-btn-row')?.remove();
+
+    
+    // if (!isLatestMessage) botElement.querySelector('.message-btn-row')?.remove();
+    setLatestMessage();
+    addGeneratingLoader(botElement);
+    
+    // 改成生成时不添加按钮好了……
+    if (chatbotIndicator.classList.contains('generating')) return;
+
+
+
     botElement.querySelector('.message-btn-column')?.remove();
 
     // Copy bot button
@@ -30,10 +100,17 @@ function addChuanhuButton(botElement) {
     copyButton.innerHTML = copyIcon;
 
     copyButton.addEventListener('click', async () => {
-        const textToCopy = rawMessage.innerText;
+
+        let textToCopyHTML = rawMessage.innerHTML;
+        let textToCopyTMP = textToCopyHTML.replace(/<br\s*\/?>/gi, '\n');
+        let textToCopyDOM = document.createElement('div');
+        textToCopyDOM.innerHTML = textToCopyTMP;
+        let textToCopy = textToCopyDOM.textContent;
+
         try {
             if ("clipboard" in navigator) {
                 await navigator.clipboard.writeText(textToCopy);
+                // console.log("Copied to clipboard: \n", textToCopy);
                 copyButton.innerHTML = copiedIcon;
                 setTimeout(() => {
                     copyButton.innerHTML = copyIcon;
@@ -108,12 +185,26 @@ function addChuanhuButton(botElement) {
 }
 
 function setLatestMessage() {
-    var latestMessage = gradioApp().querySelector('#chuanhu-chatbot > .wrapper > .wrap > .message-wrap .message.bot.latest');
+    // var latestMessage = gradioApp().querySelector('#chuanhu-chatbot > .wrapper .message-wrap .message.bot:last-of-type');
+    var botMessages = gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot');
+    var messageCount = botMessages.length;
+    var latestMessage = botMessages[messageCount - 1];
+    botMessages.forEach((message, index) => {
+        if (index === messageCount -1) {
+            message.classList.add('latest');
+        } else {
+            message.classList.remove('latest');
+            message.querySelector('.message-btn-row')?.remove();
+            message.querySelector('.generating-loader')?.remove();
+        }
+    });
+    if (chatbotIndicator.classList.contains('generating')) return;
     if (latestMessage) addLatestMessageButtons(latestMessage);
 }
 
 function addLatestMessageButtons(botElement) {
-    botElement.querySelector('.message-btn-row')?.remove();
+    // botElement.querySelector('.message-btn-row')?.remove();
+    if (botElement.querySelector('.message-btn-row')) return;
 
     var messageBtnRow = document.createElement('div');
     messageBtnRow.classList.add('message-btn-row');
@@ -180,6 +271,20 @@ function addLatestMessageButtons(botElement) {
     messageBtnRowTrailing.appendChild(dislikeButton);
 }
 
+function addGeneratingLoader(botElement) {
+    if (botElement.innerText.trim() === '' && chatbotIndicator.classList.contains('generating')) {
+        var generatingLoader = document.createElement('div');
+        generatingLoader.classList.add('generating-loader');
+        botElement.appendChild(generatingLoader);
+        thisMessageObserver = new MutationObserver((mutations) => {
+            botElement.querySelector('.generating-loader')?.remove();
+            thisMessageObserver.disconnect();
+        });
+        thisMessageObserver.observe(botElement, { childList: true, attributes: true, subtree: true});
+    } else {
+        botElement.querySelector('.generating-loader')?.remove();
+    }
+}
 
 // button svg code
 const copyIcon   = '<span><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height=".8em" width=".8em" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>';

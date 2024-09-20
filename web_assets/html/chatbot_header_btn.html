@@ -1,5 +1,21 @@
 <div id="header-btn-groups">
-    <div class="btn-bar-group" style="margin-left: -12px;">
+    <div class="btn-bar-group" style="margin-left: -12px; transform: scale(0.85); transform-origin: left;">
+        <div class="nav-item-dropdown show-on-description">
+            <button id="model-description-btn" onclick="" class="chuanhu-ui-btn dropdown-trigger">
+                <svg width="24px" height="24px" viewBox="0 0 23.9038 23.9062" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <g transform-origin="center" transform="scale(0.85)">
+                        <path d="M11.9456 23.8912C18.4792 23.8912 23.9037 18.4792 23.9037 11.9456C23.9037 5.41207 18.4668 0 11.9332 0C5.40953 0-4.44089e-16 5.41207-4.44089e-16 11.9456C-4.44089e-16 18.4792 5.42197 23.8912 11.9456 23.8912ZM11.9456 21.907C6.429 21.907 2.00652 17.4746 2.00652 11.9456C2.00652 6.4166 6.41659 1.9842 11.9332 1.9842C17.4622 1.9842 21.9071 6.4166 21.9071 11.9456C21.9071 17.4746 17.4747 21.907 11.9456 21.907Z" fill="currentColor" fill-opacity="0.85"/>
+                        <path d="M9.89909 18.5091L14.6694 18.5091C15.1469 18.5091 15.5274 18.1633 15.5274 17.6759C15.5274 17.2159 15.1469 16.8552 14.6694 16.8552L13.2142 16.8552L13.2142 10.8905C13.2142 10.2565 12.8959 9.84616 12.3066 9.84616L10.093 9.84616C9.61546 9.84616 9.24744 10.2068 9.24744 10.657C9.24744 11.1419 9.61546 11.4902 10.093 11.4902L11.3542 11.4902L11.3542 16.8552L9.89909 16.8552C9.41902 16.8552 9.04109 17.2159 9.04109 17.6759C9.04109 18.1633 9.41902 18.5091 9.89909 18.5091ZM11.8463 7.89044C12.7022 7.89044 13.3741 7.21369 13.3741 6.35773C13.3741 5.5018 12.7022 4.82986 11.8463 4.82986C11.0027 4.82986 10.3184 5.5018 10.3184 6.35773C10.3184 7.21369 11.0027 7.89044 11.8463 7.89044Z" fill="currentColor" fill-opacity="0.85"/>
+                    </g>
+                </svg>
+            </button>
+            <div class="dropdown-menu dropdown-info">
+                <div id="model-description" class="dropdown-info-item">
+                    <p>No Description Found!</p>
+                </div>
+            </div>
+        </div>
+        
         <span class="show-on-gpt">
             <button id="chuanhu-training-btn" onclick="openTrainingBox()" class="chuanhu-ui-btn">
                 <!-- <svg width="24px" height="24px" viewBox="0 0 45.297 28.8394" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -18,7 +34,7 @@
         </span>
     </div>
 
-    <div class="btn-bar-group">
+    <div class="btn-bar-group" style="transform: scale(0.85); transform-origin: right;">
         <button id="new-chat-btn" onclick="newChatClick()" class="chuanhu-ui-btn">
             <!-- <svg width="24px" height="24px" viewBox="0 0 41.3058 37.9805" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

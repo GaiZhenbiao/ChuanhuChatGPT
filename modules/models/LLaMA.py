@@ -2,14 +2,12 @@ from __future__ import annotations
 
 import json
 import os
-
-from huggingface_hub import hf_hub_download
 from llama_cpp import Llama
 
 from ..index_func import *
 from ..presets import *
 from ..utils import *
-from .base_model import BaseLLMModel
+from .base_model import BaseLLMModel, download
 
 SYS_PREFIX = "<<SYS>>\n"
 SYS_POSTFIX = "\n<</SYS>>\n\n"
@@ -17,34 +15,6 @@ INST_PREFIX = "<s>[INST] "
 INST_POSTFIX = " "
 OUTPUT_PREFIX = "[/INST] "
 OUTPUT_POSTFIX = "</s>"
-
-
-def download(repo_id, filename, retry=10):
-    if os.path.exists("./models/downloaded_models.json"):
-        with open("./models/downloaded_models.json", "r") as f:
-            downloaded_models = json.load(f)
-        if repo_id in downloaded_models:
-            return downloaded_models[repo_id]["path"]
-    else:
-        downloaded_models = {}
-    while retry > 0:
-        try:
-            model_path = hf_hub_download(
-                repo_id=repo_id,
-                filename=filename,
-                cache_dir="models",
-                resume_download=True,
-            )
-            downloaded_models[repo_id] = {"path": model_path}
-            with open("./models/downloaded_models.json", "w") as f:
-                json.dump(downloaded_models, f)
-            break
-        except:
-            print("Error downloading model, retrying...")
-            retry -= 1
-    if retry == 0:
-        raise Exception("Error downloading model, please try again later.")
-    return model_path
 
 
 class LLaMA_Client(BaseLLMModel):
@@ -115,7 +85,7 @@ class LLaMA_Client(BaseLLMModel):
         iter = self.model(
             context,
             max_tokens=self.max_generation_token,
-            stop=[SYS_PREFIX, SYS_POSTFIX, INST_PREFIX, OUTPUT_PREFIX,OUTPUT_POSTFIX],
+            stop=[SYS_PREFIX, SYS_POSTFIX, INST_PREFIX, OUTPUT_PREFIX, OUTPUT_POSTFIX],
             echo=False,
             stream=True,
         )

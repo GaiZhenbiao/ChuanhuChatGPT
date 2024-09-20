@@ -51,10 +51,11 @@ body.popup-open {
 }
 
 .hideK {
-    display: none;
+    display: none !important;
 }
 
-#app-title {
+#app-title,
+#app-title .gradio-html {
     font-weight: var(--prose-header-text-weight);
     font-size: var(--text-xxl);
     line-height: 1.3;
@@ -68,10 +69,11 @@ body.popup-open {
 }
 #description {
     text-align: center;
-    /* margin: 32px 0 4px 0; */
+    /* margin: 16px 0 4px 0; */
 }
-#about-tab {
+#about-tab * {
     text-align: center;
+    justify-content: center;
 }
 #about-tab img {
     margin: 0 auto;
@@ -148,7 +150,7 @@ body.popup-open {
         right: max(24px, env(safe-area-inset-right));
     }
 }
-#chuanhu-header > #status-display #status-display {
+#chuanhu-header > #status-display div.gradio-markdown {
     min-height: unset;
 }
 #chuanhu-header > #status-display > .wrap {
@@ -159,6 +161,7 @@ body.popup-open {
     font-family: ui-monospace, "SF Mono", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "Microsoft Yahei UI", "Microsoft Yahei", monospace;
     /* Windows下中文的monospace会fallback为新宋体，实在太丑，这里折中使用微软雅黑 */
     color: var(--body-text-color-subdued);
+    margin-bottom: 8px;
 }
 
 #chatbot-ctrl-btns {
@@ -229,6 +232,8 @@ body.popup-open {
 
 
 #popup-wrapper {
+    width: 100dvw;
+    height: 100dvh;
     display: none;
     position: fixed;
     overflow: auto;
@@ -245,7 +250,7 @@ body.popup-open {
     display: none;
     z-index: 99999;
     width: 680px;
-    height: 400px;
+    height: 420px;
     padding: 0;
 }
 #chuanhu-popup.showBox {
@@ -253,11 +258,11 @@ body.popup-open {
     box-shadow: 0 2px 64px 4px rgba(0, 0, 0, 0.2);
 }
 
-#chuanhu-popup > .gradio-box {
+#chuanhu-popup > .gradio-group {
     padding: 0;
 }
 .hideBox {
-    display: none;
+    display: none !important;
 }
 
 
@@ -297,10 +302,10 @@ body.popup-open {
     display: inline-flex;
     justify-content: space-between;
     /* margin-top: 54px; */
-    /* height: calc(100*var(--vh) - 72px); */
+    /* height: calc(100dvh - 72px); */
     position: absolute;
     top: 65px;
-    height: calc(100*var(--vh) - 65px);
+    height: calc(100dvh - 65px);
 }
 
 #chuanhu-area {
@@ -340,7 +345,7 @@ body.popup-open {
     height: 60px;
     overflow: unset !important;
 }
-#chatbot-header .gradio-dropdown > label {
+#chatbot-header .gradio-dropdown > div[class^="svelte-"] {
     display: flex;
 }
 #chatbot-header .gradio-dropdown ul.options {
@@ -348,7 +353,7 @@ body.popup-open {
     left: 0 !important;
     position: absolute !important;
 }
-#chatbot-header .gradio-dropdown > label > span[data-testid="block-info"] {
+#chatbot-header .gradio-dropdown > div[class^="svelte-"] > span[data-testid="block-info"] {
     height: unset;
     overflow: visible;
     top: 0;
@@ -360,18 +365,23 @@ body.popup-open {
     width: auto;
     color: var(--body-text-color-subdued);
 }
-#chatbot-header .gradio-dropdown > label > .wrap {
+#chatbot-header .gradio-dropdown > div[class^="svelte-"] > .wrap {
     background: none;
     box-shadow: none;
     padding-left: 8px;
 }
-#model-select-dropdown > label > span[data-testid="block-info"]  {
+#model-select-dropdown > div[class^="svelte-"] > span[data-testid="block-info"]  {
     display: none;
 }
-#chatbot-header .gradio-dropdown > label > .wrap input {
+#model-select-dropdown > div, 
+#model-select-dropdown > div > div {
+    height: 100%;
+    background: none;
+}
+#chatbot-header .gradio-dropdown > div[class^="svelte-"] > .wrap input {
     font-weight: bold;
 }
-#chatbot-header #model-select-dropdown > label::before {
+#chatbot-header #model-select-dropdown > div[class^="svelte-"]::before {
     content: "";
     background: var(--primary-600);
     height: 12px;
@@ -408,6 +418,12 @@ body.popup-open {
 }
 .is-gpt .show-on-gpt {
     /* visibility: visible; */
+    display: block;
+}
+.show-on-description {
+    display: none;
+}
+.has-description .show-on-description {
     display: block;
 }
 
@@ -574,18 +590,18 @@ input:checked + .chatbot-input-more-span {
     opacity: 1;
 }
 
-#uploaded-files-div {
+#uploaded-files-btn {
     display: none;
 }
-.with-file #uploaded-files-div {
+.with-file #uploaded-files-btn {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
-.with-file label.may-disable-label {
+/* .with-file label.may-disable-label {
     cursor: not-allowed !important;
-}
-.with-file #uploaded-files-div > .chatbot-input-more-span {
+} */
+.with-file #uploaded-files-btn > .chatbot-input-more-span {
     opacity: 1;
 }
 #uploaded-files-count {
@@ -630,7 +646,7 @@ input:checked + .chatbot-input-more-span {
 #menu-area.showSide {
     width: var(--menu-width);
     max-width: var(--menu-width);
-    height: calc(100*var(--vh) - 65px);
+    height: calc(100dvh - 65px);
     visibility: visible;
     /* margin-right: 16px; */
     border-right: 0.5px solid var(--border-color-primary);
@@ -642,7 +658,7 @@ input:checked + .chatbot-input-more-span {
 }
 #toolbox-area.showSide {
     width: var(--toolbox-width);
-    height: calc(100*var(--vh) - 65px);
+    height: calc(100dvh - 65px);
     visibility: visible;
     /* margin-left: 16px; */
 }
@@ -671,17 +687,17 @@ input:checked + .chatbot-input-more-span {
         /* right: calc(0px - var(--toolbox-width)); */
         z-index: 10008;
         overflow: unset;
-        top: calc(100*var(--vh));
+        top: 100dvh;
         margin: 0;
     }
     #toolbox-area > div {
         width: 100vw;
-        height: calc( 90*var(--vh) - 48px );
+        height: calc( 90dvh - 48px );
     }
     #toolbox-area.showSide {
         width: 100vw;
         right: 0;
-        top: calc( 10*var(--vh) + 48px );
+        top: calc( 10dvh + 48px );
         margin: 0;
         border-radius: 6px;
         box-shadow: 0 2px 64px 4px rgba(0, 0, 0, 0.2);
@@ -702,40 +718,40 @@ input:checked + .chatbot-input-more-span {
     box-shadow: var(--shadow-drop-lg);
 } */
 
-#chuanhu-popup > .gradio-box {
+#chuanhu-popup .gradio-group {
     height: 100%;
 }
-#chuanhu-popup > .gradio-box > .gradio-row:first-of-type {
+#chuanhu-popup .gradio-group > div.styler > .gradio-row:first-of-type {
     padding: 24px !important;
     border-bottom: 1.8px solid var(--border-color-primary);
 }
-#toolbox-area > .gradio-box > .gradio-row:first-of-type * ,
-#chuanhu-popup > .gradio-box > .gradio-row:first-of-type * {
+#toolbox-area .gradio-group > div.styler > .gradio-row:first-of-type * ,
+#chuanhu-popup .gradio-group > div.styler > .gradio-row:first-of-type * {
     margin: 0;
 }
 
-#toolbox-area > .gradio-box > .gradio-row > .close-btn,
-#chuanhu-popup > .gradio-box > .gradio-row > .close-btn {
+#toolbox-area .gradio-group > div.styler > .gradio-row > .close-btn,
+#chuanhu-popup .gradio-group > div.styler > .gradio-row > .close-btn {
     max-width: 28px;
     display: flex;
     justify-content: flex-end;
 }
 
 
-#chuanhu-popup > .gradio-box > .gradio-tabs {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs {
     display: block;
-    height: 322px;
+    height: calc(100% - 78px);
     /* margin: 16px 24px; */
 }
 
-#chuanhu-popup > .gradio-box > .gradio-tabs > div.tabitem {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tabitem {
     border: none;
     border-radius: 0;
     overflow: auto;
     height: 100%;
     padding: 16px 24px;
 }
-#chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav {
     float: left;
     display: block;
     border: none;
@@ -747,7 +763,7 @@ input:checked + .chatbot-input-more-span {
     border-bottom-left-radius: var(--block-radius);
     border-right: 1px solid var(--border-color-primary);
 }
-#chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button {
     display: block;
     border: none;
     border-radius: 6px;
@@ -757,14 +773,14 @@ input:checked + .chatbot-input-more-span {
     /* height: 32px; */
     padding: 7px 12px;
 }
-#chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button.selected {
+#chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected {
     background-color: var(--button-primary-background-fill);
     /* font-weight: bold; */
     color: var(--button-primary-text-color);
 }
 
 /* 这是为了第二级tab的选项，比如training里的openai tab下的几个准备数据集tab */
-.gradio-box > .gradio-tabs .gradio-tabs > div.tab-nav > button.selected {
+.gradio-group > div.styler > .gradio-tabs .gradio-tabs > div.tab-nav > button.selected {
     background-color: var(--block-background-fill);
 }
 
@@ -775,30 +791,30 @@ input:checked + .chatbot-input-more-span {
     }
     #chuanhu-popup {
         width: 100vw;
-        height: calc( 90*var(--vh) - 48px );
+        height: calc( 90dvh - 48px );
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
-    #toolbox-area > .gradio-box > .gradio-row:first-of-type,
-    #chuanhu-popup > .gradio-box > .gradio-row:first-of-type {
+    #toolbox-area > .gradio-group > div.styler > .gradio-row:first-of-type,
+    #chuanhu-popup .gradio-group > div.styler > .gradio-row:first-of-type {
         padding: 18px 24px 0 !important;
         border-bottom: 0;
     }
-    #toolbox-area > .gradio-box > .gradio-tabs,
-    #chuanhu-popup > .gradio-box > .gradio-tabs {
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs,
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs {
         height: auto;
         width: 100vw;
         overflow: hidden;
     }
-    #toolbox-area > .gradio-box > .gradio-tabs > div.tabitem,
-    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tabitem {
-        height: calc( 90*var(--vh) - 48px - 46px - 45px );
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tabitem,
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tabitem {
+        height: calc( 90dvh - 48px - 46px - 45px );
         overflow-x: auto;
         border: none;
     }
     /* 下面是弃用方案：横条按钮tab */
     /* 
-    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav {
+    #chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tab-nav {
         display: flex;
         margin: 0;
         padding: 12px 16px 8px;
@@ -812,7 +828,7 @@ input:checked + .chatbot-input-more-span {
         height: auto;
         background: none;
     }
-    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button {
+    #chuanhu-popup > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button {
         display: inline-block;
         border-style: none;
         border-radius: 6px;
@@ -823,8 +839,8 @@ input:checked + .chatbot-input-more-span {
         background: var(--background-fill-secondary);
     }
     */
-    #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav,
-    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav {
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav,
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav {
         display: flex;
         margin: 0;
         padding: 6px 16px 0;
@@ -840,8 +856,8 @@ input:checked + .chatbot-input-more-span {
         border-bottom: 1px solid var(--border-color-primary);
         align-items: baseline;
     }
-    #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav > button,
-    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button {
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button,
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button {
         display: inline-block;
         position: relative;
         padding: 7px 6px;
@@ -852,15 +868,15 @@ input:checked + .chatbot-input-more-span {
         background: none;
         transition: font-size 0.3s ease-in-out;
     }
-    #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav > button.selected,
-    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button.selected {
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected,
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected {
         background-color: unset !important;
         font-weight: bold;
         font-size: large;
         color: var(--body-text-color);
     }
-    #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav > button.selected::after,
-    #chuanhu-popup > .gradio-box > .gradio-tabs > div.tab-nav > button.selected::after {
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected::after,
+    #chuanhu-popup .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected::after {
         content: "";
         background-color: var(--primary-600);
         height: 4px;
@@ -878,21 +894,21 @@ input:checked + .chatbot-input-more-span {
     #toolbox-area {
         border-left: 1px solid var(--border-color-primary);
     }
-    #toolbox-area > .gradio-box {
+    #toolbox-area > .gradio-group {
         border-radius: 0;
     }
-    #toolbox-area > .gradio-box > .gradio-row > .close-btn {
+    #toolbox-area > .gradio-group > div.styler > .gradio-row > .close-btn {
         display: none;
     }
-    #toolbox-area > .gradio-box > .gradio-row:first-of-type {
+    #toolbox-area > .gradio-group > div.styler > .gradio-row:first-of-type {
         display: none;
     }
-    #toolbox-area > .gradio-box > .gradio-tabs{
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs{
         height: 100%;
         width: var(--toolbox-width);
         overflow: hidden;
     }
-    #toolbox-area > .gradio-box > .gradio-tabs > div.tabitem {
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tabitem {
         height: calc(100% - 35px);
         overflow-y: auto;
         border-style: none;
@@ -901,7 +917,7 @@ input:checked + .chatbot-input-more-span {
         /* 理论上不该是0，但这里考虑内部gradio有好多container有padding了 */
         padding-right: max(4px, env(safe-area-inset-right));
     }
-    #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav {
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav {
         display: flex;
         margin: 0;
         /* padding: 4px; */
@@ -918,7 +934,7 @@ input:checked + .chatbot-input-more-span {
         border:none;
         align-items: baseline;
     }
-    #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav > button {
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button {
         display: inline-block;
         position: relative;
         padding: 8px 2rem;
@@ -931,7 +947,7 @@ input:checked + .chatbot-input-more-span {
         border-right: 1px var(--border-color-primary) solid;
         border-radius: 0;
     }
-    #toolbox-area > .gradio-box > .gradio-tabs > div.tab-nav > button.selected {
+    #toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tab-nav > button.selected {
         background-color: var(--block-background-fill);
         font-weight: bold;
         /* border-top-left-radius: 8px;
@@ -941,12 +957,12 @@ input:checked + .chatbot-input-more-span {
     }
 }
 
-#toolbox-area > .gradio-box {
+#toolbox-area > .gradio-group {
     padding: 0;
     height: 100%;
 }
 /* 
-#toolbox-area > .gradio-box > .gradio-tabs > div.tabitem {
+#toolbox-area > .gradio-group > div.styler > .gradio-tabs > div.tabitem {
     padding: 0;
     理论上不该是0，但这里考虑内部gradio有好多container有padding了 
 } 
@@ -976,8 +992,8 @@ input:checked + .chatbot-input-more-span {
 } */
 
 #chuanhu-history {
-    max-height: calc(100*var(--vh) - 65px - 61px);
-    max-height: calc(100*var(--vh) - 65px - calc(36px + 12px + max(12px, env(safe-area-inset-bottom)) + 1px ));
+    max-height: calc(100dvh - 65px - 61px);
+    max-height: calc(100dvh - 65px - calc(36px + 12px + max(12px, env(safe-area-inset-bottom)) + 1px ));
     /* overflow-y: auto; */
 }
 #chuanhu-history > div {
@@ -986,7 +1002,7 @@ input:checked + .chatbot-input-more-span {
     height: 100%;
     padding: 0;
 }
-#chuanhu-history > div > div {
+#chuanhu-history > .gradio-group > div.styler > div {
     padding-inline: 12px;
 }
 #chuanhu-history-header {
@@ -1020,6 +1036,7 @@ input:checked + .chatbot-input-more-span {
     width: calc(100% - 32px);
     margin-left: 32px;
     padding-left: 6px;
+    align-content: center;
     box-shadow: none;
 }
 #chuanhu-history-body {
@@ -1077,11 +1094,20 @@ input:checked + .chatbot-input-more-span {
     transition: background-color .2s ease;
 }
 .chuanhu-ui-btn:hover {
-    background-color: rgba(167, 167, 167, 0.25) !important;
+    background-color: rgba(167, 167, 167, 0.25);
     /* color: unset !important; */
 }
 .chuanhu-ui-btn:active {
-    background-color: rgba(167, 167, 167, 0.5) !important;
+    background-color: rgba(167, 167, 167, 0.5);
+}
+.chuanhu-ui-btn.disabled {
+    /* all content transparent 50% */
+    background-color: transparent;
+    opacity: 0.5;
+    cursor: not-allowed !important;
+}
+.chuanhu-ui-btn.disabled+.dropdown-menu {
+    display: none !important;
 }
 
 .hover-round-btn {
@@ -1118,6 +1144,11 @@ input:checked + .chatbot-input-more-span {
     display: none;
 }
 
+#chatbot-area {
+    container-name: chatbot-area;
+    container-type: inline-size;
+}
+
 #chatbot-area.no-menu #chatbot-header {
     padding-left: max(20px, env(safe-area-inset-left));
 }
@@ -1127,7 +1158,7 @@ input:checked + .chatbot-input-more-span {
 #chatbot-area.no-menu #chatbot-input-box {
     padding-left: max(16px, env(safe-area-inset-left));
 }
-#chatbot-area.no-menu #chuanhu-chatbot>.wrapper>.wrap {
+#chatbot-area.no-menu #chuanhu-chatbot > .wrapper > .bubble-wrap {
     padding-left: max(20px, env(safe-area-inset-left));
 }
 
@@ -1140,10 +1171,35 @@ input:checked + .chatbot-input-more-span {
 #chatbot-area.no-toolbox #chatbot-input-box {
     padding-right: max(16px, env(safe-area-inset-right));
 }
-#chatbot-area.no-toolbox #chuanhu-chatbot>.wrapper>.wrap {
+#chatbot-area.no-toolbox #chuanhu-chatbot > .wrapper > .bubble-wrap {
     padding-right: max(20px, env(safe-area-inset-right));
 }
 
+div.gradio-group > div.styler {
+    background: unset !important;
+    border-radius: unset !important;
+    height: 100%;
+    display: flex;
+    /* flex-direction: column; */
+    gap: unset !important;
+    /* overflow: unset !important; */
+
+    --block-radius: unset !important;
+    --block-border-width: unset !important;
+    --layout-gap: unset !important;
+    --form-gap-width: unset !important;
+    --button-border-width: unset !important;
+    --button-large-radius: unset !important;
+    --button-small-radius: unset !important;
+}
+
+div.gradio-group {
+    background: var(--block-background-fill);
+}
+
+div.styler > * {
+    overflow: auto;
+}
 
 /* #history-select-wrap {
     height: 600px;
@@ -1176,20 +1232,71 @@ button:hover .icon-need-hover, button:hover.icon-need-hover {
 button:active .icon-need-hover, button:active.icon-need-hover {
     opacity: 1;
 }
+
+.chuanhu-sparkle >::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    height: calc(100% - 4px);
+    width: calc(100% - 4px);
+    animation: border-pulse 2s cubic-bezier(.5,0,.5,1) infinite;
+    border: 2px solid var(--color-accent) !important;
+    border-radius: 4px;
+    pointer-events: none;
+}
+/* .chuanhu-sparkle {
+    animation: content-pulse 1s cubic-bezier(.5,0,.5,1) infinite;
+} */
+@keyframes border-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.1;
+    }
+}
+
+.generating-loader {
+    height: 12px;
+    width: 48px;
+    aspect-ratio: 4;
+    --_g: no-repeat radial-gradient(farthest-side, var(--body-text-color) 90%,#0000);
+    background: var(--_g), var(--_g), var(--_g), var(--_g);
+    background-size: 12% 48%;
+    animation: generating-dots 1s infinite linear;
+    opacity: 0.3;
+    margin: 6px 4.5px;
+}
+
+@keyframes generating-dots {
+    0%     {background-position: calc(0*100%/3) 50% ,calc(1*100%/3) 50% ,calc(2*100%/3) 50% ,calc(3*100%/3) 50% }
+    16.67% {background-position: calc(0*100%/3) 0   ,calc(1*100%/3) 50% ,calc(2*100%/3) 50% ,calc(3*100%/3) 50% }
+    33.33% {background-position: calc(0*100%/3) 100%,calc(1*100%/3) 0   ,calc(2*100%/3) 50% ,calc(3*100%/3) 50% }
+    50%    {background-position: calc(0*100%/3) 50% ,calc(1*100%/3) 100%,calc(2*100%/3) 0   ,calc(3*100%/3) 50% }
+    66.67% {background-position: calc(0*100%/3) 50% ,calc(1*100%/3) 50% ,calc(2*100%/3) 100%,calc(3*100%/3) 0   }
+    83.33% {background-position: calc(0*100%/3) 50% ,calc(1*100%/3) 50% ,calc(2*100%/3) 50% ,calc(3*100%/3) 100%}
+    100%   {background-position: calc(0*100%/3) 50% ,calc(1*100%/3) 50% ,calc(2*100%/3) 50% ,calc(3*100%/3) 50% }
+}
+
+  
 /* .main-body {
     flex-wrap: nowrap;
     gap: 0;
     overflow: hidden;
     display: inline-flex;
     /* margin-top: 54px; */
-    /* height: calc(100*var(--vh) - 72px); */
+    /* height: calc(100dvh - 72px); */
     /* position: absolute;
     top: 48px;
 } */
 /* 
 .hide-body {
     display: none;
-    top: calc(-100*var(--vh));
+    top: calc(-100dvh);
     
 }
 #train-body {
@@ -1198,7 +1305,7 @@ button:active .icon-need-hover, button:active.icon-need-hover {
 
 #chuanhu-body.hide-body {
     display: none;
-    top: calc(100*var(--vh) + 48px);
+    top: calc(100dvh + 48px);
 }
 #chuanhu-body {
     transition: top 0.3s ease-in-out, display 0.3s ease;

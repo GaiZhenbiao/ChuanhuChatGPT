@@ -1,6 +1,12 @@
-import os, json, re, sys
-import aiohttp, asyncio
+import asyncio
+import logging
+import os
+import re
+import sys
+
+import aiohttp
 import commentjson
+import commentjson as json
 
 asyncio.set_event_loop_policy(asyncio.DefaultEventLoopPolicy())
 
@@ -98,7 +104,13 @@ async def main(auto=False):
     for locale_filename in locale_files:
         if "zh_CN" in locale_filename:
             continue
-        locale_strs = get_locale_strings(locale_filename)
+        try:
+            locale_strs = get_locale_strings(locale_filename)
+        except json.decoder.JSONDecodeError:
+            import traceback
+            traceback.print_exc()
+            logging.error(f"Error decoding {locale_filename}")
+            continue
 
         # Add new keys
         new_keys = []
