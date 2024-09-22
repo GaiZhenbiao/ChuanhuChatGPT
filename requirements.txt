@@ -42,3 +42,4 @@ protobuf==3.20.3
 ollama>=0.1.6
 numexpr
 regex
+python-multipart==0.9.0
