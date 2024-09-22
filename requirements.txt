@@ -1,4 +1,4 @@
-gradio==4.26.0
+gradio==4.27.0
 gradio_client==0.15.1
 primp==0.5.5
 pypinyin
