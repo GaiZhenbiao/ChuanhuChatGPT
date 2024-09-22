@@ -512,6 +512,8 @@ else:
 
 DEFAULT_MODEL = 0
 
+RENAME_MODEL = 0
+
 os.makedirs("models", exist_ok=True)
 os.makedirs("lora", exist_ok=True)
 os.makedirs("history", exist_ok=True)
