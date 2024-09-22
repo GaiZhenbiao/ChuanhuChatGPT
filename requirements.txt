@@ -43,3 +43,4 @@ ollama>=0.1.6
 numexpr
 regex
 python-multipart==0.0.9
+fastapi==0.112.4
