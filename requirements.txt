@@ -1,5 +1,5 @@
-gradio==4.26.0
-gradio_client==0.15.1
+gradio==4.29.0
+gradio_client==0.16.1
 primp==0.5.5
 pypinyin
 tiktoken
@@ -42,3 +42,5 @@ protobuf==3.20.3
 ollama>=0.1.6
 numexpr
 regex
+python-multipart==0.0.9
+fastapi==0.112.4
