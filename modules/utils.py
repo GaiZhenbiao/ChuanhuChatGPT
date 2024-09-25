@@ -243,7 +243,7 @@ def convert_mdtext(md_text):  # deprecated
     output += ALREADY_CONVERTED_MARK
     return output
 
-def remove_html_tags(data):
+def remove_html_tags(chatbot):
     def clean_text(text):
         # Regular expression to match code blocks, including all newlines
         code_block_pattern = r'(```[\s\S]*?```)'
@@ -267,10 +267,16 @@ def remove_html_tags(data):
         # Join the cleaned parts back together
         return ''.join(cleaned_parts)
 
-    return [
-        [clean_text(item) for item in sublist]
-        for sublist in data
-    ]
+    processed = []
+    for conv in chatbot:
+        if len(conv) == 2 and (isinstance(conv[0], tuple) or isinstance(conv[0], list)) and len(conv[0]) == 2 and conv[0][1] is None and conv[1] is None:
+            # This is an image path sublist, keep it as-is
+            processed.append(conv)
+        else:
+            # Apply clean_text to each item in the sublist
+            processed.append([clean_text(item) if item is not None else None for item in conv])
+
+    return processed
 
 
 def clip_rawtext(chat_message, need_escape=True):
@@ -412,7 +418,21 @@ def construct_assistant(text):
 def save_file(filename, model):
     system = model.system_prompt
     history = model.history
-    chatbot = [(history[i]["content"], history[i + 1]["content"]) for i in range(0, len(history), 2)]
+    chatbot = []
+    i = 0
+    while i < len(history):
+        if history[i]["role"] == "image":
+            # Handle image
+            chatbot.append(((history[i]["content"], None), None))
+            i += 1
+        elif i + 1 < len(history) and history[i + 1]["role"] != "image":
+            # Handle user-assistant pair
+            chatbot.append((history[i]["content"], history[i + 1]["content"]))
+            i += 2
+        else:
+            # Handle unpaired message (could be at the end or before an image)
+            chatbot.append((history[i]["content"], None))
+            i += 1
     user_name = model.user_name
     os.makedirs(os.path.join(HISTORY_DIR, user_name), exist_ok=True)
     if filename is None:
