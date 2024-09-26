@@ -6,9 +6,10 @@ from .base_model import BaseLLMModel
 
 
 class Claude_Client(BaseLLMModel):
-    def __init__(self, model_name, api_secret) -> None:
+    def __init__(self, model_name, api_secret, api_host) -> None:
         super().__init__(model_name=model_name)
         self.api_secret = api_secret
+        self.api_host = api_host
         if None in [self.api_secret]:
             raise Exception("请在配置文件或者环境变量中设置Claude的API Secret")
         self.claude_client = Anthropic(api_key=self.api_secret, base_url=self.api_host)
@@ -81,11 +82,13 @@ class Claude_Client(BaseLLMModel):
                 messages=history,
                 system=system_prompt,
             ) as stream:
+                logging.info("Claude流正常输出")
                 partial_text = ""
                 for text in stream.text_stream:
                     partial_text += text
                     yield partial_text
         except Exception as e:
+            logging.error(f"Claude流异常,异常为: {e}")
             yield i18n(GENERAL_ERROR_MSG) + ": " + str(e)
 
     def get_answer_at_once(self):

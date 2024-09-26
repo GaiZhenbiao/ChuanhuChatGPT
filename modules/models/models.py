@@ -120,7 +120,7 @@ def get_model(
                 "SPARK_API_KEY"), os.getenv("SPARK_API_SECRET"), user_name=user_name)
         elif model_type == ModelType.Claude:
             from .Claude import Claude_Client
-            model = Claude_Client(model_name=model_name, api_secret=os.getenv("CLAUDE_API_SECRET"))
+            model = Claude_Client(model_name=model_name, api_secret=os.getenv("CLAUDE_API_SECRET"), api_host=os.getenv("CLAUDE_API_HOST"))
         elif model_type == ModelType.Qwen:
             from .Qwen import Qwen_Client
             model = Qwen_Client(model_name, user_name=user_name)
