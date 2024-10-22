@@ -1,6 +1,9 @@
 
 /* list from gradio 4.26, recover what silly gradio has done*/ 
 .message {
+
+    --chatbot-body-text-size: 14px; /* gradio set 16px in v4.29 */
+
     .prose ul {
         list-style-position: outside !important;
         list-style-type: disc;
