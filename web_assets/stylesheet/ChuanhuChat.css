@@ -1175,6 +1175,10 @@ input:checked + .chatbot-input-more-span {
     padding-right: max(20px, env(safe-area-inset-right));
 }
 
+#chuanhu-chatbot > div.wrap {
+    z-index: -50;
+}
+
 div.gradio-group > div.styler {
     background: unset !important;
     border-radius: unset !important;
