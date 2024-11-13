@@ -402,6 +402,7 @@ function chatbotContentChanged(attempt = 1, force = false) {
             // clearMessageRows();
             saveHistoryHtml();
             disableSendBtn();
+            disableChatListClick(); // 避免生成中切换对话导致错误
             // updateSlider();
             updateCheckboxes();
             bindFancyBox();
@@ -410,6 +411,7 @@ function chatbotContentChanged(attempt = 1, force = false) {
 
             if (chatbotIndicator.classList.contains('hide')) { // generation finished
                 setLatestMessage();
+                enableChatListClick();
                 setChatList();
             }
 
