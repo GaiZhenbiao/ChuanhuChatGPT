@@ -53,7 +53,6 @@ function setChatList() {
 function disableChatListClick() {
     var chatList = gradioApp().querySelector('fieldset#history-select-dropdown');
     if (chatList.querySelector('label').style.pointerEvents !== 'none' && !isChatListRecentlyEnabled) {
-        console.log("disableChatListClick");
         chatList.querySelectorAll('label').forEach(label => {
             label.style.transition = 'opacity 0.1s ease';
             label.style.pointerEvents = 'none';
@@ -64,7 +63,6 @@ function disableChatListClick() {
 function enableChatListClick() {
     var chatList = gradioApp().querySelector('fieldset#history-select-dropdown');
     if (chatList.querySelector('label').style.pointerEvents !== 'auto') {
-        console.log("enableChatListClick");
         chatList.querySelectorAll('label').forEach(label => {
             label.style.transition = 'opacity 0.2s ease';
             label.style.pointerEvents = 'auto';
