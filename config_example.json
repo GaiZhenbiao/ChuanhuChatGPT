@@ -69,6 +69,17 @@
     "hide_my_key": false, // 如果你想在UI中隐藏 API 密钥输入框，将此值设置为 true
     // "available_models": ["GPT3.5 Turbo", "GPT4 Turbo", "GPT4 Vision"], // 可用的模型列表，将覆盖默认的可用模型列表
     // "extra_models": ["模型名称3", "模型名称4", ...], // 额外的模型，将添加到可用的模型列表之后
+    // "extra_model_metadata": {
+    //     "GPT-3.5 Turbo Keldos": {
+    //         "model_name": "gpt-3.5-turbo",
+    //         "description": "GPT-3.5 Turbo is a large language model trained by OpenAI. It is the latest version of the GPT series of models, and is known for its ability to generate human-like text.",
+    //         "model_type": "OpenAI",
+    //         "multimodal": false,
+    //         "api_host": "https://www.example.com",
+    //         "token_limit": 4096,
+    //         "max_generation": 4096,
+    //     },
+    // }
     // "api_key_list": [
     //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx1",
     //     "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
