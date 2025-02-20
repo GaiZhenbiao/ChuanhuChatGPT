@@ -149,6 +149,12 @@ def get_model(
             from .GoogleGemma import GoogleGemmaClient
             model = GoogleGemmaClient(
                 model_name, access_key, user_name=user_name)
+        elif model_type == ModelType.BaiLian:
+            access_key = os.environ.get("BAILIAN_API_KEY", access_key)
+            from .BaiLian import BaiLian_Client
+            model = BaiLian_Client(
+                model_name, access_key, user_name=user_name
+            )
         elif model_type == ModelType.Unknown:
             raise ValueError(f"Unknown model: {model_name}")
         else:

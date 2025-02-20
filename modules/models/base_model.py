@@ -148,9 +148,17 @@ class ModelType(Enum):
     GoogleGemini = 19
     GoogleGemma = 20
     Ollama = 21
+    BaiLian = 101
 
     @classmethod
     def get_type(cls, model_name: str):
+        # 1. get model type from model metadata (if exists)
+        model_type = MODEL_METADATA[model_name]["model_type"]
+        if model_type is not None:
+            for member in cls:
+                if member.name == model_type:
+                    return member
+        # 2. infer model type from model name
         model_type = None
         model_name_lower = model_name.lower()
         if "gpt" in model_name_lower:

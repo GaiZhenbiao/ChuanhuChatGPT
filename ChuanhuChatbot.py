@@ -818,6 +818,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
 demo.title = i18n("情绪Chat 🚀")
 
 if __name__ == "__main__":
+    os.environ["no_proxy"] = "localhost,127.0.0.1,::1"
     reload_javascript()
     setup_wizard()
     demo.queue(concurrency_count=CONCURRENT_COUNT).launch(

@@ -87,7 +87,10 @@ ONLINE_MODELS = [
     "ERNIE-Bot-turbo",
     "ERNIE-Bot",
     "ERNIE-Bot-4",
-    "Ollama"
+    "Ollama",
+    "deepseek-r1",
+    "deepseek-r1-70B",
+    "deepseek-r1-32B"
 ]
 
 LOCAL_MODELS = [
@@ -211,6 +214,30 @@ MODEL_METADATA = {
         "repo_id": "google/gemma-7b-it",
         "model_name": "gemma-7b-it",
         "token_limit": 8192,
+    },
+    "deepseek-r1": {
+        "model_name": "deepseek-r1",
+        "description": "deepseek-r1 from bailian",
+        "model_type": "BaiLian",
+        "metadata": {
+            "temperature": 0.6
+        }
+    },
+    "deepseek-r1-70B": {
+        "model_name": "deepseek-r1-distill-llama-70b",
+        "description": "deepseek-r1 distill-llama-70b from bailian",
+        "model_type": "BaiLian",
+        "metadata": {
+            "temperature": 0.6
+        }
+    },
+    "deepseek-r1-32B": {
+        "model_name": "deepseek-r1-distill-qwen-32b",
+        "description": "deepseek-r1-distill-qwen-32b from bailian",
+        "model_type": "BaiLian",
+        "metadata": {
+            "temperature": 0.6
+        }
     }
 }
 
