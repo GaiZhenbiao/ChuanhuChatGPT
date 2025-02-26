@@ -67,8 +67,8 @@ ONLINE_MODELS = [
     "川虎助理",
     "川虎助理 Pro",
     "DALL-E 3",
-    "Gemini Pro",
-    "Gemini Pro Vision",
+    "Gemini 2.0 Flash",
+    "Gemini 2.0 Flash-Lite",
     "Groq LLaMA3 8B",
     "Groq LLaMA3 70B",
     "Groq LLaMA2 70B",
@@ -357,17 +357,19 @@ MODEL_METADATA = {
         "model_name": "ERNIE-Bot-4",
         "token_limit": 1024,
     },
-    "Gemini Pro": {
-        "model_name": "gemini-pro",
-        "token_limit": 30720,
+    "Gemini 2.0 Flash": {
+        "model_name": "gemini-2.0-flash",
+        "token_limit": 1048576,
+        "api_host": "generativelanguage.googleapis.com",
         "placeholder": {
             "logo": "file=web_assets/model_logos/gemini.svg",
             "slogan": i18n("gpt_default_slogan"),
         }
     },
-    "Gemini Pro Vision": {
-        "model_name": "gemini-pro-vision",
-        "token_limit": 30720,
+    "Gemini 2.0 Flash-Lite": {
+        "model_name": "gemini-2.0-flash-lite",
+        "token_limit": 1048576,
+        "api_host": "generativelanguage.googleapis.com",
         "placeholder": {
             "logo": "file=web_assets/model_logos/gemini.svg",
             "slogan": i18n("gpt_default_slogan"),

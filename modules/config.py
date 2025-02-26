@@ -132,6 +132,9 @@ google_genai_api_key = config.get("google_palm_api_key", google_genai_api_key)
 google_genai_api_key = config.get("google_genai_api_key", google_genai_api_key)
 os.environ["GOOGLE_GENAI_API_KEY"] = google_genai_api_key
 
+google_genai_api_host = config.get("google_genai_api_host", "generativelanguage.googleapis.com")
+os.environ["GOOGLE_GENAI_API_HOST"] = google_genai_api_host
+
 huggingface_auth_token = os.environ.get("HF_AUTH_TOKEN", "")
 huggingface_auth_token = config.get("hf_auth_token", huggingface_auth_token)
 os.environ["HF_AUTH_TOKEN"] = huggingface_auth_token

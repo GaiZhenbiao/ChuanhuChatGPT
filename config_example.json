@@ -4,6 +4,7 @@
     //== API 配置 ==
     "openai_api_key": "", // 你的 OpenAI API Key，一般必填，若空缺则需在图形界面中填入API Key
     "google_genai_api_key": "", // 你的 Google Gemini API Key ，用于 Google Gemini 对话模型
+    "google_genai_api_host": "generativelanguage.googleapis.com", // 你的 Google Gemini API Host 地址，一般无需更改
     "xmchat_api_key": "", // 你的 xmchat API Key，用于 XMChat 对话模型
     "minimax_api_key": "", // 你的 MiniMax API Key，用于 MiniMax 对话模型
     "minimax_group_id": "", // 你的 MiniMax Group ID，用于 MiniMax 对话模型
