@@ -160,6 +160,7 @@ class ModelType(Enum):
     GoogleGemma = 20
     Ollama = 21
     Groq = 22
+    DeepSeek = 23
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -224,6 +225,8 @@ class ModelType(Enum):
             model_type = ModelType.DALLE3
         elif "gemma" in model_name_lower:
             model_type = ModelType.GoogleGemma
+        elif "deepseek" in model_name_lower:
+            model_type = ModelType.DeepSeek
         else:
             model_type = ModelType.LLaMA
         return model_type
@@ -1053,7 +1056,7 @@ class BaseLLMModel:
                 logging.info(f"Trimmed history: {saved_json['history']}")
 
             # Sanitize chatbot
-            saved_json["chatbot"] = remove_html_tags(saved_json["chatbot"])
+            saved_json["chatbot"] = saved_json["chatbot"]
             logging.debug(f"{self.user_name} 加载对话历史完毕")
             self.history = saved_json["history"]
             self.single_turn = saved_json.get("single_turn", self.single_turn)

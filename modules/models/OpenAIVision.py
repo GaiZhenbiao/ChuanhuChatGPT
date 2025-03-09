@@ -9,7 +9,7 @@ from math import ceil
 import colorama
 import requests
 from io import BytesIO
-import uuid
+import time
 
 import requests
 from PIL import Image
@@ -47,9 +47,27 @@ class OpenAIVisionClient(BaseLLMModel):
         if response is not None:
             iter = self._decode_chat_response(response)
             partial_text = ""
-            for i in iter:
-                partial_text += i
-                yield partial_text
+            reasoning_text = ""
+            reasoning_start_time = None
+
+            for content_delta, reasoning_delta in iter:
+                if content_delta:
+                    partial_text += content_delta
+
+                if reasoning_delta:
+                    if reasoning_start_time is None:
+                        reasoning_start_time = time.time()
+                        elapsed_seconds = 0
+                    reasoning_text += reasoning_delta
+                if reasoning_text:
+                    if reasoning_delta:
+                        elapsed_seconds = int(time.time() - reasoning_start_time)
+                        reasoning_preview = reasoning_text[-20:].replace("\n", "")
+                        yield f'<details open>\n<summary>Thinking ({elapsed_seconds}s)</summary>\n{reasoning_text}</details>\n\n' + partial_text
+                    else:
+                        yield f'<details>\n<summary>Thought for {elapsed_seconds} s</summary>\n{reasoning_text}</details>\n\n' + partial_text
+                else:
+                    yield partial_text
         else:
             yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
 
@@ -233,6 +251,8 @@ class OpenAIVisionClient(BaseLLMModel):
         for chunk in response.iter_lines():
             if chunk:
                 chunk = chunk.decode()
+                if chunk == ": keep-alive":
+                    continue
                 chunk_length = len(chunk)
                 try:
                     chunk = json.loads(chunk[6:])
@@ -251,7 +271,11 @@ class OpenAIVisionClient(BaseLLMModel):
                         if finish_reason == "stop":
                             break
                         try:
-                            yield chunk["choices"][0]["delta"]["content"]
+                            if "reasoning_content" in chunk["choices"][0]["delta"]:
+                                reasoning_content = chunk["choices"][0]["delta"]["reasoning_content"]
+                            else:
+                                reasoning_content = None
+                            yield chunk["choices"][0]["delta"]["content"], reasoning_content
                         except Exception as e:
                             # logging.error(f"Error: {e}")
                             continue

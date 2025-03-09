@@ -40,6 +40,13 @@ def get_model(
             access_key = os.environ.get("OPENAI_API_KEY", access_key)
             model = OpenAIVisionClient(
                 model_name, api_key=access_key, user_name=user_name)
+        elif model_type == ModelType.DeepSeek:
+            logging.info(f"正在加载 DeepSeek 模型: {model_name}")
+            from .OpenAIVision import OpenAIVisionClient
+            access_key = os.environ.get("DEEPSEEK_API_KEY", access_key)
+            logging.info(access_key)
+            model = OpenAIVisionClient(
+                model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.OpenAIInstruct:
             logging.info(f"正在加载OpenAI Instruct模型: {model_name}")
             from .OpenAIInstruct import OpenAI_Instruct_Client

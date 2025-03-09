@@ -64,6 +64,8 @@ ONLINE_MODELS = [
     "Claude 3 Haiku",
     "Claude 3.5 Sonnet",
     "Claude 3 Opus",
+    "DeepSeek Chat",
+    "DeepSeek R1",
     "川虎助理",
     "川虎助理 Pro",
     "DALL-E 3",
@@ -504,6 +506,22 @@ MODEL_METADATA = {
             "path": "/v1.1/chat",
             "domain": "general"
         }
+    },
+    "DeepSeek Chat": {
+            "model_name": "deepseek-chat",
+            "api_host": "https://api.deepseek.com/v1",
+            "description": "DeepSeek V3 Chat",
+            "token_limit": 64000,
+            "multimodal": False,
+            "model_type": "DeepSeek"
+        },
+    "DeepSeek R1": {
+        "model_name": "deepseek-reasoner",
+        "api_host": "https://api.deepseek.com/v1",
+        "description": "DeepSeek V3 Chat",
+        "token_limit": 64000,
+        "multimodal": False,
+        "model_type": "DeepSeek"
     }
 }
 

@@ -142,6 +142,9 @@ os.environ["HF_AUTH_TOKEN"] = huggingface_auth_token
 xmchat_api_key = config.get("xmchat_api_key", "")
 os.environ["XMCHAT_API_KEY"] = xmchat_api_key
 
+deepseek_api_key = config.get("deepseek_api_key", "")
+os.environ["DEEPSEEK_API_KEY"] = deepseek_api_key
+
 minimax_api_key = config.get("minimax_api_key", "")
 os.environ["MINIMAX_API_KEY"] = minimax_api_key
 minimax_group_id = config.get("minimax_group_id", "")
