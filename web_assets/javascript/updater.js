@@ -1,4 +1,3 @@
-
 var updateInfoGotten = false;
 var isLatestVersion = localStorage.getItem('isLatestVersion') === "true" || false;
 var shouldCheckUpdate = false;
@@ -54,7 +53,14 @@ async function getLatestRelease() {
         if (!response.ok) {
             console.log(`Error: ${response.status} - ${response.statusText}`);
             updateInfoGotten = true;
-            return null;
+            
+            // 返回错误信息而不是直接访问DOM元素
+            return { 
+                error: true, 
+                status: response.status, 
+                statusText: response.statusText,
+                errorType: 'network'
+            };
         }
         const data = await response.json();
         updateInfoGotten = true;
@@ -62,7 +68,13 @@ async function getLatestRelease() {
     } catch (error) {
         console.log(`Error: ${error}`);
         updateInfoGotten = true;
-        return null;
+        
+        // 返回错误信息
+        return { 
+            error: true, 
+            message: error.message || "未知错误",
+            errorType: 'exception'
+        };
     }
 }
 
@@ -84,6 +96,25 @@ async function updateLatestVersion() {
     updateInfoGotten = true; //无论成功与否都只执行一次，否则容易api超限...
     try {
         const data = await getLatestRelease();
+        
+        // 处理错误响应
+        if (data && data.error) {
+            if (data.errorType === 'network') {
+                const errorMessage = `更新检查失败: ${data.status} - ${data.statusText}`;
+                versionInfoElement.textContent = errorMessage;
+                updatingInfoElement.innerText = "无法连接到GitHub API，请检查您的网络连接或稍后再试";
+                // 错误时更新releaseNoteElement内容
+                releaseNoteElement.innerHTML = marked.parse("**无法获取更新信息**\n\n请检查您的网络连接或GitHub API访问权限。", {mangle: false, headerIds: false});
+            } else {
+                versionInfoElement.textContent = "更新检查遇到错误";
+                updatingInfoElement.innerText = `发生错误: ${data.message}`;
+                // 错误时更新releaseNoteElement内容
+                releaseNoteElement.innerHTML = marked.parse(`**更新检查失败**\n\n错误信息: ${data.message}\n\n请稍后再试。`, {mangle: false, headerIds: false});
+            }
+            disableUpdateBtn_enableCancelBtn();
+            return;
+        }
+        
         const releaseNote = data.body;
         if (releaseNote) {
             releaseNoteElement.innerHTML = marked.parse(releaseNote, {mangle: false, headerIds: false});
