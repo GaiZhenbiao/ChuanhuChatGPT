@@ -53,13 +53,14 @@ def list_scripts(scriptdirname, extension):
 
 def reload_javascript():
     js = javascript_html()
-    js += '<script async type="module" src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>'
-    js += '<script async type="module" src="https://spin.js.org/spin.umd.js"></script><link type="text/css" href="https://spin.js.org/spin.css" rel="stylesheet" />'
-    js += '<script async src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />'
+    js += '<script async type="module" src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.6/marked.min.js"></script>'
+    js += '<script async type="module" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.2/spin.min.js"></script><link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.2/spin.min.css" rel="stylesheet" />'
+    js += '<script async src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css" />'
     
     meta = """
         <meta name="apple-mobile-web-app-title" content="川虎 Chat">
         <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
         <meta name="application-name" content="川虎 Chat">
         <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover'>
         <meta name="theme-color" content="#ffffff">
