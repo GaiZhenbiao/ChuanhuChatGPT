@@ -1,36 +1,40 @@
 # -*- coding:utf-8 -*-
 from __future__ import annotations
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple, Type
-from enum import Enum
-import logging
-import commentjson as json
-import os
-import datetime
+
 import csv
-import threading
-import requests
+import datetime
+import getpass
+import hashlib
 import hmac
 import html
-import hashlib
+import logging
+import os
+import threading
+from enum import Enum
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Tuple, Type
 
+import colorama
+import commentjson as json
 import gradio as gr
+import pandas as pd
 import regex as re
-import getpass
-from pypinyin import lazy_pinyin
+import requests
 import tiktoken
 from markdown import markdown
 from pygments import highlight
-from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
-import pandas as pd
-import colorama
+from pygments.lexers import get_lexer_by_name
+from pypinyin import lazy_pinyin
 
+from modules.config import (admin_list, hide_history_when_not_logged_in,
+                            retrieve_proxy)
 from modules.presets import *
+
 from . import shared
-from modules.config import retrieve_proxy, hide_history_when_not_logged_in, admin_list
 
 if TYPE_CHECKING:
     from typing import TypedDict
+
     from .models.base_model import BaseLLMModel
 
     class DataframeData(TypedDict):
@@ -145,6 +149,7 @@ def set_user_identifier(current_model, *args):
 def set_single_turn(current_model, *args):
     current_model.set_single_turn(*args)
 
+
 def set_streaming(current_model, *args):
     current_model.set_streaming(*args)
 
@@ -243,38 +248,47 @@ def convert_mdtext(md_text):  # deprecated
     output += ALREADY_CONVERTED_MARK
     return output
 
+
 def remove_html_tags(chatbot):
     def clean_text(text):
         # Regular expression to match code blocks, including all newlines
-        code_block_pattern = r'(```[\s\S]*?```)'
+        code_block_pattern = r"(```[\s\S]*?```)"
 
         # Split the text into code blocks and non-code blocks
         parts = re.split(code_block_pattern, text)
 
         cleaned_parts = []
         for part in parts:
-            if part.startswith('```') and part.endswith('```'):
+            if part.startswith("```") and part.endswith("```"):
                 # This is a code block, keep it exactly as is
                 cleaned_parts.append(part)
             else:
                 # This is not a code block, remove HTML tags
                 # Remove all HTML tags
-                cleaned = re.sub(r'<[^>]+>', '', part)
+                cleaned = re.sub(r"<[^>]+>", "", part)
                 # Remove any remaining HTML entities
-                cleaned = re.sub(r'&[#\w]+;', '', cleaned)
+                cleaned = re.sub(r"&[#\w]+;", "", cleaned)
                 cleaned_parts.append(cleaned)  # Don't strip here to preserve newlines
 
         # Join the cleaned parts back together
-        return ''.join(cleaned_parts)
+        return "".join(cleaned_parts)
 
     processed = []
     for conv in chatbot:
-        if len(conv) == 2 and (isinstance(conv[0], tuple) or isinstance(conv[0], list)) and len(conv[0]) == 2 and conv[0][1] is None and conv[1] is None:
+        if (
+            len(conv) == 2
+            and (isinstance(conv[0], tuple) or isinstance(conv[0], list))
+            and len(conv[0]) == 2
+            and conv[0][1] is None
+            and conv[1] is None
+        ):
             # This is an image path sublist, keep it as-is
             processed.append(conv)
         else:
             # Apply clean_text to each item in the sublist
-            processed.append([clean_text(item) if item is not None else None for item in conv])
+            processed.append(
+                [clean_text(item) if item is not None else None for item in conv]
+            )
 
     return processed
 
@@ -285,9 +299,7 @@ def clip_rawtext(chat_message, need_escape=True):
     hr_match = re.search(hr_pattern, chat_message, re.DOTALL)
     message_clipped = chat_message[: hr_match.start()] if hr_match else chat_message
     # second, avoid agent-prefix being escaped
-    agent_prefix_pattern = (
-        r'(<!-- S O PREFIX -->.*?<!-- E O PREFIX -->)'
-    )
+    agent_prefix_pattern = r"(<!-- S O PREFIX -->.*?<!-- E O PREFIX -->)"
     # agent_matches = re.findall(agent_prefix_pattern, message_clipped)
     agent_parts = re.split(agent_prefix_pattern, message_clipped, flags=re.DOTALL)
     final_message = ""
@@ -300,7 +312,7 @@ def clip_rawtext(chat_message, need_escape=True):
                     else f'<pre class="fake-pre">{part}</pre>'
                 )
         else:
-            part = part.replace(' data-fancybox="gallery"', '')
+            part = part.replace(' data-fancybox="gallery"', "")
             final_message += part
     return final_message
 
@@ -403,6 +415,7 @@ def construct_text(role, text):
 def construct_user(text):
     return construct_text("user", text)
 
+
 def construct_image(path):
     return construct_text("image", path)
 
@@ -470,12 +483,16 @@ def save_file(filename, model):
 
     # check if history file path matches user_name
     # if user access control is not enabled, user_name is empty, don't check
-    assert os.path.basename(os.path.dirname(history_file_path)) == model.user_name or model.user_name == ""
+    assert (
+        os.path.basename(os.path.dirname(history_file_path)) == model.user_name
+        or model.user_name == ""
+    )
     with open(history_file_path, "w", encoding="utf-8") as f:
         json.dump(json_s, f, ensure_ascii=False, indent=4)
 
     save_md_file(history_file_path)
     return history_file_path
+
 
 def save_md_file(json_file_path):
     with open(json_file_path, "r", encoding="utf-8") as f:
@@ -483,11 +500,12 @@ def save_md_file(json_file_path):
 
     md_file_path = json_file_path[:-5] + ".md"
     md_s = f"system: \n- {json_data['system']} \n"
-    for data in json_data['history']:
+    for data in json_data["history"]:
         md_s += f"\n{data['role']}: \n- {data['content']} \n"
 
     with open(md_file_path, "w", encoding="utf8") as f:
         f.write(md_s)
+
 
 def sorted_by_pinyin(list):
     return sorted(list, key=lambda char: lazy_pinyin(char)[0][0])
@@ -537,7 +555,9 @@ def get_history_names(user_name=""):
     else:
         user_history_dir = os.path.join(HISTORY_DIR, user_name)
         # ensure the user history directory is inside the HISTORY_DIR
-        assert os.path.realpath(user_history_dir).startswith(os.path.realpath(HISTORY_DIR))
+        assert os.path.realpath(user_history_dir).startswith(
+            os.path.realpath(HISTORY_DIR)
+        )
         history_files = get_file_names_by_last_modified_time(
             os.path.join(HISTORY_DIR, user_name)
         )
@@ -567,27 +587,31 @@ def init_history_list(user_name="", prepend=None):
 def filter_history(user_name, keyword):
     history_names = get_history_names(user_name)
     try:
-        history_names = [name for name in history_names if re.search(keyword, name, timeout=0.01)]
+        history_names = [
+            name for name in history_names if re.search(keyword, name, timeout=0.01)
+        ]
         return gr.update(choices=history_names)
     except:
         return gr.update(choices=history_names)
 
 
 def load_template(filename, mode=0):
-    logging.debug(f"加载模板文件{filename}，模式为{mode}（0为返回字典和下拉菜单，1为返回下拉菜单，2为返回字典）")
+    logging.debug(
+        f"加载模板文件{filename}，模式为{mode}（0为返回字典和下拉菜单，1为返回下拉菜单，2为返回字典）"
+    )
     lines = []
     template_file_path = os.path.join(TEMPLATES_DIR, filename)
     # check if template_file_path is inside TEMPLATES_DIR
-    if not os.path.realpath(template_file_path).startswith(os.path.realpath(TEMPLATES_DIR)):
+    if not os.path.realpath(template_file_path).startswith(
+        os.path.realpath(TEMPLATES_DIR)
+    ):
         return "Invalid template file path"
     if filename.endswith(".json"):
         with open(template_file_path, "r", encoding="utf8") as f:
             lines = json.load(f)
         lines = [[i["act"], i["prompt"]] for i in lines]
     else:
-        with open(
-            template_file_path, "r", encoding="utf8"
-        ) as csvfile:
+        with open(template_file_path, "r", encoding="utf8") as csvfile:
             reader = csv.reader(csvfile)
             lines = list(reader)
         lines = lines[1:]
@@ -612,7 +636,9 @@ def get_template_dropdown():
 
 
 def get_template_content(templates, selection, original_system_prompt):
-    logging.debug(f"应用模板中，选择为{selection}，原始系统提示为{original_system_prompt}")
+    logging.debug(
+        f"应用模板中，选择为{selection}，原始系统提示为{original_system_prompt}"
+    )
     try:
         return templates[selection]
     except:
@@ -699,7 +725,9 @@ def get_geoip():
                 SERVER_GEO_IP_MSG = i18n("您的IP区域：未知。")
             else:
                 SERVER_GEO_IP_MSG = (
-                    i18n("获取IP地理位置失败。原因：") + f"{data['reason']}" + i18n("。你仍然可以使用聊天功能。")
+                    i18n("获取IP地理位置失败。原因：")
+                    + f"{data['reason']}"
+                    + i18n("。你仍然可以使用聊天功能。")
                 )
         else:
             country = data["country_name"]
@@ -1013,11 +1041,25 @@ class SetupWizard:
     def __init__(self, file_path="config.json") -> None:
         self.config = {}
         self.file_path = file_path
-        language = input('请问是否需要更改语言？可选："auto", "zh_CN", "en_US", "ja_JP", "ko_KR", "sv_SE", "ru_RU", "vi_VN"\nChange the language? Options: "auto", "zh_CN", "en_US", "ja_JP", "ko_KR", "sv_SE", "ru_RU", "vi_VN"\n目前正在使用中文(zh_CN)\nCurrently using Chinese(zh_CN)\n如果需要，请输入你想用的语言的代码：\nIf you need, please enter the code of the language you want to use:')
-        if language.lower() in ["auto", "zh_cn", "en_us", "ja_jp", "ko_kr", "sv_se", "ru_ru", "vi_vn"]:
+        language = input(
+            '请问是否需要更改语言？可选："auto", "zh_CN", "zh_TW", "en_US", "ja_JP", "ko_KR", "sv_SE", "ru_RU", "vi_VN"\nChange the language? Options: "auto", "zh_CN", "zh_TW", "en_US", "ja_JP", "ko_KR", "sv_SE", "ru_RU", "vi_VN"\n目前正在使用中文(zh_CN)\nCurrently using Chinese(zh_CN)\n如果需要，请输入你想用的语言的代码：\nIf you need, please enter the code of the language you want to use:'
+        )
+        if language.lower() in [
+            "auto",
+            "zh_cn",
+            "zh_tw",
+            "en_us",
+            "ja_jp",
+            "ko_kr",
+            "sv_se",
+            "ru_ru",
+            "vi_vn",
+        ]:
             i18n.change_language(language)
         else:
-            print("你没有输入有效的语言代码，将使用默认语言中文(zh_CN)\nYou did not enter a valid language code, the default language Chinese(zh_CN) will be used.")
+            print(
+                "你没有输入有效的语言代码，将使用默认语言中文(zh_CN)\nYou did not enter a valid language code, the default language Chinese(zh_CN) will be used."
+            )
         print(
             i18n("正在进行首次设置，请按照提示进行配置，配置将会被保存在")
             + colorama.Fore.GREEN
@@ -1037,7 +1079,9 @@ class SetupWizard:
         )
         print(
             colorama.Back.GREEN
-            + i18n("现在开始进行交互式配置。碰到不知道该怎么办的设置项时，请直接按回车键跳过，程序会自动选择合适的默认值。")
+            + i18n(
+                "现在开始进行交互式配置。碰到不知道该怎么办的设置项时，请直接按回车键跳过，程序会自动选择合适的默认值。"
+            )
             + colorama.Style.RESET_ALL
         )
 
@@ -1076,7 +1120,8 @@ class SetupWizard:
                     config_value = []
                     while True:
                         config_value_item = input(
-                            generate_prompt_string(config_item) + i18n("，输入空行结束：")
+                            generate_prompt_string(config_item)
+                            + i18n("，输入空行结束：")
                         )
                         if config_value_item == "":
                             break
@@ -1103,7 +1148,13 @@ class SetupWizard:
 
     def set_users(self):
         # 询问设置用户账户
-        choice = input(colorama.Fore.YELLOW + i18n("是否设置用户账户？设置后，用户需要登陆才可访问。输入 Yes(y) 或 No(n)，默认No：") + colorama.Style.RESET_ALL)
+        choice = input(
+            colorama.Fore.YELLOW
+            + i18n(
+                "是否设置用户账户？设置后，用户需要登陆才可访问。输入 Yes(y) 或 No(n)，默认No："
+            )
+            + colorama.Style.RESET_ALL
+        )
         if choice.lower() in ["y", "yes"]:
             users = []
             while True:
@@ -1174,7 +1225,9 @@ def setup_wizard():
             "是否在本地编制知识库索引？如果是，可以在使用本地模型时离线使用知识库，否则使用OpenAI服务来编制索引（需要OpenAI API Key）。请确保你的电脑有至少16GB内存。本地索引模型需要从互联网下载。",
         )
         print(
-            colorama.Back.GREEN + i18n("现在开始设置其他在线模型的API Key") + colorama.Style.RESET_ALL
+            colorama.Back.GREEN
+            + i18n("现在开始设置其他在线模型的API Key")
+            + colorama.Style.RESET_ALL
         )
         # Google Palm
         wizard.set(
@@ -1209,7 +1262,9 @@ def setup_wizard():
             [
                 ConfigItem(
                     "midjourney_proxy_api_base",
-                    i18n("你的") + "https://github.com/novicezk/midjourney-proxy" + i18n("代理地址"),
+                    i18n("你的")
+                    + "https://github.com/novicezk/midjourney-proxy"
+                    + i18n("代理地址"),
                     type=ConfigType.String,
                 ),
                 ConfigItem(
@@ -1238,7 +1293,9 @@ def setup_wizard():
                 ConfigItem(
                     "spark_api_secret", "讯飞星火 API Secret", type=ConfigType.Password
                 ),
-                ConfigItem("spark_api_key", "讯飞星火 API Key", type=ConfigType.Password),
+                ConfigItem(
+                    "spark_api_key", "讯飞星火 API Key", type=ConfigType.Password
+                ),
             ],
             "是否设置讯飞星火？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 讯飞星火 模型。请注意不要搞混App ID和API Secret。",
         )
@@ -1255,10 +1312,14 @@ def setup_wizard():
         wizard.set(
             [
                 ConfigItem(
-                    "ernie_api_key", "百度云中的文心一言 API Key", type=ConfigType.Password
+                    "ernie_api_key",
+                    "百度云中的文心一言 API Key",
+                    type=ConfigType.Password,
                 ),
                 ConfigItem(
-                    "ernie_secret_key", "百度云中的文心一言 Secret Key", type=ConfigType.Password
+                    "ernie_secret_key",
+                    "百度云中的文心一言 Secret Key",
+                    type=ConfigType.Password,
                 ),
             ],
             "是否设置文心一言？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 文心一言 模型。",
@@ -1300,7 +1361,9 @@ def setup_wizard():
             "是否设置 Azure OpenAI？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 Azure OpenAI 模型。",
         )
         print(
-            colorama.Back.GREEN + i18n("现在开始进行软件功能设置") + colorama.Style.RESET_ALL
+            colorama.Back.GREEN
+            + i18n("现在开始进行软件功能设置")
+            + colorama.Style.RESET_ALL
         )
         # 用户列表
         wizard.set_users()
@@ -1319,7 +1382,10 @@ def setup_wizard():
         wizard.set(
             [
                 ConfigItem(
-                    "check_update", "是否启用检查更新", type=ConfigType.Bool, default=True
+                    "check_update",
+                    "是否启用检查更新",
+                    type=ConfigType.Bool,
+                    default=True,
                 )
             ],
             "是否启用检查更新？如果设置，软件启动时会自动检查更新。",
@@ -1493,20 +1559,34 @@ def setup_wizard():
             "是否通过gradio分享？可以通过公网访问。",
         )
         wizard.save()
-        print(colorama.Back.GREEN + i18n("设置完成。现在请重启本程序。") + colorama.Style.RESET_ALL)
+        print(
+            colorama.Back.GREEN
+            + i18n("设置完成。现在请重启本程序。")
+            + colorama.Style.RESET_ALL
+        )
         exit()
 
 
 def reboot_chuanhu():
     import sys
+
     print(colorama.Back.GREEN + i18n("正在尝试重启...") + colorama.Style.RESET_ALL)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 
 def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = None):
     from .webui import get_html
+
     logo_class, slogan_class, question_class = "", "", ""
-    model_logo, model_logo_round, model_slogan, model_question_1, model_question_2, model_question_3, model_question_4 = "", "", "", "", "", "", ""
+    (
+        model_logo,
+        model_logo_round,
+        model_slogan,
+        model_question_1,
+        model_question_2,
+        model_question_3,
+        model_question_4,
+    ) = ("", "", "", "", "", "", "")
 
     if model is None:
         try:
@@ -1522,10 +1602,18 @@ def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = Non
         except:
             slogan_class = "hideK"
         try:
-            model_question_1 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_1"])
-            model_question_2 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_2"])
-            model_question_3 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_3"])
-            model_question_4 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_4"])
+            model_question_1 = i18n(
+                MODEL_METADATA[model_name]["placeholder"]["question_1"]
+            )
+            model_question_2 = i18n(
+                MODEL_METADATA[model_name]["placeholder"]["question_2"]
+            )
+            model_question_3 = i18n(
+                MODEL_METADATA[model_name]["placeholder"]["question_3"]
+            )
+            model_question_4 = i18n(
+                MODEL_METADATA[model_name]["placeholder"]["question_4"]
+            )
         except:
             question_class = "hideK"
     else:
@@ -1553,19 +1641,27 @@ def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = Non
         return ""
     else:
         # 除非明确指定为 squared 或 false 等，否则默认为圆角
-        if model_logo_round.lower().strip() not in ["square", "squared", "false", "0", "no", "off"]:
+        if model_logo_round.lower().strip() not in [
+            "square",
+            "squared",
+            "false",
+            "0",
+            "no",
+            "off",
+        ]:
             logo_class += " rounded"
         return get_html("chatbot_placeholder.html").format(
-            chatbot_ph_logo = model_logo,
-            chatbot_ph_slogan = model_slogan,
-            chatbot_ph_question_1 = model_question_1,
-            chatbot_ph_question_2 = model_question_2,
-            chatbot_ph_question_3 = model_question_3,
-            chatbot_ph_question_4 = model_question_4,
-            chatbot_ph_logo_class = logo_class,
-            chatbot_ph_slogan_class = slogan_class,
-            chatbot_ph_question_class = question_class
+            chatbot_ph_logo=model_logo,
+            chatbot_ph_slogan=model_slogan,
+            chatbot_ph_question_1=model_question_1,
+            chatbot_ph_question_2=model_question_2,
+            chatbot_ph_question_3=model_question_3,
+            chatbot_ph_question_4=model_question_4,
+            chatbot_ph_logo_class=logo_class,
+            chatbot_ph_slogan_class=slogan_class,
+            chatbot_ph_question_class=question_class,
         )
+
 
 def download_file(path):
     print(path)
