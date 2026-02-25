@@ -218,7 +218,7 @@ class OpenAIVisionClient(BaseLLMModel):
                     stream=stream,
                     timeout=timeout,
                 )
-            except:
+            except Exception:
                 traceback.print_exc()
                 return None
         return response
@@ -256,7 +256,7 @@ class OpenAIVisionClient(BaseLLMModel):
                 chunk_length = len(chunk)
                 try:
                     chunk = json.loads(chunk[6:])
-                except:
+                except Exception:
                     print(i18n("JSON解析错误,收到的内容: ") + f"{chunk}")
                     error_msg += chunk
                     continue
@@ -279,7 +279,7 @@ class OpenAIVisionClient(BaseLLMModel):
                         except Exception as e:
                             # logging.error(f"Error: {e}")
                             continue
-                except:
+                except Exception:
                     traceback.print_exc()
                     print(f"ERROR: {chunk}")
                     continue

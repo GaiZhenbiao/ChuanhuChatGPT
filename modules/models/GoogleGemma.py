@@ -34,7 +34,7 @@ class GoogleGemmaClient(BaseLLMModel):
                 else:
                     try:
                         model_source = MODEL_METADATA[model_name]["repo_id"]
-                    except:
+                    except Exception:
                         model_source = model_name
             dtype = torch.bfloat16
             GEMMA_TOKENIZER = AutoTokenizer.from_pretrained(

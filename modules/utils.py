@@ -382,7 +382,7 @@ def detect_converted_mark(userinput):  # deprecated
             return True
         else:
             return False
-    except:
+    except Exception:
         return True
 
 
@@ -569,7 +569,7 @@ def filter_history(user_name, keyword):
     try:
         history_names = [name for name in history_names if re.search(keyword, name, timeout=0.01)]
         return gr.update(choices=history_names)
-    except:
+    except Exception:
         return gr.update(choices=history_names)
 
 
@@ -615,7 +615,7 @@ def get_template_content(templates, selection, original_system_prompt):
     logging.debug(f"应用模板中，选择为{selection}，原始系统提示为{original_system_prompt}")
     try:
         return templates[selection]
-    except:
+    except Exception:
         return original_system_prompt
 
 
@@ -691,7 +691,7 @@ def get_geoip():
             with retrieve_proxy():
                 response = requests.get("https://ipapi.co/json/", timeout=5)
             data = response.json()
-        except:
+        except Exception:
             data = {"error": True, "reason": "连接ipapi失败"}
         if "error" in data.keys():
             # logging.warning(f"无法获取IP地址信息。\n{data}")
@@ -903,7 +903,7 @@ def beautify_err_msg(err_msg):
         return i18n("请查看 config_example.json，配置 Azure OpenAI")
     try:
         err_msg = json.loads(err_msg)["error"]["message"]
-    except:
+    except Exception:
         pass
     return err_msg
 
@@ -1069,7 +1069,7 @@ class SetupWizard:
                     print(generate_result_string(config_item, config_value))
                     try:
                         self.config[config_item.key] = int(config_value)
-                    except:
+                    except Exception:
                         print("输入的不是数字，将使用默认值。")
                 elif config_item.type == ConfigType.ListOfStrings:
                     # read one string at a time
@@ -1511,42 +1511,42 @@ def setPlaceholder(model_name: str | None = "", model: BaseLLMModel | None = Non
     if model is None:
         try:
             model_logo = MODEL_METADATA[model_name]["placeholder"]["logo"]
-        except:
+        except Exception:
             logo_class = "hideK"
         try:
             model_logo_round = MODEL_METADATA[model_name]["placeholder"]["logo_rounded"]
-        except:
+        except Exception:
             pass
         try:
             model_slogan = i18n(MODEL_METADATA[model_name]["placeholder"]["slogan"])
-        except:
+        except Exception:
             slogan_class = "hideK"
         try:
             model_question_1 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_1"])
             model_question_2 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_2"])
             model_question_3 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_3"])
             model_question_4 = i18n(MODEL_METADATA[model_name]["placeholder"]["question_4"])
-        except:
+        except Exception:
             question_class = "hideK"
     else:
         try:
             model_logo = model.placeholder["logo"]
-        except:
+        except Exception:
             logo_class = "hideK"
         try:
             model_logo_round = model.placeholder["logo_rounded"]
-        except:
+        except Exception:
             pass
         try:
             model_slogan = i18n(model.placeholder["slogan"])
-        except:
+        except Exception:
             slogan_class = "hideK"
         try:
             model_question_1 = i18n(model.placeholder["question_1"])
             model_question_2 = i18n(model.placeholder["question_2"])
             model_question_3 = i18n(model.placeholder["question_3"])
             model_question_4 = i18n(model.placeholder["question_4"])
-        except:
+        except Exception:
             question_class = "hideK"
 
     if logo_class == "hideK" and slogan_class == "hideK" and question_class == "hideK":

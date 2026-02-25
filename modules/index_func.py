@@ -32,7 +32,7 @@ def get_documents(file_src):
 
                     two_column = advance_docs["pdf"].get("two_column", False)
                     pdftext = parse_pdf(filepath, two_column).text
-                except:
+                except Exception:
                     pdftext = ""
                     with open(filepath, "rb") as pdfFileObj:
                         pdfReader = PyPDF2.PdfReader(pdfFileObj)

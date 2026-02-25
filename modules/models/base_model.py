@@ -178,7 +178,7 @@ class ModelType(Enum):
             try:
                 assert MODEL_METADATA[model_name]["multimodal"] == True
                 model_type = ModelType.OpenAIVision
-            except:
+            except Exception:
                 if "instruct" in model_name_lower:
                     model_type = ModelType.OpenAIInstruct
                 elif "vision" in model_name_lower:
@@ -252,7 +252,7 @@ def download(repo_id, filename, retry=10):
             with open("./models/downloaded_models.json", "w") as f:
                 json.dump(downloaded_models, f)
             break
-        except:
+        except Exception:
             print("Error downloading model, retrying...")
             retry -= 1
     if retry == 0:
@@ -1046,7 +1046,7 @@ class BaseLLMModel:
                             new_history.append(construct_assistant(item))
                     saved_json["history"] = new_history
                     logging.info(new_history)
-            except:
+            except Exception:
                 pass
             if len(saved_json["chatbot"]) < len(saved_json["history"]) // 2:
                 logging.info("Trimming corrupted history...")
@@ -1105,7 +1105,7 @@ class BaseLLMModel:
                 gr.DownloadButton(value=tmp_json_for_download, interactive=True),
                 gr.DownloadButton(value=tmp_md_for_download, interactive=True),
             )
-        except:
+        except Exception:
             # 没有对话历史或者对话历史解析失败
             logging.debug(f"没有找到对话历史记录 {self.history_file_path}")
             self.reset()
@@ -1152,7 +1152,7 @@ class BaseLLMModel:
             os.remove(history_file_path)
             os.remove(md_history_file_path)
             return i18n("删除对话历史成功"), get_history_list(self.user_name), []
-        except:
+        except Exception:
             logging.info(f"删除对话历史失败 {history_file_path}")
             return (
                 i18n("对话历史") + filename + i18n("已经被删除啦"),

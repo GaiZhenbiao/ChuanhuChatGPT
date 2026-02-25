@@ -201,7 +201,7 @@ class Yuan:
                         txt = txt[:txt.index(tr)]
                     else:
                         continue
-        except:
+        except Exception:
             return txt
         return txt
 

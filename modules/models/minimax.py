@@ -122,7 +122,7 @@ class MiniMax_Client(BaseLLMModel):
                 stream=stream,
                 timeout=timeout,
             )
-        except:
+        except Exception:
             return None
 
         return response
