@@ -73,7 +73,7 @@
 | [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM) ||
 | [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS) ||
 | [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [通义千问](https://github.com/QwenLM/Qwen/tree/main) ||
-| [MiniMax](https://api.minimax.chat/) ||[DeepSeek](https://platform.deepseek.com)||
+| [MiniMax](https://platform.minimax.io/) | ✨ 支持 MiniMax-M2.5, M2.5-highspeed (204K context) |[DeepSeek](https://platform.deepseek.com)||
 | [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输|||
 | [Midjourney](https://www.midjourney.com/) | 不支持流式传输|||
 | [Claude](https://www.anthropic.com/) | ✨ 现已支持Claude 3 Opus、Sonnet，Haiku将会在推出后的第一时间支持|||

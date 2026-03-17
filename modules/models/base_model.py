@@ -161,6 +161,7 @@ class ModelType(Enum):
     Ollama = 21
     Groq = 22
     DeepSeek = 23
+    MiniMaxM25 = 24
 
     @classmethod
     def get_type(cls, model_name: str):
