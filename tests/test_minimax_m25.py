@@ -1,4 +1,4 @@
-"""Unit tests for MiniMax M2.5 provider integration."""
+"""Unit tests for MiniMax provider integration (M2.5 and M2.7 models)."""
 
 import pytest
 
@@ -24,6 +24,18 @@ class TestMiniMaxM25ModelType:
         model_type = ModelType.get_type("MiniMax-M2.5-highspeed")
         assert model_type == ModelType.MiniMaxM25
 
+    def test_minimax_m27_type_detection(self):
+        """MiniMax-M2.7 should be detected as MiniMaxM25 type via metadata."""
+        from modules.models.base_model import ModelType
+        model_type = ModelType.get_type("MiniMax-M2.7")
+        assert model_type == ModelType.MiniMaxM25
+
+    def test_minimax_m27_highspeed_type_detection(self):
+        """MiniMax-M2.7-highspeed should be detected as MiniMaxM25 type via metadata."""
+        from modules.models.base_model import ModelType
+        model_type = ModelType.get_type("MiniMax-M2.7-highspeed")
+        assert model_type == ModelType.MiniMaxM25
+
     def test_old_minimax_type_detection(self):
         """Old minimax-abab5-chat should still be detected as Minimax type."""
         from modules.models.base_model import ModelType
@@ -31,8 +43,8 @@ class TestMiniMaxM25ModelType:
         assert model_type == ModelType.Minimax
 
 
-class TestMiniMaxM25ModelMetadata:
-    """Test MiniMax M2.5 model metadata configuration."""
+class TestMiniMaxModelMetadata:
+    """Test MiniMax model metadata configuration."""
 
     def test_m25_in_online_models(self):
         """MiniMax-M2.5 should be in ONLINE_MODELS list."""
@@ -40,11 +52,30 @@ class TestMiniMaxM25ModelMetadata:
         assert "MiniMax-M2.5" in ONLINE_MODELS
         assert "MiniMax-M2.5-highspeed" in ONLINE_MODELS
 
+    def test_m27_in_online_models(self):
+        """MiniMax-M2.7 should be in ONLINE_MODELS list."""
+        from modules.presets import ONLINE_MODELS
+        assert "MiniMax-M2.7" in ONLINE_MODELS
+        assert "MiniMax-M2.7-highspeed" in ONLINE_MODELS
+
+    def test_m27_listed_before_m25(self):
+        """MiniMax-M2.7 should appear before M2.5 in ONLINE_MODELS (newest first)."""
+        from modules.presets import ONLINE_MODELS
+        idx_m27 = ONLINE_MODELS.index("MiniMax-M2.7")
+        idx_m25 = ONLINE_MODELS.index("MiniMax-M2.5")
+        assert idx_m27 < idx_m25
+
     def test_m25_metadata_exists(self):
         """MiniMax-M2.5 should have metadata entry."""
         from modules.presets import MODEL_METADATA
         assert "MiniMax-M2.5" in MODEL_METADATA
         assert "MiniMax-M2.5-highspeed" in MODEL_METADATA
+
+    def test_m27_metadata_exists(self):
+        """MiniMax-M2.7 should have metadata entry."""
+        from modules.presets import MODEL_METADATA
+        assert "MiniMax-M2.7" in MODEL_METADATA
+        assert "MiniMax-M2.7-highspeed" in MODEL_METADATA
 
     def test_m25_metadata_model_name(self):
         """Model name should be the API model ID."""
@@ -52,11 +83,23 @@ class TestMiniMaxM25ModelMetadata:
         assert MODEL_METADATA["MiniMax-M2.5"]["model_name"] == "MiniMax-M2.5"
         assert MODEL_METADATA["MiniMax-M2.5-highspeed"]["model_name"] == "MiniMax-M2.5-highspeed"
 
+    def test_m27_metadata_model_name(self):
+        """Model name should be the API model ID."""
+        from modules.presets import MODEL_METADATA
+        assert MODEL_METADATA["MiniMax-M2.7"]["model_name"] == "MiniMax-M2.7"
+        assert MODEL_METADATA["MiniMax-M2.7-highspeed"]["model_name"] == "MiniMax-M2.7-highspeed"
+
     def test_m25_metadata_api_host(self):
         """API host should be the MiniMax OpenAI-compatible endpoint."""
         from modules.presets import MODEL_METADATA
         assert MODEL_METADATA["MiniMax-M2.5"]["api_host"] == "https://api.minimax.io"
         assert MODEL_METADATA["MiniMax-M2.5-highspeed"]["api_host"] == "https://api.minimax.io"
+
+    def test_m27_metadata_api_host(self):
+        """API host should be the MiniMax OpenAI-compatible endpoint."""
+        from modules.presets import MODEL_METADATA
+        assert MODEL_METADATA["MiniMax-M2.7"]["api_host"] == "https://api.minimax.io"
+        assert MODEL_METADATA["MiniMax-M2.7-highspeed"]["api_host"] == "https://api.minimax.io"
 
     def test_m25_metadata_token_limit(self):
         """Token limit should be 204800 for M2.5 models."""
@@ -64,11 +107,23 @@ class TestMiniMaxM25ModelMetadata:
         assert MODEL_METADATA["MiniMax-M2.5"]["token_limit"] == 204800
         assert MODEL_METADATA["MiniMax-M2.5-highspeed"]["token_limit"] == 204800
 
+    def test_m27_metadata_token_limit(self):
+        """Token limit should be 204800 for M2.7 models."""
+        from modules.presets import MODEL_METADATA
+        assert MODEL_METADATA["MiniMax-M2.7"]["token_limit"] == 204800
+        assert MODEL_METADATA["MiniMax-M2.7-highspeed"]["token_limit"] == 204800
+
     def test_m25_metadata_model_type(self):
         """Model type should be MiniMaxM25."""
         from modules.presets import MODEL_METADATA
         assert MODEL_METADATA["MiniMax-M2.5"]["model_type"] == "MiniMaxM25"
         assert MODEL_METADATA["MiniMax-M2.5-highspeed"]["model_type"] == "MiniMaxM25"
+
+    def test_m27_metadata_model_type(self):
+        """Model type should be MiniMaxM25 (same OpenAI-compatible API)."""
+        from modules.presets import MODEL_METADATA
+        assert MODEL_METADATA["MiniMax-M2.7"]["model_type"] == "MiniMaxM25"
+        assert MODEL_METADATA["MiniMax-M2.7-highspeed"]["model_type"] == "MiniMaxM25"
 
     def test_m25_metadata_not_multimodal(self):
         """M2.5 models should not be multimodal."""
@@ -76,11 +131,23 @@ class TestMiniMaxM25ModelMetadata:
         assert MODEL_METADATA["MiniMax-M2.5"]["multimodal"] is False
         assert MODEL_METADATA["MiniMax-M2.5-highspeed"]["multimodal"] is False
 
+    def test_m27_metadata_not_multimodal(self):
+        """M2.7 models should not be multimodal."""
+        from modules.presets import MODEL_METADATA
+        assert MODEL_METADATA["MiniMax-M2.7"]["multimodal"] is False
+        assert MODEL_METADATA["MiniMax-M2.7-highspeed"]["multimodal"] is False
+
     def test_m25_metadata_has_description(self):
         """M2.5 models should have descriptions."""
         from modules.presets import MODEL_METADATA
         assert len(MODEL_METADATA["MiniMax-M2.5"]["description"]) > 0
         assert len(MODEL_METADATA["MiniMax-M2.5-highspeed"]["description"]) > 0
+
+    def test_m27_metadata_has_description(self):
+        """M2.7 models should have descriptions."""
+        from modules.presets import MODEL_METADATA
+        assert len(MODEL_METADATA["MiniMax-M2.7"]["description"]) > 0
+        assert len(MODEL_METADATA["MiniMax-M2.7-highspeed"]["description"]) > 0
 
     def test_old_minimax_still_exists(self):
         """Old minimax-abab5-chat metadata should still exist."""
@@ -88,8 +155,8 @@ class TestMiniMaxM25ModelMetadata:
         assert "minimax-abab5-chat" in MODEL_METADATA
 
 
-class TestMiniMaxM25ApiHost:
-    """Test API host URL formatting for MiniMax M2.5."""
+class TestMiniMaxApiHost:
+    """Test API host URL formatting for MiniMax."""
 
     def test_format_openai_host_minimax(self):
         """format_openai_host should correctly format MiniMax API host."""
@@ -113,8 +180,8 @@ class TestMiniMaxM25ApiHost:
         assert api_base == "https://api.minimaxi.com/v1"
 
 
-class TestMiniMaxM25ModelRouting:
-    """Test model routing for MiniMax M2.5 in models.py."""
+class TestMiniMaxModelRouting:
+    """Test model routing for MiniMax models in models.py."""
 
     def test_m25_resolves_to_minimax_m25_type(self):
         """MiniMax-M2.5 should resolve to MiniMaxM25 model type via get_type."""
@@ -128,6 +195,18 @@ class TestMiniMaxM25ModelRouting:
         model_type = ModelType.get_type("MiniMax-M2.5-highspeed")
         assert model_type == ModelType.MiniMaxM25
 
+    def test_m27_resolves_to_minimax_m25_type(self):
+        """MiniMax-M2.7 should resolve to MiniMaxM25 model type via get_type."""
+        from modules.models.base_model import ModelType
+        model_type = ModelType.get_type("MiniMax-M2.7")
+        assert model_type == ModelType.MiniMaxM25
+
+    def test_m27_highspeed_resolves_to_minimax_m25_type(self):
+        """MiniMax-M2.7-highspeed should resolve to MiniMaxM25 model type."""
+        from modules.models.base_model import ModelType
+        model_type = ModelType.get_type("MiniMax-M2.7-highspeed")
+        assert model_type == ModelType.MiniMaxM25
+
     def test_old_minimax_resolves_to_minimax_type(self):
         """Old minimax-abab5-chat should resolve to Minimax (not MiniMaxM25)."""
         from modules.models.base_model import ModelType
@@ -136,8 +215,8 @@ class TestMiniMaxM25ModelRouting:
         assert model_type != ModelType.MiniMaxM25
 
 
-class TestMiniMaxM25DefaultConfig:
-    """Test default configuration values for MiniMax M2.5."""
+class TestMiniMaxDefaultConfig:
+    """Test default configuration values for MiniMax models."""
 
     def test_default_temperature(self):
         """Default temperature should be 1.0 (from DEFAULT_METADATA)."""
@@ -147,13 +226,20 @@ class TestMiniMaxM25DefaultConfig:
     def test_m25_inherits_default_temperature(self):
         """M2.5 models should inherit default temperature after config merge."""
         from modules.presets import MODEL_METADATA, DEFAULT_METADATA
-        # After config.py merges DEFAULT_METADATA into each model entry,
-        # models without an explicit temperature get the default value.
         default_temp = DEFAULT_METADATA["temperature"]
         m25_temp = MODEL_METADATA["MiniMax-M2.5"].get("temperature", default_temp)
         m25hs_temp = MODEL_METADATA["MiniMax-M2.5-highspeed"].get("temperature", default_temp)
         assert m25_temp == default_temp
         assert m25hs_temp == default_temp
+
+    def test_m27_inherits_default_temperature(self):
+        """M2.7 models should inherit default temperature after config merge."""
+        from modules.presets import MODEL_METADATA, DEFAULT_METADATA
+        default_temp = DEFAULT_METADATA["temperature"]
+        m27_temp = MODEL_METADATA["MiniMax-M2.7"].get("temperature", default_temp)
+        m27hs_temp = MODEL_METADATA["MiniMax-M2.7-highspeed"].get("temperature", default_temp)
+        assert m27_temp == default_temp
+        assert m27hs_temp == default_temp
 
     def test_default_stream(self):
         """Default stream should be True."""

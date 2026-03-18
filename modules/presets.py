@@ -88,6 +88,8 @@ ONLINE_MODELS = [
     "yuanai-1.0-translate",
     "yuanai-1.0-dialog",
     "yuanai-1.0-rhythm_poems",
+    "MiniMax-M2.7",
+    "MiniMax-M2.7-highspeed",
     "MiniMax-M2.5",
     "MiniMax-M2.5-highspeed",
     "minimax-abab5-chat",
@@ -560,6 +562,22 @@ MODEL_METADATA = {
         "token_limit": 64000,
         "multimodal": False,
         "model_type": "DeepSeek"
+    },
+    "MiniMax-M2.7": {
+        "model_name": "MiniMax-M2.7",
+        "api_host": "https://api.minimax.io",
+        "description": "MiniMax M2.7 - Latest flagship model with enhanced reasoning and generation capabilities. 204K context window.",
+        "token_limit": 204800,
+        "multimodal": False,
+        "model_type": "MiniMaxM25"
+    },
+    "MiniMax-M2.7-highspeed": {
+        "model_name": "MiniMax-M2.7-highspeed",
+        "api_host": "https://api.minimax.io",
+        "description": "MiniMax M2.7 High Speed - Same performance, faster and more agile. 204K context window.",
+        "token_limit": 204800,
+        "multimodal": False,
+        "model_type": "MiniMaxM25"
     },
     "MiniMax-M2.5": {
         "model_name": "MiniMax-M2.5",
