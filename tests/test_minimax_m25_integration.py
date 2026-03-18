@@ -1,7 +1,6 @@
 """Integration tests for MiniMax M2.5 provider - requires MINIMAX_API_KEY."""
 
 import os
-import json
 import pytest
 import requests
 

@@ -96,7 +96,7 @@ def get_model(
         elif model_type == ModelType.MiniMaxM25:
             logging.info(f"正在加载 MiniMax M2.5 模型: {model_name}")
             from .OpenAIVision import OpenAIVisionClient
-            access_key = os.environ.get("MINIMAX_API_KEY", access_key)
+            access_key = os.environ.get("MINIMAX_API_KEY") or access_key
             model = OpenAIVisionClient(
                 model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.Minimax:

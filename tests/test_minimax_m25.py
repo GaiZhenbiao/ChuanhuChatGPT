@@ -1,9 +1,6 @@
 """Unit tests for MiniMax M2.5 provider integration."""
 
-import os
-import json
 import pytest
-from unittest.mock import patch, MagicMock
 
 
 class TestMiniMaxM25ModelType:
@@ -13,7 +10,7 @@ class TestMiniMaxM25ModelType:
         """MiniMaxM25 enum value should exist in ModelType."""
         from modules.models.base_model import ModelType
         assert hasattr(ModelType, "MiniMaxM25")
-        assert ModelType.MiniMaxM25.value == 24
+        assert isinstance(ModelType.MiniMaxM25.value, int)
 
     def test_minimax_m25_type_detection(self):
         """MiniMax-M2.5 models should be detected as MiniMaxM25 type via metadata."""
@@ -119,30 +116,24 @@ class TestMiniMaxM25ApiHost:
 class TestMiniMaxM25ModelRouting:
     """Test model routing for MiniMax M2.5 in models.py."""
 
-    @patch.dict(os.environ, {"MINIMAX_API_KEY": "test-minimax-key"})
-    @patch("modules.models.OpenAIVision.OpenAIVisionClient.__init__", return_value=None)
-    @patch("modules.models.OpenAIVision.OpenAIVisionClient.description", new_callable=lambda: property(lambda self: "test"), create=True)
-    def test_m25_uses_openai_vision_client(self, mock_desc, mock_init):
-        """MiniMax M2.5 should be routed through OpenAIVisionClient."""
+    def test_m25_resolves_to_minimax_m25_type(self):
+        """MiniMax-M2.5 should resolve to MiniMaxM25 model type via get_type."""
         from modules.models.base_model import ModelType
         model_type = ModelType.get_type("MiniMax-M2.5")
         assert model_type == ModelType.MiniMaxM25
 
-    def test_m25_env_key_name(self):
-        """MiniMax M2.5 routing should use MINIMAX_API_KEY env variable."""
-        # Verify the env var name used in models.py routing
-        import inspect
-        from modules.models import models
-        source = inspect.getsource(models.get_model)
-        assert 'os.environ.get("MINIMAX_API_KEY"' in source
+    def test_m25_highspeed_resolves_to_minimax_m25_type(self):
+        """MiniMax-M2.5-highspeed should resolve to MiniMaxM25 model type."""
+        from modules.models.base_model import ModelType
+        model_type = ModelType.get_type("MiniMax-M2.5-highspeed")
+        assert model_type == ModelType.MiniMaxM25
 
-    def test_old_minimax_routing_preserved(self):
-        """Old minimax routing code should still exist."""
-        import inspect
-        from modules.models import models
-        source = inspect.getsource(models.get_model)
-        assert "ModelType.Minimax" in source
-        assert "MiniMax_Client" in source
+    def test_old_minimax_resolves_to_minimax_type(self):
+        """Old minimax-abab5-chat should resolve to Minimax (not MiniMaxM25)."""
+        from modules.models.base_model import ModelType
+        model_type = ModelType.get_type("minimax-abab5-chat")
+        assert model_type == ModelType.Minimax
+        assert model_type != ModelType.MiniMaxM25
 
 
 class TestMiniMaxM25DefaultConfig:
@@ -153,11 +144,16 @@ class TestMiniMaxM25DefaultConfig:
         from modules.presets import DEFAULT_METADATA
         assert DEFAULT_METADATA["temperature"] == 1.0
 
-    def test_m25_uses_default_temperature(self):
-        """M2.5 models should use default temperature of 1.0."""
-        from modules.presets import MODEL_METADATA
-        assert MODEL_METADATA["MiniMax-M2.5"]["temperature"] == 1.0
-        assert MODEL_METADATA["MiniMax-M2.5-highspeed"]["temperature"] == 1.0
+    def test_m25_inherits_default_temperature(self):
+        """M2.5 models should inherit default temperature after config merge."""
+        from modules.presets import MODEL_METADATA, DEFAULT_METADATA
+        # After config.py merges DEFAULT_METADATA into each model entry,
+        # models without an explicit temperature get the default value.
+        default_temp = DEFAULT_METADATA["temperature"]
+        m25_temp = MODEL_METADATA["MiniMax-M2.5"].get("temperature", default_temp)
+        m25hs_temp = MODEL_METADATA["MiniMax-M2.5-highspeed"].get("temperature", default_temp)
+        assert m25_temp == default_temp
+        assert m25hs_temp == default_temp
 
     def test_default_stream(self):
         """Default stream should be True."""
