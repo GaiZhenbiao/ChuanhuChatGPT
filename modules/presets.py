@@ -69,6 +69,9 @@ ONLINE_MODELS = [
     "Claude 3 Opus",
     "DeepSeek Chat",
     "DeepSeek R1",
+    "Novita Kimi K2.5",
+    "Novita GLM-5",
+    "Novita MiniMax M2.5",
     "川虎助理",
     "川虎助理 Pro",
     "DALL-E 3",
@@ -558,6 +561,33 @@ MODEL_METADATA = {
         "token_limit": 64000,
         "multimodal": False,
         "model_type": "DeepSeek"
+    },
+    "Novita Kimi K2.5": {
+        "model_name": "moonshotai/kimi-k2.5",
+        "api_host": "https://api.novita.ai/openai",
+        "description": "Novita Kimi K2.5 - 262K context, multimodal with vision",
+        "token_limit": 262144,
+        "max_generation": 262144,
+        "multimodal": True,
+        "model_type": "Novita",
+    },
+    "Novita GLM-5": {
+        "model_name": "zai-org/glm-5",
+        "api_host": "https://api.novita.ai/openai",
+        "description": "Novita GLM-5 - 202K context, reasoning",
+        "token_limit": 202800,
+        "max_generation": 131072,
+        "multimodal": False,
+        "model_type": "Novita",
+    },
+    "Novita MiniMax M2.5": {
+        "model_name": "minimax/minimax-m2.5",
+        "api_host": "https://api.novita.ai/openai",
+        "description": "Novita MiniMax M2.5 - 204K context",
+        "token_limit": 204800,
+        "max_generation": 131100,
+        "multimodal": False,
+        "model_type": "Novita",
     }
 }
 

@@ -47,6 +47,12 @@ def get_model(
             logging.info(access_key)
             model = OpenAIVisionClient(
                 model_name, api_key=access_key, user_name=user_name)
+        elif model_type == ModelType.Novita:
+            logging.info(f"正在加载 Novita 模型: {model_name}")
+            from .OpenAIVision import OpenAIVisionClient
+            access_key = os.environ.get("NOVITA_API_KEY", access_key)
+            model = OpenAIVisionClient(
+                model_name, api_key=access_key, user_name=user_name)
         elif model_type == ModelType.OpenAIInstruct:
             logging.info(f"正在加载OpenAI Instruct模型: {model_name}")
             from .OpenAIInstruct import OpenAI_Instruct_Client
