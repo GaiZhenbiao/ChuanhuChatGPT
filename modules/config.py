@@ -209,7 +209,7 @@ if api_host is not None:
 
 default_chuanhu_assistant_model = config.get(
     "default_chuanhu_assistant_model", "gpt-4-turbo-preview")
-for x in ["GOOGLE_CSE_ID", "GOOGLE_API_KEY", "WOLFRAM_ALPHA_APPID", "SERPAPI_API_KEY"]:
+for x in ["GOOGLE_CSE_ID", "GOOGLE_API_KEY", "WOLFRAM_ALPHA_APPID", "SERPAPI_API_KEY", "TAVILY_API_KEY"]:
     if config.get(x, None) is not None:
         os.environ[x] = config[x]
 
