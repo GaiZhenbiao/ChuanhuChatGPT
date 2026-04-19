@@ -56,7 +56,7 @@ class Midjourney_Client(XMChat):
         self.command_splitter = "::"
 
         if mj_temp_folder:
-            temp = "./tmp"
+            temp = mj_temp_folder
             if user_name:
                 temp = os.path.join(temp, user_name)
             if not os.path.exists(temp):

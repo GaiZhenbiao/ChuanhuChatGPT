@@ -802,8 +802,11 @@ demo.title = i18n("川虎Chat 🚀")
 if __name__ == "__main__":
     reload_javascript()
     setup_wizard()
+    _allowed_paths = ["web_assets"]
+    if config.midjourney_temp_folder:
+        _allowed_paths.append(config.midjourney_temp_folder)
     demo.queue().launch(
-        allowed_paths=["web_assets"],
+        allowed_paths=_allowed_paths,
         blocked_paths=["config.json", "files", "models", "lora", "modules", "history"],
         server_name=server_name,
         server_port=server_port,
