@@ -267,18 +267,21 @@ class OpenAIVisionClient(BaseLLMModel):
                         elif "finish_reason" in chunk["choices"][0]:
                             finish_reason = chunk["choices"][0]["finish_reason"]
                         else:
-                            finish_reason = chunk["finish_details"]
-                        if finish_reason == "stop":
-                            break
+                            finish_reason = chunk.get("finish_details")
                         try:
-                            if "reasoning_content" in chunk["choices"][0]["delta"]:
-                                reasoning_content = chunk["choices"][0]["delta"]["reasoning_content"]
+                            delta = chunk["choices"][0]["delta"]
+                            if "reasoning_content" in delta:
+                                reasoning_content = delta["reasoning_content"]
                             else:
                                 reasoning_content = None
-                            yield chunk["choices"][0]["delta"]["content"], reasoning_content
+                            content = delta.get("content")
+                            if content is not None:
+                                yield content, reasoning_content
                         except Exception as e:
                             # logging.error(f"Error: {e}")
-                            continue
+                            pass
+                        if finish_reason == "stop":
+                            break
                 except Exception:
                     traceback.print_exc()
                     print(f"ERROR: {chunk}")
