@@ -35,6 +35,7 @@ __all__ = [
     "chat_name_method_index",
     "HIDE_MY_KEY",
     "hfspaceflag",
+    "disabled_extensions",
 ]
 
 # 添加一个统一的config文件，避免文件过多造成的疑惑（优先级最低）
@@ -58,6 +59,7 @@ check_update = config.get("check_update", True)
 show_api_billing = config.get("show_api_billing", False)
 show_api_billing = bool(os.environ.get("SHOW_API_BILLING", show_api_billing))
 chat_name_method_index = config.get("chat_name_method_index", 2)
+disabled_extensions = config.get("disabled_extensions", [])
 
 if os.path.exists("api_key.txt"):
     logging.info("检测到api_key.txt文件，正在进行迁移...")
