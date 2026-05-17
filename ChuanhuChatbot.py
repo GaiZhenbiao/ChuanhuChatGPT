@@ -14,12 +14,14 @@ from modules.presets import *
 from modules.utils import *
 from modules.config import *
 from modules import config
+from modules import extensions
 import gradio as gr
 import colorama
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 patch_gradio()
+extensions.load_extensions(disabled_extensions=disabled_extensions)
 
 # with open("web_assets/css/ChuanhuChat.css", "r", encoding="utf-8") as f:
 #     ChuanhuChatCSS = f.read()
@@ -344,9 +346,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 value=user_name.value,
                                 lines=1,
                             )
-                    with gr.Tab(label=i18n("拓展")):
-                        gr.Markdown(
-                            "Will be here soon...\n(We hope)\n\nAnd we hope you can help us to make more extensions!")
+                    extensions.render_extension_tabs()
 
                     # changeAPIURLBtn = gr.Button(i18n("🔄 切换API地址"))
 
@@ -357,6 +357,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     gr.Markdown("## "+i18n("设置"))
                     gr.HTML(get_html("close_btn.html").format(
                         obj="box"), elem_classes="close-btn")
+                gr.HTML(
+                    f'<span id="extension-settings-label-source" style="display:none">{i18n("插件设置")}</span>'
+                )
                 with gr.Tabs(elem_id="chuanhu-setting-tabs"):
                     # with gr.Tab(label=i18n("模型")):
 
@@ -425,6 +428,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             elem_classes="view-only-textbox no-container",
                         )
 
+                    with gr.Tab(label=i18n("插件")):
+                        extensions.render_extension_manager()
+
                     with gr.Tab(label=i18n("关于"), elem_id="about-tab"):
                         gr.Markdown(
                             '<img alt="Chuanhu Chat logo" src="file=web_assets/icon/any-icon-512.png" style="max-width: 144px;">')
@@ -432,6 +438,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         gr.HTML(get_html("footer.html").format(
                             versions=versions_html()), elem_id="footer")
                         gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
+
+                    extensions.render_extension_settings()
 
             with gr.Group(elem_id="chuanhu-training"):
                 with gr.Row():
@@ -803,6 +811,7 @@ if __name__ == "__main__":
     reload_javascript()
     setup_wizard()
     _allowed_paths = ["web_assets"]
+    _allowed_paths.append("extensions")
     if config.midjourney_temp_folder:
         _allowed_paths.append(config.midjourney_temp_folder)
     demo.queue().launch(

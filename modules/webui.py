@@ -4,6 +4,7 @@ import os
 import gradio as gr
 
 from . import shared
+from . import extensions
 
 # with open("./assets/ChuanhuChat.js", "r", encoding="utf-8") as f, \
 #     open("./assets/external-scripts.js", "r", encoding="utf-8") as f1:
@@ -19,7 +20,8 @@ def get_html(filename):
     return ""
 
 def webpath(fn):
-    if fn.startswith(shared.assets_path):
+    fn = str(fn)
+    if fn.startswith(shared.assets_path) or fn.startswith(shared.chuanhu_path):
         web_path = os.path.relpath(fn, shared.chuanhu_path).replace('\\', '/')
     else:
         web_path = os.path.abspath(fn)
@@ -33,12 +35,17 @@ def javascript_html():
         head += f'<script type="text/javascript" src="{webpath(script.path)}"></script>\n'
     for script in list_scripts("javascript", ".mjs"):
         head += f'<script type="module" src="{webpath(script.path)}"></script>\n'
+    for script in extensions.javascript_files():
+        script_type = "module" if script.suffix.lower() == ".mjs" else "text/javascript"
+        head += f'<script type="{script_type}" src="{webpath(script)}"></script>\n'
     return head
 
 def css_html():
     head = ""
     for cssfile in list_scripts("stylesheet", ".css"):
         head += f'<link rel="stylesheet" property="stylesheet" href="{webpath(cssfile.path)}">'
+    for cssfile in extensions.stylesheet_files():
+        head += f'<link rel="stylesheet" property="stylesheet" href="{webpath(cssfile)}">'
     return head
 
 def list_scripts(scriptdirname, extension):

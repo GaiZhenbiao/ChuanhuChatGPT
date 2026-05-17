@@ -31,8 +31,10 @@ from langchain.schema import (AgentAction, AgentFinish, AIMessage, BaseMessage,
                               HumanMessage, SystemMessage)
 
 from .. import shared
+from .. import plugin_callbacks
 from ..config import retrieve_proxy, auth_list
 from ..index_func import *
+from ..plugin_context import ChatContext, ChatErrorContext
 from ..presets import *
 from ..utils import *
 
@@ -602,6 +604,21 @@ class BaseLLMModel:
         should_check_token_count=True,
     ):  # repetition_penalty, top_k
         status_text = "开始生成回答……"
+        chat_context = ChatContext(
+            model=self,
+            user_input=inputs,
+            chatbot=chatbot,
+            use_websearch=use_websearch,
+            files=files,
+            reply_language=reply_language,
+            status_text=status_text,
+        )
+        plugin_callbacks.invoke("before_chat", chat_context)
+        inputs = chat_context.user_input
+        chatbot = chat_context.chatbot
+        use_websearch = chat_context.use_websearch
+        files = chat_context.files
+        reply_language = chat_context.reply_language
         if type(inputs) == list:
             logging.info(
                 "用户"
@@ -644,6 +661,17 @@ class BaseLLMModel:
             reply_language=reply_language,
             chatbot=chatbot,
         )
+        chat_context.limited_context = limited_context
+        chat_context.fake_input = fake_inputs
+        chat_context.display_append = display_append
+        chat_context.prepared_input = inputs
+        chat_context.chatbot = chatbot
+        plugin_callbacks.invoke("after_prepare", chat_context)
+        limited_context = chat_context.limited_context
+        fake_inputs = chat_context.fake_input
+        display_append = chat_context.display_append
+        inputs = chat_context.prepared_input
+        chatbot = chat_context.chatbot
         yield chatbot + [(fake_inputs, "")], status_text
 
         if (
@@ -675,6 +703,15 @@ class BaseLLMModel:
             self.history.append(inputs)
         else:
             self.history.append(construct_user(inputs))
+        chat_context.prepared_input = inputs
+        chat_context.chatbot = chatbot
+        plugin_callbacks.invoke("before_model_call", chat_context)
+        if chat_context.prepared_input != inputs:
+            inputs = chat_context.prepared_input
+            if type(inputs) == list:
+                self.history[-1] = inputs
+            else:
+                self.history[-1] = construct_user(inputs)
 
         start_time = time.time()
         try:
@@ -699,9 +736,20 @@ class BaseLLMModel:
                 yield chatbot, status_text
         except Exception as e:
             traceback.print_exc()
+            plugin_callbacks.invoke("chat_error", ChatErrorContext(self, e, chat_context))
             status_text = STANDARD_ERROR_MSG + beautify_err_msg(str(e))
             yield chatbot, status_text
         end_time = time.time()
+        if len(self.history) > 0 and isinstance(self.history[-1], dict) and self.history[-1].get("role") == "assistant":
+            chat_context.assistant_reply = self.history[-1]["content"]
+            chat_context.chatbot = chatbot
+            chat_context.status_text = status_text
+            plugin_callbacks.invoke("after_chat", chat_context)
+            if isinstance(chat_context.assistant_reply, str) and chat_context.assistant_reply != self.history[-1]["content"]:
+                self.history[-1] = construct_assistant(chat_context.assistant_reply)
+                if chatbot:
+                    chatbot[-1] = (chatbot[-1][0], chat_context.assistant_reply + chat_context.display_append)
+                yield chatbot, status_text
         if len(self.history) > 1 and self.history[-1]["content"] != fake_inputs:
             logging.info(
                 "回答为："
@@ -735,6 +783,8 @@ class BaseLLMModel:
 
         self.chatbot = chatbot
         self.auto_save(chatbot)
+        chat_context.history_file_path = self.history_file_path
+        plugin_callbacks.invoke("after_history_saved", chat_context)
 
     def retry(
         self,

@@ -1,0 +1,16 @@
+{
+  "id": "auto_notes",
+  "name": "自动笔记",
+  "name_i18n": {
+    "en_US": "Auto notes"
+  },
+  "version": "0.1.0",
+  "description": "把启用期间的问答自动追加到 Markdown 笔记，适合沉淀会议纪要、学习记录和调试日志。",
+  "description_i18n": {
+    "en_US": "Append Q&A during enabled sessions to a Markdown note, useful for meeting notes, study logs, and debugging records."
+  },
+  "author": "ChuanhuChatGPT",
+  "enabled": true,
+  "priority": 110,
+  "tags": ["notes", "archive", "after_chat"]
+}

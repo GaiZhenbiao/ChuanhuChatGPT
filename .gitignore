@@ -149,6 +149,8 @@ files/
 tmp/
 
 scripts/
+!extensions/**/scripts/
+!extensions/**/scripts/*.py
 include/
 pyvenv.cfg
 

@@ -69,6 +69,7 @@
     // 是否多个API Key轮换使用
     "multi_api_key": false,
     "hide_my_key": false, // 如果你想在UI中隐藏 API 密钥输入框，将此值设置为 true
+    "disabled_extensions": [], // 禁用的插件 ID 列表，例如 ["prompt_prefix_demo"]
     // "available_models": ["GPT3.5 Turbo", "GPT4 Turbo", "GPT4 Vision"], // 可用的模型列表，将覆盖默认的可用模型列表
     // "extra_models": ["模型名称3", "模型名称4", ...], // 额外的模型，将添加到可用的模型列表之后
     // "extra_model_metadata": {

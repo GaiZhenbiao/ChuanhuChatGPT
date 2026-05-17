@@ -1,0 +1,54 @@
+.prompt-tools-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prompt-tools-language {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--body-text-color);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.prompt-tools-language select {
+  border: none;
+  border-radius: var(--input-radius);
+  background: var(--input-background-fill);
+  box-shadow: var(--input-shadow);
+  color: var(--body-text-color);
+  font: inherit;
+  padding: 8px 10px;
+}
+
+.prompt-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.prompt-tools-button {
+  border: none;
+  border-radius: var(--button-large-radius);
+  background: var(--button-secondary-background-fill);
+  box-shadow: var(--button-shadow);
+  color: var(--button-secondary-text-color);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: 8px 10px;
+}
+
+.prompt-tools-button:hover {
+  background: var(--button-secondary-background-fill-hover);
+}
+
+.prompt-tools-hint {
+  color: var(--body-text-color-subdued);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  margin: 0;
+  opacity: .72;
+}
