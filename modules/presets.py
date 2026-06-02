@@ -88,7 +88,10 @@ ONLINE_MODELS = [
     "yuanai-1.0-translate",
     "yuanai-1.0-dialog",
     "yuanai-1.0-rhythm_poems",
-    "minimax-abab5-chat",
+    "MiniMax-M3",
+    "MiniMax-M3-highspeed",
+    "MiniMax-M2.7",
+    "MiniMax-M2.7-highspeed",
     "midjourney",
     # 兼容旧配置文件，待删除
     "讯飞星火大模型V4.0",
@@ -454,7 +457,6 @@ MODEL_METADATA = {
     "yuanai-1.0-translate": {"model_name": "yuanai-1.0-translate"},
     "yuanai-1.0-dialog": {"model_name": "yuanai-1.0-dialog"},
     "yuanai-1.0-rhythm_poems": {"model_name": "yuanai-1.0-rhythm_poems"},
-    "minimax-abab5-chat": {"model_name": "minimax-abab5-chat"},
     "midjourney": {"model_name": "midjourney"},
     # 兼容旧配置文件，待删除
     "讯飞星火大模型V4.0": {
@@ -558,6 +560,38 @@ MODEL_METADATA = {
         "token_limit": 64000,
         "multimodal": False,
         "model_type": "DeepSeek"
+    },
+    "MiniMax-M3": {
+        "model_name": "MiniMax-M3",
+        "api_host": "https://api.minimax.io",
+        "description": "MiniMax M3 - Latest flagship model with 512K context window, 128K max output, and image input support.",
+        "token_limit": 524288,
+        "multimodal": True,
+        "model_type": "MiniMaxM25"
+    },
+    "MiniMax-M3-highspeed": {
+        "model_name": "MiniMax-M3-highspeed",
+        "api_host": "https://api.minimax.io",
+        "description": "MiniMax M3 High Speed - Same performance, faster and more agile. 512K context window.",
+        "token_limit": 524288,
+        "multimodal": True,
+        "model_type": "MiniMaxM25"
+    },
+    "MiniMax-M2.7": {
+        "model_name": "MiniMax-M2.7",
+        "api_host": "https://api.minimax.io",
+        "description": "MiniMax M2.7 - Enhanced reasoning and generation capabilities. 204K context window.",
+        "token_limit": 204800,
+        "multimodal": False,
+        "model_type": "MiniMaxM25"
+    },
+    "MiniMax-M2.7-highspeed": {
+        "model_name": "MiniMax-M2.7-highspeed",
+        "api_host": "https://api.minimax.io",
+        "description": "MiniMax M2.7 High Speed - Same performance, faster and more agile. 204K context window.",
+        "token_limit": 204800,
+        "multimodal": False,
+        "model_type": "MiniMaxM25"
     }
 }
 
