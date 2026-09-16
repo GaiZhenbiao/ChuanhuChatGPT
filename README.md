@@ -1,6 +1,6 @@
 <div align="right">
-  <!-- 语言: -->
-  简体中文 | <a title="English" href="./readme/README_en.md">English</a> | <a title="Japanese" href="./readme/README_ja.md">日本語</a> | <a title="Russian" href="./readme/README_ru.md">Russian</a> | <a title="Korean" href="./readme/README_ko.md">한국어</a>
+  <!-- Language: -->
+  简体中文 | <a title="English" href="./readme/README_en.md">English</a> | <a title="Japanese" href="./readme/README_ja.md">日本語</a> | <a title="Korean" href="./readme/README_ko.md">한국어</a> | <a title="Russian" href="./readme/README_ru.md">Русский</a>
 </div>
 
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
@@ -22,7 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        支持 DeepSeek R1 & GPT 4 · 基于文件问答 · LLM本地部署 · 联网搜索 · Agent 助理 ·  支持 Fine-tune
+        支持 GPT-5 & DeepSeek R1 · 基于文件问答 · LLM 本地部署 · 联网搜索 · Agent 助理 · 支持 Fine-tune
       </p>
       <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
         ·
@@ -41,13 +41,12 @@
 
 ## 目录
 
-| [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) | [加入Telegram群组](https://t.me/tkdifferent) |
-| --- | --- | --- | --- | --- | --- |
+| [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [Telegram 群组](https://t.me/tkdifferent) |
+| --- | --- | --- | --- | --- |
 
 ## ✨ 5.0 重磅更新！
 
 ![ChuanhuChat5更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/f2c2be3a-ea93-4edf-8221-94eddd4a0178)
-
 
 <sup>New!</sup> 全新的用户界面！精致得不像 Gradio，甚至有毛玻璃效果！
 
@@ -63,21 +62,21 @@
 
 <sup>New!</sup> 支持 Finetune（微调） GPT 3.5！
 
-
 ## 支持模型
 
 | API 调用模型 | 备注 | 本地部署模型 | 备注 |
-| :---: | --- | :---: | --- |
-| [ChatGPT(GPT-5、GPT-4、GPT-4o、o1)](https://chat.openai.com) | 支持微调 gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | 支持 Lora 模型 |
-| [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM) ||
-| [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS) ||
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [通义千问](https://github.com/QwenLM/Qwen/tree/main) ||
-| [MiniMax](https://api.minimax.chat/) ||[DeepSeek](https://platform.deepseek.com)||
-| [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输|||
-| [Midjourney](https://www.midjourney.com/) | 不支持流式传输|||
-| [Claude](https://www.anthropic.com/) | ✨ 现已支持Claude 3 Opus、Sonnet，Haiku将会在推出后的第一时间支持|||
-| DALL·E 3 ||||
+| :--- | :--- | :--- | :--- |
+| [ChatGPT (GPT-5, GPT-4o, GPT-4, o1)](https://chat.openai.com) | 支持微调 gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) |  |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | 支持 Lora 模型 |
+| [Google Gemini](https://ai.google.dev/gemini-api/docs/api-key) |  | [StableLM](https://github.com/Stability-AI/StableLM) |  |
+| [Claude](https://www.anthropic.com/) | Claude 3 Opus / 3.5 Sonnet / 3 Haiku | [MOSS](https://github.com/OpenLMLab/MOSS) |  |
+| [DeepSeek](https://platform.deepseek.com) | DeepSeek Chat 与 DeepSeek R1 | [Qwen](https://github.com/QwenLM/Qwen/tree/main) |  |
+| [iFlytek Spark](https://xinghuo.xfyun.cn) |  |  |  |
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  |  |  |
+| [MiniMax](https://api.minimax.chat/) |  |  |  |
+| [XMChat](https://github.com/MILVLG/xmchat) | 不支持流式传输 |  |  |
+| [Midjourney](https://www.midjourney.com/) | 不支持流式传输 |  |  |
+| DALL·E 3 | 图像生成 |  |  |
 
 ## 使用技巧
 
@@ -173,6 +172,7 @@ python ChuanhuChatbot.py
 
 若需了解更多信息，请查看我们的 [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki)：
 
+- [想要贡献翻译？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/Localization)
 - [想要做出贡献？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
 - [项目更新情况？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
 - [二次开发许可？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
@@ -187,13 +187,3 @@ python ChuanhuChatbot.py
 <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=GaiZhenbiao/ChuanhuChatGPT" />
 </a>
-
-## 捐款
-
-🐯如果觉得这个软件对你有所帮助，欢迎请作者喝可乐、喝咖啡～
-
-联系作者：请去[我的bilibili账号](https://space.bilibili.com/29125536)私信我。
-
-<a href="https://www.buymeacoffee.com/ChuanhuChat" ><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=ChuanhuChat&button_colour=219d53&font_colour=ffffff&font_family=Poppins&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy Me A Coffee" width="250"></a>
-
-<img width="250" alt="image" src="https://user-images.githubusercontent.com/51039745/226920291-e8ec0b0a-400f-4c20-ac13-dafac0c3aeeb.JPG">

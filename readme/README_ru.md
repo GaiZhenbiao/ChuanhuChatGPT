@@ -1,6 +1,6 @@
 <div align="right">
   <!-- Language: -->
-  <a title="Chinese" href="../README.md">简体中文</a> | <a title="English" href="README_en.md">English</a> |  <a title="Japanese" href="README_ja.md">日本語</a> |  Russian | <a title="Korean" href="README_ko.md">한국어</a>
+  <a title="Chinese" href="../README.md">简体中文</a> | <a title="English" href="README_en.md">English</a> | <a title="Japanese" href="README_ja.md">日本語</a> | <a title="Korean" href="README_ko.md">한국어</a> | Русский
 </div>
 
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
@@ -22,7 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-	Поддержка GPT-4 · Анализ файлов в чате · Локальная установка LLM · Онлайн-поиск · Помощник Agent · Поддержка Fine-tune
+        Поддержка GPT-5 и DeepSeek R1 · Анализ файлов в чате · Локальная установка LLM · Онлайн-поиск · Помощник Agent · Поддержка Fine-tune
       </p>
       <a href="https://www.youtube.com/watch?v=MtxS4XZWbJE"><strong>Видео туториал</strong></a>
         ·
@@ -37,9 +37,14 @@
   </p>
 </div>
 
-> Новое: теперь поддерживается семейство GPT-5 (GPT-5, GPT-5-mini, GPT-5-nano): контекст 400k, до 128k токенов вывода.
+> 📢 Новое: теперь поддерживается семейство GPT-5 (GPT-5, GPT-5-mini, GPT-5-nano): контекст 400k, до 128k токенов вывода.
 
 [![Video Title](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7.jpg)](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7?autoplay=1)
+
+## Содержание
+
+| [Поддерживаемые модели](#поддерживаемые-модели) | [Советы по использованию](#советы-по-использованию) | [Установка](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [Частые вопросы](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [Telegram-группа](https://t.me/tkdifferent) |
+| --- | --- | --- | --- | --- |
 
 ## ✨ Обновление 5.0!
 
@@ -61,17 +66,19 @@
 
 ## Поддерживаемые модели
 
-| Модель с использованием API | Примечание | Локально развернутые модели | Примечание |
-| :---: | --- | :---: | --- |
-| [ChatGPT (GPT-5、GPT-4、GPT-4o、o1)](https://chat.openai.com) | Поддерживает микронастройку gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Поддерживает модель Lora |
-| [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM)||
-| [Xunfei Xinghuo Cognitive Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)||
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)||
-| [MiniMax](https://api.minimax.chat/) ||||
-| [XMChat](https://github.com/MILVLG/xmchat) | Не поддерживает потоковую передачу данных|||
-| [Midjourney](https://www.midjourney.com/) | Не поддерживает потоковую передачу данных|||
-| [Claude](https://www.anthropic.com/) ||||
+| Модели через API | Примечание | Локальные модели | Примечание |
+| :--- | :--- | :--- | :--- |
+| [ChatGPT (GPT-5, GPT-4o, GPT-4, o1)](https://chat.openai.com) | Поддерживает дообучение gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) |  |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Поддерживает модели Lora |
+| [Google Gemini](https://ai.google.dev/gemini-api/docs/api-key) |  | [StableLM](https://github.com/Stability-AI/StableLM) |  |
+| [Claude](https://www.anthropic.com/) | Claude 3 Opus / 3.5 Sonnet / 3 Haiku | [MOSS](https://github.com/OpenLMLab/MOSS) |  |
+| [DeepSeek](https://platform.deepseek.com) | DeepSeek Chat и DeepSeek R1 | [Qwen](https://github.com/QwenLM/Qwen/tree/main) |  |
+| [iFlytek Spark](https://xinghuo.xfyun.cn) |  |  |  |
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  |  |  |
+| [MiniMax](https://api.minimax.chat/) |  |  |  |
+| [XMChat](https://github.com/MILVLG/xmchat) | Без потоковой передачи |  |  |
+| [Midjourney](https://www.midjourney.com/) | Без потоковой передачи |  |  |
+| DALL·E 3 | Генерация изображений |  |  |
 
 ## Советы по использованию
 
@@ -124,6 +131,8 @@
 
 ## Быстрый старт
 
+Выполните в терминале следующие команды:
+
 ```shell
 git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git
 cd ChuanhuChatGPT
@@ -167,9 +176,9 @@ python ChuanhuChatbot.py
 
 - [Как добавить перевод](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/Localization)
 - [Как внести вклад](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
-- [Как цитировать проект](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
 - [Журнал изменений проекта](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
 - [Лицензия проекта](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
+- [Как цитировать проект](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
 
 ## Starchart
 
@@ -180,11 +189,3 @@ python ChuanhuChatbot.py
 <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=GaiZhenbiao/ChuanhuChatGPT" />
 </a>
-
-## Спонсорство
-
-🐯 Если этот проект будет вам полезен, не стесняйтесь угостить меня колой или чашкой кофе~.
-
-<a href="https://www.buymeacoffee.com/ChuanhuChat" ><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=ChuanhuChat&button_colour=219d53&font_colour=ffffff&font_family=Poppins&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy Me A Coffee" width="250"></a>
-
-<img width="250" alt="image" src="https://user-images.githubusercontent.com/51039745/226920291-e8ec0b0a-400f-4c20-ac13-dafac0c3aeeb.JPG">

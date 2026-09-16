@@ -1,6 +1,6 @@
 <div align="right">
   <!-- Language: -->
-  <a title="Chinese" href="../README.md">简体中文</a> | English | <a title="Japanese" href="README_ja.md">日本語</a> | <a title="Russian" href="README_ru.md">Russian</a> | <a title="Korean" href="README_ko.md">한국어</a>
+  <a title="Chinese" href="../README.md">简体中文</a> | English | <a title="Japanese" href="README_ja.md">日本語</a> | <a title="Korean" href="README_ko.md">한국어</a> | <a title="Russian" href="README_ru.md">Русский</a>
 </div>
 
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
@@ -12,8 +12,6 @@
 <p align="center">
     <h3>Lightweight and User-friendly Web-UI for LLMs including ChatGPT/ChatGLM/LLaMA</h3>
     <p align="center">
-          <p align="center"><b>New:</b> Now supports GPT-5 family (GPT-5, GPT-5-mini, GPT-5-nano) with 400k context and up to 128k output tokens.</p>
-
       <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
         <img alt="Tests Passing" src="https://img.shields.io/github/license/GaiZhenbiao/ChuanhuChatGPT" />
       </a>
@@ -24,7 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        Compatible with GPT-4 · Chat with files · LLMs local deployment · Web search · Chuanhu Agent ·  Fine-tuning
+        Supports GPT-5 & DeepSeek R1 · Chat with files · LLMs local deployment · Web search · Chuanhu Agent · Fine-tuning
       </p>
       <a href="https://www.youtube.com/watch?v=MtxS4XZWbJE"><strong>Video Tutorial</strong></a>
         ·
@@ -39,12 +37,18 @@
   </p>
 </div>
 
+> 📢 New: the GPT-5 family is now supported (GPT-5, GPT-5-mini, GPT-5-nano) — 400k context, up to 128k output tokens.
+
 [![Video Title](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7.jpg)](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7?autoplay=1)
+
+## Contents
+
+| [Supported models](#supported-models) | [Usage tips](#usage-tips) | [Installation](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [FAQ](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [Telegram group](https://t.me/tkdifferent) |
+| --- | --- | --- | --- | --- |
 
 ## ✨ 5.0 Major Update!
 
 ![ChuanhuChat5update](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/f2c2be3a-ea93-4edf-8221-94eddd4a0178)
-
 
 <sup>New!</sup> An all-new user interface! So exquisite that it doesn't look like Gradio, it even has a frosted glass effect!
 
@@ -62,18 +66,19 @@
 
 ## Supported Models
 
-| API Callable Models | Remarks | Locally Deployed Models | Remarks |
-| :---: | --- | :---: | --- |
-| [ChatGPT(GPT-5, GPT-4, GPT-4o, o1)](https://chat.openai.com) | supports fine-tune gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Support Lora models|
-| [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM)||
-| [iFlytek Starfire Cognition Large Model](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)||
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)||
-| [MiniMax](https://api.minimax.chat/) ||||
-| [XMChat](https://github.com/MILVLG/xmchat) | Not support streaming|||
-| [Midjourney](https://www.midjourney.com/) | Not support streaming|||
-| [Claude](https://www.anthropic.com/) | ✨ Now supports Claude 3 Opus and Sonnet, Haiku will be supported as soon as it is released|||
-| DALL·E 3 ||||
+| API models | Note | Local models | Note |
+| :--- | :--- | :--- | :--- |
+| [ChatGPT (GPT-5, GPT-4o, GPT-4, o1)](https://chat.openai.com) | Supports fine-tuning gpt-3.5 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) |  |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Supports Lora models |
+| [Google Gemini](https://ai.google.dev/gemini-api/docs/api-key) |  | [StableLM](https://github.com/Stability-AI/StableLM) |  |
+| [Claude](https://www.anthropic.com/) | Claude 3 Opus / 3.5 Sonnet / 3 Haiku | [MOSS](https://github.com/OpenLMLab/MOSS) |  |
+| [DeepSeek](https://platform.deepseek.com) | DeepSeek Chat and DeepSeek R1 | [Qwen](https://github.com/QwenLM/Qwen/tree/main) |  |
+| [iFlytek Spark](https://xinghuo.xfyun.cn) |  |  |  |
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  |  |  |
+| [MiniMax](https://api.minimax.chat/) |  |  |  |
+| [XMChat](https://github.com/MILVLG/xmchat) | No streaming |  |  |
+| [Midjourney](https://www.midjourney.com/) | No streaming |  |  |
+| DALL·E 3 | Image generation |  |  |
 
 ## Usage Tips
 
@@ -146,7 +151,6 @@ A browser window will automatically open, at this point you can use **Chuanhu Ch
 >
 > Please check our [wiki page](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) for detailed instructions.).
 
-
 ## Troubleshooting
 
 When you encounter problems, you should try to **manually pull the latest changes<sup>1</sup>** and **update dependencies<sup>2</sup>** first, then retry. Steps are:
@@ -168,13 +172,13 @@ This page lists almost all the possible problems and solutions. Please read it c
 
 ## More Information
 
-More information could be found in our [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki):
+More information can be found in our [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki):
 
 - [How to contribute a translation](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/Localization)
 - [How to make a contribution](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
-- [How to cite the project](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
 - [Project changelog](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
 - [Project license](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
+- [How to cite the project](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
 
 ## Starchart
 
@@ -185,11 +189,3 @@ More information could be found in our [wiki](https://github.com/GaiZhenbiao/Chu
 <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=GaiZhenbiao/ChuanhuChatGPT" />
 </a>
-
-## Sponsor
-
-🐯 If you find this project helpful, feel free to buy me a coke or a cup of coffee~
-
-<a href="https://www.buymeacoffee.com/ChuanhuChat" ><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=ChuanhuChat&button_colour=219d53&font_colour=ffffff&font_family=Poppins&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy Me A Coffee" width="250"></a>
-
-<img width="250" alt="image" src="https://user-images.githubusercontent.com/51039745/226920291-e8ec0b0a-400f-4c20-ac13-dafac0c3aeeb.JPG">

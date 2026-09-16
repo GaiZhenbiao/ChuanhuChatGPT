@@ -1,6 +1,6 @@
 <div align="right">
   <!-- Language: -->
-  <a title="Chinese" href="../README.md">简体中文</a> | <a title="English" href="README_en.md">English</a> | 日本語 |  <a title="Russian" href="README_ru.md">Russian</a> | <a title="Korean" href="README_ko.md">한국어</a>
+  <a title="Chinese" href="../README.md">简体中文</a> | <a title="English" href="README_en.md">English</a> | 日本語 | <a title="Korean" href="README_ko.md">한국어</a> | <a title="Russian" href="README_ru.md">Русский</a>
 </div>
 
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
@@ -22,7 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        GPT-4対応 · ファイルへの質問チャット · LLMのローカルデプロイ可能 · ウェブ検索 · エージェントアシスタント · Fine-tuneをサポートします
+        GPT-5 & DeepSeek R1 対応 · ファイルへの質問チャット · LLM のローカルデプロイ · ウェブ検索 · エージェントアシスタント · Fine-tune 対応
       </p>
       <a href="https://www.youtube.com/watch?v=MtxS4XZWbJE"><strong>動画チュートリアル</strong></a>
         ·
@@ -37,9 +37,14 @@
   </p>
 </div>
 
-> 新着: GPT-5 ファミリー（GPT-5 / GPT-5-mini / GPT-5-nano）に対応。40万トークンのコンテキスト、最大 12.8万トークンの出力。
+> 📢 新着: GPT-5 ファミリー（GPT-5 / GPT-5-mini / GPT-5-nano）に対応。40 万トークンのコンテキスト、最大 12.8 万トークンの出力。
 
 [![Video Title](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7.jpg)](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7?autoplay=1)
+
+## 目次
+
+| [対応モデル](#対応モデル) | [使い方のヒント](#使い方のヒント) | [インストール](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [よくある質問](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [Telegram グループ](https://t.me/tkdifferent) |
+| --- | --- | --- | --- | --- |
 
 ## ✨ 5.0の重要な更新！
 
@@ -59,21 +64,23 @@
 
 <sup>新!</sup> Finetune（微調整）GPT 3.5に対応！
 
-## モデルのサポート
+## 対応モデル
 
-| API呼び出しモデル | 備考 | ローカルデプロイモデル | 備考 |
-| :---: | --- | :---: | --- |
-| [ChatGPT(GPT-5、GPT-4、GPT-4o、o1)](https://chat.openai.com) | gpt-3.5の微調整をサポート | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) ||
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Loraモデルのサポートあり |
-| [Google Gemini Pro](https://ai.google.dev/gemini-api/docs/api-key?hl=zh-cn) |  | [StableLM](https://github.com/Stability-AI/StableLM)||
-| [讯飞星火认知大模型](https://xinghuo.xfyun.cn) |  | [MOSS](https://github.com/OpenLMLab/MOSS)||
-| [Inspur Yuan 1.0](https://air.inspur.com/home) |  | [Qwen](https://github.com/QwenLM/Qwen/tree/main)||
-| [MiniMax](https://api.minimax.chat/) ||||
-| [XMChat](https://github.com/MILVLG/xmchat) | ストリーミング転送はサポートされていません|||
-| [Midjourney](https://www.midjourney.com/) | ストリーミング転送はサポートされていません|||
-| [Claude](https://www.anthropic.com/) ||||
+| API 呼び出しモデル | 備考 | ローカルデプロイモデル | 備考 |
+| :--- | :--- | :--- | :--- |
+| [ChatGPT (GPT-5, GPT-4o, GPT-4, o1)](https://chat.openai.com) | gpt-3.5 の微調整に対応 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) |  |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Lora モデルに対応 |
+| [Google Gemini](https://ai.google.dev/gemini-api/docs/api-key) |  | [StableLM](https://github.com/Stability-AI/StableLM) |  |
+| [Claude](https://www.anthropic.com/) | Claude 3 Opus / 3.5 Sonnet / 3 Haiku | [MOSS](https://github.com/OpenLMLab/MOSS) |  |
+| [DeepSeek](https://platform.deepseek.com) | DeepSeek Chat と DeepSeek R1 | [Qwen](https://github.com/QwenLM/Qwen/tree/main) |  |
+| [iFlytek Spark](https://xinghuo.xfyun.cn) |  |  |  |
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  |  |  |
+| [MiniMax](https://api.minimax.chat/) |  |  |  |
+| [XMChat](https://github.com/MILVLG/xmchat) | ストリーミング非対応 |  |  |
+| [Midjourney](https://www.midjourney.com/) | ストリーミング非対応 |  |  |
+| DALL·E 3 | 画像生成 |  |  |
 
-## 使う上でのTips
+## 使い方のヒント
 
 ### 💪 パワフルな機能
 - **川虎助理**：AutoGPTに似ており、自動的に問題を解決します。
@@ -122,8 +129,9 @@
 - 共有リンクの取得：`config.json`ファイルで`"share": true,`を設定します。ただし、プログラムが実行されている必要があります。
 - Hugging Faceでの使用：右上のコーナーの「Spaceをコピー」を選択し、それから使用することをおすすめします。これにより、アプリの反応が速くなる場合があります。
 
-
 ## クイックスタート
+
+ターミナルで以下のコマンドを実行します：
 
 ```shell
 git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git
@@ -162,15 +170,15 @@ python ChuanhuChatbot.py
 
 このページでは、考えられるほぼすべての問題点と解決策を掲載しています。よくお読みください。
 
-## More Information
+## もっと詳しく
 
-より詳細な情報は、[wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki) をご覧ください。:
+詳しい情報は [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki) をご覧ください：
 
-- [How to contribute a translation](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/Localization)
-- [How to make a contribution](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
-- [How to cite the project](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
-- [Project changelog](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
-- [Project license](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
+- [翻訳に貢献するには](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/Localization)
+- [プロジェクトに貢献するには](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
+- [更新履歴](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
+- [プロジェクトのライセンス](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
+- [プロジェクトの引用方法](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
 
 ## Starchart
 
@@ -181,11 +189,3 @@ python ChuanhuChatbot.py
 <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=GaiZhenbiao/ChuanhuChatGPT" />
 </a>
-
-## Sponsor
-
-🐯 この企画が役に立ったら、遠慮なくコーラかコーヒーでもおごってください〜。
-
-<a href="https://www.buymeacoffee.com/ChuanhuChat" ><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=ChuanhuChat&button_colour=219d53&font_colour=ffffff&font_family=Poppins&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy Me A Coffee" width="250"></a>
-
-<img width="250" alt="image" src="https://user-images.githubusercontent.com/51039745/226920291-e8ec0b0a-400f-4c20-ac13-dafac0c3aeeb.JPG">

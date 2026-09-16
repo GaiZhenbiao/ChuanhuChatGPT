@@ -1,6 +1,6 @@
 <div align="right">
   <!-- Language: -->
-  <a title="Chinese" href="../README.md">简体中文</a> |  <a title="English" href="README_en.md">English</a> | <a title="Japanese" href="README_ja.md">日本語</a> | <a title="Russian" href="README_ru.md">Russian</a> | 한국어
+  <a title="Chinese" href="../README.md">简体中文</a> | <a title="English" href="README_en.md">English</a> | <a title="Japanese" href="README_ja.md">日本語</a> | 한국어 | <a title="Russian" href="README_ru.md">Русский</a>
 </div>
 
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
@@ -22,7 +22,7 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        GPT-4 지원 · 파일에 대한 채팅 · LLMs 로컬 배포 · 웹 검색 · Chuanhu Agent ·  파인튜닝
+        GPT-5 & DeepSeek R1 지원 · 파일에 대한 채팅 · LLM 로컬 배포 · 웹 검색 · Chuanhu Agent · 파인튜닝
       </p>
       <a href="https://www.youtube.com/watch?v=MtxS4XZWbJE"><strong>영상 튜토리얼</strong></a>
         ·
@@ -37,14 +37,18 @@
   </p>
 </div>
 
-> 신규: 이제 GPT-5 패밀리(GPT-5 / GPT-5-mini / GPT-5-nano) 지원. 컨텍스트 40만 토큰, 최대 출력 12.8만 토큰.
+> 📢 신규: 이제 GPT-5 패밀리(GPT-5 / GPT-5-mini / GPT-5-nano)를 지원합니다. 컨텍스트 40만 토큰, 최대 출력 12.8만 토큰.
 
 [![Video Title](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7.jpg)](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/51039745/0eee1598-c2fd-41c6-bda9-7b059a3ce6e7?autoplay=1)
+
+## 목차
+
+| [지원 모델](#지원-모델) | [사용 팁](#사용-팁) | [설치 방법](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [자주 묻는 질문](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [Telegram 그룹](https://t.me/tkdifferent) |
+| --- | --- | --- | --- | --- |
 
 ## ✨ 5.0 업데이트!
 
 ![ChuanhuChat5update](https://github.com/GaiZhenbiao/ChuanhuChatGPT/assets/70903329/f2c2be3a-ea93-4edf-8221-94eddd4a0178)
-
 
 <sup>New!</sup> 완전히 새로운 사용자 인터페이스! 반투명 유리효과를 지원합니다!
 
@@ -60,19 +64,21 @@
 
 <sup>New!</sup> GPT 3.5! 파인튜닝을 지원합니다.
 
-## 지원 모델들
+## 지원 모델
 
-|                                      API 호출 모델들                                       | 설명                    |                                             로컬 배포 모델                                              | 설명                  |
-|:-------------------------------------------------------------------------------------:|-----------------------|:-------------------------------------------------------------------------------------------------:|---------------------|
-|                       [ChatGPT(GPT-5、GPT-4、GPT-4o、o1)](https://chat.openai.com)                       | gpt-3.5 파인튜닝 지원       | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) |
-| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |                       |                        [LLaMA](https://github.com/facebookresearch/llama)                         | Lora 모델 지원
-|          [Google PaLM](https://developers.generativeai.google/products/palm)          | 스트리밍 미지원              |                       [StableLM](https://github.com/Stability-AI/StableLM)
-|          [iFlytek Starfire Cognition Large Model](https://xinghuo.xfyun.cn)           |                       |                             [MOSS](https://github.com/OpenLMLab/MOSS)
-|                    [Inspur Yuan 1.0](https://air.inspur.com/home)                     |                       |                         [Qwen](https://github.com/QwenLM/Qwen/tree/main)
-|                         [MiniMax](https://api.minimax.chat/)                          |
-|                      [XMChat](https://github.com/MILVLG/xmchat)                       | 스트리밍 미지원
-|                       [Midjourney](https://www.midjourney.com/)                       | 스트리밍 미지원
-|                         [Claude](https://www.anthropic.com/)                          |
+| API 호출 모델 | 설명 | 로컬 배포 모델 | 설명 |
+| :--- | :--- | :--- | :--- |
+| [ChatGPT (GPT-5, GPT-4o, GPT-4, o1)](https://chat.openai.com) | gpt-3.5 파인튜닝 지원 | [ChatGLM](https://github.com/THUDM/ChatGLM-6B) ([ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)) ([ChatGLM3](https://huggingface.co/THUDM/chatglm3-6b)) |  |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) |  | [LLaMA](https://github.com/facebookresearch/llama) | Lora 모델 지원 |
+| [Google Gemini](https://ai.google.dev/gemini-api/docs/api-key) |  | [StableLM](https://github.com/Stability-AI/StableLM) |  |
+| [Claude](https://www.anthropic.com/) | Claude 3 Opus / 3.5 Sonnet / 3 Haiku | [MOSS](https://github.com/OpenLMLab/MOSS) |  |
+| [DeepSeek](https://platform.deepseek.com) | DeepSeek Chat 및 DeepSeek R1 | [Qwen](https://github.com/QwenLM/Qwen/tree/main) |  |
+| [iFlytek Spark](https://xinghuo.xfyun.cn) |  |  |  |
+| [Inspur Yuan 1.0](https://air.inspur.com/home) |  |  |  |
+| [MiniMax](https://api.minimax.chat/) |  |  |  |
+| [XMChat](https://github.com/MILVLG/xmchat) | 스트리밍 미지원 |  |  |
+| [Midjourney](https://www.midjourney.com/) | 스트리밍 미지원 |  |  |
+| DALL·E 3 | 이미지 생성 |  |  |
 
 ## 사용 팁
 
@@ -145,7 +151,6 @@ python ChuanhuChatbot.py
 >
 > [wiki page](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) 에서 자세한 정보를 확인하세요
 
-
 ## 문제해결
 
 문제가 발생하면 **최신 코드로 업데이트하고<sup>1</sup>** **종속성을 업데이트<sup>2</sup>** 한 후 재시도 해보세요. 단계는 다음과 같습니다.:
@@ -167,13 +172,13 @@ python ChuanhuChatbot.py
 
 ## 더 알아보기
 
-더 많은 정보가 [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki) 에 있습니다.
+더 많은 정보가 [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki) 에 있습니다:
 
 - [어떻게 번역에 기여하나요?](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/Localization)
 - [어떻게 이 프로젝트에 기여하나요?](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
-- [어떻게 이 프로젝트를 인용하나요?](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
 - [업데이트 기록](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
 - [프로젝트 라이선스](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
+- [어떻게 이 프로젝트를 인용하나요?](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
 
 ## Starchart
 
@@ -184,11 +189,3 @@ python ChuanhuChatbot.py
 <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=GaiZhenbiao/ChuanhuChatGPT" />
 </a>
-
-## 기부
-
-🐯 이 프로젝트가 도움이되었다면, 저에게 커피나 콜라를 사주세요~
-
-<a href="https://www.buymeacoffee.com/ChuanhuChat" ><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=ChuanhuChat&button_colour=219d53&font_colour=ffffff&font_family=Poppins&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy Me A Coffee" width="250"></a>
-
-<img width="250" alt="image" src="https://user-images.githubusercontent.com/51039745/226920291-e8ec0b0a-400f-4c20-ac13-dafac0c3aeeb.JPG">
