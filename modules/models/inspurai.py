@@ -10,7 +10,7 @@ from datetime import datetime
 import pytz
 import requests
 
-from modules.presets import NO_APIKEY_MSG
+from modules.presets import NO_APIKEY_MSG, i18n
 from modules.models.base_model import BaseLLMModel
 
 
@@ -182,7 +182,7 @@ class Yuan:
         if 'resData' in res and res['resData'] != None:
             txt = res['resData']
         else:
-            txt = '模型返回为空，请尝试修改输入'
+            txt = i18n("msg.error.empty_response")
         # 单独针对翻译模型的后处理
         if self.engine == 'translate':
             txt = txt.replace(' ##', '').replace(' "', '"').replace(": ", ":").replace(" ,", ",") \

@@ -152,9 +152,9 @@ class ChuanhuAgent_Client(BaseLLMModel):
         status = gr.Markdown()
         if files:
             index = construct_index(self.api_key, file_src=files)
-            assert index is not None, "获取索引失败"
+            assert index is not None, i18n("msg.index.get_failed")
             self.index = index
-            status = i18n("索引构建完成")
+            status = i18n("msg.index.complete")
             self.index_summary = ", ".join(
                 [os.path.basename(file.name) for file in files]
             )

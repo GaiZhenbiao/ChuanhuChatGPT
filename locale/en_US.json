@@ -1,288 +1,570 @@
 {
-    "API Key 列表": "API Key List",
-    "Azure OpenAI Chat 模型 Deployment 名称": "Azure OpenAI Chat Model Deployment Name",
-    "Azure OpenAI Embedding 模型 Deployment 名称": "Azure OpenAI Embedding Model Deployment Name",
-    "Azure OpenAI Embedding 模型名称": "Azure OpenAI Embedding Model Name",
-    "HTTP 代理": "HTTP Proxy",
-    "LaTeX 公式渲染策略": "LaTeX formula rendering strategy",
-    "MidJourney Discord Proxy URL（用于对生成对图进行反代，可选）": "MidJourney Discord Proxy URL (used to reverse the generated image, optional)",
-    "MidJourney Proxy API Secret（用于鉴权访问 api，可选）": "MidJourney Proxy API Secret (used for authentication access api, optional)",
-    "SerpAPI API Key（获取方式请看 https://serpapi.com/）": "SerpAPI API Key (see https://serpapi.com/ for how to get it)",
-    "Wolfram Alpha API Key（获取方式请看 https://products.wolframalpha.com/api/）": "Wolfram Alpha API Key (see https://products.wolframalpha.com/api/ for how to get it)",
-    "你的 MidJourney 临时文件夹，用于存放生成的图片，填空则关闭自动下载切图（直接显示MJ的四宫格图）": "Your MidJourney temporary folder, used to store the generated images, leave blank to turn off the automatic download of the cut image (display the four-grid image of MJ directly)",
-    "可用模型列表": "Available model list",
-    "可选的本地模型为：": "The optional local models are:",
-    "如果不设置，将无法使用GPT模型和知识库在线索引功能。如果不设置此选项，您必须每次手动输入API Key。如果不设置，将自动启用本地编制索引的功能，可与本地模型配合使用。请问要设置默认 OpenAI API Key 吗？": "If not set, you will not be able to use the GPT model and the knowledge base online indexing function. If this option is not set, you must manually enter the API Key each time. If not set, the function of indexing locally will be automatically enabled, which can be used with local models. Do you want to set the default OpenAI API Key?",
-    "川虎助理使用的模型": "The model used by Chuanhu Assistant",
-    "是否不展示对话历史": "Do not show conversation history",
-    "是否启用检查更新": "Enable check for update",
-    "是否启用检查更新？如果设置，软件启动时会自动检查更新。": "Enable check for update? If set, the software will automatically check for updates when it starts.",
-    "是否在本地编制知识库索引？如果是，可以在使用本地模型时离线使用知识库，否则使用OpenAI服务来编制索引（需要OpenAI API Key）。请确保你的电脑有至少16GB内存。本地索引模型需要从互联网下载。": "Do you want to index the knowledge base locally? If so, you can use the knowledge base offline when using the local model, otherwise use the OpenAI service to index (requires OpenAI API Key). Make sure your computer has at least 16GB of memory. The local index model needs to be downloaded from the Internet.",
-    "是否指定可用模型列表？如果设置，将只会在 UI 中显示指定的模型。默认展示所有模型。可用的模型有：": "Specify the available model list? If set, only the specified models will be displayed in the UI. All models are displayed by default. The available models are:",
-    "是否更改默认模型？如果设置，软件启动时会自动加载该模型，无需在 UI 中手动选择。目前的默认模型为 gpt-3.5-turbo。可选的在线模型有：": "Change the default model? If set, the software will automatically load the model when it starts, and there is no need to manually select it in the UI. The current default model is gpt-3.5-turbo. The optional online models are:",
-    "是否添加模型到列表？例如，训练好的GPT模型可以添加到列表中。可以在UI中自动添加模型到列表。": "Add model to list? For example, the trained GPT model can be added to the list. You can automatically add models to the list in the UI.",
-    "是否设置 Azure OpenAI？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 Azure OpenAI 模型。": "Set the default Azure OpenAI API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the Azure OpenAI model will not be available.",
-    "是否设置 Midjourney ？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 Midjourney 模型。": "Set the default Midjourney API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the Midjourney model will not be available.",
-    "是否设置Cloude API？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 Cloude 模型。": "Set the default Cloude API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the Cloude model will not be available.",
-    "是否设置多 API Key 切换？如果设置，将在多个API Key之间切换使用。": "Set multiple API Key switching? If set, it will switch between multiple API Keys.",
-    "是否设置川虎助理？如果不设置，仍可设置川虎助理。如果设置，可以使用川虎助理Pro模式。": "Set Chuanhu Assistant? If not set, Chuanhu Assistant can still be set. If set, you can use Chuanhu Assistant Pro mode.",
-    "是否设置文心一言？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 文心一言 模型。": "Set the default ERNIE Bot API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the ERNIE Bot model will not be available.",
-    "是否设置文档处理与显示？可选的 LaTeX 公式渲染策略有：\"default\", \"strict\", \"all\"或者\"disabled\"。": "Set document processing and display? The optional LaTeX formula rendering strategies are: \"default\", \"strict\", \"all\" or \"disabled\".",
-    "是否设置未登录情况下是否不展示对话历史？如果设置，未登录情况下将不展示对话历史。": "Set whether to show conversation history when not logged in? If set, the conversation history will not be displayed when not logged in.",
-    "是否设置机器人头像和用户头像？可填写本地或网络图片链接，或者\"none\"（不显示头像）。": "Set the bot avatar and user avatar? You can fill in the local or network picture link, or \"none\" (do not display the avatar).",
-    "是否设置讯飞星火？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 讯飞星火 模型。请注意不要搞混App ID和API Secret。": "Set the default Spark API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the Spark model will not be available. Please be careful not to confuse App ID and API Secret.",
-    "是否设置默认 Google AI Studio API 密钥？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，可以在软件启动后手动输入 API Key。": "Set the default Google Palm API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, you can manually enter the API Key after the software starts.",
-    "是否设置默认 HTTP 代理？这可以透过代理使用OpenAI API。": "Set the default HTTP proxy? This can use the OpenAI API through the proxy.",
-    "是否设置默认 MiniMax API 密钥和 Group ID？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 MiniMax 模型。": "Set the default MiniMax API Key and Group ID? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the MiniMax model will not be available.",
-    "是否设置默认 OpenAI API Base？如果你在使用第三方API或者CloudFlare Workers等来中转OpenAI API，可以在这里设置。": "Set the default OpenAI API Base? If you are using a third-party API or CloudFlare Workers to transfer the OpenAI API, you can set it here.",
-    "是否设置默认 OpenAI API Key？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，可以在软件启动后手动输入 API Key。": "Set the default OpenAI API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, you can manually enter the API Key after the software starts.",
-    "是否设置默认 XMChat API 密钥？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，可以在软件启动后手动输入 API Key。": "Set the default XMChat API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, you can manually enter the API Key after the software starts.",
-    "是否选择自动命名对话历史的方式？": "Do you want to choose the way to automatically name the conversation history?",
-    "是否通过gradio分享？": "Share via gradio?",
-    "是否通过gradio分享？可以通过公网访问。": "Share via gradio? Can be accessed through the public network.",
-    "是否配置运行地址和端口？（不建议设置）": "Configure the running address and port? (Not recommended)",
-    "是否隐藏API Key输入框": "Hide API Key input box",
-    "是否隐藏API Key输入框？如果设置，将不会在 UI 中显示API Key输入框。": "Hide API Key input box? If set, the API Key input box will not be displayed in the UI.",
-    "服务器地址，例如设置为 0.0.0.0 则可以通过公网访问（如果你用公网IP）": "Server address, for example, set to 0.0.0。0 can be accessed through the public network (if you use a public network IP)",
-    "服务器端口": "Server port",
-    "未登录情况下是否不展示对话历史": "Do not show conversation history when not logged in",
-    "未设置用户名/密码情况下是否不展示对话历史？": "Do not show conversation history when username/password is not set?",
-    "本地编制索引": "Local indexing",
-    "机器人头像": "Bot avatar",
-    "用户头像": "User avatar",
-    "由于下面的原因，Google 拒绝返回 Gemini 的回答：\n\n": "For the following reasons, Google refuses to return Gemini's response:\n\n",
-    "百度云中的文心一言 API Key": "Baidu Cloud's ERNIE Bot API Key",
-    "百度云中的文心一言 Secret Key": "Baidu Cloud's ERNIE Bot Secret Key",
-    "自动命名对话历史的方式（0: 使用日期时间命名；1: 使用第一条提问命名，2: 使用模型自动总结。）": "The way to automatically name the conversation history (0: name by date and time; 1: name by first question, 2: name by model auto summary.)",
-    "讯飞星火 API Key": "Spark API Key",
-    "讯飞星火 API Secret": "Spark API Secret",
-    "讯飞星火 App ID": "Spark App ID",
-    "谷歌API Key（获取方式请看 https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search）": "Google API Key (see https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search for how to get it)",
-    "谷歌搜索引擎ID（获取方式请看 https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search）": "Google search engine ID (see https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search for how to get it)",
-    "输入的不是数字，将使用默认值。": "The input is not a number, the default value will be used.",
-    "额外模型列表": "Extra model list",
-    "默认模型": "Default model",
-    "获取资源错误": "Error retrieving resources.",
-    "该模型不支持多模态输入": "This model does not accept multi-modal input.",
-    " 中。": ".",
-    " 为: ": " as: ",
-    " 吗？": " ?",
-    "# ⚠️ 务必谨慎更改 ⚠️": "# ⚠️ Caution: Changes require care. ⚠️",
-    "**发送消息** 或 **提交key** 以显示额度": "**Send message** or **Submit key** to display credit",
-    "**本月使用金额** ": "**Monthly usage** ",
-    "**获取API使用情况失败**": "**Failed to get API usage**",
-    "**获取API使用情况失败**，sensitive_id错误或已过期": "**Failed to get API usage**, wrong or expired sensitive_id",
-    "**获取API使用情况失败**，需在填写`config.json`中正确填写sensitive_id": "**Failed to get API usage**, correct sensitive_id needed in `config.json`",
-    "== API 配置 ==": "== API Configuration ==",
-    "== 基础配置 ==": "== Basic Settings ==",
-    "== 高级配置 ==": "== Advanced Settings ==",
-    "API key为空，请检查是否输入正确。": "API key is empty, check whether it is entered correctly.",
-    "API密钥更改为了": "The API key is changed to",
-    "IP地址信息正在获取中，请稍候...": "IP address information is being retrieved, please wait...",
-    "JSON解析错误,收到的内容: ": "JSON parsing error, received content: ",
-    "SSL错误，无法获取对话。": "SSL error, unable to get dialogue.",
-    "Token 计数: ": "Token Count: ",
-    "☹️发生了错误：": "☹️Error: ",
-    "⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置": "⚠️ To ensure the security of API-Key, please modify the network settings in the configuration file `config.json`.",
-    "⚠️请先删除知识库中的历史文件，再尝试上传！": "⚠️ Please clear the files in the knowledge base before trying to upload new files!",
-    "。": ".",
-    "。你仍然可以使用聊天功能。": ". You can still use the chat function.",
-    "上传": "Upload",
-    "上传了": "Uploaded",
-    "上传到 OpenAI 后自动填充": "Automatically filled after uploading to OpenAI",
-    "上传到OpenAI": "Upload to OpenAI",
-    "上传文件": "Upload files",
-    "不支持的文件: ": "Unsupported file:",
-    "中。": ".",
-    "中，包含了可用设置项及其简要说明。请查看 wiki 获取更多信息：": " contains available settings and brief descriptions. Please check the wiki for more information:",
-    "仅供查看": "For viewing only",
-    "从Prompt模板中加载": "Load from Prompt Template",
-    "从列表中加载对话": "Load dialog from list",
-    "代理地址": "Proxy address",
-    "代理错误，无法获取对话。": "Proxy error, unable to get dialogue.",
-    "你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)": "You do not have permission to access GPT-4, [learn more](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)",
-    "你没有选择任何对话历史": "You have not selected any conversation history.",
-    "你的": "Your ",
-    "你真的要删除 ": "Are you sure you want to delete ",
-    "你设置了 ": "You set ",
-    "你选择了不设置 ": "You chose not to set ",
-    "你选择了不设置用户账户。": "You chose not to set user account.",
-    "使用在线搜索": "Use online search",
-    "停止符，用英文逗号隔开...": "Type in stop token here, separated by comma...",
-    "关于": "About",
-    "关闭": "Close",
-    "准备数据集": "Prepare Dataset",
-    "切换亮暗色主题": "Switch light/dark theme",
-    "删除对话历史成功": "Successfully deleted conversation history.",
-    "删除这轮问答": "Delete this round of Q&A",
-    "刷新状态": "Refresh Status",
-    "剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)": "Insufficient remaining quota, [learn more](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)",
-    "加载Prompt模板": "Load Prompt Template",
-    "单轮对话": "Single-turn",
-    "历史记录（JSON）": "History file (JSON)",
-    "参数": "Parameters",
-    "双栏pdf": "Two-column pdf",
-    "取消": "Cancel",
-    "取消所有任务": "Cancel All Tasks",
-    "可选，用于区分不同的模型": "Optional, used to distinguish different models",
-    "启用的工具：": "Enabled tools: ",
-    "在": "in",
-    "在工具箱中管理知识库文件": "Manage knowledge base files in the toolbox",
-    "在线搜索": "Web search",
-    "在这里输入": "Type in here",
-    "在这里输入System Prompt...": "Type in System Prompt here...",
-    "多账号模式已开启，无需输入key，可直接开始对话": "Multi-account mode is enabled, no need to enter key, you can start the dialogue directly",
-    "好": "OK",
-    "实时传输回答": "Stream output",
-    "对话": "Dialogue",
-    "对话历史": "Conversation history",
-    "对话历史记录": "Dialog History",
-    "对话命名方式": "History naming method",
-    "导出为 Markdown": "Export as Markdown",
-    "川虎Chat": "Chuanhu Chat",
-    "川虎Chat 🚀": "Chuanhu Chat 🚀",
-    "工具箱": "Toolbox",
-    "已经被删除啦": "It has been deleted.",
-    "开始实时传输回答……": "Start streaming output...",
-    "开始训练": "Start Training",
-    "微调": "Fine-tuning",
-    "总结": "Summarize",
-    "总结完成": "Summary completed.",
-    "您使用的就是最新版！": "You are using the latest version!",
-    "您的IP区域：": "Your IP region: ",
-    "您的IP区域：未知。": "Your IP region: Unknown.",
-    "您输入的 API 密钥为：": "The API key you entered is:",
-    "找到了缓存的索引文件，加载中……": "Found cached index file, loading...",
-    "拓展": "Extensions",
-    "搜索（支持正则）...": "Search (supports regex)...",
-    "数据集预览": "Dataset Preview",
-    "文件ID": "File ID",
-    "新对话 ": "New Chat ",
-    "新建对话保留Prompt": "Retain Prompt For New Chat",
-    "是否设置 HTTP 代理？[Y/N]：": "Do you want to set up an HTTP proxy? [Y/N]:",
-    "是否设置 OpenAI API 密钥？[Y/N]：": "Have you set the OpenAI API key? [Y/N]:",
-    "是否设置用户账户？设置后，用户需要登陆才可访问。输入 Yes(y) 或 No(n)，默认No：": "Set user account? After setting, users need to log in to access. Enter Yes(y) or No(n), default No: ",
-    "暂时未知": "Unknown",
-    "更新": "Update",
-    "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)": "Update failed, please try [manually updating](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)",
-    "更新成功，请重启本程序": "Updated successfully, please restart this program",
-    "未命名对话历史记录": "Unnamed Dialog History",
-    "未设置代理...": "No proxy...",
-    "本月使用金额": "Monthly usage",
-    "构建索引中……": "Building index...",
-    "查看[使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35)": "View the [usage guide](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35) for more details",
-    "根据日期时间": "By date and time",
-    "模型": "Model",
-    "模型名称后缀": "Model Name Suffix",
-    "模型自动总结（消耗tokens）": "Auto summary by LLM (Consume tokens)",
-    "模型设置为了：": "Model is set to: ",
-    "正在尝试更新...": "Trying to update...",
-    "正在尝试重启...": "Trying to restart...",
-    "正在获取IP地址信息，请稍候...": "Getting IP address information, please wait...",
-    "正在进行首次设置，请按照提示进行配置，配置将会被保存在": "First-time setup is in progress, please follow the prompts to configure, and the configuration will be saved in",
-    "没有找到任何支持的文档。": "No supported documents found.",
-    "添加训练好的模型到模型列表": "Add trained model to the model list",
-    "状态": "Status",
-    "现在开始设置其他在线模型的API Key": "Start setting the API Key for other online models",
-    "现在开始进行交互式配置。碰到不知道该怎么办的设置项时，请直接按回车键跳过，程序会自动选择合适的默认值。": "Starting interactive configuration now. When you encounter a setting that you don't know what to do, just press the Enter key to skip, and the program will automatically select the appropriate default value.",
-    "现在开始进行交互式配置：": "Interactive configuration will now begin:",
-    "现在开始进行软件功能设置": "Start setting the software function now",
-    "生成内容总结中……": "Generating content summary...",
-    "用于定位滥用行为": "Used to locate abuse",
-    "用户标识符": "User identifier",
-    "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "Developed by Bilibili [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) and [Keldos](https://github.com/Keldos-Li)\n\nDownload latest code from [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
-    "由于下面的原因，Google 拒绝返回 Gemini 的回答：\\n\\n": "Google has refused to return Gemini's response due to the following reasons:",
-    "知识库": "Knowledge base",
-    "知识库文件": "Knowledge base files",
-    "立即重启": "Restart now",
-    "第一条提问": "By first question",
-    "索引已保存至本地!": "Index saved locally!",
-    "索引构建失败！": "Index build failed!",
-    "索引构建完成": "Indexing complete.",
-    "索引构建完成！": "Indexing completed!",
-    "网络": "Network",
-    "获取API使用情况失败:": "Failed to get API usage:",
-    "获取IP地理位置失败。原因：": "Failed to get IP location. Reason: ",
-    "获取对话时发生错误，请查看后台日志": "Error occurred when getting dialogue, check the background log",
-    "覆盖gradio.oauth /logout路由": "Overrided the gradio.oauth/logout route",
-    "训练": "Training",
-    "训练状态": "Training Status",
-    "训练轮数（Epochs）": "Training Epochs",
-    "设置": "Settings",
-    "设置保存文件名": "Set save file name",
-    "设置完成。现在请重启本程序。": "Setup completed. Please restart this program now.",
-    "设置文件名: 默认为.json，可选为.md": "Set file name: default is .json, optional is .md",
-    "识别公式": "formula OCR",
-    "详情": "Details",
-    "请先输入用户名，输入空行结束添加用户：": "Please enter the username first, press Enter to add the user: ",
-    "请先选择Ollama后端模型\\n\\n": "Please select the Ollama backend model first.",
-    "请查看 config_example.json，配置 Azure OpenAI": "Please review config_example.json to configure Azure OpenAI",
-    "请检查网络连接，或者API-Key是否有效。": "Check the network connection or whether the API-Key is valid.",
-    "请输入 ": "Please enter ",
-    "请输入 HTTP 代理地址：": "Please enter the HTTP proxy address:",
-    "请输入 OpenAI API 密钥：": "Please enter your OpenAI API key:",
-    "请输入密码：": "Please enter the password: ",
-    "请输入对话内容。": "Enter the content of the conversation.",
-    "请输入有效的文件名，不要包含以下特殊字符：": "Please enter a valid file name, do not include the following special characters: ",
-    "读取超时，无法获取对话。": "Read timed out, unable to get dialogue.",
-    "账单信息不适用": "Billing information is not applicable",
-    "跳过设置 HTTP 代理。": "Skip setting up HTTP proxy.",
-    "跳过设置 OpenAI API 密钥。": "Skip setting up OpenAI API key.",
-    "输入 Yes(y) 或 No(n)，默认No：": "Enter Yes(y) or No(n), default No: ",
-    "连接超时，无法获取对话。": "Connection timed out, unable to get dialogue.",
-    "退出用户": "Log out user.",
-    "选择LoRA模型": "Select LoRA Model",
-    "选择Prompt模板集合文件": "Select Prompt Template Collection File",
-    "选择回复语言（针对搜索&索引功能）": "Select reply language (for search & index)",
-    "选择数据集": "Select Dataset",
-    "选择模型": "Select Model",
-    "配置已保存在 config.json 中。": "The configuration has been saved in config.json.",
-    "释放文件以上传": "Drop files to upload",
-    "重命名该对话": "Rename this chat",
-    "重新生成": "Regenerate",
-    "高级": "Advanced",
-    "，本次对话累计消耗了 ": ", total cost: ",
-    "，请使用 .pdf, .docx, .pptx, .epub, .xlsx 等文档。": "Please use .pdf, .docx, .pptx, .epub, .xlsx, etc. documents.",
-    "，输入空行结束：": ", press Enter to end: ",
-    "，默认为 ": ", default is ",
-    "：": ": ",
-    "💾 保存对话": "💾 Save Dialog",
-    "📝 导出为 Markdown": "📝 Export as Markdown",
-    "🔄 切换API地址": "🔄 Switch API Address",
-    "🔄 刷新": "🔄 Refresh",
-    "🔄 检查更新...": "🔄 Check for Update...",
-    "🔄 设置代理地址": "🔄 Set Proxy Address",
-    "🔄 重新生成": "🔄 Regeneration",
-    "🔙 恢复默认网络设置": "🔙 Reset Network Settings",
-    "🗑️ 删除最新对话": "🗑️ Delete latest dialog",
-    "🗑️ 删除最旧对话": "🗑️ Delete oldest dialog",
-    "🧹 新的对话": "🧹 New Dialogue",
-    "gpt3.5turbo_description": "GPT-3.5 Turbo is a text-only large language model developed by OpenAI. It is based on the GPT-3 model and has been fine-tuned on a large amount of data. The latest version of GPT-3.5 Turbo has been optimized for performance and accuracy, supporting a context window of up to 16k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of GPT-3.5 Turbo that is available.",
-    "gpt3.5turbo_instruct_description": "GPT3.5 Turbo Instruct is a text completion model developed by OpenAI. It has similar capabilities as GPT-3 era models. Compatible with legacy Completions endpoint and not Chat Completions. This model has a context window of 4096 tokens.",
-    "gpt3.5turbo_16k_description": "Legacy model of GPT-3.5 Turbo with a context window of 16k tokens.",
-    "gpt4_description": "GPT-4 is a text-only large language model developed by OpenAI. It has a context window of 8192 tokens, and a maximum response length of 4096 tokens. This model always uses the latest version of GPT-4 that is available. It's recommended to use GPT-4 Turbo for better performance, better speed and lower cost.",
-    "gpt4_32k_description": "GPT-4 32k is a text-only large language model developed by OpenAI. It has a context window of 32k tokens, and a maximum response length of 4096 tokens. This model was never rolled out widely in favor of GPT-4 Turbo.",
-    "gpt4turbo_description": "GPT-4 Turbo is a multimodal large language model developed by OpenAI. It offers state-of-the-art performance on a wide range of natural language processing tasks, including text generation, translation, summarization, visual question answering, and more. GPT-4 Turbo has a context window of up to 128k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of GPT-4 Turbo that is available.",
-    "claude3_haiku_description": "Claude3 Haiku is a multimodal large language model developed by Anthropic. It's the fastest and most compact model in the Claude 3 model family, designed for near-instant responsiveness and seamless AI experiences that mimic human interactions. Claude3 Haiku has a context window of up to 200k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of Claude3 Haiku that is available.",
-    "claude3_sonnet_description": "Claude3 Sonnet is a multimodal large language model developed by Anthropic. It's the most balanced model between intelligence and speed in the Claude 3 model family, designed for enterprise workloads and scaled AI deployments. Claude3 Sonnet has a context window of up to 200k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of Claude3 Sonnet that is available.",
-    "claude3_opus_description": "Claude3 Opus is a multimodal large language model developed by Anthropic. It's the most intelligent and largest model in the Claude 3 model family, delivering state-of-the-art performance on highly complex tasks and demonstrating fluency and human-like understanding. Claude3 Opus has a context window of up to 200k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of Claude3 Opus that is available.",
-    "groq_llama3_8b_description": "LLaMA 3 8B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
-    "groq_llama3_70b_description": "LLaMA 3 70B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
-    "groq_mixtral_8x7b_description": "Mixtral 8x7B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
-    "groq_gemma_7b_description": "Gemma 7B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service.",
-    "chuanhu_description": "An agent that can use multiple tools to solve complex problems.",
-    "gpt_default_slogan": "How can I help you today?",
-    "claude_default_slogan": "What can l help you with?",
-    "chuanhu_slogan": "What can Chuanhu do for you today?",
-    "chuanhu_question_1": "What's the weather in Hangzhou today?",
-    "chuanhu_question_2": "Any new releases from Apple?",
-    "chuanhu_question_3": "Current prices of graphics cards?",
-    "chuanhu_question_4": "Any new trends on TikTok?",
-    "gpt4o_description": "OpenAI's most advanced, multimodal flagship model that’s cheaper and faster than GPT-4 Turbo.",
-    "gpt4omini_description": "OpenAI's affordable and intelligent small model for fast, lightweight tasks.",
-    "gpt5_description": "The best model for coding and agentic tasks across domains. 400,000-token context window and up to 128,000 output tokens.",
-    "gpt5mini_description": "A faster, more cost-efficient version of GPT-5 for well-defined tasks. 400,000-token context window and up to 128,000 output tokens.",
-    "gpt5nano_description": "Fastest, most cost-efficient version of GPT-5. 400,000-token context window and up to 128,000 output tokens.",
-    "o1_description": "The o1 series of large language models are trained with reinforcement learning to perform complex reasoning. o1 models think before they answer, producing a long internal chain of thought before responding to the user.",
-    "no_permission_to_update_description": "You do not have permission to update. Please contact the administrator. The administrator's configuration method is to add the username to the admin_list in the configuration file config.json."
+    "app": {
+        "description": "Developed by Bilibili [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) and [Keldos](https://github.com/Keldos-Li)\n\nDownload latest code from [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
+        "title": "Chuanhu Chat 🚀"
+    },
+    "config": {
+        "api_key_list": {
+            "label": "API Key List",
+            "prompt": "Set multiple API Key switching? If set, it will switch between multiple API Keys."
+        },
+        "available_models": {
+            "label": "Available model list",
+            "prompt": "Specify the available model list? If set, only the specified models will be displayed in the UI. All models are displayed by default. The available models are:"
+        },
+        "azure_deployment_name": {
+            "label": "Azure OpenAI Chat Model Deployment Name"
+        },
+        "azure_embedding_deployment_name": {
+            "label": "Azure OpenAI Embedding Model Deployment Name"
+        },
+        "azure_embedding_model_name": {
+            "label": "Azure OpenAI Embedding Model Name"
+        },
+        "azure_openai_api_base_url": {
+            "label": "Azure OpenAI API Base URL"
+        },
+        "azure_openai_api_key": {
+            "label": "Azure OpenAI API Key",
+            "prompt": "Set the default Azure OpenAI API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the Azure OpenAI model will not be available."
+        },
+        "azure_openai_api_version": {
+            "label": "Azure OpenAI API Version"
+        },
+        "bot_avatar": {
+            "label": "Bot avatar",
+            "prompt": "Set the bot avatar and user avatar? You can fill in the local or network picture link, or \"none\" (do not display the avatar)."
+        },
+        "chat_name_method_index": {
+            "label": "The way to automatically name the conversation history (0: name by date and time; 1: name by first question, 2: name by model auto summary.)",
+            "prompt": "Do you want to choose the way to automatically name the conversation history?"
+        },
+        "check_update": {
+            "label": "Enable check for update",
+            "prompt": "Enable check for update? If set, the software will automatically check for updates when it starts."
+        },
+        "cloude_api_secret": {
+            "label": "Cloude API Secret",
+            "prompt": "Set the default Cloude API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the Cloude model will not be available."
+        },
+        "default_chuanhu_assistant_model": {
+            "label": "The model used by Chuanhu Assistant",
+            "prompt": "Set Chuanhu Assistant? If not set, Chuanhu Assistant can still be set. If set, you can use Chuanhu Assistant Pro mode."
+        },
+        "default_model": {
+            "label": "Default model",
+            "local_models": "Local models available:",
+            "prompt": "Change the default model? If set, it is loaded automatically at startup and does not have to be chosen in the UI. The current default is GPT3.5 Turbo. Online models available:"
+        },
+        "ernie_api_key": {
+            "label": "Baidu Cloud's ERNIE Bot API Key",
+            "prompt": "Set the default ERNIE Bot API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the ERNIE Bot model will not be available."
+        },
+        "ernie_secret_key": {
+            "label": "Baidu Cloud's ERNIE Bot Secret Key"
+        },
+        "extra_models": {
+            "label": "Extra model list",
+            "prompt": "Add model to list? For example, the trained GPT model can be added to the list. You can automatically add models to the list in the UI."
+        },
+        "google_api_key": {
+            "label": "Google API Key (see https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search for how to get it)"
+        },
+        "google_cse_id": {
+            "label": "Google search engine ID (see https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search for how to get it)"
+        },
+        "google_palm_api_key": {
+            "label": "Google Palm API Key",
+            "prompt": "Set the default Google Palm API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, you can manually enter the API Key after the software starts."
+        },
+        "hide_history_when_not_logged_in": {
+            "label": "Do not show conversation history when not logged in",
+            "label_2": "Do not show conversation history",
+            "prompt": "Set whether to show conversation history when not logged in? If set, the conversation history will not be displayed when not logged in.",
+            "prompt_2": "Do not show conversation history when username/password is not set?"
+        },
+        "hide_my_key": {
+            "label": "Hide API Key input box",
+            "prompt": "Hide API Key input box? If set, the API Key input box will not be displayed in the UI."
+        },
+        "http_proxy": {
+            "label": "HTTP Proxy",
+            "prompt": "Set the default HTTP proxy? This can use the OpenAI API through the proxy."
+        },
+        "latex_option": {
+            "label": "LaTeX formula rendering strategy",
+            "prompt": "Set document processing and display? The optional LaTeX formula rendering strategies are: \"default\", \"strict\", \"all\" or \"disabled\"."
+        },
+        "local_embedding": {
+            "label": "Local indexing",
+            "prompt": "Do you want to index the knowledge base locally? If so, you can use the knowledge base offline when using the local model, otherwise use the OpenAI service to index (requires OpenAI API Key). Make sure your computer has at least 16GB of memory. The local index model needs to be downloaded from the Internet."
+        },
+        "midjourney_discord_proxy_url": {
+            "label": "MidJourney Discord Proxy URL (used to reverse the generated image, optional)"
+        },
+        "midjourney_proxy_api_base": {
+            "prompt": "Set the default Midjourney API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the Midjourney model will not be available."
+        },
+        "midjourney_proxy_api_secret": {
+            "label": "MidJourney Proxy API Secret (used for authentication access api, optional)"
+        },
+        "midjourney_temp_folder": {
+            "label": "Your MidJourney temporary folder, used to store the generated images, leave blank to turn off the automatic download of the cut image (display the four-grid image of MJ directly)"
+        },
+        "minimax_api_key": {
+            "label": "MiniMax API Key",
+            "prompt": "Set the default MiniMax API Key and Group ID? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the MiniMax model will not be available."
+        },
+        "minimax_group_id": {
+            "label": "MiniMax Group ID"
+        },
+        "openai_api_base": {
+            "label": "OpenAI API Base",
+            "prompt": "Set the default OpenAI API Base? If you are using a third-party API or CloudFlare Workers to transfer the OpenAI API, you can set it here."
+        },
+        "openai_api_key": {
+            "label": "OpenAI API Key",
+            "label_2": "OpenAI API Key",
+            "prompt": "Set the default OpenAI API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, you can manually enter the API Key after the software starts.",
+            "prompt_2": "If not set, you will not be able to use the GPT model and the knowledge base online indexing function. If this option is not set, you must manually enter the API Key each time. If not set, the function of indexing locally will be automatically enabled, which can be used with local models. Do you want to set the default OpenAI API Key?"
+        },
+        "serpapi_api_key": {
+            "label": "SerpAPI API Key (see https://serpapi.com/ for how to get it)"
+        },
+        "server_name": {
+            "label": "Server address, for example, set to 0.0.0。0 can be accessed through the public network (if you use a public network IP)",
+            "prompt": "Configure the running address and port? (Not recommended)"
+        },
+        "server_port": {
+            "label": "Server port"
+        },
+        "share": {
+            "label": "Share via gradio?",
+            "prompt": "Share via gradio? Can be accessed through the public network."
+        },
+        "spark_api_key": {
+            "label": "Spark API Key"
+        },
+        "spark_api_secret": {
+            "label": "Spark API Secret"
+        },
+        "spark_appid": {
+            "label": "Spark App ID",
+            "prompt": "Set the default Spark API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, the Spark model will not be available. Please be careful not to confuse App ID and API Secret."
+        },
+        "user_avatar": {
+            "label": "User avatar"
+        },
+        "wolfram_alpha_appid": {
+            "label": "Wolfram Alpha API Key (see https://products.wolframalpha.com/api/ for how to get it)"
+        },
+        "xmchat_api_key": {
+            "label": "XMChat API Key",
+            "prompt": "Set the default XMChat API Key? If set, the API Key will be automatically loaded when the software starts, and there is no need to manually enter it in the UI. If not set, you can manually enter the API Key after the software starts."
+        }
+    },
+    "model": {
+        "chuanhu": {
+            "description": "An agent that can use multiple tools to solve complex problems.",
+            "question_1": "What's the weather in Hangzhou today?",
+            "question_2": "Any new releases from Apple?",
+            "question_3": "Current prices of graphics cards?",
+            "question_4": "Any new trends on TikTok?",
+            "slogan": "What can Chuanhu do for you today?"
+        },
+        "chuanhu_pro": {
+            "description": "Like AutoGPT, solves your problem end to end"
+        },
+        "claude": {
+            "slogan": "What can l help you with?"
+        },
+        "claude3_haiku": {
+            "description": "Claude3 Haiku is a multimodal large language model developed by Anthropic. It's the fastest and most compact model in the Claude 3 model family, designed for near-instant responsiveness and seamless AI experiences that mimic human interactions. Claude3 Haiku has a context window of up to 200k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of Claude3 Haiku that is available."
+        },
+        "claude3_opus": {
+            "description": "Claude3 Opus is a multimodal large language model developed by Anthropic. It's the most intelligent and largest model in the Claude 3 model family, delivering state-of-the-art performance on highly complex tasks and demonstrating fluency and human-like understanding. Claude3 Opus has a context window of up to 200k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of Claude3 Opus that is available."
+        },
+        "claude3_sonnet": {
+            "description": "Claude3 Sonnet is a multimodal large language model developed by Anthropic. It's the most balanced model between intelligence and speed in the Claude 3 model family, designed for enterprise workloads and scaled AI deployments. Claude3 Sonnet has a context window of up to 200k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of Claude3 Sonnet that is available."
+        },
+        "deepseek": {
+            "description": "DeepSeek V3 Chat"
+        },
+        "gpt": {
+            "slogan": "How can I help you today?"
+        },
+        "gpt35turbo": {
+            "description": "GPT-3.5 Turbo is a text-only large language model developed by OpenAI. It is based on the GPT-3 model and has been fine-tuned on a large amount of data. The latest version of GPT-3.5 Turbo has been optimized for performance and accuracy, supporting a context window of up to 16k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of GPT-3.5 Turbo that is available."
+        },
+        "gpt35turbo16k": {
+            "description": "Legacy model of GPT-3.5 Turbo with a context window of 16k tokens."
+        },
+        "gpt35turbo_instruct": {
+            "description": "GPT3.5 Turbo Instruct is a text completion model developed by OpenAI. It has similar capabilities as GPT-3 era models. Compatible with legacy Completions endpoint and not Chat Completions. This model has a context window of 4096 tokens."
+        },
+        "gpt4": {
+            "description": "GPT-4 is a text-only large language model developed by OpenAI. It has a context window of 8192 tokens, and a maximum response length of 4096 tokens. This model always uses the latest version of GPT-4 that is available. It's recommended to use GPT-4 Turbo for better performance, better speed and lower cost."
+        },
+        "gpt4_32k": {
+            "description": "GPT-4 32k is a text-only large language model developed by OpenAI. It has a context window of 32k tokens, and a maximum response length of 4096 tokens. This model was never rolled out widely in favor of GPT-4 Turbo."
+        },
+        "gpt4o": {
+            "description": "OpenAI's most advanced, multimodal flagship model that’s cheaper and faster than GPT-4 Turbo."
+        },
+        "gpt4omini": {
+            "description": "OpenAI's affordable and intelligent small model for fast, lightweight tasks."
+        },
+        "gpt4turbo": {
+            "description": "GPT-4 Turbo is a multimodal large language model developed by OpenAI. It offers state-of-the-art performance on a wide range of natural language processing tasks, including text generation, translation, summarization, visual question answering, and more. GPT-4 Turbo has a context window of up to 128k tokens and a maximum response length of 4096 tokens. This model always uses the latest version of GPT-4 Turbo that is available."
+        },
+        "gpt5": {
+            "description": "The best model for coding and agentic tasks across domains. 400,000-token context window and up to 128,000 output tokens."
+        },
+        "gpt5mini": {
+            "description": "A faster, more cost-efficient version of GPT-5 for well-defined tasks. 400,000-token context window and up to 128,000 output tokens."
+        },
+        "gpt5nano": {
+            "description": "Fastest, most cost-efficient version of GPT-5. 400,000-token context window and up to 128,000 output tokens."
+        },
+        "groq_gemma_7b": {
+            "description": "Gemma 7B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service."
+        },
+        "groq_llama3_70b": {
+            "description": "LLaMA 3 70B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service."
+        },
+        "groq_llama3_8b": {
+            "description": "LLaMA 3 8B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service."
+        },
+        "groq_mixtral_8x7b": {
+            "description": "Mixtral 8x7B with [Groq](https://console.groq.com/), the impressively fast language model inferencing service."
+        },
+        "o1": {
+            "description": "The o1 series of large language models are trained with reinforcement learning to perform complex reasoning. o1 models think before they answer, producing a long internal chain of thought before responding to the user."
+        }
+    },
+    "msg": {
+        "billing": {
+            "failed": "**Failed to get API usage**",
+            "failed_expired": "**Failed to get API usage**, wrong or expired sensitive_id",
+            "failed_log": "Failed to get API usage:",
+            "failed_sensitive_id": "**Failed to get API usage**, correct sensitive_id needed in `config.json`",
+            "monthly_usage_label": "Monthly usage",
+            "monthly_usage_md": "**Monthly usage** "
+        },
+        "error": {
+            "azure_not_configured": "Please review config_example.json to configure Azure OpenAI",
+            "billing_not_applicable": "Billing information is not applicable",
+            "claude_credentials": "Set the Claude API Secret in the config file or environment",
+            "connection_timeout": "Connection timed out, unable to get dialogue.",
+            "empty_context": "The context is empty",
+            "empty_filename": "The file name cannot be empty",
+            "empty_response": "The model returned nothing; try changing your input",
+            "ernie_credentials": "Set the ERNIE API Key and Secret Key in the config file or environment",
+            "gemini_no_response": "Failed to get a valid response from the Gemini API",
+            "gemini_refused": "Google has refused to return Gemini's response due to the following reasons:",
+            "general": "Error occurred when getting dialogue, check the background log",
+            "json_parse": "JSON parsing error, received content: ",
+            "multimodal_unsupported": "This model does not accept multi-modal input.",
+            "no_api_key": "API key is empty, check whether it is entered correctly.",
+            "no_documents": "No supported documents found.",
+            "no_gpt4_permission": "You do not have permission to access GPT-4, [learn more](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)",
+            "no_input": "Enter the content of the conversation.",
+            "ollama_select_model": "Please select the Ollama backend model first.",
+            "palm_refused": "Google refused to return a PaLM answer for the following reason:\n\n",
+            "prefix": "☹️Error: ",
+            "proxy": "Proxy error, unable to get dialogue.",
+            "quota_exceeded": "Insufficient remaining quota, [learn more](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)",
+            "read_timeout": "Read timed out, unable to get dialogue.",
+            "resource": "Error retrieving resources.",
+            "retrieve": "Check the network connection or whether the API-Key is valid.",
+            "spark_credentials": "Set the iFlytek API Key, APP ID and API Secret in the config file or environment",
+            "spark_generic": "An error occurred: ",
+            "spark_request": "Request error: {code}, {data}",
+            "ssl": "SSL error, unable to get dialogue.",
+            "unsupported_file": "Unsupported file:",
+            "unsupported_file_suffix": "Please use .pdf, .docx, .pptx, .epub, .xlsx, etc. documents."
+        },
+        "geo": {
+            "china_warning": "**Your IP region: China. Check your proxy settings now - using the API from an unsupported region may get your account banned.**",
+            "failed": "Failed to get IP location. Reason: ",
+            "failed_suffix": ". You can still use the chat function.",
+            "fetching": "Getting IP address information, please wait...",
+            "ipapi_failed": "Could not reach ipapi",
+            "locating": "IP address information is being retrieved, please wait...",
+            "region": "Your IP region: ",
+            "unknown": "Your IP region: Unknown."
+        },
+        "history": {
+            "deleted": "Successfully deleted conversation history.",
+            "deleted_error_only": "Contained an error message, so only the chat record was deleted",
+            "deleted_one": "Deleted one exchange",
+            "deleted_pair": "Deleted one chat exchange",
+            "deleted_prefix": "Conversation history",
+            "deleted_suffix": "It has been deleted.",
+            "deleted_tokens": "Deleted the token count for one exchange",
+            "none_selected": "You have not selected any conversation history."
+        },
+        "index": {
+            "building": "Building index...",
+            "built": "Indexing completed!",
+            "cache_found": "Found cached index file, loading...",
+            "complete": "Indexing complete.",
+            "failed": "Index build failed!",
+            "get_failed": "Could not get the index",
+            "loading": "Loading index...",
+            "ready_answering": "Index ready, generating an answer...",
+            "saved": "Index saved locally!"
+        },
+        "midjourney": {
+            "elapsed": "\n\nElapsed: {seconds}s",
+            "failed": "Task failed: ",
+            "in_progress": "Task is running",
+            "not_started": "Task has not started, waited {seconds}s",
+            "please_wait": "Please wait a moment",
+            "prefix": "**Prompt:** {prompt}\n**Task ID:** {task_id}\n",
+            "progress": ", progress: {progress}",
+            "status_failed": "Could not fetch task status: ",
+            "status_line": "**Task status:** [{time}] - {content}",
+            "submit_error": "Task submission error: ",
+            "submit_failed": "Task submission failed: ",
+            "submitted": "Task submitted for processing",
+            "submitted_at": "[{time}] - Task submitted: ",
+            "time_cost": "\n\n{action} took {seconds}s",
+            "timeout": "Task timed out, check the Discord output. Prompt: ",
+            "unknown_error": "Unknown error",
+            "unknown_reason": "Unknown reason",
+            "unknown_type": "Task submission failed: unknown task type",
+            "upscale": "\nUpscale image:\n\n",
+            "variation": "\nImage variations:\n\n"
+        },
+        "model": {
+            "available_set": "Available models set: {available_models}",
+            "extra_added": "Extra models added: {extra_models}",
+            "extra_metadata_added": "Added {extra_model_quantity} extra model metadata entries"
+        },
+        "status": {
+            "api_key_changed": "The API key is changed to",
+            "choose_lora": "Now choose a LoRA model for {model_name}",
+            "context_trimmed": "To stay within the token limit, the model dropped the earliest {count} exchange(s)",
+            "files_suffix": " file(s)",
+            "generating": "Generating an answer...",
+            "host_changed": "API host changed to {host}",
+            "host_proxy_reset": "API host and proxy reset",
+            "model_set": "Model is set to: ",
+            "proxy_changed": "Proxy changed to {proxy}",
+            "streaming": "Start streaming output...",
+            "summarizing": "Generating content summary...",
+            "summary_done": "Summary completed.",
+            "summary_label": "Summary",
+            "token_count": "Token Count: ",
+            "tokens_per_second": "Tokens per second：{token_generation_speed}",
+            "tools_enabled": "Enabled tools: ",
+            "total_cost": ", total cost: ",
+            "uploaded": "Uploaded"
+        },
+        "train": {
+            "failed": "Training failed: {error}",
+            "file_not_ready": "Training failed because the file is not ready yet. OpenAI needs a moment to process it - try again in a few minutes.",
+            "jobs_cancelled": "Cancelled {count} training job(s).",
+            "models_added": "Added {count} model(s).",
+            "token_estimate": "About {tokens} tokens; roughly ${cost} per epoch.",
+            "upload_failed": "Upload failed: {error}",
+            "upload_ok": "Upload succeeded"
+        },
+        "xmchat": {
+            "dislike_no_message": "Cannot dislike yet - you have not sent a message",
+            "dislike_ok": "👎 Disliked, thanks for the feedback!",
+            "like_no_message": "Cannot like yet - you have not sent a message",
+            "like_ok": "👍 Liked, thanks for the feedback!"
+        }
+    },
+    "naming": {
+        "by_datetime": "By date and time",
+        "by_first_question": "By first question",
+        "by_model_summary": "Auto summary by LLM (Consume tokens)"
+    },
+    "setup": {
+        "done": "Setup completed. Please restart this program now.",
+        "first_run": {
+            "example_prefix": "in",
+            "example_suffix": " contains available settings and brief descriptions. Please check the wiki for more information:",
+            "interactive": "Starting interactive configuration now. When you encounter a setting that you don't know what to do, just press the Enter key to skip, and the program will automatically select the appropriate default value.",
+            "intro": "First-time setup is in progress, please follow the prompts to configure, and the configuration will be saved in",
+            "intro_suffix": "."
+        },
+        "prompt": {
+            "as": " as: ",
+            "colon": ": ",
+            "default_is": ", default is ",
+            "empty_line_ends": ", press Enter to end: ",
+            "enter": "Please enter ",
+            "not_a_number": "That is not a number; the default will be used.",
+            "period": ".",
+            "skipped": "You chose not to set ",
+            "yes_no": "Enter Yes(y) or No(n), default No: ",
+            "you_set": "You set "
+        },
+        "proxy_url_suffix": "Proxy address",
+        "restarting": "Trying to restart...",
+        "section": {
+            "features": "Start setting the software function now",
+            "other_api_keys": "Start setting the API Key for other online models"
+        },
+        "users": {
+            "ask": "Set user account? After setting, users need to log in to access. Enter Yes(y) or No(n), default No: ",
+            "password": "Please enter the password: ",
+            "skipped": "You chose not to set user account.",
+            "username": "Please enter the username first, press Enter to add the user: "
+        },
+        "your_prefix": "Your "
+    },
+    "ui": {
+        "chat": {
+            "delete_latest": "🗑️ Delete latest dialog",
+            "delete_oldest": "🗑️ Delete oldest dialog",
+            "delete_round": "Delete this round of Q&A",
+            "drop_to_upload": "Drop files to upload",
+            "input_placeholder": "Type in here",
+            "knowledge_clear_first": "⚠️ Please clear the files in the knowledge base before trying to upload new files!",
+            "knowledge_files": "Knowledge base files",
+            "knowledge_files_tip": "Manage knowledge base files in the toolbox",
+            "model_select": "Select Model",
+            "new_conversation": "🧹 New Dialogue",
+            "regenerate": "Regenerate",
+            "regenerate_btn": "🔄 Regeneration",
+            "single_turn": "Single-turn",
+            "upload_file": "Upload files",
+            "web_search": "Web search"
+        },
+        "common": {
+            "cancel": "Cancel",
+            "close": "Close",
+            "details": "Details",
+            "ok": "OK",
+            "refresh": "🔄 Refresh",
+            "restart_now": "Restart now",
+            "update": "Update"
+        },
+        "history": {
+            "confirm_delete": "Are you sure you want to delete ",
+            "confirm_delete_suffix": " ?",
+            "default_name": "Dialog History",
+            "export_json": "History file (JSON)",
+            "export_markdown": "Export as Markdown",
+            "filename_label": "Set save file name",
+            "filename_placeholder": "Set file name: default is .json, optional is .md",
+            "invalid_filename": "Please enter a valid file name, do not include the following special characters: ",
+            "load_from_list": "Load dialog from list",
+            "new_chat_prefix": "New Chat ",
+            "rename": "Rename this chat",
+            "save": "💾 Save Dialog",
+            "search_placeholder": "Search (supports regex)...",
+            "unnamed": "Unnamed Dialog History"
+        },
+        "settings": {
+            "about": {
+                "name": "Chuanhu Chat",
+                "title": "About"
+            },
+            "advanced": {
+                "check_update": "🔄 Check for Update...",
+                "naming_method": "History naming method",
+                "reply_language": "Select reply language (for search & index)",
+                "single_turn": "Single-turn",
+                "stream_output": "Stream output",
+                "title": "Advanced",
+                "toggle_theme": "Switch light/dark theme"
+            },
+            "model": {
+                "select": "Select Model",
+                "select_lora": "Select LoRA Model",
+                "title": "Model"
+            },
+            "network": {
+                "proxy_label": "Proxy address",
+                "proxy_placeholder": "No proxy...",
+                "reset": "🔙 Reset Network Settings",
+                "security_warning": "⚠️ To ensure the security of API-Key, please modify the network settings in the configuration file `config.json`.",
+                "set_proxy": "🔄 Set Proxy Address",
+                "title": "Network"
+            },
+            "title": "Settings",
+            "update": {
+                "failed": "Update failed, please try [manually updating](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)",
+                "latest": "You are using the latest version!",
+                "no_permission": "You do not have permission to update. Please contact the administrator. The administrator's configuration method is to add the username to the admin_list in the configuration file config.json.",
+                "success": "Updated successfully, please restart this program",
+                "trying": "Trying to update..."
+            },
+            "view_only": "For viewing only"
+        },
+        "toolbox": {
+            "extensions": {
+                "switch_api": "🔄 Switch API Address"
+            },
+            "knowledge": {
+                "formula_ocr": "formula OCR",
+                "summarize_btn": "Summarize",
+                "title": "Knowledge base",
+                "two_column_pdf": "Two-column pdf",
+                "upload": "Upload",
+                "use_web_search": "Use online search"
+            },
+            "model": {
+                "multi_account_hint": "Multi-account mode is enabled, no need to enter key, you can start the dialogue directly",
+                "title": "Model",
+                "usage_hint": "**Send message** or **Submit key** to display credit"
+            },
+            "parameters": {
+                "stop_placeholder": "Type in stop token here, separated by comma...",
+                "title": "Parameters",
+                "user_id": "User identifier",
+                "user_id_tip": "Used to locate abuse",
+                "warning": "# ⚠️ Caution: Changes require care. ⚠️"
+            },
+            "prompt": {
+                "load_from_template": "Load from Prompt Template",
+                "load_template": "Load Prompt Template",
+                "retain_on_new": "Retain Prompt For New Chat",
+                "select_collection": "Select Prompt Template Collection File",
+                "system_placeholder": "Type in System Prompt here..."
+            },
+            "tab": {
+                "conversation": "Dialogue",
+                "extensions": "Extensions",
+                "parameters": "Parameters"
+            },
+            "title": "Toolbox"
+        },
+        "training": {
+            "dataset": {
+                "preview": "Dataset Preview",
+                "select": "Select Dataset",
+                "title": "Prepare Dataset",
+                "upload": "Upload to OpenAI"
+            },
+            "openai": {
+                "finetune": "Fine-tuning",
+                "status_label": "Training Status",
+                "usage_guide": "View the [usage guide](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35) for more details"
+            },
+            "status": {
+                "add_model": "Add trained model to the model list",
+                "cancel_all": "Cancel All Tasks",
+                "refresh": "Refresh Status",
+                "title": "Status",
+                "unknown": "Unknown"
+            },
+            "title": "Training",
+            "train": {
+                "epochs": "Training Epochs",
+                "file_id": "File ID",
+                "file_id_placeholder": "Automatically filled after uploading to OpenAI",
+                "start": "Start Training",
+                "suffix": "Model Name Suffix",
+                "suffix_placeholder": "Optional, used to distinguish different models",
+                "title": "Training"
+            }
+        }
+    }
 }

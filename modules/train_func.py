@@ -70,7 +70,8 @@ def estimate_cost(ds):
             dialogues.append(m["content"])
     dialogues = "\n".join(dialogues)
     tokens = count_token(dialogues)
-    return f"Token 数约为 {tokens}，预估每轮（epoch）费用约为 {tokens / 1000 * 0.008} 美元。"
+    return i18n("msg.train.token_estimate").format(
+        tokens=tokens, cost=tokens / 1000 * 0.008)
 
 
 def handle_dataset_selection(file_src):
@@ -95,12 +96,12 @@ def upload_to_openai(file_src):
     try:
         uploaded = client.files.create(file=open(dspath, "rb"),
         purpose='fine-tune')
-        return uploaded.id, f"上传成功"
+        return uploaded.id, i18n("msg.train.upload_ok")
     except Exception as e:
         traceback.print_exc()
-        return "", f"上传失败，原因：{ e }"
+        return "", i18n("msg.train.upload_failed").format(error=e)
 
-def build_event_description(id, status, trained_tokens, name=i18n("暂时未知")):
+def build_event_description(id, status, trained_tokens, name=i18n("ui.training.status.unknown")):
     # convert to markdown
     return f"""
     #### 训练任务 {id}
@@ -119,8 +120,8 @@ def start_training(file_id, suffix, epochs):
     except Exception as e:
         traceback.print_exc()
         if "is not ready" in str(e):
-            return "训练出错，因为文件还没准备好。OpenAI 需要一点时间准备文件，过几分钟再来试试。"
-        return f"训练失败，原因：{ e }"
+            return i18n("msg.train.file_not_ready")
+        return i18n("msg.train.failed").format(error=e)
 
 def get_training_status():
     active_jobs = [build_event_description(job.id, job.status, job.trained_tokens, job.fine_tuned_model) for job in client.fine_tuning.jobs.list().data if job.status != "cancelled"]
@@ -153,10 +154,11 @@ def add_to_models():
     with open('config.json', 'w') as f:
         commentjson.dump(data, f, indent=4)
 
-    return gr.update(choices=presets.MODELS), f"成功添加了 {len(succeeded_jobs)} 个模型。"
+    return gr.update(choices=presets.MODELS), i18n("msg.train.models_added").format(
+        count=len(succeeded_jobs))
 
 def cancel_all_jobs():
     jobs = [job for job in client.fine_tuning.jobs.list().data if job.status not in ["cancelled", "succeeded"]]
     for job in jobs:
         client.fine_tuning.jobs.cancel(job.id)
-    return f"成功取消了 {len(jobs)} 个训练任务。"
+    return i18n("msg.train.jobs_cancelled").format(count=len(jobs))

@@ -16,6 +16,7 @@ import websocket
 import logging
 
 from .base_model import BaseLLMModel, CallbackToIterator
+from modules.presets import i18n
 
 
 class Ws_Param(object):
@@ -71,13 +72,13 @@ class Spark_Client(BaseLLMModel):
         self.appid = appid
         self.api_secret = api_secret
         if None in [self.api_key, self.appid, self.api_secret]:
-            raise Exception("请在配置文件或者环境变量中设置讯飞的API Key、APP ID和API Secret")
+            raise Exception(i18n("msg.error.spark_credentials"))
         self.spark_url = f"wss://spark-api.xf-yun.com{self.metadata['path']}"
         self.domain = self.metadata['domain']
 
     # 收到websocket错误的处理
     def on_error(self, ws, error):
-        ws.iterator.callback("出现了错误:" + error)
+        ws.iterator.callback(i18n("msg.error.spark_generic") + error)
 
     # 收到websocket关闭的处理
     def on_close(self, ws, one, two):
@@ -145,7 +146,7 @@ class Spark_Client(BaseLLMModel):
             code = data["header"]["code"]
             if code != 0:
                 ws.close()
-                raise Exception(f"请求错误: {code}, {data}")
+                raise Exception(i18n("msg.error.spark_request").format(code=code, data=data))
             else:
                 choices = data["payload"]["choices"]
                 status = choices["status"]

@@ -1,5 +1,6 @@
 from .base_model import BaseLLMModel
 import google.generativeai as palm
+from modules.presets import i18n
 
 
 class Google_PaLM_Client(BaseLLMModel):
@@ -25,4 +26,4 @@ class Google_PaLM_Client(BaseLLMModel):
         else:
             reasons = '\n\n'.join(
                 reason['reason'].name for reason in response.filters)
-            return "由于下面的原因，Google 拒绝返回 PaLM 的回答：\n\n" + reasons, 0
+            return i18n("msg.error.palm_refused") + reasons, 0

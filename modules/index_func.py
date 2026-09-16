@@ -80,9 +80,9 @@ def get_documents(file_src):
                 ".tif",
             ]:
                 raise gr.Warning(
-                    i18n("不支持的文件: ")
+                    i18n("msg.error.unsupported_file")
                     + filename
-                    + i18n("，请使用 .pdf, .docx, .pptx, .epub, .xlsx 等文档。")
+                    + i18n("msg.error.unsupported_file_suffix")
                 )
             else:
                 logging.debug("Loading text file...")
@@ -146,20 +146,20 @@ def construct_index(
                 openai_api_type="azure",
             )
     if os.path.exists(index_path) and load_from_cache_if_possible:
-        logging.info(i18n("找到了缓存的索引文件，加载中……"))
+        logging.info(i18n("msg.index.cache_found"))
         return FAISS.load_local(
             index_path, embeddings, allow_dangerous_deserialization=True
         )
     else:
         documents = get_documents(file_src)
-        logging.debug(i18n("构建索引中……"))
+        logging.debug(i18n("msg.index.building"))
         if documents:
             with retrieve_proxy():
                 index = FAISS.from_documents(documents, embeddings)
         else:
-            raise Exception(i18n("没有找到任何支持的文档。"))
-        logging.debug(i18n("索引构建完成！"))
+            raise Exception(i18n("msg.error.no_documents"))
+        logging.debug(i18n("msg.index.built"))
         os.makedirs("./index", exist_ok=True)
         index.save_local(index_path)
-        logging.debug(i18n("索引已保存至本地!"))
+        logging.debug(i18n("msg.index.saved"))
         return index

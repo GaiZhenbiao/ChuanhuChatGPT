@@ -42,7 +42,7 @@ class OllamaClient(BaseLLMModel):
 
     def get_answer_stream_iter(self):
         if self.backend_model == "":
-            return i18n("请先选择Ollama后端模型\n\n")
+            return i18n("msg.error.ollama_select_model")
         client = Client(host=self.ollama_host)
         response = client.chat(model=self.backend_model, messages=self.history,stream=True)
         partial_text = ""

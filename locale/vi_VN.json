@@ -1,201 +1,570 @@
 {
-    "获取资源错误": "Lỗi khi lấy tài nguyên",
-    "该模型不支持多模态输入": "Mô hình này không hỗ trợ đầu vào đa phương tiện",
-    " 中。": "Giữa.",
-    " 为: ": "Cho:",
-    " 吗？": " ?",
-    "# ⚠️ 务必谨慎更改 ⚠️": "# ⚠️ Lưu ý: Thay đổi yêu cầu cẩn thận. ⚠️",
-    "**发送消息** 或 **提交key** 以显示额度": "**Gửi tin nhắn** hoặc **Gửi khóa(key)** để hiển thị số dư",
-    "**本月使用金额** ": "**Số tiền sử dụng trong tháng** ",
-    "**获取API使用情况失败**": "**Lỗi khi lấy thông tin sử dụng API**",
-    "**获取API使用情况失败**，sensitive_id错误或已过期": "**Lỗi khi lấy thông tin sử dụng API**, sensitive_id sai hoặc đã hết hạn",
-    "**获取API使用情况失败**，需在填写`config.json`中正确填写sensitive_id": "**Lỗi khi lấy thông tin sử dụng API**, cần điền đúng sensitive_id trong tệp `config.json`",
-    "== API 配置 ==": "== Cấu hình API ==",
-    "== 基础配置 ==": "== Cấu hình cơ bản ==",
-    "== 高级配置 ==": "== Cấu hình Nâng cao ==",
-    "API key为空，请检查是否输入正确。": "Khóa API trống, vui lòng kiểm tra xem đã nhập đúng chưa.",
-    "API密钥更改为了": "Khóa API đã được thay đổi thành",
-    "IP地址信息正在获取中，请稍候...": "Đang lấy thông tin địa chỉ IP, vui lòng chờ...",
-    "JSON解析错误,收到的内容: ": "Lỗi phân tích JSON, nội dung nhận được: ",
-    "SSL错误，无法获取对话。": "Lỗi SSL, không thể nhận cuộc trò chuyện.",
-    "Token 计数: ": "Số lượng Token: ",
-    "☹️发生了错误：": "☹️Lỗi: ",
-    "⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置": "⚠️ Để đảm bảo an toàn cho API-Key, vui lòng chỉnh sửa cài đặt mạng trong tệp cấu hình `config.json`.",
-    "⚠️请先删除知识库中的历史文件，再尝试上传！": "⚠️ Vui lòng xóa tệp lịch sử trong cơ sở kiến thức trước khi tải lên!",
-    "。": "。",
-    "。你仍然可以使用聊天功能。": ". Bạn vẫn có thể sử dụng chức năng trò chuyện.",
-    "上传": "Tải lên",
-    "上传了": "Tải lên thành công.",
-    "上传到 OpenAI 后自动填充": "Tự động điền sau khi tải lên OpenAI",
-    "上传到OpenAI": "Tải lên OpenAI",
-    "上传文件": "Tải lên tệp",
-    "不支持的文件: ": "Tệp không được hỗ trợ:",
-    "中。": "Trong.",
-    "中，包含了可用设置项及其简要说明。请查看 wiki 获取更多信息：": "Trong đó chứa các mục cài đặt có sẵn và mô tả ngắn gọn của chúng. Vui lòng xem wiki để biết thêm thông tin:",
-    "仅供查看": "Chỉ xem",
-    "从Prompt模板中加载": "Tải từ mẫu Prompt",
-    "从列表中加载对话": "Tải cuộc trò chuyện từ danh sách",
-    "代理地址": "Địa chỉ proxy",
-    "代理错误，无法获取对话。": "Lỗi proxy, không thể nhận cuộc trò chuyện.",
-    "你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)": "Bạn không có quyền truy cập GPT-4, [tìm hiểu thêm](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)",
-    "你没有选择任何对话历史": "Bạn chưa chọn bất kỳ lịch sử trò chuyện nào.",
-    "你的": "Tôi không hiểu.",
-    "你真的要删除 ": "Bạn có chắc chắn muốn xóa ",
-    "你设置了 ": "Bạn đã thiết lập了",
-    "你选择了不设置 ": "Bạn đã chọn không thiết lập",
-    "你选择了不设置用户账户。": "Bạn đã chọn không thiết lập tài khoản người dùng.",
-    "使用在线搜索": "Sử dụng tìm kiếm trực tuyến",
-    "停止符，用英文逗号隔开...": "Nhập dấu dừng, cách nhau bằng dấu phẩy...",
-    "关于": "Về",
-    "关闭": "Đóng",
-    "准备数据集": "Chuẩn bị tập dữ liệu",
-    "切换亮暗色主题": "Chuyển đổi chủ đề sáng/tối",
-    "删除对话历史成功": "Xóa lịch sử cuộc trò chuyện thành công.",
-    "删除这轮问答": "Xóa cuộc trò chuyện này",
-    "刷新状态": "Làm mới tình trạng",
-    "剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)": "剩余配额 không đủ, [Nhấn vào đây để biết thêm](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)",
-    "加载Prompt模板": "Tải mẫu Prompt",
-    "单轮对话": "Cuộc trò chuyện một lượt",
-    "历史记录（JSON）": "Tệp lịch sử (JSON)",
-    "参数": "Tham số",
-    "双栏pdf": "PDF hai cột",
-    "取消": "Hủy",
-    "取消所有任务": "Hủy tất cả các nhiệm vụ",
-    "可选，用于区分不同的模型": "Tùy chọn, sử dụng để phân biệt các mô hình khác nhau",
-    "启用的工具：": "Công cụ đã bật: ",
-    "在": "trong",
-    "在工具箱中管理知识库文件": "Quản lý tệp cơ sở kiến thức trong hộp công cụ",
-    "在线搜索": "Tìm kiếm trực tuyến",
-    "在这里输入": "Nhập vào đây",
-    "在这里输入System Prompt...": "Nhập System Prompt ở đây...",
-    "多账号模式已开启，无需输入key，可直接开始对话": "Chế độ nhiều tài khoản đã được bật, không cần nhập key, bạn có thể bắt đầu cuộc trò chuyện trực tiếp",
-    "好": "OK",
-    "实时传输回答": "Truyền đầu ra trực tiếp",
-    "对话": "Cuộc trò chuyện",
-    "对话历史": "Lịch sử cuộc trò chuyện",
-    "对话历史记录": "Lịch sử Cuộc trò chuyện",
-    "对话命名方式": "Phương thức đặt tên lịch sử trò chuyện",
-    "导出为 Markdown": "Xuất ra Markdown",
-    "川虎Chat": "Chuanhu Chat",
-    "川虎Chat 🚀": "Chuanhu Chat 🚀",
-    "工具箱": "Hộp công cụ",
-    "已经被删除啦": "Đã bị xóa rồi.",
-    "开始实时传输回答……": "Bắt đầu truyền đầu ra trực tiếp...",
-    "开始训练": "Bắt đầu đào tạo",
-    "微调": "Feeling-tuning",
-    "总结": "Tóm tắt",
-    "总结完成": "Hoàn thành tóm tắt",
-    "您使用的就是最新版！": "Bạn đang sử dụng phiên bản mới nhất!",
-    "您的IP区域：": "Khu vực IP của bạn: ",
-    "您的IP区域：未知。": "Khu vực IP của bạn: Không xác định.",
-    "您输入的 API 密钥为：": "Khóa API bạn đã nhập là:",
-    "找到了缓存的索引文件，加载中……": "Tìm thấy tập tin chỉ mục của bộ nhớ cache, đang tải...",
-    "拓展": "Mở rộng",
-    "搜索（支持正则）...": "Tìm kiếm (hỗ trợ regex)...",
-    "数据集预览": "Xem trước tập dữ liệu",
-    "文件ID": "ID Tệp",
-    "新对话 ": "Cuộc trò chuyện mới ",
-    "新建对话保留Prompt": "Tạo Cuộc trò chuyện mới và giữ Prompt nguyên vẹn",
-    "是否设置 HTTP 代理？[Y/N]：": "Bạn có muốn thiết lập proxy HTTP không? [C/K]:",
-    "是否设置 OpenAI API 密钥？[Y/N]：": "Bạn có muốn cài đặt mã khóa API của OpenAI không? [Y/N]:",
-    "是否设置用户账户？设置后，用户需要登陆才可访问。输入 Yes(y) 或 No(n)，默认No：": "Bạn có muốn thiết lập tài khoản người dùng không? Sau khi thiết lập, người dùng cần đăng nhập để truy cập. Nhập Yes(y) hoặc No(n), mặc định là No:",
-    "暂时未知": "Tạm thời chưa xác định",
-    "更新": "Cập nhật",
-    "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)": "Cập nhật thất bại, vui lòng thử [cập nhật thủ công](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)",
-    "更新成功，请重启本程序": "Cập nhật thành công, vui lòng khởi động lại chương trình này",
-    "未命名对话历史记录": "Lịch sử Cuộc trò chuyện không đặt tên",
-    "未设置代理...": "Không có proxy...",
-    "本月使用金额": "Số tiền sử dụng trong tháng",
-    "构建索引中……": "Xây dựng chỉ mục...",
-    "查看[使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35)": "Xem [hướng dẫn sử dụng](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35) để biết thêm chi tiết",
-    "根据日期时间": "Theo ngày và giờ",
-    "模型": "Mô hình",
-    "模型名称后缀": "Hậu tố Tên Mô hình",
-    "模型自动总结（消耗tokens）": "Tự động tóm tắt bằng LLM (Tiêu thụ token)",
-    "模型设置为了：": "Mô hình đã được đặt thành: ",
-    "正在尝试更新...": "Đang cố gắng cập nhật...",
-    "正在尝试重启...": "Đang cố gắng khởi động lại...",
-    "正在获取IP地址信息，请稍候...": "Đang lấy thông tin địa chỉ IP, vui lòng đợi...",
-    "正在进行首次设置，请按照提示进行配置，配置将会被保存在": "Đang thiết lập lần đầu, vui lòng làm theo hướng dẫn để cấu hình, cài đặt sẽ được lưu vào",
-    "没有找到任何支持的文档。": "Không tìm thấy tài liệu hỗ trợ nào.",
-    "添加训练好的模型到模型列表": "Thêm mô hình đã đào tạo vào danh sách mô hình",
-    "状态": "Tình trạng",
-    "现在开始设置其他在线模型的API Key": "Bây giờ bắt đầu thiết lập API Key cho các mô hình trực tuyến khác",
-    "现在开始进行交互式配置。碰到不知道该怎么办的设置项时，请直接按回车键跳过，程序会自动选择合适的默认值。": "Bắt đầu cấu hình tương tác ngay bây giờ. Khi gặp các mục cài đặt không biết phải làm gì, hãy nhấn Enter để bỏ qua, chương trình sẽ tự động chọn giá trị mặc định phù hợp.",
-    "现在开始进行交互式配置：": "Bắt đầu cấu hình tương tác ngay bây giờ:",
-    "现在开始进行软件功能设置": "Bắt đầu cài đặt chức năng phần mềm ngay bây giờ.",
-    "生成内容总结中……": "Đang tạo tóm tắt nội dung...",
-    "用于定位滥用行为": "Sử dụng để xác định hành vi lạm dụng",
-    "用户标识符": "Định danh người dùng",
-    "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "Phát triển bởi Bilibili [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) và [Keldos](https://github.com/Keldos-Li)\n\nTải mã nguồn mới nhất từ [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
-    "由于下面的原因，Google 拒绝返回 Gemini 的回答：\\n\\n": "Vì lý do dưới đây, Google từ chối trả lời của Gemini:",
-    "知识库": "Cơ sở kiến thức",
-    "知识库文件": "Tệp cơ sở kiến thức",
-    "立即重启": "Khởi động lại ngay",
-    "第一条提问": "Theo câu hỏi đầu tiên",
-    "索引已保存至本地!": "Chỉ số đã được lưu cục bộ!",
-    "索引构建失败！": "Xây dựng chỉ mục thất bại!",
-    "索引构建完成": "Xây dựng chỉ mục hoàn tất",
-    "索引构建完成！": "Xây dựng chỉ mục đã hoàn thành!",
-    "网络": "Mạng",
-    "获取API使用情况失败:": "Lỗi khi lấy thông tin sử dụng API:",
-    "获取IP地理位置失败。原因：": "Không thể lấy vị trí địa lý của IP. Nguyên nhân: ",
-    "获取对话时发生错误，请查看后台日志": "Xảy ra lỗi khi nhận cuộc trò chuyện, kiểm tra nhật ký nền",
-    "覆盖gradio.oauth /logout路由": "Ghi đè tuyến đường gradio.oauth / logout.",
-    "训练": "Đào tạo",
-    "训练状态": "Tình trạng đào tạo",
-    "训练轮数（Epochs）": "Số lượt đào tạo (Epochs)",
-    "设置": "Cài đặt",
-    "设置保存文件名": "Đặt tên tệp lưu",
-    "设置完成。现在请重启本程序。": "Đã thiết lập xong. Vui lòng khởi động lại chương trình này.",
-    "设置文件名: 默认为.json，可选为.md": "Đặt tên tệp: mặc định là .json, tùy chọn là .md",
-    "识别公式": "Nhận dạng công thức",
-    "详情": "Chi tiết",
-    "请先输入用户名，输入空行结束添加用户：": "Vui lòng nhập tên người dùng trước, nhấn Enter để kết thúc thêm người dùng:",
-    "请先选择Ollama后端模型\\n\\n": "Vui lòng chọn mô hình backend của Ollama trước\\n",
-    "请查看 config_example.json，配置 Azure OpenAI": "Vui lòng xem tệp config_example.json để cấu hình Azure OpenAI",
-    "请检查网络连接，或者API-Key是否有效。": "Vui lòng kiểm tra kết nối mạng hoặc xem xét tính hợp lệ của API-Key.",
-    "请输入 ": "Vui lòng nhập.",
-    "请输入 HTTP 代理地址：": "Nhập địa chỉ proxy HTTP:",
-    "请输入 OpenAI API 密钥：": "Nhập khóa API của OpenAI:",
-    "请输入密码：": "Nhập mật khẩu:",
-    "请输入对话内容。": "Nhập nội dung cuộc trò chuyện.",
-    "请输入有效的文件名，不要包含以下特殊字符：": "Vui lòng nhập tên tệp hợp lệ, không chứa các ký tự đặc biệt sau: ",
-    "读取超时，无法获取对话。": "Hết thời gian đọc, không thể nhận cuộc trò chuyện.",
-    "账单信息不适用": "Thông tin thanh toán không áp dụng",
-    "跳过设置 HTTP 代理。": "Bỏ qua cài đặt proxy HTTP.",
-    "跳过设置 OpenAI API 密钥。": "Bỏ qua cài đặt mã API của OpenAI.",
-    "输入 Yes(y) 或 No(n)，默认No：": "Nhập Yes(y) hoặc No(n), mặc định là No:",
-    "连接超时，无法获取对话。": "Hết thời gian kết nối, không thể nhận cuộc trò chuyện.",
-    "退出用户": "Đăng xuất",
-    "选择LoRA模型": "Chọn Mô hình LoRA",
-    "选择Prompt模板集合文件": "Chọn Tệp bộ sưu tập mẫu Prompt",
-    "选择回复语言（针对搜索&索引功能）": "Chọn ngôn ngữ phản hồi (đối với chức năng tìm kiếm & chỉ mục)",
-    "选择数据集": "Chọn tập dữ liệu",
-    "选择模型": "Chọn Mô hình",
-    "配置已保存在 config.json 中。": "Cấu hình đã được lưu trong tệp config.json.",
-    "释放文件以上传": "Thả tệp để tải lên",
-    "重命名该对话": "Đổi tên cuộc trò chuyện này",
-    "重新生成": "Tạo lại",
-    "高级": "Nâng cao",
-    "，本次对话累计消耗了 ": ", Tổng cộng chi phí cho cuộc trò chuyện này là ",
-    "，请使用 .pdf, .docx, .pptx, .epub, .xlsx 等文档。": "Vui lòng sử dụng các tệp .pdf, .docx, .pptx, .epub, .xlsx và các loại tài liệu khác.",
-    "，输入空行结束：": "Vui lòng nhập vào một dòng trống để kết thúc:",
-    "，默认为 ": "Mặc định là",
-    "：": "：Xin chào! Bạn cần giúp đỡ với điều gì?",
-    "💾 保存对话": "💾 Lưu Cuộc trò chuyện",
-    "📝 导出为 Markdown": "📝 Xuất ra dưới dạng Markdown",
-    "🔄 切换API地址": "🔄 Chuyển đổi Địa chỉ API",
-    "🔄 刷新": "🔄 Làm mới",
-    "🔄 检查更新...": "🔄 Kiểm tra cập nhật...",
-    "🔄 设置代理地址": "🔄 Đặt Địa chỉ Proxy",
-    "🔄 重新生成": "🔄 Tạo lại",
-    "🔙 恢复默认网络设置": "🔙 Khôi phục cài đặt mạng mặc định",
-    "🗑️ 删除最新对话": "🗑️ Xóa cuộc trò chuyện mới nhất",
-    "🗑️ 删除最旧对话": "🗑️ Xóa cuộc trò chuyện cũ nhất",
-    "🧹 新的对话": "🧹 Cuộc trò chuyện mới",
-    "gpt5_description": "Mô hình tốt nhất cho lập trình và các tác vụ agent trên nhiều lĩnh vực. Cửa sổ ngữ cảnh 400.000 token và tối đa 128.000 token đầu ra.",
-    "gpt5mini_description": "Phiên bản GPT-5 nhanh hơn và tiết kiệm chi phí hơn cho các tác vụ được xác định rõ ràng. Cửa sổ ngữ cảnh 400.000 token và tối đa 128.000 token đầu ra.",
-    "gpt5nano_description": "Phiên bản nhanh nhất và tiết kiệm chi phí nhất của GPT-5. Cửa sổ ngữ cảnh 400.000 token và tối đa 128.000 token đầu ra.",
-    "no_permission_to_update_description": "Bạn không có quyền cập nhật. Vui lòng liên hệ với quản trị viên. Cách cấu hình của quản trị viên là thêm tên người dùng vào danh sách admin_list trong tệp cấu hình config.json."
+    "app": {
+        "description": "Phát triển bởi Bilibili [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) và [Keldos](https://github.com/Keldos-Li)\n\nTải mã nguồn mới nhất từ [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
+        "title": "Chuanhu Chat 🚀"
+    },
+    "config": {
+        "api_key_list": {
+            "label": "",
+            "prompt": ""
+        },
+        "available_models": {
+            "label": "",
+            "prompt": ""
+        },
+        "azure_deployment_name": {
+            "label": ""
+        },
+        "azure_embedding_deployment_name": {
+            "label": ""
+        },
+        "azure_embedding_model_name": {
+            "label": ""
+        },
+        "azure_openai_api_base_url": {
+            "label": ""
+        },
+        "azure_openai_api_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "azure_openai_api_version": {
+            "label": ""
+        },
+        "bot_avatar": {
+            "label": "",
+            "prompt": ""
+        },
+        "chat_name_method_index": {
+            "label": "",
+            "prompt": ""
+        },
+        "check_update": {
+            "label": "",
+            "prompt": ""
+        },
+        "cloude_api_secret": {
+            "label": "",
+            "prompt": ""
+        },
+        "default_chuanhu_assistant_model": {
+            "label": "",
+            "prompt": ""
+        },
+        "default_model": {
+            "label": "",
+            "local_models": "",
+            "prompt": ""
+        },
+        "ernie_api_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "ernie_secret_key": {
+            "label": ""
+        },
+        "extra_models": {
+            "label": "",
+            "prompt": ""
+        },
+        "google_api_key": {
+            "label": ""
+        },
+        "google_cse_id": {
+            "label": ""
+        },
+        "google_palm_api_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "hide_history_when_not_logged_in": {
+            "label": "",
+            "label_2": "",
+            "prompt": "",
+            "prompt_2": ""
+        },
+        "hide_my_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "http_proxy": {
+            "label": "",
+            "prompt": ""
+        },
+        "latex_option": {
+            "label": "",
+            "prompt": ""
+        },
+        "local_embedding": {
+            "label": "",
+            "prompt": ""
+        },
+        "midjourney_discord_proxy_url": {
+            "label": ""
+        },
+        "midjourney_proxy_api_base": {
+            "prompt": ""
+        },
+        "midjourney_proxy_api_secret": {
+            "label": ""
+        },
+        "midjourney_temp_folder": {
+            "label": ""
+        },
+        "minimax_api_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "minimax_group_id": {
+            "label": ""
+        },
+        "openai_api_base": {
+            "label": "",
+            "prompt": ""
+        },
+        "openai_api_key": {
+            "label": "",
+            "label_2": "",
+            "prompt": "",
+            "prompt_2": ""
+        },
+        "serpapi_api_key": {
+            "label": ""
+        },
+        "server_name": {
+            "label": "",
+            "prompt": ""
+        },
+        "server_port": {
+            "label": ""
+        },
+        "share": {
+            "label": "",
+            "prompt": ""
+        },
+        "spark_api_key": {
+            "label": ""
+        },
+        "spark_api_secret": {
+            "label": ""
+        },
+        "spark_appid": {
+            "label": "",
+            "prompt": ""
+        },
+        "user_avatar": {
+            "label": ""
+        },
+        "wolfram_alpha_appid": {
+            "label": ""
+        },
+        "xmchat_api_key": {
+            "label": "",
+            "prompt": ""
+        }
+    },
+    "model": {
+        "chuanhu": {
+            "description": "Một tác nhân có thể dùng nhiều công cụ để giải quyết các vấn đề phức tạp.",
+            "question_1": "Thời tiết Hàng Châu hôm nay thế nào?",
+            "question_2": "Gần đây Apple ra mắt sản phẩm mới nào?",
+            "question_3": "Giá card đồ họa hiện nay thế nào?",
+            "question_4": "TikTok đang có trend gì mới?",
+            "slogan": "Hôm nay Chuanhu có thể làm gì cho bạn?"
+        },
+        "chuanhu_pro": {
+            "description": "Giống AutoGPT, tự động giải quyết vấn đề của bạn"
+        },
+        "claude": {
+            "slogan": "Tôi có thể giúp gì cho bạn?"
+        },
+        "claude3_haiku": {
+            "description": ""
+        },
+        "claude3_opus": {
+            "description": ""
+        },
+        "claude3_sonnet": {
+            "description": ""
+        },
+        "deepseek": {
+            "description": "DeepSeek V3 Chat"
+        },
+        "gpt": {
+            "slogan": "Hôm nay tôi có thể giúp gì cho bạn?"
+        },
+        "gpt35turbo": {
+            "description": ""
+        },
+        "gpt35turbo16k": {
+            "description": ""
+        },
+        "gpt35turbo_instruct": {
+            "description": ""
+        },
+        "gpt4": {
+            "description": ""
+        },
+        "gpt4_32k": {
+            "description": ""
+        },
+        "gpt4o": {
+            "description": ""
+        },
+        "gpt4omini": {
+            "description": ""
+        },
+        "gpt4turbo": {
+            "description": ""
+        },
+        "gpt5": {
+            "description": "Mô hình tốt nhất cho lập trình và các tác vụ agent trên nhiều lĩnh vực. Cửa sổ ngữ cảnh 400.000 token và tối đa 128.000 token đầu ra."
+        },
+        "gpt5mini": {
+            "description": "Phiên bản GPT-5 nhanh hơn và tiết kiệm chi phí hơn cho các tác vụ được xác định rõ ràng. Cửa sổ ngữ cảnh 400.000 token và tối đa 128.000 token đầu ra."
+        },
+        "gpt5nano": {
+            "description": "Phiên bản nhanh nhất và tiết kiệm chi phí nhất của GPT-5. Cửa sổ ngữ cảnh 400.000 token và tối đa 128.000 token đầu ra."
+        },
+        "groq_gemma_7b": {
+            "description": ""
+        },
+        "groq_llama3_70b": {
+            "description": ""
+        },
+        "groq_llama3_8b": {
+            "description": ""
+        },
+        "groq_mixtral_8x7b": {
+            "description": ""
+        },
+        "o1": {
+            "description": ""
+        }
+    },
+    "msg": {
+        "billing": {
+            "failed": "**Lỗi khi lấy thông tin sử dụng API**",
+            "failed_expired": "**Lỗi khi lấy thông tin sử dụng API**, sensitive_id sai hoặc đã hết hạn",
+            "failed_log": "Lỗi khi lấy thông tin sử dụng API:",
+            "failed_sensitive_id": "**Lỗi khi lấy thông tin sử dụng API**, cần điền đúng sensitive_id trong tệp `config.json`",
+            "monthly_usage_label": "Số tiền sử dụng trong tháng",
+            "monthly_usage_md": "**Số tiền sử dụng trong tháng** "
+        },
+        "error": {
+            "azure_not_configured": "Vui lòng xem tệp config_example.json để cấu hình Azure OpenAI",
+            "billing_not_applicable": "Thông tin thanh toán không áp dụng",
+            "claude_credentials": "",
+            "connection_timeout": "Hết thời gian kết nối, không thể nhận cuộc trò chuyện.",
+            "empty_context": "",
+            "empty_filename": "",
+            "empty_response": "",
+            "ernie_credentials": "",
+            "gemini_no_response": "Không nhận được phản hồi hợp lệ từ Gemini API",
+            "gemini_refused": "Vì lý do dưới đây, Google từ chối trả lời của Gemini:",
+            "general": "Xảy ra lỗi khi nhận cuộc trò chuyện, kiểm tra nhật ký nền",
+            "json_parse": "Lỗi phân tích JSON, nội dung nhận được: ",
+            "multimodal_unsupported": "Mô hình này không hỗ trợ đầu vào đa phương tiện",
+            "no_api_key": "Khóa API trống, vui lòng kiểm tra xem đã nhập đúng chưa.",
+            "no_documents": "Không tìm thấy tài liệu hỗ trợ nào.",
+            "no_gpt4_permission": "Bạn không có quyền truy cập GPT-4, [tìm hiểu thêm](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)",
+            "no_input": "Nhập nội dung cuộc trò chuyện.",
+            "ollama_select_model": "Vui lòng chọn mô hình backend của Ollama trước\\n",
+            "palm_refused": "",
+            "prefix": "☹️Lỗi: ",
+            "proxy": "Lỗi proxy, không thể nhận cuộc trò chuyện.",
+            "quota_exceeded": "剩余配额 không đủ, [Nhấn vào đây để biết thêm](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)",
+            "read_timeout": "Hết thời gian đọc, không thể nhận cuộc trò chuyện.",
+            "resource": "Lỗi khi lấy tài nguyên",
+            "retrieve": "Vui lòng kiểm tra kết nối mạng hoặc xem xét tính hợp lệ của API-Key.",
+            "spark_credentials": "",
+            "spark_generic": "",
+            "spark_request": "",
+            "ssl": "Lỗi SSL, không thể nhận cuộc trò chuyện.",
+            "unsupported_file": "Tệp không được hỗ trợ:",
+            "unsupported_file_suffix": "Vui lòng sử dụng các tệp .pdf, .docx, .pptx, .epub, .xlsx và các loại tài liệu khác."
+        },
+        "geo": {
+            "china_warning": "",
+            "failed": "Không thể lấy vị trí địa lý của IP. Nguyên nhân: ",
+            "failed_suffix": ". Bạn vẫn có thể sử dụng chức năng trò chuyện.",
+            "fetching": "Đang lấy thông tin địa chỉ IP, vui lòng đợi...",
+            "ipapi_failed": "",
+            "locating": "Đang lấy thông tin địa chỉ IP, vui lòng chờ...",
+            "region": "Khu vực IP của bạn: ",
+            "unknown": "Khu vực IP của bạn: Không xác định."
+        },
+        "history": {
+            "deleted": "Xóa lịch sử cuộc trò chuyện thành công.",
+            "deleted_error_only": "",
+            "deleted_one": "",
+            "deleted_pair": "",
+            "deleted_prefix": "Lịch sử cuộc trò chuyện",
+            "deleted_suffix": "Đã bị xóa rồi.",
+            "deleted_tokens": "",
+            "none_selected": "Bạn chưa chọn bất kỳ lịch sử trò chuyện nào."
+        },
+        "index": {
+            "building": "Xây dựng chỉ mục...",
+            "built": "Xây dựng chỉ mục đã hoàn thành!",
+            "cache_found": "Tìm thấy tập tin chỉ mục của bộ nhớ cache, đang tải...",
+            "complete": "Xây dựng chỉ mục hoàn tất",
+            "failed": "Xây dựng chỉ mục thất bại!",
+            "get_failed": "",
+            "loading": "",
+            "ready_answering": "",
+            "saved": "Chỉ số đã được lưu cục bộ!"
+        },
+        "midjourney": {
+            "elapsed": "",
+            "failed": "",
+            "in_progress": "",
+            "not_started": "",
+            "please_wait": "",
+            "prefix": "",
+            "progress": "",
+            "status_failed": "",
+            "status_line": "",
+            "submit_error": "",
+            "submit_failed": "",
+            "submitted": "",
+            "submitted_at": "",
+            "time_cost": "",
+            "timeout": "",
+            "unknown_error": "",
+            "unknown_reason": "",
+            "unknown_type": "",
+            "upscale": "",
+            "variation": ""
+        },
+        "model": {
+            "available_set": "Đã đặt các mô hình khả dụng: {available_models}",
+            "extra_added": "Đã thêm các mô hình bổ sung: {extra_models}",
+            "extra_metadata_added": "Đã thêm {extra_model_quantity} mục siêu dữ liệu mô hình bổ sung"
+        },
+        "status": {
+            "api_key_changed": "Khóa API đã được thay đổi thành",
+            "choose_lora": "",
+            "context_trimmed": "",
+            "files_suffix": "",
+            "generating": "",
+            "host_changed": "",
+            "host_proxy_reset": "",
+            "model_set": "Mô hình đã được đặt thành: ",
+            "proxy_changed": "",
+            "streaming": "Bắt đầu truyền đầu ra trực tiếp...",
+            "summarizing": "Đang tạo tóm tắt nội dung...",
+            "summary_done": "Hoàn thành tóm tắt",
+            "summary_label": "Tóm tắt",
+            "token_count": "Số lượng Token: ",
+            "tokens_per_second": "Số token mỗi giây: {token_generation_speed}",
+            "tools_enabled": "Công cụ đã bật: ",
+            "total_cost": ", Tổng cộng chi phí cho cuộc trò chuyện này là ",
+            "uploaded": "Tải lên thành công."
+        },
+        "train": {
+            "failed": "",
+            "file_not_ready": "",
+            "jobs_cancelled": "",
+            "models_added": "",
+            "token_estimate": "",
+            "upload_failed": "",
+            "upload_ok": ""
+        },
+        "xmchat": {
+            "dislike_no_message": "",
+            "dislike_ok": "",
+            "like_no_message": "",
+            "like_ok": ""
+        }
+    },
+    "naming": {
+        "by_datetime": "Theo ngày và giờ",
+        "by_first_question": "Theo câu hỏi đầu tiên",
+        "by_model_summary": "Tự động tóm tắt bằng LLM (Tiêu thụ token)"
+    },
+    "setup": {
+        "done": "Đã thiết lập xong. Vui lòng khởi động lại chương trình này.",
+        "first_run": {
+            "example_prefix": "trong",
+            "example_suffix": "Trong đó chứa các mục cài đặt có sẵn và mô tả ngắn gọn của chúng. Vui lòng xem wiki để biết thêm thông tin:",
+            "interactive": "Bắt đầu cấu hình tương tác ngay bây giờ. Khi gặp các mục cài đặt không biết phải làm gì, hãy nhấn Enter để bỏ qua, chương trình sẽ tự động chọn giá trị mặc định phù hợp.",
+            "intro": "Đang thiết lập lần đầu, vui lòng làm theo hướng dẫn để cấu hình, cài đặt sẽ được lưu vào",
+            "intro_suffix": "Trong."
+        },
+        "prompt": {
+            "as": "Cho:",
+            "colon": "：Xin chào! Bạn cần giúp đỡ với điều gì?",
+            "default_is": "Mặc định là",
+            "empty_line_ends": "Vui lòng nhập vào một dòng trống để kết thúc:",
+            "enter": "Vui lòng nhập.",
+            "not_a_number": "",
+            "period": "。",
+            "skipped": "Bạn đã chọn không thiết lập",
+            "yes_no": "Nhập Yes(y) hoặc No(n), mặc định là No:",
+            "you_set": "Bạn đã thiết lập了"
+        },
+        "proxy_url_suffix": "Địa chỉ proxy",
+        "restarting": "Đang cố gắng khởi động lại...",
+        "section": {
+            "features": "Bắt đầu cài đặt chức năng phần mềm ngay bây giờ.",
+            "other_api_keys": "Bây giờ bắt đầu thiết lập API Key cho các mô hình trực tuyến khác"
+        },
+        "users": {
+            "ask": "Bạn có muốn thiết lập tài khoản người dùng không? Sau khi thiết lập, người dùng cần đăng nhập để truy cập. Nhập Yes(y) hoặc No(n), mặc định là No:",
+            "password": "Nhập mật khẩu:",
+            "skipped": "Bạn đã chọn không thiết lập tài khoản người dùng.",
+            "username": "Vui lòng nhập tên người dùng trước, nhấn Enter để kết thúc thêm người dùng:"
+        },
+        "your_prefix": "Tôi không hiểu."
+    },
+    "ui": {
+        "chat": {
+            "delete_latest": "🗑️ Xóa cuộc trò chuyện mới nhất",
+            "delete_oldest": "🗑️ Xóa cuộc trò chuyện cũ nhất",
+            "delete_round": "Xóa cuộc trò chuyện này",
+            "drop_to_upload": "Thả tệp để tải lên",
+            "input_placeholder": "Nhập vào đây",
+            "knowledge_clear_first": "⚠️ Vui lòng xóa tệp lịch sử trong cơ sở kiến thức trước khi tải lên!",
+            "knowledge_files": "Tệp cơ sở kiến thức",
+            "knowledge_files_tip": "Quản lý tệp cơ sở kiến thức trong hộp công cụ",
+            "model_select": "Chọn Mô hình",
+            "new_conversation": "🧹 Cuộc trò chuyện mới",
+            "regenerate": "Tạo lại",
+            "regenerate_btn": "🔄 Tạo lại",
+            "single_turn": "Cuộc trò chuyện một lượt",
+            "upload_file": "Tải lên tệp",
+            "web_search": "Tìm kiếm trực tuyến"
+        },
+        "common": {
+            "cancel": "Hủy",
+            "close": "Đóng",
+            "details": "Chi tiết",
+            "ok": "OK",
+            "refresh": "🔄 Làm mới",
+            "restart_now": "Khởi động lại ngay",
+            "update": "Cập nhật"
+        },
+        "history": {
+            "confirm_delete": "Bạn có chắc chắn muốn xóa ",
+            "confirm_delete_suffix": " ?",
+            "default_name": "Lịch sử Cuộc trò chuyện",
+            "export_json": "Tệp lịch sử (JSON)",
+            "export_markdown": "Xuất ra Markdown",
+            "filename_label": "Đặt tên tệp lưu",
+            "filename_placeholder": "Đặt tên tệp: mặc định là .json, tùy chọn là .md",
+            "invalid_filename": "Vui lòng nhập tên tệp hợp lệ, không chứa các ký tự đặc biệt sau: ",
+            "load_from_list": "Tải cuộc trò chuyện từ danh sách",
+            "new_chat_prefix": "Cuộc trò chuyện mới ",
+            "rename": "Đổi tên cuộc trò chuyện này",
+            "save": "💾 Lưu Cuộc trò chuyện",
+            "search_placeholder": "Tìm kiếm (hỗ trợ regex)...",
+            "unnamed": "Lịch sử Cuộc trò chuyện không đặt tên"
+        },
+        "settings": {
+            "about": {
+                "name": "Chuanhu Chat",
+                "title": "Về"
+            },
+            "advanced": {
+                "check_update": "🔄 Kiểm tra cập nhật...",
+                "naming_method": "Phương thức đặt tên lịch sử trò chuyện",
+                "reply_language": "Chọn ngôn ngữ phản hồi (đối với chức năng tìm kiếm & chỉ mục)",
+                "single_turn": "Cuộc trò chuyện một lượt",
+                "stream_output": "Truyền đầu ra trực tiếp",
+                "title": "Nâng cao",
+                "toggle_theme": "Chuyển đổi chủ đề sáng/tối"
+            },
+            "model": {
+                "select": "Chọn Mô hình",
+                "select_lora": "Chọn Mô hình LoRA",
+                "title": "Mô hình"
+            },
+            "network": {
+                "proxy_label": "Địa chỉ proxy",
+                "proxy_placeholder": "Không có proxy...",
+                "reset": "🔙 Khôi phục cài đặt mạng mặc định",
+                "security_warning": "⚠️ Để đảm bảo an toàn cho API-Key, vui lòng chỉnh sửa cài đặt mạng trong tệp cấu hình `config.json`.",
+                "set_proxy": "🔄 Đặt Địa chỉ Proxy",
+                "title": "Mạng"
+            },
+            "title": "Cài đặt",
+            "update": {
+                "failed": "Cập nhật thất bại, vui lòng thử [cập nhật thủ công](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)",
+                "latest": "Bạn đang sử dụng phiên bản mới nhất!",
+                "no_permission": "Bạn không có quyền cập nhật. Vui lòng liên hệ với quản trị viên. Cách cấu hình của quản trị viên là thêm tên người dùng vào danh sách admin_list trong tệp cấu hình config.json.",
+                "success": "Cập nhật thành công, vui lòng khởi động lại chương trình này",
+                "trying": "Đang cố gắng cập nhật..."
+            },
+            "view_only": "Chỉ xem"
+        },
+        "toolbox": {
+            "extensions": {
+                "switch_api": "🔄 Chuyển đổi Địa chỉ API"
+            },
+            "knowledge": {
+                "formula_ocr": "Nhận dạng công thức",
+                "summarize_btn": "Tóm tắt",
+                "title": "Cơ sở kiến thức",
+                "two_column_pdf": "PDF hai cột",
+                "upload": "Tải lên",
+                "use_web_search": "Sử dụng tìm kiếm trực tuyến"
+            },
+            "model": {
+                "multi_account_hint": "Chế độ nhiều tài khoản đã được bật, không cần nhập key, bạn có thể bắt đầu cuộc trò chuyện trực tiếp",
+                "title": "Mô hình",
+                "usage_hint": "**Gửi tin nhắn** hoặc **Gửi khóa(key)** để hiển thị số dư"
+            },
+            "parameters": {
+                "stop_placeholder": "Nhập dấu dừng, cách nhau bằng dấu phẩy...",
+                "title": "Tham số",
+                "user_id": "Định danh người dùng",
+                "user_id_tip": "Sử dụng để xác định hành vi lạm dụng",
+                "warning": "# ⚠️ Lưu ý: Thay đổi yêu cầu cẩn thận. ⚠️"
+            },
+            "prompt": {
+                "load_from_template": "Tải từ mẫu Prompt",
+                "load_template": "Tải mẫu Prompt",
+                "retain_on_new": "Tạo Cuộc trò chuyện mới và giữ Prompt nguyên vẹn",
+                "select_collection": "Chọn Tệp bộ sưu tập mẫu Prompt",
+                "system_placeholder": "Nhập System Prompt ở đây..."
+            },
+            "tab": {
+                "conversation": "Cuộc trò chuyện",
+                "extensions": "Mở rộng",
+                "parameters": "Tham số"
+            },
+            "title": "Hộp công cụ"
+        },
+        "training": {
+            "dataset": {
+                "preview": "Xem trước tập dữ liệu",
+                "select": "Chọn tập dữ liệu",
+                "title": "Chuẩn bị tập dữ liệu",
+                "upload": "Tải lên OpenAI"
+            },
+            "openai": {
+                "finetune": "Feeling-tuning",
+                "status_label": "Tình trạng đào tạo",
+                "usage_guide": "Xem [hướng dẫn sử dụng](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35) để biết thêm chi tiết"
+            },
+            "status": {
+                "add_model": "Thêm mô hình đã đào tạo vào danh sách mô hình",
+                "cancel_all": "Hủy tất cả các nhiệm vụ",
+                "refresh": "Làm mới tình trạng",
+                "title": "Tình trạng",
+                "unknown": "Tạm thời chưa xác định"
+            },
+            "title": "Đào tạo",
+            "train": {
+                "epochs": "Số lượt đào tạo (Epochs)",
+                "file_id": "ID Tệp",
+                "file_id_placeholder": "Tự động điền sau khi tải lên OpenAI",
+                "start": "Bắt đầu đào tạo",
+                "suffix": "Hậu tố Tên Mô hình",
+                "suffix_placeholder": "Tùy chọn, sử dụng để phân biệt các mô hình khác nhau",
+                "title": "Đào tạo"
+            }
+        }
+    }
 }

@@ -360,7 +360,7 @@ class BaseLLMModel:
         def get_return_value():
             return chatbot, status_text
 
-        status_text = i18n("开始实时传输回答……")
+        status_text = i18n("msg.status.streaming")
         if fake_input:
             chatbot.append((fake_input, ""))
         else:
@@ -428,15 +428,15 @@ class BaseLLMModel:
                     chatbot.extend([(((image.name, None)), None) for image in image_files])
                     self.history.extend([construct_image(image.name) for image in image_files])
                 else:
-                    gr.Warning(i18n("该模型不支持多模态输入"))
+                    gr.Warning(i18n("msg.error.multimodal_unsupported"))
             if other_files:
                 try:
                     construct_index(self.api_key, file_src=files)
-                    status = i18n("索引构建完成")
+                    status = i18n("msg.index.complete")
                 except Exception as e:
                     import traceback
                     traceback.print_exc()
-                    status = i18n("索引构建失败！") + str(e)
+                    status = i18n("msg.index.failed") + str(e)
         if other_files:
             other_files = [f.name for f in other_files]
         else:
@@ -447,8 +447,8 @@ class BaseLLMModel:
         status = gr.Markdown()
         if files:
             index = construct_index(self.api_key, file_src=files)
-            status = i18n("总结完成")
-            logging.info(i18n("生成内容总结中……"))
+            status = i18n("msg.status.summary_done")
+            logging.info(i18n("msg.status.summarizing"))
             os.environ["OPENAI_API_KEY"] = self.api_key
             from langchain.callbacks import StdOutCallbackHandler
             from langchain.chains.summarize import load_summarize_chain
@@ -473,8 +473,8 @@ class BaseLLMModel:
                 {"input_documents": list(index.docstore.__dict__["_dict"].values())},
                 return_only_outputs=True,
             )["output_text"]
-            print(i18n("总结") + f": {summary}")
-            chatbot.append([i18n("上传了") + str(len(files)) + "个文件", summary])
+            print(i18n("msg.status.summary_label") + f": {summary}")
+            chatbot.append([i18n("msg.status.uploaded") + str(len(files)) + i18n("msg.status.files_suffix"), summary])
         return chatbot, status
 
     def prepare_inputs(
@@ -497,15 +497,15 @@ class BaseLLMModel:
             from langchain.vectorstores.base import VectorStoreRetriever
 
             limited_context = True
-            msg = "加载索引中……"
+            msg = i18n("msg.index.loading")
             logging.info(msg)
             index = construct_index(
                 self.api_key,
                 file_src=files,
                 load_from_cache_if_possible=load_from_cache_if_possible,
             )
-            assert index is not None, "获取索引失败"
-            msg = "索引获取成功，生成回答中……"
+            assert index is not None, i18n("msg.index.get_failed")
+            msg = i18n("msg.index.ready_answering")
             logging.info(msg)
             with retrieve_proxy():
                 retriever = VectorStoreRetriever(
@@ -601,7 +601,7 @@ class BaseLLMModel:
         reply_language="中文",
         should_check_token_count=True,
     ):  # repetition_penalty, top_k
-        status_text = "开始生成回答……"
+        status_text = i18n("msg.status.generating")
         if type(inputs) == list:
             logging.info(
                 "用户"
@@ -709,7 +709,7 @@ class BaseLLMModel:
                 + f"{self.history[-1]['content']}"
                 + colorama.Style.RESET_ALL
             )
-            logging.info(i18n("Tokens per second：{token_generation_speed}").format(token_generation_speed=str(self.all_token_counts[-1] / (end_time - start_time))))
+            logging.info(i18n("msg.status.tokens_per_second").format(token_generation_speed=str(self.all_token_counts[-1] / (end_time - start_time))))
 
         if limited_context:
             # self.history = self.history[-4:]
@@ -730,7 +730,7 @@ class BaseLLMModel:
                 del self.all_token_counts[0]
                 del self.history[:2]
             logging.info(status_text)
-            status_text = f"为了防止token超限，模型忘记了早期的 {count} 轮对话"
+            status_text = i18n("msg.status.context_trimmed").format(count=count)
             yield chatbot, status_text
 
         self.chatbot = chatbot
@@ -758,7 +758,7 @@ class BaseLLMModel:
             inputs = self.history[-1]["content"]
             del self.history[-1]
         else:
-            yield chatbot, f"{STANDARD_ERROR_MSG}上下文是空的"
+            yield chatbot, f'{STANDARD_ERROR_MSG}{i18n("msg.error.empty_context")}'
             return
 
         iter = self.predict(
@@ -856,7 +856,7 @@ class BaseLLMModel:
     def set_key(self, new_access_key):
         if "*" not in new_access_key:
             self.api_key = new_access_key.strip()
-            msg = i18n("API密钥更改为了") + hide_middle_chars(self.api_key)
+            msg = i18n("msg.status.api_key_changed") + hide_middle_chars(self.api_key)
             logging.info(msg)
             return self.api_key, msg
         else:
@@ -920,18 +920,18 @@ class BaseLLMModel:
 
     def delete_last_conversation(self, chatbot):
         if len(chatbot) > 0 and STANDARD_ERROR_MSG in chatbot[-1][1]:
-            msg = "由于包含报错信息，只删除chatbot记录"
+            msg = i18n("msg.history.deleted_error_only")
             chatbot = chatbot[:-1]
             return chatbot, self.history
         if len(self.history) > 0:
             self.history = self.history[:-2]
         if len(chatbot) > 0:
-            msg = "删除了一组chatbot对话"
+            msg = i18n("msg.history.deleted_pair")
             chatbot = chatbot[:-1]
         if len(self.all_token_counts) > 0:
-            msg = "删除了一组对话的token计数记录"
+            msg = i18n("msg.history.deleted_tokens")
             self.all_token_counts.pop()
-        msg = "删除了一组对话"
+        msg = i18n("msg.history.deleted_one")
         self.chatbot = chatbot
         self.auto_save(chatbot)
         return chatbot, msg
@@ -943,9 +943,9 @@ class BaseLLMModel:
         for i in range(len(token_lst)):
             token_sum += sum(token_lst[: i + 1])
         return (
-            i18n("Token 计数: ")
+            i18n("msg.status.token_count")
             + f"{sum(token_lst)}"
-            + i18n("，本次对话累计消耗了 ")
+            + i18n("msg.status.total_cost")
             + f"{token_sum} tokens"
         )
 
@@ -1133,7 +1133,7 @@ class BaseLLMModel:
         if filename == "CANCELED":
             return gr.update(), gr.update(), gr.update()
         if filename == "":
-            return i18n("你没有选择任何对话历史"), gr.update(), gr.update()
+            return i18n("msg.history.none_selected"), gr.update(), gr.update()
         if not filename.endswith(".json"):
             filename += ".json"
         if filename == os.path.basename(filename):
@@ -1151,11 +1151,11 @@ class BaseLLMModel:
         try:
             os.remove(history_file_path)
             os.remove(md_history_file_path)
-            return i18n("删除对话历史成功"), get_history_list(self.user_name), []
+            return i18n("msg.history.deleted"), get_history_list(self.user_name), []
         except Exception:
             logging.info(f"删除对话历史失败 {history_file_path}")
             return (
-                i18n("对话历史") + filename + i18n("已经被删除啦"),
+                i18n("msg.history.deleted_prefix") + filename + i18n("msg.history.deleted_suffix"),
                 get_history_list(self.user_name),
                 [],
             )

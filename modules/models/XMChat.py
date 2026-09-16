@@ -82,23 +82,23 @@ class XMChat(BaseLLMModel):
 
     def like(self):
         if self.last_conv_id is None:
-            return "点赞失败，你还没发送过消息"
+            return i18n("msg.xmchat.like_no_message")
         data = {
             "uuid": self.last_conv_id,
             "appraise": "good"
         }
         requests.post(self.url, json=data)
-        return "👍点赞成功，感谢反馈～"
+        return i18n("msg.xmchat.like_ok")
 
     def dislike(self):
         if self.last_conv_id is None:
-            return "点踩失败，你还没发送过消息"
+            return i18n("msg.xmchat.dislike_no_message")
         data = {
             "uuid": self.last_conv_id,
             "appraise": "bad"
         }
         requests.post(self.url, json=data)
-        return "👎点踩成功，感谢反馈～"
+        return i18n("msg.xmchat.dislike_ok")
 
     def prepare_inputs(self, real_inputs, use_websearch, files, reply_language, chatbot):
         fake_inputs = real_inputs

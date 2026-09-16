@@ -104,7 +104,7 @@ else:
 
 if "extra_model_metadata" in config:
     presets.MODEL_METADATA.update(config["extra_model_metadata"])
-    logging.info(i18n("已添加 {extra_model_quantity} 个额外的模型元数据").format(extra_model_quantity=len(config["extra_model_metadata"])))
+    logging.info(i18n("msg.model.extra_metadata_added").format(extra_model_quantity=len(config["extra_model_metadata"])))
 
 _model_metadata = {}
 for k, v in presets.MODEL_METADATA.items():
@@ -115,12 +115,12 @@ presets.MODEL_METADATA = _model_metadata
 
 if "available_models" in config:
     presets.MODELS = config["available_models"]
-    logging.info(i18n("已设置可用模型：{available_models}").format(available_models=config["available_models"]))
+    logging.info(i18n("msg.model.available_set").format(available_models=config["available_models"]))
 
 # 模型配置
 if "extra_models" in  config:
     presets.MODELS.extend(config["extra_models"])
-    logging.info(i18n("已添加额外的模型：{extra_models}").format(extra_models=config["extra_models"]))
+    logging.info(i18n("msg.model.extra_added").format(extra_models=config["extra_models"]))
 
 HIDE_MY_KEY = config.get("hide_my_key", False)
 

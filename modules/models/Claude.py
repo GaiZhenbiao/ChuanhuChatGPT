@@ -10,7 +10,7 @@ class Claude_Client(BaseLLMModel):
         super().__init__(model_name=model_name)
         self.api_secret = api_secret
         if None in [self.api_secret]:
-            raise Exception("请在配置文件或者环境变量中设置Claude的API Secret")
+            raise Exception(i18n("msg.error.claude_credentials"))
         self.claude_client = Anthropic(api_key=self.api_secret, base_url=self.api_host)
 
     def _get_claude_style_history(self):
@@ -101,4 +101,4 @@ class Claude_Client(BaseLLMModel):
         if response is not None:
             return response.content[0].text, response.usage.output_tokens
         else:
-            return i18n("获取资源错误"), 0
+            return i18n("msg.error.resource"), 0

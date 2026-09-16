@@ -1,201 +1,570 @@
 {
-    "获取资源错误": "Fel vid hämtning av resurser",
-    "该模型不支持多模态输入": "Den här modellen stöder inte multitmodal inmatning.",
-    " 中。": "Mitten.",
-    " 为: ": "För:",
-    " 吗？": " ?",
-    "# ⚠️ 务必谨慎更改 ⚠️": "# ⚠️ Var försiktig med ändringar. ⚠️",
-    "**发送消息** 或 **提交key** 以显示额度": "**Skicka meddelande** eller **Skicka in nyckel** för att visa kredit",
-    "**本月使用金额** ": "**Månadens användning** ",
-    "**获取API使用情况失败**": "**Misslyckades med att hämta API-användning**",
-    "**获取API使用情况失败**，sensitive_id错误或已过期": "**Misslyckades med att hämta API-användning**, felaktig eller utgången sensitive_id",
-    "**获取API使用情况失败**，需在填写`config.json`中正确填写sensitive_id": "**Misslyckades med att hämta API-användning**, korrekt sensitive_id behövs i `config.json`",
-    "== API 配置 ==": "== API-inställningar ==",
-    "== 基础配置 ==": "== Grundläggande konfiguration ==",
-    "== 高级配置 ==": "== Avancerade inställningar ==",
-    "API key为空，请检查是否输入正确。": "API-nyckeln är tom, kontrollera om den är korrekt inmatad.",
-    "API密钥更改为了": "API-nyckeln har ändrats till",
-    "IP地址信息正在获取中，请稍候...": "IP-adressinformation hämtas, vänligen vänta...",
-    "JSON解析错误,收到的内容: ": "JSON-tolkningsfel, mottaget innehåll: ",
-    "SSL错误，无法获取对话。": "SSL-fel, kunde inte hämta dialogen.",
-    "Token 计数: ": "Tokenräkning: ",
-    "☹️发生了错误：": "☹️Fel: ",
-    "⚠️ 为保证API-Key安全，请在配置文件`config.json`中修改网络设置": "⚠️ För att säkerställa säkerheten för API-nyckeln, vänligen ändra nätverksinställningarna i konfigurationsfilen `config.json`.",
-    "⚠️请先删除知识库中的历史文件，再尝试上传！": "⚠️ Ta bort historikfilen i kunskapsbanken innan du försöker ladda upp!",
-    "。": "。",
-    "。你仍然可以使用聊天功能。": ". Du kan fortfarande använda chattfunktionen.",
-    "上传": "Ladda upp",
-    "上传了": "Uppladdad",
-    "上传到 OpenAI 后自动填充": "Automatiskt ifylld efter uppladdning till OpenAI",
-    "上传到OpenAI": "Ladda upp till OpenAI",
-    "上传文件": "ladda upp fil",
-    "不支持的文件: ": "Ogiltig fil:",
-    "中。": "Mellan.",
-    "中，包含了可用设置项及其简要说明。请查看 wiki 获取更多信息：": "I, innehåller tillgängliga inställningsalternativ och deras korta beskrivningar. Besök wikin för mer information:",
-    "仅供查看": "Endast för visning",
-    "从Prompt模板中加载": "Ladda från Prompt-mall",
-    "从列表中加载对话": "Ladda dialog från lista",
-    "代理地址": "Proxyadress",
-    "代理错误，无法获取对话。": "Proxyfel, kunde inte hämta dialogen.",
-    "你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)": "Du har inte behörighet att komma åt GPT-4, [läs mer](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)",
-    "你没有选择任何对话历史": "Du har inte valt någon konversationshistorik.",
-    "你的": "Din",
-    "你真的要删除 ": "Är du säker på att du vill ta bort ",
-    "你设置了 ": "Du har ställt in.",
-    "你选择了不设置 ": "Du har valt att inte ställa in",
-    "你选择了不设置用户账户。": "Du har valt att inte skapa ett användarkonto.",
-    "使用在线搜索": "Använd online-sökning",
-    "停止符，用英文逗号隔开...": "Skriv in stopptecken här, separerade med kommatecken...",
-    "关于": "om",
-    "关闭": "Stäng",
-    "准备数据集": "Förbered dataset",
-    "切换亮暗色主题": "Byt ljus/mörk tema",
-    "删除对话历史成功": "Raderade konversationens historik.",
-    "删除这轮问答": "Ta bort denna omgång av Q&A",
-    "刷新状态": "Uppdatera status",
-    "剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)": "Återstående kvot är otillräcklig, [läs mer](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%C3%84mnen)",
-    "加载Prompt模板": "Ladda Prompt-mall",
-    "单轮对话": "Enkel dialog",
-    "历史记录（JSON）": "Historikfil (JSON)",
-    "参数": "Parametrar",
-    "双栏pdf": "Två-kolumns pdf",
-    "取消": "Avbryt",
-    "取消所有任务": "Avbryt alla uppgifter",
-    "可选，用于区分不同的模型": "Valfritt, används för att särskilja olika modeller",
-    "启用的工具：": "Aktiverade verktyg: ",
-    "在": "på",
-    "在工具箱中管理知识库文件": "hantera kunskapsbankfiler i verktygslådan",
-    "在线搜索": "onlinesökning",
-    "在这里输入": "Skriv in här",
-    "在这里输入System Prompt...": "Skriv in System Prompt här...",
-    "多账号模式已开启，无需输入key，可直接开始对话": "Flerkontoläge är aktiverat, ingen nyckel behövs, du kan starta dialogen direkt",
-    "好": "OK",
-    "实时传输回答": "Strömmande utdata",
-    "对话": "konversation",
-    "对话历史": "Dialoghistorik",
-    "对话历史记录": "Dialoghistorik",
-    "对话命名方式": "Dialognamn",
-    "导出为 Markdown": "Exportera som Markdown",
-    "川虎Chat": "Chuanhu Chat",
-    "川虎Chat 🚀": "Chuanhu Chat 🚀",
-    "工具箱": "verktygslåda",
-    "已经被删除啦": "Har raderats.",
-    "开始实时传输回答……": "Börjar strömma utdata...",
-    "开始训练": "Börja träning",
-    "微调": "Finjustering",
-    "总结": "Sammanfatta",
-    "总结完成": "Slutfört sammanfattningen.",
-    "您使用的就是最新版！": "Du använder den senaste versionen!",
-    "您的IP区域：": "Din IP-region: ",
-    "您的IP区域：未知。": "Din IP-region: Okänd.",
-    "您输入的 API 密钥为：": "Den API-nyckel du angav är:",
-    "找到了缓存的索引文件，加载中……": "Hittade cachefilens index, laddar...",
-    "拓展": "utvidgning",
-    "搜索（支持正则）...": "Sök (stöd för reguljära uttryck)...",
-    "数据集预览": "Datasetförhandsvisning",
-    "文件ID": "Fil-ID",
-    "新对话 ": "Ny dialog ",
-    "新建对话保留Prompt": "Skapa ny konversation med bevarad Prompt",
-    "是否设置 HTTP 代理？[Y/N]：": "Vill du ställa in en HTTP-proxy? [J/N]:",
-    "是否设置 OpenAI API 密钥？[Y/N]：": "Har du ställt in OpenAI API-nyckeln? [J/N]:",
-    "是否设置用户账户？设置后，用户需要登陆才可访问。输入 Yes(y) 或 No(n)，默认No：": "Vill du skapa ett användarkonto? Användaren måste logga in för att få åtkomst. Ange Ja(j) eller Nej(n), standard är Nej:",
-    "暂时未知": "Okänd",
-    "更新": "Uppdatera",
-    "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)": "Uppdateringen misslyckades, prova att [uppdatera manuellt](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)",
-    "更新成功，请重启本程序": "Uppdaterat framgångsrikt, starta om programmet",
-    "未命名对话历史记录": "Onämnd Dialoghistorik",
-    "未设置代理...": "Inte inställd proxy...",
-    "本月使用金额": "Månadens användning",
-    "构建索引中……": "Bygger index ...",
-    "查看[使用介绍](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35)": "Se [användarguiden](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35) för mer information",
-    "根据日期时间": "Enligt datum och tid",
-    "模型": "Modell",
-    "模型名称后缀": "Modellnamnstillägg",
-    "模型自动总结（消耗tokens）": "Modellens automatiska sammanfattning (förbrukar tokens)",
-    "模型设置为了：": "Modellen är inställd på: ",
-    "正在尝试更新...": "Försöker uppdatera...",
-    "正在尝试重启...": "Försöker starta om...",
-    "正在获取IP地址信息，请稍候...": "Hämtar IP-adressinformation, vänta...",
-    "正在进行首次设置，请按照提示进行配置，配置将会被保存在": "Du håller på med första inställningen, följ anvisningarna för att konfigurera. Konfigurationen sparas i",
-    "没有找到任何支持的文档。": "Inga supportdokument hittades.",
-    "添加训练好的模型到模型列表": "Lägg till tränad modell i modellistan",
-    "状态": "Status",
-    "现在开始设置其他在线模型的API Key": "Nu börja ställa in API-nyckeln för andra online-modeller.",
-    "现在开始进行交互式配置。碰到不知道该怎么办的设置项时，请直接按回车键跳过，程序会自动选择合适的默认值。": "Interaktiv konfiguration påbörjas nu. Om du stöter på en inställning som du inte vet hur du ska hantera, tryck bara på Retur-tangenten för att hoppa över den. Programmet kommer automatiskt välja lämpligt standardvärde.",
-    "现在开始进行交互式配置：": "Interaktiv konfiguration påbörjas nu:",
-    "现在开始进行软件功能设置": "Nu börjar du konfigurera programfunktionaliteten.",
-    "生成内容总结中……": "Genererar innehållssammanfattning...",
-    "用于定位滥用行为": "Används för att lokalisera missbruk",
-    "用户标识符": "Användar-ID",
-    "由Bilibili [土川虎虎虎](https://space.bilibili.com/29125536)、[明昭MZhao](https://space.bilibili.com/24807452) 和 [Keldos](https://github.com/Keldos-Li) 开发<br />访问川虎Chat的 [GitHub项目](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 下载最新版脚本": "Utvecklad av Bilibili [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) och [Keldos](https://github.com/Keldos-Li)\n\nLadda ner senaste koden från [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
-    "由于下面的原因，Google 拒绝返回 Gemini 的回答：\\n\\n": "Google vägrar att returnera Gemini's svar av följande skäl:",
-    "知识库": "kunskapsbank",
-    "知识库文件": "kunskapsbankfil",
-    "立即重启": "Starta om nu",
-    "第一条提问": "Första frågan",
-    "索引已保存至本地!": "Index har sparats lokalt!",
-    "索引构建失败！": "Indexeringen misslyckades!",
-    "索引构建完成": "Indexet har blivit byggt färdigt.",
-    "索引构建完成！": "Indexeringen är klar!",
-    "网络": "nätverksparametrar",
-    "获取API使用情况失败:": "Misslyckades med att hämta API-användning:",
-    "获取IP地理位置失败。原因：": "Misslyckades med att hämta IP-plats. Orsak: ",
-    "获取对话时发生错误，请查看后台日志": "Ett fel uppstod när dialogen hämtades, kontrollera bakgrundsloggen",
-    "覆盖gradio.oauth /logout路由": "Ersätt 'gradio.oauth/logout'-rutten.",
-    "训练": "träning",
-    "训练状态": "Träningsstatus",
-    "训练轮数（Epochs）": "Träningsomgångar (Epochs)",
-    "设置": "inställningar",
-    "设置保存文件名": "Ställ in sparfilnamn",
-    "设置完成。现在请重启本程序。": "Inställningarna är klara. Vänligen starta om programmet nu.",
-    "设置文件名: 默认为.json，可选为.md": "Ställ in filnamn: standard är .json, valfritt är .md",
-    "识别公式": "Formel OCR",
-    "详情": "Detaljer",
-    "请先输入用户名，输入空行结束添加用户：": "Var god och ange användarnamn, lägg till användare genom att trycka på Enter när du är klar:",
-    "请先选择Ollama后端模型\\n\\n": "Vänligen välj först Ollama backend-modellen.",
-    "请查看 config_example.json，配置 Azure OpenAI": "Vänligen granska config_example.json för att konfigurera Azure OpenAI",
-    "请检查网络连接，或者API-Key是否有效。": "Kontrollera nätverksanslutningen eller om API-nyckeln är giltig.",
-    "请输入 ": "Ange texten.",
-    "请输入 HTTP 代理地址：": "Ange HTTP-proxyadressen:",
-    "请输入 OpenAI API 密钥：": "Ange OpenAI API-nyckel:",
-    "请输入密码：": "Ange lösenord:",
-    "请输入对话内容。": "Ange dialoginnehåll.",
-    "请输入有效的文件名，不要包含以下特殊字符：": "Ange ett giltigt filnamn, använd inte följande specialtecken: ",
-    "读取超时，无法获取对话。": "Läsningen tog för lång tid, kunde inte hämta dialogen.",
-    "账单信息不适用": "Faktureringsinformation är inte tillämplig",
-    "跳过设置 HTTP 代理。": "Hoppa över inställning av HTTP-proxy.",
-    "跳过设置 OpenAI API 密钥。": "Hoppa över att ange OpenAI API-nyckel.",
-    "输入 Yes(y) 或 No(n)，默认No：": "Ange Ja(j) eller Nej(n), standard är Nej:",
-    "连接超时，无法获取对话。": "Anslutningen tog för lång tid, kunde inte hämta dialogen.",
-    "退出用户": "Logga ut användaren",
-    "选择LoRA模型": "Välj LoRA Modell",
-    "选择Prompt模板集合文件": "Välj Prompt-mall Samlingsfil",
-    "选择回复语言（针对搜索&索引功能）": "Välj svarspråk (för sök- och indexfunktion)",
-    "选择数据集": "Välj dataset",
-    "选择模型": "Välj Modell",
-    "配置已保存在 config.json 中。": "Inställningarna har sparats i config.json.",
-    "释放文件以上传": "Släpp filen för att ladda upp",
-    "重命名该对话": "Byt namn på dialogen",
-    "重新生成": "Återgenerera",
-    "高级": "Avancerat",
-    "，本次对话累计消耗了 ": ", Total kostnad för denna dialog är ",
-    "，请使用 .pdf, .docx, .pptx, .epub, .xlsx 等文档。": "Använd .pdf, .docx, .pptx, .epub, .xlsx eller liknande dokument.",
-    "，输入空行结束：": "，Ange en tom rad för att avsluta：",
-    "，默认为 ": "Standardinställning.",
-    "：": "：",
-    "💾 保存对话": "💾 Spara Dialog",
-    "📝 导出为 Markdown": "📝 Exportera som Markdown",
-    "🔄 切换API地址": "🔄 Byt API-adress",
-    "🔄 刷新": "🔄 Uppdatera",
-    "🔄 检查更新...": "🔄 Sök efter uppdateringar...",
-    "🔄 设置代理地址": "🔄 Ställ in Proxyadress",
-    "🔄 重新生成": "🔄 Regenerera",
-    "🔙 恢复默认网络设置": "🔙 Återställ standardnätverksinställningar+",
-    "🗑️ 删除最新对话": "🗑️ Ta bort senaste dialogen",
-    "🗑️ 删除最旧对话": "🗑️ Ta bort äldsta dialogen",
-    "🧹 新的对话": "🧹 Ny Dialog",
-    "gpt5_description": "Den bästa modellen för kodning och agentuppgifter över domäner. 400 000 tokens kontextfönster och upp till 128 000 tokens utdata.",
-    "gpt5mini_description": "En snabbare och mer kostnadseffektiv version av GPT‑5 för väldefinierade uppgifter. 400 000 tokens kontextfönster och upp till 128 000 tokens utdata.",
-    "gpt5nano_description": "Den snabbaste och mest kostnadseffektiva versionen av GPT‑5. 400 000 tokens kontextfönster och upp till 128 000 tokens utdata.",
-    "no_permission_to_update_description": "Du har inte behörighet att uppdatera. Vänligen kontakta administratören. Administratören konfigureras genom att lägga till användarnamnet i admin_list i konfigurationsfilen config.json."
+    "app": {
+        "description": "Utvecklad av Bilibili [土川虎虎虎](https://space.bilibili.com/29125536), [明昭MZhao](https://space.bilibili.com/24807452) och [Keldos](https://github.com/Keldos-Li)\n\nLadda ner senaste koden från [GitHub](https://github.com/GaiZhenbiao/ChuanhuChatGPT)",
+        "title": "Chuanhu Chat 🚀"
+    },
+    "config": {
+        "api_key_list": {
+            "label": "",
+            "prompt": ""
+        },
+        "available_models": {
+            "label": "",
+            "prompt": ""
+        },
+        "azure_deployment_name": {
+            "label": ""
+        },
+        "azure_embedding_deployment_name": {
+            "label": ""
+        },
+        "azure_embedding_model_name": {
+            "label": ""
+        },
+        "azure_openai_api_base_url": {
+            "label": ""
+        },
+        "azure_openai_api_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "azure_openai_api_version": {
+            "label": ""
+        },
+        "bot_avatar": {
+            "label": "",
+            "prompt": ""
+        },
+        "chat_name_method_index": {
+            "label": "",
+            "prompt": ""
+        },
+        "check_update": {
+            "label": "",
+            "prompt": ""
+        },
+        "cloude_api_secret": {
+            "label": "",
+            "prompt": ""
+        },
+        "default_chuanhu_assistant_model": {
+            "label": "",
+            "prompt": ""
+        },
+        "default_model": {
+            "label": "",
+            "local_models": "",
+            "prompt": ""
+        },
+        "ernie_api_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "ernie_secret_key": {
+            "label": ""
+        },
+        "extra_models": {
+            "label": "",
+            "prompt": ""
+        },
+        "google_api_key": {
+            "label": ""
+        },
+        "google_cse_id": {
+            "label": ""
+        },
+        "google_palm_api_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "hide_history_when_not_logged_in": {
+            "label": "",
+            "label_2": "",
+            "prompt": "",
+            "prompt_2": ""
+        },
+        "hide_my_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "http_proxy": {
+            "label": "",
+            "prompt": ""
+        },
+        "latex_option": {
+            "label": "",
+            "prompt": ""
+        },
+        "local_embedding": {
+            "label": "",
+            "prompt": ""
+        },
+        "midjourney_discord_proxy_url": {
+            "label": ""
+        },
+        "midjourney_proxy_api_base": {
+            "prompt": ""
+        },
+        "midjourney_proxy_api_secret": {
+            "label": ""
+        },
+        "midjourney_temp_folder": {
+            "label": ""
+        },
+        "minimax_api_key": {
+            "label": "",
+            "prompt": ""
+        },
+        "minimax_group_id": {
+            "label": ""
+        },
+        "openai_api_base": {
+            "label": "",
+            "prompt": ""
+        },
+        "openai_api_key": {
+            "label": "",
+            "label_2": "",
+            "prompt": "",
+            "prompt_2": ""
+        },
+        "serpapi_api_key": {
+            "label": ""
+        },
+        "server_name": {
+            "label": "",
+            "prompt": ""
+        },
+        "server_port": {
+            "label": ""
+        },
+        "share": {
+            "label": "",
+            "prompt": ""
+        },
+        "spark_api_key": {
+            "label": ""
+        },
+        "spark_api_secret": {
+            "label": ""
+        },
+        "spark_appid": {
+            "label": "",
+            "prompt": ""
+        },
+        "user_avatar": {
+            "label": ""
+        },
+        "wolfram_alpha_appid": {
+            "label": ""
+        },
+        "xmchat_api_key": {
+            "label": "",
+            "prompt": ""
+        }
+    },
+    "model": {
+        "chuanhu": {
+            "description": "En agent som använder flera verktyg för att lösa komplexa problem.",
+            "question_1": "Hur är vädret i Hangzhou idag?",
+            "question_2": "Vilka nyheter har Apple släppt nyligen?",
+            "question_3": "Hur ser grafikkortspriserna ut nu?",
+            "question_4": "Vilka nya trender finns på TikTok?",
+            "slogan": "Vad kan Chuanhu göra för dig idag?"
+        },
+        "chuanhu_pro": {
+            "description": "Som AutoGPT – löser ditt problem helt automatiskt"
+        },
+        "claude": {
+            "slogan": "Vad kan jag hjälpa dig med?"
+        },
+        "claude3_haiku": {
+            "description": ""
+        },
+        "claude3_opus": {
+            "description": ""
+        },
+        "claude3_sonnet": {
+            "description": ""
+        },
+        "deepseek": {
+            "description": "DeepSeek V3 Chat"
+        },
+        "gpt": {
+            "slogan": "Hur kan jag hjälpa dig idag?"
+        },
+        "gpt35turbo": {
+            "description": ""
+        },
+        "gpt35turbo16k": {
+            "description": ""
+        },
+        "gpt35turbo_instruct": {
+            "description": ""
+        },
+        "gpt4": {
+            "description": ""
+        },
+        "gpt4_32k": {
+            "description": ""
+        },
+        "gpt4o": {
+            "description": ""
+        },
+        "gpt4omini": {
+            "description": ""
+        },
+        "gpt4turbo": {
+            "description": ""
+        },
+        "gpt5": {
+            "description": "Den bästa modellen för kodning och agentuppgifter över domäner. 400 000 tokens kontextfönster och upp till 128 000 tokens utdata."
+        },
+        "gpt5mini": {
+            "description": "En snabbare och mer kostnadseffektiv version av GPT‑5 för väldefinierade uppgifter. 400 000 tokens kontextfönster och upp till 128 000 tokens utdata."
+        },
+        "gpt5nano": {
+            "description": "Den snabbaste och mest kostnadseffektiva versionen av GPT‑5. 400 000 tokens kontextfönster och upp till 128 000 tokens utdata."
+        },
+        "groq_gemma_7b": {
+            "description": ""
+        },
+        "groq_llama3_70b": {
+            "description": ""
+        },
+        "groq_llama3_8b": {
+            "description": ""
+        },
+        "groq_mixtral_8x7b": {
+            "description": ""
+        },
+        "o1": {
+            "description": ""
+        }
+    },
+    "msg": {
+        "billing": {
+            "failed": "**Misslyckades med att hämta API-användning**",
+            "failed_expired": "**Misslyckades med att hämta API-användning**, felaktig eller utgången sensitive_id",
+            "failed_log": "Misslyckades med att hämta API-användning:",
+            "failed_sensitive_id": "**Misslyckades med att hämta API-användning**, korrekt sensitive_id behövs i `config.json`",
+            "monthly_usage_label": "Månadens användning",
+            "monthly_usage_md": "**Månadens användning** "
+        },
+        "error": {
+            "azure_not_configured": "Vänligen granska config_example.json för att konfigurera Azure OpenAI",
+            "billing_not_applicable": "Faktureringsinformation är inte tillämplig",
+            "claude_credentials": "",
+            "connection_timeout": "Anslutningen tog för lång tid, kunde inte hämta dialogen.",
+            "empty_context": "",
+            "empty_filename": "",
+            "empty_response": "",
+            "ernie_credentials": "",
+            "gemini_no_response": "Kunde inte få ett giltigt svar från Gemini API",
+            "gemini_refused": "Google vägrar att returnera Gemini's svar av följande skäl:",
+            "general": "Ett fel uppstod när dialogen hämtades, kontrollera bakgrundsloggen",
+            "json_parse": "JSON-tolkningsfel, mottaget innehåll: ",
+            "multimodal_unsupported": "Den här modellen stöder inte multitmodal inmatning.",
+            "no_api_key": "API-nyckeln är tom, kontrollera om den är korrekt inmatad.",
+            "no_documents": "Inga supportdokument hittades.",
+            "no_gpt4_permission": "Du har inte behörighet att komma åt GPT-4, [läs mer](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)",
+            "no_input": "Ange dialoginnehåll.",
+            "ollama_select_model": "Vänligen välj först Ollama backend-modellen.",
+            "palm_refused": "",
+            "prefix": "☹️Fel: ",
+            "proxy": "Proxyfel, kunde inte hämta dialogen.",
+            "quota_exceeded": "Återstående kvot är otillräcklig, [läs mer](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%C3%84mnen)",
+            "read_timeout": "Läsningen tog för lång tid, kunde inte hämta dialogen.",
+            "resource": "Fel vid hämtning av resurser",
+            "retrieve": "Kontrollera nätverksanslutningen eller om API-nyckeln är giltig.",
+            "spark_credentials": "",
+            "spark_generic": "",
+            "spark_request": "",
+            "ssl": "SSL-fel, kunde inte hämta dialogen.",
+            "unsupported_file": "Ogiltig fil:",
+            "unsupported_file_suffix": "Använd .pdf, .docx, .pptx, .epub, .xlsx eller liknande dokument."
+        },
+        "geo": {
+            "china_warning": "",
+            "failed": "Misslyckades med att hämta IP-plats. Orsak: ",
+            "failed_suffix": ". Du kan fortfarande använda chattfunktionen.",
+            "fetching": "Hämtar IP-adressinformation, vänta...",
+            "ipapi_failed": "",
+            "locating": "IP-adressinformation hämtas, vänligen vänta...",
+            "region": "Din IP-region: ",
+            "unknown": "Din IP-region: Okänd."
+        },
+        "history": {
+            "deleted": "Raderade konversationens historik.",
+            "deleted_error_only": "",
+            "deleted_one": "",
+            "deleted_pair": "",
+            "deleted_prefix": "Dialoghistorik",
+            "deleted_suffix": "Har raderats.",
+            "deleted_tokens": "",
+            "none_selected": "Du har inte valt någon konversationshistorik."
+        },
+        "index": {
+            "building": "Bygger index ...",
+            "built": "Indexeringen är klar!",
+            "cache_found": "Hittade cachefilens index, laddar...",
+            "complete": "Indexet har blivit byggt färdigt.",
+            "failed": "Indexeringen misslyckades!",
+            "get_failed": "",
+            "loading": "",
+            "ready_answering": "",
+            "saved": "Index har sparats lokalt!"
+        },
+        "midjourney": {
+            "elapsed": "",
+            "failed": "",
+            "in_progress": "",
+            "not_started": "",
+            "please_wait": "",
+            "prefix": "",
+            "progress": "",
+            "status_failed": "",
+            "status_line": "",
+            "submit_error": "",
+            "submit_failed": "",
+            "submitted": "",
+            "submitted_at": "",
+            "time_cost": "",
+            "timeout": "",
+            "unknown_error": "",
+            "unknown_reason": "",
+            "unknown_type": "",
+            "upscale": "",
+            "variation": ""
+        },
+        "model": {
+            "available_set": "Tillgängliga modeller inställda: {available_models}",
+            "extra_added": "Extra modeller tillagda: {extra_models}",
+            "extra_metadata_added": "Lade till {extra_model_quantity} extra modellmetadata"
+        },
+        "status": {
+            "api_key_changed": "API-nyckeln har ändrats till",
+            "choose_lora": "",
+            "context_trimmed": "",
+            "files_suffix": "",
+            "generating": "",
+            "host_changed": "",
+            "host_proxy_reset": "",
+            "model_set": "Modellen är inställd på: ",
+            "proxy_changed": "",
+            "streaming": "Börjar strömma utdata...",
+            "summarizing": "Genererar innehållssammanfattning...",
+            "summary_done": "Slutfört sammanfattningen.",
+            "summary_label": "Sammanfattning",
+            "token_count": "Tokenräkning: ",
+            "tokens_per_second": "Tokens per sekund: {token_generation_speed}",
+            "tools_enabled": "Aktiverade verktyg: ",
+            "total_cost": ", Total kostnad för denna dialog är ",
+            "uploaded": "Uppladdad"
+        },
+        "train": {
+            "failed": "",
+            "file_not_ready": "",
+            "jobs_cancelled": "",
+            "models_added": "",
+            "token_estimate": "",
+            "upload_failed": "",
+            "upload_ok": ""
+        },
+        "xmchat": {
+            "dislike_no_message": "",
+            "dislike_ok": "",
+            "like_no_message": "",
+            "like_ok": ""
+        }
+    },
+    "naming": {
+        "by_datetime": "Enligt datum och tid",
+        "by_first_question": "Första frågan",
+        "by_model_summary": "Modellens automatiska sammanfattning (förbrukar tokens)"
+    },
+    "setup": {
+        "done": "Inställningarna är klara. Vänligen starta om programmet nu.",
+        "first_run": {
+            "example_prefix": "på",
+            "example_suffix": "I, innehåller tillgängliga inställningsalternativ och deras korta beskrivningar. Besök wikin för mer information:",
+            "interactive": "Interaktiv konfiguration påbörjas nu. Om du stöter på en inställning som du inte vet hur du ska hantera, tryck bara på Retur-tangenten för att hoppa över den. Programmet kommer automatiskt välja lämpligt standardvärde.",
+            "intro": "Du håller på med första inställningen, följ anvisningarna för att konfigurera. Konfigurationen sparas i",
+            "intro_suffix": "Mellan."
+        },
+        "prompt": {
+            "as": "För:",
+            "colon": "：",
+            "default_is": "Standardinställning.",
+            "empty_line_ends": "，Ange en tom rad för att avsluta：",
+            "enter": "Ange texten.",
+            "not_a_number": "",
+            "period": "。",
+            "skipped": "Du har valt att inte ställa in",
+            "yes_no": "Ange Ja(j) eller Nej(n), standard är Nej:",
+            "you_set": "Du har ställt in."
+        },
+        "proxy_url_suffix": "Proxyadress",
+        "restarting": "Försöker starta om...",
+        "section": {
+            "features": "Nu börjar du konfigurera programfunktionaliteten.",
+            "other_api_keys": "Nu börja ställa in API-nyckeln för andra online-modeller."
+        },
+        "users": {
+            "ask": "Vill du skapa ett användarkonto? Användaren måste logga in för att få åtkomst. Ange Ja(j) eller Nej(n), standard är Nej:",
+            "password": "Ange lösenord:",
+            "skipped": "Du har valt att inte skapa ett användarkonto.",
+            "username": "Var god och ange användarnamn, lägg till användare genom att trycka på Enter när du är klar:"
+        },
+        "your_prefix": "Din"
+    },
+    "ui": {
+        "chat": {
+            "delete_latest": "🗑️ Ta bort senaste dialogen",
+            "delete_oldest": "🗑️ Ta bort äldsta dialogen",
+            "delete_round": "Ta bort denna omgång av Q&A",
+            "drop_to_upload": "Släpp filen för att ladda upp",
+            "input_placeholder": "Skriv in här",
+            "knowledge_clear_first": "⚠️ Ta bort historikfilen i kunskapsbanken innan du försöker ladda upp!",
+            "knowledge_files": "kunskapsbankfil",
+            "knowledge_files_tip": "hantera kunskapsbankfiler i verktygslådan",
+            "model_select": "Välj Modell",
+            "new_conversation": "🧹 Ny Dialog",
+            "regenerate": "Återgenerera",
+            "regenerate_btn": "🔄 Regenerera",
+            "single_turn": "Enkel dialog",
+            "upload_file": "ladda upp fil",
+            "web_search": "onlinesökning"
+        },
+        "common": {
+            "cancel": "Avbryt",
+            "close": "Stäng",
+            "details": "Detaljer",
+            "ok": "OK",
+            "refresh": "🔄 Uppdatera",
+            "restart_now": "Starta om nu",
+            "update": "Uppdatera"
+        },
+        "history": {
+            "confirm_delete": "Är du säker på att du vill ta bort ",
+            "confirm_delete_suffix": " ?",
+            "default_name": "Dialoghistorik",
+            "export_json": "Historikfil (JSON)",
+            "export_markdown": "Exportera som Markdown",
+            "filename_label": "Ställ in sparfilnamn",
+            "filename_placeholder": "Ställ in filnamn: standard är .json, valfritt är .md",
+            "invalid_filename": "Ange ett giltigt filnamn, använd inte följande specialtecken: ",
+            "load_from_list": "Ladda dialog från lista",
+            "new_chat_prefix": "Ny dialog ",
+            "rename": "Byt namn på dialogen",
+            "save": "💾 Spara Dialog",
+            "search_placeholder": "Sök (stöd för reguljära uttryck)...",
+            "unnamed": "Onämnd Dialoghistorik"
+        },
+        "settings": {
+            "about": {
+                "name": "Chuanhu Chat",
+                "title": "om"
+            },
+            "advanced": {
+                "check_update": "🔄 Sök efter uppdateringar...",
+                "naming_method": "Dialognamn",
+                "reply_language": "Välj svarspråk (för sök- och indexfunktion)",
+                "single_turn": "Enkel dialog",
+                "stream_output": "Strömmande utdata",
+                "title": "Avancerat",
+                "toggle_theme": "Byt ljus/mörk tema"
+            },
+            "model": {
+                "select": "Välj Modell",
+                "select_lora": "Välj LoRA Modell",
+                "title": "Modell"
+            },
+            "network": {
+                "proxy_label": "Proxyadress",
+                "proxy_placeholder": "Inte inställd proxy...",
+                "reset": "🔙 Återställ standardnätverksinställningar+",
+                "security_warning": "⚠️ För att säkerställa säkerheten för API-nyckeln, vänligen ändra nätverksinställningarna i konfigurationsfilen `config.json`.",
+                "set_proxy": "🔄 Ställ in Proxyadress",
+                "title": "nätverksparametrar"
+            },
+            "title": "inställningar",
+            "update": {
+                "failed": "Uppdateringen misslyckades, prova att [uppdatera manuellt](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)",
+                "latest": "Du använder den senaste versionen!",
+                "no_permission": "Du har inte behörighet att uppdatera. Vänligen kontakta administratören. Administratören konfigureras genom att lägga till användarnamnet i admin_list i konfigurationsfilen config.json.",
+                "success": "Uppdaterat framgångsrikt, starta om programmet",
+                "trying": "Försöker uppdatera..."
+            },
+            "view_only": "Endast för visning"
+        },
+        "toolbox": {
+            "extensions": {
+                "switch_api": "🔄 Byt API-adress"
+            },
+            "knowledge": {
+                "formula_ocr": "Formel OCR",
+                "summarize_btn": "Sammanfatta",
+                "title": "kunskapsbank",
+                "two_column_pdf": "Två-kolumns pdf",
+                "upload": "Ladda upp",
+                "use_web_search": "Använd online-sökning"
+            },
+            "model": {
+                "multi_account_hint": "Flerkontoläge är aktiverat, ingen nyckel behövs, du kan starta dialogen direkt",
+                "title": "Modell",
+                "usage_hint": "**Skicka meddelande** eller **Skicka in nyckel** för att visa kredit"
+            },
+            "parameters": {
+                "stop_placeholder": "Skriv in stopptecken här, separerade med kommatecken...",
+                "title": "Parametrar",
+                "user_id": "Användar-ID",
+                "user_id_tip": "Används för att lokalisera missbruk",
+                "warning": "# ⚠️ Var försiktig med ändringar. ⚠️"
+            },
+            "prompt": {
+                "load_from_template": "Ladda från Prompt-mall",
+                "load_template": "Ladda Prompt-mall",
+                "retain_on_new": "Skapa ny konversation med bevarad Prompt",
+                "select_collection": "Välj Prompt-mall Samlingsfil",
+                "system_placeholder": "Skriv in System Prompt här..."
+            },
+            "tab": {
+                "conversation": "konversation",
+                "extensions": "utvidgning",
+                "parameters": "Parametrar"
+            },
+            "title": "verktygslåda"
+        },
+        "training": {
+            "dataset": {
+                "preview": "Datasetförhandsvisning",
+                "select": "Välj dataset",
+                "title": "Förbered dataset",
+                "upload": "Ladda upp till OpenAI"
+            },
+            "openai": {
+                "finetune": "Finjustering",
+                "status_label": "Träningsstatus",
+                "usage_guide": "Se [användarguiden](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#微调-gpt-35) för mer information"
+            },
+            "status": {
+                "add_model": "Lägg till tränad modell i modellistan",
+                "cancel_all": "Avbryt alla uppgifter",
+                "refresh": "Uppdatera status",
+                "title": "Status",
+                "unknown": "Okänd"
+            },
+            "title": "träning",
+            "train": {
+                "epochs": "Träningsomgångar (Epochs)",
+                "file_id": "Fil-ID",
+                "file_id_placeholder": "Automatiskt ifylld efter uppladdning till OpenAI",
+                "start": "Börja träning",
+                "suffix": "Modellnamnstillägg",
+                "suffix_placeholder": "Valfritt, används för att särskilja olika modeller",
+                "title": "träning"
+            }
+        }
+    }
 }

@@ -442,7 +442,7 @@ def save_file(filename, model):
     if not filename.endswith(".json") and not filename.endswith(".md"):
         filename += ".json"
     if filename == ".json":
-        raise Exception("文件名不能为空")
+        raise Exception(i18n("msg.error.empty_filename"))
 
     json_s = {
         "system": system,
@@ -627,12 +627,12 @@ def reset_textbox():
 def reset_default():
     default_host = shared.state.reset_api_host()
     retrieve_proxy("")
-    return gr.update(value=default_host), gr.update(value=""), "API-Host 和代理已重置"
+    return gr.update(value=default_host), gr.update(value=""), i18n("msg.status.host_proxy_reset")
 
 
 def change_api_host(host):
     shared.state.set_api_host(host)
-    msg = f"API-Host更改为了{host}"
+    msg = i18n("msg.status.host_changed").format(host=host)
     logging.info(msg)
     return msg
 
@@ -640,7 +640,7 @@ def change_api_host(host):
 def change_proxy(proxy):
     retrieve_proxy(proxy)
     os.environ["HTTPS_PROXY"] = proxy
-    msg = f"代理更改为了{proxy}"
+    msg = i18n("msg.status.proxy_changed").format(proxy=proxy)
     logging.info(msg)
     return msg
 
@@ -659,7 +659,7 @@ def hide_middle_chars(s):
 
 def submit_key(key):
     key = key.strip()
-    msg = f"API密钥更改为了{hide_middle_chars(key)}"
+    msg = i18n("msg.status.api_key_changed") + hide_middle_chars(key)
     logging.info(msg)
     return key, msg
 
@@ -682,7 +682,7 @@ def get_geoip():
 
     # 如果正在获取IP信息，则返回等待消息
     if FETCHING_IP:
-        return i18n("IP地址信息正在获取中，请稍候...")
+        return i18n("msg.geo.locating")
 
     # 定义一个内部函数用于在新线程中执行IP信息的获取
     def fetch_ip():
@@ -692,21 +692,21 @@ def get_geoip():
                 response = requests.get("https://ipapi.co/json/", timeout=5)
             data = response.json()
         except Exception:
-            data = {"error": True, "reason": "连接ipapi失败"}
+            data = {"error": True, "reason": i18n("msg.geo.ipapi_failed")}
         if "error" in data.keys():
             # logging.warning(f"无法获取IP地址信息。\n{data}")
             if data["reason"] == "RateLimited":
-                SERVER_GEO_IP_MSG = i18n("您的IP区域：未知。")
+                SERVER_GEO_IP_MSG = i18n("msg.geo.unknown")
             else:
                 SERVER_GEO_IP_MSG = (
-                    i18n("获取IP地理位置失败。原因：") + f"{data['reason']}" + i18n("。你仍然可以使用聊天功能。")
+                    i18n("msg.geo.failed") + f"{data['reason']}" + i18n("msg.geo.failed_suffix")
                 )
         else:
             country = data["country_name"]
             if country == "China":
-                SERVER_GEO_IP_MSG = "**您的IP区域：中国。请立即检查代理设置，在不受支持的地区使用API可能导致账号被封禁。**"
+                SERVER_GEO_IP_MSG = i18n("msg.geo.china_warning")
             else:
-                SERVER_GEO_IP_MSG = i18n("您的IP区域：") + f"{country}。"
+                SERVER_GEO_IP_MSG = i18n("msg.geo.region") + f"{country}。"
             logging.info(SERVER_GEO_IP_MSG)
         FETCHING_IP = False
 
@@ -718,7 +718,7 @@ def get_geoip():
     thread.start()
 
     # 返回一个默认消息，真正的IP信息将由新线程更新
-    return i18n("正在获取IP地址信息，请稍候...")
+    return i18n("msg.geo.fetching")
 
 
 def find_n(lst, max_num):
@@ -766,7 +766,7 @@ def transfer_input(inputs):
 
 def update_chuanhu(username):
     if username not in admin_list:
-        return gr.Markdown(value=i18n("no_permission_to_update_description"))
+        return gr.Markdown(value=i18n("ui.settings.update.no_permission"))
     from .repo import background_update
 
     print("[Updater] Trying to update...")
@@ -774,13 +774,11 @@ def update_chuanhu(username):
     if update_status == "success":
         logging.info("Successfully updated, restart needed")
         status = '<span id="update-status" class="hideK">success</span>'
-        return gr.Markdown(value=i18n("更新成功，请重启本程序") + status)
+        return gr.Markdown(value=i18n("ui.settings.update.success") + status)
     else:
         status = '<span id="update-status" class="hideK">failure</span>'
         return gr.Markdown(
-            value=i18n(
-                "更新失败，请尝试[手动更新](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程#手动更新)"
-            )
+            value=i18n("ui.settings.update.failed")
             + status
         )
 
@@ -875,7 +873,7 @@ def new_auto_history_filename(username):
         ) as f:
             if len(f.read()) == 0:
                 return latest_file
-    now = i18n("新对话 ") + datetime.datetime.now().strftime("%m-%d %H-%M")
+    now = i18n("ui.history.new_chat_prefix") + datetime.datetime.now().strftime("%m-%d %H-%M")
     return f"{now}.json"
 
 
@@ -892,15 +890,11 @@ def get_history_filepath(username):
 
 def beautify_err_msg(err_msg):
     if "insufficient_quota" in err_msg:
-        return i18n(
-            "剩余配额不足，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#you-exceeded-your-current-quota-please-check-your-plan-and-billing-details)"
-        )
+        return i18n("msg.error.quota_exceeded")
     if "The model `gpt-4` does not exist" in err_msg:
-        return i18n(
-            "你没有权限访问 GPT4，[进一步了解](https://github.com/GaiZhenbiao/ChuanhuChatGPT/issues/843)"
-        )
+        return i18n("msg.error.no_gpt4_permission")
     if "Resource not found" in err_msg:
-        return i18n("请查看 config_example.json，配置 Azure OpenAI")
+        return i18n("msg.error.azure_not_configured")
     try:
         err_msg = json.loads(err_msg)["error"]["message"]
     except Exception:
@@ -978,33 +972,33 @@ class ConfigItem:
 def generate_prompt_string(config_item):
     if config_item.default is not None:
         return (
-            i18n("请输入 ")
+            i18n("setup.prompt.enter")
             + colorama.Fore.GREEN
             + i18n(config_item.name)
             + colorama.Style.RESET_ALL
-            + i18n("，默认为 ")
+            + i18n("setup.prompt.default_is")
             + colorama.Fore.GREEN
             + str(config_item.default)
             + colorama.Style.RESET_ALL
-            + i18n("：")
+            + i18n("setup.prompt.colon")
         )
     else:
         return (
-            i18n("请输入 ")
+            i18n("setup.prompt.enter")
             + colorama.Fore.GREEN
             + i18n(config_item.name)
             + colorama.Style.RESET_ALL
-            + i18n("：")
+            + i18n("setup.prompt.colon")
         )
 
 
 def generate_result_string(config_item, config_value):
     return (
-        i18n("你设置了 ")
+        i18n("setup.prompt.you_set")
         + colorama.Fore.CYAN
         + i18n(config_item.name)
         + colorama.Style.RESET_ALL
-        + i18n(" 为: ")
+        + i18n("setup.prompt.as")
         + config_value
     )
 
@@ -1019,35 +1013,39 @@ class SetupWizard:
         else:
             print("你没有输入有效的语言代码，将使用默认语言中文(zh_CN)\nYou did not enter a valid language code, the default language Chinese(zh_CN) will be used.")
         print(
-            i18n("正在进行首次设置，请按照提示进行配置，配置将会被保存在")
+            i18n("setup.first_run.intro")
             + colorama.Fore.GREEN
             + " config.json "
             + colorama.Style.RESET_ALL
-            + i18n("中。")
+            + i18n("setup.first_run.intro_suffix")
         )
         print(
-            i18n("在")
+            i18n("setup.first_run.example_prefix")
             + colorama.Fore.YELLOW
             + " example_config.json "
             + colorama.Style.RESET_ALL
-            + i18n("中，包含了可用设置项及其简要说明。请查看 wiki 获取更多信息：")
+            + i18n("setup.first_run.example_suffix")
             + colorama.Fore.CYAN
             + "https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki"
             + colorama.Style.RESET_ALL
         )
         print(
             colorama.Back.GREEN
-            + i18n("现在开始进行交互式配置。碰到不知道该怎么办的设置项时，请直接按回车键跳过，程序会自动选择合适的默认值。")
+            + i18n("setup.first_run.interactive")
             + colorama.Style.RESET_ALL
         )
 
-    def set(self, config_items: List[ConfigItem], prompt: str):
+    def set(self, config_items: List[ConfigItem], prompt: str, detail: str = ""):
         """Ask for a settings key
+
+        `prompt` names a string to look up; `detail` is appended verbatim, for
+        values that are not translatable (a list of model names, say).
+
         Returns:
             Bool: Set or aborted
         """
-        print(colorama.Fore.YELLOW + i18n(prompt) + colorama.Style.RESET_ALL)
-        choice = input(i18n("输入 Yes(y) 或 No(n)，默认No："))
+        print(colorama.Fore.YELLOW + i18n(prompt) + detail + colorama.Style.RESET_ALL)
+        choice = input(i18n("setup.prompt.yes_no"))
         if choice.lower() in ["y", "yes"]:
             for config_item in config_items:
                 if config_item.type == ConfigType.Password:
@@ -1070,13 +1068,13 @@ class SetupWizard:
                     try:
                         self.config[config_item.key] = int(config_value)
                     except Exception:
-                        print("输入的不是数字，将使用默认值。")
+                        print(i18n("setup.prompt.not_a_number"))
                 elif config_item.type == ConfigType.ListOfStrings:
                     # read one string at a time
                     config_value = []
                     while True:
                         config_value_item = input(
-                            generate_prompt_string(config_item) + i18n("，输入空行结束：")
+                            generate_prompt_string(config_item) + i18n("setup.prompt.empty_line_ends")
                         )
                         if config_value_item == "":
                             break
@@ -1089,11 +1087,11 @@ class SetupWizard:
         elif choice.lower() in ["n", "no"]:
             for config_item in config_items:
                 print(
-                    i18n("你选择了不设置 ")
+                    i18n("setup.prompt.skipped")
                     + colorama.Fore.RED
                     + i18n(config_item.name)
                     + colorama.Style.RESET_ALL
-                    + i18n("。")
+                    + i18n("setup.prompt.period")
                 )
                 if config_item.default is not None:
                     self.config[config_item.key] = config_item.default
@@ -1103,19 +1101,19 @@ class SetupWizard:
 
     def set_users(self):
         # 询问设置用户账户
-        choice = input(colorama.Fore.YELLOW + i18n("是否设置用户账户？设置后，用户需要登陆才可访问。输入 Yes(y) 或 No(n)，默认No：") + colorama.Style.RESET_ALL)
+        choice = input(colorama.Fore.YELLOW + i18n("setup.users.ask") + colorama.Style.RESET_ALL)
         if choice.lower() in ["y", "yes"]:
             users = []
             while True:
-                username = input(i18n("请先输入用户名，输入空行结束添加用户："))
+                username = input(i18n("setup.users.username"))
                 if username == "":
                     break
-                password = getpass.getpass(i18n("请输入密码："))
+                password = getpass.getpass(i18n("setup.users.password"))
                 users.append([username, password])
             self.config["users"] = users
             return True
         else:
-            print(i18n("你选择了不设置用户账户。"))
+            print(i18n("setup.users.skipped"))
             return False
 
     def __setitem__(self, setting_key: str, value):
@@ -1135,172 +1133,172 @@ def setup_wizard():
         flag = False
         # 设置openai_api_key。
         flag = wizard.set(
-            [ConfigItem("openai_api_key", "OpenAI API Key", type=ConfigType.Password)],
-            "是否设置默认 OpenAI API Key？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，可以在软件启动后手动输入 API Key。",
+            [ConfigItem("openai_api_key", "config.openai_api_key.label", type=ConfigType.Password)],
+            "config.openai_api_key.prompt",
         )
         if not flag:
             flag = wizard.set(
                 [
                     ConfigItem(
-                        "openai_api_key", "OpenAI API Key", type=ConfigType.Password
+                        "openai_api_key", "config.openai_api_key.label_2", type=ConfigType.Password
                     )
                 ],
-                "如果不设置，将无法使用GPT模型和知识库在线索引功能。如果不设置此选项，您必须每次手动输入API Key。如果不设置，将自动启用本地编制索引的功能，可与本地模型配合使用。请问要设置默认 OpenAI API Key 吗？",
+                "config.openai_api_key.prompt_2",
             )
             if not flag:
                 wizard["local_embedding"] = True
         # 设置openai_api_base
         wizard.set(
-            [ConfigItem("openai_api_base", "OpenAI API Base", type=ConfigType.String)],
-            "是否设置默认 OpenAI API Base？如果你在使用第三方API或者CloudFlare Workers等来中转OpenAI API，可以在这里设置。",
+            [ConfigItem("openai_api_base", "config.openai_api_base.label", type=ConfigType.String)],
+            "config.openai_api_base.prompt",
         )
         # 设置http_proxy
         flag = wizard.set(
-            [ConfigItem("http_proxy", "HTTP 代理", type=ConfigType.String)],
-            "是否设置默认 HTTP 代理？这可以透过代理使用OpenAI API。",
+            [ConfigItem("http_proxy", "config.http_proxy.label", type=ConfigType.String)],
+            "config.http_proxy.prompt",
         )
         if flag:
             wizard["https_proxy"] = wizard["http_proxy"]
         # 设置多 API Key 切换
         flag = wizard.set(
-            [ConfigItem("api_key_list", "API Key 列表", type=ConfigType.ListOfStrings)],
-            "是否设置多 API Key 切换？如果设置，将在多个API Key之间切换使用。",
+            [ConfigItem("api_key_list", "config.api_key_list.label", type=ConfigType.ListOfStrings)],
+            "config.api_key_list.prompt",
         )
         if flag:
             wizard["multi_api_key"] = True
         # 设置local_embedding
         wizard.set(
-            [ConfigItem("local_embedding", "本地编制索引", type=ConfigType.Bool)],
-            "是否在本地编制知识库索引？如果是，可以在使用本地模型时离线使用知识库，否则使用OpenAI服务来编制索引（需要OpenAI API Key）。请确保你的电脑有至少16GB内存。本地索引模型需要从互联网下载。",
+            [ConfigItem("local_embedding", "config.local_embedding.label", type=ConfigType.Bool)],
+            "config.local_embedding.prompt",
         )
         print(
-            colorama.Back.GREEN + i18n("现在开始设置其他在线模型的API Key") + colorama.Style.RESET_ALL
+            colorama.Back.GREEN + i18n("setup.section.other_api_keys") + colorama.Style.RESET_ALL
         )
         # Google Palm
         wizard.set(
             [
                 ConfigItem(
                     "google_palm_api_key",
-                    "Google Palm API Key",
+                    "config.google_palm_api_key.label",
                     type=ConfigType.Password,
                 )
             ],
-            "是否设置默认 Google AI Studio API 密钥？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，可以在软件启动后手动输入 API Key。",
+            "config.google_palm_api_key.prompt",
         )
         # XMChat
         wizard.set(
-            [ConfigItem("xmchat_api_key", "XMChat API Key", type=ConfigType.Password)],
-            "是否设置默认 XMChat API 密钥？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，可以在软件启动后手动输入 API Key。",
+            [ConfigItem("xmchat_api_key", "config.xmchat_api_key.label", type=ConfigType.Password)],
+            "config.xmchat_api_key.prompt",
         )
         # MiniMax
         wizard.set(
             [
                 ConfigItem(
-                    "minimax_api_key", "MiniMax API Key", type=ConfigType.Password
+                    "minimax_api_key", "config.minimax_api_key.label", type=ConfigType.Password
                 ),
                 ConfigItem(
-                    "minimax_group_id", "MiniMax Group ID", type=ConfigType.Password
+                    "minimax_group_id", "config.minimax_group_id.label", type=ConfigType.Password
                 ),
             ],
-            "是否设置默认 MiniMax API 密钥和 Group ID？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 MiniMax 模型。",
+            "config.minimax_api_key.prompt",
         )
         # Midjourney
         wizard.set(
             [
                 ConfigItem(
                     "midjourney_proxy_api_base",
-                    i18n("你的") + "https://github.com/novicezk/midjourney-proxy" + i18n("代理地址"),
+                    i18n("setup.your_prefix") + "https://github.com/novicezk/midjourney-proxy" + i18n("setup.proxy_url_suffix"),
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "midjourney_proxy_api_secret",
-                    "MidJourney Proxy API Secret（用于鉴权访问 api，可选）",
+                    "config.midjourney_proxy_api_secret.label",
                     type=ConfigType.Password,
                 ),
                 ConfigItem(
                     "midjourney_discord_proxy_url",
-                    "MidJourney Discord Proxy URL（用于对生成对图进行反代，可选）",
+                    "config.midjourney_discord_proxy_url.label",
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "midjourney_temp_folder",
-                    "你的 MidJourney 临时文件夹，用于存放生成的图片，填空则关闭自动下载切图（直接显示MJ的四宫格图）",
+                    "config.midjourney_temp_folder.label",
                     type=ConfigType.String,
                     default="files",
                 ),
             ],
-            "是否设置 Midjourney ？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 Midjourney 模型。",
+            "config.midjourney_proxy_api_base.prompt",
         )
         # Spark
         wizard.set(
             [
-                ConfigItem("spark_appid", "讯飞星火 App ID", type=ConfigType.Password),
+                ConfigItem("spark_appid", "config.spark_appid.label", type=ConfigType.Password),
                 ConfigItem(
-                    "spark_api_secret", "讯飞星火 API Secret", type=ConfigType.Password
+                    "spark_api_secret", "config.spark_api_secret.label", type=ConfigType.Password
                 ),
-                ConfigItem("spark_api_key", "讯飞星火 API Key", type=ConfigType.Password),
+                ConfigItem("spark_api_key", "config.spark_api_key.label", type=ConfigType.Password),
             ],
-            "是否设置讯飞星火？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 讯飞星火 模型。请注意不要搞混App ID和API Secret。",
+            "config.spark_appid.prompt",
         )
         # Cloude
         wizard.set(
             [
                 ConfigItem(
-                    "cloude_api_secret", "Cloude API Secret", type=ConfigType.Password
+                    "cloude_api_secret", "config.cloude_api_secret.label", type=ConfigType.Password
                 ),
             ],
-            "是否设置Cloude API？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 Cloude 模型。",
+            "config.cloude_api_secret.prompt",
         )
         # 文心一言
         wizard.set(
             [
                 ConfigItem(
-                    "ernie_api_key", "百度云中的文心一言 API Key", type=ConfigType.Password
+                    "ernie_api_key", "config.ernie_api_key.label", type=ConfigType.Password
                 ),
                 ConfigItem(
-                    "ernie_secret_key", "百度云中的文心一言 Secret Key", type=ConfigType.Password
+                    "ernie_secret_key", "config.ernie_secret_key.label", type=ConfigType.Password
                 ),
             ],
-            "是否设置文心一言？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 文心一言 模型。",
+            "config.ernie_api_key.prompt",
         )
         # Azure OpenAI
         wizard.set(
             [
                 ConfigItem(
                     "azure_openai_api_key",
-                    "Azure OpenAI API Key",
+                    "config.azure_openai_api_key.label",
                     type=ConfigType.Password,
                 ),
                 ConfigItem(
                     "azure_openai_api_base_url",
-                    "Azure OpenAI API Base URL",
+                    "config.azure_openai_api_base_url.label",
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "azure_openai_api_version",
-                    "Azure OpenAI API Version",
+                    "config.azure_openai_api_version.label",
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "azure_deployment_name",
-                    "Azure OpenAI Chat 模型 Deployment 名称",
+                    "config.azure_deployment_name.label",
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "azure_embedding_deployment_name",
-                    "Azure OpenAI Embedding 模型 Deployment 名称",
+                    "config.azure_embedding_deployment_name.label",
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "azure_embedding_model_name",
-                    "Azure OpenAI Embedding 模型名称",
+                    "config.azure_embedding_model_name.label",
                     type=ConfigType.String,
                 ),
             ],
-            "是否设置 Azure OpenAI？如果设置，软件启动时会自动加载该API Key，无需在 UI 中手动输入。如果不设置，将无法使用 Azure OpenAI 模型。",
+            "config.azure_openai_api_key.prompt",
         )
         print(
-            colorama.Back.GREEN + i18n("现在开始进行软件功能设置") + colorama.Style.RESET_ALL
+            colorama.Back.GREEN + i18n("setup.section.features") + colorama.Style.RESET_ALL
         )
         # 用户列表
         wizard.set_users()
@@ -1309,36 +1307,36 @@ def setup_wizard():
             [
                 ConfigItem(
                     "hide_history_when_not_logged_in",
-                    "未登录情况下是否不展示对话历史",
+                    "config.hide_history_when_not_logged_in.label",
                     type=ConfigType.Bool,
                 )
             ],
-            "是否设置未登录情况下是否不展示对话历史？如果设置，未登录情况下将不展示对话历史。",
+            "config.hide_history_when_not_logged_in.prompt",
         )
         # 是否启用检查更新
         wizard.set(
             [
                 ConfigItem(
-                    "check_update", "是否启用检查更新", type=ConfigType.Bool, default=True
+                    "check_update", "config.check_update.label", type=ConfigType.Bool, default=True
                 )
             ],
-            "是否启用检查更新？如果设置，软件启动时会自动检查更新。",
+            "config.check_update.prompt",
         )
         # 默认模型
         wizard.set(
             [
                 ConfigItem(
                     "default_model",
-                    "默认模型",
+                    "config.default_model.label",
                     type=ConfigType.String,
                     default="GPT3.5 Turbo",
                 )
             ],
-            "是否更改默认模型？如果设置，软件启动时会自动加载该模型，无需在 UI 中手动选择。目前的默认模型为 GPT3.5 Turbo。可选的在线模型有："
-            + "\n"
+            "config.default_model.prompt",
+            detail="\n"
             + "\n".join(ONLINE_MODELS)
             + "\n"
-            + "可选的本地模型为："
+            + i18n("config.default_model.local_models")
             + "\n"
             + "\n".join(LOCAL_MODELS),
         )
@@ -1347,110 +1345,110 @@ def setup_wizard():
             [
                 ConfigItem(
                     "hide_history_when_not_logged_in",
-                    "是否不展示对话历史",
+                    "config.hide_history_when_not_logged_in.label_2",
                     type=ConfigType.Bool,
                     default=False,
                 )
             ],
-            "未设置用户名/密码情况下是否不展示对话历史？",
+            "config.hide_history_when_not_logged_in.prompt_2",
         )
         # 如何自动命名对话历史
         wizard.set(
             [
                 ConfigItem(
                     "chat_name_method_index",
-                    "自动命名对话历史的方式（0: 使用日期时间命名；1: 使用第一条提问命名，2: 使用模型自动总结。）",
+                    "config.chat_name_method_index.label",
                     type=ConfigType.Number,
                     default=2,
                 )
             ],
-            "是否选择自动命名对话历史的方式？",
+            "config.chat_name_method_index.prompt",
         )
         # 头像
         wizard.set(
             [
                 ConfigItem(
                     "bot_avatar",
-                    "机器人头像",
+                    "config.bot_avatar.label",
                     type=ConfigType.String,
                     default="default",
                 ),
                 ConfigItem(
                     "user_avatar",
-                    "用户头像",
+                    "config.user_avatar.label",
                     type=ConfigType.String,
                     default="default",
                 ),
             ],
-            '是否设置机器人头像和用户头像？可填写本地或网络图片链接，或者"none"（不显示头像）。',
+            "config.bot_avatar.prompt",
         )
         # 川虎助理
         wizard.set(
             [
                 ConfigItem(
                     "default_chuanhu_assistant_model",
-                    "川虎助理使用的模型",
+                    "config.default_chuanhu_assistant_model.label",
                     type=ConfigType.String,
                     default="gpt-4",
                 ),
                 ConfigItem(
                     "GOOGLE_CSE_ID",
-                    "谷歌搜索引擎ID（获取方式请看 https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search）",
+                    "config.google_cse_id.label",
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "GOOGLE_API_KEY",
-                    "谷歌API Key（获取方式请看 https://stackoverflow.com/questions/37083058/programmatically-searching-google-in-python-using-custom-search）",
+                    "config.google_api_key.label",
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "WOLFRAM_ALPHA_APPID",
-                    "Wolfram Alpha API Key（获取方式请看 https://products.wolframalpha.com/api/）",
+                    "config.wolfram_alpha_appid.label",
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "SERPAPI_API_KEY",
-                    "SerpAPI API Key（获取方式请看 https://serpapi.com/）",
+                    "config.serpapi_api_key.label",
                     type=ConfigType.String,
                 ),
             ],
-            "是否设置川虎助理？如果不设置，仍可设置川虎助理。如果设置，可以使用川虎助理Pro模式。",
+            "config.default_chuanhu_assistant_model.prompt",
         )
         # 文档处理与显示
         wizard.set(
             [
                 ConfigItem(
                     "latex_option",
-                    "LaTeX 公式渲染策略",
+                    "config.latex_option.label",
                     type=ConfigType.String,
                     default="default",
                 )
             ],
-            '是否设置文档处理与显示？可选的 LaTeX 公式渲染策略有："default", "strict", "all"或者"disabled"。',
+            "config.latex_option.prompt",
         )
         # 是否隐藏API Key输入框
         wizard.set(
             [
                 ConfigItem(
                     "hide_my_key",
-                    "是否隐藏API Key输入框",
+                    "config.hide_my_key.label",
                     type=ConfigType.Bool,
                     default=False,
                 )
             ],
-            "是否隐藏API Key输入框？如果设置，将不会在 UI 中显示API Key输入框。",
+            "config.hide_my_key.prompt",
         )
         # 是否指定可用模型列表
         wizard.set(
             [
                 ConfigItem(
                     "available_models",
-                    "可用模型列表",
+                    "config.available_models.label",
                     type=ConfigType.ListOfStrings,
                 )
             ],
-            "是否指定可用模型列表？如果设置，将只会在 UI 中显示指定的模型。默认展示所有模型。可用的模型有："
-            + "\n".join(ONLINE_MODELS)
+            "config.available_models.prompt",
+            detail="\n".join(ONLINE_MODELS)
             + "\n".join(LOCAL_MODELS),
         )
         # 添加模型到列表
@@ -1458,48 +1456,48 @@ def setup_wizard():
             [
                 ConfigItem(
                     "extra_models",
-                    "额外模型列表",
+                    "config.extra_models.label",
                     type=ConfigType.ListOfStrings,
                 )
             ],
-            "是否添加模型到列表？例如，训练好的GPT模型可以添加到列表中。可以在UI中自动添加模型到列表。",
+            "config.extra_models.prompt",
         )
         # 分享
         wizard.set(
             [
                 ConfigItem(
                     "server_name",
-                    "服务器地址，例如设置为 0.0.0.0 则可以通过公网访问（如果你用公网IP）",
+                    "config.server_name.label",
                     type=ConfigType.String,
                 ),
                 ConfigItem(
                     "server_port",
-                    "服务器端口",
+                    "config.server_port.label",
                     type=ConfigType.Number,
                     default=7860,
                 ),
             ],
-            "是否配置运行地址和端口？（不建议设置）",
+            "config.server_name.prompt",
         )
         wizard.set(
             [
                 ConfigItem(
                     "share",
-                    "是否通过gradio分享？",
+                    "config.share.label",
                     type=ConfigType.Bool,
                     default=False,
                 )
             ],
-            "是否通过gradio分享？可以通过公网访问。",
+            "config.share.prompt",
         )
         wizard.save()
-        print(colorama.Back.GREEN + i18n("设置完成。现在请重启本程序。") + colorama.Style.RESET_ALL)
+        print(colorama.Back.GREEN + i18n("setup.done") + colorama.Style.RESET_ALL)
         exit()
 
 
 def reboot_chuanhu():
     import sys
-    print(colorama.Back.GREEN + i18n("正在尝试重启...") + colorama.Style.RESET_ALL)
+    print(colorama.Back.GREEN + i18n("setup.restarting") + colorama.Style.RESET_ALL)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 

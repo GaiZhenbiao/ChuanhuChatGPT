@@ -137,7 +137,7 @@ class MiniMax_Client(BaseLLMModel):
                 try:
                     chunk = json.loads(chunk[6:])
                 except json.JSONDecodeError:
-                    print(i18n("JSON解析错误,收到的内容: ") + f"{chunk}")
+                    print(i18n("msg.error.json_parse") + f"{chunk}")
                     error_msg += chunk
                     continue
                 if chunk_length > 6 and "delta" in chunk["choices"][0]:

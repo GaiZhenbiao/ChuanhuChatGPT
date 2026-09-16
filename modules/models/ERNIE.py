@@ -10,7 +10,7 @@ class ERNIE_Client(BaseLLMModel):
         self.api_key = api_key
         self.api_secret = secret_key
         if None in [self.api_secret, self.api_key]:
-            raise Exception("请在配置文件或者环境变量中设置文心一言的API Key 和 Secret Key")
+            raise Exception(i18n("msg.error.ernie_credentials"))
 
         if self.model_name == "ERNIE-Bot-turbo":
             self.ERNIE_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token="
@@ -91,6 +91,6 @@ class ERNIE_Client(BaseLLMModel):
 
             return str(response.json()["result"]),len(response.json()["result"])
         else:
-            return "获取资源错误", 0
+            return i18n("msg.error.resource"), 0
 
 
