@@ -119,6 +119,18 @@ class ChuanhuAgent_Client(BaseLLMModel):
             logging.warning("SERPAPI_API_KEY not found, serpapi is disabled.")
         self.tools += load_tools(tools_to_enable, llm=self.llm)
 
+        # if exists TAVILY_API_KEY, enable tavily search
+        if os.environ.get("TAVILY_API_KEY", None) is not None:
+            try:
+                from langchain_community.tools.tavily_search import TavilySearchResults
+                tavily_tool = TavilySearchResults(max_results=5)
+                self.tools.append(tavily_tool)
+                logging.info("Tavily search tool enabled.")
+            except Exception as e:
+                logging.warning(f"Failed to load Tavily search tool: {e}")
+        else:
+            logging.warning("TAVILY_API_KEY not found, tavily search is disabled.")
+
         self.tools.append(
             Tool.from_function(
                 func=self.summary_url,
