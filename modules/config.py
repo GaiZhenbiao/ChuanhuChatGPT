@@ -168,6 +168,8 @@ os.environ["SPARK_API_SECRET"] = spark_api_secret
 
 claude_api_secret = config.get("claude_api_secret", "")
 os.environ["CLAUDE_API_SECRET"] = claude_api_secret
+claude_api_host = config.get("claude_api_host", "")
+os.environ["CLAUDE_API_HOST"] = claude_api_host
 
 ernie_api_key = config.get("ernie_api_key", "")
 os.environ["ERNIE_APIKEY"] = ernie_api_key
