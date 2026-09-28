@@ -117,6 +117,19 @@ class ChuanhuAgent_Client(BaseLLMModel):
             tools_to_enable.append("serpapi")
         else:
             logging.warning("SERPAPI_API_KEY not found, serpapi is disabled.")
+        # if exists YOUCOM_API_KEY, enable you.com search
+        if os.environ.get("YOUCOM_API_KEY", None) is not None:
+            self.tools.append(
+                Tool.from_function(
+                    func=self.youcom_search,
+                    name="youcom_search",
+                    description="useful when you need to search the web using You.com. Provides current web results with citations.",
+                    args_schema=GoogleSearchInput,
+                )
+            )
+            logging.info("You.com search enabled. Get a free API key at https://you.com/platform/api-keys")
+        else:
+            logging.warning("YOUCOM_API_KEY not found, you.com search is disabled.")
         self.tools += load_tools(tools_to_enable, llm=self.llm)
 
         self.tools.append(
@@ -146,6 +159,41 @@ class ChuanhuAgent_Client(BaseLLMModel):
                     {"title": r["title"], "link": r["href"], "snippet": r["body"]}
                 )
         return str(results)
+
+    def youcom_search(self, query):
+        """Search using You.com API."""
+        try:
+            api_key = os.environ.get("YOUCOM_API_KEY", "")
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            }
+            params = {"query": query, "num_web_results": 10}
+            resp = requests.get(
+                "https://api.you.com/search",
+                headers=headers,
+                params=params,
+                timeout=15,
+            )
+            if resp.status_code == 200:
+                data = resp.json()
+                results = []
+                hits = data.get("web_results", data.get("hits", []))
+                for r in hits:
+                    results.append(
+                        {
+                            "title": r.get("title", ""),
+                            "link": r.get("url", r.get("link", "")),
+                            "snippet": r.get("description", r.get("snippet", "")),
+                        }
+                    )
+                if results:
+                    return str(results)
+                return f"No results found for '{query}'."
+            else:
+                return f"You.com search error (HTTP {resp.status_code}): {resp.text[:200]}"
+        except Exception as e:
+            return f"You.com search failed: {e}"
 
     def handle_file_upload(self, files, chatbot, language):
         """if the model accepts multi modal input, implement this function"""
