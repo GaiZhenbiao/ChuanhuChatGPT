@@ -1,0 +1,16 @@
+{
+  "id": "prompt_tools",
+  "name": "提示词工具箱",
+  "name_i18n": {
+    "en_US": "Prompt toolbox"
+  },
+  "version": "0.1.0",
+  "description": "在侧边栏点选常用提示词模板，并自动插入到当前输入框。",
+  "description_i18n": {
+    "en_US": "Click common prompt templates in the toolbox and insert them into the current input box."
+  },
+  "author": "ChuanhuChatGPT",
+  "enabled": true,
+  "priority": 100,
+  "tags": ["prompt", "productivity", "toolbox"]
+}

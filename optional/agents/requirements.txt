@@ -1,0 +1,2 @@
+# Dedicated environment only; do not install into the core Gradio environment.
+openai==3.13.0

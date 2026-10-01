@@ -1,0 +1,16 @@
+{
+  "id": "conversation_export",
+  "name": "会话导出",
+  "version": "1.0.0",
+  "description": "显式导出当前浏览器会话为 Markdown 或 JSON，不联网。",
+  "enabled": true,
+  "priority": 120,
+  "name_i18n": {
+    "zh_CN": "会话导出",
+    "en_US": "Conversation export"
+  },
+  "description_i18n": {
+    "zh_CN": "显式导出当前浏览器会话为 Markdown 或 JSON，不联网。",
+    "en_US": "Export current browser conversation text as Markdown or JSON."
+  }
+}

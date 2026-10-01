@@ -1,0 +1,21 @@
+{
+  "id": "openai_agents",
+  "name": "OpenAI Agent 任务",
+  "version": "1.0.0",
+  "description": "在独立官方托管沙箱中完成多步任务，显示进度、继续对话、停止和下载产物。需要专用密钥及隔离 SDK，默认关闭。",
+  "enabled": false,
+  "priority": 140,
+  "tags": [
+    "agent",
+    "optional",
+    "openai"
+  ],
+  "name_i18n": {
+    "zh_CN": "OpenAI Agent 任务",
+    "en_US": "OpenAI Agent tasks"
+  },
+  "description_i18n": {
+    "zh_CN": "在独立官方托管沙箱中完成多步任务，显示进度、继续对话、停止和下载产物。需要专用密钥及隔离 SDK，默认关闭。",
+    "en_US": "Run multi-step tasks in an official hosted sandbox with progress, follow-ups, cancellation and artifacts. Requires dedicated credentials and an isolated SDK; disabled by default."
+  }
+}

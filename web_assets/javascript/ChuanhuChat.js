@@ -47,6 +47,61 @@ var isInIframe = (window.self !== window.top);
 var currentTime = new Date().getTime();
 
 let windowWidth = window.innerWidth; // 初始窗口宽度
+var chuanhuReady = false;
+var chuanhuReadyCallbacks = [];
+var chuanhuRenderCallbacks = [];
+var chuanhuMutationCallbacks = [];
+var chuanhuPluginObserver = null;
+
+function runChuanhuCallbacks(callbacks) {
+    callbacks.forEach((callback) => {
+        try {
+            callback(window.ChuanhuApp);
+        } catch (error) {
+            console.error("[ChuanhuApp callback]", error);
+        }
+    });
+}
+
+function addChuanhuCallback(callbacks, callback, runNow = false) {
+    if (typeof callback !== "function") return;
+    callbacks.push(callback);
+    if (runNow && chuanhuReady) {
+        try {
+            callback(window.ChuanhuApp);
+        } catch (error) {
+            console.error("[ChuanhuApp callback]", error);
+        }
+    }
+}
+
+function setChuanhuInputValue(input, value) {
+    if (!input) return false;
+    input.value = value;
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+}
+
+function startChuanhuPluginObserver() {
+    if (chuanhuPluginObserver) {
+        chuanhuPluginObserver.disconnect();
+    }
+    chuanhuPluginObserver = new MutationObserver(() => {
+        runChuanhuCallbacks(chuanhuMutationCallbacks);
+    });
+    chuanhuPluginObserver.observe(gradioApp(), { childList: true, subtree: true });
+}
+
+window.ChuanhuApp = {
+    root: () => gradioApp(),
+    gradioApp: () => gradioApp(),
+    onReady: (callback) => addChuanhuCallback(chuanhuReadyCallbacks, callback, true),
+    onRender: (callback) => addChuanhuCallback(chuanhuRenderCallbacks, callback, true),
+    onMutation: (callback) => addChuanhuCallback(chuanhuMutationCallbacks, callback, false),
+    userInput: () => gradioApp().querySelector("#user-input-tb textarea, #user-input-tb input"),
+    setInputValue: setChuanhuInputValue,
+};
 
 function addInit() {
     var needInit = {chatbotIndicator, uploaderIndicator};
@@ -133,6 +188,13 @@ function initialize() {
 
     setChatbotScroll();
     setTimeout(showOrHideUserInfo(), 2000);
+    const wasChuanhuReady = chuanhuReady;
+    chuanhuReady = true;
+    if (!wasChuanhuReady) {
+        runChuanhuCallbacks(chuanhuReadyCallbacks);
+    }
+    runChuanhuCallbacks(chuanhuRenderCallbacks);
+    startChuanhuPluginObserver();
 
     // setHistroyPanel();
     // trainBody.classList.add('hide-body');

@@ -1,0 +1,6 @@
+.auto-notes-muted,
+.auto-notes-muted p {
+  color: var(--body-text-color-subdued);
+  font-size: var(--text-xs);
+  opacity: .72;
+}

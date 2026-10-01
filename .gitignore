@@ -139,16 +139,25 @@ dmypy.json
 # 配置文件/模型文件
 api_key.txt
 config.json
+extension_state.json
+plugin_data/
+.agents-runtime/
+.env.agents
 auth.json
 .models/
 models/*
 lora/
 .idea
 templates/*
+!templates/extension/
 files/
 tmp/
 
 scripts/
+!templates/extension/scripts/
+!templates/extension/scripts/*.py
+!extensions/**/scripts/
+!extensions/**/scripts/*.py
 include/
 pyvenv.cfg
 

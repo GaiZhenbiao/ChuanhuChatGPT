@@ -1,0 +1,8 @@
+# Offline plugin tests; isolated Python 3.11 venv. Does not install model providers.
+gradio==4.29.0
+gradio_client==0.16.1
+pydantic==2.5.2
+fastapi==0.112.4
+huggingface-hub>=0.19.3,<1
+commentjson==0.9.0
+pytest>=8,<10

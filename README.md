@@ -116,6 +116,8 @@
 - <sup>New!</sup> 支持以 PWA应用程序 安装，体验更加原生！
 
 ### 👨‍💻 极客功能
+- 插件管理、离线批量整理与会话导出：[插件开发和使用](docs/extensions.md)。
+- 可选官方托管 Agent 任务界面：[隔离 SDK 配置与操作](docs/agents.md)。
 - <sup>New!</sup> 支持 Fine-tune（微调）gpt-3.5！
 - 大量 LLM 参数可调；
 - 支持更换 api-host；

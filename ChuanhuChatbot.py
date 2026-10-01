@@ -14,12 +14,16 @@ from modules.presets import *
 from modules.utils import *
 from modules.config import *
 from modules import config
+from modules import extensions
+from modules import plugin_callbacks
+from modules.plugin_context import AppContext
 import gradio as gr
 import colorama
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 patch_gradio()
+extensions.load_extensions(disabled_extensions=disabled_extensions)
 
 # with open("web_assets/css/ChuanhuChat.css", "r", encoding="utf-8") as f:
 #     ChuanhuChatCSS = f.read()
@@ -338,9 +342,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                                 value=user_name.value,
                                 lines=1,
                             )
-                    with gr.Tab(label=i18n("ui.toolbox.tab.extensions")):
-                        gr.Markdown(
-                            "Will be here soon...\n(We hope)\n\nAnd we hope you can help us to make more extensions!")
+                    extensions.render_extension_tabs()
 
                     # changeAPIURLBtn = gr.Button(i18n("ui.toolbox.extensions.switch_api"))
 
@@ -351,6 +353,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                     gr.Markdown("## "+i18n("ui.settings.title"))
                     gr.HTML(get_html("close_btn.html").format(
                         obj="box"), elem_classes="close-btn")
+                gr.HTML(
+                    f'<span id="extension-settings-label-source" style="display:none">{i18n("ui.settings.extensions.settings")}</span>'
+                )
                 with gr.Tabs(elem_id="chuanhu-setting-tabs"):
                     # with gr.Tab(label=i18n("ui.settings.model.title")):
 
@@ -418,6 +423,9 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                             elem_classes="view-only-textbox no-container",
                         )
 
+                    with gr.Tab(label=i18n("ui.settings.extensions.title")):
+                        extensions.render_extension_manager()
+
                     with gr.Tab(label=i18n("ui.settings.about.title"), elem_id="about-tab"):
                         gr.Markdown(
                             '<img alt="Chuanhu Chat logo" src="file=web_assets/icon/any-icon-512.png" style="max-width: 144px;">')
@@ -425,6 +433,8 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
                         gr.HTML(get_html("footer.html").format(
                             versions=versions_html()), elem_id="footer")
                         gr.Markdown(CHUANHU_DESCRIPTION, elem_id="description")
+
+                    extensions.render_extension_settings()
 
             with gr.Group(elem_id="chuanhu-training"):
                 with gr.Row():
@@ -784,6 +794,7 @@ with gr.Blocks(theme=small_and_beautiful_theme) as demo:
         outputs=[saveFileName, systemPromptTxt, chatbot, single_turn_checkbox, temperature_slider, top_p_slider, n_choices_slider, stop_sequence_txt, max_context_length_slider, max_generation_slider, presence_penalty_slider, frequency_penalty_slider, logit_bias_txt, user_identifier_txt, use_streaming_checkbox, downloadHistoryJSONBtn, downloadHistoryMarkdownBtn],
         js='(a,b)=>{return bgSelectHistory(a,b);}'
     )
+    plugin_callbacks.invoke("app_ready", AppContext(chatbot, current_model, user_input))
 # 默认开启本地服务器，默认可以直接从IP访问，默认不创建公开分享链接
 demo.title = i18n("app.title")
 
@@ -791,11 +802,12 @@ if __name__ == "__main__":
     reload_javascript()
     setup_wizard()
     _allowed_paths = ["web_assets"]
+    _allowed_paths.append("extensions")
     if config.midjourney_temp_folder:
         _allowed_paths.append(config.midjourney_temp_folder)
     demo.queue().launch(
         allowed_paths=_allowed_paths,
-        blocked_paths=["config.json", "files", "models", "lora", "modules", "history"],
+        blocked_paths=["config.json", ".env.agents", ".agents-runtime", "extension_state.json", "plugin_data", "files", "models", "lora", "modules", "history"],
         server_name=server_name,
         server_port=server_port,
         share=share,

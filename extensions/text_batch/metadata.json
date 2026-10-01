@@ -1,0 +1,16 @@
+{
+  "id": "text_batch",
+  "name": "文本批处理",
+  "version": "1.0.0",
+  "description": "离线整理文本与 Markdown 文件，逐文件显示进度和部分结果。",
+  "enabled": true,
+  "priority": 130,
+  "name_i18n": {
+    "zh_CN": "文本批处理",
+    "en_US": "Offline text batch"
+  },
+  "description_i18n": {
+    "zh_CN": "离线整理文本与 Markdown 文件，逐文件显示进度和部分结果。",
+    "en_US": "Analyze text files offline with incremental results and cancellation."
+  }
+}

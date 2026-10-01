@@ -1,0 +1,22 @@
+{
+  "id": "auto_notes",
+  "name": "自动笔记",
+  "name_i18n": {
+    "zh_CN": "自动笔记",
+    "en_US": "Automatic notes"
+  },
+  "version": "1.0.0",
+  "description": "当前模型会话显式开启后，将问答写入服务器私有目录；默认不记录。",
+  "description_i18n": {
+    "zh_CN": "当前模型会话显式开启后，将问答写入服务器私有目录；默认不记录。",
+    "en_US": "Opt-in notes for the current model session, stored privately on the server."
+  },
+  "author": "ChuanhuChatGPT",
+  "enabled": true,
+  "priority": 110,
+  "tags": [
+    "notes",
+    "archive",
+    "after_chat"
+  ]
+}

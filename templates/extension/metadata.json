@@ -1,0 +1,16 @@
+{
+  "id": "my_extension",
+  "name": "我的文本工具",
+  "version": "1.0.0",
+  "description": "显式操作当前输入，不联网、不保存会话。",
+  "enabled": false,
+  "priority": 100,
+  "name_i18n": {
+    "zh_CN": "我的文本工具",
+    "en_US": "Input tidy example"
+  },
+  "description_i18n": {
+    "zh_CN": "显式操作当前输入，不联网、不保存会话。",
+    "en_US": "A small offline example of guarded callbacks bound to current browser components."
+  }
+}
