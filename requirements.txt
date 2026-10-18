@@ -9,6 +9,7 @@ colorama
 googlesearch-python
 Pygments
 openai==1.16.2
+httpx>=0.24,<0.28
 langchain==0.1.14
 langchain-openai
 langchainhub

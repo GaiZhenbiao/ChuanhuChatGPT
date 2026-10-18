@@ -85,6 +85,7 @@
 ### 💪 Powerful Functions
 - **Chuanhu Assistant**: Similar to AutoGPT, automatically solves your problems;
 - **Online Search**: Is ChatGPT's data too old? Give LLM the wings of the internet;
+- **[Parallel Search](../docs/parallel-search.md)**: Optional web search for ChuanhuAgent without a search API key.
 - **Knowledge Base**: Let ChatGPT help you speed read quantumly! Answer questions based on files.
 - **Local LLM Deployment**: One-click deployment, get your own large language model.
 - **Fine-tuning**: Support fine-tuning GPT-3.5, make your own model!
