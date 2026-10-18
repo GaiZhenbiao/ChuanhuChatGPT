@@ -119,6 +119,11 @@ class ChuanhuAgent_Client(BaseLLMModel):
             logging.warning("SERPAPI_API_KEY not found, serpapi is disabled.")
         self.tools += load_tools(tools_to_enable, llm=self.llm)
 
+        if os.environ.get("CHUANHU_PARALLEL_SEARCH", "").lower() in ("true", "1"):
+            from ..parallel_search import create_parallel_search_tool
+
+            self.tools.append(create_parallel_search_tool())
+
         self.tools.append(
             Tool.from_function(
                 func=self.summary_url,

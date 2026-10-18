@@ -80,6 +80,8 @@
 
 ## 使用技巧
 
+- **[Parallel 联网搜索](docs/parallel-search.md)**：可选的川虎助理搜索工具，无需搜索 API Key。
+
 ### 💪 强力功能
 - **川虎助理**：类似 AutoGPT，全自动解决你的问题；
 - **在线搜索**：ChatGPT 的数据太旧？给 LLM 插上网络的翅膀；
