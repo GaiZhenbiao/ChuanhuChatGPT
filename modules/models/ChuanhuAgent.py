@@ -119,10 +119,12 @@ class ChuanhuAgent_Client(BaseLLMModel):
             logging.warning("SERPAPI_API_KEY not found, serpapi is disabled.")
         self.tools += load_tools(tools_to_enable, llm=self.llm)
 
+        self._parallel_search_tool = None
         if os.environ.get("CHUANHU_PARALLEL_SEARCH", "").lower() in ("true", "1"):
             from ..parallel_search import create_parallel_search_tool
 
-            self.tools.append(create_parallel_search_tool())
+            self._parallel_search_tool = create_parallel_search_tool()
+            self.tools.append(self._parallel_search_tool)
 
         self.tools.append(
             Tool.from_function(
@@ -232,12 +234,24 @@ class ChuanhuAgent_Client(BaseLLMModel):
         )
         return qa.run(f"{question} Reply in 中文")
 
+    def _tools_for_conversation(self, history):
+        from ..parallel_search import create_parallel_search_tool
+
+        return [
+            create_parallel_search_tool(history.conversation_id)
+            if tool is self._parallel_search_tool else tool
+            for tool in self.tools
+        ]
+
     def get_answer_at_once(self):
-        question = self.history[-1]["content"]
+        history = self.history
+        question = history[-1]["content"]
+        tools = self._tools_for_conversation(history)
+        llm = self.llm
         # llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
         agent = initialize_agent(
-            self.tools,
-            self.llm,
+            tools,
+            llm,
             agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
             verbose=True,
         )
@@ -245,12 +259,14 @@ class ChuanhuAgent_Client(BaseLLMModel):
         return reply, -1
 
     def get_answer_stream_iter(self):
-        question = self.history[-1]["content"]
+        history = self.history
+        question = history[-1]["content"]
+        tools = self._tools_for_conversation(history)
         it = CallbackToIterator()
         manager = BaseCallbackManager(handlers=[ChuanhuCallbackHandler(it.callback)])
 
         if "Pro" in self.model_name:
-            self.llm = ChatOpenAI(
+            llm = ChatOpenAI(
                 openai_api_key=self.api_key,
                 model_name="gpt-4-turbo-preview",
                 openai_api_base=os.environ.get("OPENAI_API_BASE", None),
@@ -258,7 +274,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
                 streaming=True,
             )
         else:
-            self.llm = ChatOpenAI(
+            llm = ChatOpenAI(
                 openai_api_key=self.api_key,
                 model_name="gpt-3.5-turbo",
                 openai_api_base=os.environ.get("OPENAI_API_BASE", None),
@@ -266,6 +282,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
                 streaming=True,
             )
 
+        self.llm = llm
         agent_prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", self.system_prompt),
@@ -276,29 +293,29 @@ class ChuanhuAgent_Client(BaseLLMModel):
         )
         agent_prompt.input_variables = ["agent_scratchpad", "input"]
 
-        def thread_func():
-            tools = self.tools
-            if self.index is not None:
-                tools.append(
-                    Tool.from_function(
-                        func=self.query_index,
-                        name="query_knowledge_base",
-                        description=f"useful when you need to know about: {self.index_summary}",
-                        args_schema=KnowledgeBaseQueryInput,
-                    )
+        if self.index is not None:
+            tools.append(
+                Tool.from_function(
+                    func=self.query_index,
+                    name="query_knowledge_base",
+                    description=f"useful when you need to know about: {self.index_summary}",
+                    args_schema=KnowledgeBaseQueryInput,
                 )
-            agent = create_openai_tools_agent(self.llm, tools, agent_prompt)
+            )
+        messages = []
+        for msg in history:
+            if msg["role"] == "user":
+                messages.append(HumanMessage(content=msg["content"]))
+            elif msg["role"] == "assistant":
+                messages.append(AIMessage(content=msg["content"]))
+            else:
+                logging.warning(f"Unknown role: {msg['role']}")
+
+        def thread_func():
+            agent = create_openai_tools_agent(llm, tools, agent_prompt)
             agent_executor = AgentExecutor(
                 agent=agent, tools=tools, callback_manager=manager, verbose=True
             )
-            messages = []
-            for msg in self.history:
-                if msg["role"] == "user":
-                    messages.append(HumanMessage(content=msg["content"]))
-                elif msg["role"] == "assistant":
-                    messages.append(AIMessage(content=msg["content"]))
-                else:
-                    logging.warning(f"Unknown role: {msg['role']}")
             try:
                 reply = agent_executor.invoke(
                     {"input": question, "chat_history": messages}

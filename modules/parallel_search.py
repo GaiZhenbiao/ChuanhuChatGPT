@@ -3,7 +3,6 @@
 import asyncio
 import json
 from typing import List
-from uuid import uuid4
 
 import httpx
 from langchain.tools import StructuredTool
@@ -85,9 +84,9 @@ def _result(message, request_id):
     return message["result"]
 
 
-def create_parallel_search_tool():
-    # One stable conversation identifier per agent instance, shared across calls.
-    conversation_id = str(uuid4())
+def create_parallel_search_tool(session_id=None):
+    # Bind an immutable caller-owned context, never a model-wide mutable ID.
+    # Hosts without a conversation lifecycle leave this optional field absent.
 
     async def search(objective, search_queries):
         async def call():
@@ -110,13 +109,15 @@ def create_parallel_search_tool():
                 tools = discovered.get("tools")
                 if not isinstance(tools, list) or not any(isinstance(tool, dict) and tool.get("name") == "web_search" for tool in tools):
                     raise ValueError("MCP server does not advertise web_search")
+                arguments = {
+                    "objective": objective,
+                    "search_queries": search_queries,
+                }
+                if session_id is not None:
+                    arguments["session_id"] = session_id
                 result = await _rpc(client, "tools/call", {
                     "name": "web_search",
-                    "arguments": {
-                        "objective": objective,
-                        "search_queries": search_queries,
-                        "session_id": conversation_id,
-                    },
+                    "arguments": arguments,
                 }, 3)
                 content = result.get("content")
                 if not isinstance(content, list) or any(not isinstance(item, dict) for item in content):

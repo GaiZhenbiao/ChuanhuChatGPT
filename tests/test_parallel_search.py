@@ -5,6 +5,7 @@ unrelated tool loading are isolated so this suite needs no GPU or API keys.
 """
 
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import ExitStack
 import importlib
 import json
@@ -12,9 +13,10 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+from threading import Event
 import types
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import MagicMock, Mock, patch
 
 import httpx
 from langchain.agents import AgentExecutor, create_openai_tools_agent
@@ -33,27 +35,27 @@ REAL_CLIENT = httpx.AsyncClient
 
 def load_agent_module():
     """Import the real agent without the app's unrelated UI/indexing setup."""
-    class BaseModel:
-        def __init__(self, model_name, user):
-            self.model_name = model_name
-
+    global base_module, utils_module
     stubs = {}
     for name, attrs in {
-        "gradio": {},
+        "gradio": {"themes": MagicMock(), "Radio": Mock(), "DownloadButton": Mock(),
+                   "update": lambda **kwargs: kwargs},
+        "gradio.utils": {"get_upload_folder": lambda: tempfile.gettempdir()},
+        "gradio.processing_utils": {"save_file_to_cache": lambda path, cache: path},
         "modules.index_func": {"construct_index": Mock()},
-        "modules.presets": {"SUMMARIZE_PROMPT": "{text}", "i18n": lambda value: value},
-        "modules.utils": {"add_source_numbers": Mock()},
-        "modules.models.base_model": {
-            "BaseLLMModel": BaseModel,
-            "CallbackToIterator": Mock(),
-            "ChuanhuCallbackHandler": Mock(),
-        },
+        "modules.config": {"retrieve_proxy": Mock(), "auth_list": [],
+                           "hide_history_when_not_logged_in": False, "admin_list": []},
     }.items():
         module = types.ModuleType(name)
         module.__dict__.update(attrs)
         stubs[name] = module
     with patch.dict(sys.modules, stubs):
-        return importlib.import_module("modules.models.ChuanhuAgent")
+        # Keep the real BaseLLMModel lifecycle, history loader, serializer and
+        # callback iterator. Only UI/cache/indexing/config startup is isolated.
+        agent = importlib.import_module("modules.models.ChuanhuAgent")
+        base_module = sys.modules["modules.models.base_model"]
+        utils_module = sys.modules["modules.utils"]
+        return agent
 
 
 agent_module = load_agent_module()
@@ -68,6 +70,10 @@ def make_agent(environment):
         stack.enter_context(patch.object(agent_module, "TokenTextSplitter"))
         stack.enter_context(patch.object(agent_module, "load_summarize_chain"))
         loaded = stack.enter_context(patch.object(agent_module, "load_tools", return_value=[]))
+        stack.enter_context(patch.object(base_module, "get_first_history_name", return_value="test"))
+        # config.py normally merges these defaults during app startup.
+        config = {**base_module.DEFAULT_METADATA, **base_module.MODEL_METADATA["川虎助理"]}
+        stack.enter_context(patch.dict(base_module.MODEL_METADATA, {"川虎助理": config}))
         agent = agent_module.ChuanhuAgent_Client("川虎助理", "inference-test-key")
         return agent, loaded.call_args.args[0]
 
@@ -108,7 +114,242 @@ class MCPServer:
         return REAL_CLIENT(transport=httpx.MockTransport(self.handle), **kwargs)
 
 
+class RecordingModel(FakeListLLM):
+    prompts: list = []
+
+    def _call(self, prompt, stop=None, run_manager=None, **kwargs):
+        self.prompts.append(prompt)
+        return super()._call(prompt, stop=stop, run_manager=run_manager, **kwargs)
+
+
+def research_model(label="research", streaming=False):
+    query = {**QUERY, "objective": label}
+    if streaming:
+        return FakeMessagesListChatModel(responses=[
+            AIMessage(content="", additional_kwargs={"tool_calls": [{
+                "id": "call_search", "type": "function", "function": {
+                    "name": "parallel_search", "arguments": json.dumps(query),
+                },
+            }]}),
+            AIMessage(content="", additional_kwargs={"tool_calls": [{
+                "id": "call_followup", "type": "function", "function": {
+                    "name": "parallel_search", "arguments": json.dumps(query),
+                },
+            }]}),
+            AIMessage(content="See https://example.org/docs?a=1&b=2"),
+        ])
+    action = 'Action:\n```json\n' + json.dumps({
+        "action": "parallel_search", "action_input": query,
+    }) + '\n```'
+    return RecordingModel(responses=[action, action, 'Action:\n```json\n' + json.dumps({
+        "action": "Final Answer", "action_input": "See https://example.org/docs?a=1&b=2",
+    }) + '\n```'])
+
+
+def search_arguments(server):
+    return [json.loads(request.content)["params"]["arguments"]
+            for request in server.requests
+            if json.loads(request.content)["method"] == "tools/call"]
+
+
+class ConversationLifecycleTests(unittest.TestCase):
+    def setUp(self):
+        self.agent, _ = make_agent({"CHUANHU_PARALLEL_SEARCH": "true"})
+        self.agent.history.append({"role": "user", "content": "Research this topic"})
+        self.server = MCPServer()
+        self.stack = ExitStack()
+        self.addCleanup(self.stack.close)
+        self.stack.enter_context(patch.object(parallel_search.httpx, "AsyncClient", side_effect=self.server.client))
+        self.stack.enter_context(patch.object(self.agent, "token_message", return_value="tokens"))
+
+    def answer(self, label="research"):
+        self.agent.llm = research_model(label)
+        reply, _ = self.agent.get_answer_at_once()
+        self.assertIn(SOURCE, self.agent.llm.prompts[-1])
+        self.assertIn("https://example.org/docs", reply)
+        return search_arguments(self.server)[-1]["session_id"]
+
+    def test_followups_webpage_read_and_retries_keep_conversation(self):
+        first = self.answer()
+        self.agent.history.extend([
+            {"role": "assistant", "content": "Found sources"},
+            {"role": "user", "content": "Follow up on those sources"},
+        ])
+        # Existing webpage tools use requests, not MCP web_fetch. Reading a
+        # source must not change the research context used by the next search.
+        with patch.object(agent_module.requests, "get", return_value=Mock(text="<p>A source</p>")), \
+                patch.object(self.agent, "summary", return_value="A source"):
+            webpage = next(tool for tool in self.agent.tools if tool.name == "summary_webpage")
+            self.assertIn("A source", webpage.invoke({"url": "https://example.org/docs"}))
+        self.assertEqual(self.answer(), first)
+        # Deleting/trimming a turn must not turn a follow-up into a new chat.
+        self.agent.history = self.agent.history[-1:]
+        self.assertEqual(self.answer(), first)
+        with patch.object(self.agent, "auto_save"), patch.object(base_module, "count_token", return_value=1):
+            self.agent.stream = False
+            list(self.agent.retry([]))
+        self.assertEqual({args["session_id"] for args in search_arguments(self.server)}, {first})
+
+    def test_reset_new_and_replaced_history_are_independent(self):
+        first = self.answer()
+        with patch.object(base_module, "new_auto_history_filename", return_value="new.json"), \
+                patch.object(base_module, "get_history_names", return_value=[]):
+            self.agent.reset()
+        self.agent.history.append({"role": "user", "content": "Independent chat"})
+        second = self.answer()
+        self.assertNotEqual(first, second)
+        self.agent.history = [{"role": "user", "content": "Independent research run"}]
+        third = self.answer()
+        self.assertNotIn(third, {first, second})
+        self.assertEqual(self.answer(), third)
+
+    def test_saved_loaded_and_legacy_histories(self):
+        first = self.answer()
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.object(utils_module, "HISTORY_DIR", directory), \
+                patch.object(base_module, "HISTORY_DIR", directory):
+            saved = utils_module.save_file(str(Path(directory, "saved.json")), self.agent)
+            data = json.loads(Path(saved).read_text())
+            self.assertEqual(data["conversation_id"], first)
+            self.agent.history = [{"role": "user", "content": "Unrelated chat"}]
+            unrelated = self.answer()
+            self.agent.load_chat_history(saved)
+            self.assertEqual(self.answer(), first)
+            self.agent.load_chat_history(saved)
+            self.assertEqual(self.answer(), first)
+            for identity in [None, "invalid identity"]:
+                data.pop("conversation_id", None)
+                if identity is not None:
+                    data["conversation_id"] = identity
+                Path(saved).write_text(json.dumps(data))
+                self.agent.load_chat_history(saved)
+                legacy = self.answer()
+                self.assertNotIn(legacy, {first, unrelated})
+                self.assertEqual(self.answer(), legacy)
+                # Saving a legacy context establishes an identity for reloads.
+                utils_module.save_file(saved, self.agent)
+                self.agent.load_chat_history(saved)
+                self.assertEqual(self.answer(), legacy)
+
+    def test_single_turn_new_runs_and_retry_boundaries(self):
+        self.agent.single_turn = True
+        self.agent.stream = False
+        self.agent.llm = research_model()
+        with patch.object(self.agent, "auto_save"), patch.object(base_module, "count_token", return_value=1):
+            list(self.agent.predict("First independent run", []))
+            first = search_arguments(self.server)[-1]["session_id"]
+            list(self.agent.retry([]))
+            self.assertEqual(search_arguments(self.server)[-1]["session_id"], first)
+            list(self.agent.predict("Next independent run", []))
+            second = search_arguments(self.server)[-1]["session_id"]
+        self.assertNotEqual(first, second)
+        self.assertEqual([a["session_id"] for a in search_arguments(self.server)],
+                         [first] * 4 + [second] * 2)
+
+    def test_failure_and_cancellation_retry_keep_run_then_new_run_rotates(self):
+        for failure in [httpx.Response(503, text="temporary failure"), asyncio.CancelledError()]:
+            with self.subTest(failure=type(failure).__name__):
+                self.agent.history = [{"role": "user", "content": "Retry this run"}]
+                self.agent.llm = research_model()
+                original_handle = self.server.handle
+                failed = False
+
+                async def fail_once(request):
+                    nonlocal failed
+                    if not failed and json.loads(request.content)["method"] == "tools/call":
+                        failed = True
+                        self.server.requests.append(request)
+                        if isinstance(failure, BaseException):
+                            raise failure
+                        return failure
+                    return await original_handle(request)
+
+                with patch.object(self.server, "handle", side_effect=fail_once):
+                    if isinstance(failure, asyncio.CancelledError):
+                        with self.assertRaises(asyncio.CancelledError):
+                            self.agent.get_answer_at_once()
+                    else:
+                        self.agent.get_answer_at_once()
+                failed_id = search_arguments(self.server)[-1]["session_id"]
+                self.agent.llm = research_model()
+                self.agent.stream = False
+                with patch.object(self.agent, "auto_save"), patch.object(base_module, "count_token", return_value=1):
+                    list(self.agent.retry([]))
+                self.assertEqual(search_arguments(self.server)[-1]["session_id"], failed_id)
+                self.agent.history = [{"role": "user", "content": "New run after retry"}]
+                self.assertNotEqual(self.answer(), failed_id)
+
+    def test_interleaved_independent_runs_and_resumption_on_one_model(self):
+        for streaming in [False, True]:
+            with self.subTest(streaming=streaming):
+                self.server.requests.clear()
+                self.agent.history = [{"role": "user", "content": "Conversation A"}]
+                history_a = self.agent.history
+                model_a = research_model("A", streaming)
+                model_b = research_model("B", streaming)
+                entered, release = Event(), Event()
+                original_handle = self.server.handle
+
+                async def interleave(request):
+                    payload = json.loads(request.content)
+                    if (payload["method"] == "tools/call"
+                            and payload["params"]["arguments"]["objective"] == "A"
+                            and not entered.is_set()):
+                        entered.set()
+                        if not release.wait(5):
+                            raise RuntimeError("Second conversation did not complete")
+                    return await original_handle(request)
+
+                def answer():
+                    if streaming:
+                        return "".join(self.agent.get_answer_stream_iter())
+                    return self.agent.get_answer_at_once()[0]
+
+                self.agent.llm = model_a
+                initial_tools = list(self.agent.tools)
+                with patch.object(self.server, "handle", side_effect=interleave), \
+                        patch.object(agent_module, "ChatOpenAI", side_effect=[model_a, model_b]), \
+                        ThreadPoolExecutor(max_workers=2) as pool:
+                    future_a = pool.submit(answer)
+                    try:
+                        self.assertTrue(entered.wait(5))
+                        self.agent.history = [{"role": "user", "content": "Conversation B"}]
+                        history_b = self.agent.history
+                        self.agent.llm = model_b
+                        future_b = pool.submit(answer)
+                        self.assertIn("https://example.org/docs", future_b.result(5))
+                    finally:
+                        release.set()
+                    self.assertIn("https://example.org/docs", future_a.result(5))
+                grouped = {label: [a["session_id"] for a in search_arguments(self.server)
+                                   if a["objective"] == label] for label in ["A", "B"]}
+                self.assertEqual(grouped["A"], [history_a.conversation_id] * 2)
+                self.assertEqual(grouped["B"], [history_b.conversation_id] * 2)
+                self.assertNotEqual(grouped["A"][0], grouped["B"][0])
+                self.assertEqual(self.agent.tools, initial_tools)
+                # Switching back to a captured conversation resumes its identity.
+                for history in [history_a, history_b]:
+                    self.agent.history = history
+                    self.agent.history.extend([
+                        {"role": "assistant", "content": "Sources found"},
+                        {"role": "user", "content": "Follow up"},
+                    ])
+                    if streaming:
+                        with patch.object(agent_module, "ChatOpenAI", return_value=research_model(streaming=True)):
+                            self.assertIn("https://example.org/docs", answer())
+                        self.assertEqual(search_arguments(self.server)[-1]["session_id"], history.conversation_id)
+                    else:
+                        self.assertEqual(self.answer(), history.conversation_id)
+
+
 class ParallelSearchTests(unittest.TestCase):
+    def test_tool_without_host_context_omits_optional_session_id(self):
+        server = MCPServer()
+        tool = parallel_search.create_parallel_search_tool()
+        with patch.object(parallel_search.httpx, "AsyncClient", side_effect=server.client):
+            self.assertEqual(tool.invoke(QUERY), SOURCE)
+        self.assertNotIn("session_id", search_arguments(server)[0])
+
     def test_saved_config_overrides_environment_for_enable_and_disable(self):
         import modules
 
@@ -169,7 +410,7 @@ class ParallelSearchTests(unittest.TestCase):
             with self.subTest(sse=sse):
                 server = MCPServer(sse=sse)
                 agent, _ = make_agent({"CHUANHU_PARALLEL_SEARCH": "true"})
-                tool = next(tool for tool in agent.tools if tool.name == "parallel_search")
+                tool = next(tool for tool in agent._tools_for_conversation(agent.history) if tool.name == "parallel_search")
                 with patch.object(parallel_search.httpx, "AsyncClient", side_effect=server.client):
                     self.assertEqual(tool.invoke(QUERY), SOURCE)
                     self.assertEqual(tool.invoke(QUERY), SOURCE)

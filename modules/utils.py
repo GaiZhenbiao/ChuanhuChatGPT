@@ -447,6 +447,7 @@ def save_file(filename, model):
     json_s = {
         "system": system,
         "history": history,
+        "conversation_id": history.conversation_id,
         "chatbot": chatbot,
         "model_name": model.model_name,
         "single_turn": model.single_turn,

@@ -32,6 +32,7 @@ from langchain.schema import (AgentAction, AgentFinish, AIMessage, BaseMessage,
 
 from .. import shared
 from ..config import retrieve_proxy, auth_list
+from ..conversation import ConversationHistory
 from ..index_func import *
 from ..presets import *
 from ..utils import *
@@ -261,6 +262,19 @@ def download(repo_id, filename, retry=10):
 
 
 class BaseLLMModel:
+    @property
+    def history(self):
+        return self._history
+
+    @history.setter
+    def history(self, messages):
+        # Appending/trimming/retrying keeps the context. Replacing it with a plain
+        # list starts an independent conversation; a captured context can resume.
+        self._history = (
+            messages if isinstance(messages, ConversationHistory)
+            else ConversationHistory(messages)
+        )
+
     def __init__(
         self,
         model_name,
@@ -600,6 +614,7 @@ class BaseLLMModel:
         files=None,
         reply_language="中文",
         should_check_token_count=True,
+        _retry=False,
     ):  # repetition_penalty, top_k
         status_text = i18n("msg.status.generating")
         if type(inputs) == list:
@@ -669,7 +684,9 @@ class BaseLLMModel:
             return
 
         if self.single_turn:
-            self.history = []
+            self.history = ConversationHistory(
+                conversation_id=self.history.conversation_id if _retry else None
+            )
             self.all_token_counts = []
         if type(inputs) == list:
             self.history.append(inputs)
@@ -767,6 +784,7 @@ class BaseLLMModel:
             use_websearch=use_websearch,
             files=files,
             reply_language=reply_language,
+            _retry=True,
         )
         for x in iter:
             yield x
@@ -1058,7 +1076,9 @@ class BaseLLMModel:
             # Sanitize chatbot
             saved_json["chatbot"] = saved_json["chatbot"]
             logging.debug(f"{self.user_name} 加载对话历史完毕")
-            self.history = saved_json["history"]
+            self.history = ConversationHistory(
+                saved_json["history"], saved_json.get("conversation_id")
+            )
             self.single_turn = saved_json.get("single_turn", self.single_turn)
             self.temperature = saved_json.get("temperature", self.temperature)
             self.top_p = saved_json.get("top_p", self.top_p)

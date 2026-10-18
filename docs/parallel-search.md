@@ -19,6 +19,10 @@ Parallel API Key，搜索使用 Fast 模式，有服务端用量限制。
 只有助理实际调用此工具时，搜索目标和关键词才会发送至
 `https://search.parallel.ai/mcp`；未启用时不会连接该服务。
 
+同一对话中的后续提问、流式回答和重试会沿用同一个会话 ID，重置对话或开始独立的
+单轮任务时会生成新的 ID。保存的历史记录会保留该 ID；不含 ID 的旧历史记录在加载时
+会建立新的会话上下文，再次保存后即可保留。
+
 ## Parallel search in ChuanhuAgent
 
 Set the string `"CHUANHU_PARALLEL_SEARCH": "true"` in `config.json`, or set the
@@ -35,3 +39,12 @@ Requests have a 45-second
 overall timeout, and failures are returned to the agent without automatic provider
 fallback. Async tool calls support cancellation. The existing webpage summary
 and question-answering tools remain available for reading pages.
+
+Search calls share a conversation ID across follow-up turns, retries and webpage
+reads, including streaming turns. Resetting the chat or starting a new independent
+single-turn run creates a new ID. Saved histories retain their ID when loaded;
+older histories receive a new ID on load and retain it when saved again.
+For callers using the model directly, append to the current `history` to continue
+a chat; assign a plain list to start an independent context. A captured
+`ConversationHistory` can be restored to resume that chat. Each execution binds
+its own search tool to that context, so interleaved chats cannot overwrite its ID.
