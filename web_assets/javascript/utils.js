@@ -110,7 +110,7 @@ function downloadFile(fileUrl, filename = "", format = "", retryTimeout = 200, m
     
 function statusDisplayMessage(message) {
     statusDisplayBlock = statusDisplay.querySelector("#status-display .md p");
-    statusDisplayBlock.innerText = message;
+    if (statusDisplayBlock) statusDisplayBlock.innerText = message;
 }
 
 function bindFancyBox() {

@@ -153,3 +153,8 @@ include/
 pyvenv.cfg
 
 create_release.sh
+
+# Isolated official Agent runtime and private recovery records
+.agents-runtime/
+.env.agents
+agent_data/

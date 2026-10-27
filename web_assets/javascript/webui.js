@@ -152,6 +152,8 @@ var wantOpenMenu = windowWidth > 768;
 var wantOpenToolbox = windowWidth >= 1024;
 
 function adjustSide() {
+    // Resize can arrive before Gradio has mounted the sidebar elements.
+    if (!menu || !toolbox || !chatbotArea || !chuanhuHeader) return;
     if (windowWidth >= 1024) {
         shouldAutoClose = true;
         if (wantOpenMenu) {

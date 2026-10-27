@@ -419,6 +419,13 @@
         "your_prefix": "당신의"
     },
     "ui": {
+        "agent_activity": {
+            "thinking_active": "생각 중",
+            "thinking_completed": "생각 완료",
+            "thinking_neutral": "생각",
+            "elapsed_seconds": "{seconds}s",
+            "elapsed_minutes_seconds": "{minutes}분 {seconds}초"
+        },
         "chat": {
             "delete_latest": "🗑️ 최신 대화 삭제",
             "delete_oldest": "🗑️ 가장 오래된 대화 삭제",
@@ -455,6 +462,8 @@
             "filename_placeholder": "파일 이름 설정: 기본값: .json, 선택: .md",
             "invalid_filename": "유효한 파일 이름을 입력하세요. 다음 특수 문자를 포함하지 마세요: ",
             "load_from_list": "리스트에서 대화 불러오기",
+            "file_missing": "기록 파일이 없습니다",
+            "file_invalid": "기록을 읽을 수 없거나 형식이 잘못되었습니다",
             "new_chat_prefix": "새 대화 ",
             "rename": "대화 이름 변경",
             "save": "💾 대화 저장",
@@ -534,7 +543,41 @@
                 "extensions": "확장",
                 "parameters": "파라미터들"
             },
-            "title": "도구 상자"
+            "title": "도구 상자",
+            "agent": {
+                "model": "사용할 모델",
+                "reasoning": "추론 수준",
+                "tools_title": "도구 설정",
+                "locked_hint": "대화가 시작되면 도구 설정을 변경할 수 없습니다. 변경하려면 첫 메시지를 보내기 전에 설정하세요.",
+                "network": "클라우드 실행 환경 인터넷 연결",
+                "code": "코드 및 파일 실행",
+                "search": "내장 웹 검색",
+                "search_mode": "검색 모드",
+                "domains": "검색 도메인(한 줄에 하나, 선택 사항)",
+                "browser": "클라우드 브라우저(Computer Use)",
+                "screenshots": "브라우저 스크린샷 포함",
+                "discovery": "도구 검색",
+                "programmatic": "프로그래밍 방식 도구 호출",
+                "functions": "등록된 애플리케이션 함수",
+                "mcp": "MCP 서버",
+                "fork": "이 설정으로 새 대화 시작",
+                "system_prompt": "시스템 프롬프트",
+                "search_live": "실시간",
+                "search_cached": "캐시",
+                "search_disabled": "사용 안 함",
+                "reasoning_default": "모델 기본값",
+                "minimal": "최소",
+                "low": "낮음",
+                "medium": "보통",
+                "high": "높음",
+                "xhigh": "매우 높음",
+                "max": "최대",
+                "invalid_tools": "도구 설정이 올바르지 않습니다. 보내기 전에 확인하세요.",
+                "invalid_mcp": "MCP 설정이 유효한 JSON이 아닙니다.",
+                "capability": "기능",
+                "status": "상태",
+                "description": "설명"
+            }
         },
         "training": {
             "dataset": {

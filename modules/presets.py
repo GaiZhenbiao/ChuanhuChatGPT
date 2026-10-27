@@ -69,6 +69,7 @@ ONLINE_MODELS = [
     "Claude 3 Opus",
     "DeepSeek Chat",
     "DeepSeek R1",
+    "OpenAI Agent",
     "川虎助理",
     "川虎助理 Pro",
     "DALL-E 3",
@@ -153,6 +154,15 @@ DEFAULT_METADATA = {
 
 # Additional metadata for online and local models
 MODEL_METADATA = {
+    "OpenAI Agent": {
+        "model_name": "gpt-6.1-sol",
+        "model_type": "OpenAIAgents",
+        "description": "model.openai_agent.description",
+        "system": "Perform only the requested task. Keep your final answer concise. Use files in /workspace for deliverables.",
+        "placeholder": {"logo": "file=web_assets/model_logos/codex-color.png",
+                        "logo_rounded": "true", "slogan": "model.openai_agent.slogan"},
+        "metadata": {"allow_text_tool": False},
+    },
     "Llama-2-7B":{
         "repo_id": "TheBloke/Llama-2-7B-GGUF",
         "filelist": ["llama-2-7b.Q6_K.gguf"],

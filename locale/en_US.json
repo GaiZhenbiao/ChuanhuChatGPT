@@ -240,6 +240,12 @@
         },
         "o1": {
             "description": "The o1 series of large language models are trained with reinforcement learning to perform complex reasoning. o1 models think before they answer, producing a long internal chain of thought before responding to the user."
+        },
+        "openai_agent": {
+            "description": "Chat with OpenAI Agent to work with files and complete tasks.",
+            "slogan": "Let Agent complete the task.",
+            "selection_notice": "Agent reuses the existing OpenAI connection. Ordinary history is quoted as context; bound Agent conversations restore cloud state before continuing.",
+            "invalid_response": "The connection response could not be read. No task was resent; reconnect the original session to confirm its state."
         }
     },
     "msg": {
@@ -360,7 +366,9 @@
             "tokens_per_second": "Tokens per second：{token_generation_speed}",
             "tools_enabled": "Enabled tools: ",
             "total_cost": ", total cost: ",
-            "uploaded": "Uploaded"
+            "uploaded": "Uploaded",
+            "stop_requested": "Stop requested.",
+            "model_busy": "The model is generating or has been replaced. Wait for completion and use the currently selected model."
         },
         "train": {
             "failed": "Training failed: {error}",
@@ -419,6 +427,116 @@
         "your_prefix": "Your "
     },
     "ui": {
+        "agent_activity": {
+            "thinking_active": "Thinking",
+            "thinking_completed": "Thought",
+            "thinking_neutral": "Reasoning",
+            "elapsed_seconds": "{seconds}s",
+            "elapsed_minutes_seconds": "{minutes}m {seconds}s",
+            "list_separator": ", ",
+            "list_two": "{first} and {last}",
+            "list_many": "{items}, and {last}",
+            "neutral_template": "{actions}",
+            "progressive_template": "{actions}",
+            "past_template": "{actions}",
+            "actions": {
+                "function_call": {
+                    "neutral": "call functions",
+                    "progressive": "calling functions",
+                    "past": "called functions"
+                },
+                "function_call_output": {
+                    "neutral": "return function results",
+                    "progressive": "returning function results",
+                    "past": "returned function results"
+                },
+                "mcp_call": {
+                    "neutral": "call tools",
+                    "progressive": "calling tools",
+                    "past": "called tools"
+                },
+                "command_execution": {
+                    "neutral": "run commands",
+                    "progressive": "running commands",
+                    "past": "ran commands"
+                },
+                "web_search": {
+                    "neutral": "search the web",
+                    "progressive": "searching the web",
+                    "past": "searched the web"
+                },
+                "web_open": {
+                    "neutral": "open web pages",
+                    "progressive": "opening web pages",
+                    "past": "opened web pages"
+                },
+                "web_find": {
+                    "neutral": "find text on web pages",
+                    "progressive": "finding text on web pages",
+                    "past": "found text on web pages"
+                },
+                "web_search_call": {
+                    "neutral": "web activity",
+                    "progressive": "web activity",
+                    "past": "web activity"
+                },
+                "computer_use_call": {
+                    "neutral": "use the computer",
+                    "progressive": "using the computer",
+                    "past": "used the computer"
+                },
+                "computer_use_approval_request": {
+                    "neutral": "website authorization request",
+                    "progressive": "website authorization request",
+                    "past": "website authorization request"
+                },
+                "computer_use_approval_request_result": {
+                    "neutral": "website authorization result",
+                    "progressive": "website authorization result",
+                    "past": "website authorization result"
+                },
+                "create_subagent_call": {
+                    "neutral": "create subtasks",
+                    "progressive": "creating subtasks",
+                    "past": "create subtasks"
+                },
+                "send_subagent_input_call": {
+                    "neutral": "send subtask input",
+                    "progressive": "sending subtask input",
+                    "past": "send subtask input"
+                },
+                "resume_subagent_call": {
+                    "neutral": "resume subtasks",
+                    "progressive": "resuming subtasks",
+                    "past": "resume subtasks"
+                },
+                "wait_for_subagents_call": {
+                    "neutral": "wait for subtasks",
+                    "progressive": "waiting for subtasks",
+                    "past": "wait for subtasks"
+                },
+                "interrupt_subagent_call": {
+                    "neutral": "stop subtasks",
+                    "progressive": "stopping subtasks",
+                    "past": "stop subtasks"
+                },
+                "close_subagent_call": {
+                    "neutral": "close subtasks",
+                    "progressive": "closing subtasks",
+                    "past": "close subtasks"
+                },
+                "agent_message": {
+                    "neutral": "messages between tasks",
+                    "progressive": "messages between tasks",
+                    "past": "messages between tasks"
+                },
+                "other": {
+                    "neutral": "tool activity",
+                    "progressive": "tool activity",
+                    "past": "tool activity"
+                }
+            }
+        },
         "chat": {
             "delete_latest": "🗑️ Delete latest dialog",
             "delete_oldest": "🗑️ Delete oldest dialog",
@@ -455,6 +573,8 @@
             "filename_placeholder": "Set file name: default is .json, optional is .md",
             "invalid_filename": "Please enter a valid file name, do not include the following special characters: ",
             "load_from_list": "Load dialog from list",
+            "file_missing": "History file does not exist",
+            "file_invalid": "Unable to read history or invalid history format",
             "new_chat_prefix": "New Chat ",
             "rename": "Rename this chat",
             "save": "💾 Save Dialog",
@@ -534,7 +654,41 @@
                 "extensions": "Extensions",
                 "parameters": "Parameters"
             },
-            "title": "Toolbox"
+            "title": "Toolbox",
+            "agent": {
+                "model": "Model to use",
+                "reasoning": "Reasoning effort",
+                "tools_title": "Tool configuration",
+                "locked_hint": "Tool configuration cannot be changed after the conversation starts. Make any changes before sending the first message.",
+                "network": "Cloud environment internet access",
+                "code": "Code and file execution",
+                "search": "Built-in web search",
+                "search_mode": "Search mode",
+                "domains": "Search domains (one per line; optional)",
+                "browser": "Cloud browser (Computer Use)",
+                "screenshots": "Include browser screenshots",
+                "discovery": "Tool discovery",
+                "programmatic": "Programmatic tool calling",
+                "functions": "Registered application functions",
+                "mcp": "MCP servers",
+                "fork": "Start a new conversation with this configuration",
+                "system_prompt": "System prompt",
+                "search_live": "Live",
+                "search_cached": "Cached",
+                "search_disabled": "Disabled",
+                "reasoning_default": "Model default",
+                "minimal": "Minimal",
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High",
+                "xhigh": "Extra high",
+                "max": "Maximum",
+                "invalid_tools": "Invalid tool configuration. Check it before sending.",
+                "invalid_mcp": "The MCP configuration is not valid JSON.",
+                "capability": "Capability",
+                "status": "Status",
+                "description": "Description"
+            }
         },
         "training": {
             "dataset": {

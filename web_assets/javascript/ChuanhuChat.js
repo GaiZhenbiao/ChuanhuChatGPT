@@ -27,6 +27,8 @@ var logginUser = null;
 var updateToast = null;
 var sendBtn = null;
 var cancelBtn = null;
+var sendControlsRoot = null;
+var sendControlsObserver = null;
 // var sliders = null;
 var updateChuanhuBtn = null;
 var rebootChuanhuBtn = null;
@@ -49,14 +51,13 @@ var currentTime = new Date().getTime();
 let windowWidth = window.innerWidth; // 初始窗口宽度
 
 function addInit() {
-    var needInit = {chatbotIndicator, uploaderIndicator};
-
     chatbotIndicator = gradioApp().querySelector('#chuanhu-chatbot > div.wrap');
     uploaderIndicator = gradioApp().querySelector('#upload-index-file > div.wrap');
     uploaderIndicator2 = gradioApp().querySelector('#upload-index-file');
     chatListIndicator = gradioApp().querySelector('#history-select-dropdown > div.wrap');
     modelSelectIndicator = gradioApp().querySelector('#gr-model-description > div.wrap');
 
+    var needInit = {chatbotIndicator, uploaderIndicator, chatListIndicator, modelSelectIndicator};
     for (let elem in needInit) {
         if (needInit[elem] == null) {
             // addInited = false;
@@ -66,7 +67,7 @@ function addInit() {
 
     chatbotObserver.observe(chatbotIndicator, { attributes: true, childList: true, subtree: true });
     chatListObserver.observe(chatListIndicator, { attributes: true });
-    modelSelectObserver.observe(modelSelectIndicator, { attributes: true });
+    modelSelectObserver.observe(gradioApp().querySelector('#gr-model-description'), { childList: true, subtree: true, characterData: true });
     setUploader();
     setPasteUploader();
     setDragUploader();
@@ -212,12 +213,71 @@ function selectHistory() {
     }
 }
 
-function disableSendBtn() {
-    sendBtn.disabled = user_input_ta.value.trim() === '';
-    user_input_ta.addEventListener('input', () => {
-        sendBtn.disabled = user_input_ta.value.trim() === '';
-    });
+function refreshSendButton() {
+    const app = gradioApp();
+    const button = app.querySelector('#submit-btn');
+    const textarea = app.querySelector('#user-input-tb textarea');
+    if (!button || !textarea) return false;
+
+    const conversation = window.chuanhuInputConversation?.() || '';
+    const preview = conversation ? app.querySelector('#agent-pending-files') : null;
+    let hasAttachments = false;
+    if (preview) {
+        try {
+            const metadata = JSON.parse(preview.querySelector('[data-testid="block-label"]').textContent.trim());
+            const ids = metadata.ids;
+            hasAttachments = metadata.target === conversation && Array.isArray(ids) && ids.length > 0 &&
+                ids.every(id => typeof id === 'string' && id.length > 0) &&
+                new Set(ids).size === ids.length && ids.length === preview.querySelectorAll('tr.file').length;
+        } catch (_) { /* A partial/stale preview is not a ready attachment. */ }
+    }
+    const uploading = conversation && (window.chuanhuAgentUploading || window.chuanhuAgentUploadStaging || window.chuanhuUploadHasPending?.() ||
+        app.querySelector('#agent-upload-files .uploading, #agent-upload-files .file-preview-holder'));
+    // Gradio hides Send while a turn is running, including remote states that
+    // can outlive the local busy flag. Never undo that state on an input event.
+    const configTarget = app.querySelector('#agent-config-target textarea, #agent-config-target input');
+    const awaitingTarget = conversation && configTarget && configTarget.value !== conversation;
+    const blocked = awaitingTarget || textarea.disabled || button.hidden || button.classList.contains('hidden') ||
+        window.chuanhuInputBusy?.() || uploading;
+    const disabled = Boolean(blocked || !(textarea.value.trim() || hasAttachments));
+    if (button.disabled !== disabled) button.disabled = disabled;
+    return !disabled;
 }
+
+function guardComposerSubmit(event) {
+    const path = event.composedPath ? event.composedPath() : [event.target];
+    const target = path.find(node => node?.matches?.(event.type === 'click' ? '#submit-btn' : '#user-input-tb textarea'));
+    if (!target) return;
+    if (event.type !== 'click' && (event.key !== 'Enter' || event.shiftKey || event.isComposing)) return;
+    if (!refreshSendButton()) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+    }
+    // Keep Gradio's native keypress -> Textbox.submit path. Clicking Send here
+    // as well would send an attachment-only message twice.
+}
+
+function disableSendBtn() {
+    const app = gradioApp();
+    if (sendControlsRoot !== app) {
+        if (sendControlsRoot) {
+            sendControlsRoot.removeEventListener('input', refreshSendButton);
+            for (const type of ['click', 'keydown', 'keypress'])
+                sendControlsRoot.removeEventListener(type, guardComposerSubmit, true);
+            sendControlsObserver.disconnect();
+        }
+        sendControlsRoot = app;
+        app.addEventListener('input', refreshSendButton);
+        for (const type of ['click', 'keydown', 'keypress'])
+            app.addEventListener(type, guardComposerSubmit, true);
+        sendControlsObserver = new MutationObserver(refreshSendButton);
+        sendControlsObserver.observe(app, {childList: true, subtree: true, characterData: true,
+            attributes: true, attributeFilter: ['class', 'hidden', 'disabled', 'data-model-capabilities']});
+    }
+    refreshSendButton();
+}
+// Upload callbacks also change flags without necessarily changing the DOM.
+window.chuanhuRefreshSendButton = refreshSendButton;
 
 function checkModel() {
     const model = gradioApp().querySelector('#model-select-dropdown input');
@@ -277,7 +337,7 @@ function bindChatbotPlaceholderButtons() {
             user_input_ta.dispatchEvent(input_event);
 
             // 创建并触发回车键事件
-            sendBtn.disabled = false;
+            refreshSendButton();
             sendBtn.click();
             // const enterEvent = new KeyboardEvent('keydown', { 'key': 'Enter' });
             // userInput.dispatchEvent(enterEvent);
@@ -342,6 +402,8 @@ function setScrollShadow() {
 function setPopupBoxPosition() {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
+    popupWrapper = gradioApp().querySelector('#popup-wrapper');
+    if (!popupWrapper) return;
     popupWrapper.style.height = `${screenHeight}px`;
     popupWrapper.style.width = `${screenWidth}px`;
     // const popupBoxWidth = 680;
@@ -390,6 +452,8 @@ function setAutocomplete() {
 }
 
 function clearChatbot(a, b) {
+    window.chuanhuClearHistoryIntent?.();
+    window.chuanhuAgentPendingDraft = null;
     clearHistoryHtml();
     // clearMessageRows();
     return [a, b]
@@ -409,13 +473,13 @@ function chatbotContentChanged(attempt = 1, force = false) {
 
             gradioApp().querySelectorAll('#chuanhu-chatbot .message-wrap .message.bot').forEach(addChuanhuButton);
 
-            if (chatbotIndicator.classList.contains('hide')) { // generation finished
+            if (chatbotIndicator?.classList.contains('hide')) { // generation finished
                 setLatestMessage();
                 enableChatListClick();
                 setChatList();
             }
 
-            if (!chatbotIndicator.classList.contains('translucent')) { // message deleted
+            if (!chatbotIndicator?.classList.contains('translucent')) { // message deleted
                 var checkLatestAdded = setInterval(() => {
                     var latestMessageNow = gradioApp().querySelector('#chuanhu-chatbot .message-wrap .message.bot:last-of-type');
                     if (latestMessageNow && latestMessageNow.querySelector('.message-btn-row')) {
@@ -434,11 +498,11 @@ function chatbotContentChanged(attempt = 1, force = false) {
 
 var chatbotObserver = new MutationObserver(() => {
     chatbotContentChanged(1);
-    if (chatbotIndicator.classList.contains('hide')) {
+    if (chatbotIndicator?.classList.contains('hide')) {
         // setLatestMessage();
         chatbotContentChanged(2);
     }
-    if (!chatbotIndicator.classList.contains('translucent')) {
+    if (!chatbotIndicator?.classList.contains('translucent')) {
         chatbotContentChanged(2);
     }
 

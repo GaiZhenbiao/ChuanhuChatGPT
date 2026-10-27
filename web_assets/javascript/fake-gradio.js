@@ -3,6 +3,7 @@
 
 // buttons
 function newChatClick() {
+    window.chuanhuAgentPendingDraft = null;
     gradioApp().querySelector('#empty-btn').click();
 }
 function jsonDownloadClick() {
@@ -26,7 +27,7 @@ function setUploader() {
             fileCountSpan.innerText = fileCount;
         } else {
             chatbotArea.classList.remove('with-file');
-            statusDisplayMessage("");
+            if (window.chuanhuSupports?.('knowledge') !== false) statusDisplayMessage("");
             fileCount = 0;
             transUpload();
         }
@@ -37,7 +38,10 @@ function setUploader() {
 var grUploader;
 var chatbotUploader;
 var handleClick = function() {
-    grUploader.click();
+    if (window.chuanhuSupports?.('input_attachments') === false || window.chuanhuInputBusy?.()) return;
+    const selector = window.chuanhuInputTarget?.() || '#upload-index-file';
+    if (selector === '#agent-upload-files' && window.chuanhuAgentUploading) return;
+    gradioApp().querySelector(selector + ' input[type=file]')?.click();
 
 };
 function transUpload() {
@@ -63,10 +67,12 @@ function setCheckboxes() {
     grOnlineSearchCB = gradioApp().querySelector("#gr-websearch-cb > label> input");
     
     chatbotSingleSessionCB.addEventListener('change', (e) => {
+        if (window.chuanhuSupports?.('single_turn') === false) return;
         grSingleSessionCB.checked = chatbotSingleSessionCB.checked;
         gradioApp().querySelector('#change-single-session-btn').click();
     });
     chatbotOnlineSearchCB.addEventListener('change', (e) => {
+        if (window.chuanhuSupports?.('external_websearch') === false) return;
         grOnlineSearchCB.checked = chatbotOnlineSearchCB.checked;
         gradioApp().querySelector('#change-online-search-btn').click();
     });

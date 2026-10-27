@@ -56,6 +56,13 @@ hr.append-display {
     padding: 0 4px;
 }
 
+/* Gradio 4.29 animates opacity on .generating even when show_progress is
+   hidden. Remove only explicitly hidden generation overlays from display. */
+.gradio-container .wrap.hidden.generating {
+    display: none !important;
+    animation: none !important;
+}
+
 /* 阻止generating时的border */
 #chuanhu-chatbot > .wrap {
     border: none !important;
@@ -125,6 +132,8 @@ hr.append-display {
 }
 .message.bot {
     background-color: var(--message-bot-background-color-light) !important;
+    /* Preserve the product's fixed bot column when Gradio's mobile CSS sets auto. */
+    width: 100% !important;
     max-width: calc(85% - 40px);
     border-bottom-left-radius: 0 !important;
 }
@@ -165,11 +174,22 @@ hr.append-display {
     #chuanhu-chatbot>.wrapper>.wrap {
         max-height: calc(100dvh - 140px - var(--line-sm)*1rem - 2*var(--block-label-margin) );
     } */
-    .message.bot {
-        max-width: calc(100% - 84px) !important;
+    #chuanhu-chatbot .message-row.bot-row {
+        /* Reserve half a 32px avatar beyond the existing button budget.
+           Shrink the row so flex layout also preserves this with an avatar. */
+        width: calc(100% - 16px);
     }
-    .message.user {
-        max-width: calc(100% - 84px) !important;
+    .message.bot {
+        /* The existing button column extends 23px beyond the bubble. */
+        max-width: calc(100% - 23px) !important;
+    }
+    #chuanhu-chatbot .message.user {
+        /* Same visible maximum as bot: 16px row reserve plus 23px buttons. */
+        max-width: calc(100% - 39px) !important;
+    }
+    #chuanhu-chatbot .user-row:has(> .avatar-container) > .message.user {
+        /* Bot flex layout also reserves the 32px avatar and its 10px gap. */
+        max-width: calc(100% - 58px) !important;
     }
 
     #app-title,
@@ -182,7 +202,161 @@ hr.append-display {
     }
 }
 
-#chuanhu-chatbot {
+/* Keep the original absolute header/footer and translucent bottom overlay.
+   Only the optional live website request panel participates in content flow. */
+#chatbot-area.agent-mode { height: 100%; min-height: 0; gap: 0; }
+#chatbot-area.agent-mode #chatbot-content {
+    flex: 1 1 0;
+    min-height: 0;
+    gap: 0;
+    overflow: hidden;
+}
+#chatbot-area.agent-mode #chatbot-messages {
+    flex: 1 1 0;
+    min-height: 0;
+}
+#model-output-panels {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: 60%;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+#model-output-panels > .gradio-column {
+    flex: 0 0 auto;
+    padding: 12px 20px;
+    min-width: 0;
+}
+#model-output-files, #model-output-native-files, #model-output-retry-id, #model-output-retry {
+    display: none !important;
+}
+.model-file-cards { display: flex; flex-direction: column; gap: 8px; }
+#chuanhu-chatbot .agent-message-files,
+#chuanhu-chatbot .agent-user-files {
+    display: flex; flex-direction: column; gap: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 300px;
+    padding: 0;
+}
+#chuanhu-chatbot .agent-message-files {
+    /* Cancel the message list's inter-turn gap for files in the same reply. */
+    margin-block: calc(12px - var(--spacing-xxl) - var(--spacing-lg)) 12px;
+}
+#chuanhu-chatbot .agent-files-with-avatar {
+    margin-inline-start: 42px; /* Product avatar (32px) plus its 10px gap. */
+    width: calc(100% - 42px);
+}
+#chuanhu-chatbot .agent-file-only-message + .agent-message-files:not(.agent-turn-files-after-answer) { margin-block-start: 0; }
+.agent-file-only-message { display: none !important; }
+.agent-message-anchor, .agent-message-raw { display: none !important; }
+/* Keep these scoped: Gradio's button reset otherwise wins after mounting. */
+#chuanhu-chatbot .agent-file-card {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%;
+    box-sizing: border-box; padding: 8px 12px; border: 0;
+    border-radius: 12px; text-align: left; font: inherit;
+    color: var(--body-text-color); background: #fff;
+}
+#chuanhu-chatbot .model-file-card { cursor: pointer; }
+#chuanhu-chatbot .agent-message-files > .model-file-card:hover:not(:disabled) { background: #FAFAFA; }
+.dark #chuanhu-chatbot .agent-file-card { background: var(--message-bot-background-color-dark); }
+.dark #chuanhu-chatbot .agent-message-files > .model-file-card:hover:not(:disabled) { background: #3A3A3A; }
+#chuanhu-chatbot .agent-message-files > .model-file-card:focus-visible { outline: 2px solid var(--primary-500); outline-offset: 2px; }
+#chuanhu-chatbot .agent-message-files > .model-file-card:disabled { cursor: wait; }
+#chuanhu-chatbot .agent-file-card .agent-file-icon { flex: 0 0 24px; width: 24px; height: 28px; }
+.agent-file-icon svg { width: 100%; height: 100%; }
+.agent-file-icon { color: #737373; }
+.agent-file-icon[data-file-kind="text"] { color: #47704e; }
+.agent-file-icon[data-file-kind="document"] { color: #3568a4; }
+.agent-file-icon[data-file-kind="pdf"] { color: #bd4242; }
+.agent-file-icon[data-file-kind="sheet"] { color: #27825b; }
+.agent-file-icon[data-file-kind="slides"] { color: #b85c29; }
+.agent-file-icon[data-file-kind="image"] { color: #8d55ab; }
+.agent-file-icon[data-file-kind="code"] { color: #357d91; }
+.agent-file-icon[data-file-kind="archive"] { color: #957322; }
+.agent-file-icon[data-file-kind="media"] { color: #ae4f86; }
+.dark .agent-file-icon { color: #a3a3a3; }
+.dark .agent-file-icon[data-file-kind="text"] { color: #8fb996; }
+.dark .agent-file-icon[data-file-kind="document"] { color: #83ade0; }
+.dark .agent-file-icon[data-file-kind="pdf"] { color: #ef9090; }
+.dark .agent-file-icon[data-file-kind="sheet"] { color: #73c6a2; }
+.dark .agent-file-icon[data-file-kind="slides"] { color: #e7a174; }
+.dark .agent-file-icon[data-file-kind="image"] { color: #c5a0df; }
+.dark .agent-file-icon[data-file-kind="code"] { color: #80bdcf; }
+.dark .agent-file-icon[data-file-kind="archive"] { color: #d8bd71; }
+.dark .agent-file-icon[data-file-kind="media"] { color: #e39bc7; }
+#chuanhu-chatbot .agent-file-card [data-file-part="content"] {
+    display: flex; flex-direction: column; gap: 0; min-width: 0; flex: 1;
+}
+#chuanhu-chatbot .agent-file-card [data-file-part="name"] {
+    font-size: inherit; font-weight: 400; line-height: 1.4;
+    display: flex;
+    white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
+}
+#chuanhu-chatbot .agent-file-card [data-file-part="basename"] { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+#chuanhu-chatbot .model-file-extension { flex: 0 0 auto; }
+#chuanhu-chatbot .agent-file-card [data-file-part="meta"] {
+    font-size: 11px; line-height: 1.35; color: var(--body-text-color-subdued); overflow-wrap: anywhere;
+}
+.model-file-error, .model-file-feedback {
+    font-size: 0.875em; color: var(--body-text-color-subdued); overflow-wrap: anywhere;
+}
+.model-file-error:empty, .model-file-feedback:empty { display: none; }
+#agent-input-files { display: none !important; gap: 0; min-height: 0; }
+#agent-activity-feedback, #agent-input-feedback {
+    border: 0; background: none; box-shadow: none;
+    color: var(--body-text-color-subdued);
+}
+#agent-activity-feedback { padding: 8px 20px; }
+#agent-input-feedback { padding: 0 20px; }
+#agent-upload-files, #agent-pending-files { min-height: 0 !important; padding: 0 !important; border: 0 !important; background: none; }
+#agent-upload-files > .center.flex { display: none; }
+/* Gradio swaps an empty disabled File to its tall read-only placeholder.
+   These native empty states must not displace conversation/authorization. */
+#agent-upload-files > .empty, #agent-pending-files > .empty { display: none; }
+#agent-pending-files > .center.flex { display: none; }
+#agent-pending-files .file-preview-holder { max-height: 130px !important; overflow: auto; }
+#agent-pending-files [data-testid="block-label"], #agent-input-remove-payload, #agent-input-remove { display: none !important; }
+#agent-browser-form {
+    overflow-wrap: anywhere;
+}
+#agent-browser-form label {
+    display: block;
+    margin-block: 8px;
+}
+#agent-browser-form label[hidden] {
+    display: none;
+}
+#agent-browser-form input,
+#agent-browser-form select {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+}
+@media screen and (max-width: 499px) {
+    /* Full cards stay narrower than the mobile message column, not its text. */
+    #chuanhu-chatbot .agent-message-files,
+    #chuanhu-chatbot .agent-user-files {
+        width: calc(100% - 100px);
+        max-width: 300px;
+    }
+}
+@container chatbot-area (width < 500px) {
+    #model-output-panels > .gradio-column {
+        padding-inline: 12px;
+    }
+}
+#agent-tool-settings .switch-checkbox input[type="checkbox"] { flex-shrink: 0; }
+#agent-tool-settings .switch-checkbox input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 3px;
+}
+#agent-tool-settings .switch-checkbox input[type="checkbox"]:disabled { opacity: 0.5; cursor: not-allowed; }
+#chatbot-messages > #chuanhu-chatbot {
     height: calc(100dvh - 65px) !important;
     border-radius: 0;
 }
@@ -224,6 +398,9 @@ hr.append-display {
 .message .raw-message p {
     margin:0 !important;
 }
+/* Ordinary body text keeps the same rhythm in Markdown and raw views. */
+#chuanhu-chatbot .message .md-message > p,
+#chuanhu-chatbot .message .raw-message pre.fake-pre { line-height: var(--line-md) !important; }
 .message .raw-message pre.fake-pre {
     color: inherit;
     background: unset !important;
@@ -277,6 +454,11 @@ hr.append-display {
 }
 .chuanhu-btn:focus {
     outline: none;
+}
+#chuanhu-chatbot .copy-bot-btn:focus-visible,
+#chuanhu-chatbot .toggle-md-btn:focus-visible {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
 }
 
 .message-btn-column {
@@ -465,4 +647,176 @@ img.avatar-image {
     #chatbot-placeholder-options button.hide-for-mobile {
         display: none;
     }
+}
+
+#chatbot-area.agent-mode #chuanhu-chatbot { height: 100% !important; min-height: 0; }
+
+/* Match the existing sidebar Accordion heading weight for this nested panel. */
+
+/* 输入附件复用当前输入框，不改变普通聊天的布局。 */
+#agent-pending-files { display: none !important; }
+#chatbot-input-tb-row > .agent-pending-cards {
+    display: flex; flex-wrap: nowrap; flex: 0 0 100%; width: 0; min-width: 100%; max-width: 100%;
+    gap: 8px; overflow-x: auto; padding: 12px 12px 8px; box-sizing: border-box;
+    scrollbar-width: thin; overscroll-behavior-x: contain;
+}
+.agent-pending-cards[hidden], .agent-user-file-source { display: none !important; }
+#chatbot-input-tb-row.agent-composer-has-files { flex-wrap: wrap; }
+.agent-file-card--mini {
+    display: flex; align-items: center; gap: 10px; position: relative;
+    flex: 0 0 220px; min-width: 0; max-width: 100%; padding: 10px 12px;
+    box-sizing: border-box; border-radius: 12px;
+    background: #ECEDEE; color: var(--body-text-color);
+    border: 0;
+}
+.dark .agent-file-card--mini { background: var(--background-fill-secondary); }
+.agent-file-card--mini .agent-input-icon {
+    display: inline-flex; flex: 0 0 28px; width: 28px; height: 34px;
+}
+.agent-file-card--mini .agent-input-card-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.agent-file-card--mini .agent-input-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 400; }
+.agent-file-card--mini .agent-input-meta { color: var(--body-text-color-subdued); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#chatbot-input-tb-row .agent-input-remove-card {
+    position: absolute; right: -5px; top: -5px; width: 22px; height: 22px;
+    padding: 0; border-radius: 50%; font-size: 18px; line-height: 22px;
+    color: #fff; background: #60636b;
+    opacity: 0; cursor: pointer; border: 0;
+}
+#chatbot-input-tb-row .agent-input-card:hover .agent-input-remove-card, #chatbot-input-tb-row .agent-input-card:focus-within .agent-input-remove-card { opacity: 1; }
+.agent-input-remove-card:focus-visible { outline: 2px solid var(--primary-500); outline-offset: 2px; }
+.agent-input-remove-card:disabled { cursor: not-allowed; }
+.agent-user-files { margin: 0 var(--agent-user-bubble-inset, 0px) calc(12px - var(--spacing-xxl) - var(--spacing-lg)) auto; }
+@media (hover: none) { #chatbot-input-tb-row .agent-input-remove-card { opacity: 1; } }
+@media (max-width: 499px) { .agent-file-card--mini { flex-basis: 190px; } }
+
+/* Native transport UI stays outside the composer and chat; mini cards own progress. */
+#agent-upload-files > .wrap { display: none !important; }
+.agent-upload-progress svg { width: 28px; height: 28px; transform: rotate(-90deg); }
+.agent-upload-progress circle { fill: none; stroke-width: 3; }
+.agent-upload-track { stroke: var(--border-color-primary); }
+.agent-upload-value { stroke: var(--primary-500); stroke-linecap: round; }
+.agent-upload-retry { border: 0; padding: 0; background: none; color: var(--primary-500); font-size: 11px; cursor: pointer; }
+
+/* Inert saved Agent activity uses the existing message and file surfaces. */
+.agent-history-activity { margin-block: 0; }
+.agent-history-detail { margin: 0; }
+.agent-history-detail summary { cursor: pointer; }
+.agent-history-detail pre { max-height: 24em; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.agent-history-file { display: inline-flex; margin: .4em .4em .4em 0; }
+
+/* Root Agent steps follow actual item order inside the logical answer. */
+#chuanhu-chatbot .agent-history-activity {
+    --agent-tool-text: rgba(57, 57, 57, .60);
+    --agent-tool-alert: #666666;
+    margin-block: 0;
+    color: var(--agent-tool-text);
+    font-size: 14px;
+    font-weight: 400;
+}
+.dark #chuanhu-chatbot .agent-history-activity { --agent-tool-text: rgba(242, 242, 242, .60); --agent-tool-alert: #B8B8B8; }
+#chuanhu-chatbot .agent-history-detail > summary { cursor: pointer; -webkit-tap-highlight-color: transparent; overflow-wrap: anywhere; color: var(--agent-tool-text); font-size: inherit; font-weight: 400; }
+#chuanhu-chatbot .agent-activity-elapsed { color: var(--agent-tool-text); font-size: inherit; }
+#chuanhu-chatbot .agent-activity-elapsed { margin-inline-start: .35em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#chuanhu-chatbot .agent-summary-text { margin-block: 6px 0; overflow-wrap: anywhere; color: var(--agent-tool-text); }
+
+/* Tool JSON follows the active theme instead of Markdown's dark code surface. */
+#chuanhu-chatbot .agent-history-detail pre {
+    padding: 8px 12px !important;
+    margin-block: 6px 0;
+    background: #F6F7F8 !important;
+    color: var(--agent-tool-text) !important;
+    font-size: 14px;
+    font-weight: 400;
+}
+.dark #chuanhu-chatbot .agent-history-detail pre {
+    background: #1F1F1F !important;
+}
+#chuanhu-chatbot .agent-history-detail pre code {
+    background: transparent !important;
+    color: var(--agent-tool-text) !important;
+    font-size: 14px !important;
+    font-weight: 400;
+}
+
+#chuanhu-chatbot .agent-activity-notice { color: var(--agent-tool-alert); }
+
+/* Only actual projected body text adds the larger boundary gap. */
+#chuanhu-chatbot .agent-history-activity[data-body-before="true"] { margin-block-start: 12px; }
+#chuanhu-chatbot .agent-history-activity[data-body-after="true"] { margin-block-end: 12px; }
+
+/* Both sides of adjacent blocks use 4px, including collapsed margins. */
+#chuanhu-chatbot .agent-history-activity:has(+ .agent-history-activity) { margin-block-end: 4px; }
+#chuanhu-chatbot .agent-history-activity + .agent-history-activity { margin-block-start: 4px; }
+#chuanhu-chatbot .agent-history-detail + .agent-history-detail { margin-block-start: 4px; }
+
+/* Two native disclosure layers; chevrons reserve space while hidden. */
+#chuanhu-chatbot .agent-history-detail > summary {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    list-style: none;
+}
+#chuanhu-chatbot .agent-history-detail > summary,
+#chuanhu-chatbot .agent-history-detail > summary * { user-select: none; -webkit-user-select: none; }
+#chuanhu-chatbot .agent-history-detail > summary::marker { content: ""; }
+#chuanhu-chatbot .agent-history-detail > summary::-webkit-details-marker { display: none; }
+#chuanhu-chatbot .agent-tool-title { min-width: 0; overflow-wrap: anywhere; }
+#chuanhu-chatbot .agent-history-detail > summary > .agent-tool-title { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#chuanhu-chatbot .agent-activity-elapsed { flex: 0 0 auto; }
+#chuanhu-chatbot .agent-activity-chevron {
+    flex: 0 0 12px;
+    width: 12px;
+    height: 12px;
+    margin-inline-start: 6px;
+    opacity: 0;
+    transition: transform 120ms;
+}
+#chuanhu-chatbot .agent-history-detail[open] > summary > .agent-activity-chevron { opacity: 1; transform: rotate(90deg); }
+#chuanhu-chatbot .agent-history-detail > summary:focus-visible > .agent-activity-chevron { opacity: 1; }
+#chuanhu-chatbot .agent-history-detail > summary:focus-visible > .agent-tool-title,
+#chuanhu-chatbot .agent-history-detail > summary:focus-visible > .agent-activity-chevron { color: #393939; }
+.dark #chuanhu-chatbot .agent-history-detail > summary:focus-visible > .agent-tool-title,
+.dark #chuanhu-chatbot .agent-history-detail > summary:focus-visible > .agent-activity-chevron { color: #F2F2F2; }
+#chuanhu-chatbot .agent-tool-list { margin-block-start: 6px; padding-inline-start: 0; min-width: 0; }
+/* Native tool disclosures keep their keyboard and interruption behavior. */
+@supports selector(::details-content) and (interpolate-size: allow-keywords) and (transition-behavior: allow-discrete) {
+    #chuanhu-chatbot .agent-history-detail[data-layer="group"],
+    #chuanhu-chatbot .agent-history-detail[data-layer="tool"] { interpolate-size: allow-keywords; }
+    #chuanhu-chatbot .agent-history-detail[data-layer="group"]::details-content,
+    #chuanhu-chatbot .agent-history-detail[data-layer="tool"]::details-content {
+        display: flow-root;
+        height: 0;
+        overflow: clip;
+        transition: height 180ms ease, content-visibility 180ms allow-discrete;
+    }
+    #chuanhu-chatbot .agent-history-detail[data-layer="group"][open]::details-content,
+    #chuanhu-chatbot .agent-history-detail[data-layer="tool"][open]::details-content { height: auto; }
+    #chuanhu-chatbot .agent-history-detail[data-restoring-open]::details-content { transition: none; }
+}
+@media (hover: hover) and (pointer: fine) {
+    #chuanhu-chatbot .agent-history-detail > summary:hover > .agent-activity-chevron { opacity: 1; }
+    #chuanhu-chatbot .agent-history-detail > summary:hover > .agent-tool-title,
+    #chuanhu-chatbot .agent-history-detail > summary:hover > .agent-activity-chevron { color: #393939; }
+    .dark #chuanhu-chatbot .agent-history-detail > summary:hover > .agent-tool-title,
+    .dark #chuanhu-chatbot .agent-history-detail > summary:hover > .agent-activity-chevron { color: #F2F2F2; }
+}
+@media (hover: none), (pointer: coarse) {
+    #chuanhu-chatbot .agent-history-detail > summary > .agent-activity-chevron { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #chuanhu-chatbot .agent-activity-chevron { transition: none; }
+    #chuanhu-chatbot .agent-history-detail[data-layer="group"]::details-content,
+    #chuanhu-chatbot .agent-history-detail[data-layer="tool"]::details-content { transition: none; }
+}
+
+/* Native metadata trigger stays mounted for independent file refresh. */
+#agent-file-refresh { display: none !important; }
+
+#chuanhu-chatbot .agent-unassociated-files,
+#chuanhu-chatbot .agent-file-notice { margin-block: 12px; align-self: center; max-width: 300px; }
+
+/* An empty Gradio message button still has a line box. The scoped receipt
+   proves that this cell has no visible body/activity before collapsing it. */
+#chuanhu-chatbot .message.bot.agent-loading-only > button[data-testid="bot"] {
+    display: none !important;
 }

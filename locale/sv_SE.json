@@ -419,6 +419,13 @@
         "your_prefix": "Din"
     },
     "ui": {
+        "agent_activity": {
+            "thinking_active": "Tänker",
+            "thinking_completed": "Tänkt",
+            "thinking_neutral": "Resonemang",
+            "elapsed_seconds": "{seconds}s",
+            "elapsed_minutes_seconds": "{minutes} min {seconds} s"
+        },
         "chat": {
             "delete_latest": "🗑️ Ta bort senaste dialogen",
             "delete_oldest": "🗑️ Ta bort äldsta dialogen",
@@ -455,6 +462,8 @@
             "filename_placeholder": "Ställ in filnamn: standard är .json, valfritt är .md",
             "invalid_filename": "Ange ett giltigt filnamn, använd inte följande specialtecken: ",
             "load_from_list": "Ladda dialog från lista",
+            "file_missing": "Historikfilen finns inte",
+            "file_invalid": "Historiken kan inte läsas eller har ett ogiltigt format",
             "new_chat_prefix": "Ny dialog ",
             "rename": "Byt namn på dialogen",
             "save": "💾 Spara Dialog",
@@ -534,7 +543,41 @@
                 "extensions": "utvidgning",
                 "parameters": "Parametrar"
             },
-            "title": "verktygslåda"
+            "title": "verktygslåda",
+            "agent": {
+                "model": "Modell att använda",
+                "reasoning": "Resonemangsnivå",
+                "tools_title": "Verktygsinställningar",
+                "locked_hint": "Verktygsinställningarna kan inte ändras när samtalet har börjat. Gör eventuella ändringar innan du skickar det första meddelandet.",
+                "network": "Internetåtkomst för molnmiljön",
+                "code": "Körning av kod och filer",
+                "search": "Inbyggd webbsökning",
+                "search_mode": "Sökläge",
+                "domains": "Sökdomäner (en per rad, valfritt)",
+                "browser": "Molnwebbläsare (Computer Use)",
+                "screenshots": "Inkludera skärmbilder från webbläsaren",
+                "discovery": "Verktygsupptäckt",
+                "programmatic": "Programmatiska verktygsanrop",
+                "functions": "Registrerade programfunktioner",
+                "mcp": "MCP-servrar",
+                "fork": "Starta ett nytt samtal med dessa inställningar",
+                "system_prompt": "Systeminstruktion",
+                "search_live": "Direkt",
+                "search_cached": "Cachelagrat",
+                "search_disabled": "Inaktiverat",
+                "reasoning_default": "Modellens standard",
+                "minimal": "Minimal",
+                "low": "Låg",
+                "medium": "Medel",
+                "high": "Hög",
+                "xhigh": "Extra hög",
+                "max": "Maximal",
+                "invalid_tools": "Ogiltiga verktygsinställningar. Kontrollera dem innan du skickar.",
+                "invalid_mcp": "MCP-inställningarna är inte giltig JSON.",
+                "capability": "Funktion",
+                "status": "Status",
+                "description": "Beskrivning"
+            }
         },
         "training": {
             "dataset": {

@@ -114,7 +114,7 @@ for k, v in presets.MODEL_METADATA.items():
 presets.MODEL_METADATA = _model_metadata
 
 if "available_models" in config:
-    presets.MODELS = config["available_models"]
+    presets.MODELS = list(config["available_models"])
     logging.info(i18n("msg.model.available_set").format(available_models=config["available_models"]))
 
 # 模型配置

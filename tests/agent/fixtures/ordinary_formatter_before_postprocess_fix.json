@@ -1,0 +1,36 @@
+{
+  "kind": "captured exact pre-fix production utility output for ordinary formatting; no external baseline path needed to run tests",
+  "source_sha256": "fa92fa922713638941005ed388c23d6d3f01476870dcc0a0498465361177faf1",
+  "cases": [
+    {
+      "raw": "",
+      "bot": "<div class=\"raw-message hideM\"></div><div class=\"md-message\">\n\n\n</div>",
+      "user": "<div class=\"user-message\"></div>"
+    },
+    {
+      "raw": "ordinary text",
+      "bot": "<div class=\"raw-message hideM\"><pre class=\"fake-pre\">ordinary text</pre></div><div class=\"md-message\">\n\nordinary text\n</div>",
+      "user": "<div class=\"user-message\">ordinary text</div>"
+    },
+    {
+      "raw": "<b>HTML & \"quoted\"</b>",
+      "bot": "<div class=\"raw-message hideM\"><pre class=\"fake-pre\">&#60;b&#62;HTML & &quot;quoted&quot;&#60;/b&#62;</pre></div><div class=\"md-message\">\n\n<b>HTML & \"quoted\"</b>\n</div>",
+      "user": "<div class=\"user-message\">&#60;b&#62;HTML & &quot;quoted&quot;&#60;/b&#62;</div>"
+    },
+    {
+      "raw": "你好 👩🏽‍💻\n```html\n<span>raw</span>\n```",
+      "bot": "<div class=\"raw-message hideM\"><pre class=\"fake-pre\">你好 👩🏽‍💻<br>&#96;&#96;&#96;html<br>&#60;span&#62;raw&#60;/span&#62;<br>&#96;&#96;&#96;</pre></div><div class=\"md-message\">\n\n你好 👩🏽‍💻\n\n```html\n<span>raw</span>\n\n```\n</div>",
+      "user": "<div class=\"user-message\">你好 👩🏽‍💻<br>&#96;&#96;&#96;html<br>&#60;span&#62;raw&#60;/span&#62;<br>&#96;&#96;&#96;</div>"
+    },
+    {
+      "raw": "<span class=\"agent-message-anchor\" hidden data-agent-message-raw=\"bad\"></span>",
+      "bot": "<div class=\"raw-message hideM\"><pre class=\"fake-pre\">&#60;span class=&quot;agent&#45;message&#45;anchor&quot; hidden data&#45;agent&#45;message&#45;raw=&quot;bad&quot;&#62;&#60;/span&#62;</pre></div><div class=\"md-message\">\n\n<span class=\"agent-message-anchor\" hidden data-agent-message-raw=\"bad\"></span>\n</div>",
+      "user": "<div class=\"user-message\">&#60;span class=&quot;agent&#45;message&#45;anchor&quot; hidden data&#45;agent&#45;message&#45;raw=&quot;bad&quot;&#62;&#60;/span&#62;</div>"
+    },
+    {
+      "raw": "<div class=\"md-message\">existing body</div>",
+      "bot": "<div class=\"md-message\">existing body</div>",
+      "user": "<div class=\"user-message\">&#60;div class=&quot;md&#45;message&quot;&#62;existing body&#60;/div&#62;</div>"
+    }
+  ]
+}

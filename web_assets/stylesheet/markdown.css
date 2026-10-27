@@ -87,6 +87,11 @@
     font-family: var(--font-mono);
     font-size: var(--text-md);
 }
+/* Keep ordinary code white against Gradio's prose color reset. */
+.message .md-message pre,
+.message .md-message pre code {
+    color: #fff;
+}
 .message .code_wrap {
     margin: .8em 1em 1em 0em;
 }

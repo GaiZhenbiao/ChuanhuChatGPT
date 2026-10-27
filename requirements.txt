@@ -8,11 +8,13 @@ tqdm
 colorama
 googlesearch-python
 Pygments
-openai==1.16.2
-langchain==0.1.14
-langchain-openai
+openai==3.22.0
+langchain-classic==1.0.8
+langchain-openai==1.6.7
+langchain-core==1.6.6
+langchain-text-splitters==1.1.2
 langchainhub
-langchain_community
+langchain-community==0.4.2
 groq
 markdown
 PyPDF2
@@ -22,7 +24,7 @@ commentjson
 openpyxl
 pandoc
 wolframalpha
-faiss-cpu==1.7.4
+faiss-cpu>=1.8,<2
 duckduckgo-search>=5.3.0
 arxiv
 wikipedia
@@ -34,7 +36,7 @@ tabulate
 ujson
 python-docx
 websocket_client
-pydantic==2.5.2
+pydantic==2.10.6
 google-search-results
 anthropic==0.18.1
 Pillow>=10.1.0
@@ -44,3 +46,6 @@ numexpr
 regex
 python-multipart==0.0.9
 fastapi==0.112.4
+langsmith==0.8.5
+mypy-extensions>=1,<2
+jsonschema>=4,<5

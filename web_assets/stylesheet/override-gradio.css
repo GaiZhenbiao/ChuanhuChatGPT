@@ -67,7 +67,11 @@ fieldset#history-select-dropdown .wrap label > span::before {
     content: url("data:image/svg+xml,%3Csvg stroke='%23FFFFFF' fill='none' stroke-opacity='0.85' stroke-width='2' viewBox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'%3E%3C/path%3E%3C/svg%3E");
 }
 fieldset#history-select-dropdown .wrap label > input {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
 }
 
 

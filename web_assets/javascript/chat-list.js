@@ -16,7 +16,7 @@ function setChatList() {
     exportBtnCheck();
     var selectedChat = null;
     var chatList = gradioApp().querySelector('fieldset#history-select-dropdown');
-    selectedChat = chatList.querySelector("label.selected");
+    selectedChat = chatList?.querySelector("label.selected");
     if (!selectedChat) {
         currentChatName = null;
         return;
@@ -51,9 +51,16 @@ function setChatList() {
 }
 
 function disableChatListClick() {
+    // Agent execution belongs to the conversation, not the selected view.
+    if (window.chuanhuInputTarget?.() === '#agent-upload-files') {
+        enableChatListClick();
+        return;
+    }
     var chatList = gradioApp().querySelector('fieldset#history-select-dropdown');
-    if (chatList.querySelector('label').style.pointerEvents !== 'none' && !isChatListRecentlyEnabled) {
-        chatList.querySelectorAll('label').forEach(label => {
+    var labels = chatList?.querySelectorAll('label');
+    if (!labels?.length) return;
+    if (labels[0].style.pointerEvents !== 'none' && !isChatListRecentlyEnabled) {
+        labels.forEach(label => {
             label.style.transition = 'opacity 0.1s ease';
             label.style.pointerEvents = 'none';
             label.style.opacity = '0.72';
@@ -62,8 +69,10 @@ function disableChatListClick() {
 }
 function enableChatListClick() {
     var chatList = gradioApp().querySelector('fieldset#history-select-dropdown');
-    if (chatList.querySelector('label').style.pointerEvents !== 'auto') {
-        chatList.querySelectorAll('label').forEach(label => {
+    var labels = chatList?.querySelectorAll('label');
+    if (!labels?.length) return;
+    if (labels[0].style.pointerEvents !== 'auto') {
+        labels.forEach(label => {
             label.style.transition = 'opacity 0.2s ease';
             label.style.pointerEvents = 'auto';
             label.style.opacity = '1';

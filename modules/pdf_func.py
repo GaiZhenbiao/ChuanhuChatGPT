@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 import pdfplumber
 import logging
-from langchain.docstore.document import Document
+from langchain_core.documents import Document
 
 def prepare_table_config(crop_page):
     """Prepare table查找边界, 要求page为原始page

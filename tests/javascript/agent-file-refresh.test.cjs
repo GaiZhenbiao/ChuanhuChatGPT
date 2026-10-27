@@ -1,0 +1,23 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const source=fs.readFileSync(require('path').join(__dirname,'../../web_assets/javascript/agent-file-refresh.js'),'utf8');
+let tick,clicks=0;
+const state={agent_tools:true,input_target:'conversation',history_visit:'visit-a',task_generation:'gen-a'};
+const cards={dataset:{filePending:'true',fileRevision:'r0'}};
+const root={querySelector:selector=>selector.includes('data-model-capabilities')?{dataset:{modelCapabilities:JSON.stringify(state)}}:selector.includes('data-file-pending')?cards:{click:()=>clicks++}};
+const context={document:root,gradioApp:()=>root,setInterval:fn=>(tick=fn,1),clearInterval:()=>{},gradio_config:{root:'https://local.example/prefix'}};
+vm.runInNewContext(source,context);
+const wire=(target,generation)=>JSON.stringify({target,generation,updates:[{__type__:'update'},{__type__:'update',value:'owned cards'},{__type__:'update',value:[{url:'/file=/private/cache/file'}]},{__type__:'update'}]});
+tick();tick();assert.equal(clicks,1);
+let result=context.chuanhuAcceptFileUpdate(wire('visit-a','gen-a'),'visit-a');
+assert.equal(result[1].value,'owned cards');assert.equal(result[2].value[0].url,'https://local.example/prefix/file=/private/cache/file');
+tick();assert.equal(clicks,2);
+state.task_generation='gen-b';tick();assert.equal(clicks,3);
+result=context.chuanhuAcceptFileUpdate(wire('visit-a','gen-a'),'visit-a');assert(result.every(update=>!Object.hasOwn(update,'value')));
+tick();assert.equal(clicks,3); // old response cannot release the new in-flight read
+context.chuanhuAcceptFileUpdate(wire('visit-a','gen-b'),'visit-a');cards.dataset.filePending='false';tick();assert.equal(clicks,3);
+cards.dataset.fileRevision='r1';tick();assert.equal(clicks,4);
+context.chuanhuAcceptFileUpdate(wire('visit-a','gen-b'),'visit-a');tick();assert.equal(clicks,4);
+state.history_visit='visit-new';tick();assert.equal(clicks,5);
+result=context.chuanhuAcceptFileUpdate(wire('visit-a','gen-b'),'visit-new');assert(result.every(update=>!Object.hasOwn(update,'value')));
+state.agent_tools=false;tick();assert.equal(clicks,5);
+console.log('File refresh ownership, native URL and bounded polling passed');

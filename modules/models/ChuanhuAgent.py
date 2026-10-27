@@ -7,22 +7,22 @@ import gradio as gr
 import requests
 from bs4 import BeautifulSoup
 from duckduckgo_search import DDGS
-from langchain.agents import (AgentExecutor, AgentType,
-                              create_openai_tools_agent, initialize_agent,
-                              load_tools)
-from langchain.callbacks.base import BaseCallbackManager
-from langchain.chains import RetrievalQA
-from langchain.chains.summarize import load_summarize_chain
-from langchain.docstore.document import Document
-from langchain.text_splitter import TokenTextSplitter
-from langchain.tools import StructuredTool, Tool
-from langchain.vectorstores.base import VectorStoreRetriever
+from langchain_classic.agents import (AgentExecutor, AgentType,
+                              create_openai_tools_agent, initialize_agent)
+from langchain_community.agent_toolkits.load_tools import load_tools
+from langchain_core.callbacks import BaseCallbackManager
+from langchain_classic.chains import RetrievalQA
+from langchain_classic.chains.summarize import load_summarize_chain
+from langchain_core.documents import Document
+from langchain_text_splitters import TokenTextSplitter
+from langchain_core.tools import StructuredTool, Tool
+from langchain_core.vectorstores import VectorStoreRetriever
 from langchain_community.vectorstores import FAISS
 from langchain_core.messages.ai import AIMessage
 from langchain_core.messages.human import HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 from ..index_func import construct_index
 from ..presets import SUMMARIZE_PROMPT, i18n
@@ -58,6 +58,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         self.text_splitter = TokenTextSplitter(chunk_size=500, chunk_overlap=30)
         self.api_key = openai_api_key
         self.cheap_llm = ChatOpenAI(
+            http_socket_options=(),
             openai_api_key=openai_api_key,
             temperature=0,
             model_name="gpt-3.5-turbo",
@@ -76,6 +77,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         self.tools = []
         if "Pro" in self.model_name:
             self.llm = ChatOpenAI(
+                http_socket_options=(),
                 openai_api_key=openai_api_key,
                 model_name="gpt-4-turbo-preview",
                 openai_api_base=os.environ.get("OPENAI_API_BASE", None),
@@ -83,6 +85,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
             )
         else:
             self.llm = ChatOpenAI(
+                http_socket_options=(),
                 openai_api_key=openai_api_key,
                 model_name="gpt-3.5-turbo",
                 openai_api_base=os.environ.get("OPENAI_API_BASE", None),
@@ -172,7 +175,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
         retriever = VectorStoreRetriever(
             vectorstore=self.index, search_type="similarity", search_kwargs={"k": 6}
         )
-        relevant_documents = retriever.get_relevant_documents(query)
+        relevant_documents = retriever.invoke(query)
         reference_results = [
             [d.page_content.strip("�"), os.path.basename(d.metadata["source"])]
             for d in relevant_documents
@@ -246,6 +249,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
 
         if "Pro" in self.model_name:
             self.llm = ChatOpenAI(
+                http_socket_options=(),
                 openai_api_key=self.api_key,
                 model_name="gpt-4-turbo-preview",
                 openai_api_base=os.environ.get("OPENAI_API_BASE", None),
@@ -254,6 +258,7 @@ class ChuanhuAgent_Client(BaseLLMModel):
             )
         else:
             self.llm = ChatOpenAI(
+                http_socket_options=(),
                 openai_api_key=self.api_key,
                 model_name="gpt-3.5-turbo",
                 openai_api_base=os.environ.get("OPENAI_API_BASE", None),

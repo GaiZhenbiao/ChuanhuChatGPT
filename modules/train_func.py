@@ -4,7 +4,19 @@ import traceback
 
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = None
+
+
+def get_training_client():
+    # Building the ordinary chat UI must not require a fine-tuning credential.
+    global client
+    if client is None:
+        key = os.getenv('OPENAI_API_KEY')
+        if not key:
+            raise gr.Error('请先配置 OpenAI API key，再使用训练功能')
+        client = OpenAI(api_key=key)
+    return client
+
 import gradio as gr
 import ujson as json
 import commentjson
@@ -94,7 +106,7 @@ def upload_to_openai(file_src):
         jsonl = excel_to_jsonl(dspath)
         dspath = jsonl_save_to_disk(jsonl, dspath)
     try:
-        uploaded = client.files.create(file=open(dspath, "rb"),
+        uploaded = get_training_client().files.create(file=open(dspath, "rb"),
         purpose='fine-tune')
         return uploaded.id, i18n("msg.train.upload_ok")
     except Exception as e:
@@ -115,7 +127,7 @@ def build_event_description(id, status, trained_tokens, name=i18n("ui.training.s
 
 def start_training(file_id, suffix, epochs):
     try:
-        job = client.fine_tuning.jobs.create(training_file=file_id, model="gpt-3.5-turbo", suffix=suffix, hyperparameters={"n_epochs": epochs})
+        job = get_training_client().fine_tuning.jobs.create(training_file=file_id, model="gpt-3.5-turbo", suffix=suffix, hyperparameters={"n_epochs": epochs})
         return build_event_description(job.id, job.status, job.trained_tokens)
     except Exception as e:
         traceback.print_exc()
@@ -124,14 +136,14 @@ def start_training(file_id, suffix, epochs):
         return i18n("msg.train.failed").format(error=e)
 
 def get_training_status():
-    active_jobs = [build_event_description(job.id, job.status, job.trained_tokens, job.fine_tuned_model) for job in client.fine_tuning.jobs.list().data if job.status != "cancelled"]
+    active_jobs = [build_event_description(job.id, job.status, job.trained_tokens, job.fine_tuned_model) for job in get_training_client().fine_tuning.jobs.list().data if job.status != "cancelled"]
     return "\n\n".join(active_jobs), gr.update(interactive=True) if len(active_jobs) > 0 else gr.update(interactive=False)
 
 def handle_dataset_clear():
     return gr.update(value=None), gr.update(interactive=False)
 
 def add_to_models():
-    succeeded_jobs = [job for job in client.fine_tuning.jobs.list().data if job.status == "succeeded"]
+    succeeded_jobs = [job for job in get_training_client().fine_tuning.jobs.list().data if job.status == "succeeded"]
     extra_models = [job.fine_tuned_model for job in succeeded_jobs]
     for i in extra_models:
         if i not in presets.MODELS:
@@ -158,7 +170,7 @@ def add_to_models():
         count=len(succeeded_jobs))
 
 def cancel_all_jobs():
-    jobs = [job for job in client.fine_tuning.jobs.list().data if job.status not in ["cancelled", "succeeded"]]
+    jobs = [job for job in get_training_client().fine_tuning.jobs.list().data if job.status not in ["cancelled", "succeeded"]]
     for job in jobs:
-        client.fine_tuning.jobs.cancel(job.id)
+        get_training_client().fine_tuning.jobs.cancel(job.id)
     return i18n("msg.train.jobs_cancelled").format(count=len(jobs))

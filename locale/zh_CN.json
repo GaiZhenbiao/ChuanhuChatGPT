@@ -240,6 +240,12 @@
         },
         "o1": {
             "description": "o1 系列的大型语言模型通过强化学习训练，能够执行复杂的推理任务。o1 模型在回答之前会进行思考，产生一长串内部思维链，然后再回应用户。"
+        },
+        "openai_agent": {
+            "description": "使用 OpenAI Agent 连续对话、处理文件并执行任务。",
+            "slogan": "把任务交给 Agent 完成",
+            "selection_notice": "Agent 使用现有 OpenAI 连接。普通历史作为文字引用；已绑定的 Agent 会话会先恢复云端状态再继续。",
+            "invalid_response": "连接响应无法解析，任务未自动重发；请重新连接原会话确认状态。"
         }
     },
     "msg": {
@@ -360,7 +366,9 @@
             "tokens_per_second": "Tokens per second：{token_generation_speed}",
             "tools_enabled": "启用的工具：",
             "total_cost": "，本次对话累计消耗了 ",
-            "uploaded": "上传了"
+            "uploaded": "上传了",
+            "stop_requested": "已请求停止。",
+            "model_busy": "模型正在生成或已被切换，请等待完成后使用当前选中的模型。"
         },
         "train": {
             "failed": "训练失败，原因：{error}",
@@ -419,6 +427,116 @@
         "your_prefix": "你的"
     },
     "ui": {
+        "agent_activity": {
+            "thinking_active": "正在思考",
+            "thinking_completed": "已思考",
+            "thinking_neutral": "思考",
+            "elapsed_seconds": "{seconds}s",
+            "elapsed_minutes_seconds": "{minutes}分{seconds}秒",
+            "list_separator": "、",
+            "list_two": "{first}和{last}",
+            "list_many": "{items}和{last}",
+            "neutral_template": "{actions}",
+            "progressive_template": "正在{actions}",
+            "past_template": "{actions}",
+            "actions": {
+                "function_call": {
+                    "neutral": "调用函数",
+                    "progressive": "调用函数",
+                    "past": "调用了函数"
+                },
+                "function_call_output": {
+                    "neutral": "返回函数结果",
+                    "progressive": "返回函数结果",
+                    "past": "返回了函数结果"
+                },
+                "mcp_call": {
+                    "neutral": "调用工具",
+                    "progressive": "调用工具",
+                    "past": "调用了工具"
+                },
+                "command_execution": {
+                    "neutral": "运行命令",
+                    "progressive": "运行命令",
+                    "past": "运行了命令"
+                },
+                "web_search": {
+                    "neutral": "搜索网页",
+                    "progressive": "搜索网页",
+                    "past": "搜索了网页"
+                },
+                "web_open": {
+                    "neutral": "打开网页",
+                    "progressive": "打开网页",
+                    "past": "打开了网页"
+                },
+                "web_find": {
+                    "neutral": "页内查找",
+                    "progressive": "页内查找",
+                    "past": "查找了页面内容"
+                },
+                "web_search_call": {
+                    "neutral": "网页操作",
+                    "progressive": "网页操作",
+                    "past": "网页操作"
+                },
+                "computer_use_call": {
+                    "neutral": "操作计算机",
+                    "progressive": "操作计算机",
+                    "past": "操作了计算机"
+                },
+                "computer_use_approval_request": {
+                    "neutral": "网站授权请求",
+                    "progressive": "网站授权请求",
+                    "past": "网站授权请求"
+                },
+                "computer_use_approval_request_result": {
+                    "neutral": "网站授权结果",
+                    "progressive": "网站授权结果",
+                    "past": "网站授权结果"
+                },
+                "create_subagent_call": {
+                    "neutral": "创建子任务",
+                    "progressive": "创建子任务",
+                    "past": "创建子任务"
+                },
+                "send_subagent_input_call": {
+                    "neutral": "发送子任务输入",
+                    "progressive": "发送子任务输入",
+                    "past": "发送子任务输入"
+                },
+                "resume_subagent_call": {
+                    "neutral": "继续子任务",
+                    "progressive": "继续子任务",
+                    "past": "继续子任务"
+                },
+                "wait_for_subagents_call": {
+                    "neutral": "等待子任务",
+                    "progressive": "等待子任务",
+                    "past": "等待子任务"
+                },
+                "interrupt_subagent_call": {
+                    "neutral": "停止子任务",
+                    "progressive": "停止子任务",
+                    "past": "停止子任务"
+                },
+                "close_subagent_call": {
+                    "neutral": "关闭子任务",
+                    "progressive": "关闭子任务",
+                    "past": "关闭子任务"
+                },
+                "agent_message": {
+                    "neutral": "任务间消息",
+                    "progressive": "任务间消息",
+                    "past": "任务间消息"
+                },
+                "other": {
+                    "neutral": "工具操作",
+                    "progressive": "工具操作",
+                    "past": "工具操作"
+                }
+            }
+        },
         "chat": {
             "delete_latest": "🗑️ 删除最新对话",
             "delete_oldest": "🗑️ 删除最旧对话",
@@ -455,6 +573,8 @@
             "filename_placeholder": "设置文件名: 默认为.json，可选为.md",
             "invalid_filename": "请输入有效的文件名，不要包含以下特殊字符：",
             "load_from_list": "从列表中加载对话",
+            "file_missing": "历史文件不存在",
+            "file_invalid": "历史记录无法读取或格式无效",
             "new_chat_prefix": "新对话 ",
             "rename": "重命名该对话",
             "save": "💾 保存对话",
@@ -534,7 +654,41 @@
                 "extensions": "拓展",
                 "parameters": "参数"
             },
-            "title": "工具箱"
+            "title": "工具箱",
+            "agent": {
+                "model": "使用模型",
+                "reasoning": "推理强度",
+                "tools_title": "工具配置",
+                "locked_hint": "对话开始后无法更改工具配置；如需调整，请在第一轮对话开始前设置。",
+                "network": "云端执行环境联网",
+                "code": "代码与文件执行",
+                "search": "内置网页搜索",
+                "search_mode": "搜索模式",
+                "domains": "搜索域名范围（每行一个，可留空）",
+                "browser": "云端浏览器（Computer Use）",
+                "screenshots": "返回浏览器截图",
+                "discovery": "工具发现",
+                "programmatic": "程序化工具调用",
+                "functions": "已注册的应用函数",
+                "mcp": "MCP 服务器",
+                "fork": "按新配置新建并继续",
+                "system_prompt": "系统提示词",
+                "search_live": "实时",
+                "search_cached": "缓存",
+                "search_disabled": "禁用",
+                "reasoning_default": "模型默认",
+                "minimal": "最低",
+                "low": "低",
+                "medium": "中",
+                "high": "高",
+                "xhigh": "极高",
+                "max": "最高",
+                "invalid_tools": "工具配置格式无效，请检查后发送",
+                "invalid_mcp": "MCP 配置不是有效 JSON",
+                "capability": "能力",
+                "status": "状态",
+                "description": "说明"
+            }
         },
         "training": {
             "dataset": {

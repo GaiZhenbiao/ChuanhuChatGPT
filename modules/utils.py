@@ -26,6 +26,7 @@ import pandas as pd
 import colorama
 
 from modules.presets import *
+from modules.model_capabilities import capabilities, require_capability, model_lock, reserve_submission, consume_submission
 from . import shared
 from modules.config import retrieve_proxy, hide_history_when_not_logged_in, admin_list
 
@@ -38,68 +39,201 @@ if TYPE_CHECKING:
         data: List[List[str | int | bool]]
 
 
-def predict(current_model, *args):
-    iter = current_model.predict(*args)
-    for i in iter:
-        yield i
+def predict(current_model, inputs, chatbot, use_websearch=False, files=None, reply_language=None, request: gr.Request = None):
+    if getattr(current_model, "is_hosted_agent", False):
+        current_model.bind_owner(request)
+    iterator = None
+    try:
+        with model_lock(current_model):
+            inputs = consume_submission(current_model, inputs)
+            if files: require_capability(current_model, 'input_attachments')
+            if use_websearch: require_capability(current_model, 'external_websearch')
+            execute = current_model.background_predict if getattr(current_model, 'is_hosted_agent', False) else current_model.predict
+            iterator = execute(inputs, chatbot, use_websearch, files, reply_language)
+            if not getattr(current_model, 'is_hosted_agent', False): first = next(iterator)
+        if getattr(current_model, 'is_hosted_agent', False): first = next(iterator)
+        yield first
+        yield from iterator
+    except StopIteration:
+        return
+    finally:
+        if iterator is not None and hasattr(iterator, 'close'):
+            iterator.close()
 
 
 def billing_info(current_model):
+    if not capabilities(current_model).billing: return ''
     return current_model.billing_info()
 
 
-def set_key(current_model, *args):
-    return current_model.set_key(*args)
+def set_key(current_model, new_key, request: gr.Request = None):
+    if getattr(current_model, "is_hosted_agent", False) and request is not None:
+        current_model.bind_owner(request)
+    return current_model.set_key(new_key)
 
 
-def load_chat_history(current_model, *args):
-    return current_model.load_chat_history(*args)
+def load_chat_history(current_model, new_history_file_path=None, request: gr.Request = None):
+    if getattr(current_model, "is_hosted_agent", False) and request is not None:
+        current_model.bind_owner(request)
+    with model_lock(current_model):
+        if getattr(current_model, '_running', False) or getattr(current_model, '_chat_running', False) or getattr(current_model, '_pending_send', None):
+            raise gr.Error('当前输入正在提交或生成，请先停止再改变聊天历史')
+        return current_model.load_chat_history(new_history_file_path)
 
 
-def delete_chat_history(current_model, *args):
-    return current_model.delete_chat_history(*args)
+def delete_chat_history(current_model, filename, request: gr.Request = None):
+    from modules.agent.tasks import TASKS
+    if request is not None and current_model.user_name != (request.username or ''):
+        raise gr.Error('只能删除当前登录用户的聊天历史')
+    if getattr(current_model, "is_hosted_agent", False):
+        if request is not None: current_model.bind_owner(request)
+        return current_model.delete_chat_history(filename)
+    from modules.agent.history_deletion import has_agent_history, delete_agent_history
+    if filename not in (None, '', 'CANCELED') and (TASKS.find_history(current_model.user_name, filename) is not None or has_agent_history(current_model, filename)):
+        return delete_agent_history(current_model, filename)
+    with model_lock(current_model):
+        if getattr(current_model, '_running', False) or getattr(current_model, '_chat_running', False) or getattr(current_model, '_pending_send', None):
+            raise gr.Error('当前输入正在提交或生成，请先停止再改变聊天历史')
+        return current_model.delete_chat_history(filename)
 
 
-def interrupt(current_model, *args):
-    return current_model.interrupt(*args)
+def interrupt(current_model, target=None, request: gr.Request = None):
+    from modules.agent.tasks import TASKS
+    def stop_task(task):
+        result = task.stop()
+        if getattr(current_model, '_conversation_id', None) == task.conversation:
+            task.project(current_model)
+            if task.model is not current_model:
+                message = task.model.take_completed_ui_errors()
+                if message:
+                    from uuid import uuid4
+                    operation = uuid4().hex
+                    current_model.record_ui_error(message, operation=operation, source='stop')
+                    current_model.complete_error_operation(operation, source='stop')
+        return result
+    if request is not None and current_model.user_name != (request.username or ''):
+        raise gr.Error('此任务不属于当前登录用户')
+    if getattr(current_model, "is_hosted_agent", False) and request is not None:
+        current_model.bind_owner(request)
+    if target is not None:
+        if (not isinstance(target, dict) or set(target) != {'conversation', 'generation'}
+                or not isinstance(target['conversation'], str) or not target['conversation']
+                or not isinstance(target['generation'], (str, type(None)))):
+            raise gr.Error('停止目标已变化，请在当前对话重新点击停止')
+        task = TASKS.find_conversation(current_model.user_name, target['conversation'])
+        if task is not None:
+            if task.generation != target['generation']: return '原任务已结束，未停止后续任务'
+            return stop_task(task)
+        if (not getattr(current_model, 'is_hosted_agent', False)
+                or current_model._conversation_id != target['conversation']
+                or current_model._state.get('generation') != target['generation']):
+            return '原任务当前没有本地观察，请打开该历史确认状态；未停止当前任务'
+    with model_lock(current_model):
+        if target is not None and (current_model._conversation_id != target['conversation']
+                or current_model._state.get('generation') != target['generation']):
+            return '原任务已结束，未停止后续任务'
+        if getattr(current_model, '_pending_send', None):
+            current_model._pending_send = None
+            return '本次输入尚未提交，已取消'
+    if getattr(current_model, 'is_hosted_agent', False):
+        task = TASKS.find(current_model)
+        if task is not None:
+            if target is not None and task.generation != target['generation']:
+                return '原任务已结束，未停止后续任务'
+            return stop_task(task)
+        if target is not None:
+            return current_model.interrupt(expected_generation=target['generation'])
+    return current_model.interrupt() or i18n("msg.status.stop_requested")
 
 
-def reset(current_model, *args):
-    return current_model.reset(*args)
+def reset(current_model, remain_system_prompt=False, request: gr.Request = None):
+    if getattr(current_model, "is_hosted_agent", False) and request is not None:
+        current_model.bind_owner(request)
+    with model_lock(current_model):
+        if getattr(current_model, '_running', False) or getattr(current_model, '_chat_running', False) or getattr(current_model, '_pending_send', None):
+            raise gr.Error('当前输入正在提交或生成，请先停止再改变聊天历史')
+        return current_model.reset(remain_system_prompt)
 
 
-def retry(current_model, *args):
-    iter = current_model.retry(*args)
+def retry(current_model, chatbot, use_websearch=False, files=None, reply_language=None, request: gr.Request = None):
+    if getattr(current_model, "is_hosted_agent", False) and request is not None:
+        current_model.bind_owner(request)
+    require_capability(current_model, 'regenerate')
+    iter = current_model.retry(chatbot, use_websearch, files, reply_language)
     for i in iter:
         yield i
 
 
-def delete_first_conversation(current_model, *args):
-    return current_model.delete_first_conversation(*args)
+def delete_first_conversation(current_model, request: gr.Request = None):
+    if getattr(current_model, "is_hosted_agent", False) and request is not None:
+        current_model.bind_owner(request)
+    require_capability(current_model, 'history_rollback')
+    with model_lock(current_model):
+        if getattr(current_model, '_running', False) or getattr(current_model, '_chat_running', False) or getattr(current_model, '_pending_send', None):
+            raise gr.Error('当前输入正在提交或生成，请先停止再改变聊天历史')
+        return current_model.delete_first_conversation()
 
 
-def delete_last_conversation(current_model, *args):
-    return current_model.delete_last_conversation(*args)
+def delete_last_conversation(current_model, chatbot, request: gr.Request = None):
+    if getattr(current_model, "is_hosted_agent", False) and request is not None:
+        current_model.bind_owner(request)
+    require_capability(current_model, 'history_delete')
+    with model_lock(current_model):
+        if getattr(current_model, '_running', False) or getattr(current_model, '_chat_running', False) or getattr(current_model, '_pending_send', None):
+            raise gr.Error('当前输入正在提交或生成，请先停止再改变聊天历史')
+        return current_model.delete_last_conversation(chatbot)
 
 
-def set_system_prompt(current_model, *args):
-    return current_model.set_system_prompt(*args)
+def set_system_prompt(current_model, new_system_prompt, request: gr.Request = None):
+    if getattr(current_model, "is_hosted_agent", False) and request is not None:
+        current_model.bind_owner(request)
+    current_model.set_system_prompt(new_system_prompt)
+    if getattr(current_model, 'is_hosted_agent', False):
+        return '系统提示词已保存' if not current_model._session_settings else gr.update()
+    return gr.update()
 
 
-def rename_chat_history(current_model, *args):
-    return current_model.rename_chat_history(*args)
+def rename_chat_history(current_model, filename, request: gr.Request = None):
+    if getattr(current_model, "is_hosted_agent", False) and request is not None:
+        current_model.bind_owner(request)
+    with model_lock(current_model):
+        if getattr(current_model, '_running', False) or getattr(current_model, '_chat_running', False) or getattr(current_model, '_pending_send', None):
+            raise gr.Error('当前输入正在提交或生成，请先停止再改变聊天历史')
+        return current_model.rename_chat_history(filename)
 
 
-def auto_name_chat_history(current_model, *args):
-    return current_model.auto_name_chat_history(*args)
+def auto_name_chat_history(current_model, name_chat_method, user_question, single_turn_checkbox, request: gr.Request = None):
+    if getattr(current_model, 'is_hosted_agent', False) and request is not None:
+        current_model.bind_owner(request)
+    envelope = user_question if isinstance(user_question, dict) else None
+    with model_lock(current_model):
+        if isinstance(user_question, dict):
+            if (user_question.get('target') != id(current_model)
+                    or user_question.get('token') != getattr(current_model, '_submission_token', None)
+                    or getattr(current_model, '_submission_history_path', None) != current_model.history_file_path):
+                return gr.update()
+            user_question = user_question['text']
+        if getattr(current_model, '_chat_retired', False) or getattr(current_model, '_retired', False):
+            return gr.update()
+        if not getattr(current_model, 'is_hosted_agent', False):
+            # Ordinary naming and rename must stay in the same reservation.
+            return current_model.auto_name_chat_history(name_chat_method, user_question, single_turn_checkbox)
+    return current_model.auto_name_chat_history(name_chat_method, user_question, single_turn_checkbox, submission=envelope)
 
 
-def export_markdown(current_model, *args):
-    return current_model.export_markdown(*args)
+def export_markdown(current_model, filename, chatbot, request: gr.Request = None):
+    if getattr(current_model, 'is_hosted_agent', False) and request is not None:
+        current_model.bind_owner(request)
+    return current_model.export_markdown(filename, chatbot)
 
 
-def upload_chat_history(current_model, *args):
-    return current_model.upload_chat_history(*args)
+def upload_chat_history(current_model, new_history_file_content=None, request: gr.Request = None):
+    if getattr(current_model, 'is_hosted_agent', False) and request is not None:
+        current_model.bind_owner(request)
+    with model_lock(current_model):
+        if getattr(current_model, '_running', False) or getattr(current_model, '_chat_running', False) or getattr(current_model, '_pending_send', None):
+            raise gr.Error('当前输入正在提交或生成，请先停止再改变聊天历史')
+        return current_model.upload_chat_history(new_history_file_content)
 
 
 def set_token_upper_limit(current_model, *args):
@@ -149,11 +283,16 @@ def set_streaming(current_model, *args):
     current_model.set_streaming(*args)
 
 
-def handle_file_upload(current_model, *args):
-    return current_model.handle_file_upload(*args)
+def handle_file_upload(current_model, files, chatbot, reply_language=None, request: gr.Request = None):
+    if getattr(current_model, 'is_hosted_agent', False):
+        current_model.bind_owner(request)
+        raise gr.Error('聊天模型已变化，请使用消息附件入口重新上传')
+    require_capability(current_model, 'input_attachments')
+    return current_model.handle_file_upload(files, chatbot, reply_language)
 
 
 def handle_summarize_index(current_model, *args):
+    require_capability(current_model, 'knowledge')
     return current_model.summarize_index(*args)
 
 
@@ -415,11 +554,30 @@ def construct_assistant(text):
     return construct_text("assistant", text)
 
 
-def save_file(filename, model):
+def save_file(filename, model, *, _history_guarded=False):
+    if getattr(model, 'is_hosted_agent', False) and not _history_guarded:
+        # Cover direct exports as well as auto_save: a late callback must not
+        # rebuild a deleted history, even when it bypasses the model wrapper.
+        target = filename or model.history_file_path
+        if target.endswith('.md'): target = target[:-3]
+        if not target.endswith('.json'): target += '.json'
+        with model._lock, model._store().history_guard(model._owner, target):
+            if model._local_history_deleted(): return
+            return save_file(filename, model, _history_guarded=True)
     system = model.system_prompt
     history = model.history
     chatbot = []
     i = 0
+    if getattr(model, 'is_hosted_agent', False):
+        # Agent turns may contain multiple assistant messages or only files.
+        # Persist roles faithfully instead of pairing adjacent messages.
+        for message in history:
+            if message['role'] == 'image': chatbot.append([(message['content'], None), None])
+            elif message['role'] == 'user': chatbot.append([message['content'], None])
+            elif message['role'] == 'assistant':
+                if chatbot and chatbot[-1][1] is None: chatbot[-1][1] = message['content']
+                else: chatbot.append([None, message['content']])
+        i = len(history)
     while i < len(history):
         if history[i]["role"] == "image":
             # Handle image
@@ -449,6 +607,7 @@ def save_file(filename, model):
         "history": history,
         "chatbot": chatbot,
         "model_name": model.model_name,
+        "model_selection": getattr(model, '_selection_name', model.model_name),
         "single_turn": model.single_turn,
         "temperature": model.temperature,
         "top_p": model.top_p,
@@ -463,6 +622,12 @@ def save_file(filename, model):
         "stream": model.stream,
         "metadata": model.metadata,
     }
+    agent_wire = None
+    if getattr(model, 'is_hosted_agent', False):
+        from modules.agent import transcript
+        from modules.agent.tool_logging import known_secrets
+        json_s = model.history_document(json_s)
+        agent_wire = transcript.serialize(json_s, secrets=known_secrets(model))
     if not filename == os.path.basename(filename):
         history_file_path = filename
     else:
@@ -471,8 +636,30 @@ def save_file(filename, model):
     # check if history file path matches user_name
     # if user access control is not enabled, user_name is empty, don't check
     assert os.path.basename(os.path.dirname(history_file_path)) == model.user_name or model.user_name == ""
-    with open(history_file_path, "w", encoding="utf-8") as f:
-        json.dump(json_s, f, ensure_ascii=False, indent=4)
+    import tempfile
+    # Streaming saves must not reorder Radio's index-keyed rows under a click.
+    # Advance recency when a user turn starts; keep it stable through its frames.
+    stable_times = None
+    if os.path.isfile(history_file_path):
+        previous_stat = os.stat(history_file_path)
+        with open(history_file_path, "r", encoding="utf-8") as previous_file:
+            previous_json = json.load(previous_file)
+        if getattr(model, 'is_hosted_agent', False):
+            transcript.migrate(model._legacy_document(previous_json), scope_id=model._conversation_id, secrets=known_secrets(model))
+        user_turns = lambda rows: sum(isinstance(row, dict) and row.get('role') == 'user' for row in rows)
+        if user_turns(previous_json['history']) == user_turns(history):
+            stable_times = (previous_stat.st_atime_ns, previous_stat.st_mtime_ns)
+    fd, temporary = tempfile.mkstemp(prefix=".chat-", dir=os.path.dirname(history_file_path))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            if agent_wire is not None: f.write(agent_wire)
+            else: json.dump(json_s, f, ensure_ascii=False, indent=4)
+            f.flush()
+            os.fsync(f.fileno())
+        if stable_times is not None: os.utime(temporary, ns=stable_times)
+        os.replace(temporary, history_file_path)
+    finally:
+        if os.path.exists(temporary): os.unlink(temporary)
 
     save_md_file(history_file_path)
     return history_file_path
@@ -557,11 +744,9 @@ def get_history_list(user_name=""):
 
 def init_history_list(user_name="", prepend=None):
     history_names = get_history_names(user_name)
-    if prepend is not None and prepend not in history_names:
-        history_names.insert(0, prepend)
-    return gr.Radio(
-        choices=history_names, value=history_names[0] if history_names else ""
-    )
+    # A reserved filename is not a history entry. Only select persisted chats.
+    selected = prepend if prepend in history_names else None
+    return gr.Radio(choices=history_names, value=selected)
 
 
 def filter_history(user_name, keyword):
@@ -752,12 +937,25 @@ def cancel_outputing():
     shared.state.interrupt()
 
 
-def transfer_input(inputs):
+def transfer_input(inputs, current_model=None, agent_model=None, agent_reasoning='default', agent_choice_revision=None, agent_files=None, request: gr.Request = None):
+    if getattr(current_model, 'is_hosted_agent', False) and request is not None:
+        current_model.bind_owner(request)
+    if getattr(current_model, 'is_hosted_agent', False) and agent_model is not None:
+        # Freeze what is actually selected when Send is pressed, even if an
+        # earlier dropdown callback is delayed in transit.
+        with model_lock(current_model):
+            if isinstance(agent_choice_revision, (int, float)) and agent_choice_revision >= 0 and int(agent_choice_revision) == agent_choice_revision:
+                current_model.set_agent_model(agent_model, agent_reasoning, int(agent_choice_revision))
+            else:
+                current_model.set_agent_model(agent_model, agent_reasoning)
+            envelope = reserve_submission(current_model, inputs, files=agent_files)
+    else:
+        envelope = reserve_submission(current_model, inputs, files=agent_files) if current_model is not None else inputs
     # 一次性返回，降低延迟
     textbox = reset_textbox()
     outputing = start_outputing()
     return (
-        inputs,
+        envelope,
         gr.update(value=""),
         gr.Button(visible=False),
         gr.Button(visible=True),
@@ -864,17 +1062,14 @@ def get_corresponding_file_type_by_model_name(selected_model_name):
 
 
 def new_auto_history_filename(username):
-    latest_file = get_first_history_name(username)
-    if latest_file:
-        with open(
-            os.path.join(HISTORY_DIR, username, latest_file + ".json"),
-            "r",
-            encoding="utf-8",
-        ) as f:
-            if len(f.read()) == 0:
-                return latest_file
     now = i18n("ui.history.new_chat_prefix") + datetime.datetime.now().strftime("%m-%d %H-%M")
-    return f"{now}.json"
+    root = os.path.join(HISTORY_DIR, username)
+    filename = f"{now}.json"
+    index = 2
+    while os.path.lexists(os.path.join(root, filename)):
+        filename = f"{now} ({index}).json"
+        index += 1
+    return filename
 
 
 def get_history_filepath(username):

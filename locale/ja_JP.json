@@ -419,6 +419,13 @@
         "your_prefix": "あなたの"
     },
     "ui": {
+        "agent_activity": {
+            "thinking_active": "思考中",
+            "thinking_completed": "思考済み",
+            "thinking_neutral": "思考",
+            "elapsed_seconds": "{seconds}s",
+            "elapsed_minutes_seconds": "{minutes}分{seconds}秒"
+        },
         "chat": {
             "delete_latest": "🗑️ 最新の会話削除",
             "delete_oldest": "🗑️ 最古の会話削除",
@@ -455,6 +462,8 @@
             "filename_placeholder": "ファイル名を設定: デフォルトは.json、.mdを選択できます",
             "invalid_filename": "有効なファイル名を入力してください。以下の特殊文字は使用しないでください：",
             "load_from_list": "リストから会話を読込",
+            "file_missing": "履歴ファイルが存在しません",
+            "file_invalid": "履歴を読み込めないか、形式が無効です",
             "new_chat_prefix": "新しい会話 ",
             "rename": "会話の名前を変更",
             "save": "💾 会話を保存",
@@ -534,7 +543,41 @@
                 "extensions": "拡張",
                 "parameters": "調整"
             },
-            "title": "ツールボックス"
+            "title": "ツールボックス",
+            "agent": {
+                "model": "使用するモデル",
+                "reasoning": "推論の強度",
+                "tools_title": "ツール設定",
+                "locked_hint": "会話開始後はツール設定を変更できません。変更する場合は、最初のメッセージを送信する前に設定してください。",
+                "network": "クラウド実行環境のインターネット接続",
+                "code": "コードとファイルの実行",
+                "search": "組み込みウェブ検索",
+                "search_mode": "検索モード",
+                "domains": "検索対象ドメイン（1行に1つ、省略可）",
+                "browser": "クラウドブラウザー（Computer Use）",
+                "screenshots": "ブラウザーのスクリーンショットを含める",
+                "discovery": "ツールの検出",
+                "programmatic": "プログラムによるツール呼び出し",
+                "functions": "登録済みアプリケーション関数",
+                "mcp": "MCP サーバー",
+                "fork": "この設定で新しい会話を開始",
+                "system_prompt": "システムプロンプト",
+                "search_live": "リアルタイム",
+                "search_cached": "キャッシュ",
+                "search_disabled": "無効",
+                "reasoning_default": "モデルの既定値",
+                "minimal": "最小",
+                "low": "低",
+                "medium": "中",
+                "high": "高",
+                "xhigh": "非常に高い",
+                "max": "最大",
+                "invalid_tools": "ツール設定が無効です。送信前に確認してください。",
+                "invalid_mcp": "MCP 設定は有効な JSON ではありません。",
+                "capability": "機能",
+                "status": "状態",
+                "description": "説明"
+            }
         },
         "training": {
             "dataset": {

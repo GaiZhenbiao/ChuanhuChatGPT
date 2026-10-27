@@ -416,3 +416,6 @@ input:checked + .apSlider::before {
 .dragging .dragging-hint {
     display: flex;
 }
+
+#model-capability-state { display: none !important; }
+.regenerate-btn[hidden], .delete-latest-btn[hidden], .copy-bot-btn[hidden], .toggle-md-btn[hidden], #chatbot-input-more-area [hidden], #chatbot-input-more-btn-div[hidden], #agent-browser-form [hidden] { display: none !important; }

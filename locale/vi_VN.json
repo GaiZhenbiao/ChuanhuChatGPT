@@ -419,6 +419,13 @@
         "your_prefix": "Tôi không hiểu."
     },
     "ui": {
+        "agent_activity": {
+            "thinking_active": "Đang suy nghĩ",
+            "thinking_completed": "Đã suy nghĩ",
+            "thinking_neutral": "Suy nghĩ",
+            "elapsed_seconds": "{seconds}s",
+            "elapsed_minutes_seconds": "{minutes} phút {seconds} giây"
+        },
         "chat": {
             "delete_latest": "🗑️ Xóa cuộc trò chuyện mới nhất",
             "delete_oldest": "🗑️ Xóa cuộc trò chuyện cũ nhất",
@@ -455,6 +462,8 @@
             "filename_placeholder": "Đặt tên tệp: mặc định là .json, tùy chọn là .md",
             "invalid_filename": "Vui lòng nhập tên tệp hợp lệ, không chứa các ký tự đặc biệt sau: ",
             "load_from_list": "Tải cuộc trò chuyện từ danh sách",
+            "file_missing": "Tệp lịch sử không tồn tại",
+            "file_invalid": "Không thể đọc lịch sử hoặc định dạng lịch sử không hợp lệ",
             "new_chat_prefix": "Cuộc trò chuyện mới ",
             "rename": "Đổi tên cuộc trò chuyện này",
             "save": "💾 Lưu Cuộc trò chuyện",
@@ -534,7 +543,41 @@
                 "extensions": "Mở rộng",
                 "parameters": "Tham số"
             },
-            "title": "Hộp công cụ"
+            "title": "Hộp công cụ",
+            "agent": {
+                "model": "Mô hình sử dụng",
+                "reasoning": "Mức độ suy luận",
+                "tools_title": "Cấu hình công cụ",
+                "locked_hint": "Không thể thay đổi cấu hình công cụ sau khi cuộc trò chuyện bắt đầu. Nếu cần điều chỉnh, hãy thực hiện trước khi gửi tin nhắn đầu tiên.",
+                "network": "Kết nối Internet cho môi trường đám mây",
+                "code": "Thực thi mã và tệp",
+                "search": "Tìm kiếm web tích hợp",
+                "search_mode": "Chế độ tìm kiếm",
+                "domains": "Tên miền tìm kiếm (mỗi dòng một tên, không bắt buộc)",
+                "browser": "Trình duyệt đám mây (Computer Use)",
+                "screenshots": "Kèm ảnh chụp màn hình trình duyệt",
+                "discovery": "Khám phá công cụ",
+                "programmatic": "Gọi công cụ bằng chương trình",
+                "functions": "Hàm ứng dụng đã đăng ký",
+                "mcp": "Máy chủ MCP",
+                "fork": "Bắt đầu cuộc trò chuyện mới với cấu hình này",
+                "system_prompt": "Chỉ dẫn hệ thống",
+                "search_live": "Trực tiếp",
+                "search_cached": "Bộ nhớ đệm",
+                "search_disabled": "Tắt",
+                "reasoning_default": "Mặc định của mô hình",
+                "minimal": "Tối thiểu",
+                "low": "Thấp",
+                "medium": "Trung bình",
+                "high": "Cao",
+                "xhigh": "Rất cao",
+                "max": "Tối đa",
+                "invalid_tools": "Cấu hình công cụ không hợp lệ. Hãy kiểm tra trước khi gửi.",
+                "invalid_mcp": "Cấu hình MCP không phải JSON hợp lệ.",
+                "capability": "Khả năng",
+                "status": "Trạng thái",
+                "description": "Mô tả"
+            }
         },
         "training": {
             "dataset": {

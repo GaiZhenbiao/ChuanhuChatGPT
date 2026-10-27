@@ -9,8 +9,8 @@ from modules.utils import *
 
 
 def get_documents(file_src):
-    from langchain.schema import Document
-    from langchain.text_splitter import TokenTextSplitter
+    from langchain_core.documents import Document
+    from langchain_text_splitters import TokenTextSplitter
 
     text_splitter = TokenTextSplitter(chunk_size=500, chunk_overlap=30)
 
@@ -41,21 +41,21 @@ def get_documents(file_src):
                 texts = [Document(page_content=pdftext, metadata={"source": filepath})]
             elif file_type == ".docx":
                 logging.debug("Loading Word...")
-                from langchain.document_loaders import \
+                from langchain_community.document_loaders import \
                     UnstructuredWordDocumentLoader
 
                 loader = UnstructuredWordDocumentLoader(filepath)
                 texts = loader.load()
             elif file_type == ".pptx":
                 logging.debug("Loading PowerPoint...")
-                from langchain.document_loaders import \
+                from langchain_community.document_loaders import \
                     UnstructuredPowerPointLoader
 
                 loader = UnstructuredPowerPointLoader(filepath)
                 texts = loader.load()
             elif file_type == ".epub":
                 logging.debug("Loading EPUB...")
-                from langchain.document_loaders import UnstructuredEPubLoader
+                from langchain_community.document_loaders import UnstructuredEPubLoader
 
                 loader = UnstructuredEPubLoader(filepath)
                 texts = loader.load()
@@ -86,7 +86,7 @@ def get_documents(file_src):
                 )
             else:
                 logging.debug("Loading text file...")
-                from langchain.document_loaders import TextLoader
+                from langchain_community.document_loaders import TextLoader
 
                 loader = TextLoader(filepath, "utf8")
                 texts = loader.load()
